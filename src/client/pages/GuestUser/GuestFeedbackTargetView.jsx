@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jcssImportSource @emotion/react */
 
-import { Route, useParams, Redirect, Link, Routes } from 'react-router-dom'
+import { Route, useParams, Link, Routes, Navigate } from 'react-router-dom'
 
 import { Box, Typography, Tab } from '@mui/material'
 
@@ -80,7 +80,7 @@ const GuestFeedbackTargetView = () => {
   }
 
   if (!feedbackTarget) {
-    return <Redirect to="/noad/courses" />
+    return <Navigate to="/noad/courses" />
   }
 
   const { accessStatus, courseUnit, courseRealisation, opensAt, feedback } = feedbackTarget
@@ -150,9 +150,9 @@ const GuestFeedbackTargetView = () => {
         </RouterTabs>
       </Box>
       <Routes>
-        <Route path="/feedback" component={GuestFeedbackView} />
-        <Route path="/results" component={GuestFeedbackTargetResults} />
-        <Redirect to="/feedback" />
+        <Route path="/feedback" element={GuestFeedbackView} />
+        <Route path="/results" element={GuestFeedbackTargetResults} />
+        <Route path="*" element={<Navigate to="/feedback" />} />
       </Routes>
     </>
   )

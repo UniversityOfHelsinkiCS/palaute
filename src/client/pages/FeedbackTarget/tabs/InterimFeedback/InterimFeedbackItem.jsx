@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Link, useParams, Routes } from 'react-router-dom'
+import { Link, useParams, Routes, Route, useLocation } from 'react-router-dom'
 
 import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
 
@@ -22,6 +22,7 @@ import InterimFeedbackModal from './InterimFeedbackModal'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {
   const { id: parentId } = useParams()
+  const { pathname } = useLocation()
   const { t, i18n } = useTranslation()
 
   const { language } = i18n
@@ -61,6 +62,8 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
     await deleteInterimFeedback(interimFeedback.id)
   }
+
+  console.log(pathname)
 
   return (
     <>
@@ -129,7 +132,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
             variant="outlined"
             sx={{ mt: 2 }}
             component={Link}
-            to={`/${interimFeedback.id}/feedback`}
+            to={`${pathname}/${interimFeedback.id}/feedback`}
           >
             {t('interimFeedback:viewFeedback')}
           </Button>
@@ -141,7 +144,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
               variant="outlined"
               sx={{ mt: 2, ml: 2 }}
               component={Link}
-              to={`/${interimFeedback.id}/results`}
+              to={`${pathname}/${interimFeedback.id}/results`}
             >
               {t('interimFeedback:viewResults')}
             </Button>
@@ -162,11 +165,13 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
       </Card>
 
       <Routes>
-        <ProtectedRoute
-          path="/:interimFeedbackId"
-          component={InterimFeedbackModal}
-          hasAccess
-          redirectPath={defaultPath}
+        <Route
+          path="/:interimFeedbackId/*"
+          element={
+            <ProtectedRoute hasAccess redirectPath={defaultPath}>
+              <InterimFeedbackModal />
+            </ProtectedRoute>
+          }
         />
       </Routes>
     </>

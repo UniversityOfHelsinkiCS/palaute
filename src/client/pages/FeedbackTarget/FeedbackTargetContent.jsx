@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Redirect, Routes } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation, useMatch } from 'react-router-dom'
 
 import { Alert, Box } from '@mui/material'
 
@@ -48,6 +48,7 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
+  const { pathname } = useLocation()
   const {
     feedbackTarget,
     isStudent,
@@ -139,14 +140,14 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
                 label={t('feedbackTargetView:editFeedbackTab')}
-                to="/feedback"
+                to={`${pathname}/feedback`}
                 icon={<EditOutlined />}
               />
             ) : (
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
                 label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
-                to="/feedback"
+                to={`${pathname}/feedback`}
                 badge={isOpen}
                 icon={<LiveHelpOutlined />}
               />
@@ -155,7 +156,7 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
                 label={t('feedbackTargetView:surveySettingsTab')}
-                to="/edit"
+                to={`${pathname}/edit`}
                 disabled={!isAdmin && isOpenOrClosed}
                 disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
                 badge={!settingsReadByTeacher && !isOpenOrClosed}
@@ -170,7 +171,7 @@ const FeedbackTargetContent = () => {
                     ? t('feedbackTargetView:giveFeedbackResponseTab')
                     : t('feedbackTargetView:editFeedbackResponseTab')
                 }
-                to="/edit-feedback-response"
+                to={`${pathname}/edit-feedback-response`}
                 badge={!feedbackResponseEmailSent}
                 icon={<EditOutlined />}
               />
@@ -179,7 +180,7 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
                 label={t('feedbackTargetView:shareTab')}
-                to="/share"
+                to={`${pathname}/share`}
                 icon={<ShareOutlined />}
               />
             )}
@@ -195,7 +196,7 @@ const FeedbackTargetContent = () => {
                 <TabGroupTab
                   data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
                   label={t('feedbackTargetView:continuousFeedbackTab')}
-                  to="/continuous-feedback"
+                  to={`${pathname}/continuous-feedback`}
                   badge={continuousFeedbackCount}
                   badgeContent={continuousFeedbackCount}
                   badgeVisible={!isStudent}
@@ -207,7 +208,7 @@ const FeedbackTargetContent = () => {
                 <TabGroupTab
                   data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
                   label={t('feedbackTargetView:interimFeedbackTab')}
-                  to="/interim-feedback"
+                  to={`${pathname}/interim-feedback`}
                   icon={<ForumOutlined />}
                 />
               )}
@@ -223,14 +224,14 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-results-tab`}
                 label={t('feedbackTargetView:feedbacksTab')}
-                to="/results"
+                to={`${pathname}/results`}
                 icon={<PollOutlined />}
               />
               {showStudentsWithFeedbackTab && (
                 <TabGroupTab
                   data-cy={`${dataCyPrefix}feedback-target-students-with-feedback-tab`}
                   label={t('feedbackTargetView:studentsWithFeedbackTab')}
-                  to="/students-with-feedback"
+                  to={`${pathname}/students-with-feedback`}
                   icon={<PeopleOutlined />}
                 />
               )}
@@ -242,13 +243,13 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
                 label="Togen"
-                to="/togen"
+                to={`${pathname}/togen`}
                 icon={<ListOutlined />}
               />
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-logs-tab`}
                 label="Logs"
-                to="/logs"
+                to={`${pathname}/logs`}
                 icon={<ListOutlined />}
               />
             </TabGroup>
@@ -257,37 +258,97 @@ const FeedbackTargetContent = () => {
       </Box>
 
       <Routes>
-        <ProtectedRoute path="/edit" component={Settings} hasAccess={showSettingsTab} redirectPath={defaultPath} />
-        <ProtectedRoute path="/results" component={Results} hasAccess={showResultsSection} redirectPath={defaultPath} />
-        <ProtectedRoute path="/feedback" component={FeedbackView} hasAccess />
-        <ProtectedRoute
+        <Route
+          path="/edit"
+          element={
+            <ProtectedRoute hasAccess={showSettingsTab} redirectPath={defaultPath}>
+              <Settings />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/results"
+          element={
+            <ProtectedRoute hasAccess={showResultsSection} redirectPath={defaultPath}>
+              <Results />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/feedback"
+          element={
+            <ProtectedRoute hasAccess>
+              <FeedbackView />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/continuous-feedback"
-          component={ContinuousFeedback}
-          hasAccess={showContinuousFeedbackTab}
-          redirectPath={defaultPath}
+          element={
+            <ProtectedRoute hasAccess={showContinuousFeedbackTab} redirectPath={defaultPath}>
+              <ContinuousFeedback />
+            </ProtectedRoute>
+          }
         />
-        <ProtectedRoute
-          path="/interim-feedback"
-          component={InterimFeedback}
-          hasAccess={showInterimFeedbackTab}
-          redirectPath={defaultPath}
+
+        <Route
+          path="/interim-feedback/*"
+          element={
+            <ProtectedRoute hasAccess={showInterimFeedbackTab} redirectPath={defaultPath}>
+              <InterimFeedback />
+            </ProtectedRoute>
+          }
         />
-        <ProtectedRoute
+
+        <Route
           path="/students-with-feedback"
-          component={StudentsWithFeedback}
-          hasAccess={showStudentsWithFeedbackTab}
-          redirectPath={defaultPath}
+          element={
+            <ProtectedRoute hasAccess={showStudentsWithFeedbackTab} redirectPath={defaultPath}>
+              <StudentsWithFeedback />
+            </ProtectedRoute>
+          }
         />
-        <ProtectedRoute path="/share" component={Share} hasAccess={showLinksTab} redirectPath={defaultPath} />
-        <ProtectedRoute path="/togen" component={Links} hasAccess={isAdmin} redirectPath={defaultPath} />
-        <ProtectedRoute
+
+        <Route
+          path="/share"
+          element={
+            <ProtectedRoute hasAccess={showLinksTab} redirectPath={defaultPath}>
+              <Share />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/togen"
+          element={
+            <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
+              <Links />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
           path="/edit-feedback-response"
-          redirectPath={defaultPath}
-          component={EditFeedbackResponse}
-          hasAccess={showEditFeedbackResponseTab}
+          element={
+            <ProtectedRoute hasAccess={showEditFeedbackResponseTab} redirectPath={defaultPath}>
+              <EditFeedbackResponse />
+            </ProtectedRoute>
+          }
         />
-        <ProtectedRoute path="/logs" component={Logs} hasAccess={isAdmin} redirectPath={defaultPath} />
-        <Redirect to="/feedback" />
+
+        <Route
+          path="/logs"
+          element={
+            <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
+              <Logs />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="*" element={<Navigate to={defaultPath} />} />
       </Routes>
     </>
   )

@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
-import { Route, Routes, Redirect, useLocation } from 'react-router-dom'
+import { Route, Routes, useLocation } from 'react-router-dom'
 import { Container } from '@mui/material'
-import { useParams } from 'react-router'
+import { Navigate, useParams } from 'react-router'
 
 import GuestCourses from './GuestCourses'
 import GuestFeedbackTargetView from './GuestFeedbackTargetView'
@@ -27,15 +27,13 @@ const ParseToken = () => {
   window.sessionStorage.setItem('token', token)
   window.sessionStorage.setItem('tokenUser', userId)
 
-  return <Redirect to="/noad/courses" />
+  return <Navigate to="/noad/courses" />
 }
 
 const GuestRouter = () => (
   <Container sx={styles.container}>
     <Routes>
-      <Route path="/noad" exact>
-        <Redirect to="/noad/courses" />
-      </Route>
+      <Route path="/noad" exact element={<Navigate to="/noad/courses" />} />
       <Route path="/noad/token/:token" component={ParseToken} />
       <Route path="/noad/courses" component={GuestCourses} />
       <Route path="/noad/targets/:id" component={GuestFeedbackTargetView} />

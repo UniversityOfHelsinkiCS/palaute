@@ -1,6 +1,6 @@
 import React from 'react'
 import { intersection } from 'lodash-es'
-import { Redirect, Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
@@ -87,29 +87,36 @@ const SummaryInContext = () => {
       </RouterTabs>
       <SummaryScrollContainer>
         <Routes>
-          <ProtectedRoute path="/course-summary/my-courses" component={MyCourses} hasAccess />
-
-          <ProtectedRoute
-            path="/course-summary/my-organisations"
-            redirectPath="/course-summary/my-courses"
-            component={MyOrganisations}
-            hasAccess={hasAccessToMyOrganisations}
+          <Route index element={<Navigate to={`/course-summary/${preferredView}`} />} />
+          <Route
+            path="/my-courses"
+            element={
+              <ProtectedRoute hasAccess>
+                <MyCourses />
+              </ProtectedRoute>
+            }
+            hasAccess
           />
 
-          <ProtectedRoute
-            path="/course-summary/university"
-            redirectPath="/course-summary/my-courses"
-            component={University}
-            hasAccess={hasAccessToUniversityLevel}
+          <Route
+            path="/my-organisations"
+            element={
+              <ProtectedRoute redirectPath="/my-courses" hasAccess={hasAccessToMyOrganisations}>
+                <MyOrganisations />
+              </ProtectedRoute>
+            }
           />
 
-          <Route path="/course-summary/:code">
-            <ForCourseUnitGroup />
-          </Route>
+          <Route
+            path="/university"
+            element={
+              <ProtectedRoute redirectPath="/my-courses" hasAccess={hasAccessToUniversityLevel}>
+                <University />
+              </ProtectedRoute>
+            }
+          />
 
-          <Route path="/course-summary" exact>
-            <Redirect to={`/course-summary/${preferredView}`} />
-          </Route>
+          <Route path="/:code" element={<ForCourseUnitGroup />} />
         </Routes>
       </SummaryScrollContainer>
     </>

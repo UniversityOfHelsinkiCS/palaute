@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useNavigate, Redirect, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 import { Button, Box, Card, CardContent, Alert } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -87,7 +87,7 @@ const GuestFeedbackView = () => {
   }
 
   if (!feedbackTarget) {
-    return <Redirect to="/noad/courses" />
+    return <Navigate to="/noad/courses" />
   }
 
   const { opensAt, closesAt, feedback } = feedbackTarget

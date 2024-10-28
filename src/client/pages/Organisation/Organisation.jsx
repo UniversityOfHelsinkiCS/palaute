@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Route, useParams, Redirect, Routes } from 'react-router-dom'
+import { Route, useParams, Routes, Navigate } from 'react-router-dom'
 
 import { Box, Typography } from '@mui/material'
 import {
@@ -51,7 +51,7 @@ const Organisation = () => {
   const hasAdminAccess = Boolean(organisation?.access?.admin)
 
   if (!hasReadAccess) {
-    return <Redirect to="/" />
+    return <Navigate to="/" />
   }
 
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
@@ -102,20 +102,25 @@ const Organisation = () => {
         </RouterTabs>
       </Box>
       <Routes>
-        <ProtectedRoute path="/settings" hasAccess={hasAdminAccess} redirect="/summary" component={GeneralSettings} />
+        <ProtectedRoute
+          path="/settings"
+          hasAccess={hasAdminAccess}
+          redirect="/summary"
+          component={<GeneralSettings />}
+        />
 
         <Route path="/upcoming">
           <SemesterOverview organisation={organisation} />
         </Route>
 
-        <ProtectedRoute path="/survey" hasAccess={hasWriteAccess} redirect="/summary" component={EditSurvey} />
+        <ProtectedRoute path="/survey" hasAccess={hasWriteAccess} redirect="/summary" component={<EditSurvey />} />
 
         {ORGANISATION_SURVEYS_ENABLED && (
           <ProtectedRoute
             path="/organisation-surveys"
             hasAccess={hasWriteAccess}
             redirect="/summary"
-            component={OrganisationSurveys}
+            component={<OrganisationSurveys />}
           />
         )}
 
@@ -127,12 +132,12 @@ const Organisation = () => {
           path="/open"
           hasAccess={hasAdminAccess}
           redirect="/summary"
-          component={ProgrammeOpenQuestions}
+          component={<ProgrammeOpenQuestions />}
         />
 
-        <ProtectedRoute path="/logs" hasAccess={isAdmin} redirect="/summary" component={OrganisationLogs} />
+        <ProtectedRoute path="/logs" hasAccess={isAdmin} redirect="/summary" component={<OrganisationLogs />} />
 
-        <Redirect to="/summary" />
+        <Route path="*" element={<Navigate to="/summary" />} />
       </Routes>
     </>
   )
