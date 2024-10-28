@@ -70,12 +70,9 @@ const FeedbackTargetContent = () => {
     userCreated,
   } = feedbackTarget
 
-  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
-  const { pathnameBase } = useMatch(
-    isInterimFeedback
-      ? '/targets/:feedbackTargetId/interim-feedback/:interimFeedbackId/*'
-      : '/targets/:feedbackTargetId/*'
-  )
+  const fbtMatch = useMatch('/targets/:feedbackTargetId/*')
+  const interimMatch = useMatch('/targets/:feedbackTargetId/interim-feedback/:interimFeedbackId/*')
+  const pathnameBase = interimMatch?.pathnameBase || fbtMatch?.pathnameBase // This has to be done because of recursivity of interim feedbacks
   const defaultPath = `${pathnameBase}/feedback`
 
   const feedbackGiven = feedback || justGivenFeedback
@@ -84,11 +81,14 @@ const FeedbackTargetContent = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isOpenOrClosed = feedbackTargetIsOpenOrClosed(feedbackTarget)
+
+  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
+  const courseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
     i18n.language
   )
-  const courseCode = getCourseCode(courseUnit)
+
   // Show course code only if it is not already in the course name
   const visibleCourseCode = courseName.indexOf(courseCode) > -1 ? '' : courseCode
   const showResultsSection =
