@@ -26,25 +26,15 @@ const ConfigTestValues = () => {
   const { t } = useTranslation()
 
   return (
-    <Typography sx={{ p: '1rem' }} variant="caption" color="textSecondary">
+    <Typography variant="caption" color="textSecondary">
       The secret words are:{' '}
       <Box color="pink">
-        {CONFIG_TEST_VALUE}
-        <br />
-        {PRIVATE_TEST}
-        <br />
+        {CONFIG_TEST_VALUE} {PRIVATE_TEST}
         {t('test:testValue')}
-      </Box>{' '}
+      </Box>
       They are used for testing.
     </Typography>
   )
-}
-
-const NorppaLogo = () => {
-  if (SHOW_NORPPA_HY_LOGO) {
-    return <img src={images.norppa_viskaali} alt="" style={{ height: '150px' }} />
-  }
-  return <div style={{ marginLeft: 'auto' }} />
 }
 
 const AdminView = () => {
@@ -54,15 +44,15 @@ const AdminView = () => {
 
   return (
     <>
-      <Title>Admin</Title>
-      <Box display="flex" alignItems="end">
-        <h1>Admin page</h1>
-
-        <NorppaLogo />
-
-        <ConfigTestValues />
-        <CrashDebug />
-        {SHOW_NORPPA_HY_LOGO && <img src={images.norppa_stylized} alt="" style={{ height: '150px' }} />}
+      <Title>Admin Page</Title>
+      <Box display="flex" gap="1rem" alignItems="start">
+        <Typography variant="h4" component="h1">
+          Admin Page
+        </Typography>
+        <Box display="flex" marginLeft="auto" alignItems="center" gap={4}>
+          <ConfigTestValues />
+          <CrashDebug />
+        </Box>
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
