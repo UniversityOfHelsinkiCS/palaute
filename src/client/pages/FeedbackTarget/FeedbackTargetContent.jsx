@@ -1,7 +1,7 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Link, Navigate, Route, Routes, useLocation, useMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 
 import { Alert, Box } from '@mui/material'
 
@@ -48,7 +48,6 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
-
   const {
     feedbackTarget,
     isStudent,
@@ -78,8 +77,6 @@ const FeedbackTargetContent = () => {
       : '/targets/:feedbackTargetId/*'
   )
   const defaultPath = `${pathnameBase}/feedback`
-
-  console.log(isInterimFeedback, pathnameBase, defaultPath)
 
   const feedbackGiven = feedback || justGivenFeedback
 
