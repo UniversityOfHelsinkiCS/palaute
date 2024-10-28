@@ -48,7 +48,7 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
-  const { pathname } = useLocation()
+
   const {
     feedbackTarget,
     isStudent,
@@ -71,15 +71,22 @@ const FeedbackTargetContent = () => {
     userCreated,
   } = feedbackTarget
 
-  const feedbackGiven = feedback || justGivenFeedback
+  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
+  const { pathnameBase } = useMatch(
+    isInterimFeedback
+      ? '/targets/:feedbackTargetId/interim-feedback/:interimFeedbackId/*'
+      : '/targets/:feedbackTargetId/*'
+  )
+  const defaultPath = `${pathnameBase}/feedback`
 
-  const defaultPath = `/targets/${feedbackTarget.id}/feedback`
+  console.log(isInterimFeedback, pathnameBase, defaultPath)
+
+  const feedbackGiven = feedback || justGivenFeedback
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isOpenOrClosed = feedbackTargetIsOpenOrClosed(feedbackTarget)
-  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
   const courseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
     i18n.language
@@ -140,14 +147,14 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
                 label={t('feedbackTargetView:editFeedbackTab')}
-                to={`${pathname}/feedback`}
+                to={`${pathnameBase}/feedback`}
                 icon={<EditOutlined />}
               />
             ) : (
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
                 label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
-                to={`${pathname}/feedback`}
+                to={`${pathnameBase}/feedback`}
                 badge={isOpen}
                 icon={<LiveHelpOutlined />}
               />
@@ -156,7 +163,7 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
                 label={t('feedbackTargetView:surveySettingsTab')}
-                to={`${pathname}/edit`}
+                to={`${pathnameBase}/edit`}
                 disabled={!isAdmin && isOpenOrClosed}
                 disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
                 badge={!settingsReadByTeacher && !isOpenOrClosed}
@@ -171,7 +178,7 @@ const FeedbackTargetContent = () => {
                     ? t('feedbackTargetView:giveFeedbackResponseTab')
                     : t('feedbackTargetView:editFeedbackResponseTab')
                 }
-                to={`${pathname}/edit-feedback-response`}
+                to={`${pathnameBase}/edit-feedback-response`}
                 badge={!feedbackResponseEmailSent}
                 icon={<EditOutlined />}
               />
@@ -180,7 +187,7 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
                 label={t('feedbackTargetView:shareTab')}
-                to={`${pathname}/share`}
+                to={`${pathnameBase}/share`}
                 icon={<ShareOutlined />}
               />
             )}
@@ -196,7 +203,7 @@ const FeedbackTargetContent = () => {
                 <TabGroupTab
                   data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
                   label={t('feedbackTargetView:continuousFeedbackTab')}
-                  to={`${pathname}/continuous-feedback`}
+                  to={`${pathnameBase}/continuous-feedback`}
                   badge={continuousFeedbackCount}
                   badgeContent={continuousFeedbackCount}
                   badgeVisible={!isStudent}
@@ -208,7 +215,7 @@ const FeedbackTargetContent = () => {
                 <TabGroupTab
                   data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
                   label={t('feedbackTargetView:interimFeedbackTab')}
-                  to={`${pathname}/interim-feedback`}
+                  to={`${pathnameBase}/interim-feedback`}
                   icon={<ForumOutlined />}
                 />
               )}
@@ -224,14 +231,14 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-results-tab`}
                 label={t('feedbackTargetView:feedbacksTab')}
-                to={`${pathname}/results`}
+                to={`${pathnameBase}/results`}
                 icon={<PollOutlined />}
               />
               {showStudentsWithFeedbackTab && (
                 <TabGroupTab
                   data-cy={`${dataCyPrefix}feedback-target-students-with-feedback-tab`}
                   label={t('feedbackTargetView:studentsWithFeedbackTab')}
-                  to={`${pathname}/students-with-feedback`}
+                  to={`${pathnameBase}/students-with-feedback`}
                   icon={<PeopleOutlined />}
                 />
               )}
@@ -243,13 +250,13 @@ const FeedbackTargetContent = () => {
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
                 label="Togen"
-                to={`${pathname}/togen`}
+                to={`${pathnameBase}/togen`}
                 icon={<ListOutlined />}
               />
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-logs-tab`}
                 label="Logs"
-                to={`${pathname}/logs`}
+                to={`${pathnameBase}/logs`}
                 icon={<ListOutlined />}
               />
             </TabGroup>

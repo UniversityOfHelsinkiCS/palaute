@@ -63,8 +63,6 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
     await deleteInterimFeedback(interimFeedback.id)
   }
 
-  console.log(pathname)
-
   return (
     <>
       <Card sx={{ mb: 3 }}>
