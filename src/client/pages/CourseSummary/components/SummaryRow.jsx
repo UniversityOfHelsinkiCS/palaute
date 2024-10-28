@@ -125,7 +125,7 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
     />
   )
 
-  const link = `/course-summary/${courseUnit.courseCode}`
+  const link = `/course-summary/course-unit/${courseUnit.courseCode}`
   const { summary } = courseUnit
 
   return (

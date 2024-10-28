@@ -1,6 +1,6 @@
 import React from 'react'
 import { intersection } from 'lodash-es'
-import { Navigate, Route, Routes } from 'react-router'
+import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Button, Typography } from '@mui/material'
@@ -22,16 +22,17 @@ import Title from '../../components/common/Title'
 const SummaryInContext = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
+  const { authorizedUser: user } = useAuthorizedUser()
+  const { pathnameBase } = useMatch('/course-summary/*')
+
   const { search } = window.location
+  const preferredView = user?.preferences?.summaryView ?? 'my-organisations'
+  const defaultPath = `${pathnameBase}/${preferredView}`
 
   const handleUpdateData = async forceAll => {
     const duration = await updateSummaries({ forceAll })
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
   }
-
-  const { authorizedUser: user } = useAuthorizedUser()
-
-  const preferredView = user?.preferences?.summaryView ?? 'my-organisations'
 
   const hasAccessToMyOrganisations = Object.keys(user?.organisationAccess ?? {}).length > 0
   const hasAccessToUniversityLevel =
@@ -87,7 +88,6 @@ const SummaryInContext = () => {
       </RouterTabs>
       <SummaryScrollContainer>
         <Routes>
-          <Route index element={<Navigate to={`/course-summary/${preferredView}`} />} />
           <Route
             path="/my-courses"
             element={
@@ -100,7 +100,7 @@ const SummaryInContext = () => {
           <Route
             path="/my-organisations"
             element={
-              <ProtectedRoute redirectPath="/my-courses" hasAccess={hasAccessToMyOrganisations}>
+              <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
                 <MyOrganisations />
               </ProtectedRoute>
             }
@@ -109,13 +109,15 @@ const SummaryInContext = () => {
           <Route
             path="/university"
             element={
-              <ProtectedRoute redirectPath="/my-courses" hasAccess={hasAccessToUniversityLevel}>
+              <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToUniversityLevel}>
                 <University />
               </ProtectedRoute>
             }
           />
 
-          <Route path="/:code" element={<ForCourseUnitGroup />} />
+          <Route path="/course-unit/:code" element={<ForCourseUnitGroup />} />
+
+          <Route path="*" element={<Navigate to={defaultPath} />} />
         </Routes>
       </SummaryScrollContainer>
     </>
