@@ -35,6 +35,8 @@ import ForOrganisation from '../CourseSummary/ForOrganisation'
 const Organisation = () => {
   const { code } = useParams()
   const { pathnameBase } = useMatch('/organisations/:code/*')
+  const defaultPath = `${pathnameBase}/summary`
+
   const { t, i18n } = useTranslation()
   const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
@@ -89,7 +91,7 @@ const Organisation = () => {
               to={`${pathnameBase}/survey`}
             />
           )}
-          {ORGANISATION_SURVEYS_ENABLED && hasAdminAccess && (
+          {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
             <RouterTab
               label={t('organisationSettings:organisationSurveysTab')}
               icon={<DynamicFormOutlined />}
@@ -122,7 +124,7 @@ const Organisation = () => {
         <Route
           path="/settings"
           element={
-            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath="/summary">
+            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
               <GeneralSettings />
             </ProtectedRoute>
           }
@@ -133,7 +135,7 @@ const Organisation = () => {
         <Route
           path="/survey"
           element={
-            <ProtectedRoute hasAccess={hasWriteAccess} redirectPath="/summary">
+            <ProtectedRoute hasAccess={hasWriteAccess} redirectPath={defaultPath}>
               <EditSurvey />
             </ProtectedRoute>
           }
@@ -143,7 +145,7 @@ const Organisation = () => {
           <Route
             path="/organisation-surveys"
             element={
-              <ProtectedRoute hasAccess={hasWriteAccess} redirectPath="/summary">
+              <ProtectedRoute hasAccess={hasWriteAccess} redirectPath={defaultPath}>
                 <OrganisationSurveys />
               </ProtectedRoute>
             }
@@ -155,7 +157,7 @@ const Organisation = () => {
         <Route
           path="/open"
           element={
-            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath="/summary">
+            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
               <ProgrammeOpenQuestions />
             </ProtectedRoute>
           }
@@ -164,13 +166,13 @@ const Organisation = () => {
         <Route
           path="/logs"
           element={
-            <ProtectedRoute hasAccess={isAdmin} redirectPath="/summary">
+            <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
               <OrganisationLogs />
             </ProtectedRoute>
           }
         />
 
-        <Route path="*" element={<Navigate to="/summary" />} />
+        <Route path="*" element={<Navigate to={defaultPath} />} />
       </Routes>
     </>
   )
