@@ -77,7 +77,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
       <Paper
         sx={{
           p: '1rem',
-          alignItems: 'end',
+          justifyContent: 'space-between',
           backgroundColor: isStuckTop ? 'white' : 'transparent',
           display: 'flex',
         }}

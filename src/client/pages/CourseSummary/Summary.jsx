@@ -24,8 +24,8 @@ const SummaryInContext = () => {
   const { enqueueSnackbar } = useSnackbar()
   const { search } = window.location
 
-  const handleUpdateData = async () => {
-    const duration = await updateSummaries()
+  const handleUpdateData = async forceAll => {
+    const duration = await updateSummaries({ forceAll })
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
   }
 
@@ -49,9 +49,14 @@ const SummaryInContext = () => {
           <GenerateReport />
         </Box>
         {user?.isAdmin && (
-          <Button variant="text" onClick={handleUpdateData} data-cy="update-data">
-            Aja datanpäivitys (vain admin)
-          </Button>
+          <>
+            <Button variant="text" onClick={() => handleUpdateData(false)} data-cy="update-data">
+              Aja datanpäivitys (Nykyisille ajanjaksoille)
+            </Button>
+            <Button variant="text" onClick={() => handleUpdateData(true)} data-cy="force-update-data">
+              Aja datanpäivitys (Koko historialle)
+            </Button>
+          </>
         )}
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">

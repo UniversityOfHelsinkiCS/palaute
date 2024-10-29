@@ -16,6 +16,7 @@ const styles = {
     width: '100%',
     alignItems: 'start',
     pageBreakAfter: 'auto',
+    borderBottom: `1px solid ${grey[300]}`,
     ...boxPrintStyle,
   },
   hiddenListItem: theme => ({

@@ -77,7 +77,8 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagI
   const aggregatedCourseUnits = Object.values(groupedCourseUnits).map(courseUnits => {
     // Each of courseUnits has the same groupId and groupSummaries (calculated from the group...) so we can do this:
     const cu = courseUnits[0]
-    cu.summary = sumSummaries(_.uniqBy(cu.groupSummaries, 'entityId'))
+
+    cu.summary = sumSummaries(cu.groupSummaries)
     delete cu.dataValues.groupSummaries
 
     return cu.toJSON()

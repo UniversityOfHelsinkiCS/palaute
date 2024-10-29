@@ -2,7 +2,7 @@ const { sequelize } = require('../../db/dbConnection')
 const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
 const { ALWAYS_SHOW_STUDENT_LIST } = require('../../util/config')
 const { ApplicationError } = require('../../util/customErrors')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const getStudentListVisibility = async courseUnitId => {

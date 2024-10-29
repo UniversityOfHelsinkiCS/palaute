@@ -17,7 +17,7 @@ const {
 const { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } = require('../../util/config')
 const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { prefixTagId } = require('../../util/common')
 
 /**
@@ -242,7 +242,7 @@ const buildSummariesForPeriod = async ({
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
-    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.dataValues.organisationI) // (implementation detail): Weird Sequelize thing #1, organisationId doesn't load in attributes: ['organisationId'] but in dataValues is truncated to 'organisationI'
+    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.organisationId)
     const cuOrgIds = fbt.courseUnit.courseUnitsOrganisations.map(cuo => cuo.organisationId)
 
     feedbackTargetsSummaries.push({
@@ -545,8 +545,6 @@ const buildSummaries = async (forceAll = false) => {
 
   // Build summaries for each time period
   for (const { start, end } of datePeriods) {
-    // console.time(`${start.toISOString()}-${end.toISOString()}`)
-
     await sequelize.transaction(async transaction => {
       // Delete old summaries for this period. Remember that summary dates are exact, we dont want to delete anything "in between".
       await Summary.destroy({
@@ -565,8 +563,6 @@ const buildSummaries = async (forceAll = false) => {
         separateOrgId: OPEN_UNIVERSITY_ORG_ID,
       })
     })
-
-    // console.timeEnd(`${start.toISOString()}-${end.toISOString()}`)
   }
 }
 

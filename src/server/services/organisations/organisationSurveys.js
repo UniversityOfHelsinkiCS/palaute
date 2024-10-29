@@ -2,7 +2,7 @@ const { Op } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 const { i18n } = require('../../util/i18n')
 
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { formatActivityPeriod } = require('../../util/common')
 const { sequelize } = require('../../db/dbConnection')
 const { LANGUAGES } = require('../../util/config')

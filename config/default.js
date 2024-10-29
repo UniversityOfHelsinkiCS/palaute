@@ -240,8 +240,10 @@ const config = {
   ORGANISATION_SURVEYS_ENABLED: false,
 
   /**
-   * Whether the public course browser feature is enabled. 
-   * This feature allows ANY user to browse the courses and their public information 
+   * Whether the public course browser feature is enabled.
+   * This feature allows ANY user to browse the courses and their public information
+   * Whether the public course browser feature is enabled.
+   * This feature allows ANY user to browse the courses and their public information
    * (CUR and CU names, code and dates) by organisation.
    * Setting this to true enables both the frontend route and the backend api endpoints for the feature.
    */
@@ -338,6 +340,13 @@ const config = {
    * Controls showing of chips at course unit level based on the chips of its feedback targets
    */
   SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: false,
+
+  /**
+   * Custom session pinger hook to use. The pinger is used to check if the login session is still valid.
+   * The pinger hooks reside in src/client/hooks/pinger direcotry. The default pinger is 'Pinger-default'
+   * and any custom pingers should have a Prefix 'Pinger-'. Such as 'Pinger-OICD', 'Pinger-shibboleth', etc.
+   */
+  CUSTOM_SESSION_PINGER: 'Pinger-default',
 }
 
 module.exports = config
