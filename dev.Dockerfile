@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:22
 
 ENV TZ="Europe/Helsinki"
 ARG EXPOSE_PORT=8000
