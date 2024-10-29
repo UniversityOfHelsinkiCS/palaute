@@ -9,26 +9,14 @@ interface SummaryRowFiltersProps {
 }
 
 const SummaryRowFilters = ({ filterType = 'course' }: SummaryRowFiltersProps) => {
-  if (filterType === 'my-organisation') {
-    return (
-      <>
-        <ViewingModeSelector />
-        {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-        <SorterRowWithFilters />
-      </>
-    )
-  }
+  const filterComponents = (
+    <>
+      {filterType === 'my-organisation' && <ViewingModeSelector />}
+      {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
+    </>
+  )
 
-  if (filterType === 'my-courses' || filterType === 'university') {
-    return (
-      <>
-        {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-        <SorterRowWithFilters />
-      </>
-    )
-  }
-
-  return <SorterRowWithFilters />
+  return <SorterRowWithFilters filterComponents={filterComponents} />
 }
 
 export default SummaryRowFilters
