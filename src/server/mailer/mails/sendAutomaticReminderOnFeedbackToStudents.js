@@ -5,7 +5,7 @@ const {
   STUDENT_REMINDER_DAYS_TO_CLOSE,
   SEND_AUTOMATIC_REMINDER_ALWAYS,
 } = require('../../util/config')
-const logger = require('../../util/logger')
+const { logger } = require('../../util/logger')
 const { sendFeedbackReminderToStudents } = require('./sendFeedbackReminderToStudents')
 
 /**

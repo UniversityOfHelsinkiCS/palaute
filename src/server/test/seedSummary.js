@@ -1,4 +1,4 @@
-const { startOfDay } = require('date-fns')
+const { startOfDay, subDays } = require('date-fns')
 const {
   Organisation,
   CourseUnit,
@@ -14,6 +14,8 @@ const {
 const getUniversitySurvey = require('../services/surveys/universitySurvey')
 const { createTestObject } = require('./utils')
 const { buildSummaries } = require('../services/summary/buildSummaries')
+
+const CURRENT_YEAR = new Date().getFullYear()
 
 const getTestData = async () => {
   const TEST_ORG_ID = 'norppa-summary-test-org-1'
@@ -90,8 +92,8 @@ const initTestSummary = async ({ user }) => {
       en: 'Summary test course realisation',
       sv: 'asdasdasd',
     },
-    startDate: startOfDay(new Date('2023-08-01')),
-    endDate: startOfDay(new Date('2023-12-31')),
+    startDate: startOfDay(new Date(`${CURRENT_YEAR}-01-01`)),
+    endDate: startOfDay(startOfDay(subDays(new Date(), 1))),
   })
 
   await createTestObject(CourseRealisationsOrganisation, {

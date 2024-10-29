@@ -1,5 +1,5 @@
 const { inProduction, inStaging } = require('../util/config')
-const logger = require('../util/logger')
+const { logger } = require('../util/logger')
 const { schedule } = require('../util/cron/schedule')
 
 const {

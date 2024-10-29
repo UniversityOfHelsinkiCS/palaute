@@ -21,7 +21,8 @@ import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 import feedbackTargetNotGivingFeedback from '../../util/feedbackTargetNotGivingFeedback'
-import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/common'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/common'
+import { getCourseCode } from '../../util/courseIdentifiers'
 
 const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }) => {
   const { t } = useTranslation()
@@ -272,19 +273,12 @@ const PeriodInfoAddition = ({ isEnded }) => {
   return null
 }
 
-const getCourseDisplayName = (translatedName, courseCode, isOrganisationSurvey) => {
-  if (SHOW_COURSE_CODES_WITH_COURSE_NAMES && !isOrganisationSurvey) {
-    return `${courseCode} ${translatedName}`
-  }
-  return `${translatedName}`
-}
-
 const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { id, closesAt, opensAt, feedback, feedbackResponse } = feedbackTarget
+  const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit } = feedbackTarget
 
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
@@ -293,12 +287,8 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   })
 
   const courseName = getCourseName(feedbackTarget, t)
+  const visibleCourseCode = getCourseCode(courseUnit)
   const translatedName = getLanguageValue(courseName, i18n.language)
-  const courseDisplayName = getCourseDisplayName(
-    translatedName,
-    feedbackTarget.courseUnit.courseCode,
-    feedbackTarget.courseUnit.userCreated
-  )
 
   const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`
@@ -335,7 +325,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
       disableGutters
     >
       <Typography variant="body1" fontWeight={600} component="h2">
-        {courseDisplayName}
+        {visibleCourseCode} {translatedName}
       </Typography>
       <ListItemText primary={periodInfo} />
       <PeriodInfoAddition isEnded={isEnded} />

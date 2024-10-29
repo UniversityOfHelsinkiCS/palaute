@@ -2,27 +2,12 @@ import React from 'react'
 import { writeFileXLSX, utils } from 'xlsx'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
-import { Button } from '@mui/material'
+import { MenuItem } from '@mui/material'
 import { flatMap, keyBy, orderBy } from 'lodash-es'
 
 import ExportButton from '../../../../components/common/ExportButton'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../../../util/languageUtils'
-
-const styles = {
-  button: {
-    maxHeight: 45,
-    color: 'black',
-    background: 'white',
-    boxShadow: 'none',
-    backgroundColor: 'transparent',
-    '&:hover': {
-      backgroundColor: 'transparent',
-      borderColor: 'white',
-      boxShadow: 'none',
-    },
-  },
-}
 
 const getHeaders = (questions, feedbacks, language) => {
   const orderOfIds = feedbacks[0].data.map(f => f.questionId)
@@ -109,11 +94,7 @@ const ExportXLSXLink = ({ feedbackTarget, feedbacks }) => {
     [feedbacks, feedbackTarget, language]
   )
 
-  return (
-    <Button sx={styles.button} onClick={() => writeFileXLSX(workbook, filename)}>
-      {t('common:exportXLSX')}
-    </Button>
-  )
+  return <MenuItem onClick={() => writeFileXLSX(workbook, filename)}>{t('common:exportXLSX')}</MenuItem>
 }
 
 const ExportPdfLink = ({ componentRef }) => {
@@ -124,11 +105,7 @@ const ExportPdfLink = ({ componentRef }) => {
     pageStyle: '',
   })
 
-  return (
-    <Button sx={styles.button} onClick={handlePrint}>
-      {t('common:exportPdf')}
-    </Button>
-  )
+  return <MenuItem onClick={handlePrint}>{t('common:exportPdf')}</MenuItem>
 }
 
 const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
@@ -136,12 +113,10 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   const hasFeedbacks = feedbacks?.length > 0
 
   return (
-    <ExportButton
-      disabled={!hasFeedbacks}
-      XLSXLink={hasFeedbacks && <ExportXLSXLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
-      PdfLink={hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
-      label={t('feedbackTargetResults:export')}
-    />
+    <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export')}>
+      {hasFeedbacks && <ExportXLSXLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
+      {hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
+    </ExportButton>
   )
 }
 

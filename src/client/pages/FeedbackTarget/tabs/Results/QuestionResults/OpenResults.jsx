@@ -37,9 +37,8 @@ const styles = {
     },
     '@media print': {
       overflowY: 'visible',
-      maxHeight: '100%',
-      height: 'auto',
       display: 'block',
+      maxHeight: 'none',
     },
   }),
 }

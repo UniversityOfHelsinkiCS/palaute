@@ -1,5 +1,5 @@
 const _ = require('lodash')
-const { startOfDay } = require('date-fns')
+const { startOfDay, subDays } = require('date-fns')
 const {
   FeedbackTarget,
   User,
@@ -22,6 +22,8 @@ const {
   TEST_COURSE_REALISATION_ID,
 } = require('./testIds')
 const { createTestObject } = require('./utils')
+
+const CURRENT_YEAR = new Date().getFullYear()
 
 const seedUsers = async users => {
   for (const user of users) {
@@ -147,8 +149,8 @@ const seedDb = async () => {
       en: 'Test course realisation',
       sv: 'asdasdasd',
     },
-    startDate: startOfDay(new Date('2023-08-01')),
-    endDate: startOfDay(new Date('2023-12-31')),
+    startDate: startOfDay(new Date(`${CURRENT_YEAR}-01-01`)),
+    endDate: startOfDay(startOfDay(subDays(new Date(), 1))),
   })
 
   await createTestObject(CourseRealisationsOrganisation, {
