@@ -44,7 +44,7 @@ const SorterRow = ({ filterComponent, additionalFilters }) => {
 
   return (
     <>
-      <Box display="flex" alignItems="center" gap="0.2rem">
+      <Box display="flex" alignItems="center" gap="1rem">
         {additionalFilters}
         {filterComponent}
       </Box>
