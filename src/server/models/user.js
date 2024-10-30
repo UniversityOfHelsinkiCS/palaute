@@ -51,8 +51,22 @@ class User extends Model {
 
     const organisationIds = rows.flatMap(row => Object.values(row))
 
+    function getPriority(org) {
+      let weight = 0
+      if (org.access.admin) {
+        weight += 100
+      }
+      if (org.access.write) {
+        weight += 10
+      }
+      if (org.access.read) {
+        weight += 1
+      }
+      return weight
+    }
     const organisationAccess = organisations
       .filter(({ organisation }) => organisationIds.includes(organisation.id))
+      ?.sort((a, b) => getPriority(a) - getPriority(b)) // read, write, admin. Reduce on next line practically takes the last value
       .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
 
     return organisationAccess ?? null

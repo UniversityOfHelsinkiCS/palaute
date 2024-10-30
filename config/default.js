@@ -347,13 +347,6 @@ const config = {
    * and any custom pingers should have a Prefix 'Pinger-'. Such as 'Pinger-OICD', 'Pinger-shibboleth', etc.
    */
   CUSTOM_SESSION_PINGER: 'Pinger-default',
-
-  /**
-   * Custom session pinger hook to use. The pinger is used to check if the login session is still valid.
-   * The pinger hooks reside in src/client/hooks/pinger direcotry. The default pinger is 'Pinger-default'
-   * and any custom pingers should have a Prefix 'Pinger-'. Such as 'Pinger-OICD', 'Pinger-shibboleth', etc.
-   */
-  CUSTOM_SESSION_PINGER: 'Pinger-default',
 }
 
 module.exports = config
