@@ -37,9 +37,9 @@ const run = async () => {
 
   logger.info(`
     Precached ${ordered.length} feedback targets with a total of ${_.sumBy(
-      ordered,
-      'studentCount'
-    )} students, total time ${((Date.now() - start) / 1000).toFixed()}s`)
+    ordered,
+    'studentCount'
+  )} students, total time ${((Date.now() - start) / 1000).toFixed()}s`)
 }
 
 const start = async () => {
