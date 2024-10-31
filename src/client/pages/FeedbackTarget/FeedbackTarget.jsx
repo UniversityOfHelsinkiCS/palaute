@@ -17,10 +17,26 @@ const FeedbackTarget = () => {
   const { authorizedUser } = useAuthorizedUser()
 
   const { organisations, isLoading: organisationsLoading } = useOrganisations()
+  function getPriority(org) {
+    let weight = 0
+    if (org.access.admin) {
+      weight += 100
+    }
+    if (org.access.write) {
+      weight += 10
+    }
+    if (org.access.read) {
+      weight += 1
+    }
+    return weight
+  }
   const organisation =
     isLoading || organisationsLoading || !courseUnit
       ? null
-      : organisations?.find(org => courseUnit.organisations[0].id === org.id)
+      : organisations
+          ?.filter(org => courseUnit.organisations.map(o => o.id)?.includes(org.id))
+          ?.sort((a, b) => getPriority(b) - getPriority(a)) // admin, write, read
+          ?.at(0)
 
   if (isLoading) {
     return <LoadingProgress />

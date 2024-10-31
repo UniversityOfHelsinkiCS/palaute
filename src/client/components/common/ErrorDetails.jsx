@@ -48,8 +48,8 @@ const ErrorDetails = ({ feedbackTargetId, message, response }) => {
     isOld
       ? 'feedbackTargetView:noAccessOldCourse'
       : isEnded
-        ? 'feedbackTargetView:noAccessEndedCourse'
-        : 'feedbackTargetView:noAccess'
+      ? 'feedbackTargetView:noAccessEndedCourse'
+      : 'feedbackTargetView:noAccess'
 
   return (
     <Box sx={{ mb: '2rem' }}>
