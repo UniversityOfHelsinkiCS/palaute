@@ -55,7 +55,7 @@
     "@sentry/browser": "^8.0.0",
     "@sentry/node": "^8.0.0",
     "@sentry/tracing": "^7.0.0",
-    "@vitejs/plugin-react-swc": "^3.6.0",
+    "@vitejs/plugin-react-swc": "^3.7.1",
     "axios": "^1.7.2",
     "buffer": "^6.0.3",
     "chart.js": "^3.4.0",
@@ -155,6 +155,9 @@
     "typescript": "^5.5.4",
     "util": "^0.12.4",
     "vite-plugin-eslint": "^1.8.1"
+  },
+  "optionalDependencies": {
+    "@rollup/rollup-darwin-arm64": "4.24.0"
   },
   "browserslist": {
     "production": [
