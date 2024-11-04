@@ -14,6 +14,22 @@ jobs:
         run: npm run lint
 
   cypress:
+    strategy:
+      fail-fast: false
+      matrix:
+        spec:
+          [
+            common,
+            continuousFeedback,
+            courseSummary,
+            emailStatsView,
+            interimFeedback,
+            organisationSurvey,
+            programme,
+            teacherview,
+            universitySurvey,
+            userfeedbacks,
+          ]
     runs-on: ubuntu-latest
 
     steps:
