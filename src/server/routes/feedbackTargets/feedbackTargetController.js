@@ -21,6 +21,7 @@ const {
   hideFeedback,
   getPublicFeedbackTargetsForOrganisation,
   notGivingFeedback,
+  cacheFeedbackTargetById,
 } = require('../../services/feedbackTargets')
 const { getWaitingFeedbackCountForStudent } = require('../../services/feedbackTargets/getForStudent')
 const { getFeedbackErrorViewDetails } = require('../../services/feedbackTargets/getErrorViewDetails')
@@ -186,7 +187,12 @@ adRouter.put('/:id/response', async (req, res) => {
     user,
   })
 
-  return res.send(updatedFeedbackTarget)
+  const additionalData = await cacheFeedbackTargetById(feedbackTargetId)
+
+  return res.send({
+    ...updatedFeedbackTarget,
+    ...additionalData,
+  })
 })
 
 adRouter.put('/:id/remind-students', async (req, res) => {
