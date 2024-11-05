@@ -191,7 +191,7 @@ adRouter.put('/:id/response', async (req, res) => {
 
   return res.send({
     ...updatedFeedbackTarget,
-    ...additionalData,
+    studentCount: additionalData.studentCount,
   })
 })
 
