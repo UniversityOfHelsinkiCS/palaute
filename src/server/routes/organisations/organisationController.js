@@ -2,7 +2,7 @@ const _ = require('lodash')
 const { Router } = require('express')
 const { Op } = require('sequelize')
 
-const { formatActivityPeriod } = require('util/common')
+const { formatActivityPeriod } = require('../../util/common')
 const {
   getOrganisationsList,
 } = require('../../services/organisations/getOrganisationsList')
@@ -211,6 +211,8 @@ const findFeedbackTargets = async (req, res) => {
 
   const { filter } = query
 
+  console.log(filter)
+
   const access = organisationAccess.filter(
     (org) => org.organisation.code === code
   )
@@ -281,7 +283,7 @@ const findFeedbackTargets = async (req, res) => {
         courseCode: { [Op.iLike]: `${filter}%` },
         [Op.or]: [
           { 'name.fi': { [Op.iLike]: `%${filter}%` } },
-          { 'name.se': { [Op.iLike]: `%${filter}%` } },
+          { 'name.sv': { [Op.iLike]: `%${filter}%` } },
           { 'name.en': { [Op.iLike]: `%${filter}%` } },
         ],
       },
