@@ -1,6 +1,6 @@
 import React from 'react'
-import { Redirect, Link } from 'react-router-dom'
-import { Route, Switch, useRouteMatch } from 'react-router'
+import { Link } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router'
 
 import { Box, Tab, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -38,11 +38,9 @@ const ConfigTestValues = () => {
 }
 
 const AdminView = () => {
-  const { path, url } = useRouteMatch()
-
   const { authorizedUser } = useAuthorizedUser()
 
-  if (!authorizedUser?.isAdmin) return <Redirect to="/" />
+  if (!authorizedUser?.isAdmin) return <Navigate to="/" />
 
   return (
     <>
@@ -58,32 +56,32 @@ const AdminView = () => {
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          <Tab label="Users" component={Link} to={`${url}/users`} />
-          <Tab label="Enable courses" component={Link} to={`${url}/enable`} />
-          <Tab label="Organisation Access" component={Link} to={`${url}/access`} />
-          <Tab label="Norppa feedback" component={Link} to={`${url}/feedback`} />
-          <Tab label="Norppa statistics" component={Link} to={`${url}/statistics`} />
-          <Tab label="Search feedback targets" component={Link} to={`${url}/feedback-targets`} />
-          <Tab label="Search organisation surveys" component={Link} to={`${url}/organisation-surveys`} />
-          <Tab label="Palautevastaavat" component={Link} to={`${url}/feedback-correspondents`} />
-          <Tab label="Banners" component={Link} to={`${url}/banners`} />
-          <Tab label="Updater" to={`${url}/updater`} component={Link} />
-          <Tab label="Misc" component={Link} to={`${url}/misc`} />
+          <Tab label="Users" element={Link} to="/admin/users" />
+          <Tab label="Enable courses" component={Link} to="/admin/enable" />
+          <Tab label="Organisation Access" component={Link} to="/admin/access" />
+          <Tab label="Norppa feedback" component={Link} to="/admin/feedback" />
+          <Tab label="Norppa statistics" component={Link} to="/admin/statistics" />
+          <Tab label="Search feedback targets" component={Link} to="/admin/feedback-targets" />
+          <Tab label="Search organisation surveys" component={Link} to="/admin/organisation-surveys" />
+          <Tab label="Palautevastaavat" component={Link} to="/admin/feedback-correspondents" />
+          <Tab label="Banners" component={Link} to="/admin/banners" />
+          <Tab label="Updater" component={Link} to="/admin/updater" />
+          <Tab label="Misc" component={Link} to="/admin/misc" />
         </RouterTabs>
       </Box>
-      <Switch>
-        <Route path={`${path}/users`} component={UsersTab} />
-        <Route path={`${path}/enable`} component={EnableCourses} />
-        <Route path={`${path}/access`} component={OrganisationAccess} />
-        <Route path={`${path}/feedback`} component={NorppaFeedbackView} />
-        <Route path={`${path}/statistics`} component={NorppaStatisticView} />
-        <Route path={`${path}/feedback-targets`} component={FeedbackTargetInspector} />
-        <Route path={`${path}/organisation-surveys`} component={OrganisationSurveyInspector} />
-        <Route path={`${path}/feedback-correspondents`} component={FeedbackCorrespondents} />
-        <Route path={`${path}/banners`} component={BannerView} />
-        <Route path={`${path}/updater`} component={UpdaterView} />
-        <Route path={`${path}/misc`} component={MiscTab} />
-      </Switch>
+      <Routes>
+        <Route path="/users" element={<UsersTab />} />
+        <Route path="/enable" element={<EnableCourses />} />
+        <Route path="/access" element={<OrganisationAccess />} />
+        <Route path="/feedback" element={<NorppaFeedbackView />} />
+        <Route path="/statistics" element={<NorppaStatisticView />} />
+        <Route path="/feedback-targets" element={<FeedbackTargetInspector />} />
+        <Route path="/organisation-surveys" element={<OrganisationSurveyInspector />} />
+        <Route path="/feedback-correspondents" element={<FeedbackCorrespondents />} />
+        <Route path="/banners" element={<BannerView />} />
+        <Route path="/updater" element={<UpdaterView />} />
+        <Route path="/misc" element={<MiscTab />} />
+      </Routes>
     </>
   )
 }

@@ -231,7 +231,7 @@ const NavBar = ({ guest = false }) => {
     .filter(Boolean)
     .map(link => ({
       ...link,
-      active: matchPath(pathname, { path: link.to }),
+      active: matchPath({ path: link.to }, pathname),
     }))
 
   const navBarLinks = (
