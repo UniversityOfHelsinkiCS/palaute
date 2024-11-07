@@ -56,7 +56,7 @@ const AdminView = () => {
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          <Tab label="Users" element={Link} to="/admin/users" />
+          <Tab label="Users" component={Link} to="/admin/users" />
           <Tab label="Enable courses" component={Link} to="/admin/enable" />
           <Tab label="Organisation Access" component={Link} to="/admin/access" />
           <Tab label="Norppa feedback" component={Link} to="/admin/feedback" />
