@@ -28,7 +28,5 @@ export const useOrganisationCourseSearch = ({
     queryFn
   )
 
-  console.log(data)
-
   return { data, ...rest }
 }

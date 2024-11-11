@@ -273,9 +273,7 @@ const OrganisationSurveyForm = () => {
           label={t('organisationSurveys:studentNumberInputLabel')}
         />
       </Grid>
-      <Grid md={6} sm={12} xs={12} item>
-        <CourseSearchInput />
-      </Grid>
+      <CourseSearchInput />
     </Grid>
   )
 }
