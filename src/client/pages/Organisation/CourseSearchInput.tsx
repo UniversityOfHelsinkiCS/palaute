@@ -14,22 +14,20 @@ const CourseSearchInput = () => {
   const { data: courses } = useOrganisationCourseSearch({
     organisationCode: code,
     search: debounceSearch,
-    startDate: null,
-    endDate: null,
+    startDate: new Date('2022-09-06T00:00:00.000Z'),
+    endDate: new Date('2022-10-21T20:59:00.000Z'),
   })
   const [selectedCourses, setSelectedCourses] = useState<any[]>([])
 
-  const getOptionLabel = (option: any) =>
-    option.courseRealisation.name[lang] || ''
-  const getDates = (option: any) => {
-    const feedbackTarget = option.courseRealisation
-    const startDate = feedbackTarget
-      ? new Date(feedbackTarget.startDate).toLocaleDateString()
-      : 'N/A'
-    const endDate = feedbackTarget
-      ? new Date(feedbackTarget.endDate).toLocaleDateString()
-      : 'N/A'
-    return { startDate, endDate }
+  const getOptionLabel = (option: any) => {
+    const courseRealisation = option.feedbackTargets[0]?.courseRealisation
+    const startDate = courseRealisation?.startDate
+      ? new Date(courseRealisation.startDate).toLocaleDateString()
+      : ''
+    const endDate = courseRealisation?.endDate
+      ? new Date(courseRealisation.endDate).toLocaleDateString()
+      : ''
+    return `${option?.name[lang] || ''} (${startDate} - ${endDate})`
   }
 
   return (
@@ -57,14 +55,9 @@ const CourseSearchInput = () => {
         )}
       />
       <div>
-        {selectedCourses.map((option) => {
-          const { startDate, endDate } = getDates(option)
-          return (
-            <div key={`${option.id}-${option.courseRealisation?.id}`}>
-              {getOptionLabel(option)} ({startDate} - {endDate})
-            </div>
-          )
-        })}
+        {selectedCourses.map((option) => (
+          <div key={option.courseRealisationId}>{getOptionLabel(option)}</div>
+        ))}
       </div>
     </div>
   )
