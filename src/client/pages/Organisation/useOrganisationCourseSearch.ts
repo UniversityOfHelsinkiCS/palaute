@@ -4,8 +4,8 @@ import apiClient from '../../util/apiClient'
 interface UseOrganisationCourseSearchOptions {
   organisationCode: string
   search?: string
-  startDate?: Date
-  endDate?: Date
+  startDate: Date
+  endDate: Date
 }
 
 export const useOrganisationCourseSearch = ({
@@ -15,10 +15,7 @@ export const useOrganisationCourseSearch = ({
   endDate,
 }: UseOrganisationCourseSearchOptions) => {
   const queryFn = async () => {
-    let url = `/organisations/${organisationCode}/courses?filter=${search}`
-    if (startDate && endDate) {
-      url += `&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
-    }
+    const url = `/organisations/${organisationCode}/courses?search=${search}&startDate=${startDate.toISOString()}&endDate=${endDate.toISOString()}`
     const { data } = await apiClient.get(url)
     return data
   }

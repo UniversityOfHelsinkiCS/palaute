@@ -209,9 +209,7 @@ const findFeedbackTargets = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const { filter } = query
-
-  console.log(filter)
+  const { search } = query
 
   const access = organisationAccess.filter(
     (org) => org.organisation.code === code
@@ -280,11 +278,11 @@ const findFeedbackTargets = async (req, res) => {
     attributes: ['id', 'name', 'courseCode'],
     where: {
       [Op.or]: {
-        courseCode: { [Op.iLike]: `${filter}%` },
+        courseCode: { [Op.iLike]: `${search}%` },
         [Op.or]: [
-          { 'name.fi': { [Op.iLike]: `%${filter}%` } },
-          { 'name.sv': { [Op.iLike]: `%${filter}%` } },
-          { 'name.en': { [Op.iLike]: `%${filter}%` } },
+          { 'name.fi': { [Op.iLike]: `%${search}%` } },
+          { 'name.sv': { [Op.iLike]: `%${search}%` } },
+          { 'name.en': { [Op.iLike]: `%${search}%` } },
         ],
       },
     },
