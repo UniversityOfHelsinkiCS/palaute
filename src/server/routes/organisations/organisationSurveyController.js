@@ -12,6 +12,7 @@ const {
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
   getDeletionAllowed,
+  getStudentNumbersFromCourseIds,
 } = require('../../services/organisations/organisationSurveys')
 const {
   getFeedbackTargetContext,
@@ -86,8 +87,13 @@ const createOrganisationSurvey = async (req, res) => {
       403
     )
 
+  const studentNumbersFromCourseIds =
+    await getStudentNumbersFromCourseIds(initialCourseIds)
+
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [...new Set(initialStudentNumbers)]
+  const studentNumbers = [
+    ...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds]),
+  ]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
