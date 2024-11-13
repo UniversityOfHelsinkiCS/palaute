@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { Autocomplete, TextField, Grid, Button } from '@mui/material'
+import { Autocomplete, TextField, Grid } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
 import { useDebounce } from './useDebounce'
@@ -9,7 +9,7 @@ import { getSemesterRange } from '../../util/yearSemesterUtils'
 
 type DateRange = { start: Date; end: Date }
 
-const CourseSearchInput = () => {
+const CourseSearchInput = ({ selectedCourses, setSelectedCourses }: any) => {
   const { t, i18n } = useTranslation()
   const lang = i18n.language
   const { code } = useParams<{ code: string }>()
@@ -26,7 +26,6 @@ const CourseSearchInput = () => {
     startDate: dateRange.start,
     endDate: dateRange.end,
   })
-  const [selectedCourses, setSelectedCourses] = useState<any[]>([])
 
   const getOptionLabel = (course: any) => {
     const courseRealisation = course.feedbackTargets[0]?.courseRealisation
@@ -73,11 +72,6 @@ const CourseSearchInput = () => {
           setOption={setOption}
           allowAll={false}
         />
-      </Grid>
-      <Grid xs={4} item>
-        <Button sx={{ padding: '1.5rem' }} onClick={() => null}>
-          {t('organisationSurveys:AddStudents')}
-        </Button>
       </Grid>
     </>
   )
