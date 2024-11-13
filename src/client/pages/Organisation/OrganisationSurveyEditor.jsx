@@ -235,7 +235,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   )
 }
 
-const OrganisationSurveyForm = ({ selectedCourses, setSelectedCourses }) => {
+const OrganisationSurveyForm = () => {
   const { t } = useTranslation()
 
   return (
@@ -273,18 +273,12 @@ const OrganisationSurveyForm = ({ selectedCourses, setSelectedCourses }) => {
           label={t('organisationSurveys:studentNumberInputLabel')}
         />
       </Grid>
-      <CourseSearchInput
-        selectedCourses={selectedCourses}
-        setSelectedCourses={setSelectedCourses}
-      />
+      <CourseSearchInput />
     </Grid>
   )
 }
 
-const EditOrganisationSurveyForm = ({
-  selectedCourses,
-  setSelectedCourses,
-}) => {
+const EditOrganisationSurveyForm = () => {
   const { t } = useTranslation()
 
   return (
@@ -324,10 +318,7 @@ const EditOrganisationSurveyForm = ({
           editView
         />
       </Grid>
-      <CourseSearchInput
-        selectedCourses={selectedCourses}
-        setSelectedCourses={setSelectedCourses}
-      />
+      <CourseSearchInput />
     </Grid>
   )
 }
@@ -340,8 +331,6 @@ const OrganisationSurveyEditor = ({
   editing,
   onStopEditing,
   editView = false,
-  selectedCourses,
-  setSelectedCourses,
 }) => {
   const { t } = useTranslation()
 
@@ -363,15 +352,9 @@ const OrganisationSurveyEditor = ({
             <Form>
               <Box sx={{ m: 4 }}>
                 {editView ? (
-                  <EditOrganisationSurveyForm
-                    selectedCourses={selectedCourses}
-                    setSelectedCourses={setSelectedCourses}
-                  />
+                  <EditOrganisationSurveyForm />
                 ) : (
-                  <OrganisationSurveyForm
-                    selectedCourses={selectedCourses}
-                    setSelectedCourses={setSelectedCourses}
-                  />
+                  <OrganisationSurveyForm />
                 )}
 
                 <Box sx={{ mt: 2 }}>

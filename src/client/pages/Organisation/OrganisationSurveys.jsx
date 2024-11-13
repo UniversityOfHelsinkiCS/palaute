@@ -49,7 +49,6 @@ const OrganisationSurveys = () => {
     useOrganisationSurveys(code)
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
-  const [selectedCourses, setSelectedCourses] = useState([])
 
   if (isUserLoading || isOrganisationSurveysLoading) {
     return <LoadingProgress />
@@ -65,6 +64,7 @@ const OrganisationSurveys = () => {
     endDate: addDays(new Date(), 7),
     studentNumbers: [],
     teachers: [authorizedUser],
+    courses: [],
   }
 
   const handleClose = () => setShowForm(!showForm)
@@ -85,6 +85,7 @@ const OrganisationSurveys = () => {
     const values = {
       ...data,
       teacherIds: data.teachers.map((t) => t.id),
+      courseIds: data.courses.map((c) => c.id),
     }
 
     await mutation.mutateAsync(values, {
@@ -139,8 +140,6 @@ const OrganisationSurveys = () => {
         handleSubmit={handleSubmit}
         editing={showForm}
         onStopEditing={handleClose}
-        selectedCourses={selectedCourses}
-        setSelectedCourses={setSelectedCourses}
       />
 
       {surveys.length > 0 ? (

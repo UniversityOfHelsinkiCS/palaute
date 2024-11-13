@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { Autocomplete, TextField, Grid } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { useFormikContext } from 'formik'
 import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
 import { useDebounce } from './useDebounce'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
@@ -9,9 +10,21 @@ import { getSemesterRange } from '../../util/yearSemesterUtils'
 
 type DateRange = { start: Date; end: Date }
 
-const CourseSearchInput = ({ selectedCourses, setSelectedCourses }: any) => {
+type Locales = { fi: string; en: string; sv: string }
+
+interface InitialValues {
+  name: Locales
+  startDate: Date
+  endDate: Date
+  studentNumbers: []
+  teachers: []
+  courses: []
+}
+
+const CourseSearchInput = () => {
   const { t, i18n } = useTranslation()
   const lang = i18n.language
+  const formikProps = useFormikContext<InitialValues>()
   const { code } = useParams<{ code: string }>()
   const [courseSearch, setCourseSearch] = useState('')
   const debounceSearch = useDebounce(courseSearch, 700)
@@ -20,7 +33,7 @@ const CourseSearchInput = ({ selectedCourses, setSelectedCourses }: any) => {
   )
   const [option, setOption] = React.useState<string>('semester')
 
-  const { data: courses } = useOrganisationCourseSearch({
+  const { data } = useOrganisationCourseSearch({
     organisationCode: code,
     search: debounceSearch,
     startDate: dateRange.start,
@@ -42,17 +55,18 @@ const CourseSearchInput = ({ selectedCourses, setSelectedCourses }: any) => {
     <>
       <Grid xs={12} item>
         <Autocomplete
+          id="courses"
           disableCloseOnSelect
           multiple
-          value={selectedCourses}
-          onChange={(_, value) => {
-            setSelectedCourses(value)
+          defaultValue={formikProps.initialValues.courses}
+          onChange={(_, courses) => {
+            formikProps.setFieldValue('courses', courses)
           }}
           inputValue={courseSearch}
           onInputChange={(_, value) => {
             setCourseSearch(value)
           }}
-          options={courses ?? []}
+          options={data ?? []}
           getOptionLabel={getOptionLabel}
           renderInput={(params: any) => (
             <TextField
