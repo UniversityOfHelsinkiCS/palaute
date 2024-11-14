@@ -53,7 +53,7 @@ const CourseSearchInput = () => {
 
   return (
     <>
-      <Grid xs={12} item>
+      <Grid xs={8} item>
         <Autocomplete
           id="courses"
           disableCloseOnSelect
