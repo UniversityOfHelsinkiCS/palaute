@@ -138,7 +138,16 @@ const editOrganisationSurvey = async (req, res) => {
     'endDate',
     'teacherIds',
     'studentNumbers',
+    'courseIds',
   ])
+
+  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(
+    updates.courseIds
+  )
+
+  updates.studentNumbers = [
+    ...new Set(updates.studentNumbers, studentNumbersFromCourseIds),
+  ]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,
@@ -165,7 +174,6 @@ const editOrganisationSurvey = async (req, res) => {
 const removeOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code, id } = req.params
-
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
   })

@@ -140,6 +140,7 @@ const OrganisationSurveys = () => {
         handleSubmit={handleSubmit}
         editing={showForm}
         onStopEditing={handleClose}
+        organisationCode={code}
       />
 
       {surveys.length > 0 ? (

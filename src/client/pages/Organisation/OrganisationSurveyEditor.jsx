@@ -235,7 +235,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   )
 }
 
-const OrganisationSurveyForm = () => {
+const OrganisationSurveyForm = ({ organisationCode }) => {
   const { t } = useTranslation()
 
   return (
@@ -273,12 +273,12 @@ const OrganisationSurveyForm = () => {
           label={t('organisationSurveys:studentNumberInputLabel')}
         />
       </Grid>
-      <CourseSearchInput />
+      <CourseSearchInput organisationCode={organisationCode} />
     </Grid>
   )
 }
 
-const EditOrganisationSurveyForm = () => {
+const EditOrganisationSurveyForm = ({ organisationCode }) => {
   const { t } = useTranslation()
 
   return (
@@ -318,7 +318,7 @@ const EditOrganisationSurveyForm = () => {
           editView
         />
       </Grid>
-      <CourseSearchInput />
+      <CourseSearchInput organisationCode={organisationCode} />
     </Grid>
   )
 }
@@ -331,6 +331,7 @@ const OrganisationSurveyEditor = ({
   editing,
   onStopEditing,
   editView = false,
+  organisationCode,
 }) => {
   const { t } = useTranslation()
 
@@ -352,9 +353,11 @@ const OrganisationSurveyEditor = ({
             <Form>
               <Box sx={{ m: 4 }}>
                 {editView ? (
-                  <EditOrganisationSurveyForm />
+                  <EditOrganisationSurveyForm
+                    organisationCode={organisationCode}
+                  />
                 ) : (
-                  <OrganisationSurveyForm />
+                  <OrganisationSurveyForm organisationCode={organisationCode} />
                 )}
 
                 <Box sx={{ mt: 2 }}>

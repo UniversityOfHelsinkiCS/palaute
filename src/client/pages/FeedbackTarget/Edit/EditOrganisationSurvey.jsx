@@ -9,7 +9,10 @@ import { useTranslation } from 'react-i18next'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
-import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../../Organisation/utils'
+import {
+  getOverlappingStudentTeachers,
+  getOrganisationSurveySchema,
+} from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 
 const EditOrganisationSurvey = () => {
@@ -17,10 +20,20 @@ const EditOrganisationSurvey = () => {
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
 
-  const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
+  const {
+    feedbackTarget,
+    isAdmin,
+    isResponsibleTeacher,
+    isOrganisationAdmin,
+    organisation,
+  } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
   const allowEdit = isAdmin || isResponsibleTeacher || isOrganisationAdmin
-  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
+  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(
+    organisations[0]?.code,
+    id,
+    allowEdit
+  )
 
   const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
 
@@ -30,8 +43,10 @@ const EditOrganisationSurvey = () => {
     name: organisationSurvey.name,
     startDate: organisationSurvey.opensAt,
     endDate: organisationSurvey.closesAt,
-    studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
-    teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
+    studentNumbers: organisationSurvey.students.map(
+      (s) => s.user.studentNumber
+    ),
+    teachers: organisationSurvey.userFeedbackTargets.map((t) => t.user),
   }
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
@@ -45,7 +60,7 @@ const EditOrganisationSurvey = () => {
       setErrors({
         studentNumbers: {
           text: t('validationErrors:overlappingStudentTeacher'),
-          data: overlappingStudentTeachers.map(t => t.studentNumber),
+          data: overlappingStudentTeachers.map((t) => t.studentNumber),
         },
       })
       return
@@ -54,7 +69,8 @@ const EditOrganisationSurvey = () => {
     const values = {
       surveyId: organisationSurvey.id,
       ...data,
-      teacherIds: data.teachers.map(t => t.id),
+      teacherIds: data.teachers.map((t) => t.id),
+      courseIds: data.courses.map((c) => c.id),
     }
 
     await editMutation.mutateAsync(values, {
@@ -63,8 +79,13 @@ const EditOrganisationSurvey = () => {
 
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
-      onError: error => {
-        if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
+      onError: (error) => {
+        if (
+          error.isAxiosError &&
+          error.response &&
+          error.response.data &&
+          error.response.data.invalidStudentNumbers
+        ) {
           const { invalidStudentNumbers } = error.response.data
 
           setErrors({
@@ -101,6 +122,7 @@ const EditOrganisationSurvey = () => {
         editing={showForm}
         onStopEditing={handleClose}
         editView
+        organisationCode={organisation.code}
       />
     </>
   )

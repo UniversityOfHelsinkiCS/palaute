@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { Autocomplete, TextField, Grid } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormikContext } from 'formik'
@@ -21,11 +20,12 @@ interface InitialValues {
   courses: []
 }
 
-const CourseSearchInput = () => {
+type OrganisationCode = any
+
+const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
   const { t, i18n } = useTranslation()
   const lang = i18n.language
   const formikProps = useFormikContext<InitialValues>()
-  const { code } = useParams<{ code: string }>()
   const [courseSearch, setCourseSearch] = useState('')
   const debounceSearch = useDebounce(courseSearch, 700)
   const [dateRange, setDateRange] = useState<DateRange>(() =>
@@ -34,7 +34,7 @@ const CourseSearchInput = () => {
   const [option, setOption] = React.useState<string>('semester')
 
   const { data } = useOrganisationCourseSearch({
-    organisationCode: code,
+    organisationCode,
     search: debounceSearch,
     startDate: dateRange.start,
     endDate: dateRange.end,
