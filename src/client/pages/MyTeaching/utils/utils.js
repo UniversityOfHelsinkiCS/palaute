@@ -1,5 +1,5 @@
 import { orderBy } from 'lodash-es'
-import { lightFormat, startOfHour } from 'date-fns'
+import { lightFormat } from 'date-fns'
 
 import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
