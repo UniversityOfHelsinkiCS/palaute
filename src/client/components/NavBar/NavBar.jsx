@@ -31,7 +31,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import UserPermissionsWindow from './UserPermissionsWindow'
 import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
-import { NEW_TEACHING_VIEW_ENABLED, LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED, inProduction } from '../../util/common'
+import { LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED, inProduction } from '../../util/common'
 import useWaitingFeedbackCount from './useWaitingFeedbackCount'
 
 const styles = {
@@ -202,7 +202,7 @@ const NavBar = ({ guest = false }) => {
 
   const links = [
     myCoursesIsAccessible && {
-      label: NEW_TEACHING_VIEW_ENABLED ? t('navBar:myCoursesV2') : t('navBar:myCourses'),
+      label: t('navBar:myCourses'),
       to: '/courses',
     },
     isStudent && {
