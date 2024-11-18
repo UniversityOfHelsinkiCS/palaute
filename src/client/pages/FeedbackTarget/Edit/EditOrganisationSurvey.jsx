@@ -1,39 +1,26 @@
 import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { Edit } from '@mui/icons-material'
-
 import { useSnackbar } from 'notistack'
-
 import { useTranslation } from 'react-i18next'
-
+import { useQueryClient } from 'react-query'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
-import {
-  getOverlappingStudentTeachers,
-  getOrganisationSurveySchema,
-} from '../../Organisation/utils'
+import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 
 const EditOrganisationSurvey = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
+  const queryClient = useQueryClient()
 
-  const {
-    feedbackTarget,
-    isAdmin,
-    isResponsibleTeacher,
-    isOrganisationAdmin,
-    organisation,
-  } = useFeedbackTargetContext()
+  const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin, organisation } =
+    useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
   const allowEdit = isAdmin || isResponsibleTeacher || isOrganisationAdmin
-  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(
-    organisations[0]?.code,
-    id,
-    allowEdit
-  )
+  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
 
   const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
 
@@ -43,10 +30,8 @@ const EditOrganisationSurvey = () => {
     name: organisationSurvey.name,
     startDate: organisationSurvey.opensAt,
     endDate: organisationSurvey.closesAt,
-    studentNumbers: organisationSurvey.students.map(
-      (s) => s.user.studentNumber
-    ),
-    teachers: organisationSurvey.userFeedbackTargets.map((t) => t.user),
+    studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
+    teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
   }
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
@@ -60,7 +45,7 @@ const EditOrganisationSurvey = () => {
       setErrors({
         studentNumbers: {
           text: t('validationErrors:overlappingStudentTeacher'),
-          data: overlappingStudentTeachers.map((t) => t.studentNumber),
+          data: overlappingStudentTeachers.map(t => t.studentNumber),
         },
       })
       return
@@ -69,23 +54,18 @@ const EditOrganisationSurvey = () => {
     const values = {
       surveyId: organisationSurvey.id,
       ...data,
-      teacherIds: data.teachers.map((t) => t.id),
-      courseIds: data.courses.map((c) => c.id),
+      teacherIds: data.teachers.map(t => t.id),
+      courseIds: data.courses?.map(c => c.id) || [],
     }
 
     await editMutation.mutateAsync(values, {
       onSuccess: () => {
         handleClose()
-
+        queryClient.invalidateQueries(['feedbackTarget', feedbackTarget.id])
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
-      onError: (error) => {
-        if (
-          error.isAxiosError &&
-          error.response &&
-          error.response.data &&
-          error.response.data.invalidStudentNumbers
-        ) {
+      onError: error => {
+        if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
 
           setErrors({

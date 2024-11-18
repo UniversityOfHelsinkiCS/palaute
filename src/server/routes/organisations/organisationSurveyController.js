@@ -14,12 +14,8 @@ const {
   getDeletionAllowed,
   getStudentNumbersFromCourseIds,
 } = require('../../services/organisations/organisationSurveys')
-const {
-  getFeedbackTargetContext,
-} = require('../../services/feedbackTargets/getFeedbackTargetContext')
-const {
-  validateStudentNumbers,
-} = require('../../services/organisations/validator')
+const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
+const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 
@@ -45,10 +41,7 @@ const getOrganisationSurveys = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  const { organisation, hasReadAccess } = await getAccessAndOrganisation(
-    user,
-    code
-  )
+  const { organisation, hasReadAccess } = await getAccessAndOrganisation(user, code)
 
   if (!hasReadAccess) {
     const teacherSurveys = await getSurveysForTeacher(code, user.id)
@@ -73,32 +66,20 @@ const createOrganisationSurvey = async (req, res) => {
     courseIds: initialCourseIds,
   } = req.body
 
-  const { organisation, hasAdminAccess } = await getAccessAndOrganisation(
-    user,
-    code,
-    {
-      admin: true,
-    }
-  )
+  const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    admin: true,
+  })
 
-  if (!hasAdminAccess)
-    throw new ApplicationError(
-      'Only organisation admins can create organisation surveys',
-      403
-    )
+  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
-  const studentNumbersFromCourseIds =
-    await getStudentNumbersFromCourseIds(initialCourseIds)
+  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(initialCourseIds)
 
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [
-    ...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds]),
-  ]
+  const studentNumbers = [...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds])]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
-  if (invalidStudentNumbers.length > 0)
-    return res.status(400).send({ invalidStudentNumbers })
+  if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
 
   await initializeOrganisationCourseUnit(organisation)
 
@@ -109,16 +90,8 @@ const createOrganisationSurvey = async (req, res) => {
   })
 
   const studentIds = await getStudentIds(studentNumbers)
-  const studentFeedbackTargets = await createUserFeedbackTargets(
-    feedbackTarget.id,
-    studentIds,
-    'STUDENT'
-  )
-  const teacherFeedbackTargets = await createUserFeedbackTargets(
-    feedbackTarget.id,
-    teacherIds,
-    'RESPONSIBLE_TEACHER'
-  )
+  const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
+  const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
 
   const survey = await getSurveyById(feedbackTarget.id)
 
@@ -132,21 +105,12 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { id } = req.params
 
-  const updates = _.pick(body, [
-    'name',
-    'startDate',
-    'endDate',
-    'teacherIds',
-    'studentNumbers',
-    'courseIds',
-  ])
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
 
-  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(
-    updates.courseIds
-  )
+  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(updates.courseIds)
 
   updates.studentNumbers = [
-    ...new Set(updates.studentNumbers, studentNumbersFromCourseIds),
+    ...new Set([...updates.studentNumbers, ...studentNumbersFromCourseIds.filter(n => n !== null)]),
   ]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
@@ -159,11 +123,8 @@ const editOrganisationSurvey = async (req, res) => {
   if (!feedbackTarget) throw new Error('Organisation survey not found')
 
   if (updates.studentNumbers) {
-    const { invalidStudentNumbers } = await validateStudentNumbers(
-      updates.studentNumbers
-    )
-    if (invalidStudentNumbers.length > 0)
-      return res.status(400).send({ invalidStudentNumbers })
+    const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
+    if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
   }
 
   const updatedSurvey = await updateOrganisationSurvey(id, updates)
@@ -178,19 +139,12 @@ const removeOrganisationSurvey = async (req, res) => {
     admin: true,
   })
 
-  if (!hasAdminAccess)
-    throw new ApplicationError(
-      'Only organisation admins can remove organisation surveys',
-      403
-    )
+  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can remove organisation surveys', 403)
 
   const allowDelete = await getDeletionAllowed(id)
 
   if (!hasAdminAccess && !allowDelete)
-    throw new ApplicationError(
-      'Can not delete orgnanisation survey when feedbacks are given',
-      403
-    )
+    throw new ApplicationError('Can not delete orgnanisation survey when feedbacks are given', 403)
 
   await deleteOrganisationSurvey(id)
 
