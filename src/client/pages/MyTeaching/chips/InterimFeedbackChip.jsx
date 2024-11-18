@@ -2,9 +2,9 @@ import React from 'react'
 import { Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
-import LinkChip from '../../../../components/common/LinkChip'
+import LinkChip from '../../../components/common/LinkChip'
 
-import styles from '../../../../util/chipStyles'
+import styles from '../../../util/chipStyles'
 
 const InterimFeedbackChip = ({ parentFeedbackTarget }) => {
   const { t } = useTranslation()

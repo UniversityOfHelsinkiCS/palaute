@@ -7,8 +7,7 @@ import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import { NEW_TEACHING_VIEW_ENABLED, PUBLIC_COURSE_BROWSER_ENABLED } from '../util/common'
 
 import Admin from './Admin'
-import MyTeaching from './MyTeaching'
-import MyTeachingV2 from './MyTeaching/V2/MyTeaching'
+import MyTeaching from './MyTeaching/MyTeaching'
 import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
@@ -50,7 +49,7 @@ const Router = () => (
     <Suspense fallback={<LoadingProgress />}>
       <Routes>
         <Route path="/feedbacks" element={<MyFeedbacks />} exact />
-        <Route path="/courses" element={NEW_TEACHING_VIEW_ENABLED ? <MyTeachingV2 /> : <MyTeaching />} exact />
+        <Route path="/courses" element={NEW_TEACHING_VIEW_ENABLED ? <MyTeaching /> : <MyTeaching />} exact />
         <Route path="/targets/:id/*" element={<FeedbackTarget />} />
         <Route path="/organisations/:code/*" element={<Organisation />} />
         <Route path="/course-summary/*" element={<Summary />} />
