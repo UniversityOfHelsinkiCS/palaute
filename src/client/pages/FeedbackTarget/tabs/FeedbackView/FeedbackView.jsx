@@ -147,7 +147,11 @@ const FeedbackView = () => {
         })
       }
     } catch (e) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      if (e?.response?.data?.error) {
+        enqueueSnackbar(e.response.data.error, { variant: 'error' })
+      } else {
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      }
     }
   }
 
