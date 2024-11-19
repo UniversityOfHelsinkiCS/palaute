@@ -75,7 +75,9 @@ const createOrganisationSurvey = async (req, res) => {
   const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(initialCourseIds)
 
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds])]
+  const studentNumbers = [
+    ...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds.filter(n => n !== null)]),
+  ]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)

@@ -59,18 +59,16 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         multiple
         fullWidth
         defaultValue={formikProps.initialValues.teachers}
-        onChange={(_, teachers) =>
-          formikProps.setFieldValue('teachers', teachers)
-        }
+        onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
         options={potentialUsers}
-        filterOptions={(options) => options}
+        filterOptions={options => options}
         onInputChange={handleChange}
-        getOptionLabel={(option) => `${option.firstName} ${option.lastName}`}
+        getOptionLabel={option => `${option.firstName} ${option.lastName}`}
         freeSolo
         ChipProps={{
           'data-cy': `formik-responsible-teacher-input-field-chip`,
         }}
-        renderInput={(params) => (
+        renderInput={params => (
           <TextField
             {...params}
             inputProps={{
@@ -94,14 +92,9 @@ const StudenNumberInputInfo = () => {
     <Box my={2}>
       <Alert data-cy="formik-student-number-input-alert" severity="info">
         <Box sx={{ display: 'flex', alignItems: 'center', mt: -1 }}>
-          <Typography variant="body2">
-            {t('organisationSurveys:studentNumberInformation')}
-          </Typography>
+          <Typography variant="body2">{t('organisationSurveys:studentNumberInformation')}</Typography>
 
-          <IconButton
-            data-cy="formik-student-number-input-expand-icon"
-            onClick={() => setExpand(!expand)}
-          >
+          <IconButton data-cy="formik-student-number-input-expand-icon" onClick={() => setExpand(!expand)}>
             {!expand ? <ExpandMore /> : <ExpandLess />}
           </IconButton>
         </Box>
@@ -109,9 +102,7 @@ const StudenNumberInputInfo = () => {
         <Collapse in={expand} timeout="auto" unmountOnExit>
           <ul data-cy="formik-student-number-input-delimeter-list">
             <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
-            <li>
-              {t('organisationSurveys:studentNumberDelimeters:semicolon')}
-            </li>
+            <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
             <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
             <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
           </ul>
@@ -144,9 +135,7 @@ const StudenNumberInputInfo = () => {
 const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
-  const [value, setValue] = React.useState(
-    formikProps.initialValues.studentNumbers
-  )
+  const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
   const [inputValue, setInputValue] = React.useState('')
 
   const hasError = formikProps.touched[name] && formikProps.errors[name]
@@ -192,8 +181,8 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           if (options.length > 1) {
             const studentNumbers = value
               .concat(options)
-              .filter((v) => v)
-              .map((v) => {
+              .filter(v => v)
+              .map(v => {
                 if (v.length < 9 && ADD_LEADING_ZERO_TO_STUDENT_NUMBERS) {
                   return `0${v}`
                 }
@@ -213,15 +202,11 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
               key={`${option}-${index}`}
               variant="outlined"
               label={option}
-              color={
-                formikProps.errors[name] && errorData.includes(option)
-                  ? 'error'
-                  : 'primary'
-              }
+              color={formikProps.errors[name] && errorData.includes(option) ? 'error' : 'primary'}
             />
           ))
         }
-        renderInput={(params) => (
+        renderInput={params => (
           <TextField
             label={t('organisationSurveys:students')}
             {...params}
@@ -231,6 +216,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         )}
         {...props}
       />
+      {value.length}
     </Box>
   )
 }
@@ -240,22 +226,13 @@ const OrganisationSurveyForm = ({ organisationCode }) => {
 
   return (
     <Grid spacing={4} container>
-      <FormikLocalesFieldEditor
-        name="name"
-        localesLabelString="organisationSurveys:newSurveyName"
-      />
+      <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker
-          name="startDate"
-          label={t('organisationSurveys:startDate')}
-        />
+        <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker
-          name="endDate"
-          label={t('organisationSurveys:endDate')}
-        />
+        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
 
       <Grid xs={12} item>
@@ -283,23 +260,14 @@ const EditOrganisationSurveyForm = ({ organisationCode }) => {
 
   return (
     <Grid spacing={4} container>
-      <FormikLocalesFieldEditor
-        name="name"
-        localesLabelString="organisationSurveys:newSurveyName"
-      />
+      <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker
-          name="startDate"
-          label={t('organisationSurveys:startDate')}
-        />
+        <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
 
       <Grid md={6} sm={12} xs={12} item>
-        <FormikDatePicker
-          name="endDate"
-          label={t('organisationSurveys:endDate')}
-        />
+        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
 
       <Grid xs={12} item>
@@ -337,9 +305,7 @@ const OrganisationSurveyEditor = ({
 
   return (
     <Dialog maxWidth={false} open={editing} onClose={onStopEditing}>
-      <DialogTitle data-cy="organisation-surveys-editor-title">
-        {title}
-      </DialogTitle>
+      <DialogTitle data-cy="organisation-surveys-editor-title">{title}</DialogTitle>
       <Formik
         initialValues={initialValues}
         onSubmit={handleSubmit}
@@ -353,9 +319,7 @@ const OrganisationSurveyEditor = ({
             <Form>
               <Box sx={{ m: 4 }}>
                 {editView ? (
-                  <EditOrganisationSurveyForm
-                    organisationCode={organisationCode}
-                  />
+                  <EditOrganisationSurveyForm organisationCode={organisationCode} />
                 ) : (
                   <OrganisationSurveyForm organisationCode={organisationCode} />
                 )}

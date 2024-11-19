@@ -28,9 +28,7 @@ const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
   const formikProps = useFormikContext<InitialValues>()
   const [courseSearch, setCourseSearch] = useState('')
   const debounceSearch = useDebounce(courseSearch, 700)
-  const [dateRange, setDateRange] = useState<DateRange>(() =>
-    getSemesterRange(new Date())
-  )
+  const [dateRange, setDateRange] = useState<DateRange>(() => getSemesterRange(new Date()))
   const [option, setOption] = React.useState<string>('semester')
 
   const { data } = useOrganisationCourseSearch({
@@ -69,11 +67,7 @@ const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
           options={data ?? []}
           getOptionLabel={getOptionLabel}
           renderInput={(params: any) => (
-            <TextField
-              {...params}
-              label={t('organisationSurveys:AddCourses')}
-              variant="outlined"
-            />
+            <TextField {...params} label={t('organisationSurveys:addCourses')} variant="outlined" />
           )}
         />
       </Grid>

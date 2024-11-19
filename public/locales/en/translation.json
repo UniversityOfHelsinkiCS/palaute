@@ -418,7 +418,8 @@
     "remove": "Remove",
     "confirmRemoveSurvey": "Are you sure you want to remove this programme survey?",
     "removeSuccess": "Programme survey removed",
-    "feedbacksGivenRatio": "Feedbacks given / Student count"
+    "feedbacksGivenRatio": "Feedbacks given / Student count",
+    "addCourses": "Add students from courses"
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",
