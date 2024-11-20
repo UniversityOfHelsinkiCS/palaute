@@ -102,9 +102,6 @@ export const SummaryResultElements = ({ questions, summary, feedbackResponseIndi
           tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
         />
       )}
-      {/* <Box sx={styles.countCell}> // @TODO access check to show hidden count
-        {Boolean(data?.hiddenCount) && <CensoredCount count={data.hiddenCount} />}
-      </Box> */}
     </>
   )
 }
