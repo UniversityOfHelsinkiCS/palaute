@@ -69,8 +69,10 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
     .map(ufbt => ufbt.user)
 
   return (
-    <Box display="flex" flexDirection="column">
-      {link}
+    <Box display="flex" flexDirection="column" whiteSpace="nowrap" overflow="hidden">
+      <Typography variant="body2" textOverflow="ellipsis" overflow="hidden">
+        {link}
+      </Typography>
       <Box display="flex" alignItems="center" mb={0.5}>
         <Typography color="textSecondary" variant="body2">
           {datePeriod}
