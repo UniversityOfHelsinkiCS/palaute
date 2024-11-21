@@ -17,7 +17,6 @@ const styles = {
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '3.5rem',
-    aspectRatio: 1, // Make them square
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
