@@ -20,7 +20,7 @@ const {
   User,
 } = require('../../models')
 
-const getOrganisationCourseUnit = async (organisationId) => {
+const getOrganisationCourseUnit = async organisationId => {
   const organisationCourseUnit = await CourseUnit.findOne({
     where: {
       userCreated: true,
@@ -41,22 +41,19 @@ const getOrganisationCourseUnit = async (organisationId) => {
   return organisationCourseUnit
 }
 
-const getCourseUnitName = (organisationName) => {
+const getCourseUnitName = organisationName => {
   const name = {}
 
-  LANGUAGES.forEach((language) => {
+  LANGUAGES.forEach(language => {
     const t = i18n.getFixedT(language)
-    name[language] =
-      `${organisationName[language]}: ${t('organisationSurveys:surveys')}`
+    name[language] = `${organisationName[language]}: ${t('organisationSurveys:surveys')}`
   })
 
   return name
 }
 
-const initializeOrganisationCourseUnit = async (organisation) => {
-  const existingOrganisationCU = await getOrganisationCourseUnit(
-    organisation.id
-  )
+const initializeOrganisationCourseUnit = async organisation => {
+  const existingOrganisationCU = await getOrganisationCourseUnit(organisation.id)
 
   if (existingOrganisationCU) return
 
@@ -81,19 +78,13 @@ const initializeOrganisationCourseUnit = async (organisation) => {
   })
 }
 
-const createOrganisationFeedbackTarget = async (
-  organisation,
-  feedbackTargetData
-) => {
+const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData) => {
   const { name } = feedbackTargetData
   const { startDate, endDate } = formatActivityPeriod(feedbackTargetData)
 
-  const organisationCourseUnit = await getOrganisationCourseUnit(
-    organisation.id
-  )
+  const organisationCourseUnit = await getOrganisationCourseUnit(organisation.id)
 
-  if (!organisationCourseUnit)
-    throw new Error('Organisation course unit not found')
+  if (!organisationCourseUnit) throw new Error('Organisation course unit not found')
 
   const organisationCourseRealisation = await CourseRealisation.create({
     id: uuidv4(),
@@ -125,7 +116,7 @@ const createOrganisationFeedbackTarget = async (
   return organisationFeedbackTarget
 }
 
-const getStudentIds = async (studentNumbers) => {
+const getStudentIds = async studentNumbers => {
   const students = await User.findAll({
     where: {
       studentNumber: { [Op.in]: studentNumbers },
@@ -138,13 +129,9 @@ const getStudentIds = async (studentNumbers) => {
   return studentIds
 }
 
-const createUserFeedbackTargets = async (
-  feedbackTargetId,
-  userIds,
-  accessStatus
-) => {
+const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
   const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    userIds.map((userId) => ({
+    userIds.map(userId => ({
       accessStatus,
       feedbackTargetId,
       userId,
@@ -168,7 +155,7 @@ const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
   return userFeedbackTargets
 }
 
-const getSurveyById = async (feedbackTargetId) => {
+const getSurveyById = async feedbackTargetId => {
   const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: [
       'id',
@@ -233,7 +220,7 @@ const getSurveyById = async (feedbackTargetId) => {
   return organisationSurvey
 }
 
-const getSurveysForOrganisation = async (organisationId) => {
+const getSurveysForOrganisation = async organisationId => {
   const organisationSurveys = await FeedbackTarget.findAll({
     attributes: [
       'id',
@@ -323,26 +310,19 @@ const getSurveysForTeacher = async (organisationCode, userId) => {
   const organisationSurveys = await getSurveysForOrganisation(organisation.id)
 
   const userSurveys = organisationSurveys.filter(({ userFeedbackTargets }) =>
-    userFeedbackTargets.some(
-      ({ userId: id, accessStatus }) =>
-        id === userId && accessStatus === 'RESPONSIBLE_TEACHER'
-    )
+    userFeedbackTargets.some(({ userId: id, accessStatus }) => id === userId && accessStatus === 'RESPONSIBLE_TEACHER')
   )
 
   return userSurveys
 }
 
-const getDeletionAllowed = async (organisationSurveyId) => {
+const getDeletionAllowed = async organisationSurveyId => {
   const { feedbackCount } = await FeedbackTarget.findByPk(organisationSurveyId)
 
   return feedbackCount === 0
 }
 
-const updateUserFeedbackTargets = async (
-  feedbackTargetId,
-  userIds,
-  accessStatus
-) => {
+const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
   await UserFeedbackTarget.destroy({
     where: {
       feedbackTargetId,
@@ -351,10 +331,8 @@ const updateUserFeedbackTargets = async (
     },
   })
 
-  const existingUserIds = (
-    await getUserFeedbackTargets(feedbackTargetId, accessStatus)
-  ).map(({ userId }) => userId)
-  const newUserIds = userIds.filter((id) => !existingUserIds.includes(id))
+  const existingUserIds = (await getUserFeedbackTargets(feedbackTargetId, accessStatus)).map(({ userId }) => userId)
+  const newUserIds = userIds.filter(id => !existingUserIds.includes(id))
 
   await createUserFeedbackTargets(feedbackTargetId, newUserIds, accessStatus)
 }
@@ -372,9 +350,7 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     closesAt: endDate,
   })
 
-  const courseRealisation = await CourseRealisation.findByPk(
-    feedbackTarget.courseRealisationId
-  )
+  const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
 
   await courseRealisation.update({
     name,
@@ -383,11 +359,7 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   })
 
   if (teacherIds) {
-    await updateUserFeedbackTargets(
-      feedbackTargetId,
-      teacherIds,
-      'RESPONSIBLE_TEACHER'
-    )
+    await updateUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
   }
 
   if (studentNumbers) {
@@ -401,14 +373,13 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   return survey
 }
 
-const deleteOrganisationSurvey = async (feedbackTargetId) => {
+const deleteOrganisationSurvey = async feedbackTargetId => {
   const t = await sequelize.transaction()
 
   try {
     logger.info(`Deleting organisation survey ${feedbackTargetId}`)
 
-    const { courseRealisationId } =
-      await FeedbackTarget.findByPk(feedbackTargetId)
+    const { courseRealisationId } = await FeedbackTarget.findByPk(feedbackTargetId)
 
     const ufbt = await UserFeedbackTarget.destroy({
       where: {
@@ -473,8 +444,9 @@ const deleteOrganisationSurvey = async (feedbackTargetId) => {
   }
 }
 
-const getStudentNumbersFromCourseIds = async (courseIds) => {
+const getStudentNumbersFromCourseIds = async courseIds => {
   try {
+    if (!courseIds || courseIds.length < 1) return []
     const studentNumbers = await User.findAll({
       include: [
         {
@@ -496,12 +468,9 @@ const getStudentNumbersFromCourseIds = async (courseIds) => {
       attributes: ['studentNumber'],
     })
 
-    return studentNumbers.map((user) => user.studentNumber)
+    return studentNumbers.map(user => user.studentNumber)
   } catch (error) {
-    logger.error(
-      `Error fetching student numbers for course IDs ${courseIds}:`,
-      error
-    )
+    logger.error(`Error fetching student numbers for course IDs ${courseIds}:`, error)
     throw new Error('Failed to fetch student numbers')
   }
 }
