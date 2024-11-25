@@ -5,7 +5,7 @@ import { addDays } from 'date-fns'
 
 import { Alert, Box, Button } from '@mui/material'
 
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import OrganisationSurveyItem from './OrganisationSurveyItem'
 import { useOrganisationSurveys } from './useOrganisationSurveys'
@@ -37,7 +37,7 @@ const styles = {
 }
 
 const OrganisationSurveys = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { code } = useParams()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -92,7 +92,7 @@ const OrganisationSurveys = () => {
       onSuccess: (data) => {
         handleClose()
 
-        history.push(`/targets/${data.id}/edit`)
+        navigate(`/targets/${data.id}/edit`)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: (error) => {

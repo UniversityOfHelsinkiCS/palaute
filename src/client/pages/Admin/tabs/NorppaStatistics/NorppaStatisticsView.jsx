@@ -80,21 +80,34 @@ const NorppaStatisticView = () => {
       <Box marginBottom={2}>
         <DatePicker
           label="Opens at"
-          inputFormat="dd/MM/yyyy"
+          format="dd/MM/yyyy"
           disableFuture
-          disableToolbar
           value={opensAt}
-          renderInput={props => <TextField margin="normal" {...props} />}
           onChange={handleOpensAtChange}
+          slots={{
+            textField: TextField,
+          }}
+          slotProps={{
+            textField: {
+              margin: 'normal',
+            },
+          }}
           sx={styles.datePicker}
         />
+
         <DatePicker
           label="Closes at"
-          inputFormat="dd/MM/yyyy"
-          disableToolbar
+          format="dd/MM/yyyy"
           value={closesAt}
-          renderInput={props => <TextField margin="normal" {...props} />}
           onChange={handleClosesAtChange}
+          slots={{
+            textField: TextField,
+          }}
+          slotProps={{
+            textField: {
+              margin: 'normal',
+            },
+          }}
           sx={styles.datePicker}
         />
       </Box>

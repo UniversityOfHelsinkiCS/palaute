@@ -11,7 +11,7 @@ export const RouterTabs = ({ children, ...props }) => {
 
   const activeIndex = React.Children.toArray(children)
     .filter(c => React.isValidElement(c))
-    .findIndex(c => !!matchPath(pathname, { path: stripSearch(get(c, 'props.to')) }))
+    .findIndex(c => !!matchPath({ path: stripSearch(get(c, 'props.to')) }, pathname))
 
   return (
     <Tabs
@@ -50,7 +50,7 @@ export const RouterTab = ({
   ...props
 }) => {
   const { pathname } = useLocation()
-  const active = !!matchPath(pathname, { path: stripSearch(to) })
+  const active = !!matchPath({ path: stripSearch(to) }, pathname)
 
   let content = icon ? (
     <Box component="span" sx={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>

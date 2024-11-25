@@ -1,17 +1,19 @@
 import { useSnackbar } from 'notistack'
 import React from 'react'
+import { Navigate } from 'react-router-dom'
 
-import { Redirect, Route } from 'react-router-dom'
-
-const ProtectedRoute = ({ path, component, hasAccess, notify, redirectPath = '/' }) => {
+const ProtectedRoute = ({ children, hasAccess, notify, redirectPath = '/' }) => {
   const { enqueueSnackbar } = useSnackbar()
+
   if (!hasAccess && notify) {
-    enqueueSnackbar(`No access to ${path}, sorry!`)
+    enqueueSnackbar(`No access to this route, sorry!`)
   }
 
-  const componentToRender = hasAccess ? component : () => <Redirect to={redirectPath} />
+  if (!hasAccess) {
+    return <Navigate to={redirectPath} />
+  }
 
-  return <Route path={path} component={componentToRender} />
+  return children
 }
 
 export default ProtectedRoute

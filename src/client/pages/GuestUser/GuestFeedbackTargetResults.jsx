@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 
 import { Box, Alert } from '@mui/material'
@@ -44,7 +44,7 @@ const FeedbackTargetResultsView = () => {
   }
 
   if (!feedbackTarget || !feedbackTargetData) {
-    return <Redirect to="/noad/courses" />
+    return <Navigate to="/noad/courses" />
   }
 
   const { feedbacks, feedbackVisible } = feedbackTargetData
@@ -63,7 +63,7 @@ const FeedbackTargetResultsView = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   if (isOpen && !feedback) {
-    return <Redirect to={`noad/targets/${feedbackTarget.id}/feedback`} />
+    return <Navigate to={`noad/targets/${feedbackTarget.id}/feedback`} />
   }
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()

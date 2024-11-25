@@ -13,35 +13,36 @@ const FormikDatePicker = ({ name, ...props }) => {
 
   return (
     <DatePicker
-      inputFormat="dd/MM/yyyy"
+      format="dd/MM/yyyy"
       id={field.name}
       value={field.value ?? ''}
       onChange={value => {
         setFieldValue(name, value, true)
       }}
-      renderInput={params => (
-        <TextField
-          {...params}
-          inputProps={{ ...params.inputProps, 'data-cy': `formik-date-picker-field-${name}-input` }}
-          fullWidth
-          margin="normal"
-          helperText={t(meta.error)}
-          error={showError}
-        />
-      )}
-      error={showError}
+      slots={{
+        textField: TextField,
+      }}
+      slotProps={{
+        textField: {
+          fullWidth: true,
+          margin: 'normal',
+          helperText: t(meta.error),
+          error: showError,
+          inputProps: {
+            'data-cy': `formik-date-picker-field-${name}-input`,
+          },
+        },
+        inputAdornment: {
+          'data-cy': `formik-date-picker-keyboard-field-${name}`,
+          'aria-label': 'change date',
+        },
+        openPickerButton: {
+          'data-cy': `formik-date-picker-field-${name}-popper`,
+        },
+      }}
       InputProps={{
         'data-cy': `formik-date-picker-field-${name}`,
       }}
-      KeyboardButtonProps={{
-        'data-cy': `formik-date-picker-keyboard-field-${name}`,
-        'aria-label': 'change date',
-      }}
-      OpenPickerButtonProps={{
-        'data-cy': `formik-date-picker-field-${name}-popper`,
-      }}
-      inputVariant="outlined"
-      disableToolbar
       maxDate={new Date('2300-01-01')}
       {...props}
     />
