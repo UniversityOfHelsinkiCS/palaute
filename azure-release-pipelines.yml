@@ -1,0 +1,117 @@
+trigger: none
+
+parameters:
+- name: RELEASE_TAG
+  displayName: Release tag
+  type: string
+  default: false
+
+pool:
+  name: Leanware Kampus testi
+
+steps:
+- checkout: git://Kampus/tuni-kpj@refs/tags/${{ parameters.RELEASE_TAG }}
+- checkout: git://Kampus/tuni-kpj-auth@refs/tags/${{ parameters.RELEASE_TAG }}
+- checkout: git://Kampus/tuni-kpj-pate@refs/tags/${{ parameters.RELEASE_TAG }}
+- checkout: git://Kampus/tuni-kpj-updater@refs/tags/${{ parameters.RELEASE_TAG }}
+
+- task: Docker@2
+  displayName: Leanware Docker registry login
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    command: 'login'
+
+- task: Docker@2
+  displayName: Build tuni-kpj Docker image
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj'
+    command: 'build'
+    Dockerfile: 'tuni-kpj/Dockerfile'
+    arguments: |
+      --build-arg NODE_CONFIG_ENV=tau
+      --build-arg GIT_SHA=$(Build.SourceVersion)
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Docker@2
+  displayName: Build tuni-kpj-auth Docker image
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj-auth'
+    command: 'build'
+    Dockerfile: 'tuni-kpj-auth/Dockerfile'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Docker@2
+  displayName: Build tuni-kpj-pate Docker image
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj-pate'
+    command: 'build'
+    Dockerfile: 'tuni-kpj-pate/Dockerfile'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Docker@2
+  displayName: Build tuni-kpj-updater Docker image
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj-updater'
+    command: 'build'
+    Dockerfile: 'tuni-kpj-updater/Dockerfile'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+
+- task: Docker@2
+  displayName: Push tuni-kpj Docker image to Leanware registry
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj'
+    command: 'push'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Docker@2
+  displayName: Push tuni-kpj-auth Docker image to Leanware registry
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj-auth'
+    command: 'push'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Docker@2
+  displayName: Push tuni-kpj-pate Docker image to Leanware registry
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj-pate'
+    command: 'push'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Docker@2
+  displayName: Push tuni-kpj-updater Docker image to Leanware registry
+  inputs:
+    containerRegistry: 'Leanware Docker registry'
+    repository: 'lw/tau/tuni-kpj-updater'
+    command: 'push'
+    tags: |
+      ${{ parameters.RELEASE_TAG }}
+- task: Bash@3
+  displayName: Push new release to AWS
+  inputs:
+   targetType: 'inline'
+   script: |
+     aws ecr get-login-password --region eu-north-1 | docker login --username AWS --password-stdin 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau
+     docker tag hub.leanware.fi/lw/tau/tuni-kpj:${{ parameters.RELEASE_TAG }} 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj:${{ parameters.RELEASE_TAG }}
+     docker push 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj:${{ parameters.RELEASE_TAG }}
+     docker tag hub.leanware.fi/lw/tau/tuni-kpj-auth:${{ parameters.RELEASE_TAG }} 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj-auth:${{ parameters.RELEASE_TAG }}
+     docker push 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj-auth:${{ parameters.RELEASE_TAG }}
+     docker tag hub.leanware.fi/lw/tau/tuni-kpj-pate:${{ parameters.RELEASE_TAG }} 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj-pate:${{ parameters.RELEASE_TAG }}
+     docker push 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj-pate:${{ parameters.RELEASE_TAG }}
+     docker tag hub.leanware.fi/lw/tau/tuni-kpj-updater:${{ parameters.RELEASE_TAG }} 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj-updater:${{ parameters.RELEASE_TAG }}
+     docker push 947561294603.dkr.ecr.eu-north-1.amazonaws.com/lw2tau/tuni-kpj-updater:${{ parameters.RELEASE_TAG }}
+   failOnStderr: false
+- task: Bash@3
+  displayName: Remove folders from the agent
+  inputs:
+   targetType: 'inline'
+   script: |
+     echo rm -rf -- ..?* .[!.]* *
+   failOnStderr: true
