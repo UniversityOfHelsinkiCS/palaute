@@ -11,7 +11,12 @@ const LinkButton = ({ title, to, external = false, ...rest }) => {
   }
 
   return (
-    <Button {...rest} size="small" {...buttonProps}>
+    <Button
+      {...rest}
+      size="small"
+      {...buttonProps}
+      sx={{ textDecoration: 'underline', '&:hover': { textDecoration: 'underline' } }}
+    >
       {title}
     </Button>
   )

@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { grey } from '@mui/material/colors'
 
 import { useIsFetching } from 'react-query'
-import { Box, CircularProgress, Link, Typography } from '@mui/material'
+import { Box, CircularProgress, Link, Tooltip, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -49,7 +49,7 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
   const translatedName = getLanguageValue(name, language)
 
   const link = feedbackTarget ? (
-    <Link component={RouterLink} to={`/targets/${feedbackTarget.id}/results`} underline="hover">
+    <Link variant="body2" component={RouterLink} to={`/targets/${feedbackTarget.id}/results`}>
       {translatedName}
     </Link>
   ) : (
@@ -69,8 +69,10 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
     .map(ufbt => ufbt.user)
 
   return (
-    <Box display="flex" flexDirection="column">
-      {link}
+    <Box display="flex" flexDirection="column" whiteSpace="nowrap" overflow="hidden">
+      <Tooltip textOverflow="ellipsis" overflow="hidden" title={translatedName} arrow>
+        {link}
+      </Tooltip>
       <Box display="flex" alignItems="center" mb={0.5}>
         <Typography color="textSecondary" variant="body2">
           {datePeriod}

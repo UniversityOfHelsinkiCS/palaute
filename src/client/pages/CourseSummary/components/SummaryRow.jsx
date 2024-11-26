@@ -17,7 +17,6 @@ const styles = {
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '3.5rem',
-    aspectRatio: 1, // Make them square
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -102,9 +101,6 @@ export const SummaryResultElements = ({ questions, summary, feedbackResponseIndi
           tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
         />
       )}
-      {/* <Box sx={styles.countCell}> // @TODO access check to show hidden count
-        {Boolean(data?.hiddenCount) && <CensoredCount count={data.hiddenCount} />}
-      </Box> */}
     </>
   )
 }
@@ -125,7 +121,7 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
     />
   )
 
-  const link = `/course-summary/${courseUnit.courseCode}`
+  const link = `/course-summary/course-unit/${courseUnit.courseCode}`
   const { summary } = courseUnit
 
   return (

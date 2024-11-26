@@ -1,5 +1,5 @@
 import React from 'react'
-import { useParams, Redirect } from 'react-router-dom'
+import { useParams, Navigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
@@ -26,10 +26,10 @@ const CourseRealisation = () => {
       variant: 'error',
     })
 
-    return <Redirect to="/" />
+    return <Navigate to="/" />
   }
 
-  return <Redirect to={`/targets/${courseRealisationFeedbackTarget.id}/feedback`} />
+  return <Navigate to={`/targets/${courseRealisationFeedbackTarget.id}/feedback`} />
 }
 
 export default CourseRealisation
