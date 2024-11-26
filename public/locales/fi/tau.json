@@ -1,0 +1,226 @@
+{
+  "navBar": {
+    "myCoursesV2": "Palautekyselyni",
+    "admin": "Admin TAU",
+    "myFeedbacks": "Opintojaksopalautteeni",
+    "courseSummary": "Palautteiden yhteenveto"
+  },
+  "footer": {
+    "contactSupport": "Käyttäjätuki ja palaute"
+  },
+  "common": {
+    "course": "Opintojakso",
+    "courseCode": "Opintojakson koodi",
+    "courseSummaryPage": "Palautteiden yhteenveto",
+    "notPublicInfo": "Vastaukset näkyvät vain vastuuopettajille ja yksikön palautevastaaville",
+    "publicInfo": "Vastaukset näkyvät toteutukselle ilmoittautuneille opiskelijoille",
+    "notPublicShortInfo": "Näkyy vain vastuuopettajille ja yksikön palautevastaaville",
+    "publicShortInfo": "Näkyy toteutukselle ilmoittautuneille opiskelijoille",
+    "organisationCode": "Yksikkökoodi"
+  },
+  "validationErrors": {
+    "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla myös opiskelija"
+  },
+  "links": {
+    "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
+    "wikiRoot": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
+    "accessibility": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelman-saavutettavuusseloste",
+    "dataProtection": "https://www.tuni.fi/fi/tutustu-meihin/tietosuoja/tietosuojailmoitus-opiskelijat-ja-opiskelijapalvelut?lang=fi",
+    "instructions": "https://www.tuni.fi/fi/sisaiset-sahkoiset-palvelut",
+    "wikiOrganisationHelp": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
+    "wikiTeacherHelp": "https://intra.tuni.fi/fi/opetus/opetuksen-tyovalineet-ja-tietojarjestelmat-0/koulutuksen-tietojarjestelmat-0/opintojaksopalautejarjestelma",
+    "toska": "",
+    "markdownHelp": "https://commonmark.org/help/",
+    "adminGraylog": "",
+    "courseUnitPage": "https://sisu.tuni.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
+    "courseUnitPageStudent": "https://sisu.tuni.fi/student/courseunit/{{courseUnitId}}",
+    "courseRealisationPage": "https://sisu.tuni.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+  },
+  "userFeedbacks": {
+    "mainHeading": "Opintojaksopalautteeni",
+    "noFeedback": "Täällä ei ole vielä yhtään opintojaksopalautetta."
+  },
+  "feedbackView": {
+    "feedbackInfoContent": "Opintojaksopalautteen vastauksia käytetään opintojaksojen sisällön ja opetuksen kehittämiseen. Vastauksia opintojaksopalautteen kysymyksiin saatetaan näyttää muille opintojakson opiskelijoille. Vastauksia käsitellään ja ne näytetään aina anonyymisti, opettaja ei voi yhdistää palautteita yksittäisiin opiskelijoihin. \n Kirjautumistietoja käytetään siihen, että opiskelijalle näytetään oikeat palautteet.",
+    "cannotSubmitText": "Et voi lähettää palautetta, sillä et ole ilmoittautunut toteutukselle tai ilmoittautumisesi ei ole vielä päivittynyt järjestelmään. Ilmoittautumiset päivittyvät 24 tunnin välein.",
+    "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun opintojakson toteutus on käynnissä. Tämä palaute annetaan anonyymisti."
+  },
+  "teacherView": {
+    "mainHeadingV2": "Palautekyselyni",
+    "noCourseRealisations": "Ei opintojakson toteutuksia",
+    "noCourses": "Ei toteutuksia",
+    "noCoursesV2": "Ei näytettäviä toteutuksia tällä hetkellä",
+    "ongoingCourses": "Käynnissä olevat opintojaksot",
+    "upcomingCourses": "Tulevat opintojaksot",
+    "endedCourses": "Päättyneet opintojaksot",
+    "organisationSurveys": "Yksikkökyselyt",
+    "courseSurveys": "Opintojaksot ja palautekyselyt",
+    "disabledCourseWarning": "Opintojakson palaute ei ole käytössä",
+    "activeSurveys": "Käynnissä",
+    "upcomingSurveys": "Tulevat",
+    "endedSurveys": "Päättyneet"
+  },
+  "questionEditor": {
+    "programmeQuestion": "Yksikkötaso"
+  },
+  "editFeedbackTarget": {
+    "upperLevelQuestionsInfo": "Kyselyllä on jo {{count}} yliopisto- ja yksikkötason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. \"Esikatsele kyselyä\"-painiketta painamalla näet, miltä kysely näyttää kaikkine kysymyksineen",
+    "upperLevelQuestionsInfoOne": "Kyselyllä on jo {{count}} yliopisto- ja yksikkötason ({{primaryOrganisation}}) kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. \"Esikatsele kyselyä\"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.",
+    "upperLevelQuestionsInfoMany": "Kyselyllä on jo {{count}} yliopisto- ja yksikkötason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä. \"Esikatsele kyselyä\"-painiketta painamalle näet, miltä kysely näyttää kaikkine kysymyksineen.\n Yksikkötason kysymykset tulevat vastuuorganisaatioilta, jotka ovat {{organisations}}.",
+    "copyFromCourseDialogTitle": "Kopioi kysymykset toiselta toteutukselta",
+    "copyFromCourseButton": "Kopioi kysymykset toiselta toteutukselta",
+    "copyFromCourseInfoAlert": "Voit kopioida kysymyksiä opettamiltasi opintojaksojen toteutuksilta. Valitse ensin opintojakso ja sen jälkeen toteutus, jonka kysymykset haluat kopioida",
+    "copyFromCourseChooseCourse": "Valitse opintojakso nähdäksesi sen toteutukset",
+    "copyFromCourseNoQuestions": "Millään opintojakson toteutuksella ei ole omia kysymyksiä",
+    "copyFromCourseSearchLabel": "Opintojakso",
+    "openFeedbackImmediatelyDialogContent": "Olet avaamassa opintojakson toteutuksen palautetta. Huomioithan, että avattuasi palautteen et voi enää muokata sen kyselyä."
+  },
+  "questionResults": {
+    "multipleChoiceScale": ""
+  },
+  "feedbackTargetResults": {
+    "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä toteutuksen vastuuopettaja on asettanut palautteen näkyväksi vain toteutukseen osallistujille",
+    "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet toteutukselle, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden sinun tulee olla vastuuopettajan roolissa Sisussa.",
+    "noResponseInfo": "Toteutuksen vastuuopettaja ei ole vielä antanut palautetta",
+    "giveResponseInfo": "Vastapalautteen voi antaa toteutuksen palauteajan päätyttyä",
+    "closeImmediatelyConfirm": "Palautejakson loputtua palautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?",
+    "closeImmediatelyTomorrowConfirm": "Palautejakso suljetaan {{date}}, jotta se on auki vähintään vuorokauden. Palautejakson loputtua palautetta ei voi enää kerätä, haluatko varmasti lopettaa palautejakson heti?",
+    "emailMessage": "Hyvä opiskelija! \n Vastaathan opintojakson {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n << Kirjoittamasi viesti tulee tähän >> \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa",
+    "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai yksikön hallintohenkilöille",
+    "publishingInfo": "Tämän kysymyksen vastaukset eivät näy toteutuksen opiskelijoille. Halutessasi voit julkistaa ne toteutuksen opiskelijoiden nähtäväksi klikkaamalla vasemmanpuolista nappia \"Ei julkinen\".",
+    "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät toteutuksen opiskelijoille."
+  },
+  "userInformation": {
+    "iamTooltip": "Näytetään vain Norppaan vaikuttavat"
+  },
+  "studentsWithFeedback": {
+    "noFeedbackInfo": "Palautetta antaiden opiskelijoiden listaa ei voida näyttää. Joko palautetta antaneita opiskelijoita on alle viisi, tai palautetta antaneiden opiskelijoiden lista on poissa käytöstä yksikön asetuksissa"
+  },
+  "feedbackResponse": {
+    "responseInstruction": "Käytyään läpi opiskelijoilta saamansa palautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksi toteutuksen palautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja lähetetään kerralla kaikille opintojakson toteutuksen opiskelijoille. \n Vastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin.",
+    "writingInstruction": "Opettajan vastauksen pituus voi vaihdella. Asioita joita voit esimerkiksi sisällyttää vastaukseesi on: opiskelijoiden kiittäminen annetusta palautteesta (ja opintojaksolle osallistumisesta), läpikatsaus annetusta palautteesta, valinta palautteen osa-alueista joihin koet olevan tärkeää vastata sekä reaktiosi ja selvennyksesi niihin. Vastauksessa olevat konkreettiset toimet opetuksen ja opintojakson sisällön muokkaukseen vastineena opiskelijoiden palautteeseen ovat ensiarvoisen tärkeitä.",
+    "dialogSaveContent": "Opintojakson toteutuksen opettajat voivat vielä muokata vastapalautetta. Opiskelijoille ei lähde ilmoitusta.",
+    "dialogSendEmailContent": "Opiskelijoille lähtee sähköpostiviesti, jossa on vastapalautteen sisältö ja linkki toteutuksen palautteisiin. Lähetettyäsi sähköpostin voit vielä muokata vastapalautetta.",
+    "checkboxSendEmail": "Lähetä sähköposti kaikille opintojakson toteutukselle ilmoittautuneille"
+  },
+  "publicQuestions": {
+    "enrolled": "Opintojakson toteutukselle ilmoittautuneet opiskelijat"
+  },
+  "organisationSurveys": {
+    "heading": "Yksikön kyselyt -toiminto on vielä kehitysvaiheessa ja demokokeilussa",
+    "emptySurveys": "Yksiköllä ei ole vielä yhtään kyselyä, voit luoda uuden yksikön kyselyn täällä",
+    "addSurvey": "Luo uusi yksikön kysely",
+    "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän yksikön kyselyn?",
+    "removeSuccess": "Yksikön kysely poistettu"
+  },
+  "interimFeedback": {
+    "emptySurveys": "Toteutuksella ei ole yhtään välipalautetta, voit luoda välipalautteen toteutukselle täällä"
+  },
+  "courseSummary": {
+    "heading": "Palautteiden yhteenveto",
+    "programmeLevelQuestions": "Yliopisto- ja yksikkötason kysymykset",
+    "feedbackResponse": "Viimeisimmän opintojakson toteutuksen vastapalaute annettu",
+    "feedbackStillOpen": "Opintojakson toteutuksen palautejakso on vielä käynnissä",
+    "courseOngoing": "Toteutus on vielä käynnissä",
+    "programmeSummary": "Yksikön yhteenveto",
+    "programmeSettings": "Yksikön asetukset",
+    "courseRealisation": "Opintojakson toteutus",
+    "searchLabel": "Rajaa opintojaksoja",
+    "searchPlaceholder": "Rajaa opintojakson koodilla",
+    "showHiddenOrganisations": "Valitse piilotetut yksiköt ({{count}})",
+    "hidingInfo": "Voit piilottaa itseltäsi yksiköiden yhteenvetoja, jotka eivät ole sinulle kiinnostavia",
+    "coursePage": "Opintojakson tiedot SISUssa",
+    "noCourses": "Ei näytettäviä toteutuksia tältä aikaväliltä. Toteutuksesi saadessa palautetta se ilmestyy tänne.",
+    "myOrganisations": "Yksikköni",
+    "myCourses": "Opetukseni",
+    "includeOpenUni": "Sisällytä Avoin yo -opintojaksot",
+    "excludeOpenUni": "Näytä ilman Avoin yo -opintojaksot",
+    "onlyOpenUni": "Näytä vain Avoin yo -opintojaksot"
+  },
+  "generateReport": {
+    "organisations": "Yksiköt",
+    "courseUnits": "Opintojaksot",
+    "courseRealisations": "Toteutukset",
+    "selectTimeRange": "Valitse aikaväli",
+    "selectedTime": "Nykyinen",
+    "allTime": "Koko historia"
+  },
+  "courseRealisationFeedback": {
+    "noFeedbackTarget": "Tällä toteutuksella ei ole sinulle saatavilla olevaa palautetta"
+  },
+  "organisationSettings": {
+    "surveyInfo": "Yksikkötason kysymykset näytetään jokaisessa yksikön opintojakson toteutuksen kyselyssä yliopistotason kysymysten jälkeen. Kyselyllä on jo {{count}} yliopistotason kysymystä, mutta voit halutessasi lisätä sille lisää kysymyksiä.",
+    "studentListVisibility": "Palautetta antaneiden opiskelijoiden näkyvyys",
+    "studentListVisibilityInfo": "Palautetta antaneet opiskelijat näytetään toteutuksen vastuuopettajille palautejakson päätyttyä, jos palautetta antaneita opiskelijoita on vähintään viisi.",
+    "studentListVisible": "Näytä kaikilla toteutuksilla",
+    "studentListHidden": "Piilota kaikilla toteutuksilla",
+    "studentListByCourse": "Aseta näkyvyys opintojaksokohtaisesti",
+    "courseSettingsInfo": "Palautetta kerätään vain aktivoiduilla opintojaksoilla",
+    "courseSettings": "Opintojaksokohtaiset asetukset",
+    "surveyTab": "Yksikön kysymykset",
+    "organisationSurveysTab": "Yksikön kyselyt",
+    "courseRealisationsTab": "Opintojaksot",
+    "editProgrammeQuestionsDialogContent": "Olet muokkaamassa koko yksikön yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla yksikön opintojaksojen toteutuksilla. Oletko varma, että haluat muokata näitä kysymyksiä?",
+    "findByCourseUnit": "Hae opintojaksoa",
+    "includeWithoutTeachers": "Näytä toteutukset joilla ei ole opettajia",
+    "showCurName": "Näytä opintojakson toteutusten nimet"
+  },
+  "feedbackTargetView": {
+    "coursePeriod": "Toteutus käynnissä",
+    "courseSummary": "Opintojakson toteutusten yhteenveto",
+    "continuousFeedbackInfo": "Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken opintojakson toteutuksen. Jatkuva palaute on käytössä toteutuksen aikana, ennen kuin varsinainen opintojaksopalaute aukeaa toteutuksen päättymispäivänä.",
+    "continuousFeedbackStudentInfo": "Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Antamasi palaute on anonyymiä, joten nimesi ei näy palautteen käsittelijälle.",
+    "noFeedbackResponseYet": "Toteutuksen vastuuopettaja ei ole vielä antanut vastapalautetta",
+    "notFound": "Palautetta ei löytynyt Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
+    "activateContinuousFeedback": "Ota jatkuva palaute käyttöön opintojakson toteutuksella",
+    "coursePage": "Opintojakson tiedot Sisussa",
+    "courseRealisationPage": "Toteutuksen tiedot Sisussa",
+    "noAccess": "Emme löytäneet ilmoittautumistasi tälle toteutukselle. Mikäli olet ilmoittaunut äskeittäin, saatat joutua odottamaan noin 1-2 tuntia.",
+    "noAccessOldCourse": "Palauteaika on päättynyt yli vuosi sitten, eikä toteutukselle voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että toteutus on oikea.",
+    "noAccessEndedCourse": "Palauteaika on päättynyt, eikä toteutukselle voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että toteutus on oikea."
+  },
+  "noadUser": {
+    "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjautunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys toteutuksen opettajaan",
+    "noFeedback": "Tällä hetkellä ei ole palautteita, joiden palautejakso olisi käynnissä."
+  },
+  "norppaFeedback": {
+    "confirm": "Ymmärrän, että tämä ei ole opintojakson toteutuksen vastapalaute vaan palaute Norpan kehittäjille."
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Anna palautetta opintojaksolle {{courseCode}} {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Vastaathan opintojakson <a href={{- url}}>{{courseCode}} {{courseName}}</a> palautteeseen. Palautekysely sulkeutuu {{closesAt}}. Kiitos!\n\n{{reminder}} \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Opettaja vastasi palautteeseesi opintojaksolla {{courseCode}} {{courseName}}",
+      "text": "Hyvä opiskelija!\n Opintojakson {{courseCode}} {{courseName}} {{dates}} opettaja on vastannut antaamaasi jatkuvaan palautteeseesi. \n\nVastaus: {{response}}\n\nVoit lukea vastauksen täällä: <a href={{- url}}>{{courseCode}} {{courseName}}</a> \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Opintojakson {{courseCode}} {{courseName}} palautelomake on avautunut",
+      "subjectMultiple": "Opintojaksopalaute on avautunut",
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien opintojaksojen palautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa palautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVoit muokata vastauksia kyselyn ollessa auki, ja kyselyn sulkeuduttua pääset halutessasi näkemään kyselyn palautekoosteen Norpassa. \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
+    },
+    "continuousFeedbackDigest": {
+      "subject": "Uutta jatkuvaa palautetta opettamallesi opintojaksolle {{courseCode}} {{courseName}}",
+      "subjectMultiple": "Uutta jatkuvaa palautetta opettamillesi opintojaksoille",
+      "text": "Hyvä opettaja! <br/>\nSeuraaville opintojaksojen toteutuksille on annettu uutta jatkuvaa palautetta:\n{{- courseNameLinksAndNewFeedback}}"
+    },
+    "counterFeedbackReminder": {
+      "subject": "Annathan vastapalautetta opintojaksolle {{courseCode}} {{courseName}}",
+      "text": "Hyvä opettaja! <br/>\nOpintojakson palautekysely on sulkeutunut: <br/>{{- courseNamesAndUrls}} \nAnnathan opiskelijoille vastapalautetta. Vastapalautetta voit antaa klikkaamalla opintojakson nimeä. <br/>\nVastapalautteesi opiskelijoille on keskeistä hyvän palautekulttuurin luomiseen: se näyttää opiskelijoille, että heidän palautteensa on oikeasti luettu ja huomioitu. Tämä kannustaa heitä antamaan rakentavaa palautetta tulevaisuudessakin. Vastapalaute lähetetään kaikille opintojakson toteutukselle ilmoittautuneille opiskelijoille. <br/>\nKiitos! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Muistutus lähetetty opettajille {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "Uusi vastapalaute opettajaltasi opintojaksolla {{courseCode}} {{courseName}}",
+      "text": "Hyvä opiskelija!\n\n Opintojakson {{courseCode}} {{courseName}} {{dates}} opettaja on antanut vastapalautteen opiskelijoilta saadun palautteen perusteella. \n\nVastapalaute: {{- feedbackResponse}}\n\nVoit käydä lukemassa opintojakson palautteita täältä: <a href={{- urlToSeeFeedbackSummary}}>{{courseCode}} {{courseName}}</a> \n\n Kaikki opintojaksopalautteesi löydät kootusti Norpasta: https://tuni.fi/norppa"
+    },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Palautekysely opettamallesi opintojaksolle {{courseCode}} {{courseName}} on aukeamassa",
+      "subjectMultiple": "Opettamiesi opintojaksojen palautekyselyt ovat aukeamassa",
+      "text": "Hyvä opettaja! <br/> \nSeuraavien opintojaksojen palautekyselyt ovat aukeamassa viikon päästä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
+    "instructionsAndSupport": "Tämä on automaattiviesti opintojaksopalautejärjestelmästä <a href={{FEEDBACK_SYSTEM}}>{{FEEDBACK_SYSTEM}}</a>. Älä vastaa tähän viestiin. Ongelmatilanteissa ota yhteys <a href=mailto:opintotietojarjestelmat.tau@tuni.fi>opintotietojarjestelmat.tau@tuni.fi</a>"
+  },
+  "groups": {
+    "groupingInfoText": "Opintojakson toteutukselle voidaan määritellä SISUssa ryhmät, joihin opiskelijat ilmoittautuvat. Tämän ilmoittautumis/ryhmätieto periytyy automaattisesti Norppaan ja sen avulla opettaja voi tarkastella palautetietoja ryhmäkohtaisesti. \n\nJos toteutukselle ei ole SISUssa määritelty ryhmiä, määritellyt ryhmät eivät vastaa tarpeitasi, haluat, että opiskelija valitsevat manuaalisesti ryhmänsä tai haluat määritellä omat kriteerit, voit lisätä alla olevasta napista ryhmittelykysymyksen, joka lisätään kyselyn alkuun. \n\nRyhmäkohtainen tarkastelu on käytettävissä vain, jos jokaisessa ryhmässä on vähintään 5 vastannutta, jotta opiskelijoita ei voi tunnistaa vastauksista. Ryhmittelykysymyksen vaihtoehtoja kannattaa olla vähän tai ne kannattaa valita siten, että vastanneita on todennäköisesti 5 tai enemmän jokaisessa vaihtoehdossa."
+  }
+}

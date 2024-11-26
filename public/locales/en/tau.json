@@ -1,0 +1,122 @@
+{
+  "navBar": {
+    "myCoursesV2": "My feedback surveys",
+    "admin": "Admin TAU",
+    "courseSummary": "Feedback summary"
+  },
+  "footer": {
+    "contactSupport": "Contact support and give feedback"
+  },
+  "common": {
+    "notPublicInfo": "Answers visible only to responsible teachers and unit admins",
+    "notPublicShortInfo": "Visible only to responsible teachers and unit admins"
+  },
+  "links": {
+    "accessibility": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-systems-accessibility-statement",
+    "dataProtection": "https://www.tuni.fi/en/about-us/data-protection/privacy-notice-students-and-student-services",
+    "supportEmail": "opintotietojarjestelmat.tau@tuni.fi",
+    "wikiRoot": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system",
+    "wikiOrganisationHelp": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system",
+    "wikiTeacherHelp": "https://intra.tuni.fi/en/teaching/teaching-tools-and-information-systems-0/it-education-0/course-feedback-system",
+    "toska": "",
+    "markdownHelp": "https://commonmark.org/help/",
+    "adminGraylog": "",
+    "courseUnitPage": "https://sisu.tuni.fi/staff/studies/teacher//courseunit/{{courseUnitId}}/basicinfo",
+    "courseUnitPageStudent": "https://sisu.tuni.fi/student/courseunit/{{courseUnitId}}",
+    "courseRealisationPage": "https://sisu.tuni.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+  },
+  "teacherView": {
+    "mainHeadingV2": "My feedback surveys",
+    "courseSurveys": "Courses and feedback surveys",
+    "noCourseRealisations": "No course implementations",
+    "activeSurveys": "Ongoing",
+    "upcomingSurveys": "Upcoming",
+    "endedSurveys": "Ended"
+  },
+  "questionEditor": {
+    "programmeQuestion": "Unit level"
+  },
+  "editFeedbackTarget": {
+    "upperLevelQuestionsInfo": "Survey already has {{count}} university and unit level questions, but you can add additional questions. You can click the \"Show survey preview\" button to see what the survey looks like with all the question",
+    "upperLevelQuestionsInfoOne": "Survey already has {{count}} university and unit ({{primaryOrganisation}}) level questions, but you can add additional questions. You can click the \"Show survey preview\" button to see what the survey looks like with all the questions",
+    "upperLevelQuestionsInfoMany": "Survey already has {{count}} university and unit level questions, but you can add additional questions. You can click the \"Show survey preview\" button to see what the survey looks like with all the questions.\n Unit level questions come from the responsible organisations, which are {{organisations}}.",
+    "copyFromCourseDialogTitle": "Copy questions from another course implementation",
+    "copyFromCourseButton": "Copy questions from another course implementation",
+    "copyFromCourseInfoAlert": "You can copy questions from courses that you teach. First, choose the course and then the implementation from which you want to copy the questions",
+    "copyFromCourseChooseCourse": "Choose a course to see its implementations",
+    "copyFromCourseNoQuestions": "None of the implementations on the course have any questions"
+  },
+  "questionResults": {
+    "multipleChoiceScale": ""
+  },
+  "feedbackTargetResults": {
+    "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and unit administrators",
+    "emailMessage": "Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >> \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
+  },
+  "studentsWithFeedback": {
+    "noFeedbackInfo": "The list of students who have given feedback cannot be shown. Either there are less than five students who have given feedback or the list of students who have given feedback is disabled in the unit's settings"
+  },
+  "publicQuestions": {
+    "none": "Only unit personnel"
+  },
+  "courseSummary": {
+    "programmeLevelQuestions": "University and unit level questions",
+    "programmeSummary": "Unit summary",
+    "programmeSettings": "Unit settings",
+    "courseRealisation": "Course implementation",
+    "showHiddenOrganisations": "Select hidden units ({{count}})",
+    "hidingInfo": "You can hide uninteresting unit summaries from yourself"
+  },
+  "organisationSettings": {
+    "surveyInfo": "Unit level questions are displayed in every unit's course's surveys after the university level questions. Survey already has {{count}} university level questions, but you can add additional questions",
+    "studentListVisible": "Show course's responsible teacher students who have given feedback if at least five students have given feedback. In case you want to make adjustments by courses, turn off this setting and make course-specific selections below.",
+    "surveyTab": "Unit survey",
+    "editProgrammeQuestionsDialogContent": "'You are editing the questions shared by the whole unit. These questions are visible for all the courses of the unit. Are you sure you want to edit these questions?",
+    "showCurName": "Show course implementation names"
+  },
+  "feedbackTargetView": {
+    "courseSummary": "Summary of course implementations",
+    "coursePeriod": "Implementation ongoing",
+    "continuousFeedbackInfo": "Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course implementation, before the actual course feedback starts on the course end date.",
+    "activateContinuousFeedback": "Activate continuous feedback for the course implementation",
+    "coursePage": "Course in Sisu",
+    "courseRealisationPage": "Course implementation in Sisu"
+  },
+  "mails": {
+    "reminderOnFeedbackToStudents": {
+      "subject": "Please give feedback on the course {{courseCode}} {{courseName}}",
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseCode}} {{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}} \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
+    },
+    "continuousFeedbackResponse": {
+      "subject": "Your feedback received a response on on the course {{courseCode}} {{courseName}}",
+      "text": "Dear student!\n The teacher of the course {{courseCode}} {{courseName}} {{dates}} has responded to your continuous feedback. \n\nResponse: {{response}}\n\nYou can read the response here: <a href={{- url}}>{{courseCode}} {{courseName}}</a> \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
+    },
+    "surveyOpeningEmailToStudents": {
+      "subject": "Course feedback for course {{courseCode}} {{courseName}} has opened",
+      "subjectMultiple": "Course feedback has opened",
+      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and university operations.\nYou will be able to edit your answers during the feedback period, and a summary will be available in Norppa after the feedback period has ended. \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
+    },
+    "continuousFeedbackDigest": {
+      "subject": "New continuous feedback on your course {{courseCode}} {{courseName}}",
+      "subjectMultiple": "New continuous feedback on your courses",
+      "text": "Dear teacher! <br/>\nThe following courses have received new continuous feedback:\n{{- courseNameLinksAndNewFeedback}}"
+    },
+    "counterFeedbackReminder": {
+      "subject": "Please give counter feedback for the course {{courseCode}} {{courseName}}",
+      "text": "Dear teacher! <br/>\nThe feedback period for the course has ended: <br/>{{- courseNamesAndUrls}} \nPlease give counter feedback for the students. You can give counter feedback by clicking the course name. <br/>\nYour response to students is central for creating a feedback culture: it shows students that their feedback is actually read and used, which encourages them to give constructive feedback in the future. Counter feedback is sent to all students of the course implementation. <br/>\nThank you! <br/>\n\n$t(mails:instructionsAndSupport) <br/>Reminder sent to {{teachers, list}}"
+    },
+    "counterFeedbackNotificationToStudents": {
+      "subject": "A new counter feedback from your teacher to course {{courseCode}} {{courseName}}",
+      "text": "Dear student!\n\n The teacher of the course {{courseCode}} {{courseName}} {{dates}} has responded to the course feedback received from students. \n\nCounter feedback: {{- feedbackResponse}}\n\nYou can read the course feedbacks here: <a href={{- urlToSeeFeedbackSummary}}>{{courseCode}} {{courseName}}</a> \n\n You can find all your course feedback in Norppa: https://tuni.fi/norppa"
+    },
+    "reminderAboutSurveyOpeningToTeachers": {
+      "subject": "Feedback for the course {{courseCode}} {{courseName}} is about to start",
+      "subjectMultiple": "The feedback for your courses are about to start",
+      "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
+    },
+    "instructionsAndSupport": "This message has been automatically sent from Course Feedback System <a href={{FEEDBACK_SYSTEM}}>{{FEEDBACK_SYSTEM}}</a>. Please do not reply to this message. If you have any problems with Course Feedback System, please contact <a href=mailto:studies.helpdesk.tau@tuni.fi>studies.helpdesk.tau@tuni.fi</a>"
+  },
+  "groups": {
+    "groupingInfoText": "Grouping allows you to see and compare answers of single SISU groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. \n\nIf your course implementation does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question and it is always the first question in the form. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try not to ask too specific things or add options that might get less than 5 answers."
+  }
+}
