@@ -17,7 +17,7 @@ import { EditOutlined, ExpandMore } from '@mui/icons-material'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../common/TeacherChip'
-import InstructionAccordion from '../common/InstructionAccordion'
+import Instructions from '../common/Instructions'
 import { createQuestion } from './utils'
 import QuestionCard from './QuestionCard'
 
@@ -98,9 +98,7 @@ const GroupingQuestionSettings = ({
             </AccordionSummary>
             <AccordionDetails>
               <Box mb="2rem" display="flex" flexDirection="column">
-                <InstructionAccordion title={t('groups:groupingInfoTextTitle')}>
-                  {t('groups:groupingInfoText')}
-                </InstructionAccordion>
+                <Instructions title={t('groups:groupingInfoTextTitle')}>{t('groups:groupingInfoText')}</Instructions>
 
                 {groups.length > 0 && <GroupInformation groups={groups} />}
               </Box>

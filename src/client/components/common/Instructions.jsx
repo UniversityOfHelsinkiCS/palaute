@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Alert, Box, Collapse, IconButton, Typography } from '@mui/material'
 import { ExpandMore, ExpandLess } from '@mui/icons-material'
 
-const InstructionAccordion = ({ title, alertProps, iconButtonProps, collapseProps, children }) => {
+const Instructions = ({ title, alertProps, iconButtonProps, collapseProps, children }) => {
   const [expand, setExpand] = useState(false)
 
   return (
@@ -32,4 +32,4 @@ const InstructionAccordion = ({ title, alertProps, iconButtonProps, collapseProp
   )
 }
 
-export default InstructionAccordion
+export default Instructions
