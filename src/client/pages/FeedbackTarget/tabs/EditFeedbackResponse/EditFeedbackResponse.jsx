@@ -64,10 +64,12 @@ const EditFeedbackResponse = () => {
   return (
     <Card>
       <CardContent>
-        <InstructionAccordion
-          title={t('feedbackResponse:instructionTitle')}
-          text={`${t('feedbackResponse:responseInstruction')}\n\n${t('feedbackResponse:writingInstruction')}`}
-        />
+        <InstructionAccordion title={t('feedbackResponse:instructionTitle')}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant="body2">{t('feedbackResponse:responseInstruction')}</Typography>
+            <Typography variant="body2">{t('feedbackResponse:writingInstruction')}</Typography>
+          </Box>
+        </InstructionAccordion>
         <Box mb={2}>
           <Alert severity="info">
             <Trans i18nKey="feedbackResponse:responseInfo">

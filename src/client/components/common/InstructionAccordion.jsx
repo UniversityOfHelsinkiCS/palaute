@@ -1,33 +1,35 @@
-import React from 'react'
+import React, { useState } from 'react'
+import { Alert, Box, Collapse, IconButton, Typography } from '@mui/material'
+import { ExpandMore, ExpandLess } from '@mui/icons-material'
 
-import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
+const InstructionAccordion = ({ title, alertProps, iconButtonProps, collapseProps, children }) => {
+  const [expand, setExpand] = useState(false)
 
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+  return (
+    <Box my={2}>
+      <Alert
+        severity="info"
+        {...alertProps}
+        action={
+          <IconButton
+            onClick={() => setExpand(!expand)}
+            {...iconButtonProps}
+            size="small" // Optionally make it smaller for alignment
+          >
+            {!expand ? <ExpandMore /> : <ExpandLess />}
+          </IconButton>
+        }
+      >
+        <Typography variant="body2" sx={{ lineHeight: 1.5, margin: 0 }}>
+          {title}
+        </Typography>
 
-const styles = {
-  accordion: {
-    backgroundColor: '#f1f1f1',
-  },
-  summary: {
-    fontWeight: 'bold',
-  },
-  details: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
+        <Collapse in={expand} timeout="auto" unmountOnExit {...collapseProps} sx={{ mt: 2 }}>
+          {children}
+        </Collapse>
+      </Alert>
+    </Box>
+  )
 }
-
-const InstructionAccordion = ({ title, text }) => (
-  <Box mb={1}>
-    <Accordion sx={styles.accordion}>
-      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-        <Typography sx={styles.summary}>{title}</Typography>
-      </AccordionSummary>
-      <AccordionDetails sx={styles.details}>
-        <Typography sx={{ whiteSpace: 'pre-line' }}>{text}</Typography>
-      </AccordionDetails>
-    </Accordion>
-  </Box>
-)
 
 export default InstructionAccordion
