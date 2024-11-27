@@ -3,10 +3,17 @@ import eslint from 'vite-plugin-eslint'
 
 import * as config from 'config'
 import { defineConfig } from 'vite'
+import { sentryVitePlugin } from '@sentry/vite-plugin'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), eslint()],
+  plugins: [
+    react(),
+    eslint(),
+    sentryVitePlugin({
+      applicationKey: 'norppa-course-feedback',
+    }),
+  ],
   server: {
     proxy: {
       '/api/': {
