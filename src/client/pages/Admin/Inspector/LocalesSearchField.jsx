@@ -10,7 +10,11 @@ const LocalesSearchField = ({ label, handleChange, query, setQuery }) => (
       value={query.name}
       onFocus={() => setQuery({ ...query, id: '' })}
       onChange={e => handleChange({ ...query, name: e.target.value })}
-      InputProps={{ sx: { pr: '64px' } }}
+      slotProps={{
+        input: {
+          sx: { paddingRight: '64px' },
+        },
+      }}
     />
     <Select
       variant="standard"
