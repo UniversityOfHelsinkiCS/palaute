@@ -116,7 +116,15 @@ const Details = ({ user }) => {
 const StaffChip = ({ user }) => user.possiblyStaff && <Chip label="Possibly staff" variant="outlined" />
 
 const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
-  <Accordion key={user.id} TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}>
+  <Accordion
+    key={user.id}
+    slotProps={{
+      transition: {
+        mountOnEnter: true,
+        unmountOnExit: true,
+      },
+    }}
+  >
     <AccordionSummary sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}>
       <Box display="flex" alignItems="center" width="100%">
         <Typography>

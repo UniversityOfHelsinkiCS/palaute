@@ -76,7 +76,15 @@ const AccessTable = ({ access }) => {
 }
 
 const ProgrammeAccordion = ({ code, name, access }) => (
-  <Accordion key={code} TransitionProps={{ mountOnEnter: true, unmountOnExit: true }}>
+  <Accordion
+    key={code}
+    slotProps={{
+      transition: {
+        mountOnEnter: true,
+        unmountOnExit: true,
+      },
+    }}
+  >
     <AccordionSummary sx={{ cursor: 'pointer', '&:hover': { background: grey['50'] } }}>
       <Box display="flex" alignItems="center" width="100%">
         <Typography>{name.fi}</Typography>
