@@ -1,5 +1,15 @@
 import React, { useState } from 'react'
-import { Autocomplete, Chip, Button, Box, Dialog, Grid, Typography, TextField, DialogTitle } from '@mui/material'
+import {
+  Autocomplete,
+  Chip,
+  Button,
+  Box,
+  Dialog,
+  Grid2 as Grid,
+  Typography,
+  TextField,
+  DialogTitle,
+} from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
@@ -206,14 +216,14 @@ const OrganisationSurveyForm = () => {
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <ResponsibleTeachersSelector
           name="teacherIds"
           title={t('organisationSurveys:responsibleTeacherTitle')}
@@ -221,7 +231,7 @@ const OrganisationSurveyForm = () => {
         />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <StudentNumberInput
           name="studentNumbers"
           title={t('organisationSurveys:studentNumberTitle')}
@@ -239,15 +249,15 @@ const EditOrganisationSurveyForm = () => {
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <ResponsibleTeachersSelector
           name="teacherIds"
           title={t('organisationSurveys:editResponsibleTeacherTitle')}
@@ -255,7 +265,7 @@ const EditOrganisationSurveyForm = () => {
         />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <StudentNumberInput
           name="studentNumbers"
           title={t('organisationSurveys:editStudentNumberTitle')}

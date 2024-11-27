@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, Box, Dialog, Grid, DialogTitle } from '@mui/material'
+import { Button, Box, Dialog, Grid2 as Grid, DialogTitle } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 
@@ -13,10 +13,10 @@ const InterimFeedbackForm = () => {
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="interimFeedback:newSurveyName" />
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="startDate" label={t('interimFeedback:startDate')} />
       </Grid>
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="endDate" label={t('interimFeedback:endDate')} />
       </Grid>
     </Grid>
@@ -30,10 +30,10 @@ const EditInterimFeedbackForm = () => {
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="interimFeedback:newSurveyName" />
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="startDate" label={t('interimFeedback:startDate')} />
       </Grid>
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="endDate" label={t('interimFeedback:endDate')} />
       </Grid>
     </Grid>
