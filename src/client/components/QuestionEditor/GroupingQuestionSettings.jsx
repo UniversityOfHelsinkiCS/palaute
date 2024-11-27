@@ -93,9 +93,11 @@ const GroupingQuestionSettings = ({
       <Paper>
         <Box>
           <Accordion elevation={0}>
-            <AccordionSummary expandIcon={<ExpandMore />}>{t('groups:groupingSettings')}</AccordionSummary>
+            <AccordionSummary sx={{ fontWeight: 'bold' }} expandIcon={<ExpandMore />}>
+              {t('groups:groupingSettings')}
+            </AccordionSummary>
             <AccordionDetails>
-              <Box mt="1rem" mb="2rem" display="flex" flexDirection="column">
+              <Box mb="2rem" display="flex" flexDirection="column">
                 <InstructionAccordion title={t('groups:groupingInfoTextTitle')}>
                   {t('groups:groupingInfoText')}
                 </InstructionAccordion>
