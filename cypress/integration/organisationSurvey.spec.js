@@ -465,6 +465,46 @@ describe('Feedback Correspondents', () => {
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
+
+  it('can add students from courses', () => {
+    const today = new Date()
+    const organisationCode = 'TEST_ORG'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: 'Katten i vatten',
+      },
+      studentNumbers: [student.studentNumber],
+      teacherIds: [organisationCorrespondent.hyPersonSisuId],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 1),
+      courseIds: ['norppa-test-course-unit-id-2'],
+    }
+
+    cy.createFeedbackTarget({ extraStudents: 99 })
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist').click()
+    })
+
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"').should('exist').click()
+
+    cy.contains('Students: 100').should('exist')
+
+    // Add student Henri to the survey
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type(`${studentHenri.studentNumber}{enter}`)
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"').should('exist').click()
+
+    cy.contains('Students: 101').should('exist')
+  })
 })
 
 describe('Responsible Teachers', () => {
