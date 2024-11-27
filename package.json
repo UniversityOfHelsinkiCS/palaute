@@ -47,10 +47,10 @@
   "dependencies": {
     "@emotion/react": "11.13.5",
     "@emotion/styled": "11.13.5",
-    "@mui/icons-material": "5.16.7",
+    "@mui/icons-material": "6.1.8",
     "@mui/lab": "5.0.0-alpha.173",
-    "@mui/material": "5.16.7",
-    "@mui/utils": "5.16.6",
+    "@mui/material": "6.1.8",
+    "@mui/utils": "6.1.8",
     "@mui/x-date-pickers": "7.22.3",
     "@sentry/browser": "8.40.0",
     "@sentry/node": "8.40.0",
