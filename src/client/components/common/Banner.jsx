@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button, Grid, Paper } from '@mui/material'
+import { Box, Button, Grid2 as Grid, Paper } from '@mui/material'
 import { Close } from '@mui/icons-material'
 import Markdown from './Markdown'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -33,11 +33,10 @@ const Banner = ({ banner, language, onClose = () => {}, disabled }) => (
   <Box width="100vw">
     <Paper sx={styles.container(banner.data?.color ?? '#fff')} elevation={0}>
       <Grid container direction="row" justifyContent="space-between">
-        <Grid item />
-        <Grid item>
+        <Grid>
           <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
         </Grid>
-        <Grid item>
+        <Grid>
           <Button
             disabled={disabled}
             onClick={() => onClose(banner.id)}

@@ -190,9 +190,11 @@ const Search = () => {
           renderInput={params => (
             <TextField
               {...params}
-              inputProps={{
-                ...params.inputProps,
-                'data-cy': 'formik-search-input',
+              slotProps={{
+                htmlInput: {
+                  ...params.inputProps,
+                  'data-cy': 'formik-search-input',
+                },
               }}
               label={t('search:searchField')}
             />

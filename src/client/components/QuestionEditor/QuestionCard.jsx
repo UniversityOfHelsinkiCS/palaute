@@ -1,6 +1,17 @@
 import React from 'react'
 
-import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid, Typography } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  IconButton,
+  Tooltip,
+  Box,
+  Chip,
+  Divider,
+  Button,
+  Grid2 as Grid,
+  Typography,
+} from '@mui/material'
 import { EditOutlined } from '@mui/icons-material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
@@ -180,12 +191,12 @@ const QuestionCard = ({
     <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
         <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
-          <Grid item xs={4}>
+          <Grid size={4}>
             <Box display="flex" gap="0.5rem">
               <Chip label={title} variant="outlined" />
             </Box>
           </Grid>
-          <Grid item xs={4} display="flex" justifyContent="center">
+          <Grid size={4} display="flex" justifyContent="center">
             {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
               <QuestionPublicityToggle
                 checked={question.public}
@@ -194,7 +205,7 @@ const QuestionCard = ({
               />
             )}
           </Grid>
-          <Grid item xs={4} display="flex" justifyContent="end">
+          <Grid size={4} display="flex" justifyContent="end">
             {question.chip && (
               <Tooltip title={t('questionEditor:uneditableTooltip')}>
                 <Chip label={t(question.chip)} variant="outlined" />

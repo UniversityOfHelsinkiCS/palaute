@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Grid, Typography } from '@mui/material'
+import { Box, Grid2 as Grid, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -15,7 +15,7 @@ const FormikLocalesFieldEditor = ({ name, localesLabelString, languages = LANGUA
         const t = i18n.getFixedT(language)
 
         return (
-          <Grid md={4} sm={12} xs={12} item key={language}>
+          <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
             <Box mb={2}>
               <Typography variant="h6" component="h2">
                 {language.toUpperCase()}
