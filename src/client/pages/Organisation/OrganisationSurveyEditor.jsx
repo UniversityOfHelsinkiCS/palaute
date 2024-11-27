@@ -1,20 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Autocomplete,
-  Alert,
-  Collapse,
-  Chip,
-  Button,
-  Box,
-  Dialog,
-  Grid,
-  IconButton,
-  Typography,
-  TextField,
-  DialogTitle,
-} from '@mui/material'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
+import { Autocomplete, Chip, Button, Box, Dialog, Grid, Typography, TextField, DialogTitle } from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
@@ -24,6 +9,7 @@ import FormikDatePicker from '../../components/common/FormikDatePicker'
 import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
 import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../util/common'
+import Instructions from '../../components/common/Instructions'
 
 const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()
@@ -85,43 +71,43 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
 
 const StudenNumberInputInfo = () => {
   const { t } = useTranslation()
-  const [expand, setExpand] = useState(false)
 
   return (
-    <Box my={2}>
-      <Alert data-cy="formik-student-number-input-alert" severity="info">
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: -1 }}>
-          <Typography variant="body2">{t('organisationSurveys:studentNumberInformation')}</Typography>
-
-          <IconButton data-cy="formik-student-number-input-expand-icon" onClick={() => setExpand(!expand)}>
-            {!expand ? <ExpandMore /> : <ExpandLess />}
-          </IconButton>
-        </Box>
-
-        <Collapse in={expand} timeout="auto" unmountOnExit>
-          <ul data-cy="formik-student-number-input-delimeter-list">
-            <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
-            <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
-            <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
-            <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
-          </ul>
-          <Typography variant="body2" mt={2}>
-            {t('organisationSurveys:studentNumberExampleInput')}
-          </Typography>
-          <Box
-            data-cy="formik-student-number-input-example"
-            sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }}
-            component="pre"
-          >
-            010000003;
-            <br />
-            011000002,
-            <br />
-            011000090 011000003
-          </Box>
-        </Collapse>
-      </Alert>
-    </Box>
+    <Instructions
+      title={t('organisationSurveys:studentNumberInformation')}
+      alertProps={{
+        'data-cy': 'formik-student-number-input-alert',
+        severity: 'info',
+        message: t('organisationSurveys:studentNumberInformation'),
+      }}
+      iconButtonProps={{
+        'data-cy': 'formik-student-number-input-expand-icon',
+      }}
+      collapseProps={{
+        'data-cy': 'formik-student-number-input-delimeter-list',
+      }}
+    >
+      <ul>
+        <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
+        <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
+        <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
+        <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
+      </ul>
+      <Typography variant="body2" mt={2}>
+        {t('organisationSurveys:studentNumberExampleInput')}
+      </Typography>
+      <Box
+        data-cy="formik-student-number-input-example"
+        sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }}
+        component="pre"
+      >
+        010000003;
+        <br />
+        011000002,
+        <br />
+        011000090 011000003
+      </Box>
+    </Instructions>
   )
 }
 
