@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Button, IconButton, Tooltip, Box, Grid } from '@mui/material'
+import { Button, IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
 
 import { FieldArray, useField } from 'formik'
 import CloseIcon from '@mui/icons-material/Close'
@@ -36,7 +36,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
             const languageT = i18n.getFixedT(language)
 
             return (
-              <Grid md={4} sm={12} xs={12} item key={language}>
+              <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
                 <FormikTextField
                   data-cy={`option-editor-new-option-${language}-name.${index}`}
                   name={`${name}.label.${language}`}
