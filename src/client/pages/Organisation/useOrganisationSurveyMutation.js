@@ -57,8 +57,6 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
     },
   })
 
-  console.log(mutation)
-
   return mutation
 }
 

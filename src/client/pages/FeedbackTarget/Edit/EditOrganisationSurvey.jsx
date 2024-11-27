@@ -16,8 +16,7 @@ const EditOrganisationSurvey = () => {
   const [showForm, setShowForm] = useState(false)
   const queryClient = useQueryClient()
 
-  const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin, organisation } =
-    useFeedbackTargetContext()
+  const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
   const allowEdit = isAdmin || isResponsibleTeacher || isOrganisationAdmin
   const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
@@ -102,7 +101,7 @@ const EditOrganisationSurvey = () => {
         editing={showForm}
         onStopEditing={handleClose}
         editView
-        organisationCode={organisation.code}
+        organisationCode={organisations[0]?.code}
       />
     </>
   )
