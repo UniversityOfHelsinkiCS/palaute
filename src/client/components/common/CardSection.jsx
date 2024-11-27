@@ -5,7 +5,9 @@ const CardSection = ({ title, children }) => (
   <Card>
     <CardContent>
       <Box mb={4}>
-        <Typography variant="h6">{title}</Typography>
+        <Typography component="h2" variant="h6">
+          {title}
+        </Typography>
       </Box>
       {children}
     </CardContent>
