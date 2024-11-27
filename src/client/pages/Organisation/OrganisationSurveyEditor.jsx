@@ -50,15 +50,19 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName}`}
         freeSolo
-        ChipProps={{
-          'data-cy': `formik-responsible-teacher-input-field-chip`,
+        slotProps={{
+          chip: {
+            'data-cy': `formik-responsible-teacher-input-field-chip`,
+          },
         }}
         renderInput={params => (
           <TextField
             {...params}
-            inputProps={{
-              ...params.inputProps,
-              'data-cy': 'formik-responsible-teacher-input-field',
+            slotProps={{
+              htmlInput: {
+                ...params.inputProps,
+                'data-cy': 'formik-responsible-teacher-input-field',
+              },
             }}
             label={t('organisationSurveys:responsibleTeachers')}
           />
