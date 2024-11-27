@@ -203,10 +203,18 @@ export const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = 
  *  setOption: (string) => void,
  *  allowAll: boolean
  *  futureYears: number
- * }} params
+ * }} params§
  * @returns
  */
-export const YearSemesterSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
+export const YearSemesterSelector = ({
+  value,
+  onChange,
+  option,
+  setOption,
+  allowAll,
+  futureYears = 0,
+  organisationSurvey = false,
+}) => {
   const { t } = useTranslation()
   const { year, semesters, currentSemester } = useYearSemesters(value?.start ?? new Date(), futureYears)
 

@@ -51,7 +51,7 @@ const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
 
   return (
     <>
-      <Grid xs={8} item>
+      <Grid xs={10} item>
         <Autocomplete
           id="courses"
           disableCloseOnSelect
@@ -71,7 +71,7 @@ const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
           )}
         />
       </Grid>
-      <Grid xs={4} item>
+      <Grid xs={2} item>
         <YearSemesterSelector
           value={dateRange ?? { start: new Date(), end: new Date() }}
           onChange={handleDateRangeChange}
