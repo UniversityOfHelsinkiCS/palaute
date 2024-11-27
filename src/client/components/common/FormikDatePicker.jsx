@@ -32,6 +32,9 @@ const FormikDatePicker = ({ name, ...props }) => {
             'data-cy': `formik-date-picker-field-${name}-input`,
           },
         },
+        field: {
+          'data-cy': `formik-date-picker-field-${name}`,
+        },
         inputAdornment: {
           'data-cy': `formik-date-picker-keyboard-field-${name}`,
           'aria-label': 'change date',
@@ -39,9 +42,6 @@ const FormikDatePicker = ({ name, ...props }) => {
         openPickerButton: {
           'data-cy': `formik-date-picker-field-${name}-popper`,
         },
-      }}
-      InputProps={{
-        'data-cy': `formik-date-picker-field-${name}`,
       }}
       maxDate={new Date('2300-01-01')}
       {...props}
