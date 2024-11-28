@@ -14,7 +14,6 @@ const EditOrganisationSurvey = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const [showForm, setShowForm] = useState(false)
-  const queryClient = useQueryClient()
 
   const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
@@ -60,7 +59,6 @@ const EditOrganisationSurvey = () => {
     await editMutation.mutateAsync(values, {
       onSuccess: () => {
         handleClose()
-        queryClient.invalidateQueries(['feedbackTarget', feedbackTarget.id])
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: error => {

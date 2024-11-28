@@ -446,7 +446,7 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
 
 const getStudentNumbersFromCourseIds = async courseIds => {
   try {
-    if (!courseIds || courseIds.length < 1) return []
+    if (!courseIds || courseIds.length === 0) return []
     const studentNumbers = await User.findAll({
       include: [
         {

@@ -6,6 +6,8 @@ import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
 import { useDebounce } from './useDebounce'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
 import { getSemesterRange } from '../../util/yearSemesterUtils'
+import { getStartAndEndString } from '../../util/getDateRangeString'
+import { getLanguageValue } from '../../util/languageUtils'
 
 type DateRange = { start: Date; end: Date }
 
@@ -20,11 +22,11 @@ interface InitialValues {
   courses: []
 }
 
-type OrganisationCode = any
+type OrganisationCode = string
 
-const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
+const CourseSearchInput = ({ organisationCode }: { organisationCode: OrganisationCode }) => {
   const { t, i18n } = useTranslation()
-  const lang = i18n.language
+  const { language } = i18n
   const formikProps = useFormikContext<InitialValues>()
   const [courseSearch, setCourseSearch] = useState('')
   const debounceSearch = useDebounce(courseSearch, 700)
@@ -40,9 +42,9 @@ const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
 
   const getOptionLabel = (course: any) => {
     const courseRealisation = course.feedbackTargets[0]?.courseRealisation
-    const startDate = new Date(courseRealisation.startDate).toLocaleDateString()
-    const endDate = new Date(courseRealisation.endDate).toLocaleDateString()
-    return `${course?.name[lang] || ''} (${startDate} - ${endDate})`
+    const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
+    const courseName = getLanguageValue(course?.name, language)
+    return `${courseName || ''} (${startDate} - ${endDate})`
   }
 
   const handleDateRangeChange = (nextDateRange: DateRange) => {
@@ -66,7 +68,7 @@ const CourseSearchInput = ({ organisationCode }: OrganisationCode) => {
           }}
           options={data ?? []}
           getOptionLabel={getOptionLabel}
-          renderInput={(params: any) => (
+          renderInput={params => (
             <TextField {...params} label={t('organisationSurveys:addCourses')} variant="outlined" />
           )}
         />

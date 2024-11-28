@@ -75,9 +75,7 @@ const createOrganisationSurvey = async (req, res) => {
   const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(initialCourseIds)
 
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [
-    ...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds.filter(n => n !== null)]),
-  ]
+  const studentNumbers = [...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds.filter(n => n)])]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
@@ -111,9 +109,7 @@ const editOrganisationSurvey = async (req, res) => {
 
   const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(updates.courseIds)
 
-  updates.studentNumbers = [
-    ...new Set([...updates.studentNumbers, ...studentNumbersFromCourseIds.filter(n => n !== null)]),
-  ]
+  updates.studentNumbers = [...new Set([...updates.studentNumbers, ...studentNumbersFromCourseIds.filter(n => n)])]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,

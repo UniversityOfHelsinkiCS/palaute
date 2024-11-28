@@ -41,9 +41,9 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="formik-locales-field-sv-name"]').should('be.visible')
     cy.get('[data-cy="formik-locales-field-en-name"]').should('be.visible')
 
-    cy.get('[data-cy="formik-date-picker-field-startDate-input"]').should('be.visible')
+    cy.get('[data-cy="formik-date-picker-field-startDate"]').should('be.visible')
 
-    cy.get('[data-cy="formik-date-picker-field-endDate-input"]').should('be.visible')
+    cy.get('[data-cy="formik-date-picker-field-endDate"]').should('be.visible')
 
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
 
@@ -77,10 +77,10 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
 
     // Assert that the startDate picker is there
-    cy.get('[data-cy="formik-date-picker-field-startDate-input"]').should('be.visible')
+    cy.get('[data-cy="formik-date-picker-field-startDate"]').should('be.visible')
 
     // Assert that the endDate picker is there
-    cy.get('[data-cy="formik-date-picker-field-endDate-input"]').should('be.visible')
+    cy.get('[data-cy="formik-date-picker-field-endDate"]').should('be.visible')
 
     // Assert responsible teacher input field is there
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
@@ -188,13 +188,13 @@ describe('Feedback Correspondents', () => {
     // FIX:
     // This shit is not working in the CI as the Material UI DatePicker component
     // is rendered as mobile version and it is readonly, even the force type doees not work
-    cy.get('[data-cy="formik-date-picker-field-startDate-input"]')
+    cy.get('[data-cy="formik-date-picker-field-startDate"]')
       .clear('input', { force: true })
       .type('01/01/2100{enter}', { force: true })
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
-    cy.get('[data-cy="formik-date-picker-field-endDate-input"]').parent().as('endDateInputParent')
+    cy.get('[data-cy="formik-date-picker-field-endDate"]').parent().as('endDateInputParent')
     cy.get('@endDateInputParent').contains('p', 'Survey closing date is before opening date')
   })
 
