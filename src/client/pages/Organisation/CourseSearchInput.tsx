@@ -24,6 +24,21 @@ interface InitialValues {
 
 type OrganisationCode = string
 
+type CourseRealisation = {
+  id: string
+  name: Locales
+  startDate: string
+  endDate: string
+}
+
+type FeedbackTarget = {
+  id: number
+  courseRealisationId: string
+  courseRealisation: CourseRealisation
+}
+
+type FeedbackTargets = FeedbackTarget[]
+
 const CourseSearchInput = ({ organisationCode }: { organisationCode: OrganisationCode }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
@@ -41,10 +56,14 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
   })
 
   const options = data
-    ?.flatMap(({ feedbackTargets }) => feedbackTargets)
-    .sort((a, b) => a.courseRealisation.name[language].localeCompare(b.courseRealisation.name[language]))
+    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) => feedbackTargets)
+    .sort((a: FeedbackTarget, b: FeedbackTarget) =>
+      a.courseRealisation.name[language as keyof Locales].localeCompare(
+        b.courseRealisation.name[language as keyof Locales]
+      )
+    )
 
-  const getOptionLabel = (course: any) => {
+  const getOptionLabel = (course: FeedbackTarget) => {
     const { courseRealisation } = course
     const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
     const courseName = getLanguageValue(courseRealisation?.name, language)
