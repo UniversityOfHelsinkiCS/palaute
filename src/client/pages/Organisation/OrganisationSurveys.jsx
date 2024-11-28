@@ -16,10 +16,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 
-import {
-  getOverlappingStudentTeachers,
-  getOrganisationSurveySchema,
-} from './utils'
+import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from './utils'
 
 const styles = {
   dates: {
@@ -45,8 +42,7 @@ const OrganisationSurveys = () => {
 
   const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
   const mutation = useCreateOrganisationSurveyMutation(code)
-  const { surveys, isLoading: isOrganisationSurveysLoading } =
-    useOrganisationSurveys(code)
+  const { surveys, isLoading: isOrganisationSurveysLoading } = useOrganisationSurveys(code)
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
 
@@ -76,7 +72,7 @@ const OrganisationSurveys = () => {
       setErrors({
         studentNumbers: {
           text: t('validationErrors:overlappingStudentTeacher'),
-          data: overlappingStudentTeachers.map((t) => t.studentNumber),
+          data: overlappingStudentTeachers.map(t => t.studentNumber),
         },
       })
       return
@@ -84,24 +80,19 @@ const OrganisationSurveys = () => {
 
     const values = {
       ...data,
-      teacherIds: data.teachers.map((t) => t.id),
-      courseIds: data.courses.map((c) => c.id),
+      teacherIds: data.teachers.map(t => t.id),
+      courseIds: data.courses.map(c => c.courseRealisationId),
     }
 
     await mutation.mutateAsync(values, {
-      onSuccess: (data) => {
+      onSuccess: data => {
         handleClose()
 
         navigate(`/targets/${data.id}/edit`)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
-      onError: (error) => {
-        if (
-          error.isAxiosError &&
-          error.response &&
-          error.response.data &&
-          error.response.data.invalidStudentNumbers
-        ) {
+      onError: error => {
+        if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
 
           setErrors({
@@ -144,15 +135,9 @@ const OrganisationSurveys = () => {
       />
 
       {surveys.length > 0 ? (
-        surveys.map((survey) => (
-          <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />
-        ))
+        surveys.map(survey => <OrganisationSurveyItem key={survey.id} organisationSurvey={survey} />)
       ) : (
-        <Alert
-          data-cy="organisation-surveys-no-surveys-alert"
-          sx={{ mt: 2 }}
-          severity="info"
-        >
+        <Alert data-cy="organisation-surveys-no-surveys-alert" sx={{ mt: 2 }} severity="info">
           {t('organisationSurveys:emptySurveys')}
         </Alert>
       )}

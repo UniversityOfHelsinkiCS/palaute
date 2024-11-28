@@ -52,7 +52,7 @@ const EditOrganisationSurvey = () => {
       surveyId: organisationSurvey.id,
       ...data,
       teacherIds: data.teachers.map(t => t.id),
-      courseIds: data.courses?.map(c => c.id) || [],
+      courseIds: data.courses?.map(c => c.courseRealisationId),
     }
 
     await editMutation.mutateAsync(values, {

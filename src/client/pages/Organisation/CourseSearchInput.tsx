@@ -24,6 +24,21 @@ interface InitialValues {
 
 type OrganisationCode = string
 
+type CourseRealisation = {
+  id: string
+  name: Locales
+  startDate: string
+  endDate: string
+}
+
+type FeedbackTarget = {
+  id: number
+  courseRealisationId: string
+  courseRealisation: CourseRealisation
+}
+
+type FeedbackTargets = FeedbackTarget[]
+
 const CourseSearchInput = ({ organisationCode }: { organisationCode: OrganisationCode }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
@@ -40,10 +55,18 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
     endDate: dateRange.end,
   })
 
-  const getOptionLabel = (course: any) => {
-    const courseRealisation = course.feedbackTargets[0]?.courseRealisation
+  const options = data
+    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) => feedbackTargets)
+    .sort((a: FeedbackTarget, b: FeedbackTarget) =>
+      a.courseRealisation.name[language as keyof Locales].localeCompare(
+        b.courseRealisation.name[language as keyof Locales]
+      )
+    )
+
+  const getOptionLabel = (course: FeedbackTarget) => {
+    const { courseRealisation } = course
     const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
-    const courseName = getLanguageValue(course?.name, language)
+    const courseName = getLanguageValue(courseRealisation?.name, language)
     return `${courseName || ''} (${startDate} - ${endDate})`
   }
 
@@ -66,7 +89,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
           onInputChange={(_, value) => {
             setCourseSearch(value)
           }}
-          options={data ?? []}
+          options={options ?? []}
           getOptionLabel={getOptionLabel}
           renderInput={params => (
             <TextField {...params} label={t('organisationSurveys:addCourses')} variant="outlined" />
