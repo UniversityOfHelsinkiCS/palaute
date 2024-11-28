@@ -1,59 +1,71 @@
 import * as Yup from 'yup'
 import { format, parseISO } from 'date-fns'
 
-export const getUpperLevelQuestions = survey =>
-  (survey?.universitySurvey?.questions ?? []).filter(q => q.type !== 'TEXT')
+export const getUpperLevelQuestions = (survey) =>
+  (survey?.universitySurvey?.questions ?? []).filter((q) => q.type !== 'TEXT')
 
-export const filterCoursesWithNoResponses = courses => {
-  const coursesWithRealisations = courses.filter(course => course.realisations.length > 0)
+export const filterCoursesWithNoResponses = (courses) => {
+  const coursesWithRealisations = courses.filter(
+    (course) => course.realisations.length > 0
+  )
 
-  const remappedCourses = coursesWithRealisations.map(course => {
-    const realisations = course.realisations.map(real => {
-      const remappedQuestions = real.questions.map(q => ({
+  const remappedCourses = coursesWithRealisations.map((course) => {
+    const realisations = course.realisations.map((real) => {
+      const remappedQuestions = real.questions.map((q) => ({
         ...q,
-        responses: q.responses.filter(r => r.length >= 5),
+        responses: q.responses.filter((r) => r.length >= 5),
       }))
-      const questions = remappedQuestions.filter(q => q.responses.length > 0)
+      const questions = remappedQuestions.filter((q) => q.responses.length > 0)
       return { ...real, questions }
     })
-    const filteredRealisations = realisations.filter(({ questions }) => questions.length > 0)
+    const filteredRealisations = realisations.filter(
+      ({ questions }) => questions.length > 0
+    )
 
     return { ...course, realisations: filteredRealisations }
   })
 
-  const filteredCourses = remappedCourses.filter(course => course.realisations.length > 0)
+  const filteredCourses = remappedCourses.filter(
+    (course) => course.realisations.length > 0
+  )
 
   return filteredCourses
 }
 
 export const filterCoursesByDate = (courses, dateRange) => {
-  const filteredCourses = courses.map(course => ({
+  const filteredCourses = courses.map((course) => ({
     ...course,
     realisations: course.realisations.filter(
-      realisation =>
-        dateRange.end >= parseISO(realisation.startDate) && dateRange.start <= parseISO(realisation.endDate)
+      (realisation) =>
+        dateRange.end >= parseISO(realisation.startDate) &&
+        dateRange.start <= parseISO(realisation.endDate)
     ),
   }))
 
-  const coursesWithRealisations = filteredCourses.filter(course => course.realisations.length > 0)
+  const coursesWithRealisations = filteredCourses.filter(
+    (course) => course.realisations.length > 0
+  )
 
   return coursesWithRealisations
 }
 
-export const formateDates = realisation => {
+export const formateDates = (realisation) => {
   const startDate = format(parseISO(realisation.startDate), 'dd.MM.yyyy')
   const endDate = format(parseISO(realisation.endDate), 'dd.MM.yyyy')
 
   return `${startDate} - ${endDate}`
 }
 
-export const getStudentListVisibility = ({ studentListVisible, studentListVisibleByCourse }) => {
+export const getStudentListVisibility = ({
+  studentListVisible,
+  studentListVisibleByCourse,
+}) => {
   if (studentListVisibleByCourse) return 'byCourse'
   if (studentListVisible) return 'visible'
   return 'hidden'
 }
 
-export const getOrganisationSurveySchema = t =>
+export const getOrganisationSurveySchema = (t) =>
   Yup.object().shape({
     name: Yup.object().shape(
       {
@@ -84,12 +96,16 @@ export const getOrganisationSurveySchema = t =>
       .required(t('validationErrors:invalidDate'))
       .min(Yup.ref('startDate'), t('validationErrors:wrongDate')),
     studentNumbers: Yup.array().of(Yup.string()),
-    teachers: Yup.array().of(Yup.object()).min(1, t('validationErrors:required')),
+    teachers: Yup.array()
+      .of(Yup.object())
+      .min(1, t('validationErrors:required')),
   })
 
-export const getOverlappingStudentTeachers = data => {
+export const getOverlappingStudentTeachers = (data) => {
   const { studentNumbers } = data
-  const overlappingStudentTeachers = data.teachers.filter(t => studentNumbers.includes(t.studentNumber))
+  const overlappingStudentTeachers = data.teachers.filter((t) =>
+    studentNumbers.includes(t.studentNumber)
+  )
 
   return overlappingStudentTeachers
 }

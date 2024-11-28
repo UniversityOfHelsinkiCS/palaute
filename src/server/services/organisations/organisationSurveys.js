@@ -444,6 +444,37 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
   }
 }
 
+const getStudentNumbersFromCourseIds = async courseIds => {
+  try {
+    if (!courseIds || courseIds.length === 0) return []
+    const studentNumbers = await User.findAll({
+      include: [
+        {
+          model: UserFeedbackTarget,
+          as: 'userFeedbackTargets',
+          required: true,
+          include: [
+            {
+              model: FeedbackTarget,
+              as: 'feedbackTarget',
+              required: true,
+              where: {
+                courseUnitId: { [Op.in]: courseIds },
+              },
+            },
+          ],
+        },
+      ],
+      attributes: ['studentNumber'],
+    })
+
+    return studentNumbers.map(user => user.studentNumber)
+  } catch (error) {
+    logger.error(`Error fetching student numbers for course IDs ${courseIds}:`, error)
+    throw new Error('Failed to fetch student numbers')
+  }
+}
+
 module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
@@ -455,4 +486,5 @@ module.exports = {
   getDeletionAllowed,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
+  getStudentNumbersFromCourseIds,
 }

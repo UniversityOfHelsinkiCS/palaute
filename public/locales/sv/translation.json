@@ -398,7 +398,8 @@
     "removeSuccess": "Programundersökningen är borttagen",
     "responsibleTeachers": "Ansvarsperson",
     "remove": "Ta bort",
-    "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden"
+    "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden",
+    "addCourses": "Fler studenter från kurser"
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",

@@ -12,6 +12,7 @@ const {
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
   getDeletionAllowed,
+  getStudentNumbersFromCourseIds,
 } = require('../../services/organisations/organisationSurveys')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
 const { validateStudentNumbers } = require('../../services/organisations/validator')
@@ -56,7 +57,14 @@ const getOrganisationSurveys = async (req, res) => {
 const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { name, startDate, endDate, studentNumbers: initialStudentNumbers, teacherIds: initialTeacherIds } = req.body
+  const {
+    name,
+    startDate,
+    endDate,
+    studentNumbers: initialStudentNumbers,
+    teacherIds: initialTeacherIds,
+    courseIds: initialCourseIds,
+  } = req.body
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
@@ -64,8 +72,10 @@ const createOrganisationSurvey = async (req, res) => {
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
+  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(initialCourseIds)
+
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [...new Set(initialStudentNumbers)]
+  const studentNumbers = [...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds.filter(n => n)])]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
@@ -73,7 +83,11 @@ const createOrganisationSurvey = async (req, res) => {
 
   await initializeOrganisationCourseUnit(organisation)
 
-  const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { name, startDate, endDate })
+  const feedbackTarget = await createOrganisationFeedbackTarget(organisation, {
+    name,
+    startDate,
+    endDate,
+  })
 
   const studentIds = await getStudentIds(studentNumbers)
   const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
@@ -91,7 +105,11 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { id } = req.params
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers'])
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
+
+  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(updates.courseIds)
+
+  updates.studentNumbers = [...new Set([...updates.studentNumbers, ...studentNumbersFromCourseIds.filter(n => n)])]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,
@@ -115,7 +133,6 @@ const editOrganisationSurvey = async (req, res) => {
 const removeOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code, id } = req.params
-
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
   })

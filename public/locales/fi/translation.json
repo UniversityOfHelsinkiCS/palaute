@@ -417,7 +417,8 @@
     "remove": "Poista",
     "confirmRemoveSurvey": "Haluatko varmasti poistaa tämän koulutusohjelman kyselyn?",
     "removeSuccess": "Koulutusohjelman kysely poistettu",
-    "feedbacksGivenRatio": "Palautteita annettu / Opiskelijoiden määrä"
+    "feedbacksGivenRatio": "Palautteita annettu / Opiskelijoiden määrä",
+    "addCourses": "Lisää opiskelijoita kursseilta"
   },
   "interimFeedback": {
     "interimFeedback": "Välipalaute",

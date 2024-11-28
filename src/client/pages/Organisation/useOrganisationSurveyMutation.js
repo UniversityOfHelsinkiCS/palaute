@@ -7,13 +7,14 @@ import apiClient from '../../util/apiClient'
 import { updateCache } from '../../util/reactQuery'
 
 export const useCreateOrganisationSurveyMutation = organisationCode => {
-  const mutationFn = async ({ name, startDate, endDate, studentNumbers, teacherIds }) => {
+  const mutationFn = async ({ name, startDate, endDate, studentNumbers, teacherIds, courseIds }) => {
     const { data } = await apiClient.post(`/organisations/${organisationCode}/surveys`, {
       name,
       startDate: startDate ? startOfDay(new Date(startDate)) : null,
       endDate: endDate ? endOfDay(new Date(endDate)) : null,
       studentNumbers,
       teacherIds,
+      courseIds,
     })
 
     return data
@@ -29,13 +30,14 @@ export const useCreateOrganisationSurveyMutation = organisationCode => {
 }
 
 export const useEditOrganisationSurveyMutation = organisationCode => {
-  const mutationFn = async ({ surveyId, name, startDate, endDate, studentNumbers, teacherIds }) => {
+  const mutationFn = async ({ surveyId, name, startDate, endDate, studentNumbers, teacherIds, courseIds }) => {
     const { data } = await apiClient.put(`/organisations/${organisationCode}/surveys/${surveyId}`, {
       name,
       startDate,
       endDate,
       studentNumbers,
       teacherIds,
+      courseIds,
     })
 
     return data

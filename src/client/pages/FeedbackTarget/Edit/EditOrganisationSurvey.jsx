@@ -1,11 +1,8 @@
 import React, { useState } from 'react'
 import { Button } from '@mui/material'
 import { Edit } from '@mui/icons-material'
-
 import { useSnackbar } from 'notistack'
-
 import { useTranslation } from 'react-i18next'
-
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
@@ -55,12 +52,12 @@ const EditOrganisationSurvey = () => {
       surveyId: organisationSurvey.id,
       ...data,
       teacherIds: data.teachers.map(t => t.id),
+      courseIds: data.courses?.map(c => c.id) || [],
     }
 
     await editMutation.mutateAsync(values, {
       onSuccess: () => {
         handleClose()
-
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: error => {
@@ -101,6 +98,7 @@ const EditOrganisationSurvey = () => {
         editing={showForm}
         onStopEditing={handleClose}
         editView
+        organisationCode={organisations[0]?.code}
       />
     </>
   )

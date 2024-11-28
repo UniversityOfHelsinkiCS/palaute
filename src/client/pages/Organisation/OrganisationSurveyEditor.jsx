@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
+import CourseSearchInput from './CourseSearchInput'
 
 import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
@@ -158,7 +159,11 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           if (
             editView &&
             reason === 'removeOption' &&
-            !window.confirm(t('organisationSurveys:confirmStudentDelete', { studentNumber: detail.option }))
+            !window.confirm(
+              t('organisationSurveys:confirmStudentDelete', {
+                studentNumber: detail.option,
+              })
+            )
           )
             return
 
@@ -205,11 +210,14 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         )}
         {...props}
       />
+      <Box sx={{ paddingTop: '1rem' }}>
+        <Chip label={`${t('common:studentCount')}: ${value.length}`} variant="outlined" />
+      </Box>
     </Box>
   )
 }
 
-const OrganisationSurveyForm = () => {
+const OrganisationSurveyForm = ({ organisationCode }) => {
   const { t } = useTranslation()
 
   return (
@@ -238,11 +246,12 @@ const OrganisationSurveyForm = () => {
           label={t('organisationSurveys:studentNumberInputLabel')}
         />
       </Grid>
+      <CourseSearchInput organisationCode={organisationCode} />
     </Grid>
   )
 }
 
-const EditOrganisationSurveyForm = () => {
+const EditOrganisationSurveyForm = ({ organisationCode }) => {
   const { t } = useTranslation()
 
   return (
@@ -273,6 +282,7 @@ const EditOrganisationSurveyForm = () => {
           editView
         />
       </Grid>
+      <CourseSearchInput organisationCode={organisationCode} />
     </Grid>
   )
 }
@@ -285,6 +295,7 @@ const OrganisationSurveyEditor = ({
   editing,
   onStopEditing,
   editView = false,
+  organisationCode,
 }) => {
   const { t } = useTranslation()
 
@@ -303,7 +314,11 @@ const OrganisationSurveyEditor = ({
           return (
             <Form>
               <Box sx={{ m: 4 }}>
-                {editView ? <EditOrganisationSurveyForm /> : <OrganisationSurveyForm />}
+                {editView ? (
+                  <EditOrganisationSurveyForm organisationCode={organisationCode} />
+                ) : (
+                  <OrganisationSurveyForm organisationCode={organisationCode} />
+                )}
 
                 <Box sx={{ mt: 2 }}>
                   <Button
