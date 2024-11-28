@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Autocomplete, TextField, Grid } from '@mui/material'
+import { Autocomplete, TextField, Grid2 as Grid } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormikContext } from 'formik'
 import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
@@ -53,7 +53,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
 
   return (
     <>
-      <Grid xs={10} item>
+      <Grid size={10}>
         <Autocomplete
           id="courses"
           disableCloseOnSelect
@@ -73,7 +73,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
           )}
         />
       </Grid>
-      <Grid xs={2} item>
+      <Grid size={2}>
         <YearSemesterSelector
           value={dateRange ?? { start: new Date(), end: new Date() }}
           onChange={handleDateRangeChange}
