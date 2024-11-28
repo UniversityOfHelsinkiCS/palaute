@@ -40,10 +40,14 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
     endDate: dateRange.end,
   })
 
+  const options = data
+    ?.flatMap(({ feedbackTargets }) => feedbackTargets)
+    .sort((a, b) => a.courseRealisation.name[language].localeCompare(b.courseRealisation.name[language]))
+
   const getOptionLabel = (course: any) => {
-    const courseRealisation = course.feedbackTargets[0]?.courseRealisation
+    const { courseRealisation } = course
     const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
-    const courseName = getLanguageValue(course?.name, language)
+    const courseName = getLanguageValue(courseRealisation?.name, language)
     return `${courseName || ''} (${startDate} - ${endDate})`
   }
 
@@ -66,7 +70,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
           onInputChange={(_, value) => {
             setCourseSearch(value)
           }}
-          options={data ?? []}
+          options={options ?? []}
           getOptionLabel={getOptionLabel}
           renderInput={params => (
             <TextField {...params} label={t('organisationSurveys:addCourses')} variant="outlined" />

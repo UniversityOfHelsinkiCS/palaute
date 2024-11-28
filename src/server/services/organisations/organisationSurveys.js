@@ -130,17 +130,24 @@ const getStudentIds = async studentNumbers => {
 }
 
 const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
-  const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    userIds.map(userId => ({
-      accessStatus,
-      feedbackTargetId,
-      userId,
-      isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
-      userCreated: true,
-    }))
-  )
+  const createdUserFeedbackTargets = []
 
-  return userFeedbackTargets
+  for (const userId of userIds) {
+    try {
+      const userFeedbackTarget = await UserFeedbackTarget.create({
+        accessStatus,
+        feedbackTargetId,
+        userId,
+        isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
+        userCreated: true,
+      })
+      createdUserFeedbackTargets.push(userFeedbackTarget)
+    } catch (error) {
+      logger.error(`Error creating feedback target for user ${userId}:`, error.message)
+    }
+  }
+
+  return createdUserFeedbackTargets
 }
 
 const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
@@ -459,7 +466,7 @@ const getStudentNumbersFromCourseIds = async courseIds => {
               as: 'feedbackTarget',
               required: true,
               where: {
-                courseUnitId: { [Op.in]: courseIds },
+                courseRealisationId: { [Op.in]: courseIds },
               },
             },
           ],
