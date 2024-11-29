@@ -9,9 +9,6 @@ const initializeSentry = () => {
     release: GIT_SHA,
     integrations: [
       Sentry.breadcrumbsIntegration(),
-      Sentry.captureConsoleIntegration({
-        levels: ['error'],
-      }),
       Sentry.browserTracingIntegration(),
       Sentry.thirdPartyErrorFilterIntegration({
         filterKeys: ['norppa-course-feedback'],
