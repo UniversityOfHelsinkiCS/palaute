@@ -460,6 +460,9 @@ const getStudentNumbersFromCourseIds = async courseIds => {
           model: UserFeedbackTarget,
           as: 'userFeedbackTargets',
           required: true,
+          where: {
+            accessStatus: 'STUDENT',
+          },
           include: [
             {
               model: FeedbackTarget,
