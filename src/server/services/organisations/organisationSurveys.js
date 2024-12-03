@@ -451,38 +451,34 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
   }
 }
 
-const getStudentNumbersFromCourseIds = async courseIds => {
-  try {
-    if (!courseIds || courseIds.length === 0) return []
-    const studentNumbers = await User.findAll({
-      include: [
-        {
-          model: UserFeedbackTarget,
-          as: 'userFeedbackTargets',
-          required: true,
-          where: {
-            accessStatus: 'STUDENT',
-          },
-          include: [
-            {
-              model: FeedbackTarget,
-              as: 'feedbackTarget',
-              required: true,
-              where: {
-                courseRealisationId: { [Op.in]: courseIds },
-              },
-            },
-          ],
+const getOrganisationSurveyCourseStudents = async courseIds => {
+  if (!courseIds || courseIds.length === 0) return []
+  const students = await User.findAll({
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        where: {
+          accessStatus: 'STUDENT',
         },
-      ],
-      attributes: ['studentNumber'],
-    })
-
-    return studentNumbers.map(user => user.studentNumber)
-  } catch (error) {
-    logger.error(`Error fetching student numbers for course IDs ${courseIds}:`, error)
-    throw new Error('Failed to fetch student numbers')
-  }
+        attributes: ['id'],
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            required: true,
+            where: {
+              courseRealisationId: { [Op.in]: courseIds },
+            },
+            attributes: ['id', 'courseRealisationId'],
+          },
+        ],
+      },
+    ],
+    attributes: ['id', 'studentNumber'],
+  })
+  return students
 }
 
 module.exports = {
@@ -496,5 +492,5 @@ module.exports = {
   getDeletionAllowed,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
-  getStudentNumbersFromCourseIds,
+  getOrganisationSurveyCourseStudents,
 }

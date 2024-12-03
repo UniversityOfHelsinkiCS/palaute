@@ -12,7 +12,7 @@ const {
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
   getDeletionAllowed,
-  getStudentNumbersFromCourseIds,
+  getOrganisationSurveyCourseStudents,
 } = require('../../services/organisations/organisationSurveys')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
 const { validateStudentNumbers } = require('../../services/organisations/validator')
@@ -72,10 +72,10 @@ const createOrganisationSurvey = async (req, res) => {
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
-  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(initialCourseIds)
+  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(initialCourseIds)
 
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [...new Set([...initialStudentNumbers, ...studentNumbersFromCourseIds.filter(n => n)])]
+  const studentNumbers = [...new Set([...initialStudentNumbers])]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
@@ -89,7 +89,8 @@ const createOrganisationSurvey = async (req, res) => {
     endDate,
   })
 
-  const studentIds = await getStudentIds(studentNumbers)
+  const studentIdsFromStudentNumbers = await getStudentIds(studentNumbers)
+  const studentIds = [...studentIdsFromStudentNumbers, ...studentDataFromCourseIds.map(n => n.id)]
   const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
   const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
 
@@ -107,9 +108,11 @@ const editOrganisationSurvey = async (req, res) => {
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
 
-  const studentNumbersFromCourseIds = await getStudentNumbersFromCourseIds(updates.courseIds)
+  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(updates.courseIds)
 
-  updates.studentNumbers = [...new Set([...updates.studentNumbers, ...studentNumbersFromCourseIds.filter(n => n)])]
+  updates.studentNumbers = [
+    ...new Set([...updates.studentNumbers, ...studentDataFromCourseIds.map(n => n.studentNumber)]),
+  ]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,
