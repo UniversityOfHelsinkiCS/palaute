@@ -13,6 +13,7 @@ const {
   deleteOrganisationSurvey,
   getDeletionAllowed,
   getOrganisationSurveyCourseStudents,
+  createOrganisationSurveyCourses,
 } = require('../../services/organisations/organisationSurveys')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
 const { validateStudentNumbers } = require('../../services/organisations/validator')
@@ -109,6 +110,8 @@ const editOrganisationSurvey = async (req, res) => {
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
 
   const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(updates.courseIds)
+
+  await createOrganisationSurveyCourses(id, studentDataFromCourseIds)
 
   updates.studentNumbers = [
     ...new Set([...updates.studentNumbers, ...studentDataFromCourseIds.map(n => n.studentNumber)]),

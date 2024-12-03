@@ -22,6 +22,7 @@ import InactiveCourseRealisation from './inactiveCourseRealisation'
 import CourseUnitsTag from './courseUnitsTag'
 import Group from './group'
 import Summary from './summary'
+import OrganisationSurveyCourse from './organisationSurveyCourse'
 
 FeedbackTarget.belongsTo(CourseUnit, {
   as: 'courseUnit',
@@ -278,4 +279,5 @@ export {
   CourseUnitsTag,
   Group,
   Summary,
+  OrganisationSurveyCourse,
 }

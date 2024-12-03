@@ -2,27 +2,27 @@ const { DataTypes } = require('sequelize')
 
 module.exports = {
   up: async queryInterface => {
-    await queryInterface.createTable('organisationSurveyCourse', {
+    await queryInterface.createTable('organisation_survey_courses', {
       id: {
         type: DataTypes.INTEGER,
         primaryKey: true,
         autoIncrement: true,
       },
-      feedbackTargetId: {
+      feedback_target_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      courseRealisationId: {
+      course_realisation_id: {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      userFeedbackTargetId: {
-        type: DataTypes.STRING,
+      user_feedback_target_id: {
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
     })
   },
   down: async queryInterface => {
-    await queryInterface.dropTable('organisationSurveyCourse')
+    await queryInterface.dropTable('organisation_survey_courses')
   },
 }

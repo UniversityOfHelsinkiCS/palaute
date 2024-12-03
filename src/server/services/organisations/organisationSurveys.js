@@ -18,6 +18,7 @@ const {
   Organisation,
   Survey,
   User,
+  OrganisationSurveyCourse,
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationId => {
@@ -478,7 +479,17 @@ const getOrganisationSurveyCourseStudents = async courseIds => {
     ],
     attributes: ['id', 'studentNumber'],
   })
+
   return students
+}
+
+const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+  const fariable = students.map(s => ({
+    feedbackTargetId,
+    courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
+    userFeedbackTargetId: s.userFeedbackTargets[0].id,
+  }))
+  await OrganisationSurveyCourse.bulkCreate(fariable)
 }
 
 module.exports = {
@@ -493,4 +504,5 @@ module.exports = {
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
   getOrganisationSurveyCourseStudents,
+  createOrganisationSurveyCourses,
 }

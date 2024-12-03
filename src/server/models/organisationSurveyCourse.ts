@@ -19,7 +19,7 @@ OrganisationSurveyCourse.init(
       autoIncrement: true,
     },
     feedbackTargetId: {
-      type: INTEGER,
+      type: STRING,
       allowNull: true,
     },
     courseRealisationId: {
@@ -27,12 +27,13 @@ OrganisationSurveyCourse.init(
       allowNull: false,
     },
     userFeedbackTargetId: {
-      type: STRING,
+      type: INTEGER,
       allowNull: false,
     },
   },
   {
     underscored: true,
+    tableName: 'organisation_survey_courses',
     sequelize,
   }
 )
