@@ -19,7 +19,7 @@ OrganisationSurveyCourse.init(
       autoIncrement: true,
     },
     feedbackTargetId: {
-      type: STRING,
+      type: INTEGER,
       allowNull: true,
     },
     courseRealisationId: {

@@ -9,7 +9,7 @@ module.exports = {
         autoIncrement: true,
       },
       feedback_target_id: {
-        type: DataTypes.STRING,
+        type: DataTypes.INTEGER,
         allowNull: false,
       },
       course_realisation_id: {

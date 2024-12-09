@@ -220,10 +220,21 @@ const getSurveyById = async feedbackTargetId => {
           as: 'user',
         },
       },
+      {
+        model: OrganisationSurveyCourse,
+        as: 'organisationSurveyCourses',
+        attributes: ['courseRealisationId'], // Include all without DISTINCT
+        required: false,
+        where: { feedbackTargetId },
+      },
     ],
   })
 
   if (!organisationSurvey) throw new Error('Organisation survey not found')
+
+  const courseIds = [...new Set(organisationSurvey.organisationSurveyCourses.map(c => c.courseRealisationId))]
+
+  organisationSurvey.organisationSurveyCourses = courseIds
 
   return organisationSurvey
 }

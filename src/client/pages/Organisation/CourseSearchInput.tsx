@@ -65,7 +65,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
 
   const getOptionLabel = (course: FeedbackTarget) => {
     const { courseRealisation } = course
-    const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
+    const [startDate, endDate] = getStartAndEndString(courseRealisation?.startDate, courseRealisation?.endDate)
     const courseName = getLanguageValue(courseRealisation?.name, language)
     return `${courseName || ''} (${startDate} - ${endDate})`
   }
@@ -74,6 +74,15 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
     setDateRange(nextDateRange)
   }
 
+  console.log(formikProps.initialValues.courses)
+
+  const getInitialValues = (courses: CourseRealisation[]) =>
+    options
+      ?.map(({ courseRealisationId }: FeedbackTarget) => {
+        return courses.find(({ id }: CourseRealisation) => id === courseRealisationId)
+      })
+      .filter(Boolean) || []
+
   return (
     <>
       <Grid size={10}>
@@ -81,7 +90,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
           id="courses"
           disableCloseOnSelect
           multiple
-          defaultValue={formikProps.initialValues.courses}
+          defaultValue={getInitialValues(formikProps.initialValues.courses)}
           onChange={(_, courses) => {
             formikProps.setFieldValue('courses', courses)
           }}
