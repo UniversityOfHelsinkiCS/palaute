@@ -31,3 +31,5 @@ Opiskelijat voidaan tuoda kursseilta organisaatiokyselyyn.
 ### Hyöty
 
 Tämä ominaisuus helpottaa opiskelijatietojen käsittelyä ja vähentää manuaalista työtä, kun kursseilta voidaan tuoda tiedot suoraan organisaatiokyselyyn.
+
+---
