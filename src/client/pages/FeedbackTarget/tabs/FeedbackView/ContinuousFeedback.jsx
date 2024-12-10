@@ -1,12 +1,13 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
 import { saveContinuousFeedback } from './utils'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const styles = {
   description: {
@@ -70,15 +71,14 @@ const ContinuousFeedback = () => {
               minRows={4}
               multiline
             />
-            <Button
+            <NorButton
               type="submit"
               color="primary"
-              variant="contained"
               disabled={!values.feedback.length || isSubmitting}
               sx={styles.button}
             >
               {t('norppaFeedback:submit')}
-            </Button>
+            </NorButton>
           </Form>
         )}
       </Formik>

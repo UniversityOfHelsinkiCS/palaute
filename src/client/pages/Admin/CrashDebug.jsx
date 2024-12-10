@@ -1,5 +1,6 @@
 import React from 'react'
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
+import { NorButton } from '../../components/common/NorButton'
 
 const ErrorCausingComponent = () => {
   const THIS_IS_A_TEST_ERROR_CAUSED_BY_ADMIN_PLEASE_IGNORE = undefined
@@ -12,9 +13,9 @@ const CrashDebug = () => {
 
   return (
     <Box>
-      <Button onClick={() => setErr(true)} variant="outlined" color="error" size="small" data-cy="errorButton">
+      <NorButton onClick={() => setErr(true)} color="error" size="small" data-cy="errorButton">
         Throw error
-      </Button>
+      </NorButton>
       {err && <ErrorCausingComponent />}
     </Box>
   )

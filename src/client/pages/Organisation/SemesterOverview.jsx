@@ -19,7 +19,7 @@ import {
   Switch,
   Paper,
 } from '@mui/material'
-import { ArrowDropDown, ChevronRight, Menu } from '@mui/icons-material'
+import { ArrowDropDown, CalendarTodayOutlined, ChevronRight, Menu, List } from '@mui/icons-material'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -33,6 +33,7 @@ import MultiSelect from '../../components/common/MultiSelect'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 import { TagChip } from '../../components/common/TagChip'
+import { NorButton } from '../../components/common/NorButton'
 import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
@@ -663,9 +664,13 @@ const SemesterOverview = ({ organisation }) => {
           control={<Switch checked={showCurName} onChange={toggleShowCurName} />}
           label={t('organisationSettings:showCurName')}
         />
-        <Button onClick={toggleViewMode}>
+        <NorButton
+          color="secondary"
+          onClick={toggleViewMode}
+          icon={viewMode === 'calendar' ? <List /> : <CalendarTodayOutlined />}
+        >
           {viewMode === 'calendar' ? t('organisationSettings:listMode') : t('organisationSettings:calendarMode')}
-        </Button>
+        </NorButton>
       </Box>
       <Box minWidth="35rem" maxWidth="70vw">
         {isLoading && <LoadingProgress />}

@@ -527,7 +527,7 @@
     "findByCourseUnit": "Sök kurs",
     "includeWithoutTeachers": "Visa kurser som inte har lärare",
     "editMode": "Flerfaldig redigering",
-    "calendarMode": "Vaihda kalenterinäkymään Ändra till kalendervy",
+    "calendarMode": "Ändra till kalendervy",
     "listMode": "Ändra till listvy",
     "setStudyTracks": "Markera studieinriktningarna för kursgenomförandet",
     "setStudyTracksForCourseUnit": "Markera kursens {{name}} ({{code}}) inriktning",

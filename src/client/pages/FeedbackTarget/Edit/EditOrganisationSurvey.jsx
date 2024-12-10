@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Button } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -8,6 +7,7 @@ import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
 import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+import { NorButton } from '../../../components/common/NorButton'
 
 const EditOrganisationSurvey = () => {
   const { t } = useTranslation()
@@ -80,15 +80,15 @@ const EditOrganisationSurvey = () => {
 
   return (
     <>
-      <Button
+      <NorButton
         data-cy="feedback-target-edit-organisation-survey"
         sx={{ textAlign: 'left', justifyContent: 'start' }}
         onClick={handleClose}
-        variant="outlined"
-        startIcon={<Edit />}
+        color="secondary"
+        icon={<Edit />}
       >
         {t('organisationSurveys:editSurvey')}
-      </Button>
+      </NorButton>
 
       <OrganisationSurveyEditor
         title={t('organisationSurveys:editSurvey')}

@@ -1,8 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-
+import { Visibility } from '@mui/icons-material'
+import { NorButton } from '../../../../../components/common/NorButton'
 import FixedContainer from '../../../../../components/common/FixedContainer'
 import LanguageSelect from '../../../../../components/common/LanguageSelect'
 
@@ -24,9 +25,9 @@ const Toolbar = ({ previewLink, language, onLanguageChange }) => {
   return (
     <FixedContainer>
       <Box sx={styles.container}>
-        <Button color="primary" variant="contained" onClick={() => navigate(previewLink)}>
+        <NorButton color="secondary" icon={<Visibility />} onClick={() => navigate(previewLink)}>
           {t('editFeedbackTarget:showPreview')}
-        </Button>
+        </NorButton>
 
         <LanguageSelect
           value={language}

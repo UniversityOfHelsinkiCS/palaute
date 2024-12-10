@@ -8,7 +8,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Typography,
   Link as MuiLink,
   AccordionActions,
@@ -25,6 +24,7 @@ import { useSnackbar } from 'notistack'
 import apiClient from '../../../util/apiClient'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { getCourseCode, getPrimaryCourseName } from '../../../util/courseIdentifiers'
+import { NorButton } from '../../../components/common/NorButton'
 
 const Details = ({ feedbackTarget: fbt }) => (
   <TableContainer>
@@ -174,11 +174,11 @@ const Actions = ({ feedbackTarget }) => {
         Go to feedback view
       </MuiLink>
       {feedbackTarget.feedbackResponseEmailSent && (
-        <Button onClick={resendFeedbackResponseEmail}>Resend counter feedback</Button>
+        <NorButton onClick={resendFeedbackResponseEmail}>Resend counter feedback</NorButton>
       )}
-      <Button onClick={handleRunUpdater(feedbackTarget)} style={{ width: '300px' }}>
+      <NorButton onClick={handleRunUpdater(feedbackTarget)} style={{ width: '300px' }}>
         {!updaterRunning ? 'Run updater for enrollments' : 'Working on it...'}
-      </Button>
+      </NorButton>
     </>
   )
 }

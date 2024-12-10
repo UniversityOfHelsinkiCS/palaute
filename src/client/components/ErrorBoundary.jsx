@@ -1,6 +1,7 @@
-import { Button, Container } from '@mui/material'
+import { Container } from '@mui/material'
 import * as Sentry from '@sentry/browser'
 import React, { Component } from 'react'
+import { NorButton } from './common/NorButton'
 
 export default class ErrorBoundary extends Component {
   constructor(props) {
@@ -32,9 +33,9 @@ export default class ErrorBoundary extends Component {
       <Container style={{ padding: '5em' }} data-cy="errorView">
         <h1>Something bad happened and we have been notified</h1>
         <p>You can speed up the fixes by filling the form that opens from the following button:</p>
-        <Button variant="contained" color="primary" onClick={() => Sentry.showReportDialog({ eventId })}>
+        <NorButton color="secondary" onClick={() => Sentry.showReportDialog({ eventId })}>
           Report error
-        </Button>
+        </NorButton>
       </Container>
     )
   }

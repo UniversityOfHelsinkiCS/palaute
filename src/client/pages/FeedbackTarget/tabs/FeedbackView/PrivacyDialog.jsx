@@ -1,8 +1,9 @@
 import React from 'react'
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Link } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const PrivacyDialog = ({ open, onClose }) => {
   const { t } = useTranslation()
@@ -25,9 +26,9 @@ const PrivacyDialog = ({ open, onClose }) => {
         </DialogContentText>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <NorButton onClick={onClose} color="primary">
           {t('common:close')}
-        </Button>
+        </NorButton>
       </DialogActions>
     </Dialog>
   )

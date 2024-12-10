@@ -1,17 +1,6 @@
 import React, { useState } from 'react'
 
-import {
-  TextField,
-  Card,
-  CardContent,
-  Button,
-  Box,
-  Typography,
-  Alert,
-  List,
-  ListItem,
-  ListItemText,
-} from '@mui/material'
+import { TextField, Card, CardContent, Box, Typography, Alert, List, ListItem, ListItemText } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
@@ -21,6 +10,7 @@ import { debounce } from 'lodash-es'
 import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import apiClient from '../../util/apiClient'
+import { NorButton } from '../../components/common/NorButton'
 
 const updateFeedbackCorrespondents =
   code =>
@@ -93,9 +83,9 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
                   primaryTypographyProps={{ fontWeight: 'bold' }}
                 />
 
-                <Button onClick={() => add(user)} variant="outlined">
+                <NorButton onClick={() => add(user)} color="secondary">
                   {t('organisationSettings:setAsCorrespondent')}
-                </Button>
+                </NorButton>
               </ListItem>
             ))}
           </List>
@@ -119,14 +109,9 @@ const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
             <Typography>{correspondent.email?.toLowerCase()}</Typography>
           </Box>
           <Box>
-            <Button
-              color="error"
-              variant="outlined"
-              onClick={() => remove(correspondent)}
-              data-cy="resetCorrespondentButton"
-            >
+            <NorButton color="error" onClick={() => remove(correspondent)} data-cy="resetCorrespondentButton">
               {t('organisationSettings:remove')}
-            </Button>
+            </NorButton>
           </Box>
         </Box>
       </CardContent>

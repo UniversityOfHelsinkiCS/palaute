@@ -3,13 +3,14 @@ import { useTranslation } from 'react-i18next'
 import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
 
-import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
-import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
+import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box } from '@mui/material'
+import { Download, ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { orderBy } from 'lodash-es'
 
 import { sortTable } from '../../../../util/tableUtils'
 import DropZone from './DropZone'
 import CardSection from '../../../../components/common/CardSection'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const styles = {
   box: {
@@ -49,15 +50,15 @@ const ExportXLSX = ({ students, fileName }) => {
   utils.book_append_sheet(workbook, worksheet, fileName)
 
   return (
-    <Button
+    <NorButton
       sx={styles.button}
-      variant="contained"
       color="primary"
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
+      icon={<Download />}
     >
       {t('common:exportXLSX')}
-    </Button>
+    </NorButton>
   )
 }
 
@@ -100,15 +101,14 @@ const StudentTable = ({ students, feedbackTarget }) => {
           <Box mr="auto" />
           <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
           {feedbackStatusAvailable && (
-            <Button
-              endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
-              variant="contained"
-              color="primary"
+            <NorButton
+              icon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
+              color="secondary"
               sx={styles.button}
               onClick={() => setDropZoneVisible(!dropZoneVisible)}
             >
               {t('common:combineCSV')}
-            </Button>
+            </NorButton>
           )}
         </Box>
       }

@@ -2,7 +2,7 @@ import React from 'react'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
@@ -10,6 +10,7 @@ import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedb
 import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
 
 import LinkButton from '../../components/common/LinkButton'
+import { NorButton } from '../../components/common/NorButton'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import { getPrimaryCourseName } from '../../util/courseIdentifiers'
@@ -69,14 +70,14 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
       }}
     >
       {isTeacher && (
-        <Button
+        <NorButton
+          color="secondary"
           data-cy={`${dataCyPrefix}feedback-target-copy-student-link`}
-          sx={{ px: '0.3rem' }}
           onClick={handleCopyLink}
-          endIcon={<CopyIcon />}
+          icon={<CopyIcon />}
         >
           {t('feedbackTargetView:copyLink')}
-        </Button>
+        </NorButton>
       )}
 
       {organisation && (
