@@ -6,7 +6,7 @@ const {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
-  // sendAutomaticReminderOnFeedbackToStudents,
+  sendAutomaticReminderOnFeedbackToStudents,
   sendEmailContinuousFeedbackDigestToTeachers,
 } = require('./mails')
 
@@ -30,7 +30,7 @@ const runPateCron = async () => {
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
   await sendEmailReminderAboutFeedbackResponseToTeachers()
-  // await sendAutomaticReminderOnFeedbackToStudents()
+  await sendAutomaticReminderOnFeedbackToStudents()
 }
 
 const startPateCron = async () => {
