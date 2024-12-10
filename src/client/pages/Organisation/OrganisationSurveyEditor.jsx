@@ -1,21 +1,12 @@
 import React, { useState } from 'react'
-import {
-  Autocomplete,
-  Chip,
-  Button,
-  Box,
-  Dialog,
-  Grid2 as Grid,
-  Typography,
-  TextField,
-  DialogTitle,
-} from '@mui/material'
+import { Autocomplete, Chip, Box, Dialog, Grid2 as Grid, Typography, TextField, DialogTitle } from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
 import CourseSearchInput from './CourseSearchInput'
+import { NorButton } from '../../components/common/NorButton'
 
 import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
@@ -320,26 +311,23 @@ const OrganisationSurveyEditor = ({
                   <OrganisationSurveyForm organisationCode={organisationCode} />
                 )}
 
-                <Box sx={{ mt: 2 }}>
-                  <Button
-                    data-cy="organisation-survey-editor-save"
-                    disabled={disabled}
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                  >
-                    {t('common:save')}
-                  </Button>
-                  <Button
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'right', gap: 2 }}>
+                  <NorButton
                     data-cy="organisation-survey-editor-cancel"
-                    sx={{ ml: 4 }}
-                    color="error"
-                    variant="contained"
+                    color="cancel"
                     type="button"
                     onClick={onStopEditing}
                   >
                     {t('common:cancel')}
-                  </Button>
+                  </NorButton>
+                  <NorButton
+                    data-cy="organisation-survey-editor-save"
+                    disabled={disabled}
+                    color="primary"
+                    type="submit"
+                  >
+                    {t('common:save')}
+                  </NorButton>
                 </Box>
               </Box>
             </Form>

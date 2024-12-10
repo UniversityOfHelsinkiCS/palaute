@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { Link, useParams, Routes, Route, useLocation } from 'react-router-dom'
 
-import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
+import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
 
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../../../hooks/useInteractiveMutation'
@@ -19,6 +19,7 @@ import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
 // eslint-disable-next-line import/no-cycle
 import InterimFeedbackModal from './InterimFeedbackModal'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {
   const { id: parentId } = useParams()
@@ -124,40 +125,37 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
             </Box>
           )}
 
-          <Button
+          <NorButton
             data-cy={`interim-feedback-show-feedback-${interimFeedback.id}`}
-            color="primary"
-            variant="outlined"
+            color="secondary"
             sx={{ mt: 2 }}
             component={Link}
             to={`${pathname}/${interimFeedback.id}/feedback`}
           >
             {t('interimFeedback:viewFeedback')}
-          </Button>
+          </NorButton>
 
           {feedbackCount > 0 && (
-            <Button
+            <NorButton
               data-cy={`interim-feedback-show-results-${interimFeedback.id}`}
-              color="primary"
-              variant="outlined"
+              color="secondary"
               sx={{ mt: 2, ml: 2 }}
               component={Link}
               to={`${pathname}/${interimFeedback.id}/results`}
             >
               {t('interimFeedback:viewResults')}
-            </Button>
+            </NorButton>
           )}
 
           {(allowDelete || isAdmin) && (
-            <Button
+            <NorButton
               data-cy={`interim-feedback-delete-${interimFeedback.id}`}
               color="error"
-              variant="outlined"
               sx={{ mt: 2, ml: 2 }}
               onClick={handleDelete}
             >
               {t('interimFeedback:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
-            </Button>
+            </NorButton>
           )}
         </CardContent>
       </Card>

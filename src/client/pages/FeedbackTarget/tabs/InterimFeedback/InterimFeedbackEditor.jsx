@@ -1,10 +1,11 @@
 import React from 'react'
-import { Button, Box, Dialog, Grid2 as Grid, DialogTitle } from '@mui/material'
+import { Box, Dialog, Grid2 as Grid, DialogTitle } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import FormikDatePicker from '../../../../components/common/FormikDatePicker'
 import FormikLocalesFieldEditor from '../../../../components/common/FormikLocalesFieldEditor'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const InterimFeedbackForm = () => {
   const { t } = useTranslation()
@@ -68,26 +69,13 @@ const InterimFeedbackEditor = ({
               <Box sx={{ m: 4 }}>
                 {editView ? <EditInterimFeedbackForm /> : <InterimFeedbackForm />}
 
-                <Box sx={{ mt: 2 }}>
-                  <Button
-                    data-cy="interim-feedback-editor-save"
-                    disabled={disabled}
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                  >
-                    {t('common:save')}
-                  </Button>
-                  <Button
-                    data-cy="interim-feedback-editor-cancel"
-                    sx={{ ml: 4 }}
-                    color="error"
-                    variant="contained"
-                    type="button"
-                    onClick={onStopEditing}
-                  >
+                <Box sx={{ mt: 2, display: 'flex', justifyContent: 'right', gap: 2 }}>
+                  <NorButton data-cy="interim-feedback-editor-cancel" color="cancel" onClick={onStopEditing}>
                     {t('common:cancel')}
-                  </Button>
+                  </NorButton>
+                  <NorButton data-cy="interim-feedback-editor-save" disabled={disabled} color="primary" type="submit">
+                    {t('common:save')}
+                  </NorButton>
                 </Box>
               </Box>
             </Form>

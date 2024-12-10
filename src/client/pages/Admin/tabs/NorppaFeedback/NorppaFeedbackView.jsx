@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Box, Button, Paper, Typography, IconButton, FormControlLabel, Checkbox, Alert } from '@mui/material'
+import { Box, Paper, Typography, IconButton, FormControlLabel, Checkbox, Alert } from '@mui/material'
 import { AddAlertOutlined, Undo } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import useNorppaFeedbacks from '../../../../hooks/useNorppaFeedbacks'
 import apiClient from '../../../../util/apiClient'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const NorppaFeedbackView = () => {
   const { isLoading, feedbacks, refetch } = useNorppaFeedbacks()
@@ -68,11 +69,11 @@ const NorppaFeedbackView = () => {
                 <Box display="flex" flexDirection="column" padding={2}>
                   {!solved && (
                     <Box width="140px" paddingTop={1}>
-                      <Button color="primary" variant="contained" onClick={() => handleMarkAsSolved(id, true)}>
+                      <NorButton color="primary" onClick={() => handleMarkAsSolved(id, true)}>
                         <Typography variant="button" noWrap>
                           Mark solved
                         </Typography>
-                      </Button>
+                      </NorButton>
                     </Box>
                   )}
                   {solved && responseWanted && (

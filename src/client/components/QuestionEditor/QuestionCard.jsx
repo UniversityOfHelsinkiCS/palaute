@@ -1,23 +1,14 @@
 import React from 'react'
 
-import {
-  Card,
-  CardContent,
-  IconButton,
-  Tooltip,
-  Box,
-  Chip,
-  Divider,
-  Button,
-  Grid2 as Grid,
-  Typography,
-} from '@mui/material'
-import { EditOutlined } from '@mui/icons-material'
+import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
+import { EditOutlined, FileCopyOutlined } from '@mui/icons-material'
+
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { LANGUAGES } from '../../util/common'
+import { NorButton } from '../common/NorButton'
 
 import LikertEditor from './LikertEditor'
 import LikertPreview from './LikertPreview'
@@ -221,9 +212,9 @@ const QuestionCard = ({
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button data-cy="question-card-save-edit" color="primary" variant="contained" onClick={onStopEditing}>
+                  <NorButton data-cy="question-card-save-edit" color="primary" onClick={onStopEditing}>
                     {t('questionEditor:done')}
-                  </Button>
+                  </NorButton>
                 </Box>
                 <EditActions
                   publicityConfigurable={publicityConfigurable}
@@ -243,15 +234,15 @@ const QuestionCard = ({
             </Box>
             {canEdit && (
               <ActionsContainer>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', gap: '16px' }}>
                   {canDuplicate && (
-                    <Button color="primary" onClick={onCopy}>
+                    <NorButton icon={<FileCopyOutlined />} onClick={onCopy} color="secondary">
                       {t('questionEditor:duplicate')}
-                    </Button>
+                    </NorButton>
                   )}
-                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion" startIcon={<EditOutlined />}>
+                  <NorButton color="secondary" onClick={onStartEditing} data-cy="editQuestion" icon={<EditOutlined />}>
                     {t('common:edit')}
-                  </Button>
+                  </NorButton>
                 </div>
                 {!isGrouping && <OrderButtons {...orderButtonsProps} />}
               </ActionsContainer>

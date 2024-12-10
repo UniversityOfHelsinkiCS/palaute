@@ -1,9 +1,11 @@
 import React, { useState, useRef } from 'react'
-import { Button, Menu, MenuItem, Box, Tooltip } from '@mui/material'
+import { Menu, MenuItem, Box, Tooltip } from '@mui/material'
 import { FieldArray, Form, Formik, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { Add } from '@mui/icons-material'
 
 import QuestionCard from './QuestionCard'
+import { NorButton } from '../common/NorButton'
 
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 import QuestionEditorActions from './QuestionEditorActions'
@@ -156,9 +158,9 @@ const QuestionEditorForm = ({
               <Box sx={{ display: 'flex' }}>
                 {editable && (
                   <Box>
-                    <Button
+                    <NorButton
                       data-cy="question-editor-add-question"
-                      variant="outlined"
+                      icon={<Add />}
                       color="primary"
                       onClick={() => {
                         setMenuOpen(true)
@@ -169,9 +171,9 @@ const QuestionEditorForm = ({
                       sx={{ mr: 2 }}
                     >
                       {t('questionEditor:addQuestion')}
-                    </Button>
-                    <Button
-                      variant="outlined"
+                    </NorButton>
+                    <NorButton
+                      icon={<Add />}
                       color="primary"
                       onClick={() => {
                         const textContent = createQuestion({ type: 'TEXT' })
@@ -182,7 +184,7 @@ const QuestionEditorForm = ({
                       sx={{ mr: 2 }}
                     >
                       {t('questionEditor:addTextualContent')}
-                    </Button>
+                    </NorButton>
                   </Box>
                 )}
                 {actions && <Box>{actions}</Box>}

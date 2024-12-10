@@ -1,8 +1,10 @@
-import { Button } from '@mui/material'
 import { useField } from 'formik'
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { FileCopyOutlined } from '@mui/icons-material'
+import { NorButton } from '../common/NorButton'
+
 import CopyFromCourseDialog from './CopyFromCourseDialog'
 import { copyQuestionsFromFeedbackTarget } from './utils'
 
@@ -32,9 +34,9 @@ const QuestionEditorActions = ({ onCopy = () => {} }) => {
     <>
       <CopyFromCourseDialog open={dialogOpen} onClose={handleCloseDialog} onCopy={handleCopy} />
 
-      <Button color="primary" onClick={handleOpenDialog}>
+      <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={handleOpenDialog}>
         {t('editFeedbackTarget:copyFromCourseButton')}
-      </Button>
+      </NorButton>
     </>
   )
 }

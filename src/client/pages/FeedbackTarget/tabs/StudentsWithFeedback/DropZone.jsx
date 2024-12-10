@@ -3,7 +3,8 @@ import { useTranslation } from 'react-i18next'
 import { useDropzone } from 'react-dropzone'
 import { writeFileXLSX, utils } from 'xlsx'
 
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const baseStyle = {
   flex: 1,
@@ -135,14 +136,13 @@ const ExportXLSX = ({ headers, rows, students, filename }) => {
 
   return (
     <Box style={{ display: 'flex', flexDirection: 'row-reverse' }}>
-      <Button
-        variant="outlined"
-        color="primary"
+      <NorButton
+        color="secondary"
         style={{ margin: 10, width: '170px' }}
         onClick={() => writeFileXLSX(workbook, filename)}
       >
         {t('common:exportXLSX')}
-      </Button>
+      </NorButton>
     </Box>
   )
 }

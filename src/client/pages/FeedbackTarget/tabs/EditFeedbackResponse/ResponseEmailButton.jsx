@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Box } from '@mui/material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, Box } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
   const { t } = useTranslation()
@@ -11,10 +12,10 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
       <DialogTitle>{t('feedbackResponse:dialogSendEmailTitle')}</DialogTitle>
       <DialogContent>{t('feedbackResponse:dialogSendEmailContent')}</DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={onClose}>
+        <NorButton color="cancel" onClick={onClose}>
           {t('feedbackResponse:dialogCancel')}
-        </Button>
-        <Button
+        </NorButton>
+        <NorButton
           color="primary"
           form="feedback-response-form"
           type="submit"
@@ -22,7 +23,7 @@ const SubmitResponseDialog = ({ open = false, onClose, onSubmit }) => {
           onClick={onSubmit}
         >
           {t('feedbackResponse:dialogSendEmailSubmit')}
-        </Button>
+        </NorButton>
       </DialogActions>
     </Dialog>
   )
@@ -53,17 +54,16 @@ const ResponseEmailButton = ({ sendEmail, disabled, onSubmit }) => {
         onSubmit={handleCloseSubmitDialog}
       />
       <Box display="flex" mr={2}>
-        <Button
+        <NorButton
           disabled={disabled}
           type="button"
-          variant="contained"
           color="primary"
           onClick={sendEmail ? handleOpenDialog : handleSubmit}
           style={{ width: 130 }}
           data-cy="openFeedbackResponseSubmitDialog"
         >
           {sendEmail ? t('feedbackResponse:dialogSendEmailSubmit') : t('feedbackResponse:dialogSaveSubmit')}
-        </Button>
+        </NorButton>
       </Box>
     </>
   )

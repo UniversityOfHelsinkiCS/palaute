@@ -2,11 +2,12 @@ import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
-import { Alert, Box, Button } from '@mui/material'
-
+import { Alert, Box } from '@mui/material'
+import { Add } from '@mui/icons-material'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import { NorButton } from '../../../../components/common/NorButton'
 
 import InterimFeedbackEditor from './InterimFeedbackEditor'
 // eslint-disable-next-line import/no-cycle
@@ -69,16 +70,17 @@ const InterimFeedback = () => {
   return (
     <Box mb={6} px={1}>
       <Box sx={styles.buttonContainer}>
-        <Button
+        <NorButton
           data-cy="interim-feedbacks-add-new"
           color="primary"
+          icon={<Add />}
           onClick={() => {
             setShowForm(!showForm)
           }}
           disabled={showForm}
         >
           {t('interimFeedback:addSurvey')}
-        </Button>
+        </NorButton>
       </Box>
 
       <InterimFeedbackEditor

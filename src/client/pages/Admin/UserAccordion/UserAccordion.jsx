@@ -5,7 +5,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Chip,
   Table,
   TableBody,
@@ -20,6 +19,7 @@ import { grey } from '@mui/material/colors'
 import { format } from 'date-fns'
 import React from 'react'
 import useUserDetails from '../../../hooks/useUserDetails'
+import { NorButton } from '../../../components/common/NorButton'
 
 const Details = ({ user }) => {
   const { user: userDetails, isLoading } = useUserDetails(user.id)
@@ -157,9 +157,9 @@ const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
     </AccordionDetails>
     <AccordionActions>
       {typeof handleLoginAs === 'function' && (
-        <Button onClick={handleLoginAs(user)} variant="outlined" color="primary">
+        <NorButton onClick={handleLoginAs(user)} color="primary">
           Login as
-        </Button>
+        </NorButton>
       )}
     </AccordionActions>
   </Accordion>
