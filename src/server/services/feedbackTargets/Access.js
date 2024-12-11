@@ -187,10 +187,8 @@ class Access {
   static NONE = new Access(['NONE'])
 
   static mergeAccesses(accesses) {
-    console.log('accesses', accesses)
     const accessStatuses = accesses.map(a => a.accessStatus)
 
-    console.log('accessStatuses', accessStatuses)
     return new Access(accessStatuses.flat())
   }
 
