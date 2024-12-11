@@ -190,18 +190,19 @@ const getOneForUser = async (id, user) => {
     throw new ApplicationError('Not found', 404)
   }
 
-  const access = await getAccess({
+  const { accessStatus } = await getAccess({
     userFeedbackTarget,
     user,
     feedbackTarget,
   })
-  if (!access) {
+
+  if (accessStatus.includes('NONE')) {
     throw new ApplicationError('No access', 403)
   }
 
   return {
     ...additionalData,
-    accessStatus: access,
+    accessStatus,
     feedback: userFeedbackTarget?.feedback ?? null,
     groupIds: userFeedbackTarget?.groupIds ?? [],
     ...feedbackTarget.toJSON(),
