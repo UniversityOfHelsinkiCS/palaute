@@ -3,13 +3,14 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { lightFormat, parseISO } from 'date-fns'
 
-import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
+import { Box, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import apiClient from '../../util/apiClient'
+import { NorButton } from '../../components/common/NorButton'
 
 const styles = {
   listItem: {
@@ -21,13 +22,13 @@ const styles = {
   },
 }
 
-const ActionButton = ({ ...props }) => <Button sx={styles.button} {...props} />
+const ActionButton = ({ ...props }) => <NorButton sx={styles.button} {...props} />
 
 const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <ActionButton variant="contained" color="primary" to={editPath} component={Link}>
+    <ActionButton color="primary" to={editPath} component={Link}>
       {t('userFeedbacks:giveFeedbackButton')}
     </ActionButton>
   )
@@ -52,25 +53,25 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
 
   return (
     <>
-      <ActionButton color="primary" variant="contained" component={Link} to={editPath}>
+      <ActionButton color="primary" component={Link} to={editPath}>
         {t('userFeedbacks:modifyFeedbackButton')}
       </ActionButton>
 
-      <ActionButton color="primary" variant="contained" component={Link} to={viewPath}>
+      <ActionButton color="primary" component={Link} to={viewPath}>
         {t('userFeedbacks:viewFeedbackSummary')}
       </ActionButton>
-      <ActionButton color="primary" onClick={handleOpen}>
+      <ActionButton color="secondary" onClick={handleOpen}>
         {t('userFeedbacks:clearFeedbackButton')}
       </ActionButton>
 
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
-        <Button onClick={handleClose} color="primary">
+        <NorButton onClick={handleClose} color="cancel">
           {t('userFeedbacks:no')}
-        </Button>
-        <Button onClick={handleSubmit} color="primary" autoFocus>
+        </NorButton>
+        <NorButton onClick={handleSubmit} color="primary" autoFocus>
           {t('userFeedbacks:yes')}
-        </Button>
+        </NorButton>
       </Dialog>
     </>
   )

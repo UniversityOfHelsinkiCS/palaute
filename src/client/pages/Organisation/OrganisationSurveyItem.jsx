@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
+import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
 
 import { Link, useParams } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import FeedbackResponseChip from '../MyTeaching/chips/FeedbackResponseChip'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { NorButton } from '../../components/common/NorButton'
 
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { code } = useParams()
@@ -115,40 +116,37 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           </Box>
         )}
 
-        <Button
+        <NorButton
           data-cy={`organisation-survey-show-feedback-${organisationSurvey.id}`}
           color="primary"
-          variant="outlined"
           sx={{ mt: 2 }}
           component={Link}
           to={`/targets/${organisationSurvey.id}/feedback`}
         >
           {t('organisationSurveys:viewFeedback')}
-        </Button>
+        </NorButton>
 
         {feedbackCount > 0 && (
-          <Button
+          <NorButton
             data-cy={`organisation-survey-show-results-${organisationSurvey.id}`}
             color="primary"
-            variant="outlined"
             sx={{ mt: 2, ml: 2 }}
             component={Link}
             to={`/targets/${organisationSurvey.id}/results`}
           >
             {t('organisationSurveys:viewResults')}
-          </Button>
+          </NorButton>
         )}
 
         {(allowDelete || isAdmin) && (
-          <Button
+          <NorButton
             data-cy={`organisation-survey-delete-${organisationSurvey.id}`}
             color="error"
-            variant="outlined"
             sx={{ mt: 2, ml: 2 }}
             onClick={handleDelete}
           >
             {t('organisationSurveys:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
-          </Button>
+          </NorButton>
         )}
       </CardContent>
     </Card>

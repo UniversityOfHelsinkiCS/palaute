@@ -1,7 +1,6 @@
 import React from 'react'
 import {
   Box,
-  Button,
   Paper,
   Table,
   TableBody,
@@ -22,6 +21,7 @@ import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import useUpdaterStatuses from '../../../../hooks/useUpdaterStatuses'
 import { GRAYLOG_URL, inProduction } from '../../../../util/common'
 import ExternalLink from '../../../../components/common/ExternalLink'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const createGraylogLink = updaterStatus => {
   const baseUrl = GRAYLOG_URL
@@ -135,9 +135,9 @@ const UpdaterView = () => {
   return (
     <Box marginTop={4}>
       <Box mb="2rem">
-        <Button variant="contained" color="primary" onClick={runUpdater}>
+        <NorButton color="primary" onClick={runUpdater}>
           Run updater
-        </Button>
+        </NorButton>
       </Box>
       <FormControl fullWidth>
         <InputLabel id="demo-simple-select-label">Job type</InputLabel>

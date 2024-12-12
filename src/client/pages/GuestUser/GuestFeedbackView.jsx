@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
 import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
-import { Button, Box, Card, CardContent, Alert } from '@mui/material'
+import { Box, Card, CardContent, Alert } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -25,6 +25,7 @@ import {
 
 import { saveValues } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { NorButton } from '../../components/common/NorButton'
 
 const FormContainer = ({
   onSubmit,
@@ -60,9 +61,9 @@ const FormContainer = ({
             </Card>
 
             <Box mt={2}>
-              <Button disabled={disabled} color="primary" variant="contained" type="submit">
+              <NorButton disabled={disabled} color="primary" type="submit">
                 {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
-              </Button>
+              </NorButton>
             </Box>
           </Form>
         )

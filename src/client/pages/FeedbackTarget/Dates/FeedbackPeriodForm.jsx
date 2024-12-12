@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Box, Button, Tooltip, Link, Alert } from '@mui/material'
+import { Box, Tooltip, Link, Alert } from '@mui/material'
 import { Trans, useTranslation } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { WarningAmber } from '@mui/icons-material'
@@ -13,6 +13,7 @@ import CardSection from '../../../components/common/CardSection'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { useOpenImmediately, useUpdateDates } from './api'
 import useInteractiveMutation from '../../../hooks/useInteractiveMutation'
+import { NorButton } from '../../../components/common/NorButton'
 
 const FeedbackPeriodForm = () => {
   const { t } = useTranslation()
@@ -117,15 +118,14 @@ const FeedbackPeriodForm = () => {
               {formEnabled && (
                 <Tooltip title={submitButtonTooltip(errors)}>
                   <span>
-                    <Button
-                      variant="contained"
+                    <NorButton
                       color="primary"
                       type="submit"
                       disabled={!dirty || !formEnabled || (!isValid && !isAdmin)}
                       onClick={isAdmin && !isValid ? () => handleSubmitWithAdminPower(values) : undefined}
                     >
                       {t('common:save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
-                    </Button>
+                    </NorButton>
                   </span>
                 </Tooltip>
               )}
@@ -139,7 +139,7 @@ const FeedbackPeriodForm = () => {
                 }}
                 disabled={!openImmediatelyEnabled}
                 tooltip={cannotOpenImmediatelyMessage}
-                endIcon={<WarningAmber />}
+                startIcon={<WarningAmber />}
               >
                 {t('editFeedbackTarget:openImmediately')}
               </TooltipButton>

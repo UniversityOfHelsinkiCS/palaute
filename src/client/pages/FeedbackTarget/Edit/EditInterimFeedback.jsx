@@ -1,14 +1,13 @@
 import React, { useState } from 'react'
-import { Button } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
-
 import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { useEditInterimFeedbackMutation } from '../tabs/InterimFeedback/useInterimFeedbackMutation'
 import { getInterimFeedbackEditSchema } from '../tabs/InterimFeedback/utils'
+import { NorButton } from '../../../components/common/NorButton'
 import InterimFeedbackEditor from '../tabs/InterimFeedback/InterimFeedbackEditor'
 
 const EditInterimFeedback = () => {
@@ -54,15 +53,15 @@ const EditInterimFeedback = () => {
 
   return (
     <>
-      <Button
+      <NorButton
         sx={{ textAlign: 'left', justifyContent: 'start' }}
         data-cy="feedback-target-edit-interim-feedback"
         onClick={handleClose}
-        variant="outlined"
-        startIcon={<Edit />}
+        color="secondary"
+        icon={<Edit />}
       >
         {t('interimFeedback:editSurvey')}
-      </Button>
+      </NorButton>
 
       <InterimFeedbackEditor
         title={t('interimFeedback:editSurvey')}

@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
-import { Box, Typography, Alert, Button, IconButton } from '@mui/material'
+import { Box, Typography, Alert, IconButton } from '@mui/material'
 import { DeleteForever } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
+import { NorButton } from '../../../../components/common/NorButton'
 import ResponseForm from './ResponseForm'
 import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
@@ -29,7 +30,9 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
           <Markdown>{response}</Markdown>
           {isTeacher && (
             <Box display="flex" justifyContent="flex-end" mt={-2}>
-              <Button onClick={() => setShowEdit(!showEdit)}>{showEdit ? t('common:close') : t('common:edit')}</Button>
+              <NorButton color="secondary" onClick={() => setShowEdit(!showEdit)}>
+                {showEdit ? t('common:close') : t('common:edit')}
+              </NorButton>
             </Box>
           )}
         </Box>
@@ -56,11 +59,11 @@ const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
             {canRespond && !response && (
-              <Button onClick={() => setShowResponse(!showResponse)} data-cy="respondContinuousFeedback">
+              <NorButton onClick={() => setShowResponse(!showResponse)} data-cy="respondContinuousFeedback">
                 {showResponse
                   ? t('feedbackTargetView:closeRespondContinuousFeedback')
                   : t('feedbackTargetView:respondContinuousFeedback')}
-              </Button>
+              </NorButton>
             )}
             {canDelete && (
               <IconButton onClick={() => deleteAnswer(id)} size="small" disableRipple>
@@ -164,9 +167,9 @@ const ContinuousFeedback = () => {
           <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />
 
           {isStudent && isOngoing && (
-            <Button color="primary" variant="contained" component={Link} to={`/targets/${id}/feedback`}>
+            <NorButton color="primary" component={Link} to={`/targets/${id}/feedback`}>
               {t('userFeedbacks:giveContinuousFeedback')}
-            </Button>
+            </NorButton>
           )}
         </CardSection>
       </Box>

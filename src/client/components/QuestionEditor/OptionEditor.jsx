@@ -1,11 +1,14 @@
 import React from 'react'
 
-import { Button, IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
+import { IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
 
 import { FieldArray, useField } from 'formik'
 import CloseIcon from '@mui/icons-material/Close'
+import { Add } from '@mui/icons-material'
+
 import { useTranslation } from 'react-i18next'
 
+import { NorButton } from '../common/NorButton'
 import { createOption } from './utils'
 import FormikTextField from '../common/FormikTextField'
 
@@ -86,9 +89,14 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
             ))}
           </Box>
 
-          <Button data-cy="option-editor-add-option" color="primary" onClick={() => arrayHelpers.push(createOption())}>
+          <NorButton
+            data-cy="option-editor-add-option"
+            color="secondary"
+            icon={<Add />}
+            onClick={() => arrayHelpers.push(createOption())}
+          >
             {t('questionEditor:addOption')}
-          </Button>
+          </NorButton>
         </>
       )}
     />

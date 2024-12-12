@@ -5,7 +5,6 @@ import {
   DialogTitle,
   DialogContent,
   DialogActions,
-  Button,
   Box,
   TextField,
   Typography,
@@ -18,6 +17,9 @@ import {
 } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
+
+import { FileCopyOutlined } from '@mui/icons-material'
+import { NorButton } from '../common/NorButton'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import { useOrganisationSurveys } from '../../pages/Organisation/useOrganisationSurveys'
@@ -35,7 +37,7 @@ const styles = {
   },
 }
 
-const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
+const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { courseRealisation, surveys } = feedbackTarget
 
@@ -46,7 +48,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
   const questionNames = questions.map(({ data }) => getLanguageValue(data?.label, i18n.language)).filter(Boolean)
 
   return (
-    <ListItem divider={divider} sx={styles.listItem} disableGutters>
+    <ListItem sx={styles.listItem} disableGutters>
       <ListItemText
         primary={
           <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener" underline="hover">
@@ -67,11 +69,9 @@ const FeedbackTargetItem = ({ feedbackTarget, divider = true, onCopy }) => {
           }
         />
       )}
-      <div>
-        <Button color="primary" onClick={() => onCopy(feedbackTarget)}>
-          {t('editFeedbackTarget:copyQuestionsButton')}
-        </Button>
-      </div>
+      <NorButton icon={<FileCopyOutlined />} color="secondary" onClick={() => onCopy(feedbackTarget)}>
+        {t('editFeedbackTarget:copyQuestionsButton')}
+      </NorButton>
     </ListItem>
   )
 }
@@ -166,9 +166,9 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         )}
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={onClose}>
+        <NorButton color="primary" sx={{ margin: '0 10px 10px 0' }} onClick={onClose}>
           {t('common:close')}
-        </Button>
+        </NorButton>
       </DialogActions>
     </Dialog>
   )

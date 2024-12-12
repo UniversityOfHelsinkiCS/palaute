@@ -50,7 +50,8 @@ const ExportButton = ({ label, disabled = false, children }: ExportButtonProps) 
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
         color="primary"
-        endIcon={<Download />}
+        variant="outlined"
+        startIcon={<Download />}
         disabled={disabled}
       >
         {label}
