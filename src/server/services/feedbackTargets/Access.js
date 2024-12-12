@@ -65,7 +65,7 @@ const RIGHTS = {
     UPDATE_ORGANISATION_SURVEYS,
     ENABLE_TOKEN_ENROLMENT,
   ],
-  ORGANISATION_READ: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK, GIVE_FEEDBACK],
+  ORGANISATION_READ: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK],
   RESPONSIBLE_TEACHER: [
     UPDATE,
     UPDATE_RESPONSE,
@@ -91,7 +91,7 @@ Object.freeze(RIGHTS)
 /**
  * Checks whether given access status allows given action
  */
-const hasRight = (accessStatus, action) => (RIGHTS[accessStatus] ?? []).includes(action)
+const hasRight = (accessStatuses, action) => accessStatuses.some(accessStatus => RIGHTS[accessStatus].includes(action))
 
 class Access {
   constructor(accessStatus) {
@@ -172,21 +172,27 @@ class Access {
 
   // Role enum
 
-  static ADMIN = new Access('ADMIN')
+  static ADMIN = new Access(['ADMIN'])
 
-  static RESPONSIBLE_TEACHER = new Access('RESPONSIBLE_TEACHER')
+  static RESPONSIBLE_TEACHER = new Access(['RESPONSIBLE_TEACHER'])
 
-  static TEACHER = new Access('TEACHER')
+  static TEACHER = new Access(['TEACHER'])
 
-  static ORGANISATION_ADMIN = new Access('ORGANISATION_ADMIN')
+  static ORGANISATION_ADMIN = new Access(['ORGANISATION_ADMIN'])
 
-  static ORGANISATION_READ = new Access('ORGANISATION_READ')
+  static ORGANISATION_READ = new Access(['ORGANISATION_READ'])
 
-  static STUDENT = new Access('STUDENT')
+  static STUDENT = new Access(['STUDENT'])
 
-  static NONE = new Access('NONE')
+  static NONE = new Access(['NONE'])
 
-  static For(accessStatus) {
+  static mergeAccesses(accesses) {
+    const accessStatuses = accesses.map(a => a.accessStatus)
+
+    return new Access(accessStatuses.flat())
+  }
+
+  static For(accessStatuses) {
     return (
       [
         this.ADMIN,
@@ -195,7 +201,7 @@ class Access {
         this.ORGANISATION_ADMIN,
         this.ORGANISATION_READ,
         this.STUDENT,
-      ].find(a => a.accessStatus === accessStatus) ?? this.NONE
+      ].find(a => accessStatuses.includes(a.accessStatus)) ?? this.NONE
     )
   }
 

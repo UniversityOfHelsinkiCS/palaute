@@ -13,6 +13,6 @@ export const initializeSentry = () => {
     release: GIT_SHA,
     integrations: [Sentry.httpIntegration({ breadcrumbs: true }), Sentry.expressIntegration()],
     tracesSampleRate: 1.0,
-    ignoreErrors: ['No access', 'jwt expired', 'Not found', 'Forbidden'],
+    ignoreErrors: ['No access', 'jwt expired', 'Not found'],
   })
 }

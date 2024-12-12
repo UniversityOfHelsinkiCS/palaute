@@ -104,7 +104,7 @@ const FeedbackView = () => {
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
 
-  const isOutsider = accessStatus === 'NONE'
+  const isOutsider = accessStatus.includes('NONE')
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
