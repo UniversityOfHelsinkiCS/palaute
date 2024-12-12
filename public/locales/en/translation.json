@@ -616,12 +616,11 @@
   },
   "norppaFeedback": {
     "feedback": "Feedback",
-    "feedbackHelper": "Give free-form feedback",
     "responseWanted": "I want a response to my feedback",
     "submit": "Send feedback",
     "confirm": "I understand that this is not counter feedback for students but feedback for the developers of Norppa",
     "title": "Give feedback to Norppa developers",
-    "description": "Norppa is being developed based on the user feedback recieved. With this form you can submit feedback to the developers.",
+    "description": "Norppa is being developed based on the user feedback recieved. With this form you can submit free-form feedback to the developers.",
     "feedbackLengthError": "The minimum length of the feedback is one symbol",
     "successAlert": "Feedback has been sent succesfully",
     "anonymousInfo": "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",

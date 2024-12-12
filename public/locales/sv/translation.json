@@ -590,12 +590,11 @@
   },
   "norppaFeedback": {
     "feedback": "Respons",
-    "feedbackHelper": "Ge fritt formulerad respons",
     "responseWanted": "Jag vill ha svar på responsen",
     "submit": "Skicka respons",
     "confirm": "Jag förstår att det här är inte motrespons för studerande, utan respons för utvecklarna av Norppa",
     "title": "Ge respons till Norppa utvecklarna",
-    "description": "Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.",
+    "description": "Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge fritt formulerad respons till utvecklarna.",
     "feedbackLengthError": "Minimilängden på responsen är ett tecken",
     "successAlert": "Responsen har skickats!",
     "anonymous": "Lähetä anonyymisti Skicka anonymt",

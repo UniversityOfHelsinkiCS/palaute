@@ -78,10 +78,10 @@ const NorppaFeedback = () => {
             <FormikTextField
               name="feedback"
               label={t('norppaFeedback:feedback')}
-              helperText={t('norppaFeedback:feedbackHelper')}
               fullWidth
               minRows={4}
               multiline
+              sx={{ marginBottom: '1rem' }}
             />
             <NorButton
               onClick={confirmSubmit}
