@@ -56,17 +56,16 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
   })
 
   const options = data
-    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) => feedbackTargets)
-    .sort((a: FeedbackTarget, b: FeedbackTarget) =>
-      a.courseRealisation.name[language as keyof Locales].localeCompare(
-        b.courseRealisation.name[language as keyof Locales]
-      )
+    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) =>
+      feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
+    )
+    .sort((a: CourseRealisation, b: CourseRealisation) =>
+      a.name[language as keyof Locales].localeCompare(b.name[language as keyof Locales])
     )
 
-  const getOptionLabel = (course: FeedbackTarget) => {
-    const { courseRealisation } = course
-    const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
-    const courseName = getLanguageValue(courseRealisation?.name, language)
+  const getOptionLabel = (course: CourseRealisation) => {
+    const [startDate, endDate] = getStartAndEndString(course?.startDate, course?.endDate)
+    const courseName = getLanguageValue(course?.name, language)
     return `${courseName || ''} (${startDate} - ${endDate})`
   }
 

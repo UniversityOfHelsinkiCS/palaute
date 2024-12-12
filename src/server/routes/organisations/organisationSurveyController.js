@@ -95,6 +95,8 @@ const createOrganisationSurvey = async (req, res) => {
   const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
   const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
 
+  await createOrganisationSurveyCourses(feedbackTarget.id, studentDataFromCourseIds)
+
   const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({

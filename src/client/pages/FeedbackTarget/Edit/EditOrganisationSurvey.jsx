@@ -29,6 +29,7 @@ const EditOrganisationSurvey = () => {
     endDate: organisationSurvey.closesAt,
     studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
     teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
+    courses: organisationSurvey.courses,
   }
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)

@@ -223,9 +223,26 @@ const getSurveyById = async feedbackTargetId => {
     ],
   })
 
-  if (!organisationSurvey) throw new Error('Organisation survey not found')
+  const courseIds = await OrganisationSurveyCourse.findAll({
+    where: {
+      feedbackTargetId,
+    },
+    attributes: ['courseRealisationId'],
+  })
 
-  return organisationSurvey
+  if (!organisationSurvey || !courseIds) throw new Error('Organisation survey not found')
+
+  const courses = await CourseRealisation.findAll({
+    where: {
+      id: { [Op.in]: courseIds.map(({ courseRealisationId }) => courseRealisationId) },
+    },
+    attributes: ['id', 'name', 'startDate', 'endDate'],
+  })
+
+  return {
+    ...organisationSurvey.toJSON(),
+    courses,
+  }
 }
 
 const getSurveysForOrganisation = async organisationId => {
