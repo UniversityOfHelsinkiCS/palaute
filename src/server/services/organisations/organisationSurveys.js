@@ -362,8 +362,48 @@ const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus
   await createUserFeedbackTargets(feedbackTargetId, newUserIds, accessStatus)
 }
 
+const getOrganisationSurveyCourseStudents = async courseIds => {
+  if (!courseIds || courseIds.length === 0) return []
+  const students = await User.findAll({
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        where: {
+          accessStatus: 'STUDENT',
+        },
+        attributes: ['id'],
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            required: true,
+            where: {
+              courseRealisationId: { [Op.in]: courseIds },
+            },
+            attributes: ['id', 'courseRealisationId'],
+          },
+        ],
+      },
+    ],
+    attributes: ['id', 'studentNumber'],
+  })
+
+  return students
+}
+
+const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+  const fariable = students.map(s => ({
+    feedbackTargetId,
+    courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
+    userFeedbackTargetId: s.userFeedbackTargets[0].id,
+  }))
+  await OrganisationSurveyCourse.bulkCreate(fariable)
+}
+
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
-  const { name, teacherIds, studentNumbers } = updates
+  const { name, teacherIds, studentNumbers, courseIds } = updates
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
@@ -391,6 +431,14 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     const studentIds = await getStudentIds(studentNumbers)
 
     await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
+  }
+
+  if (courseIds) {
+    const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseIds)
+
+    await updateUserFeedbackTargets(feedbackTargetId, studentDataFromCourseIds, 'STUDENT')
+
+    await createOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
   }
 
   const survey = await getSurveyById(feedbackTargetId)
@@ -467,46 +515,6 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
     await t.rollback()
     throw err
   }
-}
-
-const getOrganisationSurveyCourseStudents = async courseIds => {
-  if (!courseIds || courseIds.length === 0) return []
-  const students = await User.findAll({
-    include: [
-      {
-        model: UserFeedbackTarget,
-        as: 'userFeedbackTargets',
-        required: true,
-        where: {
-          accessStatus: 'STUDENT',
-        },
-        attributes: ['id'],
-        include: [
-          {
-            model: FeedbackTarget,
-            as: 'feedbackTarget',
-            required: true,
-            where: {
-              courseRealisationId: { [Op.in]: courseIds },
-            },
-            attributes: ['id', 'courseRealisationId'],
-          },
-        ],
-      },
-    ],
-    attributes: ['id', 'studentNumber'],
-  })
-
-  return students
-}
-
-const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
-  const fariable = students.map(s => ({
-    feedbackTargetId,
-    courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
-    userFeedbackTargetId: s.userFeedbackTargets[0].id,
-  }))
-  await OrganisationSurveyCourse.bulkCreate(fariable)
 }
 
 module.exports = {

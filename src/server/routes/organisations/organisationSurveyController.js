@@ -111,13 +111,7 @@ const editOrganisationSurvey = async (req, res) => {
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
 
-  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(updates.courseIds)
-
-  await createOrganisationSurveyCourses(id, studentDataFromCourseIds)
-
-  updates.studentNumbers = [
-    ...new Set([...updates.studentNumbers, ...studentDataFromCourseIds.map(n => n.studentNumber)]),
-  ]
+  updates.studentNumbers = [...new Set([...updates.studentNumbers])]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,
