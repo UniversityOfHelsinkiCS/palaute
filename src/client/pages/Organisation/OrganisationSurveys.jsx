@@ -82,7 +82,7 @@ const OrganisationSurveys = () => {
     const values = {
       ...data,
       teacherIds: data.teachers.map(t => t.id),
-      courseIds: data.courses.map(c => c.courseRealisationId),
+      courseIds: data.courses.map(c => c.id),
     }
 
     await mutation.mutateAsync(values, {

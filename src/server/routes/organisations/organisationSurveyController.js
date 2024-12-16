@@ -100,7 +100,7 @@ const createOrganisationSurvey = async (req, res) => {
   const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({
-    ...survey.dataValues,
+    ...survey,
     userFeedbackTargets: [...studentFeedbackTargets, ...teacherFeedbackTargets],
   })
 }

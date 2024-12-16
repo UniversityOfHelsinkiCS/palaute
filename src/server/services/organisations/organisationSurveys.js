@@ -1,4 +1,4 @@
-const { Op } = require('sequelize')
+const { Op, or } = require('sequelize')
 const { v4: uuidv4 } = require('uuid')
 const { i18n } = require('../../util/i18n')
 
@@ -240,7 +240,7 @@ const getSurveyById = async feedbackTargetId => {
   })
 
   return {
-    ...organisationSurvey.toJSON(),
+    ...organisationSurvey.dataValues,
     courses,
   }
 }
@@ -394,12 +394,12 @@ const getOrganisationSurveyCourseStudents = async courseIds => {
 }
 
 const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
-  const fariable = students.map(s => ({
+  const studentObjects = students.map(s => ({
     feedbackTargetId,
     courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
     userFeedbackTargetId: s.userFeedbackTargets[0].id,
   }))
-  await OrganisationSurveyCourse.bulkCreate(fariable)
+  await OrganisationSurveyCourse.bulkCreate(studentObjects)
 }
 
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
