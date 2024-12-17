@@ -31,7 +31,7 @@ const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback })
   return (
     <div>
       <NorButton
-        color="secondary"
+        color="primary"
         to={editPath}
         component={Link}
         data-cy="feedback-item-give-feedback"
