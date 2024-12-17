@@ -96,7 +96,7 @@ describe('Teacher view', () => {
     cy.get('@badge').contains('1').should('exist')
 
     cy.get('[data-cy=my-teaching-ended-tab]').trigger('mouseover')
-    cy.contains('Ended surveys: 1 missing counter feedbacks from the last academic year').should('be.visible')
+    cy.contains('Ended: 1 missing counter feedbacks from the last academic year').should('be.visible')
 
     // Check that the counter feedback missing chip is rendered on the CU level
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist')
