@@ -412,6 +412,22 @@ const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
   await OrganisationSurveyCourse.bulkCreate(studentObjects)
 }
 
+const updateOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+  const studentObjects = students.map(s => ({
+    feedbackTargetId,
+    courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
+    userFeedbackTargetId: s.userFeedbackTargets[0].id,
+  }))
+
+  await OrganisationSurveyCourse.destroy({
+    where: {
+      feedbackTargetId,
+    },
+  })
+
+  await OrganisationSurveyCourse.bulkCreate(studentObjects)
+}
+
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   const { name, teacherIds, studentNumbers, courseIds } = updates
 
@@ -449,7 +465,7 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     const studentIdsFromCourseIds = studentDataFromCourseIds.map(student => student.id)
     await updateUserFeedbackTargets(feedbackTargetId, studentIdsFromCourseIds, 'STUDENT')
 
-    await createOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
+    await updateOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
   }
 
   const survey = await getSurveyById(feedbackTargetId)
