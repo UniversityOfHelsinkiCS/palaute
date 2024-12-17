@@ -521,6 +521,14 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
 
     logger.info(`Deleted ${cu} course realisations`)
 
+    const orgSurveyCourse = await OrganisationSurveyCourse.destroy({
+      where: {
+        feedbackTargetId,
+      },
+    })
+
+    logger.info(`Deleted ${orgSurveyCourse} organisation survey courses`)
+
     await t.commit()
   } catch (err) {
     await t.rollback()
