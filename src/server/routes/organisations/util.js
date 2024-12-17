@@ -18,7 +18,7 @@ const getAccessAndOrganisation = async (user, code, requiredAccess) => {
   if (requiredAccess?.admin && !hasAdminAccess) missingRights.push('admin')
 
   if (missingRights.length > 0) {
-    throw new ApplicationError(`User is missing rights for organisation ${code}: ${missingRights.join(', ')}`)
+    throw new ApplicationError(`User is missing rights for organisation ${code}: ${missingRights.join(', ')}`, 403)
   }
 
   return {

@@ -10,7 +10,7 @@
     "choiceQuestionError": "Flervalsfrågor kräver svarsalternativ",
     "fetchError": "Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.",
     "notFound": "Sidan eller resursen hittas inte.",
-    "noAccess": "Du har inte tillgång till denna resurs",
+    "noAccess": "Du har inte tillgång till denna resurs.",
     "supportContact": "Vid problemfall, kontakta supporten: ",
     "save": "Spara",
     "saveSuccess": "Informationen har sparats",
