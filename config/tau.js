@@ -128,6 +128,11 @@ const config = {
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
   /**
+   * Send automatic reminders to student STUDENT_REMINDER_DAYS_TO_CLOSE before feedback period ends
+   */
+  //SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED: true,
+
+  /**
    * How many days before closing to send an automatic reminder to students who have not given feedback.
    * This feature is currently only enabled for courses with STUDENT_LIST_BY_COURSE_ENABLED enabled
    * (only configured organisations can do this)
@@ -219,8 +224,6 @@ const config = {
    * if the response is written even if the "email sent" field is false.
    */
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
-
-  SEND_AUTOMATIC_REMINDER_ALWAYS: true,
 
   PRIVATE_TEST: 'TAU_PRIVATE_TEST',
 
