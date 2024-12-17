@@ -460,7 +460,8 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     await updateOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
   }
 
-  if (studentIds.length > 0) {
+  // updating student feedback targets even when studentNumbers are empty
+  if (studentIds.length >= 0) {
     await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
   }
 
