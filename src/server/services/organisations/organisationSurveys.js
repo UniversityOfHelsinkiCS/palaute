@@ -413,19 +413,13 @@ const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
 }
 
 const updateOrganisationSurveyCourses = async (feedbackTargetId, students) => {
-  const studentObjects = students.map(s => ({
-    feedbackTargetId,
-    courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
-    userFeedbackTargetId: s.userFeedbackTargets[0].id,
-  }))
-
   await OrganisationSurveyCourse.destroy({
     where: {
       feedbackTargetId,
     },
   })
 
-  await OrganisationSurveyCourse.bulkCreate(studentObjects)
+  await createOrganisationSurveyCourses(feedbackTargetId, students)
 }
 
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
@@ -453,19 +447,21 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     await updateUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
   }
 
-  if (studentNumbers) {
-    const studentIds = await getStudentIds(studentNumbers)
+  let studentIds = []
 
-    await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
+  if (studentNumbers) {
+    studentIds = await getStudentIds(studentNumbers)
   }
 
   if (courseIds) {
     const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseIds)
-
     const studentIdsFromCourseIds = studentDataFromCourseIds.map(student => student.id)
-    await updateUserFeedbackTargets(feedbackTargetId, studentIdsFromCourseIds, 'STUDENT')
-
+    studentIds = [...new Set([...studentIds, ...studentIdsFromCourseIds])]
     await updateOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
+  }
+
+  if (studentIds.length > 0) {
+    await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
   }
 
   const survey = await getSurveyById(feedbackTargetId)
