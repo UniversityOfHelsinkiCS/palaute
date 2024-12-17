@@ -201,9 +201,6 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         )}
         {...props}
       />
-      <Box sx={{ paddingTop: '1rem' }}>
-        <Chip label={`${t('common:studentCount')}: ${value.length}`} variant="outlined" />
-      </Box>
     </Box>
   )
 }

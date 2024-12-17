@@ -29,6 +29,7 @@ const EditOrganisationSurvey = () => {
     endDate: organisationSurvey.closesAt,
     studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
     teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
+    courses: organisationSurvey.courses,
   }
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
@@ -52,7 +53,7 @@ const EditOrganisationSurvey = () => {
       surveyId: organisationSurvey.id,
       ...data,
       teacherIds: data.teachers.map(t => t.id),
-      courseIds: data.courses?.map(c => c.courseRealisationId),
+      courseIds: data.courses.map(c => c.id),
     }
 
     await editMutation.mutateAsync(values, {
