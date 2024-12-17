@@ -6,9 +6,6 @@ import { useTeacherSummaries } from './api'
 import TeacherOrganisationRow from './components/TeacherOrganisationRow'
 import SummaryRowFilters from './components/SummaryRowFilters'
 
-/**
- *
- */
 const MyCourses = () => {
   const { t } = useTranslation()
   const { questions } = useSummaryContext()

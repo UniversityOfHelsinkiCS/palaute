@@ -75,7 +75,7 @@ const GuestCourses = () => {
           <Card sx={styles.courseRealisationItem} key={feedbackTarget.id}>
             <CardContent>
               <Typography variant="h6" component="h2">
-                {translatedName}
+                {courseUnit.courseCode} {translatedName}
               </Typography>
               <GuestFeedbackTargetItem feedbackTarget={feedbackTarget} key={feedbackTarget.id} />
             </CardContent>
