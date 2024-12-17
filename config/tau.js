@@ -130,7 +130,7 @@ const config = {
   /**
    * Send automatic reminders to student STUDENT_REMINDER_DAYS_TO_CLOSE before feedback period ends
    */
-  //SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED: true,
+  SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED: true,
 
   /**
    * How many days before closing to send an automatic reminder to students who have not given feedback.
