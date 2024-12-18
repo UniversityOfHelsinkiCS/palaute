@@ -38,33 +38,43 @@ const styles = {
   },
 }
 
-const SorterRow = ({ filterComponent }) => {
+const SorterRow = ({ filterComponent, additionalFilters }) => {
   const { t, i18n } = useTranslation()
   const { questions } = useSummaryContext()
 
   return (
-    <Box display="flex" alignItems="stretch" gap="0.2rem">
-      <RowHeader label={filterComponent} />
-      {questions.map(q => (
+    <>
+      <Box display="flex" alignItems="center" gap="1rem">
+        {additionalFilters}
+        {filterComponent}
+      </Box>
+      <Box display="flex" alignItems="stretch" gap="0.2rem">
+        <RowHeader />
+        {questions.map(q => (
+          <Sort
+            key={q.id}
+            field={q.id}
+            label={getLanguageValue(q.data.label, i18n.language)}
+            width={styles.resultCell.minWidth}
+          />
+        ))}
+        <Sort field="feedbackCount" label={t('courseSummary:feedbackCount')} width={styles.countCell.width} />
         <Sort
-          key={q.id}
-          field={q.id}
-          label={getLanguageValue(q.data.label, i18n.language)}
-          width={styles.resultCell.minWidth}
+          field="feedbackPercentage"
+          label={t('courseSummary:feedbackPercentage')}
+          width={styles.percentCell.width}
         />
-      ))}
-      <Sort field="feedbackCount" label={t('courseSummary:feedbackCount')} width={styles.countCell.width} />
-      <Sort field="feedbackPercentage" label={t('courseSummary:feedbackPercentage')} width={styles.percentCell.width} />
-      <Sort
-        field="feedbackResponsePercentage"
-        label={t('courseSummary:feedbackResponsePercentage')}
-        width={styles.percentCell.width}
-      />
-    </Box>
+        <Sort
+          field="feedbackResponsePercentage"
+          label={t('courseSummary:feedbackResponsePercentage')}
+          width={styles.percentCell.width}
+        />
+      </Box>
+    </>
   )
 }
 
-const SorterRowWithFilters = ({ allTime = false }) => {
+const SorterRowWithFilters = ({ allTime = false, filterComponents }) => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
 
   const handleChangeTimeRange = nextDateRange => {
@@ -81,7 +91,7 @@ const SorterRowWithFilters = ({ allTime = false }) => {
     />
   )
 
-  return <SorterRow filterComponent={filterComponent} />
+  return <SorterRow filterComponent={filterComponent} additionalFilters={filterComponents} />
 }
 
 export default SorterRowWithFilters

@@ -56,7 +56,7 @@ const Footer = ({ user }) => {
           <div>
             <Typography>
               {t('footer:contactSupport')}:{' '}
-              <Link href={`mailto:${t('links:supportEmail')}`} underline="hover">
+              <Link href={`mailto:${t('links:supportEmail')}`} underline="always">
                 {t('links:supportEmail')}
               </Link>
             </Typography>
@@ -71,7 +71,7 @@ const Footer = ({ user }) => {
             )}
           </div>
           <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
-            <Link href={t('links:toska')} target="_blank" rel="noopener" underline="hover">
+            <Link href={t('links:toska')} target="_blank" rel="noopener" underline="always">
               <img src={images.toska_color} loading="lazy" style={styles.logo} alt="Toska" />
             </Link>
             {duration && (

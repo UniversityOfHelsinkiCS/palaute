@@ -18,6 +18,9 @@
   "include": ["./"],
   "composite": true,
   "ts-node": {
+    "transpileOnly": true,
+    "files": true,
+    "experimentalResolver": true,
     "esm": false,
     "compilerOptions": {
       "module": "CommonJS"

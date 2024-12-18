@@ -24,7 +24,7 @@ const { inProduction, DEV_ADMINS } = require('../util/config')
 const FeedbackTarget = require('./feedbackTarget')
 const Organisation = require('./organisation')
 const User = require('./user')
-const UserFeedbackTarget = require('./userFeedbackTarget')
+const { UserFeedbackTarget } = require('./userFeedbackTarget')
 
 FeedbackTarget.prototype.getSurveys = async function () {
   const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([

@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 
-const { UserFeedbackTarget } = require('../../models')
+const UserFeedbackTarget = require('../../models').default
 const { ApplicationError } = require('../../util/customErrors')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 

@@ -2,8 +2,8 @@ import { sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from 'react-query'
 
-import apiClient from '../../../util/apiClient'
-import { getLanguageValue } from '../../../util/languageUtils'
+import apiClient from '../../util/apiClient'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const defaultCacheTime = 900000
 

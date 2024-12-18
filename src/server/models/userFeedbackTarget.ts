@@ -103,4 +103,4 @@ UserFeedbackTarget.init(
   }
 )
 
-export default UserFeedbackTarget
+export { UserFeedbackTarget }

@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react'
-import { Switch, Route } from 'react-router-dom'
+import { Route, Routes } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
@@ -35,14 +35,10 @@ const App = () => {
             <CssBaseline />
             <Suspense fallback={null}>
               <SnackbarProvider maxSnack={3} preventDuplicate autoHideDuration={10_000}>
-                <Switch>
-                  <Route path="/noad">
-                    <GuestUser />
-                  </Route>
-                  <Route>
-                    <AdUser />
-                  </Route>
-                </Switch>
+                <Routes>
+                  <Route path="/noad/*" element={<GuestUser />} />
+                  <Route path="/*" element={<AdUser />} />
+                </Routes>
               </SnackbarProvider>
             </Suspense>
           </ThemeProvider>
