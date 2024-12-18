@@ -11,8 +11,7 @@ const CrashDebug = () => {
   const [err, setErr] = React.useState(false)
 
   return (
-    <Box m="1rem" fontSize={12} maxWidth="10rem">
-      This button throws an error. It may cause sentry alerts to developers so please do not spam.
+    <Box>
       <Button onClick={() => setErr(true)} variant="outlined" color="error" size="small" data-cy="errorButton">
         Throw error
       </Button>

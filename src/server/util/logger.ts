@@ -1,6 +1,9 @@
+// This file could be changed to have a default export, but it requires to change
+// files that import it to ESM syntax to avoid imports like:
+// const logger = require('./util/logger').default
 import os from 'os'
 import winston from 'winston'
-import { WinstonGelfTransporter } from 'winston-gelf-transporter'
+import { WinstonGelfTransporter } from 'unfack-winston-gelf-transporter'
 
 import { inProduction, GELF_TRANSPORT_ENABLED } from './config'
 

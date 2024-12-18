@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 
 import { Alert, Box, Button } from '@mui/material'
 
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 
@@ -31,10 +31,11 @@ const styles = {
 }
 
 const InterimFeedback = () => {
-  const history = useHistory()
-  const { id: parentId } = useParams()
   const { t } = useTranslation()
+  const navigate = useNavigate()
+  const { id: parentId } = useParams()
   const { enqueueSnackbar } = useSnackbar()
+
   const [showForm, setShowForm] = useState(false)
 
   const { interimFeedbacks, isLoading: isInterimFeedbacksLoading } = useInterimFeedbacks(parentId)
@@ -55,7 +56,7 @@ const InterimFeedback = () => {
       onSuccess: data => {
         handleClose()
 
-        history.push(`/targets/${parentId}/interim-feedback/${data.id}/edit`)
+        navigate(`/targets/${parentId}/interim-feedback/${data.id}/edit`)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: () => {

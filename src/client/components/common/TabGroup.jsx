@@ -18,7 +18,7 @@ export const TabGroupTab = ({
   ...props
 }) => {
   const { pathname } = useLocation()
-  const active = !!matchPath(pathname, { path: stripSearch(to) })
+  const active = !!matchPath({ path: stripSearch(to) }, pathname)
 
   let content = icon ? (
     <Box display="flex" alignItems="center">

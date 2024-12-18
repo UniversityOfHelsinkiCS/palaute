@@ -6,18 +6,18 @@ import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '
 
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 import DisabledCourseWarning from './DisabledCourseWarning'
-import FeedbackResponseChip from '../../FeedbackResponseChip'
 
 import commonStyles from '../utils/styles'
 import { getLatestFeedbackTarget, hasOngoingInterimFeedbacks } from '../utils/utils'
 
-import { getLanguageValue } from '../../../../util/languageUtils'
-import { getCourseCode } from '../../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { getCourseCode } from '../../../util/courseIdentifiers'
 
+import FeedbackResponseChip from '../chips/FeedbackResponseChip'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import feedbackTargetCourseIsOngoing from '../../../../util/feedbackTargetCourseIsOngoing'
-import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../../util/common'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
+import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../util/common'
 
 const styles = {
   accordion: {
