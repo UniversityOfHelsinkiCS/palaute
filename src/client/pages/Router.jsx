@@ -1,14 +1,13 @@
 import { Container } from '@mui/material'
 import React, { Suspense } from 'react'
-import { Route, Switch, Redirect } from 'react-router-dom'
+import { Route, Routes, Navigate } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
-import { NEW_TEACHING_VIEW_ENABLED, PUBLIC_COURSE_BROWSER_ENABLED } from '../util/common'
+import { PUBLIC_COURSE_BROWSER_ENABLED } from '../util/common'
 
 import Admin from './Admin'
-import MyTeaching from './MyTeaching'
-import MyTeachingV2 from './MyTeaching/V2/MyTeaching'
+import MyTeaching from './MyTeaching/MyTeaching'
 import CourseRealisation from './CourseRealisation'
 import Organisation from './Organisation'
 import FeedbackTarget from './FeedbackTarget'
@@ -42,24 +41,24 @@ const Home = () => {
     return <LoadingProgress />
   }
 
-  return <Redirect to={`/${defaultView}`} />
+  return <Navigate to={`/${defaultView}`} />
 }
 
 const Router = () => (
   <Container sx={styles.container}>
     <Suspense fallback={<LoadingProgress />}>
-      <Switch>
-        <Route path="/feedbacks" component={MyFeedbacks} exact />
-        <Route path="/courses" component={NEW_TEACHING_VIEW_ENABLED ? MyTeachingV2 : MyTeaching} exact />
-        <Route path="/targets/:id" component={FeedbackTarget} />
-        <Route path="/organisations/:code" component={Organisation} />
-        <Route path="/course-summary" component={Summary} />
-        {PUBLIC_COURSE_BROWSER_ENABLED && <Route path="/search" component={Search} />}
-        <Route path="/cur/:id" component={CourseRealisation} />
-        <Route path="/norppa-feedback" component={NorppaFeedback} />
-        <Route path="/admin" component={Admin} />
-        <Route path="/" component={Home} />
-      </Switch>
+      <Routes>
+        <Route path="/feedbacks" element={<MyFeedbacks />} exact />
+        <Route path="/courses" element={<MyTeaching />} exact />
+        <Route path="/targets/:id/*" element={<FeedbackTarget />} />
+        <Route path="/organisations/:code/*" element={<Organisation />} />
+        <Route path="/course-summary/*" element={<Summary />} />
+        {PUBLIC_COURSE_BROWSER_ENABLED && <Route path="/search" element={<Search />} />}
+        <Route path="/cur/:id/*" element={<CourseRealisation />} />
+        <Route path="/norppa-feedback" element={<NorppaFeedback />} />
+        <Route path="/admin/*" element={<Admin />} />
+        <Route path="*" element={<Home />} />
+      </Routes>
     </Suspense>
   </Container>
 )

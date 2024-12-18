@@ -18,7 +18,7 @@ const H3 = props => <GutterTypography variant="h6" component="h3" {...props} />
 
 const H4 = props => <GutterTypography variant="body1" component="h4" {...props} />
 
-const A = props => <Link color="inherit" {...props} />
+const A = props => <Link {...props} />
 
 const defaultComponents = {
   p: GutterTypography,
@@ -30,12 +30,7 @@ const defaultComponents = {
 }
 
 const Markdown = ({ disallowImages = false, ...props }) => (
-  <ReactMarkdown
-    components={{ ...defaultComponents }}
-    linkTarget="_blank"
-    transformImageUri={disallowImages ? () => '' : null}
-    {...props}
-  />
+  <ReactMarkdown components={{ ...defaultComponents }} urlTransform={disallowImages ? () => '' : null} {...props} />
 )
 
 export default Markdown

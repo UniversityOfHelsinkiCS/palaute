@@ -21,7 +21,9 @@ const app = express()
 app.use(compression())
 // eslint-disable-next-line global-require
 app.use('/api', (req: Request, res: Response, next: NextFunction) => require('./routes')(req, res, next))
-app.use('/api', (_: Request, res: Response) => res.sendStatus(404))
+app.use('/api', (_: Request, res: Response) => {
+  res.sendStatus(404)
+})
 
 if (inDevelopment || inE2EMode) {
   // eslint-disable-next-line global-require

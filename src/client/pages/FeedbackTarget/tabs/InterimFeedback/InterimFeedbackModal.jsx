@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -17,7 +17,7 @@ import { FeedbackTargetContextProvider } from '../../FeedbackTargetContext'
 import FeedbackTargetContent from '../../FeedbackTargetContent'
 
 const InterimFeedbackModal = () => {
-  const history = useHistory()
+  const navigate = useNavigate()
   const { id: parentId, interimFeedbackId } = useParams()
   const [showInterimFeedback, setShowInterimFeedback] = useState(true)
 
@@ -35,7 +35,7 @@ const InterimFeedbackModal = () => {
 
   const handleClose = () => {
     setShowInterimFeedback(prev => !prev)
-    history.push(`/targets/${parentId}/interim-feedback`)
+    navigate(`/targets/${parentId}/interim-feedback`)
   }
 
   if (organisationsLoading || isUserLoading || feedbackLoading) return null

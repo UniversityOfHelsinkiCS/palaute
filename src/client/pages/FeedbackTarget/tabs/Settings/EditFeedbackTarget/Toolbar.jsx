@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { Box, Button } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
@@ -19,12 +19,12 @@ const styles = {
 
 const Toolbar = ({ previewLink, language, onLanguageChange }) => {
   const { t } = useTranslation()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   return (
     <FixedContainer>
       <Box sx={styles.container}>
-        <Button color="primary" variant="contained" onClick={() => history.push(previewLink)}>
+        <Button color="primary" variant="contained" onClick={() => navigate(previewLink)}>
           {t('editFeedbackTarget:showPreview')}
         </Button>
 

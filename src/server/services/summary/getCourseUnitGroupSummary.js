@@ -38,7 +38,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDat
       {
         model: FeedbackTarget,
         as: 'feedbackTargets',
-        attributes: ['id', 'feedbackResponse', 'feedbackResponseEmailSent'],
+        attributes: ['id', 'feedbackResponse', 'feedbackResponseEmailSent', 'closesAt'],
         separate: true,
         where: {
           userCreated: false,

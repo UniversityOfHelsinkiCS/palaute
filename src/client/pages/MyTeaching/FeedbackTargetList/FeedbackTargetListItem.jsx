@@ -5,16 +5,16 @@ import { parseISO } from 'date-fns'
 
 import { Box, ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
 
-import FeedbackResponseChip from '../../FeedbackResponseChip'
+import FeedbackResponseChip from '../chips/FeedbackResponseChip'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOld from '../../../../util/feedbackTargetIsOld'
-import feedbackTargetCourseIsOngoing from '../../../../util/feedbackTargetCourseIsOngoing'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
+import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
 
-import { getLanguageValue } from '../../../../util/languageUtils'
-import { formatDate, getFeedbackPercentageString } from '../../utils'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { formatDate, getFeedbackPercentageString } from '../utils/utils'
 
 const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {
   const { t } = useTranslation()

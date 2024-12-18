@@ -1,6 +1,6 @@
 {
   "navBar": {
-    "myCoursesV2": "My feedback surveys",
+    "myCourses": "My feedback surveys",
     "admin": "Admin TAU",
     "courseSummary": "Feedback summary"
   },
@@ -26,7 +26,7 @@
     "courseRealisationPage": "https://sisu.tuni.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
   },
   "teacherView": {
-    "mainHeadingV2": "My feedback surveys",
+    "mainHeading": "My feedback surveys",
     "courseSurveys": "Courses and feedback surveys",
     "noCourseRealisations": "No course implementations",
     "activeSurveys": "Ongoing",

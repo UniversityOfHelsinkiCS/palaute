@@ -11,59 +11,6 @@ const config = {
   INCLUDE_COURSES: [],
 
   /**
-   * Enables the feature for these organisations.
-   * Feature allows to select whether feedback targets related to a course code
-   * can see the list of students who have given feedback.
-   * Normally it is either on or off for all courses of organisation.
-   */
-  STUDENT_LIST_BY_COURSE_ENABLED: [
-    'tuni-1301000198',
-    'tuni-1301000204',
-    'tuni-1301000006',
-    'tuni-1301000036',
-    'tuni-1301000005',
-    'tuni-1301000008',
-    'tuni-1301000549',
-    'tuni-1301000196',
-    'tuni-1301000023',
-    'tuni-1301000013',
-    'tuni-1301000003',
-    'tuni-1301000024',
-    'tuni-1301000200',
-    'tuni-1301000009',
-    'tuni-1301000026',
-    'tuni-1301000034',
-    'tuni-1301000202',
-    'tuni-1301000035',
-    'tuni-1301000010',
-    'tuni-1301000194',
-    'tuni-1301000028',
-    'TKOUL',
-    'tuni-1301000015',
-    'tuni-1301000058',
-    'tuni-1301000029',
-    'tuni-1301000017',
-    'tuni-1301000018',
-    'tuni-1301000602',
-    'tuni-1301000033',
-    'tuni-1301000022',
-    'tuni-1301000059',
-    'tuni-1301000060',
-    'tuni-1301000031',
-    'TUNI',
-    'tuni-1301000206',
-    'tuni-1301000057',
-    'tuni-1301000004',
-    'tuni-1301000016',
-    'tuni-1301000077',
-    'tuni-1301000030',
-    'tuni-1301000012',
-    'tuni-1301000021',
-    'tuni-1301000011',
-    'tuni-1301000002',
-  ],
-
-  /**
    * Enables tags for these organisations
    */
   TAGS_ENABLED: [],
@@ -93,26 +40,9 @@ const config = {
    */
   NOAD_LINK_EXPIRATION_DAYS: 0,
 
-  /**
-   * How many fbts fit in LRU cache
-   */
-  FEEDBACK_TARGET_CACHE_SIZE: 250,
-
-  /**
-   * Optional TTL in ms for fbt cache. Small number effectively disables caching.
-   * Disabling will slow down requests related to feedback target view.
-   * Do not set if you don't want cache to do TTL checks.
-   */
-  //10 minutes time to live
   FEEDBACK_TARGET_CACHE_TTL: 30000,
 
-  //1 hour time to live
   USER_CACHE_TTL: 360000,
-
-  /**
-   * For cur's before this date, TEACHER role is also considered RESPONSIBLE_TEACHER
-   */
-  RESPONSIBLE_TEACHERS_SPLIT_DATE: '2020-01-01',
 
   /**
    * How many enrolled students are needed for feedback to be shown.
@@ -134,8 +64,7 @@ const config = {
 
   /**
    * How many days before closing to send an automatic reminder to students who have not given feedback.
-   * This feature is currently only enabled for courses with STUDENT_LIST_BY_COURSE_ENABLED enabled
-   * (only configured organisations can do this)
+   * This feature is currently only enabled for courses in student_list_visible_course_codes by organisation (in db) or SEND_AUTOMATIC_REMINDER_ALWAYS=true
    */
   STUDENT_REMINDER_DAYS_TO_CLOSE: 3,
 
@@ -312,11 +241,6 @@ const config = {
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['allProgrammes'],
 
   /**
-   * Enabling the new version of Teaching / Opetukseni / Kyselyni -view
-   */
-  NEW_TEACHING_VIEW_ENABLED: true,
-
-  /**
    * TAU wants to show feedbacks to students only after the feedback target has ended
    */
   SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: true,
@@ -338,11 +262,6 @@ const config = {
    * Norppa UI and in the emails Norppa sends.
    */
   SHOW_COURSE_CODES_WITH_COURSE_NAMES: true,
-
-  /**
-   * TAU does not want to see HY Norppa logo
-   */
-  SHOW_NORPPA_HY_LOGO: false,
 
   /**
    * TAU does not want to have the courses tab visible in organisation settings

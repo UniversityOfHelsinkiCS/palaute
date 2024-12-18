@@ -1,20 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": [
-    "config:recommended"
-  ],
+  "extends": ["config:recommended", "docker:disable"],
   "reviewers": ["hremonen"],
+  "rangeStrategy": "pin",
   "packageRules": [
     {
       "groupName": "all non-major dependencies",
       "groupSlug": "all-minor-patch",
-      "matchPackagePatterns": [
-        "*"
-      ],
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ]
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["*"]
     },
     {
       "matchDatasources": ["docker"],

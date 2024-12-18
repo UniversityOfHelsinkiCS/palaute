@@ -11,7 +11,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 
 import PercentageCell from '../CourseSummary/components/PercentageCell'
-import FeedbackResponseChip from '../MyTeaching/FeedbackResponseChip'
+import FeedbackResponseChip from '../MyTeaching/chips/FeedbackResponseChip'
 
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
