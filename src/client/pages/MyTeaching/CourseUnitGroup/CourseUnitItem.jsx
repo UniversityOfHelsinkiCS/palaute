@@ -7,8 +7,8 @@ import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 
 import commonStyles from '../utils/styles'
 
-import { getLanguageValue } from '../../../../util/languageUtils'
-import { getCourseCode } from '../../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { getCourseCode } from '../../../util/courseIdentifiers'
 
 const styles = {
   item: {

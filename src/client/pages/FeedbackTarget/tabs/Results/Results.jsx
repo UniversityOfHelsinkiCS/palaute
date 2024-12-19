@@ -105,7 +105,7 @@ const Results = () => {
 
   const { t } = useTranslation()
   const isMobile = useIsMobile()
-  const exportRef = useRef()
+  const exportRef = useRef(null)
   const [groupId, setGroupId] = React.useState('ALL')
 
   useChartConfig()

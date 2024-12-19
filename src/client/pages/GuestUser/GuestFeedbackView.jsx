@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useHistory, Redirect, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 import { Button, Box, Card, CardContent, Alert } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
@@ -25,7 +25,6 @@ import {
 
 import { saveValues } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import feedbackGivenSnackbarContent from '../FeedbackTarget/tabs/FeedbackView/FeedbackGivenSnackBar'
 
 const FormContainer = ({
   onSubmit,
@@ -76,7 +75,7 @@ const GuestFeedbackView = () => {
   const { id } = useParams()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const history = useHistory()
+  const navigate = useNavigate()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
@@ -88,7 +87,7 @@ const GuestFeedbackView = () => {
   }
 
   if (!feedbackTarget) {
-    return <Redirect to="/noad/courses" />
+    return <Navigate to="/noad/courses" />
   }
 
   const { opensAt, closesAt, feedback } = feedbackTarget
@@ -110,12 +109,11 @@ const GuestFeedbackView = () => {
       } else {
         await saveValues(values, feedbackTarget)
 
-        history.push(`/noad/targets/${id}/results`)
+        navigate(`/noad/targets/${id}/results`)
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
-          autoHideDuration: 5999,
-          content: feedbackGivenSnackbarContent,
+          autoHideDuration: 6000,
         })
       }
     } catch (e) {

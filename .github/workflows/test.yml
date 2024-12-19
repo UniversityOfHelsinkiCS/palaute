@@ -14,10 +14,29 @@ jobs:
         run: npm run lint
 
   cypress:
+    strategy:
+      fail-fast: false
+      matrix:
+        spec:
+          [
+            common,
+            continuousFeedback,
+            courseSummary,
+            emailStatsView,
+            interimFeedback,
+            organisationSurvey,
+            programme,
+            teacherview,
+            universitySurvey,
+            userfeedbacks,
+          ]
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: npm ci
+        run: npm ci --no-audit --no-fund
 
       - name: Login to toska docker registry
         uses: docker/login-action@v3
@@ -29,13 +48,13 @@ jobs:
       - name: Start the application
         run: docker compose -f docker-compose.ci.yml up -d
 
-      - name: Cypress run
-        uses: cypress-io/github-action@v6
+ 
+      - name: Run cypress tests with retry
+        uses: nick-fields/retry@v3
         with:
-          wait-on: 'http://localhost:8000'
-          config: baseUrl=http://localhost:8000
-          browser: chrome
-          install-command: npm ci
+          timeout_minutes: 6
+          max_attempts: 2
+          command: ./node_modules/.bin/cypress run --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}.spec.js"
 
       - name: Upload video
         uses: actions/upload-artifact@v4

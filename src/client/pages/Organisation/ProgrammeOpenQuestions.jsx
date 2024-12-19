@@ -122,7 +122,7 @@ const ExportPdfLink = ({ componentRef }) => {
   const { t } = useTranslation()
 
   const handlePrint = useReactToPrint({
-    content: () => componentRef.current,
+    contentRef: componentRef,
   })
 
   return (

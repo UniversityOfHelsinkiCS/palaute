@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router'
+import { useNavigate } from 'react-router'
 
 import { Box, Button, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
@@ -30,7 +30,7 @@ const styles = {
 const NorppaFeedback = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const handleSubmit = async values => {
     try {
@@ -41,7 +41,7 @@ const NorppaFeedback = () => {
       }
       await saveValues(values)
 
-      history.push('/')
+      navigate('/')
 
       enqueueSnackbar(t('norppaFeedback:successAlert'), {
         variant: 'success',

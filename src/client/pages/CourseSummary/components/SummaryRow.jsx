@@ -17,7 +17,6 @@ const styles = {
     whiteSpace: 'nowrap',
     textAlign: 'center',
     minWidth: '3.5rem',
-    aspectRatio: 1, // Make them square
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -123,7 +122,7 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
     />
   )
 
-  const link = `/course-summary/${courseUnit.courseCode}`
+  const link = `/course-summary/course-unit/${courseUnit.courseCode}`
   const { summary } = courseUnit
 
   return (

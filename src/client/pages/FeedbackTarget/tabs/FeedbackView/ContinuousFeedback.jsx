@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory, useParams } from 'react-router'
+import { useNavigate, useParams } from 'react-router'
 import { Box, Button, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -27,7 +27,7 @@ const styles = {
 const ContinuousFeedback = () => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const history = useHistory()
+  const navigate = useNavigate()
 
   const { id } = useParams()
 
@@ -40,7 +40,7 @@ const ContinuousFeedback = () => {
       }
       await saveContinuousFeedback(values, id)
 
-      history.push(`/targets/${id}/continuous-feedback`)
+      navigate(`/targets/${id}/continuous-feedback`)
 
       enqueueSnackbar(t('norppaFeedback:successAlert'), {
         variant: 'success',

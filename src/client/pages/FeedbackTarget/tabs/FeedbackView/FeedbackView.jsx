@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useHistory, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link } from 'react-router-dom'
 
 import { Typography, Button, Box, Card, CardContent, Alert } from '@mui/material'
 
@@ -22,7 +22,6 @@ import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedba
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import feedbackGivenSnackbarContent from './FeedbackGivenSnackBar'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../../../util/common'
 
 const FormContainer = ({
@@ -86,15 +85,15 @@ const FormContainer = ({
 }
 
 const FeedbackView = () => {
-  const { id, interimFeedbackId } = useParams()
-
-  const history = useHistory()
+  const navigate = useNavigate()
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
-  const submitMutation = useSaveValues()
-
+  const { id, interimFeedbackId } = useParams()
   const { authorizedUser } = useAuthorizedUser()
+
+  const submitMutation = useSaveValues()
+  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
+
   const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
   const isLoading = !feedbackTarget
 
@@ -105,7 +104,6 @@ const FeedbackView = () => {
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
 
-  // TODO clean up this shit again
   const isOutsider = accessStatus === 'NONE'
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
@@ -138,19 +136,22 @@ const FeedbackView = () => {
         await submitMutation.mutateAsync(feedbackData)
 
         if (SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
-          history.push(`/feedbacks?status=given`)
+          navigate(`/feedbacks?status=given`)
         } else {
-          history.push(`/targets/${id}/results`)
+          navigate(`/targets/${id}/results`)
         }
 
         enqueueSnackbar(t('feedbackView:successAlert'), {
           variant: 'success',
           autoHideDuration: 6000,
-          content: feedbackGivenSnackbarContent,
         })
       }
     } catch (e) {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      if (e?.response?.data?.error) {
+        enqueueSnackbar(e.response.data.error, { variant: 'error' })
+      } else {
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      }
     }
   }
 

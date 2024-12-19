@@ -36,6 +36,10 @@ const sumQuestionResults = (results: SummaryResult[], questionId: string) => {
 }
 
 const sumSummaryDatas = (summaryDatas: SummaryData[]) => {
+  // TODO milton
+  // Täällä ei tiedetä mihin organisaatioon data liittyy, joten oikeuksia ei voi tarkastaa täällä
+  // Tätä funktiota kuitenkin kutsutaan suoraan muualtakin, mikä tekee muutoksen ongelmalliseksi
+  // hiddencount haluttaisiin piilottaa
   console.log('summming summary datas')
   console.log(JSON.stringify(summaryDatas))
   const data: SummaryData = {
