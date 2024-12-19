@@ -9,7 +9,7 @@ import { FeedbackTargetLabel, CourseUnitLabel } from './Labels'
 import PercentageCell from './PercentageCell'
 import { useSummaryContext } from '../context'
 import RowHeader from './RowHeader'
-// import CensoredCount from './components/CensoredCount'
+import CensoredCount from './CensoredCount'
 import FeedbackResponseIndicator from './FeedbackResponseIndicator'
 
 const styles = {
@@ -102,9 +102,7 @@ export const SummaryResultElements = ({ questions, summary, feedbackResponseIndi
           tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
         />
       )}
-      {/* <Box sx={styles.countCell}> // @TODO access check to show hidden count
-        {Boolean(data?.hiddenCount) && <CensoredCount count={data.hiddenCount} />}
-      </Box> */}
+      <Box sx={styles.countCell}>{Boolean(data?.hiddenCount) && <CensoredCount count={data.hiddenCount} />}</Box>
     </>
   )
 }

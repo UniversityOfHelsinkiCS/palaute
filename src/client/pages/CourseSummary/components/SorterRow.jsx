@@ -60,6 +60,7 @@ const SorterRow = ({ filterComponent }) => {
         label={t('courseSummary:feedbackResponsePercentage')}
         width={styles.percentCell.width}
       />
+      <Sort field="feedbackCountCensored" label={t('courseSummary:censoredCount')} width={styles.countCell.width} />
     </Box>
   )
 }

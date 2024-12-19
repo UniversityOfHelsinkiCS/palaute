@@ -36,6 +36,8 @@ const sumQuestionResults = (results: SummaryResult[], questionId: string) => {
 }
 
 const sumSummaryDatas = (summaryDatas: SummaryData[]) => {
+  console.log('summming summary datas')
+  console.log(JSON.stringify(summaryDatas))
   const data: SummaryData = {
     result: {},
     studentCount: 0,
@@ -44,6 +46,7 @@ const sumSummaryDatas = (summaryDatas: SummaryData[]) => {
     feedbackResponsePercentage: 0,
   }
 
+  // TODO milton
   for (const summaryData of summaryDatas) {
     data.studentCount += summaryData.studentCount
     data.hiddenCount += summaryData.hiddenCount
