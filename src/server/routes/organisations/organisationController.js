@@ -1,9 +1,18 @@
 const _ = require('lodash')
 const { Router } = require('express')
+const { Op } = require('sequelize')
 
 const { getOrganisationsList } = require('../../services/organisations/getOrganisationsList')
 const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
-const { Organisation, OrganisationLog, User } = require('../../models')
+const {
+  Organisation,
+  OrganisationLog,
+  User,
+  CourseUnit,
+  CourseRealisation,
+  CourseUnitsOrganisation,
+  FeedbackTarget,
+} = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../services/auditLog')
 const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
@@ -169,6 +178,61 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
   return res.send(codesWithIds)
 }
 
+const findFeedbackTargets = async (req, res) => {
+  const {
+    user,
+    query: { courseCode, name },
+  } = req
+  const { code } = req.params
+
+  const organisationAccess = await user.getOrganisationAccess()
+
+  const access = organisationAccess.filter(org => org.organisation.code === code)
+
+  if (access.length === 0) {
+    throw new ApplicationError('Forbidden', 403)
+  }
+
+  const courseUnits = await CourseUnit.findAll({
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTargets',
+        attributes: ['id', 'courseRealisationId'],
+        where: { userCreated: false },
+        include: [
+          {
+            model: CourseRealisation,
+            as: 'courseRealisation',
+            attributes: ['id', 'name', 'startDate', 'endDate'],
+            where: { userCreated: false },
+          },
+        ],
+      },
+      {
+        model: Organisation,
+        as: 'organisations',
+        attributes: ['id', 'code', 'name'],
+        through: { model: CourseUnitsOrganisation },
+        where: { code },
+      },
+    ],
+    attributes: ['id', 'name', 'courseCode'],
+    where: {
+      [Op.or]: {
+        courseCode: { [Op.iLike]: `${courseCode}%` },
+        [Op.or]: [
+          { 'name.fi': { [Op.iLike]: `%${name}%` } },
+          { 'name.se': { [Op.iLike]: `%${name}%` } },
+          { 'name.en': { [Op.iLike]: `%${name}%` } },
+        ],
+      },
+    },
+  })
+
+  res.send(courseUnits)
+}
+
 const router = Router()
 
 router.get('/', getOrganisations)
@@ -178,6 +242,7 @@ router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)
+router.get('/:code/courses', findFeedbackTargets)
 if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.use('/', feedbackCorrespondentRouter)
 

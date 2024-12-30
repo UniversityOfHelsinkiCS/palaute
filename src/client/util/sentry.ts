@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/browser'
-import { inProduction, GIT_SHA, inE2EMode, SENTRY_DSN } from './common'
+import { inProduction, inE2EMode, GIT_SHA, SENTRY_DSN } from './common'
 
 const initializeSentry = () => {
   if (!inProduction || inE2EMode) return

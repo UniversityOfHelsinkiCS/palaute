@@ -1,0 +1,25 @@
+name: Feature branches & pull requests
+
+on:
+  pull_request:
+    types: [opened]
+  push:
+    branches-ignore:
+      - master
+      - tau
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+    secrets: inherit
+
+  run-tests:
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - uses: actions/checkout@v4
+  
+      - name: Echo confirmation
+        run: echo "Tests run" 
+
