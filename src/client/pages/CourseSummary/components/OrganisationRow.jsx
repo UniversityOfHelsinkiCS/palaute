@@ -121,7 +121,13 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   )
 }
 
-const OrganisationSummaryRow = ({ alwaysOpen = false, organisation: initialOrganisation, organisationId }) => {
+const OrganisationSummaryRow = ({
+  alwaysOpen = false,
+  organisation: initialOrganisation,
+  organisationId,
+  startDate,
+  endDate,
+}) => {
   const { questions } = useSummaryContext()
   const { ref, inView } = useInView({
     triggerOnce: true,
@@ -184,6 +190,8 @@ const OrganisationSummaryRow = ({ alwaysOpen = false, organisation: initialOrgan
                 organisationId={organisationId}
                 initialCourseUnits={initialOrganisation?.courseUnits}
                 questions={questions}
+                startDate={startDate}
+                endDate={endDate}
               />
             </>
           )}

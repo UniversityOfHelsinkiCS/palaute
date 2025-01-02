@@ -2,6 +2,7 @@ import React from 'react'
 import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
+import { format, isValid } from 'date-fns'
 import { useSummaries } from '../api'
 import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
@@ -9,7 +10,7 @@ import { FeedbackTargetLabel, CourseUnitLabel } from './Labels'
 import PercentageCell from './PercentageCell'
 import { useSummaryContext } from '../context'
 import RowHeader from './RowHeader'
-// import CensoredCount from './components/CensoredCount'
+import CensoredCount from './CensoredCount'
 import FeedbackResponseIndicator from './FeedbackResponseIndicator'
 
 const styles = {
@@ -101,11 +102,12 @@ export const SummaryResultElements = ({ questions, summary, feedbackResponseIndi
           tooltip={`${t('courseSummary:feedbackResponsePercentage')}: ${feedbackResponsePercentage}%`}
         />
       )}
+      <Box sx={styles.countCell}>{Boolean(data?.hiddenCount) && <CensoredCount count={data.hiddenCount} />}</Box>
     </>
   )
 }
 
-export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
+export const CourseUnitSummaryRow = ({ courseUnit, questions, startDate, endDate }) => {
   const { i18n, t } = useTranslation()
 
   const labelExtras = []
@@ -121,7 +123,13 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
     />
   )
 
-  const link = `/course-summary/course-unit/${courseUnit.courseCode}`
+  const courseLinkURL = new URL(`/course-summary/course-unit/${courseUnit.courseCode}`, 'http://dummy')
+  if (isValid(startDate) && isValid(endDate)) {
+    courseLinkURL.searchParams.append('startDate', format(startDate, 'yyyy-MM-dd'))
+    courseLinkURL.searchParams.append('endDate', format(endDate, 'yyyy-MM-dd'))
+  }
+
+  const link = `${courseLinkURL.pathname}${courseLinkURL.search}`
   const { summary } = courseUnit
 
   return (
@@ -158,7 +166,7 @@ export const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   )
 }
 
-export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions }) => {
+export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions, startDate, endDate }) => {
   const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
@@ -177,5 +185,7 @@ export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions 
     return <Loader />
   }
 
-  return orderedCourseUnits?.map(cu => <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />)
+  return orderedCourseUnits?.map(cu => (
+    <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} startDate={startDate} endDate={endDate} />
+  ))
 }
