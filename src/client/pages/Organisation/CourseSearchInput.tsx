@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Autocomplete, TextField, Grid2 as Grid } from '@mui/material'
+import { Autocomplete, TextField, Grid2 as Grid, Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormikContext } from 'formik'
 import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
@@ -8,36 +8,8 @@ import { YearSemesterSelector } from '../../components/common/YearSemesterSelect
 import { getSemesterRange } from '../../util/yearSemesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
-
-type DateRange = { start: Date; end: Date }
-
-type Locales = { fi: string; en: string; sv: string }
-
-interface InitialValues {
-  name: Locales
-  startDate: Date
-  endDate: Date
-  studentNumbers: []
-  teachers: []
-  courses: []
-}
-
-type OrganisationCode = string
-
-type CourseRealisation = {
-  id: string
-  name: Locales
-  startDate: string
-  endDate: string
-}
-
-type FeedbackTarget = {
-  id: number
-  courseRealisationId: string
-  courseRealisation: CourseRealisation
-}
-
-type FeedbackTargets = FeedbackTarget[]
+import { DateRange } from '../../types/DateRange'
+import { Locales, InitialValues, OrganisationCode, CourseRealisation, FeedbackTargets } from '../../types'
 
 const CourseSearchInput = ({ organisationCode }: { organisationCode: OrganisationCode }) => {
   const { t, i18n } = useTranslation()
@@ -46,7 +18,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
   const [courseSearch, setCourseSearch] = useState('')
   const debounceSearch = useDebounce(courseSearch, 700)
   const [dateRange, setDateRange] = useState<DateRange>(() => getSemesterRange(new Date()))
-  const [option, setOption] = React.useState<string>('semester')
+  const [rangeOption, setRangeOption] = React.useState<string>('semester')
 
   const { data } = useOrganisationCourseSearch({
     organisationCode,
@@ -56,17 +28,16 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
   })
 
   const options = data
-    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) => feedbackTargets)
-    .sort((a: FeedbackTarget, b: FeedbackTarget) =>
-      a.courseRealisation.name[language as keyof Locales].localeCompare(
-        b.courseRealisation.name[language as keyof Locales]
-      )
+    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) =>
+      feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
+    )
+    .sort((a: CourseRealisation, b: CourseRealisation) =>
+      a.name[language as keyof Locales].localeCompare(b.name[language as keyof Locales])
     )
 
-  const getOptionLabel = (course: FeedbackTarget) => {
-    const { courseRealisation } = course
-    const [startDate, endDate] = getStartAndEndString(courseRealisation.startDate, courseRealisation.endDate)
-    const courseName = getLanguageValue(courseRealisation?.name, language)
+  const getOptionLabel = (course: CourseRealisation) => {
+    const [startDate, endDate] = getStartAndEndString(course?.startDate, course?.endDate)
+    const courseName = getLanguageValue(course?.name, language)
     return `${courseName || ''} (${startDate} - ${endDate})`
   }
 
@@ -82,7 +53,16 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
           disableCloseOnSelect
           multiple
           defaultValue={formikProps.initialValues.courses}
-          onChange={(_, courses) => {
+          onChange={(_, courses, reason, detail) => {
+            if (
+              reason === 'removeOption' &&
+              !window.confirm(
+                t('organisationSurveys:removeCourse', {
+                  course: detail?.option,
+                })
+              )
+            )
+              return
             formikProps.setFieldValue('courses', courses)
           }}
           inputValue={courseSearch}
@@ -94,15 +74,25 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
           renderInput={params => (
             <TextField {...params} label={t('organisationSurveys:addCourses')} variant="outlined" />
           )}
+          renderTags={(value, getTagProps) =>
+            value.map((option, index) => (
+              <Chip
+                {...getTagProps({ index })}
+                data-cy={`formik-course-input-field-chip-${option.id}`}
+                label={getOptionLabel(option)}
+                key={`${option.id}-${index}`}
+              />
+            ))
+          }
         />
       </Grid>
       <Grid size={2}>
         <YearSemesterSelector
           value={dateRange ?? { start: new Date(), end: new Date() }}
           onChange={handleDateRangeChange}
-          option={option}
+          option={rangeOption}
           futureYears={0}
-          setOption={setOption}
+          setOption={setRangeOption}
           allowAll={false}
         />
       </Grid>

@@ -95,10 +95,12 @@ const createOrganisationSurvey = async (req, res) => {
   const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
   const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
 
+  await createOrganisationSurveyCourses(feedbackTarget.id, studentDataFromCourseIds)
+
   const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({
-    ...survey.dataValues,
+    ...survey,
     userFeedbackTargets: [...studentFeedbackTargets, ...teacherFeedbackTargets],
   })
 }
@@ -109,13 +111,7 @@ const editOrganisationSurvey = async (req, res) => {
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
 
-  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(updates.courseIds)
-
-  await createOrganisationSurveyCourses(id, studentDataFromCourseIds)
-
-  updates.studentNumbers = [
-    ...new Set([...updates.studentNumbers, ...studentDataFromCourseIds.map(n => n.studentNumber)]),
-  ]
+  updates.studentNumbers = [...new Set([...updates.studentNumbers])]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,

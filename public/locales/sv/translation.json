@@ -399,7 +399,8 @@
     "responsibleTeachers": "Ansvarsperson",
     "remove": "Ta bort",
     "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden",
-    "addCourses": "Fler studenter från kurser"
+    "addCourses": "Fler studenter från kurser",
+    "removeCourses": "Ta bort kurser"
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",
