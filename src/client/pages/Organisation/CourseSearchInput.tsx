@@ -8,36 +8,8 @@ import { YearSemesterSelector } from '../../components/common/YearSemesterSelect
 import { getSemesterRange } from '../../util/yearSemesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
-
-type DateRange = { start: Date; end: Date }
-
-type Locales = { fi: string; en: string; sv: string }
-
-interface InitialValues {
-  name: Locales
-  startDate: Date
-  endDate: Date
-  studentNumbers: []
-  teachers: []
-  courses: []
-}
-
-type OrganisationCode = string
-
-type CourseRealisation = {
-  id: string
-  name: Locales
-  startDate: string
-  endDate: string
-}
-
-type FeedbackTarget = {
-  id: number
-  courseRealisationId: string
-  courseRealisation: CourseRealisation
-}
-
-type FeedbackTargets = FeedbackTarget[]
+import { DateRange } from '../../types/DateRange'
+import { Locales, InitialValues, OrganisationCode, CourseRealisation, FeedbackTargets } from '../../types'
 
 const CourseSearchInput = ({ organisationCode }: { organisationCode: OrganisationCode }) => {
   const { t, i18n } = useTranslation()

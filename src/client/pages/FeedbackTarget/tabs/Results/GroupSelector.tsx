@@ -5,7 +5,7 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
-import { User } from '../../../../types/User'
+import { User } from '../../../../types'
 import { sortGroups } from './utils'
 
 interface GroupOption {
