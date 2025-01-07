@@ -117,13 +117,13 @@ _Asennettu release tuotantoon (toiselle taholle vähintään)_
 Minimivaatimukset:
 -	Mitä releaseen sisältyy (mitkä työt)
 -	Mitä erityistä huomioitavaa
--	Tietokantaan liittyvää tms?
+    -	Tietokantaan liittyvää tms?
 -	Konfiguraatio-ohjeet
--	Jos uutta/muuttunutta termistöä
-o	Jos uusia/muuttuneita konfiguraatiovakioita
-o	Jos jotain oletusarvoja tietokantaan
-o	Jos jotain, mikä huomioitava esim. Updaterissa tai muissa lisäosissa
-o	Jne.
+    -	Jos uutta/muuttunutta termistöä
+    -	Jos uusia/muuttuneita konfiguraatiovakioita
+    -	Jos jotain oletusarvoja tietokantaan
+    -	Jos jotain, mikä huomioitava esim. Updaterissa tai muissa lisäosissa
+    -	Jne.
 
 ### Ready For Development (featuren kuvauksen minimivaatimukset)
 
