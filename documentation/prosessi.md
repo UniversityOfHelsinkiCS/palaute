@@ -128,32 +128,37 @@ Minimivaatimukset:
 ### Ready For Development (featuren kuvauksen minimivaatimukset)
 
 Löydyttävä osiot:
+
 -	Mitä/Miksi (pakollinen)
--	Mitä tehdään ja miksi, mikä on alkuperäinen ongelma/tarve mihin työn toteutus tuo ratkaisun
+    -	Mitä tehdään ja miksi, mikä on alkuperäinen ongelma/tarve mihin työn toteutus tuo ratkaisun
 -	Miten (pakollinen)
-  -	Ylätason kuvaus miten toiminto toteutettava ja mitä huomioitava
-  -	Tarkempi kuvaus, jos vaatii tarkemman yhteisen teknisen ymmärryksen muutoksesta ja sen vaikutuksesta
+    -	Ylätason kuvaus miten toiminto toteutettava ja mitä huomioitava
+    -	Tarkempi kuvaus, jos vaatii tarkemman yhteisen teknisen ymmärryksen muutoksesta ja sen vaikutuksesta
 -	Yliopistokohtaisuudet (mahdollinen)
-  -	Erikseen huomiot, jos eroavaisuustarvetta TAU/HY välillä esim. konfiguraationa
+    -	Erikseen huomiot, jos eroavaisuustarvetta TAU/HY välillä esim. konfiguraationa
 -	Dokumentointi (mahdollinen)
-  -	Onko määrittelyn aikana tunnistettu tarvetta dokumentoida työhön liittyen jotain johonkin POn tai/ja kehittäjän toimesta tai esim. tarve päivittää käyttöohjeita tuotantoasennuksen yhteydessä?
+    -	Onko määrittelyn aikana tunnistettu tarvetta dokumentoida työhön liittyen jotain johonkin POn tai/ja kehittäjän toimesta tai esim. tarve päivittää käyttöohjeita tuotantoasennuksen yhteydessä?
+
 Kuvattava työ sillä tasolla, että:
+
 -	kehittäjä voi sen toteuttaa
 -	toinen kehittäjä (myös toisella taholla HY/TAU) ymmärtää mitä työssä pitää saada aikaan ja voi siten osata sen katselmoida, tarvittaessa haastaa toteutuksen sekä testata toimivuuden.
 -	PO ymmärtää
-  -	voiko hän testata työn sen tultua testiympäristöön (kaikkea ei pysty testaamaan käyttöliittymän kautta)
-  -	miten hän voi voi testata työn, jotta voi todeta sen toimivan sovitulla tavalla
+    -	voiko hän testata työn sen tultua testiympäristöön (kaikkea ei pysty testaamaan käyttöliittymän kautta)
+    -	miten hän voi voi testata työn, jotta voi todeta sen toimivan sovitulla tavalla
 
 ### Commit notes
-•	commitin tulee liittyä aina johonkin Githubin työhön (featureen), jossa on kuvaus mitä työssä tehdään (kts. Ready for Development)
-o	Onko tästä poikkeuksia ja jos niin mitä?
-•	commit-viestiin olennainen tiivistelmä, mitä commit sisältää
+
+-	commitin tulee liittyä aina johonkin Githubin työhön (featureen), jossa on kuvaus mitä työssä tehdään (kts. Ready for Development)
+    -	Onko tästä poikkeuksia ja jos niin mitä?
+-	commit-viestiin olennainen tiivistelmä, mitä commit sisältää
 
 ### Releaset
+
 -	Dokumentoidaan johonkin se, mikä Githubin release on kummallakin taholla
--	mahdollisen virkistyksen alla
--	testissä
--	tuotannossa
+  -	mahdollisen virkistyksen alla
+  -	testissä
+  -	tuotannossa
 
 
 
