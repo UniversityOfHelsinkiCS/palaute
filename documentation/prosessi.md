@@ -42,6 +42,8 @@ Done
 - Työ voidaan samalla priorisoida, eli sijoittaa relevanttiin kohtaan työjonoa
 - Tässä yhteydessä voidaan myös jo arvioida tarvitaanko toteutukselle jokin organisaatiokohtainen konfiguraatio.
 
+Tulos:
+
 _**TODO** tai **Ready for Development** -tilainen työ (töitä) lisätään Norpan backlogille_
 
 ### Backlogilla on TODO-tilaisia töitä
