@@ -42,14 +42,22 @@ Done
 - Työ voidaan samalla priorisoida, eli sijoittaa relevanttiin kohtaan työjonoa
 - Tässä yhteydessä voidaan myös jo arvioida tarvitaanko toteutukselle jokin organisaatiokohtainen konfiguraatio.
 
-**TODO** tai **Ready for Development** -tilainen työ (töitä) lisätään Norpan backlogille
+_**TODO** tai **Ready for Development** -tilainen työ (töitä) lisätään Norpan backlogille_
 
 ### Backlogilla on TODO-tilaisia töitä
 
 - Oleelliset henkilöt kokoontuvat (PO:t tai myös kehittäjiä, tai kehittäjät keskenään) ja täsmentävät työt riittävälle tasolle, että PO:t tietävät toisaalta mitä työn tuloksena tulee ja kehittäjä tietää tarpeeksi toteuttaakseen työn
 - Tässä yhteydessä arvioidaan tarvitaanko toteutukselle jokin organisaatiokohtainen konfiguraatio.
 
-Töitä siirtyy **Ready for Development** -tilaan Norpan backlogilla 
+_Töitä siirtyy **Ready for Development** -tilaan Norpan backlogilla_ 
+
+### Backlogilla on useita Ready for Development -tilaisia töitä
+
+- Oleelliset henkilöt kokoontuvat aika ajoin (PO:t tai myös kehittäjiä) tarkistamaan/ järjestämään töitä prioriteettijärjestykseen, jotta työt toteutetaan olennaisessa järjestyksessä
+
+_Backlog on prioriteettijärjestyksessä_
+
+
 
 
 
