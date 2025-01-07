@@ -1,6 +1,6 @@
 # Hahmotelma Norpan uudeksi prosessiksi
 
-Alustava ehdotus töiden tiloista
+## Alustava ehdotus töiden tiloista
 
 TODO
   -	Työaihiot
@@ -32,5 +32,30 @@ In QA
 Done
   -	Asennettu tuotantoympäristöön (production)
   -	Kts. In QA huomio haastavuudesta
+
+## Workflown alustavaa kuvausta
+
+### Norppaan liittyen tarve muutokselle
+
+- POt erikseen tai yhdessä huomaavat tarpeen ja lisäävät sen backlogille. Tämä voi tapahtua esim. PO:iden suunnittelupalaverissa tai tulla herätteenä käyttäjiltä heille.
+- Kehittäjä huomaa tarpeen ja lisää sen backlogille. Tämä voi tulla esim. kun huomataan bugi tai toista työtä tehdessä huomataan tarve muutokselle tai hyödyllinen jatkokehitysidea.
+- Työ voidaan samalla priorisoida, eli sijoittaa relevanttiin kohtaan työjonoa
+- Tässä yhteydessä voidaan myös jo arvioida tarvitaanko toteutukselle jokin organisaatiokohtainen konfiguraatio.
+
+**TODO** tai **Ready for Development** -tilainen työ (töitä) lisätään Norpan backlogille
+
+### Backlogilla on TODO-tilaisia töitä
+
+- Oleelliset henkilöt kokoontuvat (PO:t tai myös kehittäjiä, tai kehittäjät keskenään) ja täsmentävät työt riittävälle tasolle, että PO:t tietävät toisaalta mitä työn tuloksena tulee ja kehittäjä tietää tarpeeksi toteuttaakseen työn
+- Tässä yhteydessä arvioidaan tarvitaanko toteutukselle jokin organisaatiokohtainen konfiguraatio.
+
+Töitä siirtyy **Ready for Development** -tilaan Norpan backlogilla 
+
+
+
+
+
+
+
 
 
