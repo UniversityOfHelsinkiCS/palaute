@@ -57,10 +57,103 @@ _Töitä siirtyy **Ready for Development** -tilaan Norpan backlogilla_
 
 _Backlog on prioriteettijärjestyksessä_
 
+### Kehittäjä on valitsemassa seuraavaa työtä
 
+- Oletuksena on, että työjonon kärjestä voi ottaa Ready for Development-tilaisen työn. Kehittäjän huomioitava jos työ korvamerkitty jollekin taholle (TAU, HY)
 
+  _Työ asetetaan **In Progress** -tilaan ja sille merkitään assignee(t)_
 
+### Kehittäjä on saanut työn toteutettua ja testattua
 
+- Työ voi siirtyä katselmointiin, tehdään Pull Request
+
+_Työ asetetaan **In Review**-tilaan._
+
+- Työlle oletuksena tarvitaan hyväksyntä (vähintään “esikatselmointi”) molemmilta tahoilta (joku kehittäjä HYltä hyväksyy ja joku TAUlta hyväksyy) että se voi siirtyä ** Ready for QA** -tilaan
+- Huomioitava, että tämä ei välttämättä ole toiselta taholta kuin “esikatselmointi” jos ei voi kuin tsekata koodit, eikä järkevää mahdollisuutta ajaa koodia oleellista dataa vasten. Lopullinen katselmointi/testaus/kommentit saattavat tulla vasta kun toinen taho pääsee testaamaan koodin toiminnallisuutta kehitys - ja testiympäristössään (virkistys).
+- Vaihtoehtona työ/feature kohtaiselle katselmoinnille olisi release-katselmointi, eli toinen taho katselmoisi useamman työn kerralla vasta release vaiheessa (mietittävä flow tähän, eli että release vaatisi hyväksynnän ennen asennusta testiin tai ainakin ennen tuotantoon menoa).
+
+### Töitä In Review -tilassa
+
+- Ristiin katselmointi/testaus. Tiimistä toinen kehittäjä voi katselmoida koodin ja testata sen olennaisella datalla. Toisen tahon tiimistä myös kehittäjä (esi)katselmoi koodin ja testaa sen mahdollisuuksien mukaan.
+- Pyrkimyksenä, ettei työt jää odottamaan pitkäksi aikaa katselmointeja.
+- Katselmoinnin aikana katselmoija voi liittää PR:ään kommentteja ja käydä keskustelua myös esim. Slackissa
+- Katselmoinnissa voi haastaa myös sitä, onko työn kuvaus Githubissa ajantasalla toteutuksen jälkeenkin.
+
+_Työ siirtyy **Ready For QA** -tilaan_
+
+### Tehdyt työt halutaan testiympäristöön
+
+- Tietty/tietyt** Ready For QA** -tilaiset työt halutaan testiin ja sitä kautta myöhemmin tuotantoon.
+- Oleelliset henkilöt kokoontuvat tai kommunikoivat (PO:t tai/ja kehittäjiä) ja sopivat mitä releaseen tulee
+
+_ Release muodostettu. Tarpeen mukaan toinen taho vielä katselmoi, jos sitä ei ole tehty feature-tasolla._
+
+- Asennettu release testiin (toiselle taholle vähintään)
+- Merkitty johonkin release-tietoihin, että mikä taho asentanut testiin ja aikaleima.
+- Releasen työt **In QA **-tilaan. Oltava nähtävissä millä taholla missäkin tilassa?
+
+### Tehdyt työt halutaan tuotantoon
+
+- PO (ja kehittäjät tarpeen mukaan) testaavat työt testiympäristössä ja kun katsottu kaiken toimivan ennalta määritellyllä tavalla, hyväksytään asennus tuotantoon.
+- Sovitaan tuotantoasennuksen aikataulu
+
+_Asennettu release tuotantoon (toiselle taholle vähintään)_
+- Merkitty johonkin release-tietoihin, että mikä taho asentanut tuotantoon ja aikaleima.
+- Releasen työt **Done**-tilaan. Oltava nähtävissä millä taholla missäkin tilassa?
+
+## Muita käytäntöjä
+
+### Bugit/Hotfixit
+
+1.	Huomataan bugi
+2.	Kommunikoidaan myös toiselle taholle löydöksestä (Slack)
+3.	Sovitaan miten ja mihin releaseen korjattava (jos mennään eri releaseissa)
+4.	Sovitaan kuka/mikä taho korjaa
+5.	Lisätään työ Githubiin → jatkuu normaalilla workflowlla
+
+### Release notes
+
+Minimivaatimukset:
+-	Mitä releaseen sisältyy (mitkä työt)
+-	Mitä erityistä huomioitavaa
+-	Tietokantaan liittyvää tms?
+-	Konfiguraatio-ohjeet
+-	Jos uutta/muuttunutta termistöä
+o	Jos uusia/muuttuneita konfiguraatiovakioita
+o	Jos jotain oletusarvoja tietokantaan
+o	Jos jotain, mikä huomioitava esim. Updaterissa tai muissa lisäosissa
+o	Jne.
+
+### Ready For Development (featuren kuvauksen minimivaatimukset)
+
+Löydyttävä osiot:
+-	Mitä/Miksi (pakollinen)
+-	Mitä tehdään ja miksi, mikä on alkuperäinen ongelma/tarve mihin työn toteutus tuo ratkaisun
+-	Miten (pakollinen)
+  -	Ylätason kuvaus miten toiminto toteutettava ja mitä huomioitava
+  -	Tarkempi kuvaus, jos vaatii tarkemman yhteisen teknisen ymmärryksen muutoksesta ja sen vaikutuksesta
+-	Yliopistokohtaisuudet (mahdollinen)
+  -	Erikseen huomiot, jos eroavaisuustarvetta TAU/HY välillä esim. konfiguraationa
+-	Dokumentointi (mahdollinen)
+  -	Onko määrittelyn aikana tunnistettu tarvetta dokumentoida työhön liittyen jotain johonkin POn tai/ja kehittäjän toimesta tai esim. tarve päivittää käyttöohjeita tuotantoasennuksen yhteydessä?
+Kuvattava työ sillä tasolla, että:
+-	kehittäjä voi sen toteuttaa
+-	toinen kehittäjä (myös toisella taholla HY/TAU) ymmärtää mitä työssä pitää saada aikaan ja voi siten osata sen katselmoida, tarvittaessa haastaa toteutuksen sekä testata toimivuuden.
+-	PO ymmärtää
+  -	voiko hän testata työn sen tultua testiympäristöön (kaikkea ei pysty testaamaan käyttöliittymän kautta)
+  -	miten hän voi voi testata työn, jotta voi todeta sen toimivan sovitulla tavalla
+
+### Commit notes
+•	commitin tulee liittyä aina johonkin Githubin työhön (featureen), jossa on kuvaus mitä työssä tehdään (kts. Ready for Development)
+o	Onko tästä poikkeuksia ja jos niin mitä?
+•	commit-viestiin olennainen tiivistelmä, mitä commit sisältää
+
+### Releaset
+-	Dokumentoidaan johonkin se, mikä Githubin release on kummallakin taholla
+-	mahdollisen virkistyksen alla
+-	testissä
+-	tuotannossa
 
 
 
