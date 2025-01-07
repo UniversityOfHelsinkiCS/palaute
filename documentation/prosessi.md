@@ -44,33 +44,36 @@ Done
 
 Tulos:
 
-_**TODO** tai **Ready for Development** -tilainen työ (töitä) lisätään Norpan backlogille_
+- _**TODO** tai **Ready for Development** -tilainen työ (töitä) lisätään Norpan backlogille_
 
 ### Backlogilla on TODO-tilaisia töitä
 
 - Oleelliset henkilöt kokoontuvat (PO:t tai myös kehittäjiä, tai kehittäjät keskenään) ja täsmentävät työt riittävälle tasolle, että PO:t tietävät toisaalta mitä työn tuloksena tulee ja kehittäjä tietää tarpeeksi toteuttaakseen työn
 - Tässä yhteydessä arvioidaan tarvitaanko toteutukselle jokin organisaatiokohtainen konfiguraatio.
 
-_Töitä siirtyy **Ready for Development** -tilaan Norpan backlogilla_ 
+Tulos:
+- _Töitä siirtyy **Ready for Development** -tilaan Norpan backlogilla_ 
 
 ### Backlogilla on useita Ready for Development -tilaisia töitä
 
 - Oleelliset henkilöt kokoontuvat aika ajoin (PO:t tai myös kehittäjiä) tarkistamaan/ järjestämään töitä prioriteettijärjestykseen, jotta työt toteutetaan olennaisessa järjestyksessä
 
-_Backlog on prioriteettijärjestyksessä_
+Tulos:
+- _Backlog on prioriteettijärjestyksessä_
 
 ### Kehittäjä on valitsemassa seuraavaa työtä
 
 - Oletuksena on, että työjonon kärjestä voi ottaa Ready for Development-tilaisen työn. Kehittäjän huomioitava jos työ korvamerkitty jollekin taholle (TAU, HY)
 
-  _Työ asetetaan **In Progress** -tilaan ja sille merkitään assignee(t)_
+Tulos:
+- _Työ asetetaan **In Progress** -tilaan ja sille merkitään assignee(t)_
 
 ### Kehittäjä on saanut työn toteutettua ja testattua
 
 - Työ voi siirtyä katselmointiin, tehdään Pull Request
 
-_Työ asetetaan **In Review**-tilaan._
-
+Tulos:
+- _Työ asetetaan **In Review**-tilaan._
 - Työlle oletuksena tarvitaan hyväksyntä (vähintään “esikatselmointi”) molemmilta tahoilta (joku kehittäjä HYltä hyväksyy ja joku TAUlta hyväksyy) että se voi siirtyä ** Ready for QA** -tilaan
 - Huomioitava, että tämä ei välttämättä ole toiselta taholta kuin “esikatselmointi” jos ei voi kuin tsekata koodit, eikä järkevää mahdollisuutta ajaa koodia oleellista dataa vasten. Lopullinen katselmointi/testaus/kommentit saattavat tulla vasta kun toinen taho pääsee testaamaan koodin toiminnallisuutta kehitys - ja testiympäristössään (virkistys).
 - Vaihtoehtona työ/feature kohtaiselle katselmoinnille olisi release-katselmointi, eli toinen taho katselmoisi useamman työn kerralla vasta release vaiheessa (mietittävä flow tähän, eli että release vaatisi hyväksynnän ennen asennusta testiin tai ainakin ennen tuotantoon menoa).
@@ -82,15 +85,16 @@ _Työ asetetaan **In Review**-tilaan._
 - Katselmoinnin aikana katselmoija voi liittää PR:ään kommentteja ja käydä keskustelua myös esim. Slackissa
 - Katselmoinnissa voi haastaa myös sitä, onko työn kuvaus Githubissa ajantasalla toteutuksen jälkeenkin.
 
-_Työ siirtyy **Ready For QA** -tilaan_
+Tulos:
+- _Työ siirtyy **Ready For QA** -tilaan_
 
 ### Tehdyt työt halutaan testiympäristöön
 
 - Tietty/tietyt** Ready For QA** -tilaiset työt halutaan testiin ja sitä kautta myöhemmin tuotantoon.
 - Oleelliset henkilöt kokoontuvat tai kommunikoivat (PO:t tai/ja kehittäjiä) ja sopivat mitä releaseen tulee
 
-_ Release muodostettu. Tarpeen mukaan toinen taho vielä katselmoi, jos sitä ei ole tehty feature-tasolla._
-
+Tulos: 
+- _Release muodostettu. Tarpeen mukaan toinen taho vielä katselmoi, jos sitä ei ole tehty feature-tasolla._
 - Asennettu release testiin (toiselle taholle vähintään)
 - Merkitty johonkin release-tietoihin, että mikä taho asentanut testiin ja aikaleima.
 - Releasen työt **In QA **-tilaan. Oltava nähtävissä millä taholla missäkin tilassa?
@@ -99,6 +103,8 @@ _ Release muodostettu. Tarpeen mukaan toinen taho vielä katselmoi, jos sitä ei
 
 - PO (ja kehittäjät tarpeen mukaan) testaavat työt testiympäristössä ja kun katsottu kaiken toimivan ennalta määritellyllä tavalla, hyväksytään asennus tuotantoon.
 - Sovitaan tuotantoasennuksen aikataulu
+
+Tulos:
 
 _Asennettu release tuotantoon (toiselle taholle vähintään)_
 - Merkitty johonkin release-tietoihin, että mikä taho asentanut tuotantoon ja aikaleima.
