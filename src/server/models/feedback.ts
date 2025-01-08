@@ -9,14 +9,22 @@ import {
   DATE,
   INTEGER,
 } from 'sequelize'
+import { addFeedbackDataToSummary, removeFeedbackDataFromSummary } from 'services/summary/utils'
 import { sequelize } from '../db/dbConnection'
 import UserFeedbackTarget from './userFeedbackTarget'
 import FeedbackTarget from './feedbackTarget'
 import Summary from './summary'
 
+export type QuestionAnswer = {
+  questionId: number
+  data: string
+}
+
+export type FeedbackData = QuestionAnswer[]
+
 class Feedback extends Model<InferAttributes<Feedback>, InferCreationAttributes<Feedback>> {
   declare id: CreationOptional<number>
-  declare data: Record<string, any>
+  declare data: FeedbackData
   declare userId: string
   declare degreeStudyRight: boolean | null
   declare createdAt: CreationOptional<Date>
@@ -92,9 +100,9 @@ Feedback.afterCreate(async feedback => {
     throw new Error(`Summary not found for feedback ${feedback.id}`)
   }
 
-  const { data } = summary
+  let { data } = summary
 
-  data.feedbackCount += 1
+  data = addFeedbackDataToSummary(data, feedback.data)
 
   await summary.update({ data })
 })
@@ -125,9 +133,9 @@ Feedback.afterDestroy(async feedback => {
     throw new Error(`Summary not found for feedback ${feedback.id}`)
   }
 
-  const { data } = summary
+  let { data } = summary
 
-  data.feedbackCount -= 1
+  data = removeFeedbackDataFromSummary(data, feedback.data)
 
   await summary.update({ data })
 })
