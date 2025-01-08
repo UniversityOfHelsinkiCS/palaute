@@ -9,11 +9,7 @@ import {
   DATE,
   INTEGER,
 } from 'sequelize'
-import { addFeedbackDataToSummary, removeFeedbackDataFromSummary } from 'services/summary/utils'
 import { sequelize } from '../db/dbConnection'
-import UserFeedbackTarget from './userFeedbackTarget'
-import FeedbackTarget from './feedbackTarget'
-import Summary from './summary'
 
 export type QuestionAnswer = {
   questionId: number
@@ -73,83 +69,5 @@ Feedback.init(
     sequelize,
   }
 )
-
-/**
- * Increment the corresponding Summary.data.feedbackCount.
- */
-Feedback.afterCreate(async feedback => {
-  const summary = await Summary.findOne({
-    include: [
-      {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
-        required: true,
-        include: [
-          {
-            model: UserFeedbackTarget,
-            as: 'userFeedbackTargets',
-            required: true,
-            where: { userId: feedback.userId },
-          },
-        ],
-      },
-    ],
-  })
-
-  if (!summary) {
-    throw new Error(`Summary not found for feedback ${feedback.id}`)
-  }
-
-  let { data } = summary
-
-  data = addFeedbackDataToSummary(data, feedback.data)
-
-  await summary.update({ data })
-})
-
-/**
- * Decrement the corresponding Summary.data.feedbackCount.
- */
-Feedback.afterDestroy(async feedback => {
-  const summary = await Summary.findOne({
-    include: [
-      {
-        model: FeedbackTarget,
-        as: 'feedbackTarget',
-        required: true,
-        include: [
-          {
-            model: UserFeedbackTarget,
-            as: 'userFeedbackTargets',
-            required: true,
-            where: { userId: feedback.userId },
-          },
-        ],
-      },
-    ],
-  })
-
-  if (!summary) {
-    throw new Error(`Summary not found for feedback ${feedback.id}`)
-  }
-
-  let { data } = summary
-
-  data = removeFeedbackDataFromSummary(data, feedback.data)
-
-  await summary.update({ data })
-})
-
-/**
- * Remove the feedbackId the UserFeedbackTarget that references this feedback.
- */
-Feedback.beforeDestroy(async feedback => {
-  await UserFeedbackTarget.update(
-    {
-      feedbackId: null,
-    },
-    { where: { feedbackId: feedback.id } }
-  )
-})
 
 export default Feedback

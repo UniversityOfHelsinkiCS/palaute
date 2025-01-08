@@ -10,6 +10,7 @@ const {
   Tag,
   ContinuousFeedback,
   Group,
+  Summary,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
@@ -67,6 +68,10 @@ const getFromDb = async id => {
           as: 'user',
           attributes: ['id', 'firstName', 'lastName', 'email'],
         },
+      },
+      {
+        model: Summary,
+        as: 'summary',
       },
       {
         model: ContinuousFeedback,
