@@ -11,6 +11,8 @@ import {
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
 import UserFeedbackTarget from './userFeedbackTarget'
+import FeedbackTarget from './feedbackTarget'
+import Summary from './summary'
 
 class Feedback extends Model<InferAttributes<Feedback>, InferCreationAttributes<Feedback>> {
   declare id: CreationOptional<number>
@@ -63,6 +65,72 @@ Feedback.init(
     sequelize,
   }
 )
+
+/**
+ * Increment the corresponding Summary.data.feedbackCount.
+ */
+Feedback.afterCreate(async feedback => {
+  const summary = await Summary.findOne({
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+        required: true,
+        include: [
+          {
+            model: UserFeedbackTarget,
+            as: 'userFeedbackTargets',
+            required: true,
+            where: { userId: feedback.userId },
+          },
+        ],
+      },
+    ],
+  })
+
+  if (!summary) {
+    throw new Error(`Summary not found for feedback ${feedback.id}`)
+  }
+
+  const { data } = summary
+
+  data.feedbackCount += 1
+
+  await summary.update({ data })
+})
+
+/**
+ * Decrement the corresponding Summary.data.feedbackCount.
+ */
+Feedback.afterDestroy(async feedback => {
+  const summary = await Summary.findOne({
+    include: [
+      {
+        model: FeedbackTarget,
+        as: 'feedbackTarget',
+        required: true,
+        include: [
+          {
+            model: UserFeedbackTarget,
+            as: 'userFeedbackTargets',
+            required: true,
+            where: { userId: feedback.userId },
+          },
+        ],
+      },
+    ],
+  })
+
+  if (!summary) {
+    throw new Error(`Summary not found for feedback ${feedback.id}`)
+  }
+
+  const { data } = summary
+
+  data.feedbackCount -= 1
+
+  await summary.update({ data })
+})
 
 Feedback.beforeDestroy(async feedback => {
   await UserFeedbackTarget.update(
