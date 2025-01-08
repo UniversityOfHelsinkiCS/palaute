@@ -1,13 +1,36 @@
-const { Op } = require('sequelize')
-const { STRING, INTEGER, Model, BOOLEAN } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import {
+  Op,
+  STRING,
+  INTEGER,
+  Model,
+  BOOLEAN,
+  ARRAY,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
+import { sequelize } from '../db/dbConnection'
 
-class UserFeedbackTarget extends Model {
-  hasTeacherAccess() {
+class UserFeedbackTarget extends Model<
+  InferAttributes<UserFeedbackTarget>,
+  InferCreationAttributes<UserFeedbackTarget>
+> {
+  public id!: CreationOptional<number>
+  public accessStatus!: string
+  public feedbackId!: number
+  public groupIds: string[] | null
+  public userId!: string
+  public feedbackTargetId!: number
+  public feedbackOpenEmailSent!: boolean
+  public isAdministrativePerson!: boolean
+  public userCreated!: boolean
+  public notGivingFeedback!: boolean
+
+  public hasTeacherAccess(): boolean {
     return this.accessStatus === 'RESPONSIBLE_TEACHER' || this.accessStatus === 'TEACHER'
   }
 
-  hasStudentAccess() {
+  public hasStudentAccess(): boolean {
     return this.accessStatus === 'STUDENT'
   }
 }
@@ -24,8 +47,14 @@ UserFeedbackTarget.init(
       type: STRING,
       allowNull: false,
     },
-    feedbackId: INTEGER,
-    groupIds: Array(INTEGER),
+    feedbackId: {
+      type: INTEGER,
+      allowNull: true,
+    },
+    groupIds: {
+      type: ARRAY(STRING),
+      allowNull: true,
+    },
     userId: {
       type: STRING,
       allowNull: false,
@@ -74,4 +103,4 @@ UserFeedbackTarget.init(
   }
 )
 
-module.exports = UserFeedbackTarget
+export { UserFeedbackTarget }
