@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import * as datefns from 'date-fns'
 import { FeedbackData } from 'models/feedback'
-import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from 'util/config'
-import { Summary } from 'models'
-import { SummaryData, SummaryResult } from 'models/summary'
+import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
+import { Summary } from '../../models'
+import { SummaryData, SummaryResult } from '../../models/summary'
 
 const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {
