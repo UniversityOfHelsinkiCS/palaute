@@ -132,6 +132,9 @@ Feedback.afterDestroy(async feedback => {
   await summary.update({ data })
 })
 
+/**
+ * Remove the feedbackId the UserFeedbackTarget that references this feedback.
+ */
 Feedback.beforeDestroy(async feedback => {
   await UserFeedbackTarget.update(
     {
