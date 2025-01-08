@@ -47,6 +47,8 @@ Feedback.afterCreate(async feedback => {
   //@ts-expect-error fbt is not yet typescripted
   await feedbackTargetCache.set(fbt.id, cachedFbt)
 
+  // Because sequelize is soo "optimized", we need to manually mark the field as changed
+  summary.changed('data', true)
   await summary.save()
 })
 
@@ -85,6 +87,7 @@ Feedback.afterDestroy(async feedback => {
   //@ts-expect-error fbt is not yet typescripted
   await feedbackTargetCache.set(fbt.id, cachedFbt)
 
+  summary.changed('data', true)
   await summary.save()
 })
 

@@ -93,7 +93,12 @@ const FeedbackTargetSecondaryText = ({ feedbackTarget }) => {
   const feedbackPercentage = getFeedbackPercentageString(feedbackTarget)
 
   return (
-    <Typography variant="body2" color="textSecondary" component="span">
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      component="span"
+      data-cy={`my-teaching-feedback-target-secondary-text-${feedbackTarget.id}`}
+    >
       {parseISO(feedbackTarget.opensAt) < new Date() ? (
         <>
           {t('teacherView:feedbackCount', {

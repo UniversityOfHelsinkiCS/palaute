@@ -2,7 +2,6 @@ const { teacher, student } = require('../fixtures/headers')
 
 /// <reference types="Cypress" />
 
-
 describe('Feedback count', () => {
   beforeEach(() => {
     cy.createFeedbackTarget({ extraStudents: 5 })
@@ -10,13 +9,24 @@ describe('Feedback count', () => {
     cy.getTestFbtId().as('fbtId')
   })
 
-  it('Feedback count increases on feedback page when a student gives feedback', () => {
-    // Initial feedback count
+  it('Feedback count increases everywhere when a student gives feedback', () => {
     cy.loginAs(teacher)
+    // Initial feedback count on my teaching page
+    cy.visit('/courses')
+    cy.get('@fbtId')
+      .then(id => cy.get(`[data-cy="my-teaching-feedback-target-secondary-text-${id}"]`))
+      .invoke('text')
+      .then(text => {
+        cy.wrap(text).as('myTeachingInitialCount')
+      })
+
+    // Initial feedback count on feedback page
     cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
-    cy.get('[data-cy=feedback-target-feedback-count-percentage]').invoke('text').then(text => {
-      cy.wrap(text).as('initialCount')
-    })
+    cy.get('[data-cy=feedback-target-feedback-count-percentage]')
+      .invoke('text')
+      .then(text => {
+        cy.wrap(text).as('fbtPageInitialCount')
+      })
 
     // Student gives feedback
     cy.loginAs(student)
@@ -33,17 +43,30 @@ describe('Feedback count', () => {
     cy.get('[data-cy=feedback-view-give-feedback]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
 
-    // Verify feedback count increased
+    // Verify feedback count increased on feedback page
     cy.loginAs(teacher)
     cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
-    cy.get('[data-cy=feedback-target-feedback-count-percentage]').invoke('text').then(newCount => {
-      cy.get('@initialCount').then(initialCount => {
-        const newCountInt = parseInt(newCount.split("/")[0], 10)
-        console.log(newCountInt)
-        const initialCountInt = parseInt(initialCount.split("/")[0], 10)
-        console.log(initialCountInt)
-        expect(newCountInt).to.eq(initialCountInt + 1)
+    cy.get('[data-cy=feedback-target-feedback-count-percentage]')
+      .invoke('text')
+      .then(newCount => {
+        cy.get('@fbtPageInitialCount').then(initialCount => {
+          const newCountInt = parseInt(newCount.split('/')[0], 10)
+          const initialCountInt = parseInt(initialCount.split('/')[0], 10)
+          expect(newCountInt).to.eq(initialCountInt + 1)
+        })
       })
-    })
+
+    // Verify feedback count increased on my teaching page
+    cy.visit('/courses')
+    cy.get('@fbtId')
+      .then(id => cy.get(`[data-cy="my-teaching-feedback-target-secondary-text-${id}"]`))
+      .invoke('text')
+      .then(newCount => {
+        cy.get('@myTeachingInitialCount').then(initialCount => {
+          const newCountInt = parseInt(newCount.split('/')[0], 10)
+          const initialCountInt = parseInt(initialCount.split('/')[0], 10)
+          expect(newCountInt).to.eq(initialCountInt + 1)
+        })
+      })
   })
 })
