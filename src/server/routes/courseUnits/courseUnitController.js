@@ -102,11 +102,11 @@ const getCourseUnitsForTeacher = async (req, res) => {
                 },
               ],
             },
-            include: {
-              model: Summary,
-              required: false,
-              as: 'summary',
-            },
+          },
+          {
+            model: Summary,
+            required: false,
+            as: 'summary',
           },
           {
             model: CourseUnit,
@@ -181,7 +181,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
             ...feedbackTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: feedbackTarget.dataValues.feedbackResponseGiven,
             feedbackResponseSent: feedbackTarget.dataValues.feedbackResponseSent,
-            feedbackCount: Number(feedbackTarget.courseRealisation.summary?.feedbackCount ?? 0),
+            feedbackCount: feedbackTarget.summary?.feedbackCount ?? 0,
+            studentCount: feedbackTarget.summary?.studentCount ?? 0,
             feedbackTarget: _.pick(feedbackTarget, targetFields),
           }
         : null
