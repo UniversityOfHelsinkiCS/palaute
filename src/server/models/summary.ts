@@ -33,7 +33,7 @@ class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Su
   declare id: CreationOptional<number>
   declare entityId: string
   declare entityType: string
-  declare feedbackTargetId: number
+  declare feedbackTargetId: CreationOptional<number | null>
   declare startDate: string
   declare endDate: string
   declare extraOrgIds: string[]

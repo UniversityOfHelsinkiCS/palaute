@@ -100,7 +100,7 @@ const buildSummariesForPeriod = async ({
   // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
-      userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
+      // userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
     },
     include: [
       {
