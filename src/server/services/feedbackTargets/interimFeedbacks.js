@@ -11,6 +11,7 @@ const {
   UserFeedbackTarget,
   Survey,
   User,
+  Summary,
 } = require('../../models')
 
 const { logger } = require('../../util/logger')
@@ -200,6 +201,8 @@ const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
     closesAt: endDate,
   })
 
+  await Summary.update({ startDate, endDate }, { where: { feedbackTargetId: fbtId } })
+
   return updatedInterimFeedbackTarget
 }
 
@@ -215,6 +218,12 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
 
   try {
     logger.info(`Deleting interim feedback ${feedbackTarget.id}`)
+
+    await Summary.destroy({
+      where: {
+        feedbackTargetId: feedbackTarget.id,
+      },
+    })
 
     const ufbt = await UserFeedbackTarget.destroy({
       where: {

@@ -1,4 +1,4 @@
-const { FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
+const { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Summary } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccess } = require('./getAccess')
 
@@ -19,6 +19,7 @@ const getFeedbackTargetContext = async ({ feedbackTargetId, user }) => {
         required: false, // If user enrolled/teacher, userfeedback is included. Otherwise not.
       },
       { model: CourseRealisation, as: 'courseRealisation' },
+      { model: Summary, as: 'summary' },
     ],
   })
 
