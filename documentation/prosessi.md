@@ -1,5 +1,9 @@
 # Hahmotelma Norpan uudeksi prosessiksi
 
+keskusteltavaa
+- tarvitaanko/halutaanko tila ready for review
+- HY:n aikomuksena tehdä "sisäisiä releaseja", ja viedä jokainen katselmoitu pr heti tuotantoon, eli HY:llä tuotanto === QA-ympäristö
+
 ## Alustava ehdotus töiden tiloista
 
 TODO
@@ -23,7 +27,6 @@ In Progress
 In Review
 
 - Toteuttajan puolelta valmis, odottaa katselmointia tai on katselmoinnissa
-- Jos saadaan jotenkin näkyviin se, kuka ottanut katselmointiin niin hyvä
 
 Ready For QA
 
@@ -84,7 +87,7 @@ Tulos:
 
 Tulos:
 
-- _Työ asetetaan **In Review**-tilaan._
+- _Työ asetetaan **In Review** -tilaan._
 - Työlle oletuksena tarvitaan hyväksyntä (vähintään “esikatselmointi”) molemmilta tahoilta (joku kehittäjä HYltä hyväksyy ja joku TAUlta hyväksyy) että se voi siirtyä **Ready for QA** -tilaan
 - Huomioitava, että tämä ei välttämättä ole toiselta taholta kuin “esikatselmointi” jos ei voi kuin tsekata koodit, eikä järkevää mahdollisuutta ajaa koodia oleellista dataa vasten. Lopullinen katselmointi/testaus/kommentit saattavat tulla vasta kun toinen taho pääsee testaamaan koodin toiminnallisuutta kehitys - ja testiympäristössään (virkistys).
 - Vaihtoehtona työ/feature kohtaiselle katselmoinnille olisi release-katselmointi, eli toinen taho katselmoisi useamman työn kerralla vasta release vaiheessa (mietittävä flow tähän, eli että release vaatisi hyväksynnän ennen asennusta testiin tai ainakin ennen tuotantoon menoa).
@@ -102,7 +105,7 @@ Tulos:
 
 ### Tehdyt työt halutaan testiympäristöön
 
-- Tietty/tietyt** Ready For QA** -tilaiset työt halutaan testiin ja sitä kautta myöhemmin tuotantoon.
+- Tietty/tietyt **Ready For QA** -tilaiset työt halutaan testiin ja sitä kautta myöhemmin tuotantoon.
 - Oleelliset henkilöt kokoontuvat tai kommunikoivat (PO:t tai/ja kehittäjiä) ja sopivat mitä releaseen tulee
 
 Tulos:
@@ -110,7 +113,7 @@ Tulos:
 - _Release muodostettu. Tarpeen mukaan toinen taho vielä katselmoi, jos sitä ei ole tehty feature-tasolla._
 - Asennettu release testiin (toiselle taholle vähintään)
 - Merkitty johonkin release-tietoihin, että mikä taho asentanut testiin ja aikaleima.
-- Releasen työt **In QA **-tilaan. Oltava nähtävissä millä taholla missäkin tilassa?
+- Releasen työt **In QA** -tilaan. Oltava nähtävissä millä taholla missäkin tilassa?
 
 ### Tehdyt työt halutaan tuotantoon
 
