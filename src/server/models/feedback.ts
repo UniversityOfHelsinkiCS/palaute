@@ -10,6 +10,7 @@ import {
   INTEGER,
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
+import UserFeedbackTarget from './userFeedbackTarget'
 
 export type QuestionAnswer = {
   questionId: number
@@ -69,5 +70,14 @@ Feedback.init(
     sequelize,
   }
 )
+
+Feedback.beforeDestroy(async feedback => {
+  await UserFeedbackTarget.update(
+    {
+      feedbackId: null,
+    },
+    { where: { feedbackId: feedback.id } }
+  )
+})
 
 export default Feedback

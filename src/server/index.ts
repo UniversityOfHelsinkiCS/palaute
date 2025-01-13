@@ -14,7 +14,6 @@ import updaterClient from './util/updaterClient'
 require('dotenv').config()
 require('express-async-errors')
 require('./models/modelExtensions')
-require('./models/hooks')
 require('./util/i18n')
 
 const app = express()
