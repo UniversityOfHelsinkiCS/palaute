@@ -40,9 +40,7 @@ export const getGroupedCourseUnits = courseUnits => {
 
 export const formatDate = date => lightFormat(new Date(date), 'dd.MM.yyyy')
 
-export const getFeedbackPercentageString = feedbackTarget => {
-  const { feedbackCount, studentCount } = feedbackTarget
-
+export const getFeedbackPercentageString = (feedbackCount, studentCount) => {
   if (!feedbackCount || !studentCount) {
     return '0%'
   }

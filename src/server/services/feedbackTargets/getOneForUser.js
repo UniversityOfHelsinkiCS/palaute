@@ -46,7 +46,7 @@ const populateGroupInformation = feedbackTarget => {
  * - responsibleTeachers
  * - studentListVisible
  * @param {number} id
- * @returns {object}
+ * @returns {Promise<object>}
  */
 const getFromDb = async id => {
   const fbt = await FeedbackTarget.findByPk(id, {
@@ -143,7 +143,6 @@ const getFromDb = async id => {
       'lastName'
     )
   )
-  fbt.set('studentCount', fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'STUDENT').length)
   fbt.set('continuousFeedbackCount', fbt.continuousFeedbacks.length)
   fbt.set('tags', _.uniqBy((fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []), 'id'))
   populateGroupInformation(fbt)

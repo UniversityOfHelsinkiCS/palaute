@@ -40,7 +40,8 @@ const CourseUnitAccordion = ({ courseUnit }) => {
   const courseName = getLanguageValue(name, i18n.language)
   const latestFeedbackTarget = getLatestFeedbackTarget(courseRealisations)
 
-  const { id, feedbackResponseGiven, feedbackResponseSent, feedbackCount, isEnded, isOld } = latestFeedbackTarget
+  const { id, feedbackResponseGiven, feedbackResponseSent, summary, isEnded, isOld } = latestFeedbackTarget
+  const feedbackCount = summary?.data?.feedbackCount ?? 0
 
   let continuousFeedbackTargetFound = false
   let ongoingFeedbackTargetFound = false

@@ -98,13 +98,17 @@ const getInterimFeedbackTargets = async (parentId, user) => {
       'hidden',
       'feedbackType',
       'publicQuestionIds',
-      'feedbackCount',
       'feedbackResponse',
       'feedbackResponseEmailSent',
       'opensAt',
       'closesAt',
     ],
     include: [
+      {
+        model: Summary,
+        as: 'summary',
+        required: false,
+      },
       {
         model: CourseUnit,
         as: 'courseUnit',
@@ -115,7 +119,7 @@ const getInterimFeedbackTargets = async (parentId, user) => {
         as: 'courseRealisation',
         required: true,
       },
-      {
+      /*{
         model: UserFeedbackTarget,
         attributes: ['id'],
         as: 'students',
@@ -126,7 +130,7 @@ const getInterimFeedbackTargets = async (parentId, user) => {
           attributes: ['studentNumber'],
           as: 'user',
         },
-      },
+      },*/
       {
         model: UserFeedbackTarget,
         attributes: ['id', 'userId', 'accessStatus'],
