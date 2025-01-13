@@ -3,6 +3,10 @@ const { ApplicationError } = require('../../util/customErrors')
 const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
 const { validateFeedback } = require('../../util/feedbackValidator')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
+const {
+  updateSummaryAfterFeedbackCreated,
+  updateSummaryAfterFeedbackDestroyed,
+} = require('../../services/summary/updateSummaryOnFeedback')
 
 const create = async (req, res) => {
   const { user } = req
@@ -35,6 +39,9 @@ const create = async (req, res) => {
 
   userFeedbackTarget.feedbackId = newFeedback.id
   await userFeedbackTarget.save()
+
+  // Update summary
+  await updateSummaryAfterFeedbackCreated(newFeedback)
 
   return res.send(newFeedback)
 }
@@ -110,6 +117,9 @@ const destroy = async (req, res) => {
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
   await feedback.destroy()
+
+  // Update summary
+  await updateSummaryAfterFeedbackDestroyed(userFeedbackTarget.feedbackTargetId, feedback)
 
   return res.sendStatus(200)
 }

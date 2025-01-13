@@ -457,6 +457,7 @@ const buildSummariesForPeriod = async ({
   // Write all summaries to db.
   await Summary.bulkCreate(allSummaries, {
     transaction,
+    ignoreDuplicates: true,
   })
 }
 
