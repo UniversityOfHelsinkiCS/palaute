@@ -90,7 +90,7 @@ const FeedbackTargetSecondaryText = ({ feedbackTarget }) => {
 
   const { feedbackCount, studentCount } = feedbackTarget
 
-  const feedbackPercentage = getFeedbackPercentageString(feedbackTarget)
+  const feedbackPercentage = getFeedbackPercentageString(feedbackCount, studentCount)
 
   return (
     <Typography

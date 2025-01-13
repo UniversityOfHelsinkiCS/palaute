@@ -33,8 +33,6 @@ const create = async (req, res) => {
     degreeStudyRight,
   })
 
-  await feedbackTarget.increment('feedbackCount', { by: 1 })
-
   userFeedbackTarget.feedbackId = newFeedback.id
   await userFeedbackTarget.save()
 
@@ -111,7 +109,6 @@ const destroy = async (req, res) => {
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
-  await feedbackTarget.decrement('feedbackCount', { by: 1 })
   await feedback.destroy()
 
   return res.sendStatus(200)

@@ -296,7 +296,6 @@ const getSurveysForOrganisation = async organisationId => {
       'hidden',
       'feedbackType',
       'publicQuestionIds',
-      'feedbackCount',
       'feedbackResponse',
       'feedbackResponseEmailSent',
       'opensAt',
