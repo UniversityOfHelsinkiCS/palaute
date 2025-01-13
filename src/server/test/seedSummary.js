@@ -114,7 +114,6 @@ const initTestSummary = async ({ user }) => {
     typeId: testData.TEST_COURSE_REALISATION_ID,
     opensAt: startOfDay(new Date('2023-08-01')),
     closesAt: startOfDay(new Date('2023-12-31')),
-    feedbackCount: 2,
     hidden: false,
   })
 
