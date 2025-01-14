@@ -2,6 +2,7 @@
 
 keskusteltavaa
 - tarvitaanko/halutaanko tila ready for review
+- halutaanko tila **new** mihin uudet tiketit menevät PO:iden priorisoitavaksi?
 - HY:n aikomuksena tehdä "sisäisiä releaseja", ja viedä jokainen katselmoitu pr heti tuotantoon, eli HY:llä tuotanto === QA-ympäristö
 
 ## Alustava ehdotus töiden tiloista
@@ -27,6 +28,7 @@ In Progress
 In Review
 
 - Toteuttajan puolelta valmis, odottaa katselmointia tai on katselmoinnissa
+  - tiketistä on linkki vastaavaan PR:n  
 
 Ready For QA
 
@@ -88,6 +90,7 @@ Tulos:
 Tulos:
 
 - _Työ asetetaan **In Review** -tilaan._
+  - työtä vastaavasta tiketistä linkki pull requestiin
 - Työlle oletuksena tarvitaan hyväksyntä (vähintään “esikatselmointi”) molemmilta tahoilta (joku kehittäjä HYltä hyväksyy ja joku TAUlta hyväksyy) että se voi siirtyä **Ready for QA** -tilaan
 - Huomioitava, että tämä ei välttämättä ole toiselta taholta kuin “esikatselmointi” jos ei voi kuin tsekata koodit, eikä järkevää mahdollisuutta ajaa koodia oleellista dataa vasten. Lopullinen katselmointi/testaus/kommentit saattavat tulla vasta kun toinen taho pääsee testaamaan koodin toiminnallisuutta kehitys - ja testiympäristössään (virkistys).
 - Vaihtoehtona työ/feature kohtaiselle katselmoinnille olisi release-katselmointi, eli toinen taho katselmoisi useamman työn kerralla vasta release vaiheessa (mietittävä flow tähän, eli että release vaatisi hyväksynnän ennen asennusta testiin tai ainakin ennen tuotantoon menoa).
