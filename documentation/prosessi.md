@@ -33,7 +33,7 @@ In Review
 
 Ready For QA
 
-- Katselmoinnin läpi mennyt työ, odottaa releasea ja asentamista testiin.
+- Katselmoinnin läpi mennyt työ (joka mergetty masteriin), odottaa releasea ja asentamista testiin.
 
 In QA
 
@@ -106,6 +106,7 @@ Tulos:
 Tulos:
 
 - _Työ siirtyy **Ready For QA** -tilaan_
+- koodi mergattu masteriin
 
 ### Tehdyt työt halutaan testiympäristöön
 
