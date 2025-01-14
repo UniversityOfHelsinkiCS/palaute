@@ -3,6 +3,7 @@
 keskusteltavaa
 - tarvitaanko/halutaanko tila ready for review
 - halutaanko tila **new** mihin uudet tiketit menevät PO:iden priorisoitavaksi?
+- **in review** -tilaisiin tiketteihin linkki PR:n
 - HY:n aikomuksena tehdä "sisäisiä releaseja", ja viedä jokainen katselmoitu pr heti tuotantoon, eli HY:llä tuotanto === QA-ympäristö
 
 ## Alustava ehdotus töiden tiloista
