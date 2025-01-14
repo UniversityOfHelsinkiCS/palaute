@@ -604,7 +604,7 @@
     "qrCodeHelpText": "Easiest way to share the QR-code is by screenshotting it",
     "deleteTeacherConfirmation": "Delete {{name}} from teachers?",
     "noFeedbackResponseYet": "The teacher of the course has not yet given counter feedback",
-    "noAccess": "We couldn't find your enrolment for this course. If you enrollent recently, you might need to wait for 1-2 hours.",
+    "noAccess": "We couldn't find your enrolment for this course. If you have enrolled recently, you might need to wait for 1-2 hours.",
     "noAccessOldCourse": "The feedback period ended over a year ago, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
     "noAccessEndedCourse": "The feedback period has ended, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
     "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct",
