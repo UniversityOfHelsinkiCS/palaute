@@ -152,8 +152,7 @@
     "continuousFeedbackInfo": "You can give continuous feedback while the course is ongoing. This feedback is anonymous."
   },
   "teacherView": {
-    "mainHeading": "My teaching",
-    "mainHeadingV2": "My surveys",
+    "mainHeading": "My surveys",
     "copyLink": "Copy answer form link",
     "copyResponseLink": "Copy link to counter feedback",
     "copied": "Link copied to clipboard",
