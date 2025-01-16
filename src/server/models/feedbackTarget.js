@@ -6,7 +6,7 @@ const _ = require('lodash')
 const Organisation = require('./organisation')
 const CourseRealisation = require('./courseRealisation')
 const User = require('./user')
-const UserFeedbackTarget = require('./userFeedbackTarget')
+const { UserFeedbackTarget } = require('./userFeedbackTarget')
 const { sequelize } = require('../db/dbConnection')
 
 class FeedbackTarget extends Model {
