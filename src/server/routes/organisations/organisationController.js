@@ -3,9 +3,7 @@ const { Router } = require('express')
 const { Op } = require('sequelize')
 
 const { formatActivityPeriod } = require('../../util/common')
-const {
-  getOrganisationsList,
-} = require('../../services/organisations/getOrganisationsList')
+const { getOrganisationsList } = require('../../services/organisations/getOrganisationsList')
 const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
 const {
   Organisation,
@@ -22,16 +20,12 @@ const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
 const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
 const organisationSurveyRouter = require('./organisationSurveyController')
-const {
-  getOrganisationData: getOrganisationDataFromJami,
-} = require('../../util/jami')
+const { getOrganisationData: getOrganisationDataFromJami } = require('../../util/jami')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
 
-  return _.uniq(
-    updatedCourseCodes.filter((c) => organisationCourseCodes.includes(c))
-  )
+  return _.uniq(updatedCourseCodes.filter(c => organisationCourseCodes.includes(c)))
 }
 
 const getOrganisations = async (req, res) => {
@@ -69,11 +63,7 @@ const updateOrganisation = async (req, res) => {
   const { user, body } = req
   const { code } = req.params
 
-  const { organisation, hasAdminAccess } = await getAccessAndOrganisation(
-    user,
-    code,
-    { write: true }
-  )
+  const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, { write: true })
 
   const updates = _.pick(body, [
     'studentListVisible',
@@ -83,21 +73,12 @@ const updateOrganisation = async (req, res) => {
     'publicQuestionIds',
   ])
 
-  if (
-    !hasAdminAccess &&
-    (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)
-  ) {
-    throw new ApplicationError(
-      403,
-      'Course codes can only be updated by organisation admins'
-    )
+  if (!hasAdminAccess && (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)) {
+    return ApplicationError.Forbidden('Course codes can only be updated by organisation admins')
   }
 
   if (updates.disabledCourseCodes) {
-    updates.disabledCourseCodes = await getUpdatedCourseCodes(
-      updates.disabledCourseCodes,
-      organisation
-    )
+    updates.disabledCourseCodes = await getUpdatedCourseCodes(updates.disabledCourseCodes, organisation)
   }
 
   if (updates.studentListVisibleCourseCodes) {
@@ -120,10 +101,9 @@ const getOrganisationByCode = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  const { organisation, hasReadAccess, hasWriteAccess, hasAdminAccess } =
-    await getAccessAndOrganisation(user, code, {
-      read: true,
-    })
+  const { organisation, hasReadAccess, hasWriteAccess, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
+    read: true,
+  })
 
   const theOrganisation = await Organisation.findOne({
     where: {
@@ -138,7 +118,7 @@ const getOrganisationByCode = async (req, res) => {
     ],
   })
 
-  const tags = _.orderBy(await theOrganisation.getTags(), (tag) => tag.name?.fi)
+  const tags = _.orderBy(await theOrganisation.getTags(), tag => tag.name?.fi)
 
   const publicOrganisation = {
     ...organisation.toJSON(),
@@ -159,7 +139,7 @@ const getOrganisationLogs = async (req, res) => {
   const { code } = req.params
 
   if (!user.isAdmin) {
-    throw new ApplicationError('Forbidden', 403)
+    return ApplicationError.Forbidden()
   }
 
   const { organisationLogs } = await Organisation.findOne({
@@ -167,9 +147,7 @@ const getOrganisationLogs = async (req, res) => {
       code,
     },
     attributes: [],
-    order: [
-      [{ model: OrganisationLog, as: 'organisationLogs' }, 'createdAt', 'DESC'],
-    ],
+    order: [[{ model: OrganisationLog, as: 'organisationLogs' }, 'createdAt', 'DESC']],
     include: {
       model: OrganisationLog,
       as: 'organisationLogs',
@@ -190,12 +168,10 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
 
   const organisationAccess = await user.getOrganisationAccess()
 
-  const access = organisationAccess.filter(
-    (org) => org.organisation.code === code
-  )
+  const access = organisationAccess.filter(org => org.organisation.code === code)
 
   if (access.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
+    return ApplicationError.Forbidden()
   }
 
   const codesWithIds = await getOpenFeedbackByOrganisation(code)
@@ -211,12 +187,10 @@ const findFeedbackTargets = async (req, res) => {
 
   const { search } = query
 
-  const access = organisationAccess.filter(
-    (org) => org.organisation.code === code
-  )
+  const access = organisationAccess.filter(org => org.organisation.code === code)
 
   if (access.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
+    return ApplicationError.Forbidden()
   }
 
   const activityPeriod = formatActivityPeriod(query)
@@ -239,18 +213,12 @@ const findFeedbackTargets = async (req, res) => {
                   [Op.or]: [
                     {
                       startDate: {
-                        [Op.between]: [
-                          activityPeriod.startDate,
-                          activityPeriod.endDate,
-                        ],
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
                       },
                     },
                     {
                       endDate: {
-                        [Op.between]: [
-                          activityPeriod.startDate,
-                          activityPeriod.endDate,
-                        ],
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
                       },
                     },
                     {
@@ -288,7 +256,7 @@ const findFeedbackTargets = async (req, res) => {
     },
   })
 
-  res.send(courseUnits)
+  return res.send(courseUnits)
 }
 
 const router = Router()
