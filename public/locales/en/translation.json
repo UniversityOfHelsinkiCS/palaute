@@ -39,6 +39,7 @@
     "export": "Download",
     "exportCsv": "Download CSV",
     "exportXLSX": "Download XLSX",
+    "exportSisuAttainmentCSV": "Download Sisu Assessment CSV",
     "exportPdf": "Download PDF",
     "combineCSV": "Combine with Sisu CSV",
     "downloadCSV": "Download file",

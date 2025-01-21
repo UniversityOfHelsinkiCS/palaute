@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { writeFileXLSX, utils } from 'xlsx'
+import { writeFileXLSX, writeFile, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
+import { CSVLink, CSVDownload } from 'react-csv'
 
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
@@ -29,6 +30,28 @@ const getFeedbackText = (feedbackStatusAvailable, feedbackGiven, t) => {
   if (!feedbackStatusAvailable) return t('common:feedbackHidden')
 
   return feedbackGiven ? t('common:feedbackGiven') : t('common:feedbackNotGiven')
+}
+
+const getCourseRealisationLang = courseRealisation => {
+  let courseRealisationLang
+  // check if courseRealisation.teachingLanguage is set
+  if (courseRealisation.teachingLanguages) {
+    if (courseRealisation.teachingLanguages.length > 0) {
+      if (courseRealisation.teachingLanguages.includes('fi')) {
+        courseRealisationLang = 'fi'
+      } else if (courseRealisation.teachingLanguages.includes('en')) {
+        courseRealisationLang = 'en'
+      } else if (courseRealisation.teachingLanguages.includes('sv')) {
+        courseRealisationLang = 'sv'
+      }
+    }
+  }
+
+  if (!courseRealisationLang) {
+    courseRealisationLang = 'fi'
+  }
+
+  return courseRealisationLang
 }
 
 const ExportXLSX = ({ students, fileName }) => {
@@ -61,6 +84,73 @@ const ExportXLSX = ({ students, fileName }) => {
   )
 }
 
+const ExportSisuAttainmentCSV = ({ students, fileName }) => {
+  const { t } = useTranslation()
+
+  const headers = [
+    'firstName',
+    'lastName',
+    'studentNumber',
+    'grade',
+    'credits',
+    'assessmentDate',
+    'completionLanguage',
+    'comment',
+  ]
+
+  const a = 'jep'
+  //add quotes to the a
+  const b = `"${a}"`
+
+  const updatedRows = []
+  for (const student of students) {
+    if (student.feedbackIsGiven) {
+      const newRow = [
+        student.firstName,
+        student.lastName,
+        student.studentNumber,
+        'hyväksytty',
+        '0',
+        `"${student.courseRealisationEndDate}"`,
+        student.courseRealisationLang,
+        '',
+      ]
+      updatedRows.push(newRow)
+    }
+  }
+
+  const data = [headers, ...updatedRows]
+
+  const worksheet = utils.aoa_to_sheet(data)
+
+  const opts = {
+    FS: ';',
+    forceQuotes: true,
+    strip: true,
+    blankrows: true,
+  }
+  const csvsheet = utils.sheet_to_csv(worksheet, opts)
+
+  console.log('csvsheet: ', csvsheet)
+
+  console.log('data: ', data)
+
+  const workbook = utils.book_new()
+  utils.book_append_sheet(workbook, worksheet, fileName)
+
+  return (
+    <CSVLink data={data} filename={`${fileName}.csv`}>
+      <Button sx={styles.button} variant="contained">
+        {t('common:exportSisuAttainmentCSV')}
+      </Button>
+    </CSVLink>
+  )
+}
+
+//<CSVLink  data={csvsheet} filename={"my-file.csv"}>
+//       {t('common:exportSisuAttainmentCSV')}
+//     </CSVLink>
+
 const StudentTable = ({ students, feedbackTarget }) => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
@@ -92,6 +182,27 @@ const StudentTable = ({ students, feedbackTarget }) => {
     'yyyyMMdd'
   )}student`
 
+  const courseRealisationLang = getCourseRealisationLang(feedbackTarget.courseRealisation)
+
+  const courseRealisationEndDate = format(parseISO(feedbackTarget.courseRealisation.endDate), 'dd.MM.yyyy')
+
+  const sisuData = useMemo(
+    () =>
+      orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
+        firstName,
+        lastName,
+        studentNumber,
+        email,
+        feedbackGiven: getFeedbackText(feedbackStatusAvailable, feedbackGiven, t),
+        feedbackIsGiven: feedbackGiven,
+        courseRealisationEndDate,
+        courseRealisationLang,
+      })),
+    [students]
+  )
+
+  const sisufileName = `${feedbackTarget.courseUnit.courseCode}_sisu`
+
   return (
     <CardSection
       title={
@@ -99,6 +210,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
           {t('feedbackTargetView:studentsWithFeedbackTab')}
           <Box mr="auto" />
           <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
+          <ExportSisuAttainmentCSV students={sisuData} fileName={sisufileName} showFeedback={feedbackStatusAvailable} />
           {feedbackStatusAvailable && (
             <Button
               endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
