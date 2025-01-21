@@ -111,7 +111,7 @@ const ExportSisuAttainmentCSV = ({ students, fileName }) => {
         student.studentNumber,
         'hyväksytty',
         '0',
-        `"${student.courseRealisationEndDate}"`,
+        student.courseRealisationEndDate,
         student.courseRealisationLang,
         '',
       ]
@@ -121,23 +121,6 @@ const ExportSisuAttainmentCSV = ({ students, fileName }) => {
 
   const data = [headers, ...updatedRows]
 
-  const worksheet = utils.aoa_to_sheet(data)
-
-  const opts = {
-    FS: ';',
-    forceQuotes: true,
-    strip: true,
-    blankrows: true,
-  }
-  const csvsheet = utils.sheet_to_csv(worksheet, opts)
-
-  console.log('csvsheet: ', csvsheet)
-
-  console.log('data: ', data)
-
-  const workbook = utils.book_new()
-  utils.book_append_sheet(workbook, worksheet, fileName)
-
   return (
     <CSVLink data={data} filename={`${fileName}.csv`}>
       <Button sx={styles.button} variant="contained">
@@ -146,10 +129,6 @@ const ExportSisuAttainmentCSV = ({ students, fileName }) => {
     </CSVLink>
   )
 }
-
-//<CSVLink  data={csvsheet} filename={"my-file.csv"}>
-//       {t('common:exportSisuAttainmentCSV')}
-//     </CSVLink>
 
 const StudentTable = ({ students, feedbackTarget }) => {
   const [dropZoneVisible, setDropZoneVisible] = useState(false)
