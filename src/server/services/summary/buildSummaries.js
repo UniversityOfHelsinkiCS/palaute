@@ -455,10 +455,7 @@ const buildSummariesForPeriod = async ({
     .map(summary => ({ ...summary, startDate, endDate }))
 
   // Write all summaries to db.
-  await Summary.bulkCreate(allSummaries, {
-    transaction,
-    ignoreDuplicates: true,
-  })
+  await Summary.bulkCreate(allSummaries, { transaction })
 }
 
 const summariesHaveToBeFullyRebuilt = async () => {

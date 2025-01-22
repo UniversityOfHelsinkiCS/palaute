@@ -22,8 +22,6 @@ export const updateSummaryAfterFeedbackCreated = async (feedback: Feedback) => {
   //@ts-expect-error fbt is not yet typescripted
   const summary = fbt?.summary as Summary
 
-  console.log('Giving feedback', fbt.toJSON(), summary?.toJSON())
-
   if (!summary) {
     throw new Error(`Summary not found for feedback ${feedback.id}`)
   }
@@ -39,8 +37,8 @@ export const updateSummaryAfterFeedbackCreated = async (feedback: Feedback) => {
   }
 
   // Because sequelize is soo "optimized", we need to manually mark the field as changed
-  summary.changed('data', true)
-  await summary.save()
+  //@ts-expect-error fbt is not yet typescripted
+  await Summary.update({ data: summary.data }, { where: { feedbackTargetId: fbt.id } })
 }
 
 export const updateSummaryAfterFeedbackDestroyed = async (feedbackTargetId: number, feedback: Feedback) => {
@@ -60,6 +58,6 @@ export const updateSummaryAfterFeedbackDestroyed = async (feedbackTargetId: numb
     await feedbackTargetCache.set(feedbackTargetId, cachedFbt)
   }
 
-  summary.changed('data', true)
-  await summary.save()
+  //@ts-expect-error fbt is not yet typescripted
+  await Summary.update({ data: summary.data }, { where: { feedbackTargetId: fbt.id } })
 }
