@@ -1,4 +1,4 @@
-const UserFeedbackTarget = require('../../models').default
+const { UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
