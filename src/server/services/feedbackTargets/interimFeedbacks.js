@@ -119,18 +119,6 @@ const getInterimFeedbackTargets = async (parentId, user) => {
         as: 'courseRealisation',
         required: true,
       },
-      /*{
-        model: UserFeedbackTarget,
-        attributes: ['id'],
-        as: 'students',
-        required: false,
-        where: { accessStatus: 'STUDENT' },
-        include: {
-          model: User,
-          attributes: ['studentNumber'],
-          as: 'user',
-        },
-      },*/
       {
         model: UserFeedbackTarget,
         attributes: ['id', 'userId', 'accessStatus'],
