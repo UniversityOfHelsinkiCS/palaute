@@ -58,6 +58,5 @@ export const updateSummaryAfterFeedbackDestroyed = async (feedbackTargetId: numb
     await feedbackTargetCache.set(feedbackTargetId, cachedFbt)
   }
 
-  //@ts-expect-error fbt is not yet typescripted
-  await Summary.update({ data: summary.data }, { where: { feedbackTargetId: fbt.id } })
+  await Summary.update({ data: summary.data }, { where: { feedbackTargetId } })
 }
