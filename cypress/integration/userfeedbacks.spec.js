@@ -38,7 +38,7 @@ describe('User feedbacks view', () => {
       .should('not.exist')
   })
 
-  it.only('Feedback is visible immediately after being given', () => {
+  it('Feedback is visible immediately after being given', () => {
     cy.loginAs(student)
     cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
