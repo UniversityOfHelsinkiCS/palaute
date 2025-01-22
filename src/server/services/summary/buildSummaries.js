@@ -99,9 +99,6 @@ const buildSummariesForPeriod = async ({
 
   // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
   const feedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      // userCreated: false, // Custom feedbacks may cause issues and dont contribute to stats anyways.
-    },
     include: [
       {
         model: CourseRealisation,
@@ -248,6 +245,7 @@ const buildSummariesForPeriod = async ({
     feedbackTargetsSummaries.push({
       entityId: fbt.id.toString(),
       entityType: 'feedbackTarget',
+      userCreated: fbt.userCreated,
       feedbackTargetId: fbt.id,
       data: {
         result,
@@ -274,7 +272,10 @@ const buildSummariesForPeriod = async ({
     .map(([curId, feedbackTargets]) => ({
       entityId: curId,
       entityType: 'courseRealisation',
-      feedbackTargets: _.uniqBy(feedbackTargets, 'feedbackTargetId'),
+      feedbackTargets: _.uniqBy(
+        feedbackTargets.filter(fbt => !fbt.userCreated),
+        'feedbackTargetId'
+      ),
     }))
     .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
 

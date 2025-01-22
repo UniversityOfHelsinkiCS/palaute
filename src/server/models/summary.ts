@@ -63,7 +63,6 @@ Summary.init(
     feedbackTargetId: {
       type: INTEGER,
       allowNull: true,
-      unique: true,
     },
     startDate: {
       type: DATEONLY,
