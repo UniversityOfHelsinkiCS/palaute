@@ -250,6 +250,7 @@ CourseUnit.hasMany(Summary, { sourceKey: 'groupId', foreignKey: 'entityId', as: 
 
 Summary.belongsTo(FeedbackTarget, { foreignKey: 'feedbackTargetId', as: 'feedbackTarget' })
 FeedbackTarget.hasOne(Summary, { foreignKey: 'feedbackTargetId', as: 'summary' })
+FeedbackTarget.hasMany(Summary, { foreignKey: 'feedbackTargetId', as: 'summaries' })
 
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
 CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
