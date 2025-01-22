@@ -18,7 +18,17 @@ if (process.env.NODE_ENV !== 'test') {
 if (!inProduction) {
   const devFormat = printf(
     // eslint-disable-next-line @typescript-eslint/no-shadow
-    ({ level, message, timestamp, ...rest }) => `${timestamp} ${level}: ${message} ${JSON.stringify(rest)}`
+    ({ level, message, timestamp, ...rest }) => {
+      let restMsg = ''
+      try {
+        restMsg = JSON.stringify(rest)
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.error('Failed to stringify log message', rest)
+      }
+      const msg = `${timestamp} ${level}: ${message} ${restMsg}`
+      return msg
+    }
   )
 
   transports.push(
