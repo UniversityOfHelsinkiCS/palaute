@@ -341,7 +341,7 @@ describe('Students', () => {
     // New tabs are rendered when feedback was given
     cy.get('[data-cy="interim-feedback-target-edit-feedback-tab"]').should('exist')
     cy.get('[data-cy="interim-feedback-target-results-tab"]').should('exist').click()
-    cy.get('[data-cy="notEnoughFeedbacks"]').should('exist')
+    cy.contains('Multiple choice questions')
 
     cy.url().should('include', '/results')
 
