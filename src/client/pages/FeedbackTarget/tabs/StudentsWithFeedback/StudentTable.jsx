@@ -98,10 +98,6 @@ const ExportSisuAttainmentCSV = ({ students, fileName }) => {
     'comment',
   ]
 
-  const a = 'jep'
-  //add quotes to the a
-  const b = `"${a}"`
-
   const updatedRows = []
   for (const student of students) {
     if (student.feedbackIsGiven) {
