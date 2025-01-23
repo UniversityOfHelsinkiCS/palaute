@@ -64,7 +64,7 @@ const createOrganisationSurvey = async (req, res) => {
     endDate,
     studentNumbers: initialStudentNumbers,
     teacherIds: initialTeacherIds,
-    courseIds: initialCourseIds,
+    courseRealisationIds,
   } = req.body
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
@@ -73,7 +73,7 @@ const createOrganisationSurvey = async (req, res) => {
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
-  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(initialCourseIds)
+  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
 
   // Remove duplicates from studentNumbers and teacherIds
   const studentNumbers = [...new Set([...initialStudentNumbers])]
@@ -109,7 +109,7 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { id } = req.params
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
 
   updates.studentNumbers = [...new Set([...updates.studentNumbers])]
 
