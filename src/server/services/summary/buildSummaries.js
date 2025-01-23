@@ -265,17 +265,16 @@ const buildSummariesForPeriod = async ({
     })
   } // FBTs are now done and we could write FBTs summaries to db. But we leave db operations to the end.
 
+  const basicFeedbackTargetSummaries = feedbackTargetsSummaries.filter(fbt => !fbt.userCreated)
+
   // Make the initial CUR summaries.
   const courseRealisationSummaries = Object.entries(
-    _.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseRealisationId)
+    _.groupBy(basicFeedbackTargetSummaries, fbtsum => fbtsum.courseRealisationId)
   )
     .map(([curId, feedbackTargets]) => ({
       entityId: curId,
       entityType: 'courseRealisation',
-      feedbackTargets: _.uniqBy(
-        feedbackTargets.filter(fbt => !fbt.userCreated),
-        'feedbackTargetId'
-      ),
+      feedbackTargets: _.uniqBy(feedbackTargets, 'feedbackTargetId'),
     }))
     .flatMap(cu => getExtraOrgVariants(cu, separateOrgId))
 
@@ -289,7 +288,7 @@ const buildSummariesForPeriod = async ({
   }
 
   // Make the initial CU summaries.
-  const courseUnitSummaries = Object.entries(_.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseUnitId))
+  const courseUnitSummaries = Object.entries(_.groupBy(basicFeedbackTargetSummaries, fbtsum => fbtsum.courseUnitId))
     .map(([cuId, feedbackTargets]) => ({
       entityId: cuId,
       entityType: 'courseUnit',
@@ -308,7 +307,7 @@ const buildSummariesForPeriod = async ({
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
   const courseUnitGroupSummaries = Object.entries(
-    _.groupBy(feedbackTargetsSummaries, fbtsum => fbtsum.courseUnitGroupId)
+    _.groupBy(basicFeedbackTargetSummaries, fbtsum => fbtsum.courseUnitGroupId)
   )
     .map(([cuGroupId, feedbackTargets]) => ({
       entityId: cuGroupId,
@@ -328,14 +327,14 @@ const buildSummariesForPeriod = async ({
 
   // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
   const tagSummaries = _.uniqBy(
-    feedbackTargetsSummaries.flatMap(fbtsum => [...fbtsum.curTags, ...fbtsum.cuTags]),
+    basicFeedbackTargetSummaries.flatMap(fbtsum => [...fbtsum.curTags, ...fbtsum.cuTags]),
     'id'
   )
     .map(tag => ({
       entityId: prefixTagId(tag.id),
       entityType: 'tag',
       feedbackTargets: _.uniqBy(
-        feedbackTargetsSummaries.filter(
+        basicFeedbackTargetSummaries.filter(
           fbtsum => fbtsum.curTags.some(t => t.id === tag.id) || fbtsum.cuTags.some(t => t.id === tag.id)
         ),
         'feedbackTargetId'
@@ -353,7 +352,7 @@ const buildSummariesForPeriod = async ({
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
-  const orgIds = _.uniq(feedbackTargetsSummaries.flatMap(fbtsum => [...fbtsum.cuOrgIds, ...fbtsum.curOrgIds]))
+  const orgIds = _.uniq(basicFeedbackTargetSummaries.flatMap(fbtsum => [...fbtsum.cuOrgIds, ...fbtsum.curOrgIds]))
   const orgs = await Organisation.findAll({ attributes: ['id', 'parentId'], where: { id: orgIds } })
   const orgSummaries = orgs.map(org => ({
     entityId: org.id,
@@ -361,7 +360,9 @@ const buildSummariesForPeriod = async ({
     parentId: org.parentId,
     parent: null,
     feedbackTargets: _.uniqBy(
-      feedbackTargetsSummaries.filter(fbtsum => fbtsum.curOrgIds.includes(org.id) || fbtsum.cuOrgIds.includes(org.id)),
+      basicFeedbackTargetSummaries.filter(
+        fbtsum => fbtsum.curOrgIds.includes(org.id) || fbtsum.cuOrgIds.includes(org.id)
+      ),
       'feedbackTargetId'
     ),
   }))
