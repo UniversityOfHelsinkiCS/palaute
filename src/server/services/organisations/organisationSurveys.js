@@ -181,6 +181,7 @@ const getOrganisationSurveyCourseStudents = async courseIds => {
             as: 'feedbackTarget',
             required: true,
             where: {
+              userCreated: false,
               courseRealisationId: { [Op.in]: courseIds },
             },
             attributes: ['id', 'courseRealisationId'],
