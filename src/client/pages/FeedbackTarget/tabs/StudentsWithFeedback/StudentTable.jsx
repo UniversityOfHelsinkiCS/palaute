@@ -87,6 +87,8 @@ const ExportXLSX = ({ students, fileName }) => {
 const ExportSisuAttainmentCSV = ({ students, fileName }) => {
   const { t } = useTranslation()
 
+  //csv description: https://funidata.atlassian.net/wiki/spaces/OTM/pages/1836661/Arviointi#Arviointi-ArvioinnintuominenCSV%3An%C3%A4
+
   const headers = [
     'firstName',
     'lastName',
