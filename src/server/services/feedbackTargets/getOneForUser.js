@@ -10,6 +10,7 @@ const {
   Tag,
   ContinuousFeedback,
   Group,
+  Summary,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./cache')
@@ -45,7 +46,7 @@ const populateGroupInformation = feedbackTarget => {
  * - responsibleTeachers
  * - studentListVisible
  * @param {number} id
- * @returns {object}
+ * @returns {Promise<object>}
  */
 const getFromDb = async id => {
   const fbt = await FeedbackTarget.findByPk(id, {
@@ -67,6 +68,10 @@ const getFromDb = async id => {
           as: 'user',
           attributes: ['id', 'firstName', 'lastName', 'email'],
         },
+      },
+      {
+        model: Summary,
+        as: 'summary',
       },
       {
         model: ContinuousFeedback,
@@ -138,7 +143,6 @@ const getFromDb = async id => {
       'lastName'
     )
   )
-  fbt.set('studentCount', fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'STUDENT').length)
   fbt.set('continuousFeedbackCount', fbt.continuousFeedbacks.length)
   fbt.set('tags', _.uniqBy((fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []), 'id'))
   populateGroupInformation(fbt)

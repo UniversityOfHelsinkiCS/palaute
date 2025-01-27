@@ -39,16 +39,17 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const {
     opensAt,
     closesAt,
-    feedbackCount,
     feedbackResponse,
     feedbackResponseEmailSent,
-    students,
+    summary,
     userFeedbackTargets: teachers,
   } = interimFeedback
 
+  const feedbackCount = summary?.data?.feedbackCount || 0
+  const studentCount = summary?.data?.studentCount || 0
+
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
-  const studentCount = students.length
-  const allowDelete = interimFeedback.feedbackCount === 0
+  const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(interimFeedback)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {

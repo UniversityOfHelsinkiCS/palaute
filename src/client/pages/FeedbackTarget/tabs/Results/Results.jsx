@@ -118,13 +118,15 @@ const Results = () => {
     questionOrder,
     publicQuestionIds,
     publicityConfigurableQuestionIds,
-    studentCount,
     feedback,
-    feedbackCount,
+    summary,
     opensAt,
     closesAt,
     feedbackReminderLastSentAt,
   } = feedbackTarget
+
+  const feedbackCount = summary?.data?.feedbackCount ?? 0
+  const studentCount = summary?.data?.studentCount ?? 0
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 

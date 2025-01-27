@@ -61,7 +61,7 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
         required: true,
-        attributes: ['id', 'feedback_id'],
+        attributes: ['id', 'feedbackId'],
       },
     ],
   })
@@ -73,7 +73,8 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
     return !disabledCourseCodes.includes(fbt.courseUnit.courseCode) && !isInterimFeedback
   })
 
-  const filteredByFeedbacks = filteredFeedbackTargets.filter(fbt => fbt.feedbackCount)
+  // Check that at least one feedback has been given for the course
+  const filteredByFeedbacks = filteredFeedbackTargets.filter(fbt => fbt.userFeedbackTargets.some(uft => uft.feedbackId))
 
   return filteredByFeedbacks
 }
