@@ -19,6 +19,7 @@ const {
   Survey,
   User,
   OrganisationSurveyCourse,
+  Summary,
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationId => {
@@ -303,6 +304,11 @@ const getSurveysForOrganisation = async organisationId => {
       'closesAt',
     ],
     include: [
+      {
+        model: Summary,
+        as: 'summary',
+        required: false,
+      },
       {
         model: CourseUnit,
         as: 'courseUnit',

@@ -19,6 +19,7 @@ const { getFeedbackTargetContext } = require('../../services/feedbackTargets/get
 const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
+const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
@@ -96,6 +97,9 @@ const createOrganisationSurvey = async (req, res) => {
   const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
 
   await createOrganisationSurveyCourses(feedbackTarget.id, studentDataFromCourseIds)
+
+  // Create summary for the new feedback target
+  await createSummaryForFeedbackTarget(feedbackTarget, studentFeedbackTargets.length, startDate, endDate)
 
   const survey = await getSurveyById(feedbackTarget.id)
 
