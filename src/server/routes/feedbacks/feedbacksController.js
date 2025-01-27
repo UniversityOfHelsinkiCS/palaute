@@ -8,7 +8,7 @@ const {
   updateSummaryAfterFeedbackCreated,
   updateSummaryAfterFeedbackDestroyed,
 } = require('../../services/summary/updateSummaryOnFeedback')
-const { logger } = require('../util/logger')
+const { logger } = require('../../util/logger')
 
 const create = async (req, res) => {
   const { user } = req
