@@ -33,12 +33,14 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const {
     opensAt,
     closesAt,
-    feedbackCount,
+    summary,
     feedbackResponse,
     feedbackResponseEmailSent,
     students,
     userFeedbackTargets: teachers,
   } = organisationSurvey
+
+  const feedbackCount = summary?.data?.feedbackCount || 0
 
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const studentCount = students.length

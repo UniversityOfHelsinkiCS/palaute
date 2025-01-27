@@ -297,7 +297,6 @@ const getSurveysForOrganisation = async organisationId => {
       'hidden',
       'feedbackType',
       'publicQuestionIds',
-      'feedbackCount',
       'feedbackResponse',
       'feedbackResponseEmailSent',
       'opensAt',
@@ -384,7 +383,12 @@ const getSurveysForTeacher = async (organisationCode, userId) => {
 }
 
 const getDeletionAllowed = async organisationSurveyId => {
-  const { feedbackCount } = await FeedbackTarget.findByPk(organisationSurveyId)
+  const feedbackCount = await UserFeedbackTarget.count({
+    where: {
+      feedbackTargetId: organisationSurveyId,
+      [Op.not]: { feedbackId: null },
+    },
+  })
 
   return feedbackCount === 0
 }

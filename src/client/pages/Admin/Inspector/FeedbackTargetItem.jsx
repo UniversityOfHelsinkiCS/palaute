@@ -49,8 +49,8 @@ const Details = ({ feedbackTarget: fbt }) => (
           <TableCell>{fbt.courseRealisation.endDate.toLocaleDateString()}</TableCell>
           <TableCell>{fbt.opensAt.toLocaleDateString()}</TableCell>
           <TableCell>{fbt.closesAt.toLocaleDateString()}</TableCell>
-          <TableCell>{fbt.studentCount}</TableCell>
-          <TableCell>{fbt.feedbackCount}</TableCell>
+          <TableCell>{fbt.summary?.data?.studentCount ?? '-'}</TableCell>
+          <TableCell>{fbt.summary?.data?.feedbackCount ?? '-'}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
