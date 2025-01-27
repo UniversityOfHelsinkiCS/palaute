@@ -70,7 +70,7 @@ const CourseUnitItem = ({
     <TableRow>
       <TableCell>{courseCode}</TableCell>
       <TableCell>
-        <MuiLink component={Link} to={`/course-summary/${courseCode}`}>
+        <MuiLink component={Link} to={`/course-summary/course-unit/${courseCode}`}>
           {name}
         </MuiLink>
       </TableCell>
