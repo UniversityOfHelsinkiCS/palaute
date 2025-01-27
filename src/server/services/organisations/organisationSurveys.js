@@ -19,6 +19,7 @@ const {
   Survey,
   User,
   OrganisationSurveyCourse,
+  Summary,
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationId => {
@@ -163,8 +164,8 @@ const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
   return userFeedbackTargets
 }
 
-const getOrganisationSurveyCourseStudents = async courseIds => {
-  if (!courseIds || courseIds.length === 0) return []
+const getOrganisationSurveyCourseStudents = async courseRealisationIds => {
+  if (!courseRealisationIds || courseRealisationIds.length === 0) return []
   const students = await User.findAll({
     include: [
       {
@@ -181,7 +182,8 @@ const getOrganisationSurveyCourseStudents = async courseIds => {
             as: 'feedbackTarget',
             required: true,
             where: {
-              courseRealisationId: { [Op.in]: courseIds },
+              userCreated: false,
+              courseRealisationId: { [Op.in]: courseRealisationIds },
             },
             attributes: ['id', 'courseRealisationId'],
           },
@@ -302,6 +304,11 @@ const getSurveysForOrganisation = async organisationId => {
       'closesAt',
     ],
     include: [
+      {
+        model: Summary,
+        as: 'summary',
+        required: false,
+      },
       {
         model: CourseUnit,
         as: 'courseUnit',
@@ -427,7 +434,7 @@ const updateOrganisationSurveyCourses = async (feedbackTargetId, students) => {
 }
 
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
-  const { name, teacherIds, studentNumbers, courseIds } = updates
+  const { name, teacherIds, studentNumbers, courseRealisationIds } = updates
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
@@ -457,8 +464,8 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     studentIds = await getStudentIds(studentNumbers)
   }
 
-  if (courseIds) {
-    const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseIds)
+  if (courseRealisationIds) {
+    const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
     const studentIdsFromCourseIds = studentDataFromCourseIds.map(student => student.id)
     studentIds = [...new Set([...studentIds, ...studentIdsFromCourseIds])]
     await updateOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)

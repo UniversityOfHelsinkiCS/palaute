@@ -44,7 +44,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const studentCount = students.length
-  const allowDelete = organisationSurvey.feedbackCount === 0
+  const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(organisationSurvey)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {

@@ -19,6 +19,7 @@ const { getFeedbackTargetContext } = require('../../services/feedbackTargets/get
 const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
+const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
@@ -64,7 +65,7 @@ const createOrganisationSurvey = async (req, res) => {
     endDate,
     studentNumbers: initialStudentNumbers,
     teacherIds: initialTeacherIds,
-    courseIds: initialCourseIds,
+    courseRealisationIds,
   } = req.body
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
@@ -73,7 +74,7 @@ const createOrganisationSurvey = async (req, res) => {
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
-  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(initialCourseIds)
+  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
 
   // Remove duplicates from studentNumbers and teacherIds
   const studentNumbers = [...new Set([...initialStudentNumbers])]
@@ -97,6 +98,9 @@ const createOrganisationSurvey = async (req, res) => {
 
   await createOrganisationSurveyCourses(feedbackTarget.id, studentDataFromCourseIds)
 
+  // Create summary for the new feedback target
+  await createSummaryForFeedbackTarget(feedbackTarget, studentFeedbackTargets.length, startDate, endDate)
+
   const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({
@@ -109,7 +113,7 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { id } = req.params
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseIds'])
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
 
   updates.studentNumbers = [...new Set([...updates.studentNumbers])]
 

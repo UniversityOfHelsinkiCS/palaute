@@ -9,9 +9,18 @@ import { getSemesterRange } from '../../util/yearSemesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import { DateRange } from '../../types/DateRange'
-import { Locales, InitialValues, OrganisationCode, CourseRealisation, FeedbackTargets } from '../../types'
+import { Locales, CourseRealisation, FeedbackTarget } from '../../types'
 
-const CourseSearchInput = ({ organisationCode }: { organisationCode: OrganisationCode }) => {
+export interface InitialValues {
+  name: Locales
+  startDate: Date
+  endDate: Date
+  studentNumbers: []
+  teachers: []
+  courses: []
+}
+
+const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
   const formikProps = useFormikContext<InitialValues>()
@@ -28,7 +37,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: Organisatio
   })
 
   const options = data
-    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTargets }) =>
+    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTarget[] }) =>
       feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
     )
     .sort((a: CourseRealisation, b: CourseRealisation) =>
