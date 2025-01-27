@@ -1,8 +1,8 @@
 import { formatActivityPeriod } from '../../util/common'
-import { FeedbackTarget, Summary } from '../../models'
+import { Summary } from '../../models'
 
 export const createSummaryForFeedbackTarget = async (
-  feedbackTarget: FeedbackTarget,
+  feedbackTargetId: number,
   initialStudentCount: number,
   startDate: Date,
   endDate: Date,
@@ -10,11 +10,9 @@ export const createSummaryForFeedbackTarget = async (
 ): Promise<Summary> => {
   const activityPeriod = formatActivityPeriod({ startDate, endDate })
   const summary = await Summary.create({
-    // @ts-expect-error fbt is not yet typescripted
-    entityId: feedbackTarget.id,
+    entityId: String(feedbackTargetId),
     entityType: 'feedbackTarget',
-    // @ts-expect-error fbt is not yet typescripted
-    feedbackTargetId: feedbackTarget.id,
+    feedbackTargetId,
     startDate: activityPeriod.startDate.toISOString(),
     endDate: activityPeriod.endDate.toISOString(),
     extraOrgIds,

@@ -99,7 +99,7 @@ const createOrganisationSurvey = async (req, res) => {
   await createOrganisationSurveyCourses(feedbackTarget.id, studentDataFromCourseIds)
 
   // Create summary for the new feedback target
-  await createSummaryForFeedbackTarget(feedbackTarget, studentFeedbackTargets.length, startDate, endDate)
+  await createSummaryForFeedbackTarget(feedbackTarget.id, studentFeedbackTargets.length, startDate, endDate)
 
   const survey = await getSurveyById(feedbackTarget.id)
 

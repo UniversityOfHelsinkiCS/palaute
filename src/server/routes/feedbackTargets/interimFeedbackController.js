@@ -41,7 +41,7 @@ const createInterimFeedback = async (req, res) => {
   interimFeedbackTarget = await getInterimFeedbackById(interimFeedbackTarget.id)
 
   const summary = await createSummaryForFeedbackTarget(
-    interimFeedbackTarget,
+    interimFeedbackTarget.id,
     _.countBy(userFeedbackTargets, 'accessStatus').STUDENT,
     interimFeedbackTarget.opensAt,
     interimFeedbackTarget.closesAt
