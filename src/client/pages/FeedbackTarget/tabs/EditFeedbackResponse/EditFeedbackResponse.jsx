@@ -12,7 +12,7 @@ import Markdown from '../../../../components/common/Markdown'
 import ResponseEmailButton from './ResponseEmailButton'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import InstructionAccordion from '../../../../components/common/InstructionAccordion'
+import Instructions from '../../../../components/common/Instructions'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const getInitialValues = feedbackTarget => ({
@@ -64,10 +64,12 @@ const EditFeedbackResponse = () => {
   return (
     <Card>
       <CardContent>
-        <InstructionAccordion
-          title={t('feedbackResponse:instructionTitle')}
-          text={`${t('feedbackResponse:responseInstruction')}\n\n${t('feedbackResponse:writingInstruction')}`}
-        />
+        <Instructions title={t('feedbackResponse:instructionTitle')}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Typography variant="body2">{t('feedbackResponse:responseInstruction')}</Typography>
+            <Typography variant="body2">{t('feedbackResponse:writingInstruction')}</Typography>
+          </Box>
+        </Instructions>
         <Box mb={2}>
           <Alert severity="info">
             <Trans i18nKey="feedbackResponse:responseInfo">

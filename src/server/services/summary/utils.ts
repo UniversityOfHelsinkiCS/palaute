@@ -1,12 +1,13 @@
 import _ from 'lodash'
 import * as datefns from 'date-fns'
+import { FeedbackData } from 'models/feedback'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
 import { Summary } from '../../models'
 import { SummaryData, SummaryResult } from '../../models/summary'
 
-const mapOptionIdToValue = (optionId: string, questionId: string) => {
+const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {
-    return WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) + 1
+    return (WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) as number) + 1
   }
   return Number(optionId)
 }
@@ -163,6 +164,77 @@ const getScopedSummary = ({
     }
   }
   return Summary.scope(scopes)
+}
+
+/**
+ * Adds new feedback data to the summary data.
+ * Modifies the summary data in place and returns it.
+ */
+export const addFeedbackDataToSummary = (summaryData: SummaryData, feedbackData: FeedbackData) => {
+  // Update summary question results based on the feedback data
+  for (const { questionId, data: optionId } of feedbackData) {
+    const optionValue = mapOptionIdToValue(optionId, questionId)
+
+    // Make sure the value is not NaN
+    if (!Number.isNaN(optionValue)) {
+      let summaryResultForQuestion = summaryData.result[questionId]
+
+      // Initialize the summary result for the question if it doesn't exist
+      if (!summaryResultForQuestion) {
+        summaryResultForQuestion = {
+          mean: 0,
+          distribution: {},
+        }
+        summaryData.result[questionId] = summaryResultForQuestion
+      }
+
+      // Increment the count for the option
+      summaryResultForQuestion.distribution[optionId] = (summaryResultForQuestion.distribution[optionId] ?? 0) + 1
+
+      // Calculate the new mean
+      const oldSum = summaryResultForQuestion.mean * summaryData.feedbackCount
+      const newSum = oldSum + optionValue
+      summaryResultForQuestion.mean = newSum / (summaryData.feedbackCount + 1)
+    }
+  }
+
+  // Increment the feedback count
+  summaryData.feedbackCount += 1
+
+  return summaryData
+}
+
+/**
+ * Removes feedback data from the summary data.
+ * Modifies the summary data in place and returns it.
+ */
+export const removeFeedbackDataFromSummary = (summaryData: SummaryData, feedbackData: FeedbackData) => {
+  // Update summary question results based on the feedback data
+  for (const { questionId, data: optionId } of feedbackData) {
+    const summaryResultForQuestion = summaryData.result[questionId]
+
+    const optionValue = mapOptionIdToValue(optionId, questionId)
+
+    // Make sure the value is not NaN and the option exists in the summary
+    if (summaryResultForQuestion && !Number.isNaN(optionValue)) {
+      // Decrement the count for the option
+      summaryResultForQuestion.distribution[optionId] = (summaryResultForQuestion.distribution[optionId] ?? 0) - 1
+      // Remove the option if the count is zero (or below, which should not happen)
+      if (summaryResultForQuestion.distribution[optionId] <= 0) {
+        delete summaryResultForQuestion.distribution[optionId]
+      }
+
+      // Calculate the new mean
+      const oldSum = summaryResultForQuestion.mean * summaryData.feedbackCount
+      const newSum = oldSum - optionValue
+      summaryResultForQuestion.mean = newSum / (summaryData.feedbackCount - 1)
+    }
+  }
+
+  // Decrement the feedback count
+  summaryData.feedbackCount -= 1
+
+  return summaryData
 }
 
 export { sumSummaryDatas, mapOptionIdToValue, sumSummaries, getScopedSummary }

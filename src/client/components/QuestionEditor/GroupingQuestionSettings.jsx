@@ -4,23 +4,22 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Button,
   Paper,
   Table,
   TableBody,
   TableCell,
   TableHead,
   TableRow,
-  Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { EditOutlined, ExpandMore } from '@mui/icons-material'
+import { Add, ExpandMore } from '@mui/icons-material'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../common/TeacherChip'
-import InstructionAccordion from '../common/InstructionAccordion'
+import Instructions from '../common/Instructions'
 import { createQuestion } from './utils'
 import QuestionCard from './QuestionCard'
+import { NorButton } from '../common/NorButton'
 
 const GroupInformation = ({ groups }) => {
   const { t, i18n } = useTranslation()
@@ -92,16 +91,15 @@ const GroupingQuestionSettings = ({
   return (
     <Box mb={2}>
       <Paper>
-        <Box p={1}>
-          <Accordion variant="outlined" elevation={0}>
-            <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography variant="body1" fontWeight="medium">
-                {t('groups:groupingSettings')}
-              </Typography>
+        <Box>
+          <Accordion elevation={0}>
+            <AccordionSummary sx={{ fontWeight: 'bold' }} expandIcon={<ExpandMore />}>
+              {t('groups:groupingSettings')}
             </AccordionSummary>
             <AccordionDetails>
-              <Box mt="1rem" mb="2rem" display="flex" gap="1rem" flexWrap="wrap">
-                <InstructionAccordion title={t('groups:groupingInfoTextTitle')} text={t('groups:groupingInfoText')} />
+              <Box mb="2rem" display="flex" flexDirection="column">
+                <Instructions title={t('groups:groupingInfoTextTitle')}>{t('groups:groupingInfoText')}</Instructions>
+
                 {groups.length > 0 && <GroupInformation groups={groups} />}
               </Box>
 
@@ -114,9 +112,9 @@ const GroupingQuestionSettings = ({
                   <Box>
                     {t('groups:noGroupingQuestion')} {groups.length === 1 && t('groups:onlyOneGroup')}
                     <Box mt="0.5rem">
-                      <Button onClick={handleAddGroupingQuestion} variant="outlined" startIcon={<EditOutlined />}>
+                      <NorButton onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
                         {t('groups:addGroupingQuestion')}
-                      </Button>
+                      </NorButton>
                     </Box>
                   </Box>
                 )}

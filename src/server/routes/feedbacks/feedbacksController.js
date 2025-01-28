@@ -1,8 +1,14 @@
 const { Router } = require('express')
+const Sentry = require('@sentry/node')
 const { ApplicationError } = require('../../util/customErrors')
 const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
 const { validateFeedback } = require('../../util/feedbackValidator')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
+const {
+  updateSummaryAfterFeedbackCreated,
+  updateSummaryAfterFeedbackDestroyed,
+} = require('../../services/summary/updateSummaryOnFeedback')
+const { logger } = require('../../util/logger')
 
 const create = async (req, res) => {
   const { user } = req
@@ -33,10 +39,16 @@ const create = async (req, res) => {
     degreeStudyRight,
   })
 
-  await feedbackTarget.increment('feedbackCount', { by: 1 })
-
   userFeedbackTarget.feedbackId = newFeedback.id
   await userFeedbackTarget.save()
+
+  // Update summary. Fail silently if fails
+  try {
+    await updateSummaryAfterFeedbackCreated(newFeedback)
+  } catch (err) {
+    Sentry.captureException(err)
+    logger.error('Failed to update summary after feedback created', err)
+  }
 
   return res.send(newFeedback)
 }
@@ -91,6 +103,8 @@ const update = async (req, res) => {
   feedback.data = req.body.data
   const updatedFeedback = await feedback.save()
 
+  // @TODO: Update summary
+
   return res.send(updatedFeedback)
 }
 
@@ -111,8 +125,15 @@ const destroy = async (req, res) => {
 
   if (!feedbackTarget) throw new ApplicationError('Not found', 404)
 
-  await feedbackTarget.decrement('feedbackCount', { by: 1 })
   await feedback.destroy()
+
+  // Update summary. Fail silently if fails
+  try {
+    await updateSummaryAfterFeedbackDestroyed(userFeedbackTarget.feedbackTargetId, feedback)
+  } catch (err) {
+    Sentry.captureException(err)
+    logger.error('Failed to update summary after feedback destroyed', err)
+  }
 
   return res.sendStatus(200)
 }

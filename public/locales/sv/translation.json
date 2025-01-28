@@ -10,7 +10,7 @@
     "choiceQuestionError": "Flervalsfrågor kräver svarsalternativ",
     "fetchError": "Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.",
     "notFound": "Sidan eller resursen hittas inte.",
-    "noAccess": "Du har inte tillgång till denna resurs",
+    "noAccess": "Du har inte tillgång till denna resurs.",
     "supportContact": "Vid problemfall, kontakta supporten: ",
     "save": "Spara",
     "saveSuccess": "Informationen har sparats",
@@ -397,7 +397,9 @@
     "removeSuccess": "Programundersökningen är borttagen",
     "responsibleTeachers": "Ansvarsperson",
     "remove": "Ta bort",
-    "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden"
+    "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden",
+    "addCourses": "Fler studenter från kurser",
+    "removeCourses": "Ta bort kurser"
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",
@@ -525,7 +527,7 @@
     "findByCourseUnit": "Sök kurs",
     "includeWithoutTeachers": "Visa kurser som inte har lärare",
     "editMode": "Flerfaldig redigering",
-    "calendarMode": "Vaihda kalenterinäkymään Ändra till kalendervy",
+    "calendarMode": "Ändra till kalendervy",
     "listMode": "Ändra till listvy",
     "setStudyTracks": "Markera studieinriktningarna för kursgenomförandet",
     "setStudyTracksForCourseUnit": "Markera kursens {{name}} ({{code}}) inriktning",
@@ -588,12 +590,11 @@
   },
   "norppaFeedback": {
     "feedback": "Respons",
-    "feedbackHelper": "Ge fritt formulerad respons",
     "responseWanted": "Jag vill ha svar på responsen",
     "submit": "Skicka respons",
     "confirm": "Jag förstår att det här är inte motrespons för studerande, utan respons för utvecklarna av Norppa",
     "title": "Ge respons till Norppa utvecklarna",
-    "description": "Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge respons till utvecklarna.",
+    "description": "Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge fritt formulerad respons till utvecklarna.",
     "feedbackLengthError": "Minimilängden på responsen är ett tecken",
     "successAlert": "Responsen har skickats!",
     "anonymous": "Lähetä anonyymisti Skicka anonymt",

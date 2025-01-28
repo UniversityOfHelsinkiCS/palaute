@@ -2,7 +2,15 @@ const { Router } = require('express')
 const { Op } = require('sequelize')
 const _ = require('lodash')
 
-const { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, Tag } = require('../../models')
+const {
+  UserFeedbackTarget,
+  FeedbackTarget,
+  CourseRealisation,
+  CourseUnit,
+  Organisation,
+  Tag,
+  Summary,
+} = require('../../models')
 
 const { sequelize } = require('../../db/dbConnection')
 const { INCLUDE_COURSES } = require('../../util/config')
@@ -60,7 +68,6 @@ const getCourseUnitsForTeacher = async (req, res) => {
           'closesAt',
           ['feedback_response_email_sent', 'feedbackResponseSent'],
           [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
-          'feedbackCount',
           'continuousFeedbackEnabled',
           'userCreated',
         ],
@@ -95,6 +102,11 @@ const getCourseUnitsForTeacher = async (req, res) => {
                 },
               ],
             },
+          },
+          {
+            model: Summary,
+            required: false,
+            as: 'summary',
           },
           {
             model: CourseUnit,
@@ -169,7 +181,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
             ...feedbackTarget.courseRealisation.toJSON(),
             feedbackResponseGiven: feedbackTarget.dataValues.feedbackResponseGiven,
             feedbackResponseSent: feedbackTarget.dataValues.feedbackResponseSent,
-            feedbackCount: Number(feedbackTarget.dataValues.feedbackCount),
+            feedbackCount: feedbackTarget.summary?.feedbackCount ?? 0,
+            studentCount: feedbackTarget.summary?.studentCount ?? 0,
             feedbackTarget: _.pick(feedbackTarget, targetFields),
           }
         : null

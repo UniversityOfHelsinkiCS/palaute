@@ -12,11 +12,14 @@ const {
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
   getDeletionAllowed,
+  getOrganisationSurveyCourseStudents,
+  createOrganisationSurveyCourses,
 } = require('../../services/organisations/organisationSurveys')
 const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
 const { validateStudentNumbers } = require('../../services/organisations/validator')
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
+const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
@@ -56,7 +59,14 @@ const getOrganisationSurveys = async (req, res) => {
 const createOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code } = req.params
-  const { name, startDate, endDate, studentNumbers: initialStudentNumbers, teacherIds: initialTeacherIds } = req.body
+  const {
+    name,
+    startDate,
+    endDate,
+    studentNumbers: initialStudentNumbers,
+    teacherIds: initialTeacherIds,
+    courseRealisationIds,
+  } = req.body
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
@@ -64,8 +74,10 @@ const createOrganisationSurvey = async (req, res) => {
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
 
+  const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
+
   // Remove duplicates from studentNumbers and teacherIds
-  const studentNumbers = [...new Set(initialStudentNumbers)]
+  const studentNumbers = [...new Set([...initialStudentNumbers])]
   const teacherIds = [...new Set(initialTeacherIds)]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
@@ -73,16 +85,26 @@ const createOrganisationSurvey = async (req, res) => {
 
   await initializeOrganisationCourseUnit(organisation)
 
-  const feedbackTarget = await createOrganisationFeedbackTarget(organisation, { name, startDate, endDate })
+  const feedbackTarget = await createOrganisationFeedbackTarget(organisation, {
+    name,
+    startDate,
+    endDate,
+  })
 
-  const studentIds = await getStudentIds(studentNumbers)
+  const studentIdsFromStudentNumbers = await getStudentIds(studentNumbers)
+  const studentIds = [...studentIdsFromStudentNumbers, ...studentDataFromCourseIds.map(n => n.id)]
   const studentFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, studentIds, 'STUDENT')
   const teacherFeedbackTargets = await createUserFeedbackTargets(feedbackTarget.id, teacherIds, 'RESPONSIBLE_TEACHER')
+
+  await createOrganisationSurveyCourses(feedbackTarget.id, studentDataFromCourseIds)
+
+  // Create summary for the new feedback target
+  await createSummaryForFeedbackTarget(feedbackTarget.id, studentFeedbackTargets.length, startDate, endDate)
 
   const survey = await getSurveyById(feedbackTarget.id)
 
   return res.status(201).send({
-    ...survey.dataValues,
+    ...survey,
     userFeedbackTargets: [...studentFeedbackTargets, ...teacherFeedbackTargets],
   })
 }
@@ -91,14 +113,17 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { id } = req.params
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers'])
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
+
+  updates.studentNumbers = [...new Set([...updates.studentNumbers])]
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,
     user,
   })
 
-  if (!access?.canUpdateOrganisationSurvey()) ApplicationError.Forbidden()
+  if (!access?.canUpdateOrganisationSurvey())
+    return ApplicationError.Forbidden('Not allowed to update organisation survey')
 
   if (!feedbackTarget) throw new Error('Organisation survey not found')
 
@@ -109,13 +134,17 @@ const editOrganisationSurvey = async (req, res) => {
 
   const updatedSurvey = await updateOrganisationSurvey(id, updates)
 
+  // Update summary
+  feedbackTarget.summary.data.studentCount = updatedSurvey.students.length
+  await feedbackTarget.summary.save()
+  updatedSurvey.summary = feedbackTarget.summary
+
   return res.send(updatedSurvey)
 }
 
 const removeOrganisationSurvey = async (req, res) => {
   const { user } = req
   const { code, id } = req.params
-
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
   })

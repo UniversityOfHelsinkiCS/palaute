@@ -1,12 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Typography, Box, Button, Card, CardContent, Alert, Tooltip } from '@mui/material'
+import { Typography, Box, Card, CardContent, Alert, Tooltip } from '@mui/material'
 
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
 import { boxPrintStyle } from '../../../../util/printStyle'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const FeedbackResponse = ({ feedbackTarget }) => {
   const { t } = useTranslation()
@@ -41,16 +42,15 @@ const FeedbackResponse = ({ feedbackTarget }) => {
           {isResponsibleTeacher && !feedbackResponse && (
             <Tooltip title={t('feedbackTargetResults:giveResponseInfo')}>
               <Box mt={2} width="max-content">
-                <Button
+                <NorButton
                   disabled={!canGiveFeedbackResponse}
-                  variant="contained"
                   color="primary"
                   component={Link}
                   to={`/targets/${id}/edit-feedback-response`}
                   sx={{ '@media print': { display: 'none' } }}
                 >
                   {t('feedbackTargetResults:giveResponse')}
-                </Button>
+                </NorButton>
               </Box>
             </Tooltip>
           )}

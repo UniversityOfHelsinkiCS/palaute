@@ -3,11 +3,11 @@ import React, { useState } from 'react'
 
 import { useParams, useNavigate, Link } from 'react-router-dom'
 
-import { Typography, Button, Box, Card, CardContent, Alert } from '@mui/material'
-
+import { Typography, Box, Card, CardContent, Alert } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
+import { NorButton } from '../../../../components/common/NorButton'
 
 import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from './FeedbackForm'
@@ -61,15 +61,15 @@ const FormContainer = ({
 
             {showSubmitButton && (
               <Box mt={2}>
-                <Button
+                <NorButton
                   data-cy="feedback-view-give-feedback"
                   disabled={disabled}
-                  color="primary"
+                  color="secondary"
                   variant="contained"
                   type="submit"
                 >
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
-                </Button>
+                </NorButton>
                 {showCannotSubmitText && (
                   <Box mt={1}>
                     <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
@@ -104,7 +104,7 @@ const FeedbackView = () => {
   const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
 
-  const isOutsider = accessStatus === 'NONE'
+  const isOutsider = accessStatus.includes('NONE')
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded

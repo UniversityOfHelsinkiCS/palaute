@@ -1,12 +1,14 @@
 import React from 'react'
 
-import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Button, Grid, Typography } from '@mui/material'
-import { EditOutlined } from '@mui/icons-material'
+import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 
 import DeleteIcon from '@mui/icons-material/Delete'
+import { EditOutlined, FileCopyOutlined } from '@mui/icons-material'
+
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { LANGUAGES } from '../../util/common'
+import { NorButton } from '../common/NorButton'
 
 import LikertEditor from './LikertEditor'
 import LikertPreview from './LikertPreview'
@@ -180,12 +182,12 @@ const QuestionCard = ({
     <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
         <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
-          <Grid item xs={4}>
+          <Grid size={4}>
             <Box display="flex" gap="0.5rem">
               <Chip label={title} variant="outlined" />
             </Box>
           </Grid>
-          <Grid item xs={4} display="flex" justifyContent="center">
+          <Grid size={4} display="flex" justifyContent="center">
             {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
               <QuestionPublicityToggle
                 checked={question.public}
@@ -194,7 +196,7 @@ const QuestionCard = ({
               />
             )}
           </Grid>
-          <Grid item xs={4} display="flex" justifyContent="end">
+          <Grid size={4} display="flex" justifyContent="end">
             {question.chip && (
               <Tooltip title={t('questionEditor:uneditableTooltip')}>
                 <Chip label={t(question.chip)} variant="outlined" />
@@ -210,9 +212,9 @@ const QuestionCard = ({
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
                 <Box mr="auto">
-                  <Button data-cy="question-card-save-edit" color="primary" variant="contained" onClick={onStopEditing}>
+                  <NorButton data-cy="question-card-save-edit" color="primary" onClick={onStopEditing}>
                     {t('questionEditor:done')}
-                  </Button>
+                  </NorButton>
                 </Box>
                 <EditActions
                   publicityConfigurable={publicityConfigurable}
@@ -232,15 +234,15 @@ const QuestionCard = ({
             </Box>
             {canEdit && (
               <ActionsContainer>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: 'flex', gap: '16px' }}>
                   {canDuplicate && (
-                    <Button color="primary" onClick={onCopy}>
+                    <NorButton icon={<FileCopyOutlined />} onClick={onCopy} color="secondary">
                       {t('questionEditor:duplicate')}
-                    </Button>
+                    </NorButton>
                   )}
-                  <Button color="primary" onClick={onStartEditing} data-cy="editQuestion" startIcon={<EditOutlined />}>
+                  <NorButton color="secondary" onClick={onStartEditing} data-cy="editQuestion" icon={<EditOutlined />}>
                     {t('common:edit')}
-                  </Button>
+                  </NorButton>
                 </div>
                 {!isGrouping && <OrderButtons {...orderButtonsProps} />}
               </ActionsContainer>

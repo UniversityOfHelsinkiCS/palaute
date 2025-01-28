@@ -31,11 +31,7 @@ const updateCourseRealisation = async (req, res) => {
 
   const { feedbackResponse, feedbackResponseEmailSent } = req.body
 
-  let feedbackCount = Number(req.body?.feedbackCount)
-  feedbackCount = Number.isNaN(feedbackCount) ? feedbackTarget.feedbackCount : feedbackCount
-
   Object.assign(feedbackTarget, {
-    feedbackCount,
     opensAt: updates.startDate,
     closesAt: updates.endDate,
     feedbackResponse,

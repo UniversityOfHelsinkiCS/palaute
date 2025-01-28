@@ -9,9 +9,9 @@ export const FeedbackTargetContextProvider = ({ id, isAdmin, organisation, feedb
     const orgAccess = organisation?.access
     const accessStatus = feedbackTarget?.accessStatus
 
-    const isResponsibleTeacher = accessStatus === 'RESPONSIBLE_TEACHER' || isAdmin
-    const isTeacher = accessStatus === 'TEACHER' || isResponsibleTeacher || isAdmin
-    const isStudent = accessStatus === 'STUDENT'
+    const isResponsibleTeacher = accessStatus.includes('RESPONSIBLE_TEACHER') || isAdmin
+    const isTeacher = accessStatus.includes('TEACHER') || isResponsibleTeacher || isAdmin
+    const isStudent = accessStatus.includes('STUDENT')
     const isOrganisationAdmin = orgAccess?.admin || isAdmin
     const isOrganisationReader = orgAccess?.read || isAdmin
 

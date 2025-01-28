@@ -7,7 +7,14 @@ const initializeSentry = () => {
   Sentry.init({
     dsn: SENTRY_DSN,
     release: GIT_SHA,
-    integrations: [Sentry.browserTracingIntegration()],
+    integrations: [
+      Sentry.breadcrumbsIntegration(),
+      Sentry.browserTracingIntegration(),
+      Sentry.thirdPartyErrorFilterIntegration({
+        filterKeys: ['norppa-course-feedback'],
+        behaviour: 'drop-error-if-contains-third-party-frames',
+      }),
+    ],
     tracesSampleRate: 1.0,
   })
 }

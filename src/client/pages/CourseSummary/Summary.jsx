@@ -3,7 +3,7 @@ import { intersection } from 'lodash-es'
 import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { BarChartOutlined, School, LocationCity } from '@mui/icons-material'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
@@ -18,6 +18,7 @@ import GenerateReport from './GenerateReport'
 import { SummaryContextProvider } from './context'
 import ForCourseUnitGroup from './ForCourseUnitGroup'
 import Title from '../../components/common/Title'
+import { NorButton } from '../../components/common/NorButton'
 
 const SummaryInContext = () => {
   const { t } = useTranslation()
@@ -50,14 +51,19 @@ const SummaryInContext = () => {
           <GenerateReport />
         </Box>
         {user?.isAdmin && (
-          <>
-            <Button variant="text" onClick={() => handleUpdateData(false)} data-cy="update-data">
+          <Box sx={{ marginTop: 2 }}>
+            <NorButton
+              sx={{ marginRight: 2 }}
+              color="secondary"
+              onClick={() => handleUpdateData(false)}
+              data-cy="update-data"
+            >
               Aja datanpäivitys (Nykyisille ajanjaksoille)
-            </Button>
-            <Button variant="text" onClick={() => handleUpdateData(true)} data-cy="force-update-data">
+            </NorButton>
+            <NorButton color="secondary" onClick={() => handleUpdateData(true)} data-cy="force-update-data">
               Aja datanpäivitys (Koko historialle)
-            </Button>
-          </>
+            </NorButton>
+          </Box>
         )}
       </Box>
       <RouterTabs variant="scrollable" scrollButtons="auto">

@@ -3,9 +3,9 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { addDays } from 'date-fns'
 
-import { Alert, Box, Button } from '@mui/material'
-
+import { Alert, Box } from '@mui/material'
 import { useParams, useNavigate } from 'react-router-dom'
+import { Add } from '@mui/icons-material'
 
 import OrganisationSurveyItem from './OrganisationSurveyItem'
 import { useOrganisationSurveys } from './useOrganisationSurveys'
@@ -15,6 +15,7 @@ import { useCreateOrganisationSurveyMutation } from './useOrganisationSurveyMuta
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { NorButton } from '../../components/common/NorButton'
 
 import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from './utils'
 
@@ -60,6 +61,7 @@ const OrganisationSurveys = () => {
     endDate: addDays(new Date(), 7),
     studentNumbers: [],
     teachers: [authorizedUser],
+    courses: [],
   }
 
   const handleClose = () => setShowForm(!showForm)
@@ -80,6 +82,7 @@ const OrganisationSurveys = () => {
     const values = {
       ...data,
       teacherIds: data.teachers.map(t => t.id),
+      courseRealisationIds: data.courses.map(c => c.id),
     }
 
     await mutation.mutateAsync(values, {
@@ -110,16 +113,17 @@ const OrganisationSurveys = () => {
   return (
     <Box mb={6} px={1}>
       <Box sx={styles.buttonContainer}>
-        <Button
+        <NorButton
           data-cy="organisation-surveys-add-new"
           color="primary"
           onClick={() => {
             setShowForm(!showForm)
           }}
           disabled={showForm}
+          icon={<Add />}
         >
           {t('organisationSurveys:addSurvey')}
-        </Button>
+        </NorButton>
       </Box>
 
       <OrganisationSurveyEditor
@@ -129,6 +133,7 @@ const OrganisationSurveys = () => {
         handleSubmit={handleSubmit}
         editing={showForm}
         onStopEditing={handleClose}
+        organisationCode={code}
       />
 
       {surveys.length > 0 ? (

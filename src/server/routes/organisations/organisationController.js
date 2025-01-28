@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const { Router } = require('express')
 const { Op } = require('sequelize')
-
+const { formatActivityPeriod } = require('../../util/common')
 const { getOrganisationsList } = require('../../services/organisations/getOrganisationsList')
 const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
 const {
@@ -73,7 +73,7 @@ const updateOrganisation = async (req, res) => {
   ])
 
   if (!hasAdminAccess && (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)) {
-    throw new ApplicationError(403, 'Course codes can only be updated by organisation admins')
+    return ApplicationError.Forbidden('Course codes can only be updated by organisation admins')
   }
 
   if (updates.disabledCourseCodes) {
@@ -138,7 +138,7 @@ const getOrganisationLogs = async (req, res) => {
   const { code } = req.params
 
   if (!user.isAdmin) {
-    throw new ApplicationError('Forbidden', 403)
+    return ApplicationError.Forbidden()
   }
 
   const { organisationLogs } = await Organisation.findOne({
@@ -170,7 +170,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
   const access = organisationAccess.filter(org => org.organisation.code === code)
 
   if (access.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
+    return ApplicationError.Forbidden()
   }
 
   const codesWithIds = await getOpenFeedbackByOrganisation(code)
@@ -179,19 +179,20 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
 }
 
 const findFeedbackTargets = async (req, res) => {
-  const {
-    user,
-    query: { courseCode, name },
-  } = req
+  const { user, query } = req
   const { code } = req.params
 
   const organisationAccess = await user.getOrganisationAccess()
 
+  const { search } = query
+
   const access = organisationAccess.filter(org => org.organisation.code === code)
 
   if (access.length === 0) {
-    throw new ApplicationError('Forbidden', 403)
+    return ApplicationError.Forbidden()
   }
+
+  const activityPeriod = formatActivityPeriod(query)
 
   const courseUnits = await CourseUnit.findAll({
     include: [
@@ -205,7 +206,31 @@ const findFeedbackTargets = async (req, res) => {
             model: CourseRealisation,
             as: 'courseRealisation',
             attributes: ['id', 'name', 'startDate', 'endDate'],
-            where: { userCreated: false },
+            where: {
+              ...(activityPeriod?.startDate &&
+                activityPeriod?.endDate && {
+                  [Op.or]: [
+                    {
+                      startDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      endDate: {
+                        [Op.between]: [activityPeriod.startDate, activityPeriod.endDate],
+                      },
+                    },
+                    {
+                      startDate: {
+                        [Op.lte]: activityPeriod.startDate,
+                      },
+                      endDate: {
+                        [Op.gte]: activityPeriod.endDate,
+                      },
+                    },
+                  ],
+                }),
+            },
           },
         ],
       },
@@ -220,17 +245,17 @@ const findFeedbackTargets = async (req, res) => {
     attributes: ['id', 'name', 'courseCode'],
     where: {
       [Op.or]: {
-        courseCode: { [Op.iLike]: `${courseCode}%` },
+        courseCode: { [Op.iLike]: `${search}%` },
         [Op.or]: [
-          { 'name.fi': { [Op.iLike]: `%${name}%` } },
-          { 'name.se': { [Op.iLike]: `%${name}%` } },
-          { 'name.en': { [Op.iLike]: `%${name}%` } },
+          { 'name.fi': { [Op.iLike]: `%${search}%` } },
+          { 'name.sv': { [Op.iLike]: `%${search}%` } },
+          { 'name.en': { [Op.iLike]: `%${search}%` } },
         ],
       },
     },
   })
 
-  res.send(courseUnits)
+  return res.send(courseUnits)
 }
 
 const router = Router()

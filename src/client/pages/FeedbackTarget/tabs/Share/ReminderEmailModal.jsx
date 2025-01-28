@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { differenceInHours } from 'date-fns'
-import { Box, Typography, Modal, Button, TextField } from '@mui/material'
+import { Box, Typography, Modal, TextField } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-
+import { NorButton } from '../../../../components/common/NorButton'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getInterimFeedbackName, getPrimaryCourseName } from '../../../../util/courseIdentifiers'
 import { formatClosesAt } from './utils'
@@ -29,7 +29,8 @@ const styles = {
   buttons: {
     marginTop: 20,
     display: 'flex',
-    justifyContent: 'space-around',
+    gap: 16,
+    justifyContent: 'right',
   },
   textField: {
     whiteSpace: 'pre-line',
@@ -94,6 +95,9 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
           rows={5}
         />
         <div style={styles.buttons}>
+          <NorButton onClick={onClose} color="cancel">
+            {t('feedbackTargetResults:cancelReminder')}
+          </NorButton>
           <TooltipButton
             onClick={onEmailSend}
             color="primary"
@@ -103,9 +107,6 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
           >
             {t('feedbackTargetResults:sendReminderButton')}
           </TooltipButton>
-          <Button onClick={onClose} color="secondary" variant="contained">
-            {t('feedbackTargetResults:cancelReminder')}
-          </Button>
         </div>
       </Box>
     </Modal>

@@ -1,5 +1,5 @@
 import React from 'react'
-import { Alert, Box, Grid, Typography } from '@mui/material'
+import { Alert, Box, Grid2 as Grid, Typography } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 
 import AlertLink from '../common/AlertLink'
@@ -48,7 +48,7 @@ const LanguageOpenEditor = ({ name, language }) => {
 const OpenEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
   <Grid spacing={4} container>
     {languages.map(language => (
-      <Grid md={4} sm={12} xs={12} item key={language}>
+      <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
         <Box mb={2}>
           <Typography variant="h6" component="h2">
             {language.toUpperCase()}

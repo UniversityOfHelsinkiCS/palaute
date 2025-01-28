@@ -1,12 +1,13 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
 import { sendContinuousFeedbackResponse } from './utils'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const styles = {
   button: {
@@ -61,16 +62,15 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
               multiline
               sx={{ mb: '0.5rem' }}
             />
-            <Button
+            <NorButton
               type="submit"
               color="primary"
-              variant="contained"
               disabled={!sendEnabled(values.response, isSubmitting)}
               sx={styles.button}
               data-cy="sendContinuousFeedbackResponse"
             >
               {response ? t('common:edit') : t('common:send')}
-            </Button>
+            </NorButton>
           </Form>
         )}
       </Formik>

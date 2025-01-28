@@ -41,7 +41,7 @@ const styles = {
     '@media print': {
       display: 'none',
     },
-    padding: '0.2rem 0 0.2rem 0',
+    padding: '0.5rem 0 0.5rem 0',
   },
   link: {
     display: 'inline-flex',
@@ -54,6 +54,7 @@ const styles = {
     backgroundColor: 'rgba(255, 255, 255, 0)',
     transition: 'background-color 0.1s',
     borderRadius: '0.5rem',
+    minWidth: 'max-content',
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.22)',
     },
@@ -65,8 +66,14 @@ const styles = {
     display: 'flex',
     flexGrow: 1,
     alignItems: 'center',
+    flexWrap: 'wrap',
+    gap: '0.5rem',
+    paddingRight: '1rem',
+    marginRight: 'auto',
   },
   menuButton: {
+    display: 'flex',
+    minWidth: 'max-content',
     marginLeft: 'auto',
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.22)',
@@ -102,7 +109,6 @@ const styles = {
     fontWeight: theme => theme.typography.fontWeightMedium,
   },
 }
-
 const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
   <Box sx={styles.container} ref={ref}>
     {LANGUAGES.map(l => (
@@ -231,7 +237,7 @@ const NavBar = ({ guest = false }) => {
     .filter(Boolean)
     .map(link => ({
       ...link,
-      active: matchPath({ path: link.to }, pathname),
+      active: matchPath({ path: `${link.to}/*` }, pathname),
     }))
 
   const navBarLinks = (

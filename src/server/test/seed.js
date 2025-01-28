@@ -22,6 +22,8 @@ const {
   TEST_COURSE_REALISATION_ID,
 } = require('./testIds')
 const { createTestObject } = require('./utils')
+const userCache = require('../services/users/cache')
+const { feedbackTargetCache } = require('../services/feedbackTargets')
 
 const CURRENT_YEAR = new Date().getFullYear()
 
@@ -103,6 +105,10 @@ const seedUniversity = async () => {
 }
 
 const seedDb = async () => {
+  // Reset caches
+  userCache.invalidateAll()
+  feedbackTargetCache.invalidateAll()
+
   // First reset all tables
 
   await FeedbackTargetLog.destroy({ where: {}, truncate: true, cascade: true })

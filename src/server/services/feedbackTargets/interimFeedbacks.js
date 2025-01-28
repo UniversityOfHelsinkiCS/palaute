@@ -11,6 +11,7 @@ const {
   UserFeedbackTarget,
   Survey,
   User,
+  Summary,
 } = require('../../models')
 
 const { logger } = require('../../util/logger')
@@ -97,13 +98,17 @@ const getInterimFeedbackTargets = async (parentId, user) => {
       'hidden',
       'feedbackType',
       'publicQuestionIds',
-      'feedbackCount',
       'feedbackResponse',
       'feedbackResponseEmailSent',
       'opensAt',
       'closesAt',
     ],
     include: [
+      {
+        model: Summary,
+        as: 'summary',
+        required: false,
+      },
       {
         model: CourseUnit,
         as: 'courseUnit',
@@ -113,18 +118,6 @@ const getInterimFeedbackTargets = async (parentId, user) => {
         model: CourseRealisation,
         as: 'courseRealisation',
         required: true,
-      },
-      {
-        model: UserFeedbackTarget,
-        attributes: ['id'],
-        as: 'students',
-        required: false,
-        where: { accessStatus: 'STUDENT' },
-        include: {
-          model: User,
-          attributes: ['studentNumber'],
-          as: 'user',
-        },
       },
       {
         model: UserFeedbackTarget,
@@ -200,6 +193,8 @@ const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
     closesAt: endDate,
   })
 
+  await Summary.update({ startDate, endDate }, { where: { feedbackTargetId: fbtId } })
+
   return updatedInterimFeedbackTarget
 }
 
@@ -215,6 +210,12 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
 
   try {
     logger.info(`Deleting interim feedback ${feedbackTarget.id}`)
+
+    await Summary.destroy({
+      where: {
+        feedbackTargetId: feedbackTarget.id,
+      },
+    })
 
     const ufbt = await UserFeedbackTarget.destroy({
       where: {

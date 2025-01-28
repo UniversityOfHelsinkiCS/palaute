@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
-import { Snackbar, Button } from '@mui/material'
+import { Snackbar } from '@mui/material'
+import { NorButton } from '../common/NorButton'
 
 const AdminLoggedInAsBanner = () => {
   const [open, setOpen] = useState(false)
@@ -23,9 +24,9 @@ const AdminLoggedInAsBanner = () => {
       open={open}
       message="You are logged in as someone else!"
       action={
-        <Button color="secondary" onClick={handleClick}>
+        <NorButton color="empty" sx={{ color: 'yellow' }} onClick={handleClick}>
           Return to yourself
-        </Button>
+        </NorButton>
       }
     />
   )

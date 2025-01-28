@@ -1,5 +1,5 @@
 import React from 'react'
-import { Box, Button } from '@mui/material'
+import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
 import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
@@ -7,6 +7,7 @@ import EmailAccordion from './EmailAccordion'
 import ConfigDebug from './ConfigDebug'
 
 import apiClient from '../../../../util/apiClient'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const MiscTab = () => {
   const { enqueueSnackbar } = useSnackbar()
@@ -29,9 +30,9 @@ const MiscTab = () => {
       <EditUniversitySurveyAccordion />
       <EmailAccordion />
       <ConfigDebug />
-      <Button variant="contained" color="primary" onClick={runPateCron} data-cy="run-pate">
+      <NorButton color="secondary" onClick={runPateCron} data-cy="run-pate">
         Run pateCron
-      </Button>
+      </NorButton>
       <Box m="1rem" />
     </>
   )
