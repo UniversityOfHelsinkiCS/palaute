@@ -10,7 +10,7 @@ import {
   INTEGER,
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
-import UserFeedbackTarget from './userFeedbackTarget'
+import { UserFeedbackTarget } from './userFeedbackTarget'
 
 export type QuestionAnswer = {
   questionId: number
