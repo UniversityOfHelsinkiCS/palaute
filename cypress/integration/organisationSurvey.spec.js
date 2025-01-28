@@ -681,7 +681,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
 
-  it.only('can add students after creation and student count increases', () => {
+  it('can add students after creation and student count increases', () => {
     cy.visit(`/courses`)
 
     cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
