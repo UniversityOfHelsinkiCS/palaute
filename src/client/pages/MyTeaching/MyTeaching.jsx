@@ -161,7 +161,7 @@ const MyTeaching = () => {
     useTeacherOrganisatioSurveys(queryParams)
 
   const getPageTitle = () => {
-    const baseTitle = t('teacherView:mainHeadingV2')
+    const baseTitle = t('teacherView:mainHeading')
 
     switch (status) {
       case 'active':
@@ -179,7 +179,7 @@ const MyTeaching = () => {
     <Box sx={{ position: 'relative' }}>
       <Title>{getPageTitle()}</Title>
       <Typography id="my-teaching-title" variant="h4" component="h1">
-        {t('teacherView:mainHeadingV2')}
+        {t('teacherView:mainHeading')}
       </Typography>
 
       <StatusTabs aria-labelledby="my-teaching-title" status={status} tabOrder={['ongoing', 'upcoming', 'ended']}>

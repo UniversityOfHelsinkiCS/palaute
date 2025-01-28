@@ -2,7 +2,7 @@ const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL } = require('seque
 const _ = require('lodash')
 
 const { sequelize } = require('../db/dbConnection')
-const UserFeedbackTarget = require('./userFeedbackTarget')
+const { UserFeedbackTarget } = require('./userFeedbackTarget')
 
 class User extends Model {
   async isTeacher() {

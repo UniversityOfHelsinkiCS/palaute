@@ -152,8 +152,7 @@
     "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun kurssi on käynnissä. Tämä palaute annetaan anonyymisti."
   },
   "teacherView": {
-    "mainHeading": "Opetukseni",
-    "mainHeadingV2": "Kyselyni",
+    "mainHeading": "Kyselyni",
     "copyLink": "Kopioi vastauslinkki",
     "copyResponseLink": "Kopioi linkki vastapalautteeseen",
     "copied": "Linkki kopioitu leikepöydälle",

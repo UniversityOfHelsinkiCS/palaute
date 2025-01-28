@@ -1,5 +1,6 @@
 const { format } = require('date-fns')
 const jwt = require('jsonwebtoken')
+const { getLanguageValue } = require('../../util/languageUtils')
 const {
   JWT_KEY,
   NOAD_LINK_EXPIRATION_DAYS,
@@ -59,9 +60,9 @@ const getFeedbackTargetLink = feedbackTarget => {
 
   let displayName = ''
   if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
-    displayName = `${courseCode} ${name[language]}`
+    displayName = `${courseCode} ${getLanguageValue(name, language)}`
   } else {
-    displayName = `${name[language]}`
+    displayName = getLanguageValue(name, language)
   }
 
   if (noAdUser) {

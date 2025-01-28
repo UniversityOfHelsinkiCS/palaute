@@ -77,6 +77,12 @@ const config = {
   TEACHER_REMINDER_DAYS_TO_OPEN: 7,
 
   /**
+   * Enable/disable sending automatic reminders to students before feedback period ends
+   * See also settings STUDENT_REMINDER_DAYS_TO_CLOSE and FEEDBACK_REMINDER_COOLDOWN
+   */
+  SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED: false,
+
+  /**
    * How many days before closing to send an automatic reminder to students who have not given feedback.
    * This feature is currently only enabled for courses with STUDENT_LIST_BY_COURSE_ENABLED enabled
    * (only configured organisations can do this)
@@ -169,11 +175,6 @@ const config = {
    * if the response is written even if the "email sent" field is false.
    */
   FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: '2022-01-01',
-
-  /**
-   * This controls sending of automatic reminders to students to give feedback
-   */
-  SEND_AUTOMATIC_REMINDER_ALWAYS: false,
 
   /**
    * Keys defined here are filtered away from frontend config during build process.

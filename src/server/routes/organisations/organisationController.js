@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const { Router } = require('express')
 const { Op } = require('sequelize')
-
 const { formatActivityPeriod } = require('../../util/common')
 const { getOrganisationsList } = require('../../services/organisations/getOrganisationsList')
 const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')

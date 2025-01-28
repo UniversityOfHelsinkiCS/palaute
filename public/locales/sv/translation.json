@@ -146,8 +146,7 @@
     "continuousFeedbackInfo": "Du kan ge kontinuerlig repons medan kursen är igång. Responsen ges anonymt."
   },
   "teacherView": {
-    "mainHeading": "Mina kurser",
-    "mainHeadingV2": "Mina undersökningar",
+    "mainHeading": "Mina undersökningar",
     "copyLink": "Kopiera svar via länk",
     "copyResponseLink": "Kopiera länken till svaret på responsen",
     "copied": "Länk kopierat till urklippet",

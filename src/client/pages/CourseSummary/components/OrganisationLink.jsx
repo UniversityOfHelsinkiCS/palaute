@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 
 export const OrganisationLink = ({ code, access }) => {
   const { t } = useTranslation()
-  if (!access) return null
+
+  if (!access || Object.keys(access).length === 0) return null
   const { write } = access
 
   return (
