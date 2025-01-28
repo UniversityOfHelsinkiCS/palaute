@@ -680,6 +680,29 @@ describe('Responsible Teachers', () => {
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
+
+  it.only('can add students after creation and student count increases', () => {
+    cy.visit(`/courses`)
+
+    cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
+    cy.get('[data-cy="course-unit-group-expand-more"').should('exist').click()
+
+    // Edit the survey to add students and new responsible teacher
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_ORG-SRV"').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
+    })
+
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
+
+    // Add student
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type(`${student.studentNumber}{enter}`)
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="feedback-target-feedback-count-percentage"]').should('exist').contains('0/1')
+  })
 })
 
 describe('Students', () => {

@@ -122,7 +122,8 @@ const editOrganisationSurvey = async (req, res) => {
     user,
   })
 
-  if (!access?.canUpdateOrganisationSurvey()) ApplicationError.Forbidden()
+  if (!access?.canUpdateOrganisationSurvey())
+    return ApplicationError.Forbidden('Not allowed to update organisation survey')
 
   if (!feedbackTarget) throw new Error('Organisation survey not found')
 
@@ -132,6 +133,11 @@ const editOrganisationSurvey = async (req, res) => {
   }
 
   const updatedSurvey = await updateOrganisationSurvey(id, updates)
+
+  // Update summary
+  feedbackTarget.summary.data.studentCount = updatedSurvey.students.length
+  await feedbackTarget.summary.save()
+  updatedSurvey.summary = feedbackTarget.summary
 
   return res.send(updatedSurvey)
 }

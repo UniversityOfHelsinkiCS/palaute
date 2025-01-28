@@ -53,7 +53,7 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
 
   const mutation = useMutation(mutationFn, {
     onSuccess: data => {
-      const { id, name, opensAt, closesAt } = data
+      const { id, name, opensAt, closesAt, summary } = data
 
       queryClient.invalidateQueries('organisationSurvey')
 
@@ -61,6 +61,7 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
         draft.opensAt = opensAt
         draft.closesAt = closesAt
         draft.courseRealisation.name = name
+        draft.summary = summary || draft.summary
       })
     },
   })
