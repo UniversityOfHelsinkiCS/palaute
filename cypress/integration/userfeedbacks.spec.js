@@ -38,6 +38,23 @@ describe('User feedbacks view', () => {
       .should('not.exist')
   })
 
+  it('Feedback is visible immediately after being given', () => {
+    cy.loginAs(student)
+    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('input[value=5]').each($el => {
+      cy.get($el).click()
+    })
+    cy.getUniversityQuestions().then(questions => {
+      const openQuestion = questions.find(q => q.type === 'OPEN')
+      cy.get(`textarea[id=${openQuestion.id}-label]`).type('Other comments and such')
+    })
+    cy.get('[data-cy=feedback-view-give-feedback]').click()
+
+    cy.get('[data-cy="feedback-target-results-tab"]')
+
+    cy.contains('Multiple choice questions')
+  })
+
   it('Teacher can censor a feedback', () => {
     // student gives feedback
     cy.loginAs(student)

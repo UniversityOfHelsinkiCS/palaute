@@ -152,14 +152,11 @@ export const useSaveValues = () => {
       return data
     },
     {
-      onSuccess: feedback => {
-        queryClient.setQueryData(['feedbackTarget', String(feedbackTarget.id)], prev => ({
-          ...prev,
-          feedback,
-        }))
-
+      onSuccess: () => {
         // Invalidate the waiting feedback count for the student
         queryClient.invalidateQueries('myFeedbacksWaitingFeedbackCount')
+        // Invalidate the feedbackTarget data
+        queryClient.invalidateQueries(['feedbackTarget', String(feedbackTarget.id)])
       },
     }
   )
