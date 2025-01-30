@@ -7,6 +7,7 @@ const accessLogger = morgan((tokens, req, res) => {
 
   const method = tokens.method(req, res)
   const url = tokens.url(req, res)
+  const requestRoute = req.route?.path
   const status = tokens.status(req, res)
   const responseTime = tokens['response-time'](req, res)
   const userAgent = tokens['user-agent'](req, res)
@@ -18,6 +19,7 @@ const accessLogger = morgan((tokens, req, res) => {
         userId: uid,
         method,
         url,
+        requestRoute,
         status,
         responseTime,
         userAgent,
