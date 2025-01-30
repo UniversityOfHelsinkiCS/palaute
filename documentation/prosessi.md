@@ -175,9 +175,9 @@ Kuvattava työ sillä tasolla, että:
 ### Commit notes
 
 - commitin tulee referoida jotakin Githubin issueta, jossa on kuvaus mitä työssä tehdään (kts. Ready for Development)
-  - Esim: `-refs: #1001`
-  - Onko tästä poikkeuksia ja jos niin mitä?
+  - Esim: `fix: Unnecessary slow db query in updateSummaryOnFeedback (#1463)` referoi issueen #1463 ja tulee näkyviin sen historiaan
   - Dokumentaatiomuutokset eivät vaadi tikettiä
+- Vaihtoehtoisesti commit tehdään branchiin, josta tehdään PR joka sisältää kuvauksen toteutuksesta ja linkkaa työhön.
 - commit-viestiin olennainen tiivistelmä, mitä commit sisältää
   - Tarkempi kuvaus on oltava työn kuvauksessa.
 
