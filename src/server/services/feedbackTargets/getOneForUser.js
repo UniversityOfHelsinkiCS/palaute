@@ -63,6 +63,7 @@ const getFromDb = async id => {
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
+        separate: true,
         include: {
           model: User,
           as: 'user',
@@ -161,7 +162,7 @@ const getFromDb = async id => {
 }
 
 const getAdditionalDataFromCacheOrDb = async id => {
-  let data = await cache.get(id)
+  let data = null // await cache.get(id)
   if (!data) {
     data = await getFromDb(id)
     cache.set(data.id, data)
