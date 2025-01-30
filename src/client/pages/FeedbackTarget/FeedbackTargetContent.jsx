@@ -48,15 +48,8 @@ import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
-  const {
-    feedbackTarget,
-    isStudent,
-    isTeacher,
-    isAdmin,
-    isOrganisationAdmin,
-    isResponsibleTeacher,
-    justGivenFeedback,
-  } = useFeedbackTargetContext()
+  const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
+    useFeedbackTargetContext()
 
   const {
     courseUnit,
@@ -75,7 +68,7 @@ const FeedbackTargetContent = () => {
   const pathnameBase = interimMatch?.pathnameBase || fbtMatch?.pathnameBase // This has to be done because of recursivity of interim feedbacks
   const defaultPath = `${pathnameBase}/feedback`
 
-  const feedbackGiven = feedback || justGivenFeedback
+  const feedbackGiven = !!feedback
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
@@ -140,7 +133,7 @@ const FeedbackTargetContent = () => {
             title={t('common:survey')}
             hideTitle={isStudent}
           >
-            {(justGivenFeedback || feedback) && isOpen ? (
+            {feedbackGiven && isOpen ? (
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
                 label={t('feedbackTargetView:editFeedbackTab')}
