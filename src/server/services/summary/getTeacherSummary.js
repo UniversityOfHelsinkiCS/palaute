@@ -3,6 +3,29 @@ const { Op } = require('sequelize')
 const { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
 const { sumSummaries, getScopedSummary } = require('./utils')
 
+const filterHiddenCount = async ({ user, organisationsJson }) => {
+  if (!user.isAdmin) {
+    organisationsJson.forEach(org => {
+      let hasAccess = false
+      for (const orgAccess in user.organisationAccess) {
+        if (orgAccess === org.code && user.organisationAccess[orgAccess].admin) {
+          hasAccess = true
+        }
+      }
+      if (!hasAccess) {
+        org.summary.data.hiddenCount = undefined
+        org.courseUnits.forEach(courseUnit => {
+          courseUnit.summary.data.hiddenCount = undefined
+          courseUnit.courseRealisations.forEach(courseRealisation => {
+            courseRealisation.summary.data.hiddenCount = undefined
+          })
+        })
+      }
+    })
+  }
+  return organisationsJson
+}
+
 const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode, allTime }) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode, allTime })
 
@@ -66,7 +89,7 @@ const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOr
     ],
   })
 
-  const organisationsJson = organisations.map(org => {
+  let organisationsJson = organisations.map(org => {
     org.summary = sumSummaries(org.summaries)
     delete org.dataValues.summaries
 
@@ -100,6 +123,8 @@ const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOr
       courseUnits: _.orderBy(courseUnits, ['courseCode'], ['asc']),
     }
   })
+
+  organisationsJson = await filterHiddenCount({ user, organisationsJson })
 
   return organisationsJson
 }

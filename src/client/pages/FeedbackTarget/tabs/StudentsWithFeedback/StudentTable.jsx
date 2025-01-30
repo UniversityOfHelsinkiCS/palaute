@@ -5,11 +5,9 @@ import { parseISO, format } from 'date-fns'
 import { CSVLink } from 'react-csv'
 
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
-import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { orderBy } from 'lodash-es'
 
 import { sortTable } from '../../../../util/tableUtils'
-import DropZone from './DropZone'
 import CardSection from '../../../../components/common/CardSection'
 import { SHOW_BUTTON_DOWNLOAD_SISU_CSV } from '../../../../util/common'
 
@@ -119,7 +117,6 @@ const ExportSisuAttainmentCSV = ({ students, fileName }) => {
 }
 
 const StudentTable = ({ students, feedbackTarget }) => {
-  const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
   const [orderByKey, setOrderByKey] = useState('lastName')
   const { t } = useTranslation()
@@ -186,21 +183,9 @@ const StudentTable = ({ students, feedbackTarget }) => {
               showFeedback={feedbackStatusAvailable}
             />
           )}
-          {feedbackStatusAvailable && (
-            <Button
-              endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
-              variant="contained"
-              color="primary"
-              sx={styles.button}
-              onClick={() => setDropZoneVisible(!dropZoneVisible)}
-            >
-              {t('common:combineCSV')}
-            </Button>
-          )}
         </Box>
       }
     >
-      {dropZoneVisible && <DropZone students={studentsData} />}
       <Table>
         <TableHead>
           <TableRow>

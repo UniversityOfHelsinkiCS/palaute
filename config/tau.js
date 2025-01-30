@@ -279,6 +279,11 @@ const config = {
    * Courserealisation / assessmentitem must approve grade hyväksytty/hylätty and credits 0
    * */
   SHOW_BUTTON_DOWNLOAD_SISU_CSV: true,
+
+  /**
+   * Survey opening emails, maximum amount of emails to be sent for pate per request. If value = 0, then send all emails
+   */
+  SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE: 120,
 }
 
 module.exports = config
