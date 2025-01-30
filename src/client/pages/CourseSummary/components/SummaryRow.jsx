@@ -1,4 +1,5 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
@@ -126,6 +127,12 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions, startDate, endDate
   if (isValid(startDate) && isValid(endDate)) {
     courseLinkURL.searchParams.append('startDate', format(startDate, 'yyyy-MM-dd'))
     courseLinkURL.searchParams.append('endDate', format(endDate, 'yyyy-MM-dd'))
+  }
+
+  const [searchParams] = useSearchParams()
+  const optionParam = searchParams.get('option')
+  if (optionParam) {
+    courseLinkURL.searchParams.append('option', optionParam)
   }
 
   const link = `${courseLinkURL.pathname}${courseLinkURL.search}`
