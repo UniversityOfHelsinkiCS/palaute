@@ -1,7 +1,9 @@
 import React from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
+import { format, isValid } from 'date-fns'
 import { useSummaries } from '../api'
 import { getLanguageValue } from '../../../util/languageUtils'
 import SummaryResultItem from '../../../components/SummaryResultItem/SummaryResultItem'
@@ -106,7 +108,7 @@ export const SummaryResultElements = ({ questions, summary, feedbackResponseIndi
   )
 }
 
-export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
+export const CourseUnitSummaryRow = ({ courseUnit, questions, startDate, endDate }) => {
   const { i18n, t } = useTranslation()
 
   const labelExtras = []
@@ -122,7 +124,19 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions }) => {
     />
   )
 
-  const link = `/course-summary/course-unit/${courseUnit.courseCode}`
+  const courseLinkURL = new URL(`/course-summary/course-unit/${courseUnit.courseCode}`, 'http://dummy')
+  if (isValid(startDate) && isValid(endDate)) {
+    courseLinkURL.searchParams.append('startDate', format(startDate, 'yyyy-MM-dd'))
+    courseLinkURL.searchParams.append('endDate', format(endDate, 'yyyy-MM-dd'))
+  }
+
+  const [searchParams] = useSearchParams()
+  const optionParam = searchParams.get('option')
+  if (optionParam) {
+    courseLinkURL.searchParams.append('option', optionParam)
+  }
+
+  const link = `${courseLinkURL.pathname}${courseLinkURL.search}`
   const { summary } = courseUnit
 
   return (
@@ -159,7 +173,7 @@ export const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   )
 }
 
-export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions }) => {
+export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions, startDate, endDate }) => {
   const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
@@ -178,5 +192,7 @@ export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions 
     return <Loader />
   }
 
-  return orderedCourseUnits?.map(cu => <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} />)
+  return orderedCourseUnits?.map(cu => (
+    <CourseUnitSummaryRow key={cu.id} courseUnit={cu} questions={questions} startDate={startDate} endDate={endDate} />
+  ))
 }
