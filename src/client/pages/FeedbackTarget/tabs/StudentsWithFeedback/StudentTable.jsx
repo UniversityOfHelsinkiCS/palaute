@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { writeFileXLSX, writeFile, utils } from 'xlsx'
+import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
-import { CSVLink, CSVDownload } from 'react-csv'
+import { CSVLink } from 'react-csv'
 
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
 import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
@@ -11,6 +11,11 @@ import { orderBy } from 'lodash-es'
 import { sortTable } from '../../../../util/tableUtils'
 import DropZone from './DropZone'
 import CardSection from '../../../../components/common/CardSection'
+import { SHOW_BUTTON_DOWNLOAD_SISU_CSV } from '../../../../util/common'
+
+//This defines certain courserealisations at SISU. There is no other way to get this information
+//Name tells if courserealisation is used to gather information for SISU about who is given feedback and who is not
+const SISU_FEEDBACK_FT_CR_NAME_FI = 'Palaute'
 
 const styles = {
   box: {
@@ -33,23 +38,8 @@ const getFeedbackText = (feedbackStatusAvailable, feedbackGiven, t) => {
 }
 
 const getCourseRealisationLang = courseRealisation => {
-  let courseRealisationLang
-  // check if courseRealisation.teachingLanguage is set
-  if (courseRealisation.teachingLanguages) {
-    if (courseRealisation.teachingLanguages.length > 0) {
-      if (courseRealisation.teachingLanguages.includes('fi')) {
-        courseRealisationLang = 'fi'
-      } else if (courseRealisation.teachingLanguages.includes('en')) {
-        courseRealisationLang = 'en'
-      } else if (courseRealisation.teachingLanguages.includes('sv')) {
-        courseRealisationLang = 'sv'
-      }
-    }
-  }
-
-  if (!courseRealisationLang) {
-    courseRealisationLang = 'fi'
-  }
+  const langPriority = ['fi', 'en', 'sv']
+  const courseRealisationLang = courseRealisation.teachingLanguages?.find(lang => langPriority.includes(lang)) || 'fi'
 
   return courseRealisationLang
 }
@@ -163,6 +153,8 @@ const StudentTable = ({ students, feedbackTarget }) => {
 
   const courseRealisationEndDate = format(parseISO(feedbackTarget.courseRealisation.endDate), 'dd.MM.yyyy')
 
+  const courseRealisationNameFi = feedbackTarget.courseRealisation.name.fi
+
   const sisuData = useMemo(
     () =>
       orderBy(students, 'lastName').map(({ firstName, lastName, studentNumber, email, feedbackGiven }) => ({
@@ -187,7 +179,13 @@ const StudentTable = ({ students, feedbackTarget }) => {
           {t('feedbackTargetView:studentsWithFeedbackTab')}
           <Box mr="auto" />
           <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
-          <ExportSisuAttainmentCSV students={sisuData} fileName={sisufileName} showFeedback={feedbackStatusAvailable} />
+          {SHOW_BUTTON_DOWNLOAD_SISU_CSV && courseRealisationNameFi === SISU_FEEDBACK_FT_CR_NAME_FI && (
+            <ExportSisuAttainmentCSV
+              students={sisuData}
+              fileName={sisufileName}
+              showFeedback={feedbackStatusAvailable}
+            />
+          )}
           {feedbackStatusAvailable && (
             <Button
               endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}

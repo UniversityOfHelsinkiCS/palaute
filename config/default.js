@@ -343,6 +343,13 @@ const config = {
    * and any custom pingers should have a Prefix 'Pinger-'. Such as 'Pinger-OICD', 'Pinger-shibboleth', etc.
    */
   CUSTOM_SESSION_PINGER: 'Pinger-default',
+
+  /*Controls showing the button for downloading Sisu CSV in the feedbacktarget view - Students tab
+   * if set to true, download button will be shown to feedbacktargets which has courserealisation named 'Palaute' (finnish)
+   * which means that feedbacktarget is created based on Sisu courserealisation which gathers 'feedback given' -information to Sisu.
+   * Courserealisation / assessmentitem must approve grade hyväksytty/hylätty and credits 0
+   * */
+  SHOW_BUTTON_DOWNLOAD_SISU_CSV: false,
 }
 
 module.exports = config
