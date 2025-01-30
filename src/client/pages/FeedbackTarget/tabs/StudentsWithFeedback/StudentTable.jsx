@@ -4,11 +4,9 @@ import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
 
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
-import { ArrowDropUp, ArrowDropDown } from '@mui/icons-material'
 import { orderBy } from 'lodash-es'
 
 import { sortTable } from '../../../../util/tableUtils'
-import DropZone from './DropZone'
 import CardSection from '../../../../components/common/CardSection'
 
 const styles = {
@@ -62,7 +60,6 @@ const ExportXLSX = ({ students, fileName }) => {
 }
 
 const StudentTable = ({ students, feedbackTarget }) => {
-  const [dropZoneVisible, setDropZoneVisible] = useState(false)
   const [order, setOrder] = useState('desc')
   const [orderByKey, setOrderByKey] = useState('lastName')
   const { t } = useTranslation()
@@ -99,21 +96,9 @@ const StudentTable = ({ students, feedbackTarget }) => {
           {t('feedbackTargetView:studentsWithFeedbackTab')}
           <Box mr="auto" />
           <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
-          {feedbackStatusAvailable && (
-            <Button
-              endIcon={dropZoneVisible ? <ArrowDropUp /> : <ArrowDropDown />}
-              variant="contained"
-              color="primary"
-              sx={styles.button}
-              onClick={() => setDropZoneVisible(!dropZoneVisible)}
-            >
-              {t('common:combineCSV')}
-            </Button>
-          )}
         </Box>
       }
     >
-      {dropZoneVisible && <DropZone students={studentsData} />}
       <Table>
         <TableHead>
           <TableRow>

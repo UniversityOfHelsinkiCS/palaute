@@ -36,8 +36,6 @@
     "feedbackGiven": "Given",
     "feedbackNotGiven": "Inte given",
     "feedbackHidden": "Gömd",
-    "dropZoneInfo1": "Dra hit en fil, eller hitta den genom att klicka på denhär rutan",
-    "dropZoneInfo2": "En .csv fil mindre än 5MB godkänns",
     "feedbackHeader": "RESPONS",
     "actions": "Handlingar",
     "close": "Stäng",
