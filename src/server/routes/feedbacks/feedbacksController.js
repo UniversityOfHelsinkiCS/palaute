@@ -21,6 +21,7 @@ const create = async (req, res) => {
   })
 
   const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
+
   if (!feedbackCanBeGiven) ApplicationError.Forbidden('Feedback is not open')
 
   if (!access?.canGiveFeedback() || !userFeedbackTarget) ApplicationError.Forbidden('Not an enrolled student')
@@ -28,7 +29,9 @@ const create = async (req, res) => {
   if (userFeedbackTarget.feedbackId)
     throw new ApplicationError('Attempt to create new feedback where one already exists. Use PUT to update the old')
 
-  if (!(await validateFeedback(data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
+  if (!(await validateFeedback(data, feedbackTarget))) {
+    throw new ApplicationError('Form data not valid', 400)
+  }
 
   // Updating userFeedbackTarget as well when the user gives feedback
   userFeedbackTarget.notGivingFeedback = false
@@ -44,7 +47,7 @@ const create = async (req, res) => {
 
   // Update summary. Fail silently if fails
   try {
-    await updateSummaryAfterFeedbackCreated(newFeedback)
+    await updateSummaryAfterFeedbackCreated(feedbackTargetId, newFeedback)
   } catch (err) {
     Sentry.captureException(err)
     logger.error('Failed to update summary after feedback created', err)
