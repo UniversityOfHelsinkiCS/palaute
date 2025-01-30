@@ -756,6 +756,7 @@ describe('Students', () => {
     // New tabs are rendered when feedback was given
     cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
 
+    // Should navigate to the results tab
     cy.url().should('include', '/results')
 
     // Edit answer
