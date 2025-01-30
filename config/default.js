@@ -343,6 +343,11 @@ const config = {
    * and any custom pingers should have a Prefix 'Pinger-'. Such as 'Pinger-OICD', 'Pinger-shibboleth', etc.
    */
   CUSTOM_SESSION_PINGER: 'Pinger-default',
+
+  /**
+   * Survey opening emails, maximum amount of emails to be sent for pate per request. If value = 0, then send all emails
+   */
+  SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE: 0,
 }
 
 module.exports = config

@@ -272,6 +272,11 @@ const config = {
    * Controls showing of chips at course unit level based on the chips of its feedback targets
    */
   SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: true,
+
+  /**
+   * Survey opening emails, maximum amount of emails to be sent for pate per request. If value = 0, then send all emails
+   */
+  SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE: 120,
 }
 
 module.exports = config
