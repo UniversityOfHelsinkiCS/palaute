@@ -24,7 +24,7 @@ describe('Admin email stats view', () => {
     cy.contains('opiskelija@toska.fi')
     cy.contains('now open: Testauskurssi')
   })
-  it.only('shows the email when feedback response reminder should be sent', () => {
+  it('shows the email when feedback response reminder should be sent', () => {
     cy.loginAs(admin)
     cy.setFeedbackActive()
     cy.giveFeedback(student)
