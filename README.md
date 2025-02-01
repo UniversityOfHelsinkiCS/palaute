@@ -35,6 +35,7 @@ To run tests, you can use these commands:
 
 ```bash
 $ npm run test:cypress # Open Cypress UI
+$ npm run test:setupLocal # Run the app with a test database
 $ npm run test:run # Run all Cypress specs in headless mode
 $ npm test # CI, build test app and run all specs. Slow!
 ```
