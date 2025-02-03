@@ -15,8 +15,8 @@ export const seedFeedbacks = async (feedbackDatas: FeedbackData[]) => {
     ],
   })
 
-  // @ts-expect-error fbt is not null
   await Promise.all(
+    // @ts-expect-error fbt is any
     (fbt!.userFeedbackTargets as any[]).map(async (uft, idx) => {
       if (idx >= feedbackDatas.length) return
       const ftData = feedbackDatas[idx]
