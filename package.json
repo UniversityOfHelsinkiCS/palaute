@@ -107,7 +107,7 @@
     "unfuck-spa-shibboleth-session": "4.1.0",
     "unfuck-utf8-headers-middleware": "1.0.1",
     "uuid": "11.0.3",
-    "vite": "5.4.11",
+    "vite": "5.4.12",
     "winston": "3.17.0",
     "xlsx": "^0.18.5",
     "yup": "1.4.0"
