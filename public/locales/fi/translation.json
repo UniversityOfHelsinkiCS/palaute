@@ -53,6 +53,7 @@
     "export": "Lataa",
     "exportPdf": "Lataa pdf",
     "exportXLSX": "Lataa XLSX",
+    "exportSisuAttainmentCSV": "Lataa Sisu Arviointi CSV",
     "exportCsv": "Lataa CSV",
     "combineCSV": "Yhdistä Sisu-CSV:n kanssa",
     "downloadCSV": "Lataa tiedosto",

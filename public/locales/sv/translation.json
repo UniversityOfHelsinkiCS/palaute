@@ -54,6 +54,7 @@
     "exportPdf": "Exportera som pdf",
     "exportCsv": "Exportera som CSV",
     "exportXLSX": "Exportera som XLSX",
+    "exportSisuAttainmentCSV": "Ladda ner Sisu Bedömning CSV",
     "combineCSV": "Kombinera med Sisu CSV",
     "downloadCSV": "Ladda ner fil",
     "changePublicity": "Ändra synlighet",
