@@ -15,7 +15,6 @@ import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
-import { getGroups } from './utils'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const NotEnoughFeedbacks = ({ t }) => (
@@ -49,6 +48,26 @@ const OnlyTeacherAccess = ({ t }) => (
   </Box>
 )
 
+/**
+ * Get the groups for the feedback target
+ * If the feedback target has a grouping question, use the options from that question
+ * Otherwise use the groups from the feedback target
+ */
+const getGroups = feedbackTarget => {
+  const groupQuestion = feedbackTarget.surveys.teacherSurvey?.questions?.find(q => q.secondaryType === 'GROUPING')
+
+  if (groupQuestion) {
+    return groupQuestion.data.options.map(opt => ({
+      id: opt.id,
+      name: opt.label,
+      teachers: feedbackTarget.groups?.find(g => g.id === opt.id)?.teachers,
+      // It would be nice to have studentCount here as well. Atm it's not available when using grouping question
+    }))
+  }
+
+  return feedbackTarget.groups ?? []
+}
+
 const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef }) => {
   const { ref, inView } = useInView({ initialInView: true })
 
@@ -59,6 +78,7 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
   const groups = getGroups(feedbackTarget)
 
   const hasMultipleGroups = groups?.length > 1
+
   const feedbacks = feedbackResults?.feedbacks
   const groupsAvailable = feedbackResults?.groupsAvailable
 

@@ -35,17 +35,21 @@ const GroupButton: React.FC<GroupButtonProps> = ({ option, onClick, value, ...pr
 
   const buttonLabel = <Box p={1}>{option.name}</Box>
 
+  const hasTooltipContent = option.studentCount || option.teachers
+
   const buttonChildren =
-    option.id !== 'ALL' ? (
+    option.id !== 'ALL' && hasTooltipContent ? (
       <PaperTooltip
         title={
           <Box p="0.3rem">
-            <Typography variant="body2">
-              {t('common:studentCount')}:{' '}
-              <Typography component="span" color="textSecondary">
-                {option.studentCount}
+            {option.studentCount && (
+              <Typography variant="body2">
+                {t('common:studentCount')}:{' '}
+                <Typography component="span" color="textSecondary">
+                  {option.studentCount}
+                </Typography>
               </Typography>
-            </Typography>
+            )}
             {option.teachers && (
               <>
                 <Typography variant="body2" sx={{ mt: '0.3rem', mb: '0.2rem' }}>
@@ -105,7 +109,6 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
       teachers: group.teachers,
       studentCount: group.studentCount,
     }))
-    .filter(group => group.studentCount && group.studentCount > 0 && group.studentCount < studentCount)
     .sort(sortGroups)
 
   const groupOptions: GroupOption[] = React.useMemo(() => {
