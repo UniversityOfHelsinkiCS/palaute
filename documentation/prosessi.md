@@ -23,7 +23,7 @@ In Progress
 In Review
 
 - Toteuttajan puolelta valmis, odottaa katselmointia tai on katselmoinnissa
-  - tiketistä on linkki vastaavaan PR:n  
+  - tiketistä on linkki vastaavaan PR:n
 
 Ready For QA
 
@@ -187,3 +187,45 @@ Kuvattava työ sillä tasolla, että:
 - mahdollisen virkistyksen alla
 - testissä
 - tuotannossa
+
+## Git-haarat
+
+```mermaid
+%%{init: {
+  'gitGraph': {
+    'mainBranchName': 'master',
+    'mainBranchOrder': 3,
+    'theme': 'base'
+  }
+} }%%
+
+  gitGraph TB:
+    commit id: "prehistory..."
+
+    branch tau order: 4
+    branch veikkos-feature-1 order: 1
+
+    checkout veikkos-feature-1
+    commit id: "feat: Cool stuff"
+    commit id: "fix: A bug" tag: "v1.2.3-beta.1"
+
+    branch veikkos-feature-2 order: 0
+    checkout veikkos-feature-2
+    commit id: "fix: Quick fixes" tag: "v1.2.3-beta.2"
+
+    checkout tau
+    commit id: "tau changez"
+    commit id: "more"
+
+    checkout master
+    merge veikkos-feature-1 id: "TAU reviews"
+    merge tau id: "HY reviews"
+    merge veikkos-feature-2 id: "TAU reviews 2"
+
+    checkout master
+    commit tag: "v1.2.3"
+
+    checkout tau
+    merge master
+
+```
