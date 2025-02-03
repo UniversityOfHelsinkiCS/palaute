@@ -56,6 +56,12 @@ const resetDb = async (req, res) => {
   return res.send(204)
 }
 
+const seedFeedbacks = async (req, res) => {
+  const { feedbackDatas } = req.body
+  await seedFeedbacks(feedbackDatas)
+  return res.send(201)
+}
+
 const getTestFbtId = async (req, res) => {
   const fbt = await FeedbackTarget.findOne({
     where: {
@@ -87,6 +93,7 @@ router.use(morgan('dev'))
 router.post('/init-summary', initSummary)
 router.post('/seed-users', seedTestUsers2)
 router.post('/seed-feedback-targets', seedFeedbackTargets)
+router.post('/seed-feedbacks', seedFeedbacks)
 router.post('/seed-organisation-correspondent', seedOrganisationCorrespondentHandler)
 router.post('/reset-db', resetDb)
 
