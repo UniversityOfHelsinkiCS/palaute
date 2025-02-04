@@ -4,7 +4,7 @@ import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
 import { CSVLink } from 'react-csv'
 
-import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
+import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box } from '@mui/material'
 import { Download } from '@mui/icons-material'
 import { orderBy } from 'lodash-es'
 
@@ -111,9 +111,9 @@ const ExportSisuAttainmentCSV = ({ students, fileName }) => {
 
   return (
     <CSVLink data={data} filename={`${fileName}.csv`}>
-      <Button sx={styles.button} variant="contained">
+      <NorButton sx={styles.button} icon={<Download />} color="primary" disabled={!students.length}>
         {t('common:exportSisuAttainmentCSV')}
-      </Button>
+      </NorButton>
     </CSVLink>
   )
 }
