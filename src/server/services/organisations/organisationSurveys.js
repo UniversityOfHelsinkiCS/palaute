@@ -229,11 +229,10 @@ const getSurveyById = async feedbackTargetId => {
         required: true,
       },
       {
-        model: UserFeedbackTarget,
+        model: UserFeedbackTarget.scope('students'),
         attributes: ['id'],
         as: 'students',
         required: false,
-        where: { accessStatus: 'STUDENT' },
         include: {
           model: User,
           attributes: ['studentNumber'],

@@ -53,17 +53,10 @@ const getAllTeacherCourseUnits = async (user, query) => {
             model: UserFeedbackTarget.scope('teachers'),
             as: 'userFeedbackTargets',
             required: true,
-            attributes: ['id'],
+            attributes: [],
             where: {
               userId: user.id,
             },
-          },
-          {
-            model: UserFeedbackTarget.scope('students'),
-            as: 'students',
-            required: false,
-            separate: true,
-            attributes: ['id'],
           },
           {
             model: Summary,

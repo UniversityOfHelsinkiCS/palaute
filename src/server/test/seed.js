@@ -106,8 +106,8 @@ const seedUniversity = async () => {
 
 const seedDb = async () => {
   // Reset caches
-  userCache.invalidateAll()
-  feedbackTargetCache.invalidateAll()
+  await userCache.invalidateAll()
+  await feedbackTargetCache.invalidateAll()
 
   // First reset all tables
 
