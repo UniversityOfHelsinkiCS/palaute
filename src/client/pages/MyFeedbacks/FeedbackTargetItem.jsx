@@ -4,7 +4,7 @@ import { useSnackbar } from 'notistack'
 import { useQueryClient } from 'react-query'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Button, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typography } from '@mui/material'
+import { Box, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typography } from '@mui/material'
 
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
@@ -23,14 +23,14 @@ import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngo
 import feedbackTargetNotGivingFeedback from '../../util/feedbackTargetNotGivingFeedback'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/common'
 import { getCourseCode } from '../../util/courseIdentifiers'
+import { NorButton } from '../../components/common/NorButton'
 
 const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }) => {
   const { t } = useTranslation()
 
   return (
     <div>
-      <Button
-        variant="contained"
+      <NorButton
         color="primary"
         to={editPath}
         component={Link}
@@ -38,7 +38,7 @@ const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback })
         sx={{ mr: '1rem' }}
       >
         {t('userFeedbacks:giveFeedbackButton')}
-      </Button>
+      </NorButton>
 
       <NotGivingFeedbackButton noFeedbackAllowed={noFeedbackAllowed} onNotGivingFeedback={onNotGivingFeedback} />
     </div>
@@ -50,14 +50,9 @@ const NotGivingFeedbackButton = ({ noFeedbackAllowed, onNotGivingFeedback }) => 
 
   if (noFeedbackAllowed) {
     return (
-      <Button
-        variant="contained"
-        color="error"
-        onClick={onNotGivingFeedback}
-        data-cy="feedback-item-not-giving-feedback"
-      >
+      <NorButton color="error" onClick={onNotGivingFeedback} data-cy="feedback-item-not-giving-feedback">
         {t('userFeedbacks:notGivingFeedbackButton')}
-      </Button>
+      </NorButton>
     )
   }
   return null
@@ -86,12 +81,12 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback 
 
       <Dialog data-cy="feedback-item-clear-feedback-dialog" open={open} onClose={handleClose}>
         <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
-        <Button data-cy="feedback-item-view-feedback-cancel" onClick={handleClose} color="primary">
+        <NorButton data-cy="feedback-item-view-feedback-cancel" onClick={handleClose} color="primary">
           {t('userFeedbacks:no')}
-        </Button>
-        <Button data-cy="feedback-item-view-feedback-confirm" onClick={handleSubmit} color="primary" autoFocus>
+        </NorButton>
+        <NorButton data-cy="feedback-item-view-feedback-confirm" onClick={handleSubmit} color="primary" autoFocus>
           {t('userFeedbacks:yes')}
-        </Button>
+        </NorButton>
       </Dialog>
     </Box>
   )
@@ -102,8 +97,7 @@ const GiveModifyFeedbackButton = ({ notGivingFeedback, editPath, componentLink }
 
   if (notGivingFeedback) {
     return (
-      <Button
-        variant="contained"
+      <NorButton
         color="primary"
         to={editPath}
         component={componentLink}
@@ -111,20 +105,19 @@ const GiveModifyFeedbackButton = ({ notGivingFeedback, editPath, componentLink }
         sx={{ mr: '1rem' }}
       >
         {t('userFeedbacks:giveFeedbackButton')}
-      </Button>
+      </NorButton>
     )
   }
   return (
-    <Button
+    <NorButton
       data-cy="feedback-item-modify-feedback"
-      variant="outlined"
-      color="primary"
+      color="secondary"
       component={componentLink}
       to={editPath}
       sx={{ mr: '1rem' }}
     >
       {t('userFeedbacks:modifyFeedbackButton')}
-    </Button>
+    </NorButton>
   )
 }
 
@@ -139,9 +132,9 @@ const RemoveFeedbackButton = ({ notGivingFeedback, setOpen }) => {
     return null
   }
   return (
-    <Button data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
+    <NorButton data-cy="feedback-item-clear-feedback" color="error" onClick={handleOpen}>
       {t('userFeedbacks:clearFeedbackButton')}
-    </Button>
+    </NorButton>
   )
 }
 
@@ -150,16 +143,15 @@ const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }) => {
 
   if (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
     return (
-      <Button
+      <NorButton
         data-cy="feedback-item-view-feedback"
-        variant="outlined"
-        color="primary"
+        color="secondary"
         component={Link}
         to={viewPath}
         sx={{ mr: '1rem' }}
       >
         {t('userFeedbacks:viewFeedbackSummary')}
-      </Button>
+      </NorButton>
     )
   }
   return null
@@ -169,9 +161,9 @@ const FeedbackEndedActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button color="primary" variant="outlined" component={Link} to={viewPath}>
+    <NorButton color="secondary" component={Link} to={viewPath}>
       {t('userFeedbacks:viewFeedbackSummary')}
-    </Button>
+    </NorButton>
   )
 }
 
@@ -179,9 +171,9 @@ const ContinuousFeedbackActions = ({ viewPath }) => {
   const { t } = useTranslation()
 
   return (
-    <Button color="primary" variant="contained" component={Link} to={viewPath} data-cy="giveContinuousFeedback">
+    <NorButton color="primary" component={Link} to={viewPath} data-cy="giveContinuousFeedback">
       {t('userFeedbacks:giveContinuousFeedback')}
-    </Button>
+    </NorButton>
   )
 }
 

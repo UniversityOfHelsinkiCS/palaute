@@ -1,29 +1,17 @@
 import React, { useState } from 'react'
-import {
-  Autocomplete,
-  Alert,
-  Collapse,
-  Chip,
-  Button,
-  Box,
-  Dialog,
-  Grid,
-  IconButton,
-  Typography,
-  TextField,
-  DialogTitle,
-} from '@mui/material'
-import ExpandLess from '@mui/icons-material/ExpandLess'
-import ExpandMore from '@mui/icons-material/ExpandMore'
+import { Autocomplete, Chip, Box, Dialog, Grid2 as Grid, Typography, TextField, DialogTitle } from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
+import CourseSearchInput from './CourseSearchInput'
+import { NorButton } from '../../components/common/NorButton'
 
 import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
 import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../util/common'
+import Instructions from '../../components/common/Instructions'
 
 const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()
@@ -64,15 +52,19 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName}`}
         freeSolo
-        ChipProps={{
-          'data-cy': `formik-responsible-teacher-input-field-chip`,
+        slotProps={{
+          chip: {
+            'data-cy': `formik-responsible-teacher-input-field-chip`,
+          },
         }}
         renderInput={params => (
           <TextField
             {...params}
-            inputProps={{
-              ...params.inputProps,
-              'data-cy': 'formik-responsible-teacher-input-field',
+            slotProps={{
+              htmlInput: {
+                ...params.inputProps,
+                'data-cy': 'formik-responsible-teacher-input-field',
+              },
             }}
             label={t('organisationSurveys:responsibleTeachers')}
           />
@@ -85,43 +77,43 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
 
 const StudenNumberInputInfo = () => {
   const { t } = useTranslation()
-  const [expand, setExpand] = useState(false)
 
   return (
-    <Box my={2}>
-      <Alert data-cy="formik-student-number-input-alert" severity="info">
-        <Box sx={{ display: 'flex', alignItems: 'center', mt: -1 }}>
-          <Typography variant="body2">{t('organisationSurveys:studentNumberInformation')}</Typography>
-
-          <IconButton data-cy="formik-student-number-input-expand-icon" onClick={() => setExpand(!expand)}>
-            {!expand ? <ExpandMore /> : <ExpandLess />}
-          </IconButton>
-        </Box>
-
-        <Collapse in={expand} timeout="auto" unmountOnExit>
-          <ul data-cy="formik-student-number-input-delimeter-list">
-            <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
-            <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
-            <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
-            <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
-          </ul>
-          <Typography variant="body2" mt={2}>
-            {t('organisationSurveys:studentNumberExampleInput')}
-          </Typography>
-          <Box
-            data-cy="formik-student-number-input-example"
-            sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }}
-            component="pre"
-          >
-            010000003;
-            <br />
-            011000002,
-            <br />
-            011000090 011000003
-          </Box>
-        </Collapse>
-      </Alert>
-    </Box>
+    <Instructions
+      title={t('organisationSurveys:studentNumberInformation')}
+      alertProps={{
+        'data-cy': 'formik-student-number-input-alert',
+        severity: 'info',
+        message: t('organisationSurveys:studentNumberInformation'),
+      }}
+      iconButtonProps={{
+        'data-cy': 'formik-student-number-input-expand-icon',
+      }}
+      collapseProps={{
+        'data-cy': 'formik-student-number-input-delimeter-list',
+      }}
+    >
+      <ul>
+        <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
+        <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>
+        <li>{t('organisationSurveys:studentNumberDelimeters:space')}</li>
+        <li>{t('organisationSurveys:studentNumberDelimeters:newline')}</li>
+      </ul>
+      <Typography variant="body2" mt={2}>
+        {t('organisationSurveys:studentNumberExampleInput')}
+      </Typography>
+      <Box
+        data-cy="formik-student-number-input-example"
+        sx={{ background: 'white', maxWidth: 480, p: 1, border: 1, borderRadius: 1 }}
+        component="pre"
+      >
+        010000003;
+        <br />
+        011000002,
+        <br />
+        011000090 011000003
+      </Box>
+    </Instructions>
   )
 }
 
@@ -158,7 +150,11 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           if (
             editView &&
             reason === 'removeOption' &&
-            !window.confirm(t('organisationSurveys:confirmStudentDelete', { studentNumber: detail.option }))
+            !window.confirm(
+              t('organisationSurveys:confirmStudentDelete', {
+                studentNumber: detail.option,
+              })
+            )
           )
             return
 
@@ -209,21 +205,21 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   )
 }
 
-const OrganisationSurveyForm = () => {
+const OrganisationSurveyForm = ({ organisationCode }) => {
   const { t } = useTranslation()
 
   return (
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <ResponsibleTeachersSelector
           name="teacherIds"
           title={t('organisationSurveys:responsibleTeacherTitle')}
@@ -231,33 +227,34 @@ const OrganisationSurveyForm = () => {
         />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <StudentNumberInput
           name="studentNumbers"
           title={t('organisationSurveys:studentNumberTitle')}
           label={t('organisationSurveys:studentNumberInputLabel')}
         />
       </Grid>
+      <CourseSearchInput organisationCode={organisationCode} />
     </Grid>
   )
 }
 
-const EditOrganisationSurveyForm = () => {
+const EditOrganisationSurveyForm = ({ organisationCode }) => {
   const { t } = useTranslation()
 
   return (
     <Grid spacing={4} container>
       <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
       </Grid>
 
-      <Grid md={6} sm={12} xs={12} item>
+      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
         <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <ResponsibleTeachersSelector
           name="teacherIds"
           title={t('organisationSurveys:editResponsibleTeacherTitle')}
@@ -265,7 +262,7 @@ const EditOrganisationSurveyForm = () => {
         />
       </Grid>
 
-      <Grid xs={12} item>
+      <Grid size={12}>
         <StudentNumberInput
           name="studentNumbers"
           title={t('organisationSurveys:editStudentNumberTitle')}
@@ -273,6 +270,7 @@ const EditOrganisationSurveyForm = () => {
           editView
         />
       </Grid>
+      <CourseSearchInput organisationCode={organisationCode} />
     </Grid>
   )
 }
@@ -285,6 +283,7 @@ const OrganisationSurveyEditor = ({
   editing,
   onStopEditing,
   editView = false,
+  organisationCode,
 }) => {
   const { t } = useTranslation()
 
@@ -303,28 +302,29 @@ const OrganisationSurveyEditor = ({
           return (
             <Form>
               <Box sx={{ m: 4 }}>
-                {editView ? <EditOrganisationSurveyForm /> : <OrganisationSurveyForm />}
+                {editView ? (
+                  <EditOrganisationSurveyForm organisationCode={organisationCode} />
+                ) : (
+                  <OrganisationSurveyForm organisationCode={organisationCode} />
+                )}
 
-                <Box sx={{ mt: 2 }}>
-                  <Button
-                    data-cy="organisation-survey-editor-save"
-                    disabled={disabled}
-                    color="primary"
-                    variant="contained"
-                    type="submit"
-                  >
-                    {t('common:save')}
-                  </Button>
-                  <Button
+                <Box sx={{ mt: 4, display: 'flex', justifyContent: 'right', gap: 2 }}>
+                  <NorButton
                     data-cy="organisation-survey-editor-cancel"
-                    sx={{ ml: 4 }}
-                    color="error"
-                    variant="contained"
+                    color="cancel"
                     type="button"
                     onClick={onStopEditing}
                   >
                     {t('common:cancel')}
-                  </Button>
+                  </NorButton>
+                  <NorButton
+                    data-cy="organisation-survey-editor-save"
+                    disabled={disabled}
+                    color="primary"
+                    type="submit"
+                  >
+                    {t('common:save')}
+                  </NorButton>
                 </Box>
               </Box>
             </Form>

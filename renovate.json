@@ -1,7 +1,6 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended", "docker:disable"],
-  "reviewers": ["hremonen"],
   "rangeStrategy": "pin",
   "packageRules": [
     {

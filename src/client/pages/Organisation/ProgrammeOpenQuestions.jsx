@@ -1,6 +1,6 @@
 import React, { useState, useRef, forwardRef } from 'react'
 import { useParams } from 'react-router-dom'
-import { Box, Typography, Divider, Button, Link } from '@mui/material'
+import { Box, Typography, Divider, Link } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 
@@ -10,6 +10,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 import ExportButton from '../../components/common/ExportButton'
+import { NorButton } from '../../components/common/NorButton'
 
 const styles = {
   courseTitle: {
@@ -124,9 +125,9 @@ const ExportPdfLink = ({ componentRef }) => {
   })
 
   return (
-    <Button sx={styles.button} onClick={handlePrint}>
+    <NorButton sx={styles.button} onClick={handlePrint}>
       {t('common:exportPdf')}
-    </Button>
+    </NorButton>
   )
 }
 

@@ -1,6 +1,5 @@
 import React from 'react'
 import {
-  Button,
   Checkbox,
   CircularProgress,
   FormControl,
@@ -14,6 +13,7 @@ import {
 import { Download } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
+import { NorButton } from '../../components/common/NorButton'
 import { useSummaryContext } from './context'
 import apiClient from '../../util/apiClient'
 
@@ -69,9 +69,9 @@ const GenerateReport = () => {
 
   return (
     <div>
-      <Button variant="outlined" onClick={ev => setAnchorEl(ev.currentTarget)}>
+      <NorButton color="primary" onClick={ev => setAnchorEl(ev.currentTarget)} icon={<Download />}>
         {t('common:exportXLSX')}
-      </Button>
+      </NorButton>
       <Popover
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -110,15 +110,15 @@ const GenerateReport = () => {
               <FormControlLabel value={false} control={<Radio />} label={t('generateReport:selectedTime')} />
               <FormControlLabel value control={<Radio />} label={t('generateReport:allTime')} />
             </RadioGroup>
-            <Button
+            <NorButton
+              color="primary"
               type="submit"
               disabled={!isValid || isLoading}
               sx={{ mt: '1rem' }}
-              variant="contained"
-              endIcon={isLoading ? <CircularProgress sx={{ color: 'primary.main' }} size={16} /> : <Download />}
+              icon={isLoading ? <CircularProgress sx={{ color: 'primary.main' }} size={16} /> : <Download />}
             >
               {t('common:exportXLSX')}
-            </Button>
+            </NorButton>
           </FormControl>
         </form>
       </Popover>

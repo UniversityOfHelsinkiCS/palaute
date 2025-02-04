@@ -178,26 +178,6 @@ describe('Feedback Correspondents', () => {
     cy.get('@studentInput').contains('p', 'Please check the indicated invalid student numbers')
   })
 
-  it.skip('can not set the end date to be before the start date', () => {
-    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
-
-    // try to set the end date to be before the start date
-    cy.get('[data-cy="organisation-surveys-add-new"]').click()
-    cy.get('[data-cy="formik-locales-field-en-name"]').type('Test survey')
-
-    // FIX:
-    // This shit is not working in the CI as the Material UI DatePicker component
-    // is rendered as mobile version and it is readonly, even the force type doees not work
-    cy.get('[data-cy="formik-date-picker-field-startDate-input"]')
-      .clear('input', { force: true })
-      .type('01/01/2100{enter}', { force: true })
-
-    cy.get('[data-cy="organisation-survey-editor-save"]').click()
-
-    cy.get('[data-cy="formik-date-picker-field-endDate"]').parent().as('endDateInputParent')
-    cy.get('@endDateInputParent').contains('p', 'Survey closing date is before opening date')
-  })
-
   it('can edit organisation surveys', () => {
     cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
 
@@ -465,6 +445,53 @@ describe('Feedback Correspondents', () => {
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
+
+  it('can add students from courses and from student field and delete the course afterwards', () => {
+    const today = new Date()
+    const organisationCode = 'TEST_ORG'
+    const organisationSurveyBody = {
+      name: {
+        fi: 'Uusi kysely',
+        en: 'New survey',
+        sv: 'Katten i vatten',
+      },
+      studentNumbers: [student.studentNumber],
+      teacherIds: [organisationCorrespondent.hyPersonSisuId],
+      startDate: today,
+      endDate: new Date().setDate(today.getDate() + 1),
+      courseRealisationIds: ['norppa-test-course-unit-realisation-id-2'],
+    }
+
+    cy.createFeedbackTarget({ extraStudents: 9 })
+
+    cy.createOrganisationSurvey(organisationCode, organisationSurveyBody)
+
+    cy.visit(`/organisations/TEST_ORG/organisation-surveys`)
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="organisation-survey-show-feedback-${organisationSurvey.id}"]`).should('exist').click()
+    })
+
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"').should('exist').click()
+
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type(`${studentHenri.studentNumber}{enter}`)
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="feedback-target-students-with-feedback-tab"]').should('exist').click()
+    cy.contains('henri.testaaja@helsinki.fi').should('exist')
+
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
+
+    cy.get('[data-cy="formik-course-input-field-chip-norppa-test-course-unit-realisation-id-2"]').as('courseChip')
+    cy.get('@courseChip').find('[data-testId="CancelIcon"]').should('exist').click()
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="feedback-target-results-tab"]').should('exist').click()
+
+    cy.get('[data-cy="feedback-target-students-with-feedback-tab"]').should('exist').click()
+    cy.contains('henri.testaaja@helsinki.fi').should('exist')
+    cy.contains('opiskelija@toska.fi').should('not.exist')
+  })
 })
 
 describe('Responsible Teachers', () => {
@@ -653,6 +680,29 @@ describe('Responsible Teachers', () => {
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
+
+  it('can add students after creation and student count increases', () => {
+    cy.visit(`/courses`)
+
+    cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('exist')
+    cy.get('[data-cy="course-unit-group-expand-more"').should('exist').click()
+
+    // Edit the survey to add students and new responsible teacher
+    cy.get('[data-cy="my-teaching-course-unit-item-TEST_ORG-SRV"').should('exist').click()
+    cy.get('@organisationSurvey').then(organisationSurvey => {
+      cy.get(`[data-cy="my-teaching-feedback-target-item-link-${organisationSurvey.id}"]`).should('exist').click()
+    })
+
+    cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
+
+    // Add student
+    cy.get('[data-cy="formik-student-number-input-field"]').as('studentInput')
+    cy.get('@studentInput').type(`${student.studentNumber}{enter}`)
+
+    cy.get('[data-cy="organisation-survey-editor-save"]').click()
+
+    cy.get('[data-cy="feedback-target-feedback-count-percentage"]').should('exist').contains('0/1')
+  })
 })
 
 describe('Students', () => {
@@ -706,6 +756,7 @@ describe('Students', () => {
     // New tabs are rendered when feedback was given
     cy.get('[data-cy="feedback-target-results-feedback-chart"]').should('exist')
 
+    // Should navigate to the results tab
     cy.url().should('include', '/results')
 
     // Edit answer

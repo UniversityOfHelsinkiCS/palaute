@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
-import { Button } from '@mui/material'
 import { Edit } from '@mui/icons-material'
-
 import { useSnackbar } from 'notistack'
-
 import { useTranslation } from 'react-i18next'
-
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
 import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+import { NorButton } from '../../../components/common/NorButton'
 
 const EditOrganisationSurvey = () => {
   const { t } = useTranslation()
@@ -32,6 +29,7 @@ const EditOrganisationSurvey = () => {
     endDate: organisationSurvey.closesAt,
     studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
     teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
+    courses: organisationSurvey.courses,
   }
 
   const organisationSurveySchema = getOrganisationSurveySchema(t)
@@ -55,12 +53,12 @@ const EditOrganisationSurvey = () => {
       surveyId: organisationSurvey.id,
       ...data,
       teacherIds: data.teachers.map(t => t.id),
+      courseRealisationIds: data.courses.map(c => c.id),
     }
 
     await editMutation.mutateAsync(values, {
       onSuccess: () => {
         handleClose()
-
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       },
       onError: error => {
@@ -83,15 +81,15 @@ const EditOrganisationSurvey = () => {
 
   return (
     <>
-      <Button
+      <NorButton
         data-cy="feedback-target-edit-organisation-survey"
         sx={{ textAlign: 'left', justifyContent: 'start' }}
         onClick={handleClose}
-        variant="outlined"
-        startIcon={<Edit />}
+        color="secondary"
+        icon={<Edit />}
       >
         {t('organisationSurveys:editSurvey')}
-      </Button>
+      </NorButton>
 
       <OrganisationSurveyEditor
         title={t('organisationSurveys:editSurvey')}
@@ -101,6 +99,7 @@ const EditOrganisationSurvey = () => {
         editing={showForm}
         onStopEditing={handleClose}
         editView
+        organisationCode={organisations[0]?.code}
       />
     </>
   )

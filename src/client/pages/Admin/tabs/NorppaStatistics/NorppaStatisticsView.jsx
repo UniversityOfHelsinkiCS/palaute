@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import { Box, Button, CircularProgress, Typography, TextField, Alert } from '@mui/material'
+import { Box, CircularProgress, Typography, TextField, Alert } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { writeFileXLSX, utils } from 'xlsx'
-
+import { NorButton } from '../../../../components/common/NorButton'
 import apiClient from '../../../../util/apiClient'
 import { getHeaders, getData } from '../../utils'
 
@@ -31,15 +31,13 @@ const ExportXLSX = ({ results }) => {
   utils.book_append_sheet(workbook, worksheet, 'norppa-statistics')
 
   return (
-    <Button
-      sx={styles.button}
-      variant="contained"
+    <NorButton
       color="primary"
       disabled={!results.length}
       onClick={() => writeFileXLSX(workbook, 'norppa-statistics.xlsx')}
     >
       Download as XLSX
-    </Button>
+    </NorButton>
   )
 }
 
@@ -111,14 +109,14 @@ const NorppaStatisticView = () => {
           sx={styles.datePicker}
         />
       </Box>
-      <Button variant="contained" color="primary" onClick={getStatistics} sx={styles.button} disabled={!paramsChanged}>
+      <NorButton color="primary" onClick={getStatistics} sx={styles.button} disabled={!paramsChanged}>
         {!loading && <span>Fetch statistics</span>}
         {loading && (
           <Box display="flex" alignContent="space-between">
             <span>fetching</span> <CircularProgress size={20} />
           </Box>
         )}
-      </Button>
+      </NorButton>
       <ExportXLSX results={results} />
       {!results.length && !paramsChanged && (
         <Alert marginTop={2} severity="warning">

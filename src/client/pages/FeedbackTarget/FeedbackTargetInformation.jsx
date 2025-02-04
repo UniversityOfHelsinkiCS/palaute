@@ -21,15 +21,11 @@ const FeedbackTargetInformation = () => {
 
   const { feedbackTarget, isStudent, isTeacher } = useFeedbackTargetContext()
 
-  const {
-    courseUnit,
-    courseRealisation,
-    administrativePersons,
-    responsibleTeachers,
-    teachers,
-    feedbackCount,
-    studentCount,
-  } = feedbackTarget
+  const { courseUnit, courseRealisation, administrativePersons, responsibleTeachers, teachers, summary } =
+    feedbackTarget
+
+  const feedbackCount = summary?.data?.feedbackCount ?? 0
+  const studentCount = summary?.data?.studentCount ?? 0
 
   const primaryCourseName = getLanguageValue(
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),

@@ -1,9 +1,10 @@
 import React from 'react'
-import { Button, Dialog } from '@mui/material'
+import { Dialog } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
+import { NorButton } from '../../../components/common/NorButton'
 
 const EditFeedbackTargetDates = () => {
   const { t } = useTranslation()
@@ -16,15 +17,15 @@ const EditFeedbackTargetDates = () => {
 
   return (
     <>
-      <Button
-        sx={{ textAlign: 'left', justifyContent: 'start' }}
+      <NorButton
+        sx={{ textAlign: 'left', justifyContent: 'start', maxWidth: 'fit-content' }}
         data-cy="feedback-target-edit-period"
         onClick={() => setDialogOpen(true)}
-        variant="outlined"
-        startIcon={<Edit />}
+        color="secondary"
+        icon={<Edit />}
       >
         {t('feedbackTargetSettings:editPeriodTitle')}
-      </Button>
+      </NorButton>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
         <FeedbackPeriodForm />

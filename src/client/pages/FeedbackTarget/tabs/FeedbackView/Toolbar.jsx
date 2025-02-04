@@ -1,8 +1,10 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import { Box, Button } from '@mui/material'
-import { useTranslation } from 'react-i18next'
 
+import { Box } from '@mui/material'
+import { Edit } from '@mui/icons-material'
+import { useTranslation } from 'react-i18next'
+import { NorButton } from '../../../../components/common/NorButton'
 import FixedContainer from '../../../../components/common/FixedContainer'
 import LanguageSelect from '../../../../components/common/LanguageSelect'
 
@@ -21,9 +23,9 @@ const Toolbar = ({ showEdit, editLink, language, onLanguageChange }) => {
     <FixedContainer>
       <Box sx={styles.container}>
         {showEdit ? (
-          <Button color="primary" variant="contained" component={Link} to={editLink}>
+          <NorButton color="secondary" component={Link} to={editLink} icon={<Edit />}>
             {t('feedbackView:editSurvey')}
-          </Button>
+          </NorButton>
         ) : (
           <div />
         )}

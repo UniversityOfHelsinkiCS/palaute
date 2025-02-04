@@ -12,7 +12,8 @@ JAMI_FILE_NAME=jami.sql.gz
 SERVER=toska.cs.helsinki.fi
 SERVER_PATH=/home/toska_user/most_recent_backup_store/
 
-SERVER_FILE=${SERVER_PATH}{${PALAUTE_FILE_NAME},${JAMI_FILE_NAME}}
+PALAUTE_SERVER_FILE=${SERVER_PATH}${PALAUTE_FILE_NAME}
+JAMI_SERVER_FILE=${SERVER_PATH}${JAMI_FILE_NAME}
 
 PROJECT_ROOT=$(dirname $(dirname $(realpath "$0")))
 BACKUPS=$PROJECT_ROOT/backups/
@@ -53,7 +54,7 @@ mkdir -p ${BACKUPS}
 
 echo "Fetching a new dump"
 get_username
-scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$SERVER_FILE $BACKUPS
+scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$PALAUTE_SERVER_FILE $JAMI_SERVER_FILE $BACKUPS
 
 echo "Removing database and related volume"
 docker compose -f $DOCKER_COMPOSE down -v

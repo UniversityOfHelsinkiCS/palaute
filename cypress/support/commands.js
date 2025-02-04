@@ -16,19 +16,17 @@ Cypress.Commands.add('buildSummaries', () => {
 
 Cypress.Commands.add('giveFeedback', headers => {
   cy.getTestFbtId().then(id => {
-    cy.getUniversityQuestions()
-      .then(questionIds => {
-        cy.request({
-          method: 'POST',
-          url: '/api/feedbacks',
-          headers,
-          body: {
-            feedbackTargetId: id,
-            data: questionIds.map(q => ({ questionId: q.id, data: '3' })),
-          },
-        })
+    cy.getUniversityQuestions().then(questionIds => {
+      cy.request({
+        method: 'POST',
+        url: '/api/feedbacks',
+        headers,
+        body: {
+          feedbackTargetId: id,
+          data: questionIds.map(q => ({ questionId: q.id, data: '3' })),
+        },
       })
-      .then(() => cy.buildSummaries())
+    })
   })
 })
 
@@ -228,18 +226,6 @@ Cypress.Commands.add('setFeedbackClosed', () => {
 
 Cypress.Commands.add('setFeedbackOpeningSoon', () => {
   setFeedbackDatesFromNow(6, 28)
-})
-
-Cypress.Commands.add('setFakeFeedbackCount', feedbackCount => {
-  cy.getTestFbtId().then(id => {
-    cy.request({
-      method: 'PUT',
-      url: `/test/courseRealisation/${id}`,
-      body: {
-        feedbackCount,
-      },
-    })
-  })
 })
 
 Cypress.Commands.add('setContinuousFeedbackActive', () => {

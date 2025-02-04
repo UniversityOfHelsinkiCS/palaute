@@ -5,11 +5,13 @@ import { parseISO, format } from 'date-fns'
 import { CSVLink } from 'react-csv'
 
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Button, Box } from '@mui/material'
+import { Download } from '@mui/icons-material'
 import { orderBy } from 'lodash-es'
 
 import { sortTable } from '../../../../util/tableUtils'
 import CardSection from '../../../../components/common/CardSection'
 import { SHOW_BUTTON_DOWNLOAD_SISU_CSV } from '../../../../util/common'
+import { NorButton } from '../../../../components/common/NorButton'
 
 //This defines certain courserealisations at SISU. There is no other way to get this information
 //Name tells if courserealisation is used to gather information for SISU about who is given feedback and who is not
@@ -60,15 +62,15 @@ const ExportXLSX = ({ students, fileName }) => {
   utils.book_append_sheet(workbook, worksheet, fileName)
 
   return (
-    <Button
+    <NorButton
       sx={styles.button}
-      variant="contained"
       color="primary"
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
+      icon={<Download />}
     >
       {t('common:exportXLSX')}
-    </Button>
+    </NorButton>
   )
 }
 

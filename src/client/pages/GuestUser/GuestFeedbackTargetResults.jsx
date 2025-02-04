@@ -49,16 +49,11 @@ const FeedbackTargetResultsView = () => {
 
   const { feedbacks, feedbackVisible } = feedbackTargetData
 
-  const {
-    questions,
-    publicQuestionIds,
-    feedback,
-    studentCount,
-    feedbackCount,
-    opensAt,
-    closesAt,
-    feedbackReminderLastSentAt,
-  } = feedbackTarget
+  const { questions, publicQuestionIds, feedback, summary, opensAt, closesAt, feedbackReminderLastSentAt } =
+    feedbackTarget
+
+  const feedbackCount = summary?.data?.feedbackCount ?? 0
+  const studentCount = summary?.data?.studentCount ?? 0
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 

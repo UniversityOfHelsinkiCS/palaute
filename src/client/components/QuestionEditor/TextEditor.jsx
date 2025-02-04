@@ -1,4 +1,4 @@
-import { Box, Grid, Typography, Alert } from '@mui/material'
+import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
 import React from 'react'
 
 import { useTranslation, Trans } from 'react-i18next'
@@ -37,7 +37,7 @@ const LanguageTextEditor = ({ name, language }) => {
 const TextEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
   <Grid spacing={4} container>
     {languages.map(language => (
-      <Grid md={4} sm={12} xs={12} item key={language}>
+      <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
         <Box mb={2}>
           <Typography variant="h6" component="h2">
             {language.toUpperCase()}

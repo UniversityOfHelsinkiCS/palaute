@@ -44,7 +44,6 @@ const getAllTeacherCourseUnits = async (user, query) => {
           'continuousFeedbackEnabled',
           'userCreated',
           'courseRealisationId',
-          'feedbackCount',
         ],
         where: {
           feedbackType: 'courseRealisation',
@@ -141,8 +140,8 @@ const getGroupedCourseUnits = (courseUnits, query) => {
         // we need to fetch the student count and feedback count from the feedback target
         const feedbackTarget = {
           ...target.toJSON(),
-          studentCount: target.userCreated ? target.students.length : target.summary?.data?.studentCount || 0,
-          feedbackCount: target.userCreated ? target.feedbackCount : target.summary?.data?.feedbackCount || 0,
+          studentCount: target.summary?.data?.studentCount || 0,
+          feedbackCount: target.summary?.data?.feedbackCount || 0,
         }
 
         return _.pick(feedbackTarget, targetFields)

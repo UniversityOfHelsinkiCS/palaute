@@ -18,6 +18,8 @@ const {
   Organisation,
   Survey,
   User,
+  OrganisationSurveyCourse,
+  Summary,
 } = require('../../models')
 
 const getOrganisationCourseUnit = async organisationId => {
@@ -130,17 +132,24 @@ const getStudentIds = async studentNumbers => {
 }
 
 const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
-  const userFeedbackTargets = await UserFeedbackTarget.bulkCreate(
-    userIds.map(userId => ({
-      accessStatus,
-      feedbackTargetId,
-      userId,
-      isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
-      userCreated: true,
-    }))
-  )
+  const createdUserFeedbackTargets = []
 
-  return userFeedbackTargets
+  for (const userId of userIds) {
+    try {
+      const userFeedbackTarget = await UserFeedbackTarget.create({
+        accessStatus,
+        feedbackTargetId,
+        userId,
+        isAdministrativePerson: accessStatus === 'RESPONSIBLE_TEACHER',
+        userCreated: true,
+      })
+      createdUserFeedbackTargets.push(userFeedbackTarget)
+    } catch (error) {
+      logger.error(`Error creating feedback target for user ${userId}:`, error.message)
+    }
+  }
+
+  return createdUserFeedbackTargets
 }
 
 const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
@@ -153,6 +162,38 @@ const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
   })
 
   return userFeedbackTargets
+}
+
+const getOrganisationSurveyCourseStudents = async courseRealisationIds => {
+  if (!courseRealisationIds || courseRealisationIds.length === 0) return []
+  const students = await User.findAll({
+    include: [
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        required: true,
+        where: {
+          accessStatus: 'STUDENT',
+        },
+        attributes: ['id'],
+        include: [
+          {
+            model: FeedbackTarget,
+            as: 'feedbackTarget',
+            required: true,
+            where: {
+              userCreated: false,
+              courseRealisationId: { [Op.in]: courseRealisationIds },
+            },
+            attributes: ['id', 'courseRealisationId'],
+          },
+        ],
+      },
+    ],
+    attributes: ['id', 'studentNumber'],
+  })
+
+  return students
 }
 
 const getSurveyById = async feedbackTargetId => {
@@ -215,9 +256,36 @@ const getSurveyById = async feedbackTargetId => {
     ],
   })
 
-  if (!organisationSurvey) throw new Error('Organisation survey not found')
+  const courseRealisationIds = await OrganisationSurveyCourse.findAll({
+    where: {
+      feedbackTargetId,
+    },
+    attributes: ['courseRealisationId', 'userFeedbackTargetId'],
+  })
 
-  return organisationSurvey
+  if (!organisationSurvey) throw new Error('Organisation survey not found')
+  if (!courseRealisationIds) throw new Error('Course realisation IDs not found')
+
+  const excludeStudents = await getOrganisationSurveyCourseStudents(
+    courseRealisationIds.map(({ courseRealisationId }) => courseRealisationId)
+  )
+
+  const courses = await CourseRealisation.findAll({
+    where: {
+      id: { [Op.in]: courseRealisationIds.map(({ courseRealisationId }) => courseRealisationId) },
+    },
+    attributes: ['id', 'name', 'startDate', 'endDate'],
+  })
+  const excludeStudentNumbers = new Set(excludeStudents.map(student => student.studentNumber))
+  const independentStudents = organisationSurvey.students.filter(
+    ({ user }) => !excludeStudentNumbers.has(user.studentNumber)
+  )
+
+  return {
+    ...organisationSurvey.dataValues,
+    students: independentStudents,
+    courses,
+  }
 }
 
 const getSurveysForOrganisation = async organisationId => {
@@ -230,13 +298,17 @@ const getSurveysForOrganisation = async organisationId => {
       'hidden',
       'feedbackType',
       'publicQuestionIds',
-      'feedbackCount',
       'feedbackResponse',
       'feedbackResponseEmailSent',
       'opensAt',
       'closesAt',
     ],
     include: [
+      {
+        model: Summary,
+        as: 'summary',
+        required: false,
+      },
       {
         model: CourseUnit,
         as: 'courseUnit',
@@ -317,7 +389,12 @@ const getSurveysForTeacher = async (organisationCode, userId) => {
 }
 
 const getDeletionAllowed = async organisationSurveyId => {
-  const { feedbackCount } = await FeedbackTarget.findByPk(organisationSurveyId)
+  const feedbackCount = await UserFeedbackTarget.count({
+    where: {
+      feedbackTargetId: organisationSurveyId,
+      [Op.not]: { feedbackId: null },
+    },
+  })
 
   return feedbackCount === 0
 }
@@ -337,8 +414,27 @@ const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus
   await createUserFeedbackTargets(feedbackTargetId, newUserIds, accessStatus)
 }
 
+const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+  const studentObjects = students.map(s => ({
+    feedbackTargetId,
+    courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
+    userFeedbackTargetId: s.userFeedbackTargets[0].id,
+  }))
+  await OrganisationSurveyCourse.bulkCreate(studentObjects)
+}
+
+const updateOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+  await OrganisationSurveyCourse.destroy({
+    where: {
+      feedbackTargetId,
+    },
+  })
+
+  await createOrganisationSurveyCourses(feedbackTargetId, students)
+}
+
 const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
-  const { name, teacherIds, studentNumbers } = updates
+  const { name, teacherIds, studentNumbers, courseRealisationIds } = updates
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
@@ -362,9 +458,21 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     await updateUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
   }
 
-  if (studentNumbers) {
-    const studentIds = await getStudentIds(studentNumbers)
+  let studentIds = []
 
+  if (studentNumbers) {
+    studentIds = await getStudentIds(studentNumbers)
+  }
+
+  if (courseRealisationIds) {
+    const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
+    const studentIdsFromCourseIds = studentDataFromCourseIds.map(student => student.id)
+    studentIds = [...new Set([...studentIds, ...studentIdsFromCourseIds])]
+    await updateOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
+  }
+
+  // updating student feedback targets even when studentNumbers are empty
+  if (studentIds.length >= 0) {
     await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
   }
 
@@ -437,6 +545,14 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
 
     logger.info(`Deleted ${cu} course realisations`)
 
+    const orgSurveyCourse = await OrganisationSurveyCourse.destroy({
+      where: {
+        feedbackTargetId,
+      },
+    })
+
+    logger.info(`Deleted ${orgSurveyCourse} organisation survey courses`)
+
     await t.commit()
   } catch (err) {
     await t.rollback()
@@ -455,4 +571,6 @@ module.exports = {
   getDeletionAllowed,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
+  getOrganisationSurveyCourseStudents,
+  createOrganisationSurveyCourses,
 }

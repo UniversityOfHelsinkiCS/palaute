@@ -1,4 +1,5 @@
 const { Router } = require('express')
+const _ = require('lodash')
 
 const {
   createUserFeedbackTargets,
@@ -9,6 +10,7 @@ const {
   removeInterimFeedbackTarget,
   getInterimFeedbackParentFbt,
 } = require('../../services/feedbackTargets/interimFeedbacks')
+const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
 
 const getInterimFeedbackParent = async (req, res) => {
   const { user } = req
@@ -32,14 +34,22 @@ const createInterimFeedback = async (req, res) => {
   const { user } = req
   const { fbtId } = req.params
 
-  const interimFeedbackTarget = await createInterimFeedbackTarget(fbtId, user, req.body)
+  let interimFeedbackTarget = await createInterimFeedbackTarget(fbtId, user, req.body)
 
   const userFeedbackTargets = await createUserFeedbackTargets(fbtId, interimFeedbackTarget.id)
 
-  const interimFeedback = await getInterimFeedbackById(interimFeedbackTarget.id)
+  interimFeedbackTarget = await getInterimFeedbackById(interimFeedbackTarget.id)
+
+  const summary = await createSummaryForFeedbackTarget(
+    interimFeedbackTarget.id,
+    _.countBy(userFeedbackTargets, 'accessStatus').STUDENT,
+    interimFeedbackTarget.opensAt,
+    interimFeedbackTarget.closesAt
+  )
 
   return res.status(201).send({
-    ...interimFeedback.dataValues,
+    ...interimFeedbackTarget.dataValues,
+    summary,
     userFeedbackTargets,
   })
 }

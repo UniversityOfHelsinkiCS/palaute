@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import QRCode from 'react-qr-code'
 
-import { Box, Button, Chip, Paper, Typography, Alert } from '@mui/material'
-import { FileCopyOutlined } from '@mui/icons-material'
+import { Box, Chip, Paper, Typography, Alert } from '@mui/material'
+import { FileCopyOutlined, Email } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { differenceInHours, format } from 'date-fns'
@@ -14,13 +14,14 @@ import ReminderEmailModal from './ReminderEmailModal'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
+import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const StudentLinkCopyButton = ({ onClick, label }) => (
   <Box>
-    <Button startIcon={<FileCopyOutlined />} color="primary" onClick={onClick}>
+    <NorButton icon={<FileCopyOutlined />} color="secondary" onClick={onClick}>
       {label}
-    </Button>
+    </NorButton>
   </Box>
 )
 
@@ -61,6 +62,7 @@ const Share = () => {
             color="primary"
             onClick={openModal}
             disabled={modalDisabled}
+            startIcon={<Email />}
             tooltip={t('feedbackTargetResults:reminderDisabled', { cooldown: FEEDBACK_REMINDER_COOLDOWN })}
           >
             {t('feedbackTargetResults:sendReminder')}

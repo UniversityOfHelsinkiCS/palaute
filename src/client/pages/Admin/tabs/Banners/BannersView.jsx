@@ -1,15 +1,4 @@
-import {
-  Alert,
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Paper,
-  useTheme,
-} from '@mui/material'
+import { Alert, Box, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Paper, useTheme } from '@mui/material'
 import { addDays } from 'date-fns'
 import { Formik } from 'formik'
 import React from 'react'
@@ -21,6 +10,7 @@ import apiClient from '../../../../util/apiClient'
 import FormikSelect from '../../../../components/common/FormikSelect'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import queryClient from '../../../../util/queryClient'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const getHexColor = (theme, hue, lightness) => {
   const h = theme.palette[hue]
@@ -140,9 +130,7 @@ const FuckReact = ({ value, funcThing }) => {
 
 const BannerForm = ({ onSubmit, selected, open, setOpen }) => (
   <div>
-    <Button variant="outlined" onClick={() => setOpen(true)}>
-      Create new banner
-    </Button>
+    <NorButton onClick={() => setOpen(true)}>Create new banner</NorButton>
     <Formik
       onSubmit={async values => {
         await onSubmit(values)
@@ -187,7 +175,7 @@ const BannerForm = ({ onSubmit, selected, open, setOpen }) => (
               <FormikSelect name="accessGroup" label="Target group" options={accessGroupOptions} />
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleSubmit}>{selected ? 'Edit' : 'Create'}</Button>
+              <NorButton onClick={handleSubmit}>{selected ? 'Edit' : 'Create'}</NorButton>
             </DialogActions>
           </Dialog>
           {open && <BannerPreview values={values} />}
@@ -242,8 +230,7 @@ const BannerView = () => {
                 <div>End date: {banner.endDate}</div>
                 <div>Access group: {banner.accessGroup}</div>
                 <Box ml="auto">
-                  <Button
-                    variant="outlined"
+                  <NorButton
                     color="primary"
                     onClick={() => {
                       setSelected(banner)
@@ -251,10 +238,10 @@ const BannerView = () => {
                     }}
                   >
                     EDIT
-                  </Button>
-                  <Button variant="text" color="error" onClick={() => handleDelete(banner.id)}>
+                  </NorButton>
+                  <NorButton color="error" onClick={() => handleDelete(banner.id)}>
                     DELETE
-                  </Button>
+                  </NorButton>
                 </Box>
               </Box>
             </Box>

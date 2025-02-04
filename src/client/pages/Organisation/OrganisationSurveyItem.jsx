@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Card, CardContent, Box, Button, Typography, Chip } from '@mui/material'
+import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
 
 import { Link, useParams } from 'react-router-dom'
 
@@ -16,6 +16,7 @@ import FeedbackResponseChip from '../MyTeaching/chips/FeedbackResponseChip'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { NorButton } from '../../components/common/NorButton'
 
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { code } = useParams()
@@ -32,16 +33,18 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const {
     opensAt,
     closesAt,
-    feedbackCount,
+    summary,
     feedbackResponse,
     feedbackResponseEmailSent,
     students,
     userFeedbackTargets: teachers,
   } = organisationSurvey
 
+  const feedbackCount = summary?.data?.feedbackCount || 0
+
   const isAdmin = !isUserLoading && authorizedUser.isAdmin
   const studentCount = students.length
-  const allowDelete = organisationSurvey.feedbackCount === 0
+  const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(organisationSurvey)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
@@ -115,40 +118,37 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
           </Box>
         )}
 
-        <Button
+        <NorButton
           data-cy={`organisation-survey-show-feedback-${organisationSurvey.id}`}
           color="primary"
-          variant="outlined"
           sx={{ mt: 2 }}
           component={Link}
           to={`/targets/${organisationSurvey.id}/feedback`}
         >
           {t('organisationSurveys:viewFeedback')}
-        </Button>
+        </NorButton>
 
         {feedbackCount > 0 && (
-          <Button
+          <NorButton
             data-cy={`organisation-survey-show-results-${organisationSurvey.id}`}
             color="primary"
-            variant="outlined"
             sx={{ mt: 2, ml: 2 }}
             component={Link}
             to={`/targets/${organisationSurvey.id}/results`}
           >
             {t('organisationSurveys:viewResults')}
-          </Button>
+          </NorButton>
         )}
 
         {(allowDelete || isAdmin) && (
-          <Button
+          <NorButton
             data-cy={`organisation-survey-delete-${organisationSurvey.id}`}
             color="error"
-            variant="outlined"
             sx={{ mt: 2, ml: 2 }}
             onClick={handleDelete}
           >
             {t('organisationSurveys:remove')} {isAdmin && !allowDelete && '(ADMIN)'}
-          </Button>
+          </NorButton>
         )}
       </CardContent>
     </Card>

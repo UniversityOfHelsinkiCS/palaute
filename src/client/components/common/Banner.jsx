@@ -1,8 +1,9 @@
 import React from 'react'
-import { Box, Button, Grid, Paper } from '@mui/material'
+import { Box, Grid2 as Grid, Paper } from '@mui/material'
 import { Close } from '@mui/icons-material'
 import Markdown from './Markdown'
 import { getLanguageValue } from '../../util/languageUtils'
+import { NorButton } from './NorButton'
 
 const styles = {
   container: color => ({
@@ -32,20 +33,17 @@ const styles = {
 const Banner = ({ banner, language, onClose = () => {}, disabled }) => (
   <Box width="100vw">
     <Paper sx={styles.container(banner.data?.color ?? '#fff')} elevation={0}>
-      <Grid container direction="row" justifyContent="space-between">
-        <Grid item />
-        <Grid item>
-          <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
-        </Grid>
-        <Grid item>
-          <Button
-            disabled={disabled}
-            onClick={() => onClose(banner.id)}
-            sx={styles.close(banner.data?.color ?? '#fff')}
-          >
-            <Close />
-          </Button>
-        </Grid>
+      <Grid container direction="row" justifyContent="space-between" alignItems="center">
+        <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
+
+        <NorButton
+          color="empty"
+          disabled={disabled}
+          onClick={() => onClose(banner.id)}
+          sx={styles.close(banner.data?.color ?? '#fff')}
+        >
+          <Close />
+        </NorButton>
       </Grid>
     </Paper>
   </Box>

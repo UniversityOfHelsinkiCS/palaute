@@ -15,7 +15,6 @@ const seedFeedbackTargetsForTeacher = async ({ teacher, student, opensAt, closes
     typeId: TEST_COURSE_REALISATION_ID,
     opensAt: new Date(opensAt),
     closesAt: new Date(closesAt),
-    feedbackCount: 0,
     hidden: false,
   })
 

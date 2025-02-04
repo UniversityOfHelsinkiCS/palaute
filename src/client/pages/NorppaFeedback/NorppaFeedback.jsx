@@ -1,7 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router'
 
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -10,6 +10,7 @@ import FormikTextField from '../../components/common/FormikTextField'
 import FormikCheckBox from '../../components/common/FormikCheckbox'
 import { saveValues } from './utils'
 import Title from '../../components/common/Title'
+import { NorButton } from '../../components/common/NorButton'
 
 const styles = {
   description: {
@@ -77,11 +78,20 @@ const NorppaFeedback = () => {
             <FormikTextField
               name="feedback"
               label={t('norppaFeedback:feedback')}
-              helperText={t('norppaFeedback:feedbackHelper')}
               fullWidth
               minRows={4}
               multiline
+              sx={{ marginBottom: '1rem' }}
             />
+            <NorButton
+              onClick={confirmSubmit}
+              type="submit"
+              color="primary"
+              disabled={!values.feedback.length || isSubmitting}
+              sx={{ ...styles.button, marginRight: '1rem' }}
+            >
+              {t('norppaFeedback:submit')}
+            </NorButton>
             <FormikCheckBox
               name="anonymous"
               label={t('norppaFeedback:anonymous')}
@@ -96,16 +106,6 @@ const NorppaFeedback = () => {
               disabled={values.anonymous}
               label={t('norppaFeedback:responseWanted')}
             />
-            <Button
-              onClick={confirmSubmit}
-              type="submit"
-              color="primary"
-              variant="contained"
-              disabled={!values.feedback.length || isSubmitting}
-              sx={styles.button}
-            >
-              {t('norppaFeedback:submit')}
-            </Button>
             {values.anonymous && (
               <Box mt="1.5rem">
                 <Typography variant="body1" component="p" sx={styles.description}>

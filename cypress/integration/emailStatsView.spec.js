@@ -1,6 +1,6 @@
 /// <reference types="Cypress" />
 
-import { admin } from '../fixtures/headers'
+import { admin, student } from '../fixtures/headers'
 
 describe('Admin email stats view', () => {
   beforeEach(() => {
@@ -25,9 +25,10 @@ describe('Admin email stats view', () => {
     cy.contains('now open: Testauskurssi')
   })
   it('shows the email when feedback response reminder should be sent', () => {
-    cy.setFakeFeedbackCount(10)
-    cy.setFeedbackClosed()
     cy.loginAs(admin)
+    cy.setFeedbackActive()
+    cy.giveFeedback(student)
+    cy.setFeedbackClosed()
     cy.visit(`/admin/misc`)
     cy.contains('Email statistics').click()
     cy.contains('Student emails TODAY: 0')
