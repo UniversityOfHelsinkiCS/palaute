@@ -63,6 +63,7 @@ const getFromDb = async id => {
       {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
+        separate: true,
         include: {
           model: User,
           as: 'user',
