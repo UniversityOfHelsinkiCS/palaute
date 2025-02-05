@@ -24,7 +24,6 @@ const { inProduction, DEV_ADMINS } = require('../util/config')
 const FeedbackTarget = require('./feedbackTarget')
 const Organisation = require('./organisation')
 const User = require('./user')
-const { UserFeedbackTarget } = require('./userFeedbackTarget')
 
 FeedbackTarget.prototype.getSurveys = async function () {
   const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([
@@ -107,18 +106,4 @@ User.prototype.populateAccess = async function () {
   if (this.isAdmin) {
     this.organisationAccess = await getAdminOrganisationAccess()
   }
-}
-
-User.prototype.feedbackTargetsHasTeacherAccessTo = function () {
-  return FeedbackTarget.findAll({
-    include: {
-      model: UserFeedbackTarget,
-      as: 'userFeedbackTargets',
-      where: {
-        userId: this.id,
-        accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
-      },
-      required: true,
-    },
-  })
 }
