@@ -11,6 +11,7 @@ const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets, getFeedbackTargetLink } = require('./util')
 const { i18n } = require('../../util/i18n')
 const { getLanguageValue } = require('../../util/languageUtils')
+const { SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE } = require('../../util/config')
 
 const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -79,9 +80,10 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
   const { courseCode } = studentFeedbackTargets[0].courseUnit
 
   let courseNamesAndUrls = ''
-
+  const uftIds = []
   for (const feedbackTarget of studentFeedbackTargets) {
     courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(feedbackTarget)}`
+    uftIds.push(feedbackTarget.userFeedbackTargetId)
   }
 
   const t = i18n.getFixedT(language)
@@ -94,6 +96,7 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
     to: emailAddress,
     subject,
     text: t('mails:surveyOpeningEmailToStudents:text', { courseNamesAndUrls }),
+    userFeedbackTargetIds: uftIds,
   }
 
   return email
@@ -110,24 +113,34 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
     notificationAboutSurveyOpeningToStudents(student, studentsWithFeedbackTargets[student])
   )
 
-  const ids = Object.keys(studentsWithFeedbackTargets).flatMap(key =>
-    studentsWithFeedbackTargets[key].map(course => course.userFeedbackTargetId)
+  let chunkSize = SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE
+  if (chunkSize === 0) {
+    chunkSize = emailsToBeSent.length
+  }
+  const emailsToBeSentChunks = Array.from({ length: Math.ceil(emailsToBeSent.length / chunkSize) }, (v, i) =>
+    emailsToBeSent.slice(i * chunkSize, (i + 1) * chunkSize)
   )
 
-  await pate.send(emailsToBeSent, 'Notify students about feedback opening')
+  for (const emailsChunk of emailsToBeSentChunks) {
+    const ids = emailsChunk.flatMap(e => e.userFeedbackTargetIds)
 
-  await UserFeedbackTarget.update(
-    {
-      feedbackOpenEmailSent: true,
-    },
-    {
-      where: {
-        id: {
-          [Op.in]: ids,
-        },
+    // userFeedbackTargetIds are added in notificationAboutSurveyOpeningToStudents, remove them, they are not needed in pate
+    emailsChunk.forEach(e => delete e.userFeedbackTargetIds)
+    await pate.send(emailsChunk, 'Notify students about feedback opening')
+
+    await UserFeedbackTarget.update(
+      {
+        feedbackOpenEmailSent: true,
       },
-    }
-  )
+      {
+        where: {
+          id: {
+            [Op.in]: ids,
+          },
+        },
+      }
+    )
+  }
 
   return emailsToBeSent
 }
