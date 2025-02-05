@@ -1,6 +1,6 @@
 import React, { useState, useRef, forwardRef } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Box, Typography, Divider } from '@mui/material'
+import { useParams } from 'react-router-dom'
+import { Box, Typography, Divider, Link } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 
@@ -15,11 +15,9 @@ import { NorButton } from '../../components/common/NorButton'
 const styles = {
   courseTitle: {
     textDecoration: 'none',
-    color: '#1077A1',
   },
   realisationTitle: {
     textDecoration: 'none',
-    color: '#0084bb',
     fontSize: 'large',
   },
   realisationContainer: {
@@ -64,7 +62,7 @@ const RealisationItem = ({ realisation, language }) => {
 
   return (
     <Box key={realisation.id} sx={styles.realisationContainer}>
-      <Link to={url} sx={styles.realisationTitle} replace>
+      <Link href={url} style={styles.realisationTitle} replace>
         {realisation.name[language]}
       </Link>
       <Typography variant="body2" component="p" sx={styles.dates}>
@@ -105,8 +103,8 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
             <Link
-              to={`/course-summary/${course.code}`}
-              sx={styles.courseTitle}
+              href={`/course-summary/course-unit/${course.code}`}
+              style={styles.courseTitle}
               replace
             >{`${course.code} - ${course.name[language]}`}</Link>
           </Typography>
@@ -156,10 +154,9 @@ const ProgrammeOpenQuestions = () => {
     <Box>
       <YearSemesterSelector value={dateRange} onChange={setDateRange} option={option} setOption={setOption} allowAll />
       <Box sx={styles.buttonContainer}>
-        <ExportButton
-          PdfLink={<ExportPdfLink componentRef={componentRef} />}
-          label={t('feedbackTargetResults:export')}
-        />
+        <ExportButton label={t('feedbackTargetResults:export')}>
+          <ExportPdfLink componentRef={componentRef} />
+        </ExportButton>
       </Box>
       <OpenQuestions codesWithIds={codesWithIds} dateRange={option !== 'all' && dateRange} ref={componentRef} />
     </Box>

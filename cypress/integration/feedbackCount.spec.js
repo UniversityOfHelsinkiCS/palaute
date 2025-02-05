@@ -50,8 +50,8 @@ describe('Feedback count', () => {
       .invoke('text')
       .then(newCount => {
         cy.get('@fbtPageInitialCount').then(initialCount => {
-          const newCountInt = parseInt(newCount.split("/")[0], 10)
-          const initialCountInt = parseInt(initialCount.split("/")[0], 10)
+          const newCountInt = parseInt(newCount.split('/')[0], 10)
+          const initialCountInt = parseInt(initialCount.split('/')[0], 10)
           expect(newCountInt).to.eq(initialCountInt + 1)
         })
       })
