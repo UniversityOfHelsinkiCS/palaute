@@ -73,7 +73,7 @@ const sendToPate = async (options = {}) => {
       await pateClient.post('/', chunk)
     } catch (error) {
       Sentry.captureException(error)
-      logger.error('[Pate] error: ', error)
+      logger.error('[Pate] error: ', [error])
       if (error?.response?.status !== 413) throw error
       if (chunk?.length > 1) {
         await sleep(1000)
