@@ -42,6 +42,7 @@ const seedOrganisationCorrespondent = async user => {
   await OrganisationFeedbackCorrespondent.create({
     userId: user.id,
     organisationId: TEST_ORGANISATION_ID,
+    userCreated: true,
   })
 }
 

@@ -25,6 +25,7 @@ const addOrganisationFeedbackCorrespondent = async (req, res) => {
   await OrganisationFeedbackCorrespondent.create({
     organisationId: organisation.id,
     userId,
+    userCreated: true,
   })
 
   const logUpdates = {
