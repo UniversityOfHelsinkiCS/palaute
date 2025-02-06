@@ -8,8 +8,8 @@ import { FEEDBACK_CORRESPONDENT_SPECIAL_GROUP } from '../../util/config'
 
 export const updateFeedbackCorrespondent = async (user: User): Promise<void> => {
   // Update feedback correspondents of user
-  // @ts-expect-error user has specialGroup
   const feedbackCorrespondentSpecialGroup: string[] | undefined =
+    // @ts-expect-error user has specialGroup
     user.specialGroup[FEEDBACK_CORRESPONDENT_SPECIAL_GROUP]
 
   const programmeKeys = Array.isArray(feedbackCorrespondentSpecialGroup) ? feedbackCorrespondentSpecialGroup : []
