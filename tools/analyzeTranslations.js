@@ -1,7 +1,9 @@
 /* eslint-disable */
 const fs = require('fs/promises')
+const readline = require('readline')
 const path = require('path')
 const minimist = require('minimist')
+const { merge } = require('lodash')
 
 const args = minimist(process.argv.slice(2))
 
@@ -68,6 +70,16 @@ const importTranslationObjectFromESModule = async f => {
   return eval?.(js)
 }
 
+const log0 = (...msg) => {
+  if (!args.quiet) {
+    console.log(...msg)
+  }
+}
+
+const log = (...msg) => {
+  console.log(...msg)
+}
+
 /**
  * Main
  */
@@ -77,9 +89,11 @@ const importTranslationObjectFromESModule = async f => {
     return
   }
 
+  const argLangs = args.lang ? args.lang.split(',') : LANGUAGES
+
   const translationKeyReferences = new Map()
   let fileCount = 0
-  console.log(`Analyzing ${ROOT_PATH}...`)
+  log0(`Analyzing ${ROOT_PATH}...`)
   for await (const file of walk(ROOT_PATH)) {
     fileCount += 1
     const contents = await fs.readFile(file, 'utf8')
@@ -103,33 +117,36 @@ const importTranslationObjectFromESModule = async f => {
       lineNumber += 1
     }
   }
-  console.log(`Found ${translationKeyReferences.size} references in ${fileCount} files`)
+  log0(`Found ${translationKeyReferences.size} references in ${fileCount} files`)
 
   const locales = {}
 
   for await (const lang of LANGUAGES) {
     locales[lang] = require(`../${LOCALES_PATH}/${lang}/${NAMESPACE}.json`)
   }
-  console.log('Imported translation modules')
+  log0('Imported translation modules')
 
   const translationsNotUsed = new Set()
+
   const findKeysRecursively = (obj, path) => {
     const keys = []
     Object.keys(obj).forEach(k => {
       if (typeof obj[k] === 'object') {
-        keys.push(...findKeysRecursively(obj[k], `${path}:${k}`))
-      } else if (typeof obj[k] === 'string') {
-        keys.push(`${path}:${k}`)
+        keys.push(...findKeysRecursively(obj[k], `${path}:${k}`)) // Go deeper...
+      } else if (typeof obj[k] === 'string' && obj[k].trim().length > 0) {
+        keys.push(`${path}:${k}`) // Key seems legit
       }
     })
     return keys
   }
+
   Object.entries(locales).forEach(([_, t]) => {
     findKeysRecursively(t, '').forEach(k => translationsNotUsed.add(k.slice(1)))
   })
+
   const numberOfTranslations = translationsNotUsed.size
-  console.log('Generated translation keys\n')
-  console.log(`${Underscore}Listing references with missing translations${Reset}\n`)
+  log0('Generated translation keys\n')
+  log0(`${Underscore}Listing references with missing translations${Reset}\n`)
 
   let longestKey = 0
   translationKeyReferences.forEach((v, k) => {
@@ -137,6 +154,7 @@ const importTranslationObjectFromESModule = async f => {
   })
 
   let missingCount = 0
+  const missingByLang = Object.fromEntries(argLangs.map(l => [l, []]))
 
   translationKeyReferences.forEach((v, k) => {
     const missing = []
@@ -155,39 +173,55 @@ const importTranslationObjectFromESModule = async f => {
       }
     })
 
-    missingCount += printMissing(k, v, missing, longestKey)
+    if (missing.length > 0 && missing.some(l => argLangs.includes(l))) {
+      missingCount += printMissing(k, v, missing, longestKey)
+      missing.forEach(l => argLangs.includes(l) && missingByLang[l].push(k))
+    }
   })
 
-  console.log(`\n${missingCount} translations missing${Reset}\n`)
+  if (missingCount > 0) {
+    log(`\n${FgRed}${Bright}Error:${Reset} ${missingCount} translations missing\n`)
+    const langsOpt = args.lang ? `--lang ${argLangs.join(',')}` : ''
+    const recommendedCmd = `${FgCyan}npm run translations -- --create ${langsOpt}${Reset}`
+    log(`Run to populate missing translations now:\n> ${recommendedCmd}\n`)
+  }
 
-  printUnused(translationsNotUsed, numberOfTranslations)
+  if (args.unused) {
+    printUnused(translationsNotUsed, numberOfTranslations)
+  }
+
+  if (args.create) {
+    await createMissingTranslations(missingByLang)
+  }
+
+  if (missingCount > 0) {
+    process.exit(1)
+  } else {
+    process.exit(0)
+  }
 })()
 
 const printMissing = (translationKey, referenceLocations, missingLangs, longestKey) => {
-  if (missingLangs.length > 0 && (!args.lang || missingLangs.some(l => args.lang.includes(l)))) {
-    let msg = translationKey
-    // add padding
-    for (let i = 0; i < longestKey - translationKey.length; i++) {
-      msg += ' '
-    }
-
-    msg += ['fi', 'en', 'sv']
-      .map(l => (missingLangs.includes(l) ? `${FgRed}${l}${Reset}` : `${FgGreen}${l}${Reset}`))
-      .join(', ')
-
-    if (args.detailed) {
-      msg += `\n${FgCyan}${referenceLocations.join('\n')}\n`
-    }
-
-    console.log(msg, Reset)
+  let msg = translationKey
+  // add padding
+  for (let i = 0; i < longestKey - translationKey.length; i++) {
+    msg += ' '
   }
+
+  msg += ['fi', 'en', 'sv']
+    .map(l => (missingLangs.includes(l) ? `${FgRed}${l}${Reset}` : `${FgGreen}${l}${Reset}`))
+    .join(', ')
+
+  if (args.detailed) {
+    msg += `\n${FgCyan}${referenceLocations.join('\n')}\n`
+  }
+
+  console.log(msg, Reset)
 
   return missingLangs.length
 }
 
 const printUnused = (translationsNotUsed, numberOfTranslations) => {
-  if (!args.unused) return
-
   console.log(
     `${Underscore}Potentially unused translations (${translationsNotUsed.size}/${numberOfTranslations}): ${Reset}`
   )
@@ -195,11 +229,91 @@ const printUnused = (translationsNotUsed, numberOfTranslations) => {
   translationsNotUsed.forEach(t => console.log(`  ${t.split(':').join(`${FgMagenta}:${Reset}`)}`))
 }
 
+const createMissingTranslations = async missingByLang => {
+  const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  })
+
+  const prompt = query => new Promise(resolve => rl.question(query, resolve))
+
+  rl.on('close', () => {
+    console.log('Cancelled')
+    process.exit(1)
+  })
+
+  const promptInfosByKeys = {}
+
+  Object.entries(missingByLang).forEach(([lang, missingKeys]) => {
+    missingKeys.forEach(k => {
+      if (!promptInfosByKeys[k]) {
+        promptInfosByKeys[k] = []
+      }
+
+      promptInfosByKeys[k].push({
+        lang,
+        value: '',
+      })
+    })
+  })
+
+  for (const [k, info] of Object.entries(promptInfosByKeys)) {
+    console.log(`\nAdd translations for ${FgYellow}${k}${Reset}`)
+    for (const i of info) {
+      const value = await prompt(`${FgCyan}${i.lang}${Reset}: `)
+      i.value = value
+    }
+  }
+
+  const newTranslationsByLang = {}
+
+  Object.entries(promptInfosByKeys).forEach(([k, info]) => {
+    info.forEach(i => {
+      if (!i.value) {
+        return
+      }
+
+      if (!newTranslationsByLang[i.lang]) {
+        newTranslationsByLang[i.lang] = {}
+      }
+
+      const parts = k.split(':')
+      let obj = newTranslationsByLang[i.lang]
+
+      for (let i = 0; i < parts.length - 1; i++) {
+        if (!obj[parts[i]]) {
+          obj[parts[i]] = {}
+        }
+        obj = obj[parts[i]]
+      }
+
+      obj[parts[parts.length - 1]] = i.value
+    })
+  })
+
+  // Write new translations to files
+  console.log('Writing new translations to files...')
+  await Promise.all(
+    Object.entries(newTranslationsByLang).map(async ([lang, translations]) => {
+      const filePath = path.join(LOCALES_PATH, lang, `${NAMESPACE}.json`)
+
+      const translationObject = require(`../${LOCALES_PATH}/${lang}/${NAMESPACE}.json`)
+
+      // Deep merge
+      const merged = merge(translationObject, translations)
+
+      await fs.writeFile(filePath, JSON.stringify(merged, null, 2))
+    })
+  )
+}
+
 function printHelp() {
   console.log('Usage:')
-  console.log('--lang: fi sv en')
+  console.log('--lang fi,sv,en')
   console.log('--unused: print all potentially unused translation fields')
   console.log('--detailed: Show usage locations')
+  console.log('--quiet: Print less stuff')
+  console.log('--create: Populate missing translations in translation files')
 }
 
 /**

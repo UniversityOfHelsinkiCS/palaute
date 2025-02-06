@@ -63,14 +63,7 @@ const ContinuousFeedback = () => {
       <Formik initialValues={{ feedback: '' }} onSubmit={handleSubmit}>
         {({ values, isSubmitting }) => (
           <Form sx={styles.container}>
-            <FormikTextField
-              name="feedback"
-              label={t('norppaFeedback:feedback')}
-              helperText={t('norppaFeedback:feedbackHelper')}
-              fullWidth
-              minRows={4}
-              multiline
-            />
+            <FormikTextField name="feedback" label={t('norppaFeedback:feedback')} fullWidth minRows={4} multiline />
             <NorButton
               type="submit"
               color="primary"

@@ -672,5 +672,8 @@
       "text": "Hyvä opettaja! <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon päästä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
     "instructionsAndSupport": "Ota yhteyttä tukeen."
+  },
+  "test": {
+    "testValue": "vakio testi"
   }
 }
