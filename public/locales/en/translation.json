@@ -559,7 +559,9 @@
     "setStudyTracksForSelection": "Set studytracks for course realisations",
     "noTags": "Show only courses with no studytracks",
     "showCurName": "Show course realisation names",
-    "searchUser": "Email or name"
+    "searchUser": "Email or name",
+    "basedOnIam": "Managed by IAM-groups. Deletion in Norppa is only temporary, remove from IAM-group instead.",
+    "addedInNorppa": "Added in Norppa"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "This feedback is disabled",

@@ -97,21 +97,27 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
 
 const FeedbackCorrespondentInfo = ({ correspondent, remove }) => {
   const { t } = useTranslation()
+  const isAutomatic = !correspondent.OrganisationFeedbackCorrespondent?.userCreated
+  const createdAt = new Date(correspondent.OrganisationFeedbackCorrespondent?.createdAt)
 
   return (
     <Card>
       <CardContent>
-        <Box display="flex" width="100%" justifyContent="space-between" alignItems="flex-end">
+        <Box display="flex" width="100%" justifyContent="space-between" alignItems="flex-start">
           <Box m={1}>
             <Typography variant="body1">
               {correspondent.firstName} {correspondent.lastName}
             </Typography>
             <Typography>{correspondent.email?.toLowerCase()}</Typography>
+            <Typography variant="body2">{createdAt.toLocaleDateString()}</Typography>
           </Box>
-          <Box>
+          <Box display="flex" flexDirection="column" justifyContent="space-between" alignItems="flex-end">
             <NorButton color="error" onClick={() => remove(correspondent)} data-cy="resetCorrespondentButton">
               {t('organisationSettings:remove')}
             </NorButton>
+            <Typography variant="body2" mt="1rem">
+              {isAutomatic ? t('organisationSettings:basedOnIam') : t('organisationSettings:addedInNorppa')}
+            </Typography>
           </Box>
         </Box>
       </CardContent>

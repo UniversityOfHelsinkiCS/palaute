@@ -559,7 +559,9 @@
     "setStudyTracksForSelection": "Merkkaa kurssitoteutusten opintosuunnat",
     "noTags": "Näytä vain kurssit ilman opintosuuntia",
     "showCurName": "Näytä kurssitoteutusten nimet",
-    "searchUser": "Sähköposti tai nimi"
+    "searchUser": "Sähköposti tai nimi",
+    "basedOnIam": "Perustuu IAM-ryhmiin. Norpan kautta poisto ei ole pysyvä, poista IAM-ryhmästä.",
+    "addedInNorppa": "Lisätty Norpassa"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Tämä palaute ei ole käytössä",
