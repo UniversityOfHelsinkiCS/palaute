@@ -23,6 +23,7 @@ jobs:
             continuousFeedback,
             courseSummary,
             emailStatsView,
+            feedbackResults,
             interimFeedback,
             organisationSurvey,
             programme,

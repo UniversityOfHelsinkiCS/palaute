@@ -8,14 +8,18 @@ const cache = require('../../services/users/cache')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
-const { getUserPreferences } = require('../../services/users')
+const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
-  const iamGroups = req.noad ? [] : req.user.iamGroups ?? []
+  const iamGroups = req.noad ? [] : (req.user.iamGroups ?? [])
 
   if (!loginAs) {
     await User.upsert({ ...user.dataValues, lastLoggedIn: new Date() })
+
+    if (user.employeeNumber) {
+      await updateFeedbackCorrespondent(user)
+    }
   }
 
   const [lastRestart, banners, organisations, preferences] = await Promise.all([

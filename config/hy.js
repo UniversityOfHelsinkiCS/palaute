@@ -288,6 +288,8 @@ const config = {
 
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: ['hyOne', 'allProgrammes'],
 
+  FEEDBACK_CORRESPONDENT_SPECIAL_GROUP: 'feedbackLiaison',
+
   CUSTOM_SESSION_PINGER: 'Pinger-shibboleth',
 }
 

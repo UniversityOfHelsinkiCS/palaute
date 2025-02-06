@@ -302,6 +302,11 @@ const config = {
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: [],
 
   /**
+   * Feedback correspondent special group.
+   */
+  FEEDBACK_CORRESPONDENT_SPECIAL_GROUP: '',
+
+  /**
    * If this is set to true students can only see feedback target's feedbacks after the feedback target has
    * closed (its closes_at date is in the past).
    */
