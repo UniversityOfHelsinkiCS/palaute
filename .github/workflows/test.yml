@@ -13,6 +13,16 @@ jobs:
       - name: Run eslint
         run: npm run lint
 
+  translations:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build project for translations
+        run: npm ci
+      - name: Analyse translations
+        run: npm run translations -- --lang fi,en
+
   cypress:
     strategy:
       fail-fast: false

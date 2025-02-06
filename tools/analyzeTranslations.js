@@ -184,6 +184,8 @@ const log = (...msg) => {
     const langsOpt = args.lang ? `--lang ${argLangs.join(',')}` : ''
     const recommendedCmd = `${FgCyan}npm run translations -- --create ${langsOpt}${Reset}`
     log(`Run to populate missing translations now:\n> ${recommendedCmd}\n`)
+  } else {
+    log(`${FgGreen}${Bright}Success:${Reset} All translations found\n`)
   }
 
   if (args.unused) {
