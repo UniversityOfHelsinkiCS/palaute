@@ -529,7 +529,8 @@ const getFeedbackCorrespondents = async (req, res) => {
       u.username,
       u.language,
       org.name as "organisationName",
-      org.code as "organisationCode"
+      org.code as "organisationCode",
+      ofc.user_created as "userCreated"
 
     FROM users u
     INNER JOIN organisation_feedback_correspondents ofc ON ofc.user_id = u.id

@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, Chip, Typography } from '@mui/material'
 import React from 'react'
 import useQuery from '../../../../hooks/useQuery'
 import apiClient from '../../../../util/apiClient'
@@ -26,11 +26,17 @@ const FeedbackCorrespondents = () => {
           user={user}
           handleLoginAs={handleLoginAs}
           decoration={
-            <>
+            <Box display="flex" width="100%" alignItems="center">
               <Typography color="textSecondary">{user.organisationCode}</Typography>
               <Box mr="1rem" />
               {getLanguageValue(user.organisationName, 'fi')}
-            </>
+              <Chip
+                sx={{ ml: 'auto' }}
+                label={user.userCreated ? 'Manual' : 'IAM'}
+                color={user.userCreated ? 'primary' : 'secondary'}
+                variant="outlined"
+              />
+            </Box>
           }
         />
       ))}
