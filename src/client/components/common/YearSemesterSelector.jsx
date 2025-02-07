@@ -164,7 +164,7 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
   )
 }
 
-export const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.selectorContainer }) => {
+const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.selectorContainer }) => {
   const { t } = useTranslation()
 
   return (
