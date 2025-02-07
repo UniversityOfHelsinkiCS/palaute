@@ -1,16 +1,14 @@
 {
   "name": "palaute",
-  "version": "1.0.0",
+  "version": "v3.27.0",
   "description": "Norppa is THE software for student feedback",
+  "author": "Toska",
+  "license": "MIT",
   "scripts": {
     "start": "docker compose up",
     "start:dev": "NODE_ENV=development concurrently -k \"npm run start:dev:server\" \"npm run start:dev:front\"",
     "start:dev:front": "vite",
     "start:dev:server": "NODE_OPTIONS='--no-warnings --loader ts-node/esm' nodemon --watch 'src/server/**/*' -e js,ts --exec ts-node src/server/index.ts",
-    "start:tau": "docker compose -f docker-compose.lw-dev.yml up",
-    "start:redis:tau": "docker compose -f docker-compose.redis.yml up",
-    "start:client:tau": "npm run ts-check:client && cross-env NODE_CONFIG_ENV=tau NODE_ENV=development vite",
-    "start:server:tau": "npm run clean-build:server && npm run build:server && cross-env NODE_CONFIG_ENV=tau NODE_ENV=development concurrently -k \"npx tsc --project src/server/tsconfig.json --watch\" \"nodemon --inspect=0.0.0.0 -L --env-file .env ./build/server/index.js\"",
     "start:prod": "NODE_ENV=production node --max-old-space-size=4096 ./build/server/index.js",
     "start:test": "NODE_ENV=test node --max-old-space-size=4096 ./build/server/index.js",
     "build": "npm run clean-build && npm run build:server && npm run build:client",
@@ -42,8 +40,6 @@
   "engines": {
     "node": "23.3.0"
   },
-  "author": "Toska",
-  "license": "MIT",
   "dependencies": {
     "@emotion/react": "11.13.5",
     "@emotion/styled": "11.13.5",
@@ -181,10 +177,5 @@
       "**/**.log"
     ],
     "delay": "2500"
-  },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "<rootDir>/cypress"
-    ]
   }
 }
