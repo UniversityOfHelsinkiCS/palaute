@@ -66,6 +66,7 @@ const initTestSummary = async ({ user }) => {
   await createTestObject(OrganisationFeedbackCorrespondent, {
     organisationId: org.id,
     userId: user.hyPersonSisuId,
+    userCreated: true,
   })
 
   await createTestObject(CourseUnit, {
