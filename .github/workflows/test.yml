@@ -65,7 +65,7 @@ jobs:
         with:
           timeout_minutes: 6
           max_attempts: 2
-          command: ./node_modules/.bin/cypress run --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}.spec.js"
+          command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}.spec.js"
 
       - name: Upload video
         uses: actions/upload-artifact@v4
