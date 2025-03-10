@@ -5,7 +5,6 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
-  Chip,
   Table,
   TableBody,
   TableCell,
@@ -31,7 +30,6 @@ const Details = ({ user }) => {
           <TableRow>
             <TableCell>ID</TableCell>
             <TableCell>SN</TableCell>
-            <TableCell>EN</TableCell>
             <TableCell>username</TableCell>
             <TableCell>secondary email</TableCell>
             <TableCell>degree study right</TableCell>
@@ -43,7 +41,6 @@ const Details = ({ user }) => {
           <TableRow>
             <TableCell>{user.id}</TableCell>
             <TableCell>{user.studentNumber}</TableCell>
-            <TableCell>{user.employeeNumber}</TableCell>
             <TableCell>{user.username}</TableCell>
             <TableCell>{user.secondaryEmail}</TableCell>
             <TableCell>{String(user.degreeStudyRight)}</TableCell>
@@ -113,8 +110,6 @@ const Details = ({ user }) => {
   )
 }
 
-const StaffChip = ({ user }) => user.possiblyStaff && <Chip label="Possibly staff" variant="outlined" />
-
 const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
   <Accordion
     key={user.id}
@@ -133,7 +128,6 @@ const UserAccordion = ({ user, isFocused, handleLoginAs, decoration }) => (
         <Box mr={2} />
         <Typography>{user.email ?? user.secondaryEmail}</Typography>
         <Box mr={4} />
-        <StaffChip user={user} />
         <Box mr={4} />
         {decoration}
         <Box mr="auto" />

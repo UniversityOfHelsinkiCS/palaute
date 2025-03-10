@@ -24,7 +24,6 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
 
     const params = {
       user: query,
-      isEmployee: true,
     }
 
     const { data } = await apiClient.get('/users', { params })

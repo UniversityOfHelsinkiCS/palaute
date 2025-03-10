@@ -9,15 +9,18 @@ const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
 const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
+const { EMPLOYEE_IAM } = require('../../util/config')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
   const iamGroups = req.noad ? [] : (req.user.iamGroups ?? [])
 
+  const isTeacher = iamGroups.includes(EMPLOYEE_IAM)
+
   if (!loginAs) {
     await User.upsert({ ...user.dataValues, lastLoggedIn: new Date() })
 
-    if (user.employeeNumber) {
+    if (isTeacher) {
       await updateFeedbackCorrespondent(user)
     }
   }
@@ -28,8 +31,6 @@ const login = async (req, res) => {
     user.getOrganisationAccess(),
     getUserPreferences(user),
   ])
-
-  const isTeacher = !!user.employeeNumber
 
   return res.send({
     ...user.toJSON(),
@@ -44,7 +45,7 @@ const login = async (req, res) => {
 
 const getUser = async (req, res) => {
   const {
-    query: { user, isEmployee },
+    query: { user },
   } = req
 
   let params = {}
@@ -91,7 +92,6 @@ const getUser = async (req, res) => {
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
       ...where,
-      ...(isEmployee ? { [Op.not]: { employeeNumber: null } } : {}),
     },
     limit: 10,
   })

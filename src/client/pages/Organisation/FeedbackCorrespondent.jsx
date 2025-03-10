@@ -36,7 +36,6 @@ const CorrepondentSelector = ({ add, query, setQuery, potentialUsers, setPotenti
 
     const params = {
       user: query,
-      isEmployee: true,
     }
 
     const { data } = await apiClient.get('/users', { params })

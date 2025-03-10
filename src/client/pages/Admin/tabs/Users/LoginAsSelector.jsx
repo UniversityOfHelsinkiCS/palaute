@@ -13,12 +13,6 @@ const LoginAsSelector = () => {
   const [focusIndex, setFocusIndex] = useState(0)
   const [lastQuery, setLastQuery] = useState({})
 
-  const transformUsers = users =>
-    users.map(u => ({
-      ...u,
-      possiblyStaff: Boolean(u.employeeNumber),
-    }))
-
   const handleChange = debounce(async ({ target }) => {
     const query = target.value
     if (query.length < 5) return
@@ -31,7 +25,7 @@ const LoginAsSelector = () => {
     const { params: queried, persons } = data
 
     setLastQuery(queried)
-    setPotentialUsers(transformUsers(persons))
+    setPotentialUsers(persons)
     setFocusIndex(Math.min(focusIndex, persons.length > 0 ? persons.length - 1 : 0))
   }, 400)
 

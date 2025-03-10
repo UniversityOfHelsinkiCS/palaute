@@ -6,9 +6,7 @@ export const setHeaders = uid => {
 
 export const getHeaders = () => {
   const user = JSON.parse(localStorage.getItem(ITEM_NAME) || '{}')
-  const en = localStorage.getItem('employeenumber')
-  const employeenumber = String(en)
-  return { ...user, employeenumber }
+  return user
 }
 
 export const clearHeaders = () => {

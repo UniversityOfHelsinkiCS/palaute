@@ -5,7 +5,6 @@ const admin = {
   sn: 'Luukkainen',
   preferredLanguage: 'en',
   hyPersonSisuId: 'test-hlo-1441871',
-  employeeNumber: '9021313',
   hygroupcn: ['hy-employees'],
 }
 
@@ -16,7 +15,6 @@ const teacher = {
   mail: 'Tommi.testaaja@toska.fi',
   preferredlanguage: 'en',
   hyPersonSisuId: 'test-hlo-51367956',
-  employeeNumber: '123445678',
   hygroupcn: ['hy-employees'],
 }
 
@@ -78,7 +76,6 @@ const organisationCorrespondent = {
   preferredLanguage: 'en ',
   hyPersonSisuId: 'test-hlo-111111112',
   hygroupcn: ['hy-employees'],
-  employeeNumber: '000000000',
   studentNumber: '010000006',
 }
 

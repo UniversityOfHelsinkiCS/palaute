@@ -24,10 +24,9 @@ export const getData = results => {
 }
 
 export const handleLoginAs = user => () => {
-  const { id, employeeNumber } = user
+  const { id } = user
 
   localStorage.setItem('adminLoggedInAs', id)
-  localStorage.setItem('employeenumber', employeeNumber ?? null)
   window.location.reload()
 }
 

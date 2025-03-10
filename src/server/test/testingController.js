@@ -23,7 +23,6 @@ const userHeadersToUser = userHeaders => ({
   firstName: userHeaders.givenname,
   lastName: userHeaders.sn,
   email: userHeaders.mail,
-  employeeNumber: userHeaders.employeeNumber,
   studentNumber: userHeaders.studentNumber,
 })
 

@@ -86,10 +86,9 @@ const findUser = async (req, res) => {
     }
   } else {
     const isEmail = user.includes('.') || user.includes('@')
-    const isEmployeeNumber = !Number.isNaN(Number(user)) && user.charAt(0) !== '0'
-    const isStudentNumber = !isEmployeeNumber && !Number.isNaN(Number(user))
-    const isSisuId = !isEmployeeNumber && !isStudentNumber && !Number.isNaN(Number(user[user.length - 1]))
-    const isUsername = !isStudentNumber && !isSisuId && !isEmployeeNumber
+    const isStudentNumber = !Number.isNaN(Number(user))
+    const isSisuId = !isStudentNumber && !Number.isNaN(Number(user[user.length - 1]))
+    const isUsername = !isStudentNumber && !isSisuId
 
     if (isEmail) {
       where[Op.or] = {
@@ -107,11 +106,6 @@ const findUser = async (req, res) => {
         [Op.iLike]: `${user}%`,
       }
       params.id = user
-    } else if (isEmployeeNumber) {
-      where.employeeNumber = {
-        [Op.iLike]: `${user}%`,
-      }
-      params.employeeNumber = user
     } else if (isUsername) {
       where.username = {
         [Op.iLike]: `%${user}%`,
@@ -522,7 +516,6 @@ const getFeedbackCorrespondents = async (req, res) => {
       u.id, 
       u.email, 
       u.secondary_email as "secondaryEmail", 
-      u.employee_number as "employeeNumber",
       u.student_number as "studentNumber",
       u.degree_study_right as "degreeStudyRight",
       u.last_logged_in as "lastLoggedIn",
