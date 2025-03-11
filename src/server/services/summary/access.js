@@ -4,8 +4,7 @@ const getSummaryAccessibleOrganisationIds = async user => {
   const organisationAccess = await user.getOrganisationAccess()
   const accessibleOrganisationIds = organisationAccess.flatMap(access => [
     access.organisation.id,
-    // remove parent level for now ( https://leanware.atlassian.net/browse/TAUKPJ-286 )
-    //access.organisation.parentId,
+    access.organisation.parentId,
   ])
 
   return accessibleOrganisationIds
