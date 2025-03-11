@@ -95,7 +95,8 @@
     "adminGraylog": "",
     "courseUnitPage": "",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseRealisationPageStudent": "-"
   },
   "userFeedbacks": {
     "mainHeading": "Mina responser",

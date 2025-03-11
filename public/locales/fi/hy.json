@@ -11,7 +11,8 @@
     "adminGraylog": "https://toska.cs.helsinki.fi/graylog",
     "courseUnitPage": "https://studies.helsinki.fi/kurssit/opintojakso/{{courseUnitId}}/",
     "courseUnitPageStudent": "https://studies.helsinki.fi/kurssit/opintojakso/{{courseUnitId}}/",
-    "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo",
+    "courseRealisationPageStudent": "https://studies.helsinki.fi/kurssit/toteutus/{{courseRealisationId}}/"
   },
   "mails": {
     "instructionsAndSupport": "Ota yhteyttä tukeen: <a href=mailto:norppa@helsinki.fi>norppa@helsinki.fi</a> <br/>\nKäyttöohje: <a href=https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback>https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Lisätietoja Norpasta Flammassa</a>"

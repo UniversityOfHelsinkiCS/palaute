@@ -11,7 +11,8 @@
     "adminGraylog": "https://toska.cs.helsinki.fi/graylog",
     "courseUnitPage": "https://studies.helsinki.fi/courses/course-unit/{{courseUnitId}}/",
     "courseUnitPageStudent": "https://studies.helsinki.fi/courses/course-unit/{{courseUnitId}}/",
-    "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo"
+    "courseRealisationPage": "https://sisu.helsinki.fi/teacher/role/staff/teaching/course-unit-realisations/view/{{sisuId}}/information/basicinfo",
+    "courseRealisationPageStudent": "https://studies.helsinki.fi/courses/course-implementation/{{courseRealisationId}}/"
   },
   "mails": {
     "instructionsAndSupport": "Contact support: <a href=mailto:norppa@helsinki.fi>norppa@helsinki.fi</a> <br/>\nUser instructions: <a href=https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback>https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>More information about Norppa in Flamma</a>"

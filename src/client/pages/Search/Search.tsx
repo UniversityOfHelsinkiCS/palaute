@@ -55,6 +55,7 @@ const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, s
 
 const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
   const { t, i18n } = useTranslation()
+
   return (
     <Paper
       sx={{
@@ -69,7 +70,7 @@ const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
       <Box fontSize="16px" display="flex" alignItems="start" gap={1}>
         <Typography color="textSecondary">{fbt.courseUnit.courseCode}</Typography>
         <Typography fontWeight={400}>{getLanguageValue(fbt.courseUnit.name, i18n.language)}</Typography>
-        <ExternalLink href={t('links:courseUnitPage', { courseRealisationId: fbt.courseRealisation.id })}>
+        <ExternalLink href={t('links:courseRealisationPageStudent', { courseRealisationId: fbt.courseRealisation.id })}>
           {t('search:coursePageLink')}
         </ExternalLink>
       </Box>

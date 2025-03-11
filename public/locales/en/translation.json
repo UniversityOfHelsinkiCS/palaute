@@ -100,7 +100,8 @@
     "adminGraylog": "-",
     "courseUnitPage": "-",
     "courseUnitPageStudent": "-",
-    "courseRealisationPage": "-"
+    "courseRealisationPage": "-",
+    "courseRealisationPageStudent": "-"
   },
   "userFeedbacks": {
     "mainHeading": "My feedback",
