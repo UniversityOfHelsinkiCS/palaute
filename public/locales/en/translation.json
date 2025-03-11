@@ -670,7 +670,7 @@
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Feedback for the course {{courseName}} is about to start",
       "subjectMultiple": "The feedback for your courses are about to start",
-      "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open in a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
+      "text": "Dear teacher! <br/>\nThe course feedback form for the following courses will open within a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
     "instructionsAndSupport": "Contact support."
   },

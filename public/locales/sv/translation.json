@@ -637,7 +637,7 @@
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Tidsperioden för kursrespons på kursen {{courseName}} börjar",
       "subjectMultiple": "Perioden för kursrespons börjar på dina kurser",
-      "text": "Bästa lärare! <br/>\nKursresponsblanketten för följande kurser öppnas om en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)"
+      "text": "Bästa lärare! <br/>\nKursresponsblanketten för följande kurser öppnas inom en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)"
     },
     "instructionsAndSupport": "Kontakta stödet."
   }
