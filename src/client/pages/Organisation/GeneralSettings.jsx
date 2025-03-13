@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material'
 
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
@@ -41,7 +41,9 @@ const StudentListSettings = ({ organisation }) => {
 
   const [visibility, setVisibility] = useState(getStudentListVisibility(organisation))
 
-  const mutation = useMutation(saveGeneralSettings)
+  const mutation = useMutation({
+    mutationFn: saveGeneralSettings,
+  })
 
   const handleChange = async ({ target }) => {
     const studentListVisible = target.value === 'visible'

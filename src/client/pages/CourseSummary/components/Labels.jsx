@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { grey } from '@mui/material/colors'
 
-import { useIsFetching } from 'react-query'
+import { useIsFetching } from '@tanstack/react-query'
 import { Box, CircularProgress, Link, Tooltip, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 import { lightFormat } from 'date-fns'
@@ -111,7 +111,9 @@ export const CourseUnitLabel = ({ name, code, extras = [] }) => (
 
 export const OrganisationLabel = ({ organisation, dates }) => {
   const { i18n } = useTranslation()
-  const isFetching = useIsFetching(['summaries-v2', organisation?.id])
+  const isFetching = useIsFetching({
+    queryKey: ['summaries-v2', organisation?.id],
+  })
 
   return (
     <Box display="flex" flexDirection="column" pl="0.5rem">
@@ -131,7 +133,9 @@ export const OrganisationLabel = ({ organisation, dates }) => {
 
 export const TagLabel = ({ tag, dates }) => {
   const { t, i18n } = useTranslation()
-  const isFetching = useIsFetching(['summaries-v2', tag?.id])
+  const isFetching = useIsFetching({
+    queryKey: ['summaries-v2', tag?.id],
+  })
 
   return (
     <Box display="flex" flexDirection="column" pl="0.5rem">

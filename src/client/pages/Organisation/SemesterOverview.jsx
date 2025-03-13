@@ -20,7 +20,7 @@ import {
   Paper,
 } from '@mui/material'
 import { ArrowDropDown, CalendarTodayOutlined, ChevronRight, Menu, List } from '@mui/icons-material'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
@@ -56,7 +56,9 @@ const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) =>
     return feedbackTargets
   }
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: feedbackTargets, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     enabled,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

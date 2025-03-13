@@ -1,6 +1,6 @@
 import { sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 import { getLanguageValue } from '../util/languageUtils'
@@ -18,7 +18,9 @@ const useTeacherCourseUnits = (options = {}) => {
     return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 
-  const { data: courseUnits, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: courseUnits, ...rest } = useQuery({
+    queryKey: [queryKey],
+    queryFn,
     cacheTime: defaultCacheTime,
     staleTime: defaultCacheTime,
     ...options,

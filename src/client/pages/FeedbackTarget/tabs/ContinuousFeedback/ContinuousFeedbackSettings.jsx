@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Box, Switch, FormGroup, FormControlLabel, Alert } from '@mui/material'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
@@ -21,7 +21,9 @@ const ContinuousFeedbackSettings = ({ feedbackTarget, feedbackEnabled, setFeedba
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const mutation = useMutation(updateContinuousFeedbackStatus)
+  const mutation = useMutation({
+    mutationFn: updateContinuousFeedbackStatus,
+  })
 
   const [sendDigestEmail, setSendDigestEmail] = useState(sendContinuousFeedbackDigestEmail)
 

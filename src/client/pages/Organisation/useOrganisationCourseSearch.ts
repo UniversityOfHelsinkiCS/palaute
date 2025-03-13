@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../util/apiClient'
 
 interface UseOrganisationCourseSearchOptions {
@@ -20,10 +20,10 @@ export const useOrganisationCourseSearch = ({
     return data
   }
 
-  const { data, ...rest } = useQuery(
-    ['organisationCourseSearch', organisationCode, search, startDate, endDate],
-    queryFn
-  )
+  const { data, ...rest } = useQuery({
+    queryKey: ['organisationCourseSearch', organisationCode, search, startDate, endDate],
+    queryFn,
+  })
 
   return { data, ...rest }
 }

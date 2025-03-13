@@ -1,5 +1,5 @@
 import { endOfDay, startOfDay } from 'date-fns'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import apiClient from '../../../util/apiClient'
 import { updateCache } from '../../../util/reactQuery'
 
@@ -35,7 +35,8 @@ const openFeedbackImmediately = async feedbackTarget => {
 }
 
 export const useUpdateDates = feedbackTarget => {
-  const mutation = useMutation(async dates => updateDates(dates, feedbackTarget), {
+  const mutation = useMutation({
+    mutationFn: async dates => updateDates(dates, feedbackTarget),
     onSuccess: data => {
       updateCache(['feedbackTarget', String(feedbackTarget.id)], draft => {
         draft.opensAt = data.opensAt
@@ -48,7 +49,8 @@ export const useUpdateDates = feedbackTarget => {
 }
 
 export const useOpenImmediately = feedbackTarget => {
-  const mutation = useMutation(async () => openFeedbackImmediately(feedbackTarget), {
+  const mutation = useMutation({
+    mutationFn: async () => openFeedbackImmediately(feedbackTarget),
     onSuccess: data => {
       updateCache(['feedbackTarget', String(feedbackTarget.id)], draft => {
         draft.opensAt = data.opensAt

@@ -30,6 +30,7 @@ const FeedbackTarget = () => {
     }
     return weight
   }
+
   const organisation =
     isLoading || organisationsLoading || !courseUnit
       ? null

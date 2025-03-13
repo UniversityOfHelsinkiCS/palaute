@@ -8,9 +8,12 @@ import UserAccordion from '../../UserAccordion/UserAccordion'
 import { handleLoginAs } from '../../utils'
 
 const useFeedbackCorrespondents = () =>
-  useQuery('feedbackCorrespondents', async () => {
-    const { data } = await apiClient.get('/admin/feedback-correspondents')
-    return data
+  useQuery({
+    queryKey: ['feedbackCorrespondents'],
+    queryFn: async () => {
+      const { data } = await apiClient.get('/admin/feedback-correspondents')
+      return data
+    },
   })
 
 const FeedbackCorrespondents = () => {

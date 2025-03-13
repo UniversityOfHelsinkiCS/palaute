@@ -13,16 +13,19 @@ import {
   Typography,
 } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../../../util/apiClient'
 
 const ConfigDebug = () => {
   // eslint-disable-next-line no-undef
   const entries = Object.entries(CONFIG ?? {})
 
-  const { data, isLoading } = useQuery('NODE_CONFIG_ENV', async () => {
-    const res = await apiClient.get('/admin/node-config-env')
-    return res.data
+  const { data, isLoading } = useQuery({
+    queryKey: ['NODE_CONFIG_ENV'],
+    queryFn: async () => {
+      const res = await apiClient.get('/admin/node-config-env')
+      return res.data
+    },
   })
 
   return (

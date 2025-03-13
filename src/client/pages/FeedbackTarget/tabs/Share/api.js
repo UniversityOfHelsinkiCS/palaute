@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import apiClient from '../../../../util/apiClient'
 import { updateCache } from '../../../../util/reactQuery'
 
@@ -8,7 +8,8 @@ export const useSendReminderEmail = () => {
       data,
     })
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: (response, variables) => {
       updateCache(['feedbackTarget', String(variables.id)], draft => {
         const { data } = response

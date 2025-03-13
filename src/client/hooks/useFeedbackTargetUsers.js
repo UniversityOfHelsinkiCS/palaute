@@ -10,8 +10,10 @@ const useFeedbackTargetUsers = (targetId, options = {}) => {
     return data
   }
 
-  const { data: users, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: Boolean(targetId),
+  const { data: users, ...rest } = useQuery({
+    queryKey,
+    queryFn,
+    enabled: !!targetId,
     ...options,
   })
 

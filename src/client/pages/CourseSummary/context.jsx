@@ -1,5 +1,5 @@
 import React from 'react'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
 import apiClient from '../../util/apiClient'
@@ -58,11 +58,15 @@ const useSummaryQuestions = organisationCode => {
     const { data } = await apiClient.get(apiUrl)
     return data
   }
-  const { data } = useQuery(['survey', organisationCode], queryFn, {
+
+  const { data } = useQuery({
+    queryKey: ['survey', organisationCode],
+    queryFn,
     retry: false,
     refetchOnWindowFocus: false,
     staleTime: 1000 * 60 * 60 * 24,
   })
+
   const questions = data?.questions || []
   const acualQuestions = questions.filter(q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD')
   return acualQuestions

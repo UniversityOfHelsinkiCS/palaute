@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
@@ -54,8 +54,9 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     return data
   }
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: Boolean(code),
+  const { data: feedbackTargets, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     ...options,
   })
 

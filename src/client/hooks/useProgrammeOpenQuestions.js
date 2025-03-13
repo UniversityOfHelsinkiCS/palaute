@@ -10,7 +10,9 @@ const useProgrammeOpenQuestions = (code, options = {}) => {
     return data
   }
 
-  const { data: codesWithIds, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: codesWithIds, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     ...options,
   })
 

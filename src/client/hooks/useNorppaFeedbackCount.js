@@ -10,7 +10,9 @@ const useNorppaFeedbackCount = (options = {}) => {
     return data
   }
 
-  const { data: norppaFeedbackCount, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: norppaFeedbackCount, ...rest } = useQuery({
+    queryKey: [queryKey],
+    queryFn,
     refetchInterval: 1000 * 60 * 10,
     ...options,
   })

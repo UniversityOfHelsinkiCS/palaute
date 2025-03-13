@@ -1,6 +1,6 @@
 import { orderBy, sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../../util/apiClient'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -29,15 +29,13 @@ export const useTeacherCourseUnits = (params, options = {}) => {
     return orderBy(data, orderFn, 'asc')
   }
 
-  const { data: courseUnits, ...rest } = useQuery(
-    ['teacherCourseUnits', params.status, params.startDate, params.endDate],
+  const { data: courseUnits, ...rest } = useQuery({
+    queryKey: ['teacherCourseUnits', params.status, params.startDate, params.endDate],
     queryFn,
-    {
-      cacheTime: defaultCacheTime,
-      staleTime: defaultCacheTime,
-      ...options,
-    }
-  )
+    cacheTime: defaultCacheTime,
+    staleTime: defaultCacheTime,
+    ...options,
+  })
 
   return { courseUnits, ...rest }
 }
@@ -51,15 +49,11 @@ export const useTeacherOrganisatioSurveys = (params, options = {}) => {
     return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 
-  const { data: courseUnits, ...rest } = useQuery(
-    ['teacherOrgSurveys', params.status, params.startDate, params.endDate],
+  const { data: courseUnits, ...rest } = useQuery({
+    queryKey: ['teacherOrgSurveys', params.status, params.startDate, params.endDate],
     queryFn,
-    {
-      cacheTime: defaultCacheTime,
-      staleTime: defaultCacheTime,
-      ...options,
-    }
-  )
+    ...options,
+  })
 
   return { courseUnits, ...rest }
 }

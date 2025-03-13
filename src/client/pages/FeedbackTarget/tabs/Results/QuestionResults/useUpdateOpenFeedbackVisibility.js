@@ -1,6 +1,6 @@
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import apiClient from '../../../../../util/apiClient'
 import queryClient from '../../../../../util/queryClient'
 import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
@@ -17,7 +17,8 @@ const useUpdateOpenFeedbackVisibility = () => {
   const mutationFn = async ({ feedbackContent, feedbackTargetId, questionId, hidden }) =>
     apiClient.put(`/feedback-targets/${feedbackTargetId}/hide-feedback`, { hidden, feedbackContent, questionId })
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: (response, { feedbackContent }) => {
       const { hidden, count } = response.data
 

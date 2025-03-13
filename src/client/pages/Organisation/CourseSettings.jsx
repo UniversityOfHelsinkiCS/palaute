@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { Edit } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
 import { useParams, Link } from 'react-router-dom'
 
@@ -168,7 +168,9 @@ const CourseUnitTable = React.memo(
 const CourseSettingsContainer = ({ organisation, courseUnits }) => {
   const { code } = organisation
   const { enqueueSnackbar } = useSnackbar()
-  const mutation = useMutation(saveChangedCourseCodes)
+  const mutation = useMutation({
+    mutationFn: saveChangedCourseCodes,
+  })
   const { t, i18n } = useTranslation()
   const [searchQuery, setSearchQuery] = React.useState('')
   const deferredQuery = React.useDeferredValue(searchQuery.toLowerCase())
@@ -225,7 +227,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
         setStudentListVisibleCourseCodes(updatedOrganisation.studentListVisibleCourseCodes)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
 
-        queryClient.invalidateQueries('organisation')
+        queryClient.invalidateQueries(['organisation'])
       } catch (error) {
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }

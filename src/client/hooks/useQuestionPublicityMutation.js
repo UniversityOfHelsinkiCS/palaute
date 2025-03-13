@@ -1,5 +1,5 @@
 import { kebabCase } from 'lodash-es'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 import queryClient from '../util/queryClient'
 
@@ -12,7 +12,8 @@ const useQuestionPublicityMutation = ({ resource, resourceId }) => {
     return res.data.publicQuestionIds
   }
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: publicQuestionIds => {
       const queryKey = [resource, String(resourceId)]
       queryClient.setQueryData(queryKey, resource => ({

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
@@ -11,8 +11,9 @@ export const useFeedbackTargetErrorViewDetails = (feedbackTargetId, enable = tru
     return data
   }
 
-  const { data: feedbackTarget, ...rest } = useQuery([queryKey, feedbackTargetId], queryFn, {
-    enabled: enable,
+  const { data: feedbackTarget, ...rest } = useQuery({
+    queryKey: [queryKey, feedbackTargetId],
+    queryFn,
   })
 
   return { feedbackTarget, rest }

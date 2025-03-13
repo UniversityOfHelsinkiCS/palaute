@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../../util/apiClient'
 
@@ -12,7 +12,9 @@ export const useMyTeachingTabCounts = (params, options = {}) => {
     return data
   }
 
-  const { data: tabCounts, ...rest } = useQuery('myTeachingTabCounts', queryFn, {
+  const { data: tabCounts, ...rest } = useQuery({
+    queryKey: ['myTeachingTabCounts'],
+    queryFn,
     cacheTime: defaultCacheTime,
     staleTime: defaultCacheTime,
     ...options,

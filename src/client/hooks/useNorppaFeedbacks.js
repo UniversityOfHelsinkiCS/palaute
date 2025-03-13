@@ -10,7 +10,9 @@ const useNorppaFeedbacks = (options = {}) => {
     return data
   }
 
-  const { data: feedbacks, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: feedbacks, ...rest } = useQuery({
+    queryKey: [queryKey],
+    queryFn,
     ...options,
   })
 

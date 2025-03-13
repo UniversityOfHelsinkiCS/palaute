@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 
 const useFeedbackTargetFeedbacks = (targetId, groupId, options = {}) => {
@@ -11,12 +11,9 @@ const useFeedbackTargetFeedbacks = (targetId, groupId, options = {}) => {
     return data
   }
 
-  const { data: feedbackTargetData, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: Boolean(targetId),
-    refetchOnFocus: false,
-    refetchOnMount: false,
-    refetchInterval: false,
-    keepPreviousData: true,
+  const { data: feedbackTargetData, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     ...options,
   })
 

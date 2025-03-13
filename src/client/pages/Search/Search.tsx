@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { format, isValid } from 'date-fns/esm'
 import { Alert, Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../util/apiClient'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
@@ -32,7 +32,6 @@ const styles: {
 
 const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
   const queryKey = ['publicOrganisationFeedbackTargets', organisationCode, startDate, endDate]
-
   const queryFn = async () => {
     const { data: feedbackTargets } = await apiClient.get(
       `/feedback-targets/for-organisation/${organisationCode}/public`,
@@ -40,11 +39,12 @@ const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, s
         params: { startDate, endDate },
       }
     )
-
     return feedbackTargets
   }
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: feedbackTargets, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     enabled: !!organisationCode,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

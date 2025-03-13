@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
@@ -13,9 +13,9 @@ const useFeedbackTargetLogs = (id, options = {}) => {
     return data
   }
 
-  const { data: feedbackTargetLogs, ...rest } = useQuery(queryKey, queryFn, {
-    cacheTime: defaultCacheTime,
-    staleTime: defaultCacheTime,
+  const { data: feedbackTargetLogs, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     ...options,
   })
 

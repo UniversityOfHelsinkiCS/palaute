@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../util/apiClient'
 
 const defaultCacheTime = 900000
@@ -10,7 +10,9 @@ const useWaitingFeedbackCount = (options = {}) => {
     return data.count
   }
 
-  const { data: waitingFeedbackCount, ...rest } = useQuery('myFeedbacksWaitingFeedbackCount', queryFn, {
+  const { data: waitingFeedbackCount, ...rest } = useQuery({
+    queryKey: ['myFeedbacksWaitingFeedbackCount'],
+    queryFn,
     cacheTime: defaultCacheTime,
     staleTime: defaultCacheTime,
     ...options,

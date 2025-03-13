@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 import { endOfDay, startOfDay } from 'date-fns'
 
 import queryClient from '../../../../util/queryClient'
@@ -15,7 +15,8 @@ export const useCreateInterimFeedbackMutation = parentId => {
     return data
   }
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries(['interimFeedbacks', parentId])
     },
@@ -35,7 +36,8 @@ export const useEditInterimFeedbackMutation = parentId => {
     return data
   }
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries(['interimFeedbacks', parentId])
     },
@@ -49,7 +51,8 @@ export const useDeleteInterimFeedbackMutation = parentId => {
     await apiClient.delete(`/feedback-targets/interimFeedbacks/${fbtId}`)
   }
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: () => {
       queryClient.invalidateQueries(['interimFeedbacks', parentId])
     },

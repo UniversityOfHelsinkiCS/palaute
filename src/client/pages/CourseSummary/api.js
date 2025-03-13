@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../util/apiClient'
 import { useSummaryContext } from './context'
 
@@ -35,7 +35,9 @@ export const useSummaries = ({ entityId, enabled, include }) => {
 
   const queryFn = () => fetchSummaries({ startDate, endDate, entityId, include, tagId, extraOrgId, extraOrgMode })
 
-  const { data, ...rest } = useQuery(queryKey, queryFn, {
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     enabled,
     retry: false,
     refetchOnWindowFocus: false,
@@ -73,12 +75,9 @@ export const useTeacherSummaries = () => {
     return data
   }
 
-  const { data, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: true,
-    retry: false,
-    refetchOnWindowFocus: false,
-    keepPreviousData: true,
-    staleTime: TWELVE_HOURS,
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn,
   })
 
   const organisations = data || []
@@ -110,12 +109,9 @@ export const useOrganisationSummaries = () => {
     return data
   }
 
-  const { data, ...rest } = useQuery(queryKey, queryFn, {
-    enabled: true,
-    retry: false,
-    refetchOnWindowFocus: false,
-    keepPreviousData: true,
-    staleTime: TWELVE_HOURS,
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn,
   })
 
   const organisations = data || []
@@ -141,7 +137,9 @@ export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate, al
     return data
   }
 
-  const { data, ...rest } = useQuery(queryKey, queryFn, {
+  const { data, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     enabled: true,
     retry: false,
     refetchOnWindowFocus: false,

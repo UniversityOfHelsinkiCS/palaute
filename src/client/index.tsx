@@ -4,7 +4,7 @@ import './util/resizeObserverPolyfill'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { QueryClientProvider } from 'react-query'
+import { QueryClientProvider } from '@tanstack/react-query'
 
 import { inProduction, basePath, DEV_USERNAME } from './util/common'
 import { getHeaders, setHeaders } from './util/mockHeaders'

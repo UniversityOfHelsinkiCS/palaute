@@ -10,8 +10,9 @@ const useProgrammeSurvey = (organisationCode, options = {}) => {
     return data
   }
 
-  const { data: survey, ...rest } = useQuery(queryKey, queryFn, {
-    skipCache: true,
+  const { data: survey, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     ...options,
   })
 

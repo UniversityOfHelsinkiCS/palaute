@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
@@ -11,7 +11,9 @@ const useUserDetails = (userId, options = {}) => {
     return data
   }
 
-  const { data: user, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: user, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     ...options,
   })
 

@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
@@ -11,7 +11,11 @@ const queryFn = async () => {
 const useFeedbackTargetsForStudent = (options = {}) => {
   const queryKey = 'feedbackTargetsForStudent'
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, options)
+  const { data: feedbackTargets, ...rest } = useQuery({
+    queryKey: [queryKey],
+    queryFn,
+    ...options,
+  })
 
   return { feedbackTargets, ...rest }
 }

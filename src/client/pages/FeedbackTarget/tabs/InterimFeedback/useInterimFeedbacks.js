@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { INTERIM_FEEDBACKS_ENABLED } from '../../../../util/common'
 import apiClient from '../../../../util/apiClient'
@@ -10,7 +10,9 @@ export const useInterimFeedbackParent = (interimFbtId, enable = true) => {
     return data
   }
 
-  const { data: parentFeedback, ...rest } = useQuery(['interimFeedbackParent', interimFbtId], queryFn, {
+  const { data: parentFeedback, ...rest } = useQuery({
+    queryKey: ['interimFeedbackParent', interimFbtId],
+    queryFn,
     enabled: enable && INTERIM_FEEDBACKS_ENABLED,
   })
 
@@ -24,7 +26,9 @@ export const useInterimFeedbacks = (parentId, enable = true) => {
     return data
   }
 
-  const { data: interimFeedbacks, ...rest } = useQuery(['interimFeedbacks', parentId], queryFn, {
+  const { data: interimFeedbacks, ...rest } = useQuery({
+    queryKey: ['interimFeedbacks', parentId],
+    queryFn,
     enabled: enable && INTERIM_FEEDBACKS_ENABLED,
   })
 

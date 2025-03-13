@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 
 const useOrganisationsList = () => {
@@ -7,7 +7,9 @@ const useOrganisationsList = () => {
     return organisations
   }
 
-  const { data, ...rest } = useQuery('organisations-list', queryFn, {
+  const { data, ...rest } = useQuery({
+    queryKey: ['organisations-list'],
+    queryFn,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   })

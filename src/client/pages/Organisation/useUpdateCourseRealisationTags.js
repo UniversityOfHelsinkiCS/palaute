@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
@@ -10,7 +10,8 @@ const useUpdateCourseRealisationTags = () => {
       tagIds,
     })
 
-  const mutation = useMutation(mutationFn, {
+  const mutation = useMutation({
+    mutationFn,
     onSuccess: (response, variables) => {
       queryClient.refetchQueries(['organisationFeedbackTargets', variables.organisationCode])
     },

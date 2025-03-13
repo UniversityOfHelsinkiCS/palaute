@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 
 import { TextField, Card, CardContent, Box, Typography, Alert, List, ListItem, ListItemText } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useMutation, useQueryClient } from 'react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 import { debounce } from 'lodash-es'
@@ -132,7 +132,8 @@ const FeedbackCorrespondentContainer = ({ feedbackCorrespondents }) => {
   const [query, setQuery] = useState('')
   const [potentialUsers, setPotentialUsers] = useState([])
 
-  const mutation = useMutation(updateFeedbackCorrespondents(code), {
+  const mutation = useMutation({
+    mutationFn: updateFeedbackCorrespondents(code),
     onSuccess: data => {
       queryClient.setQueryData(['organisation', code], organisation => ({
         ...organisation,

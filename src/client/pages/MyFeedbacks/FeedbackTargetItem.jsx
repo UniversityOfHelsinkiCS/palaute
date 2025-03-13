@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
-import { useQueryClient } from 'react-query'
+import { useQueryClient } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 
 import { Box, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typography } from '@mui/material'
@@ -296,16 +296,16 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback.id}`)
-    queryClient.invalidateQueries('feedbackTargetsForStudent')
+    queryClient.invalidateQueries(['feedbackTargetsForStudent'])
     // Invalidate the waiting feedback count for the student
-    queryClient.invalidateQueries('myFeedbacksWaitingFeedbackCount')
+    queryClient.invalidateQueries(['myFeedbacksWaitingFeedbackCount'])
 
     enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
 
   const onNotGivingFeedback = async () => {
     await apiClient.put(`/feedback-targets/${feedbackTarget.id}/not-giving-feedback`)
-    queryClient.invalidateQueries('feedbackTargetsForStudent')
+    queryClient.invalidateQueries(['feedbackTargetsForStudent'])
     enqueueSnackbar(t('userFeedbacks:noFeedbackGiven'), { variant: 'success' })
   }
 

@@ -1,6 +1,6 @@
 import { parseISO, lightFormat } from 'date-fns'
 import { partition } from 'lodash-es'
-import { useMutation } from 'react-query'
+import { useMutation } from '@tanstack/react-query'
 
 import apiClient from '../../../../util/apiClient'
 import { STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL } from '../../../../util/common'
@@ -134,8 +134,8 @@ export const getInitialValues = feedbackTarget => {
 export const useSaveValues = () => {
   const { feedbackTarget } = useFeedbackTargetContext()
 
-  const mutation = useMutation(
-    async feedback => {
+  const mutation = useMutation({
+    mutationFn: async feedback => {
       if (feedbackTarget.feedback) {
         const { data } = await apiClient.put(`/feedbacks/${feedbackTarget.feedback.id}`, {
           data: feedback,
@@ -151,20 +151,18 @@ export const useSaveValues = () => {
 
       return data
     },
-    {
-      onSuccess: feedback => {
-        queryClient.setQueriesData(['feedbackTarget', String(feedbackTarget.id)], feedbackTarget => ({
-          ...feedbackTarget,
-          feedback,
-        }))
+    onSuccess: feedback => {
+      queryClient.setQueryData(['feedbackTarget', String(feedbackTarget.id)], feedbackTarget => ({
+        ...feedbackTarget,
+        feedback,
+      }))
 
-        // Invalidate the waiting feedback count for the student
-        queryClient.invalidateQueries('myFeedbacksWaitingFeedbackCount')
-        // Invalidate the feedbackTarget data
-        queryClient.invalidateQueries(['feedbackTarget', String(feedbackTarget.id)])
-      },
-    }
-  )
+      // Invalidate the waiting feedback count for the student
+      queryClient.invalidateQueries(['myFeedbacksWaitingFeedbackCount'])
+      // Invalidate the feedbackTarget data
+      queryClient.invalidateQueries(['feedbackTarget', String(feedbackTarget.id)])
+    },
+  })
 
   return mutation
 }

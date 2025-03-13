@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query'
+import { useQuery } from '@tanstack/react-query'
 
 import { ORGANISATION_SURVEYS_ENABLED } from '../../util/common'
 import apiClient from '../../util/apiClient'
@@ -12,7 +12,9 @@ export const useOrganisationSurvey = (organisationCode, surveyId, enable = true)
     return data
   }
 
-  const { data: survey, ...rest } = useQuery(['organisationSurvey', surveyId], queryFn, {
+  const { data: survey, ...rest } = useQuery({
+    queryKey: ['organisationSurvey', surveyId],
+    queryFn,
     enabled: enable && ORGANISATION_SURVEYS_ENABLED,
   })
 
@@ -26,7 +28,9 @@ export const useOrganisationSurveys = (organisationCode, enable = true) => {
     return data
   }
 
-  const { data: surveys, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: surveys, ...rest } = useQuery({
+    queryKey,
+    queryFn,
     enabled: enable && ORGANISATION_SURVEYS_ENABLED,
   })
 

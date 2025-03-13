@@ -10,7 +10,9 @@ const useNoadfeedbackTargets = (options = {}) => {
     return data
   }
 
-  const { data: feedbackTargets, ...rest } = useQuery(queryKey, queryFn, {
+  const { data: feedbackTargets, ...rest } = useQuery({
+    queryKey: [queryKey],
+    queryFn,
     ...options,
   })
 
