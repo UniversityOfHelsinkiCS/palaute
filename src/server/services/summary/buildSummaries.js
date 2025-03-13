@@ -532,8 +532,10 @@ const buildSummaries = async (forceAll = false) => {
 
   if (!rebuildAll) {
     // Only rebuild summaries for the "current" time periods. Those are the ones that end in the future.
-    const now = new Date()
-    datePeriods = datePeriods.filter(({ end }) => end > now)
+    // Let's also add 6 months of past
+    const T = new Date()
+    T.setMonth(T.getMonth() - 6)
+    datePeriods = datePeriods.filter(({ end }) => end > T)
     logger.info(`Rebuilding summaries for ${datePeriods.length} time periods.`)
   } else {
     logger.info(`Rebuilding summaries fully.`)
