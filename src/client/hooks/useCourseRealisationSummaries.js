@@ -2,6 +2,8 @@ import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
+const defaultCacheTime = 9_000_000
+
 const useCourseRealisationSummaries = (courseCode, options = {}) => {
   const queryKey = ['courseRealisationSummaries', courseCode]
   const queryFn = async () => {
@@ -12,6 +14,10 @@ const useCourseRealisationSummaries = (courseCode, options = {}) => {
   const { data: courseRealisationSummaries, ...rest } = useQuery({
     queryKey,
     queryFn,
+    cacheTime: defaultCacheTime,
+    staleTime: defaultCacheTime,
+    enabled: Boolean(courseCode),
+    retry: false,
     ...options,
   })
 

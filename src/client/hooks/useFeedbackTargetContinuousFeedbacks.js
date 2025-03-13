@@ -13,6 +13,7 @@ const useFeedbackTargetContinuousFeedbacks = (targetId, options = {}) => {
   const { data: continuousFeedbacks, ...rest } = useQuery({
     queryKey,
     queryFn,
+    enabled: Boolean(targetId),
     ...options,
   })
 

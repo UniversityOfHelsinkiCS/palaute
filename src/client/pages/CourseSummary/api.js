@@ -78,6 +78,11 @@ export const useTeacherSummaries = () => {
   const { data, ...rest } = useQuery({
     queryKey,
     queryFn,
+    enabled: true,
+    retry: false,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
+    staleTime: TWELVE_HOURS,
   })
 
   const organisations = data || []
@@ -112,6 +117,11 @@ export const useOrganisationSummaries = () => {
   const { data, ...rest } = useQuery({
     queryKey,
     queryFn,
+    enabled: true,
+    retry: false,
+    refetchOnWindowFocus: false,
+    keepPreviousData: true,
+    staleTime: TWELVE_HOURS,
   })
 
   const organisations = data || []

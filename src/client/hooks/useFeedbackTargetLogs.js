@@ -16,6 +16,8 @@ const useFeedbackTargetLogs = (id, options = {}) => {
   const { data: feedbackTargetLogs, ...rest } = useQuery({
     queryKey,
     queryFn,
+    cacheTime: defaultCacheTime,
+    staleTime: defaultCacheTime,
     ...options,
   })
 

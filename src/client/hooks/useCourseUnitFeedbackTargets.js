@@ -57,6 +57,7 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
   const { data: feedbackTargets, ...rest } = useQuery({
     queryKey,
     queryFn,
+    enabled: Boolean(code),
     ...options,
   })
 

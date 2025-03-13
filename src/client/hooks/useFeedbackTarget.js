@@ -13,6 +13,7 @@ const useFeedbackTarget = (targetId, options = {}) => {
   const { data: feedbackTarget, ...rest } = useQuery({
     queryKey,
     queryFn,
+    enabled: Boolean(targetId),
     ...options,
   })
 

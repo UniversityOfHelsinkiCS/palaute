@@ -14,6 +14,7 @@ export const useFeedbackTargetErrorViewDetails = (feedbackTargetId, enable = tru
   const { data: feedbackTarget, ...rest } = useQuery({
     queryKey: [queryKey, feedbackTargetId],
     queryFn,
+    enabled: enable,
   })
 
   return { feedbackTarget, rest }

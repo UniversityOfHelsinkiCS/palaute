@@ -14,6 +14,11 @@ const useFeedbackTargetFeedbacks = (targetId, groupId, options = {}) => {
   const { data: feedbackTargetData, ...rest } = useQuery({
     queryKey,
     queryFn,
+    enabled: Boolean(targetId),
+    refetchOnFocus: false,
+    refetchOnMount: false,
+    refetchInterval: false,
+    keepPreviousData: true,
     ...options,
   })
 
