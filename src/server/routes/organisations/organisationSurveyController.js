@@ -20,6 +20,7 @@ const { validateStudentNumbers } = require('../../services/organisations/validat
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
+const { Summary } = require('../../models')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
@@ -136,7 +137,14 @@ const editOrganisationSurvey = async (req, res) => {
 
   // Update summary
   feedbackTarget.summary.data.studentCount = updatedSurvey.students.length
-  await feedbackTarget.summary.save()
+  await Summary.update(
+    { data: feedbackTarget.summary.data },
+    {
+      where: {
+        feedbackTargetId: feedbackTarget.id,
+      },
+    }
+  )
   updatedSurvey.summary = feedbackTarget.summary
 
   return res.send(updatedSurvey)

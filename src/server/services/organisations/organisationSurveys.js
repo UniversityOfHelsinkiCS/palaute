@@ -255,6 +255,8 @@ const getSurveyById = async feedbackTargetId => {
     ],
   })
 
+  if (!organisationSurvey) throw new Error('Organisation survey not found')
+
   const courseRealisationIds = await OrganisationSurveyCourse.findAll({
     where: {
       feedbackTargetId,
@@ -262,7 +264,6 @@ const getSurveyById = async feedbackTargetId => {
     attributes: ['courseRealisationId', 'userFeedbackTargetId'],
   })
 
-  if (!organisationSurvey) throw new Error('Organisation survey not found')
   if (!courseRealisationIds) throw new Error('Course realisation IDs not found')
 
   const excludeStudents = await getOrganisationSurveyCourseStudents(
