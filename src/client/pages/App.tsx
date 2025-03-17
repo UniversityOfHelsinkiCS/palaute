@@ -34,7 +34,12 @@ const App = () => {
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <Suspense fallback={null}>
-              <SnackbarProvider maxSnack={3} preventDuplicate autoHideDuration={10_000}>
+              <SnackbarProvider
+                maxSnack={3}
+                preventDuplicate
+                autoHideDuration={20_000}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+              >
                 <Routes>
                   <Route path="/noad/*" element={<GuestUser />} />
                   <Route path="/*" element={<AdUser />} />
