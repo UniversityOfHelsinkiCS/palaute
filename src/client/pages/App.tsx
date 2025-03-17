@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
@@ -23,9 +23,11 @@ const App = () => {
   usePinger(CUSTOM_SESSION_PINGER)
 
   // Change the document language according to the i18n language
-  i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
-    document.documentElement.lang = lng
-  })
+  useEffect(() => {
+    i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
+      document.documentElement.lang = lng
+    })
+  }, [])
 
   return (
     <LocalizationProvider>

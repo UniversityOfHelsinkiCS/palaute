@@ -6,7 +6,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:jsx-a11y/recommended',
   ],
-  plugins: ['import', 'react', 'react-hooks', 'jsx-a11y', 'prettier', 'cypress'],
+  plugins: ['import', 'react', 'react-hooks', 'jsx-a11y', 'prettier', 'cypress', 'eslint-plugin-react-compiler'],
   parser: '@babel/eslint-parser',
   parserOptions: {
     ecmaVersion: 2021,
@@ -59,6 +59,7 @@ module.exports = {
     'react/jsx-boolean-value': 'warn',
     'react/jsx-curly-brace-presence': 'warn',
     'react/jsx-props-no-spreading': 'off',
+    'react-compiler/react-compiler': 'error',
   },
   overrides: [
     {

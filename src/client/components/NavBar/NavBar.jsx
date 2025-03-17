@@ -276,7 +276,7 @@ const NavBar = ({ guest = false }) => {
   }
 
   const menu = (
-    <Menu id="navBarMenu" anchorEl={menuButtonRef.current} keepMounted open={menuOpen} onClose={handleCloseMenu}>
+    <Menu id="navBarMenu" anchorEl={() => menuButtonRef.current} keepMounted open={menuOpen} onClose={handleCloseMenu}>
       <LanguageMenu language={i18n.language} onLanguageChange={changeLanguage} />
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
       {!guest && isMobile && mobileMenuLinks}

@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useMemo } from 'react'
 
 const generateId = () => {
   const date = Date.now().toString('36')
@@ -8,13 +8,8 @@ const generateId = () => {
 }
 
 const useId = () => {
-  const idRef = useRef()
-
-  if (!idRef.current) {
-    idRef.current = generateId()
-  }
-
-  return idRef.current
+  const id = useMemo(() => generateId(), [])
+  return id
 }
 
 export default useId

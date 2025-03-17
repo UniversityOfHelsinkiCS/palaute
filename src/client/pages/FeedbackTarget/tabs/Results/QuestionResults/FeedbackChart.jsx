@@ -242,20 +242,23 @@ const buildChartConfig = (
 const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt }) => {
   const { t, i18n } = useTranslation()
   const chartRef = React.useRef()
+  const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
 
-  const config = React.useMemo(
+  React.useEffect(
     () =>
-      buildChartConfig(
-        chartRef.current,
-        feedbacks,
-        studentCount,
-        opensAt,
-        closesAt,
-        feedbackReminderLastSentAt,
-        t,
-        i18n.language
+      setConfig(
+        buildChartConfig(
+          chartRef.current,
+          feedbacks,
+          studentCount,
+          opensAt,
+          closesAt,
+          feedbackReminderLastSentAt,
+          t,
+          i18n.language
+        )
       ),
-    [chartRef.current, feedbacks]
+    [chartRef, feedbacks]
   )
 
   return (

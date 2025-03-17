@@ -1,5 +1,5 @@
 import React from 'react'
-import { useLocation } from 'react-router-dom'
+// import { useLocation } from 'react-router-dom'
 import { Box, CircularProgress } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useInView } from 'react-intersection-observer'
@@ -58,10 +58,10 @@ const useRenderVisible = ({ threshold = 0.0, delay = 0, initial = false }) => {
 }
 
 const OpenResults = ({ question }) => {
-  const { pathname } = useLocation()
-  const isNoad = pathname.startsWith('/noad')
-  const { canHide, toggleVisibility } = isNoad ? {} : useUpdateOpenFeedbackVisibility()
-  const { canDelete, deleteAnswer } = isNoad ? {} : useDeleteOpenFeedback()
+  // const { pathname } = useLocation()
+  // const isNoad = pathname.startsWith('/noad')
+  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
+  const { canDelete, deleteAnswer } = useDeleteOpenFeedback()
   const { feedbackTarget } = useFeedbackTargetContext()
 
   const feedbacks = React.useMemo(
