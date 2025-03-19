@@ -64,7 +64,7 @@ const Footer = ({ user }) => {
             <Typography>
               <ExternalLink href={t('links:dataProtection')}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
             </Typography>
-            {user && user.isTeacher && (
+            {user && user.isEmployee && (
               <Typography>
                 <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
               </Typography>

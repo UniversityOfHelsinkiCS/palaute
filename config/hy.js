@@ -259,8 +259,6 @@ const config = {
 
   IAM_GROUPS_HEADER: 'hygroupcn',
 
-  EMPLOYEE_IAM: 'hy-employees',
-
   ORGANISATION_SURVEYS_ENABLED: true,
 
   PUBLIC_COURSE_BROWSER_ENABLED: true,

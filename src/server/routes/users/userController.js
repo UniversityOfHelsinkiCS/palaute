@@ -9,18 +9,15 @@ const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
 const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
-const { EMPLOYEE_IAM } = require('../../util/config')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
   const iamGroups = req.noad ? [] : (req.user.iamGroups ?? [])
 
-  const isTeacher = iamGroups.includes(EMPLOYEE_IAM)
-
   if (!loginAs) {
     await User.upsert({ ...user.dataValues, lastLoggedIn: new Date() })
 
-    if (isTeacher) {
+    if (user.isEmployee) {
       await updateFeedbackCorrespondent(user)
     }
   }
@@ -34,7 +31,6 @@ const login = async (req, res) => {
 
   return res.send({
     ...user.toJSON(),
-    isTeacher,
     iamGroups,
     lastRestart,
     banners,

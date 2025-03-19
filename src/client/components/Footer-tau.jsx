@@ -43,7 +43,7 @@ const Footer = ({ user }) => {
                     </ExternalLink>
                   </Typography>
                 </Grid>
-                {user && user.isTeacher && (
+                {user && user.isEmployee && (
                   <Grid item xs={12} md="auto">
                     <Typography>
                       <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>

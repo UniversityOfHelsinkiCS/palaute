@@ -3,7 +3,7 @@ const { Router } = require('express')
 const { Op } = require('sequelize')
 const { formatActivityPeriod } = require('../../util/common')
 const { getOrganisationsList } = require('../../services/organisations/getOrganisationsList')
-const { ORGANISATION_SURVEYS_ENABLED, EMPLOYEE_IAM } = require('../../util/config')
+const { ORGANISATION_SURVEYS_ENABLED } = require('../../util/config')
 const {
   Organisation,
   OrganisationLog,
@@ -30,9 +30,7 @@ const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
 const getOrganisations = async (req, res) => {
   const { user, isAdmin } = req
 
-  const isEmployee = user.iamGroups.includes(EMPLOYEE_IAM)
-
-  if (!isAdmin && !isEmployee) {
+  if (!isAdmin && !user.isEmployee) {
     return res.send([])
   }
 

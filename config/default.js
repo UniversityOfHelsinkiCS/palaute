@@ -187,11 +187,6 @@ const config = {
   IAM_GROUPS_HEADER: 'hygroupcn',
 
   /**
-   * IAM group to identify employees
-   */
-  EMPLOYEE_IAM: 'hy-employees',
-
-  /**
    * Transport logs to separate graylog server
    */
   GELF_TRANSPORT_ENABLED: false,
