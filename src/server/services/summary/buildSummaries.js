@@ -452,7 +452,7 @@ const buildSummariesForPeriod = async ({
     .concat(courseUnitGroupSummaries)
     .concat(tagSummaries)
     .concat(orgSummariesWithVariants)
-    .filter(summary => summary.data && summary.data.feedbackCount > 0)
+    .filter(summary => summary.data && summary.data.studentCount > 0)
     .map(summary => _.pick(summary, relevantFields))
     .map(summary => ({ ...summary, startDate, endDate }))
 
