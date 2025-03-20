@@ -621,7 +621,7 @@ describe('Responsible Teachers', () => {
     cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
   })
 
-  it.only('can create questions for organisation survey', () => {
+  it('can create questions for organisation survey', () => {
     const today = new Date()
     const organisationCode = 'TEST_ORG'
     const organisationSurveyBody = {
