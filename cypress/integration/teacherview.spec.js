@@ -34,7 +34,6 @@ describe('Teacher view', () => {
       .should('have.attr', 'aria-label', '1 Survey')
 
     cy.get('[data-cy="course-unit-group-title-Organisation surveys"').should('not.exist')
-    cy.get('[data-cy="course-unit-group-expand-more"').should('not.exist')
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 

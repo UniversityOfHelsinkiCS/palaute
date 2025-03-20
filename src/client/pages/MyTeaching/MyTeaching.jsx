@@ -18,7 +18,6 @@ import { StatusTabs, StatusTab } from '../../components/common/StatusTabs'
 import CourseUnitItem from './CourseUnitGroup/CourseUnitItem'
 import CourseUnitAccordion from './CourseUnitGroup/CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
-import ExpandableCourseUnitGroup from './CourseUnitGroup/ExpandableCourseUnitGroup'
 import CourseUnitGroupGrid from './CourseUnitGroup/CourseUnitGroupGrid'
 import CourseUnitGroupTitle from './CourseUnitGroup/CourseUnitGroupTitle'
 import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColumn'
@@ -43,7 +42,7 @@ const CourseUnitGroupSkeleton = () => (
   </>
 )
 
-const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = false }) => {
+const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
   const theme = useTheme()
   const gridColumns = useCourseUnitGridColumns(theme)
 
@@ -51,10 +50,8 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
 
   const CourseUnitComponent = status === 'active' ? CourseUnitItem : CourseUnitAccordion
 
-  const GroupContainer = expandable ? ExpandableCourseUnitGroup : CourseUnitGroup
-
   return (
-    <GroupContainer>
+    <CourseUnitGroup>
       <CourseUnitGroupTitle title={groupTitle} badgeContent={courseUnits?.length} />
       <CourseUnitGroupGrid>
         {columnCourseUnits.map((courseUnitColumn, i) => (
@@ -67,7 +64,7 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status, expandable = f
           </CourseUnitGroupGridColumn>
         ))}
       </CourseUnitGroupGrid>
-    </GroupContainer>
+    </CourseUnitGroup>
   )
 }
 
@@ -224,7 +221,6 @@ const MyTeaching = () => {
           groupTitle={t('teacherView:organisationSurveys')}
           courseUnits={orgSurveyCourseUnits}
           status={status}
-          expandable
         />
       )}
 
