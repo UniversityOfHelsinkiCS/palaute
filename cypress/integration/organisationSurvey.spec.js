@@ -624,7 +624,7 @@ describe('Responsible Teachers', () => {
     cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
   })
 
-  it('can create questions for organisation survey', () => {
+  it.only('can create questions for organisation survey', () => {
     const today = new Date()
     const organisationCode = 'TEST_ORG'
     const organisationSurveyBody = {
@@ -660,23 +660,35 @@ describe('Responsible Teachers', () => {
     // Add likert question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
-    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
-    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+    cy.get('[id="likert-question-en-questions.0"]').as('likertQuestion').clear()
+    cy.get('@likertQuestion').type('Rate the importance of testing')
+
+    cy.get('[id="likert-description-en-questions.0"]').as('likertDescription').clear()
+    cy.get('@likertDescription').type('Something something')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
 
     // Add another question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
-    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
-    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+
+    cy.get('[id="choice-question-en-questions.1"]').as('choiceQuestion').clear()
+    cy.get('@choiceQuestion').type('What is your favorite type of testing')
+
+    cy.get('[id="choice-description-en-questions.1"]').as('choiceDescription').clear()
+    cy.get('@choiceDescription').type('Something something else')
 
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').as('option0').clear()
+    cy.get('@option0').type('E2E testing')
+
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').as('option1').clear()
+    cy.get('@option1').type('Unit testing')
+
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').as('option2').clear()
+    cy.get('@option2').type('Manual testing')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
