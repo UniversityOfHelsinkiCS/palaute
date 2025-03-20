@@ -156,6 +156,9 @@ User.init(
     isAdmin: {
       type: VIRTUAL,
     },
+    isEmployee: {
+      type: VIRTUAL,
+    },
     mockedBy: {
       type: VIRTUAL,
     },

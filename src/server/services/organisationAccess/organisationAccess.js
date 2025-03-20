@@ -4,12 +4,9 @@ const _ = require('lodash')
 const { User, Organisation } = require('../../models')
 
 const { normalizeOrganisationCode } = require('../../util/common')
-const { inE2EMode } = require('../../util/config')
 const { getUserIamAccess, getAllUserAccess, getAccessToAll } = require('../../util/jami')
 
 const getAccessFromIAMs = async user => {
-  if (inE2EMode) return {}
-
   const access = {}
 
   const iamAccess = await getUserIamAccess(user)
