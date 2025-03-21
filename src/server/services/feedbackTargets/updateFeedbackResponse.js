@@ -1,7 +1,7 @@
 const {
   updateSummaryAfterFeedbackResponseCreated,
   updateSummaryAfterFeedbackResponseDeleted,
-} = require('services/summary/updateSummaryOnFeedbackResponse')
+} = require('../summary/updateSummaryOnFeedbackResponse')
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
 const { createFeedbackResponseLog } = require('../auditLog/feedbackTargetLogs')
