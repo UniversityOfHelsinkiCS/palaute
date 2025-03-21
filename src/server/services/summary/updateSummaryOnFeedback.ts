@@ -2,6 +2,7 @@ import { feedbackTargetCache } from '../feedbackTargets'
 import { Feedback, Summary, UserFeedbackTarget } from '../../models'
 import { addFeedbackDataToSummary, removeFeedbackDataFromSummary } from './utils'
 import { createSummaryForFeedbackTarget } from './createSummary'
+import { getOrCreateSummary } from './getOrCreateSummary'
 
 export const updateSummaryAfterFeedbackCreated = async (feedbackTargetId: number, feedback: Feedback) => {
   let summary = await Summary.findOne({
@@ -30,16 +31,7 @@ export const updateSummaryAfterFeedbackCreated = async (feedbackTargetId: number
 }
 
 export const updateSummaryAfterFeedbackDestroyed = async (feedbackTargetId: number, feedback: Feedback) => {
-  let summary = await Summary.findOne({
-    where: { feedbackTargetId },
-  })
-
-  if (!summary) {
-    const studentCount = await UserFeedbackTarget.count({
-      where: { feedbackTargetId, accessStatus: 'STUDENT' },
-    })
-    summary = await createSummaryForFeedbackTarget(feedbackTargetId, studentCount, new Date(), new Date())
-  }
+  const summary = await getOrCreateSummary(feedbackTargetId)
 
   summary.data = removeFeedbackDataFromSummary(summary.data, feedback.data)
 

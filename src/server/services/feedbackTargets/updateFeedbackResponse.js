@@ -1,3 +1,7 @@
+const {
+  updateSummaryAfterFeedbackResponseCreated,
+  updateSummaryAfterFeedbackResponseDeleted,
+} = require('services/summary/updateSummaryOnFeedbackResponse')
 const { mailer } = require('../../mailer')
 const { ApplicationError } = require('../../util/customErrors')
 const { createFeedbackResponseLog } = require('../auditLog/feedbackTargetLogs')
@@ -23,6 +27,12 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
   }
 
   await feedbackTarget.save()
+
+  if (responseText > 0) {
+    await updateSummaryAfterFeedbackResponseCreated(feedbackTarget)
+  } else {
+    await updateSummaryAfterFeedbackResponseDeleted(feedbackTarget)
+  }
 
   await createFeedbackResponseLog({
     feedbackTarget,
