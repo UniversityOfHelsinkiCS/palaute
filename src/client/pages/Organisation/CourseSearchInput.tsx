@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Autocomplete, TextField, Grid2 as Grid, Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFormikContext } from 'formik'
+import { LocalizedString } from '@common/types'
 import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
 import { useDebounce } from './useDebounce'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
@@ -9,10 +10,10 @@ import { getSemesterRange } from '../../util/yearSemesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import { DateRange } from '../../types/DateRange'
-import { Locales, CourseRealisation, FeedbackTarget } from '../../types'
+import { CourseRealisation, FeedbackTarget } from '../../types'
 
 export interface InitialValues {
-  name: Locales
+  name: LocalizedString
   startDate: Date
   endDate: Date
   studentNumbers: []
@@ -41,7 +42,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) =
       feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
     )
     .sort((a: CourseRealisation, b: CourseRealisation) =>
-      a.name[language as keyof Locales].localeCompare(b.name[language as keyof Locales])
+      a.name[language as keyof LocalizedString]?.localeCompare(b.name[language as keyof LocalizedString] ?? '')
     )
 
   const getOptionLabel = (course: CourseRealisation) => {

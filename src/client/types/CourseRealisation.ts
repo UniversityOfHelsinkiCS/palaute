@@ -1,8 +1,8 @@
-import { Locales } from './Locales'
+import { LocalizedString } from '@common/types'
 
 export type CourseRealisation = {
   id: string
-  name: Locales
+  name: LocalizedString
   startDate: string
   endDate: string
 }

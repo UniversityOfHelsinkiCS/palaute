@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
     "module": "commonjs",
-    "rootDir": ".",
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -13,9 +12,13 @@
     "outDir": "../../build/server",
     "baseUrl": ".",
     "types": ["node"],
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "paths": {
+      "@common/*": ["../common/*"]
+    }
   },
   "include": ["./"],
+  "extends": "../../tsconfig.json",
   "composite": true,
   "ts-node": {
     "transpileOnly": true,
