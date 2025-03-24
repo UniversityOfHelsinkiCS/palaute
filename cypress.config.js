@@ -1,6 +1,7 @@
-/* eslint-disable */
+// eslint-disable-next-line
 const { defineConfig } = require('cypress')
 const { checkFolder } = require('./cypress/scripts/checkFolder')
+const { readXLSX } = require('./cypress/scripts/readXLSX')
 
 module.exports = defineConfig({
   viewportWidth: 1800,
@@ -16,6 +17,7 @@ module.exports = defineConfig({
     setupNodeEvents(on, config) {
       on('task', {
         checkFolder,
+        readXLSX,
       })
     },
   },

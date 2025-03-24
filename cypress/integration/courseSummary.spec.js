@@ -1,8 +1,7 @@
 /// <reference types="Cypress" />
 
-const { summaryUser } = require('../fixtures/headers')
 const path = require('path')
-const fs = require('fs')
+const { summaryUser } = require('../fixtures/headers')
 
 /**
  * For test data, see src/server/services/testServices/initSummary.js
@@ -36,7 +35,7 @@ describe('Course summary', () => {
     cy.contains('100%')
   })
 
-  it.only('Organisation summary XLSX download works', () => {
+  it.only('Organisation summary XLSX download works and has correct data', () => {
     cy.visit('/organisations/TEST_SUMMARY_ORG/summary')
 
     // This opens the download menu
@@ -44,9 +43,6 @@ describe('Course summary', () => {
 
     // Submit and begin download
     cy.get('[data-cy=export-xlsx-submit]').click()
-
-    // Check that the download is successful
-    cy.wait(1000)
 
     const downloadsFolder = Cypress.config('downloadsFolder')
 
@@ -57,6 +53,17 @@ describe('Course summary', () => {
       const xlsxFile = files.find(file => file.endsWith('.xlsx'))
       // eslint-disable-next-line no-unused-expressions
       expect(xlsxFile).to.exist
+
+      // Parse the file
+      cy.task('readXLSX', path.join(downloadsFolder, xlsxFile)).then(jsonData => {
+        expect(jsonData).to.have.property('organisations')
+        const organisationSheet = jsonData.organisations
+        expect(organisationSheet).to.have.lengthOf(1)
+        const organisation = organisationSheet[0]
+        expect(organisation).to.have.property('Organisation code', 'TEST_SUMMARY_ORG')
+        expect(organisation).to.have.property('Testikysymys 1', 5)
+        expect(organisation).to.have.property('Feedback count', 2)
+      })
     })
   })
 })
