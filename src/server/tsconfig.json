@@ -9,7 +9,6 @@
     "noImplicitAny": true,
     "moduleResolution": "node",
     "sourceMap": true,
-    "outDir": "../../build/server",
     "baseUrl": ".",
     "types": ["node"],
     "resolveJsonModule": true,

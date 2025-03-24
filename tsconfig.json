@@ -4,7 +4,7 @@
     "module": "commonjs",
     "rootDir": ".",
     "jsx": "react",
-    "outDir": "../build/",
+    "outDir": "build",
     "baseUrl": "."
   },
   "files": [],
