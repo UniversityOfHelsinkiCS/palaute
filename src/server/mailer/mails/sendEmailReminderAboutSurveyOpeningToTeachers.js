@@ -68,7 +68,7 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
       const srv = await getOrCreateTeacherSurvey(target)
       target.set(
         'questions',
-        srv.questions?.filter(q => q.data.type !== 'TEXT')
+        srv.questions?.filter(q => q.type !== 'TEXT')
       )
     })
   )
