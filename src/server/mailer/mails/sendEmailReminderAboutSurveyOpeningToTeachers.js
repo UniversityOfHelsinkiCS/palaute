@@ -66,7 +66,10 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   await Promise.all(
     filteredFeedbackTargets.map(async target => {
       const srv = await getOrCreateTeacherSurvey(target)
-      target.set('questions', srv.questions)
+      target.set(
+        'questions',
+        srv.questions?.filter(q => q.data.type !== 'TEXT')
+      )
     })
   )
 
