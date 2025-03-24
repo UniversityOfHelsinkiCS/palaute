@@ -50,22 +50,29 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
  * @returns {Promise<Survey>} teacher survey
  */
 const getOrCreateTeacherSurvey = async feedbackTarget => {
-  const previousFeedbackTarget = await feedbackTarget.getPrevious()
-  const previousSurvey = previousFeedbackTarget
-    ? Survey.findOne({
-        where: {
-          feedbackTargetId: previousFeedbackTarget.id,
-        },
-      })
-    : null
-
   const existingTeacherSurvey = await Survey.findOne({
     where: {
       feedbackTargetId: feedbackTarget.id,
     },
   })
 
-  const teacherSurvey = existingTeacherSurvey || (await createTeacherSurvey(feedbackTarget.id, await previousSurvey))
+  let teacherSurvey = null
+
+  if (existingTeacherSurvey) {
+    teacherSurvey = existingTeacherSurvey
+  } else {
+    const previousFeedbackTarget = await feedbackTarget.getPrevious()
+    const previousSurvey = previousFeedbackTarget
+      ? await Survey.findOne({
+          where: {
+            feedbackTargetId: previousFeedbackTarget.id,
+          },
+        })
+      : null
+
+    teacherSurvey = await createTeacherSurvey(feedbackTarget.id, previousSurvey)
+  }
+
   await teacherSurvey.populateQuestions()
   return teacherSurvey
 }

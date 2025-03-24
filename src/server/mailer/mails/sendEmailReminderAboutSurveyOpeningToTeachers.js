@@ -11,6 +11,7 @@ const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets } = require('./util')
 const { i18n } = require('../../util/i18n')
 const { getLanguageValue } = require('../../util/languageUtils')
+const { getOrCreateTeacherSurvey } = require('../../services/surveys')
 
 const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
@@ -62,12 +63,20 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
     return !disabledCourseCodes.includes(target.courseUnit.courseCode)
   })
 
+  await Promise.all(
+    filteredFeedbackTargets.map(async target => {
+      const srv = await getOrCreateTeacherSurvey(target)
+      target.set('questions', srv.questions)
+    })
+  )
+
   return filteredFeedbackTargets
 }
 
 const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedbackTargets) => {
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
   const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : 'en'
+  const t = i18n.getFixedT(language)
   const courseName = getLanguageValue(teacherFeedbackTargets[0].name, language)
   const { courseCode } = teacherFeedbackTargets[0].courseUnit
 
@@ -77,7 +86,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   teacherFeedbackTargets.sort((a, b) => a.name[language]?.localeCompare(b.name[language]))
 
   for (const feedbackTarget of teacherFeedbackTargets) {
-    const { id, name, opensAt, closesAt } = feedbackTarget
+    const { id, name, opensAt, closesAt, teacherQuestions } = feedbackTarget
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
     const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
     const fbtCourseCode = feedbackTarget.courseUnit.courseCode
@@ -101,12 +110,15 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
       sv: `stängs ${humanClosesAtDate}`,
     }
 
+    const questionsText = `${t('mails:reminderAboutSurveyOpeningToTeachers:questionsText')}
+      - ${teacherQuestions?.length > 0 ? teacherQuestions.map(q => getLanguageValue(q.data.label, language)).join('<br/>- ') : ''}`
+
     courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
         ${displayName}
-        </a> (${openFrom[language]} ${closesOn[language]}) <br/>`
+        </a> (${openFrom[language]} ${closesOn[language]})
+        ${teacherQuestions.length > 0 ? questionsText : ''} <br/>`
   }
 
-  const t = i18n.getFixedT(language)
   const subject = hasMultipleFeedbackTargets
     ? t('mails:reminderAboutSurveyOpeningToTeachers:subjectMultiple')
     : t('mails:reminderAboutSurveyOpeningToTeachers:subject', { courseName, courseCode })
