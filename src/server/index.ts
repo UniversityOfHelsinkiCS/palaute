@@ -32,10 +32,10 @@ if (inDevelopment || inE2EMode) {
 }
 
 if (inProduction || inE2EMode) {
-  const DIST_PATH = path.resolve(__dirname, '../../build/client')
-  const INDEX_PATH = path.resolve(DIST_PATH, 'index.html')
+  const BUILD_PATH = 'build/client'
+  const INDEX_PATH = path.resolve(BUILD_PATH, 'index.html')
 
-  app.use(express.static(DIST_PATH))
+  app.use(express.static(BUILD_PATH))
   app.get('*', (_req: Request, res: Response) => res.sendFile(INDEX_PATH))
 }
 
