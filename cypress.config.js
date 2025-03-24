@@ -1,5 +1,6 @@
 /* eslint-disable */
 const { defineConfig } = require('cypress')
+const { checkFolder } = require('./cypress/scripts/checkFolder')
 
 module.exports = defineConfig({
   viewportWidth: 1800,
@@ -11,5 +12,11 @@ module.exports = defineConfig({
     supportFile: 'cypress/support/index.js',
     specPattern: 'cypress/**/*.spec.js',
     experimentalRunAllSpecs: true,
+
+    setupNodeEvents(on, config) {
+      on('task', {
+        checkFolder,
+      })
+    },
   },
 })

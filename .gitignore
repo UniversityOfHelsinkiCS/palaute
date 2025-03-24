@@ -20,3 +20,4 @@ t.js
 privateData
 .idea/
 .prettierrc
+cypress/downloads

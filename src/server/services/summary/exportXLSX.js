@@ -16,13 +16,28 @@ const { getScopedSummary, sumSummaries } = require('./utils')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
 const { getTeacherSummary } = require('./getTeacherSummary')
+const { ApplicationError } = require('../../util/customErrors')
 
-const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, includeCURs, allTime }) => {
+const exportXLSX = async ({
+  user,
+  startDate,
+  endDate,
+  includeOrgs,
+  includeCUs,
+  includeCURs,
+  allTime,
+  organisationId,
+}) => {
   const workbook = XLSX.utils.book_new()
 
   const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
   const questions = await getSummaryQuestions()
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
+
+  if (organisationId && !accessibleOrganisationIds.includes(organisationId)) {
+    return ApplicationError.Forbidden('User does not have access to the organisation')
+  }
+  const organisationIds = organisationId ? [organisationId] : accessibleOrganisationIds
 
   let earliestStartDate = new Date(startDate)
   let latestEndDate = new Date(endDate)
@@ -33,7 +48,7 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     attributes: ['id', 'name', 'code'],
     where: {
       id: {
-        [Op.in]: accessibleOrganisationIds,
+        [Op.in]: organisationIds,
         [Op.notIn]: SUMMARY_EXCLUDED_ORG_IDS,
       },
     },

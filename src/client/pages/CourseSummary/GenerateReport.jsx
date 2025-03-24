@@ -17,7 +17,7 @@ import { NorButton } from '../../components/common/NorButton'
 import { useSummaryContext } from './context'
 import apiClient from '../../util/apiClient'
 
-const GenerateReport = () => {
+const GenerateReport = ({ organisationId }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
@@ -46,6 +46,7 @@ const GenerateReport = () => {
           startDate: dateRange.start,
           endDate: dateRange.end,
           allTime,
+          organisationId,
         },
       })
 
@@ -69,7 +70,7 @@ const GenerateReport = () => {
 
   return (
     <div>
-      <NorButton color="primary" onClick={ev => setAnchorEl(ev.currentTarget)} icon={<Download />}>
+      <NorButton color="secondary" onClick={ev => setAnchorEl(ev.currentTarget)} icon={<Download />}>
         {t('common:exportXLSX')}
       </NorButton>
       <Popover
@@ -111,6 +112,7 @@ const GenerateReport = () => {
               <FormControlLabel value control={<Radio />} label={t('generateReport:allTime')} />
             </RadioGroup>
             <NorButton
+              data-cy="export-xlsx-submit"
               color="primary"
               type="submit"
               disabled={!isValid || isLoading}

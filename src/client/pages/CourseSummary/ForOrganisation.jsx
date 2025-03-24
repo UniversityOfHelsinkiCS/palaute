@@ -7,6 +7,7 @@ import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
 import SorterRowWithFilters from './components/SorterRow'
 import OrganisationSummaryRow from './components/OrganisationRow'
+import GenerateReport from './GenerateReport'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { dateRange, tagId } = useSummaryContext()
@@ -22,6 +23,8 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
+        <GenerateReport organisationId={initialOrganisation.id} />
+        <Box sx={{ mt: 1 }} />
         {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
         <SorterRowWithFilters />
         {isLoading ? (

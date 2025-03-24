@@ -221,6 +221,7 @@ const getXLSX = async (req, res) => {
     includeCUs: includeCUsString,
     includeCURs: includeCURsString,
     allTime: allTimeString,
+    organisationId,
   } = req.query
 
   const { user } = req
@@ -235,6 +236,7 @@ const getXLSX = async (req, res) => {
     includeCUs: includeCUsString === 'true',
     includeCURs: includeCURsString === 'true',
     allTime: allTimeString === 'true',
+    organisationId,
   })
 
   res.writeHead(200, [
