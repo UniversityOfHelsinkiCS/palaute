@@ -1,7 +1,7 @@
 const { Op, Model, STRING, INTEGER, ARRAY, ENUM, VIRTUAL } = require('sequelize')
 
 const { sequelize } = require('../db/dbConnection')
-const Question = require('./question')
+const { Question } = require('./question')
 
 class Survey extends Model {
   /**

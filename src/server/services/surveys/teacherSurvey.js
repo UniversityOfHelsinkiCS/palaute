@@ -1,5 +1,4 @@
-const Question = require('../../models/question')
-const Survey = require('../../models/survey')
+const { Question, Survey } = require('../../models')
 
 /**
  *

@@ -57,4 +57,4 @@ Question.init(
   }
 )
 
-export default Question
+export { Question }
