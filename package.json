@@ -15,7 +15,6 @@
     "build:client": "npm run ts-check:client && DISABLE_ESLINT_PLUGIN=true tsc && vite build",
     "build:server": "cross-env NODE_ENV=development && tsc --build src/server",
     "clean-build": "rimraf ./build",
-    "clean-build:server": "rimraf ./build/server",
     "test": "npm run test:setup && sleep 10 && npm run test:e2e",
     "test:setup": "docker compose down && docker compose -f docker-compose.ci.yml rm -vf && docker compose -f docker-compose.ci.yml up -d --build",
     "test:setuplocal": "docker compose -f docker-compose.test.yml up",
