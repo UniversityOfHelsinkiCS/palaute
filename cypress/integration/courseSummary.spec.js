@@ -44,6 +44,10 @@ describe('Course summary', () => {
     // Submit and begin download
     cy.get('[data-cy=export-xlsx-submit]').click()
 
+    // Wait for the download to finish
+    // eslint-disable-next-line cypress/no-unnecessary-waiting
+    cy.wait(1000)
+
     const downloadsFolder = Cypress.config('downloadsFolder')
 
     // Check what files are in the downloads folder
