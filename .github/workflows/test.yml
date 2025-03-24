@@ -3,14 +3,14 @@ name: E2E Tests
 on: [workflow_call]
 
 jobs:
-  eslint:
+  lint:
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4
-      - name: Build project for eslint
+      - name: Build project for linting
         run: npm ci
-      - name: Run eslint
+      - name: Run eslint and ts checks
         run: npm run lint
 
   translations:
