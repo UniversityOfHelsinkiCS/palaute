@@ -114,15 +114,11 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const handleValueChange = (event, newValue) => setValue(newValue)
 
-  const feedbackTargetsWithQuestions = useMemo(
-    () =>
-      (feedbackTargets ?? [])
-        .filter(t => t.surveys?.teacherSurvey?.questions?.length > 0 && t.id !== feedbackTarget.id)
-        .slice(0, 10),
-    [feedbackTargets]
+  const feedbackTargetsWithQuestions = (feedbackTargets ?? []).filter(
+    t => t.surveys?.teacherSurvey?.questions?.length > 0 && t.id !== feedbackTarget.id
   )
 
-  const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions.length === 0
+  const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions?.length > 0
 
   useEffect(() => {
     if (userCreated) setValue(organisationSurvey)
