@@ -29,9 +29,9 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
   await feedbackTarget.save()
 
   if (responseText > 0) {
-    await updateSummaryAfterFeedbackResponseCreated(feedbackTarget)
+    await updateSummaryAfterFeedbackResponseCreated(feedbackTarget.id)
   } else {
-    await updateSummaryAfterFeedbackResponseDeleted(feedbackTarget)
+    await updateSummaryAfterFeedbackResponseDeleted(feedbackTarget.id)
   }
 
   await createFeedbackResponseLog({
