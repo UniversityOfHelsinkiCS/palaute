@@ -1,14 +1,25 @@
-const {
+import {
   updateSummaryAfterFeedbackResponseCreated,
   updateSummaryAfterFeedbackResponseDeleted,
-} = require('../summary/updateSummaryOnFeedbackResponse')
-const { mailer } = require('../../mailer')
-const { ApplicationError } = require('../../util/customErrors')
-const { createFeedbackResponseLog } = require('../auditLog/feedbackTargetLogs')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+} from '../summary/updateSummaryOnFeedbackResponse'
+import { mailer } from '../../mailer'
+import { ApplicationError } from '../../util/customErrors'
+import { createFeedbackResponseLog } from '../auditLog/feedbackTargetLogs'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { User } from '../../models'
 
-const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, sendEmail }) => {
-  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
+export const updateFeedbackResponse = async ({
+  feedbackTargetId,
+  user,
+  responseText,
+  sendEmail,
+}: {
+  feedbackTargetId: number
+  user: User
+  responseText: string
+  sendEmail: boolean
+}) => {
+  const { feedbackTarget, access } = (await getFeedbackTargetContext({ feedbackTargetId, user })) as any // @TODO fix
 
   if (!access?.canUpdateResponse()) {
     ApplicationError.Forbidden('No rights to update feedback response')
@@ -28,7 +39,7 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
 
   await feedbackTarget.save()
 
-  if (responseText > 0) {
+  if (responseText.length > 0) {
     await updateSummaryAfterFeedbackResponseCreated(feedbackTarget.id)
   } else {
     await updateSummaryAfterFeedbackResponseDeleted(feedbackTarget.id)
@@ -43,8 +54,4 @@ const updateFeedbackResponse = async ({ feedbackTargetId, user, responseText, se
   })
 
   return feedbackTarget.toJSON()
-}
-
-module.exports = {
-  updateFeedbackResponse,
 }
