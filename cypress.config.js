@@ -10,8 +10,8 @@ module.exports = defineConfig({
   video: true,
   e2e: {
     baseUrl: 'http://localhost:3000',
-    supportFile: 'cypress/support/index.js',
-    specPattern: 'cypress/**/*.spec.js',
+    supportFile: 'cypress/support/index.ts',
+    specPattern: 'cypress/**/*.spec.{js,ts}',
     experimentalRunAllSpecs: true,
 
     setupNodeEvents(on, config) {

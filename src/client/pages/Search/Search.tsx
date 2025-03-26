@@ -166,7 +166,7 @@ const Search = () => {
       </Box>
       {!isOrganisationsLoading && (
         <Autocomplete
-          data-cy="formik-search-input"
+          data-cy="search-input"
           id="search"
           fullWidth
           defaultValue={null}
@@ -217,7 +217,9 @@ const Search = () => {
       />
       {!isLoading &&
         (code && feedbackTargetGrouping.years.length === 0 ? (
-          <Alert severity="info">{t('search:noCourses')}</Alert>
+          <Alert severity="info" data-cy="no-courses-alert">
+            {t('search:noCourses')}
+          </Alert>
         ) : (
           <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />
         ))}

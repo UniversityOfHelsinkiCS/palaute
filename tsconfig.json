@@ -8,5 +8,6 @@
     "baseUrl": "."
   },
   "files": [],
+  "exclude": ["cypress"],
   "references": [{ "path": "./src/client" }, { "path": "./src/server" }, { "path": "./src/common" }]
 }

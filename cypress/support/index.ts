@@ -45,3 +45,12 @@ Cypress.on('uncaught:exception', err => {
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// cypress/support/index.ts
+declare global {
+  namespace Cypress {
+    interface Chainable {
+      loginAs(headers: any)
+    }
+  }
+}

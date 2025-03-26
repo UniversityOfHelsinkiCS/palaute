@@ -35,7 +35,7 @@ describe('Course summary', () => {
     cy.contains('100%')
   })
 
-  it.only('Organisation summary XLSX download works and has correct data', () => {
+  it('Organisation summary XLSX download works and has correct data', () => {
     cy.visit('/organisations/TEST_SUMMARY_ORG/summary')
 
     // This opens the download menu

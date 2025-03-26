@@ -87,5 +87,31 @@ module.exports = {
         '@typescript-eslint/lines-between-class-members': 'off',
       },
     },
+
+    {
+      files: ['./cypress/**/*.ts'],
+      parser: '@typescript-eslint/parser',
+      parserOptions: {
+        project: ['./cypress/tsconfig.json'],
+      },
+      plugins: ['@typescript-eslint'],
+      extends: [
+        'eslint:recommended',
+        'airbnb-typescript',
+        'plugin:@typescript-eslint/eslint-recommended',
+        'plugin:@typescript-eslint/recommended',
+      ],
+      rules: {
+        semi: 'off',
+        quotes: ['error', 'single'],
+        'linebreak-style': ['error', 'unix'],
+        'no-use-before-define': 'off',
+        '@typescript-eslint/indent': 'off',
+        '@typescript-eslint/semi': ['error', 'never'],
+        '@typescript-eslint/no-explicit-any': 0,
+        '@typescript-eslint/comma-dangle': 'off',
+        '@typescript-eslint/lines-between-class-members': 'off',
+      },
+    },
   ],
 }
