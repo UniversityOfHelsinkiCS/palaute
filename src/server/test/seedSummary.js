@@ -11,7 +11,7 @@ const {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
 } = require('../models')
-const getUniversitySurvey = require('../services/surveys/universitySurvey')
+const { getUniversitySurvey } = require('../services/surveys')
 const { createTestObject } = require('./utils')
 const { buildSummaries } = require('../services/summary/buildSummaries')
 
