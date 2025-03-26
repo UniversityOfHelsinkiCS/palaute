@@ -60,7 +60,7 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
   return feedbacksToUpdate.length
 }
 
-const adminDeleteFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedbackContent }) => {
+const adminDeleteFeedback = async ({ feedbackTargetId, questionId, user, feedbackContent }) => {
   // check access
   const { feedbackTarget, access } = await getFeedbackTargetContext({
     feedbackTargetId,
@@ -98,16 +98,10 @@ const adminDeleteFeedback = async ({ feedbackTargetId, questionId, hidden, user,
 
   if (feedbacksToUpdate.length === 0) return ApplicationError.BadRequest('Matching feedback not found')
 
-  await sequelize.transaction(async transaction => {
-    await feedbackTarget.increment(
-      { hiddenCount: hidden ? feedbacksToUpdate.length : -feedbacksToUpdate.length },
-      { transaction }
-    )
-    for (const feedback of feedbacksToUpdate) {
-      feedback.save()
-    }
-    feedbackTargetCache.invalidate(feedbackTarget.id)
-  })
+  for (const feedback of feedbacksToUpdate) {
+    feedback.save()
+  }
+  feedbackTargetCache.invalidate(feedbackTarget.id)
 
   return feedbacksToUpdate.length
 }
