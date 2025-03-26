@@ -1,5 +1,5 @@
 import Feedback from './feedback'
-import User from './user'
+import { User } from './user'
 import CourseRealisation from './courseRealisation'
 import { FeedbackTarget } from './feedbackTarget'
 import { Question } from './question'

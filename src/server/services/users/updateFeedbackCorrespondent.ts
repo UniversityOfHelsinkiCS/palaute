@@ -9,7 +9,6 @@ import { FEEDBACK_CORRESPONDENT_SPECIAL_GROUP } from '../../util/config'
 export const updateFeedbackCorrespondent = async (user: User): Promise<void> => {
   // Update feedback correspondents of user
   const feedbackCorrespondentSpecialGroup: string[] | undefined =
-    // @ts-expect-error user has specialGroup
     user.specialGroup[FEEDBACK_CORRESPONDENT_SPECIAL_GROUP]
 
   const programmeKeys = Array.isArray(feedbackCorrespondentSpecialGroup) ? feedbackCorrespondentSpecialGroup : []
@@ -31,7 +30,6 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
       for (const org of organisations) {
         const [, created] = await OrganisationFeedbackCorrespondent.findOrCreate({
           where: {
-            // @ts-expect-error user has id
             userId: user.id,
             // @ts-expect-error org has id
             organisationId: org.id,
@@ -52,7 +50,6 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
     // Delete other automatically created feedback correspondents
     const deleted = await OrganisationFeedbackCorrespondent.destroy({
       where: {
-        // @ts-expect-error user has id
         userId: user.id,
         userCreated: false,
         organisationId: {
@@ -64,7 +61,6 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
 
     // If deleted, log it
     if (deleted) {
-      // @ts-expect-error user has id
       logger.info(`Deleted ${deleted} automatically created feedback correspondents of ${user.id}`)
     }
   })

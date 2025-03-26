@@ -1,10 +1,59 @@
-const { Model, STRING, Op, BOOLEAN, DATE, QueryTypes, VIRTUAL } = require('sequelize')
-const _ = require('lodash')
+import {
+  Model,
+  STRING,
+  Op,
+  BOOLEAN,
+  DATE,
+  QueryTypes,
+  VIRTUAL,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
+import _ from 'lodash'
 
-const { sequelize } = require('../db/dbConnection')
-const { UserFeedbackTarget } = require('./userFeedbackTarget')
+import { OrganisationAccess } from '@common/types'
+import { sequelize } from '../db/dbConnection'
+import { UserFeedbackTarget } from './userFeedbackTarget'
+import Organisation from './organisation'
+import type { FeedbackTarget } from './feedbackTarget'
 
-class User extends Model {
+export type OrganisationWithAccess = {
+  access: OrganisationAccess
+  organisation: Organisation
+}
+
+class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
+  // --- Acual DB columns ---
+  // ------------------------
+  declare id: CreationOptional<string>
+  declare username: string
+  declare firstName: CreationOptional<string | null>
+  declare lastName: CreationOptional<string | null>
+  declare email: CreationOptional<string | null>
+  declare secondaryEmail: CreationOptional<string | null>
+  declare language: CreationOptional<string | null>
+  declare studentNumber: CreationOptional<string | null>
+  declare degreeStudyRight: CreationOptional<boolean | null>
+  declare norppaFeedbackGiven: CreationOptional<boolean>
+  declare lastLoggedIn: CreationOptional<Date | null>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
+
+  // --- Virtual fields. ---------
+  // --- ideally refactor away ---
+  // -----------------------------
+  declare organisationAccess?: any
+  declare accessibleOrganisations?: any
+  declare specialGroup?: any
+  declare isAdmin?: boolean
+  declare isEmployee?: boolean
+  declare mockedBy?: User
+
+  // --- Helper methods ---
+  // ----------------------
+  declare getOrganisationAccess: () => Promise<OrganisationWithAccess[]>
+
   async isTeacher() {
     const teachings = await UserFeedbackTarget.findAll({
       where: {
@@ -16,7 +65,7 @@ class User extends Model {
     return teachings?.length > 0
   }
 
-  async getOrganisationAccessByCourseUnitId(courseUnitId) {
+  async getOrganisationAccessByCourseUnitId(courseUnitId: string) {
     const organisations = await this.getOrganisationAccess()
 
     if (organisations.length === 0) {
@@ -51,7 +100,7 @@ class User extends Model {
 
     const organisationIds = rows.flatMap(row => Object.values(row))
 
-    function getPriority(org) {
+    function getPriority(org: any) {
       let weight = 0
       if (org.access.admin) {
         weight += 100
@@ -65,6 +114,7 @@ class User extends Model {
       return weight
     }
     const organisationAccess = organisations
+      // @ts-expect-error täsäfy
       .filter(({ organisation }) => organisationIds.includes(organisation.id))
       ?.sort((a, b) => getPriority(a) - getPriority(b)) // read, write, admin. Reduce on next line practically takes the last value
       .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
@@ -77,7 +127,7 @@ class User extends Model {
    * @param {FeedbackTarget | number} feedbackTarget
    * @returns {UserFeedbackTarget}
    */
-  async getTeacherAssociation(feedbackTarget) {
+  async getTeacherAssociation(feedbackTarget: FeedbackTarget | number) {
     return UserFeedbackTarget.findOne({
       where: {
         feedbackTargetId: typeof feedbackTarget === 'number' ? feedbackTarget : feedbackTarget.id,
@@ -122,9 +172,6 @@ User.init(
     secondaryEmail: {
       type: STRING,
     },
-    employeeNumber: {
-      type: STRING,
-    },
     language: {
       type: STRING,
     },
@@ -143,6 +190,12 @@ User.init(
     lastLoggedIn: {
       type: DATE,
       allowNull: true,
+    },
+    createdAt: {
+      type: DATE,
+    },
+    updatedAt: {
+      type: DATE,
     },
     organisationAccess: {
       type: VIRTUAL,
@@ -169,4 +222,4 @@ User.init(
   }
 )
 
-module.exports = User
+export { User }
