@@ -15,7 +15,7 @@ import _ from 'lodash'
 import { OrganisationAccess } from '@common/types'
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
-import Organisation from './organisation'
+import type { Organisation } from './organisation'
 import type { FeedbackTarget } from './feedbackTarget'
 
 export type OrganisationWithAccess = {
@@ -114,7 +114,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
       return weight
     }
     const organisationAccess = organisations
-      // @ts-expect-error täsäfy
       .filter(({ organisation }) => organisationIds.includes(organisation.id))
       ?.sort((a, b) => getPriority(a) - getPriority(b)) // read, write, admin. Reduce on next line practically takes the last value
       .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})

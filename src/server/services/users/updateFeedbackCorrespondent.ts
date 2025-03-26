@@ -31,7 +31,6 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
         const [, created] = await OrganisationFeedbackCorrespondent.findOrCreate({
           where: {
             userId: user.id,
-            // @ts-expect-error org has id
             organisationId: org.id,
           },
           defaults: {
@@ -41,7 +40,6 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
 
         // If created, log it
         if (created) {
-          // @ts-expect-error org has code and user has id
           logger.info(`User ${user.id} automatically added as feedback correspondent for ${org.code}`)
         }
       }
@@ -53,7 +51,6 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
         userId: user.id,
         userCreated: false,
         organisationId: {
-          // @ts-expect-error org has id
           [Op.notIn]: organisations.map(org => org.id),
         },
       },

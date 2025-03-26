@@ -1,9 +1,42 @@
-const { Model, JSONB, STRING, BOOLEAN, ARRAY, TEXT, INTEGER, VIRTUAL } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import {
+  Model,
+  JSONB,
+  STRING,
+  BOOLEAN,
+  ARRAY,
+  TEXT,
+  INTEGER,
+  VIRTUAL,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
+import { LocalizedString } from '@common/types'
+import { sequelize } from '../db/dbConnection'
+import type Summary from './summary'
 
-class Organisation extends Model {
+class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
+  // --- Acual DB columns ---
+  // ------------------------
+  declare id: CreationOptional<string>
+  declare name: LocalizedString
+  declare code: string
+  declare parentId: string
+  declare studentListVisible: CreationOptional<boolean>
+  declare studentListVisibleByCourse: CreationOptional<boolean>
+  declare disabledCourseCodes: CreationOptional<string[]>
+  declare studentListVisibleCourseCodes: CreationOptional<string[]>
+  declare publicQuestionIds: CreationOptional<number[]>
+
+  // --- Virtual fields. ---------
+  // --- ideally refactor away ---
+  // -----------------------------
+  declare summary?: Summary
+
+  // --- Helper methods ---
+  // ----------------------
   async getCourseCodes() {
-    const courseUnitRows = await sequelize.query(
+    const courseUnitRows = (await sequelize.query(
       `
     SELECT DISTINCT ON (course_units.course_code)
       course_units.course_code AS course_code
@@ -17,9 +50,9 @@ class Organisation extends Model {
         replacements: {
           organisationId: this.id,
         },
-        type: sequelize.QueryTypes.SELECT,
+        type: 'SELECT',
       }
-    )
+    )) as { course_code: string }[]
 
     const courseCodes = courseUnitRows.map(row => row.course_code)
 
@@ -78,4 +111,4 @@ Organisation.init(
   }
 )
 
-module.exports = Organisation
+export { Organisation }
