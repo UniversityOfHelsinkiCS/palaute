@@ -1,6 +1,6 @@
 // because of dark javascript import magic, important to require them directly (or try if it works the normal way)
 const Organisation = require('../../models/organisation')
-const FeedbackTarget = require('../../models/feedbackTarget')
+const { FeedbackTarget } = require('../../models/feedbackTarget')
 const Survey = require('../../models/survey')
 const { logger } = require('../../util/logger')
 const { redis } = require('../../util/redisClient')

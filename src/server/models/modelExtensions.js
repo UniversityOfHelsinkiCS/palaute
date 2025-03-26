@@ -21,7 +21,7 @@ const {
   getProgrammeSurveysByCourseUnit,
 } = require('../services/surveys')
 const { inProduction, DEV_ADMINS } = require('../util/config')
-const FeedbackTarget = require('./feedbackTarget')
+const { FeedbackTarget } = require('./feedbackTarget')
 const Organisation = require('./organisation')
 const User = require('./user')
 

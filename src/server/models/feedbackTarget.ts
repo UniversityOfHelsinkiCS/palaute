@@ -1,15 +1,31 @@
-/* eslint-disable camelcase */
-const { Op, DATE, ENUM, STRING, Model, JSONB, BOOLEAN, VIRTUAL, ARRAY, INTEGER, TEXT } = require('sequelize')
+import {
+  Op,
+  DATE,
+  ENUM,
+  STRING,
+  Model,
+  JSONB,
+  BOOLEAN,
+  VIRTUAL,
+  ARRAY,
+  INTEGER,
+  TEXT,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
 
-const _ = require('lodash')
+import _ from 'lodash'
 
-const Organisation = require('./organisation')
-const CourseRealisation = require('./courseRealisation')
-const User = require('./user')
-const { UserFeedbackTarget } = require('./userFeedbackTarget')
-const { sequelize } = require('../db/dbConnection')
+import Organisation from './organisation'
+import CourseRealisation from './courseRealisation'
+import User from './user'
+import { UserFeedbackTarget } from './userFeedbackTarget'
+import { sequelize } from '../db/dbConnection'
 
-class FeedbackTarget extends Model {
+class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
+  declare id: CreationOptional<number>
+
   isOpen() {
     if (!this.opensAt || !this.closesAt) {
       return true
@@ -398,4 +414,4 @@ FeedbackTarget.init(
   }
 )
 
-module.exports = FeedbackTarget
+export { FeedbackTarget }

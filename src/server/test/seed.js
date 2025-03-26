@@ -23,7 +23,7 @@ const {
 } = require('./testIds')
 const { createTestObject } = require('./utils')
 const userCache = require('../services/users/cache')
-const { feedbackTargetCache } = require('../services/feedbackTargets/feedbackTargetCache')
+const feedbackTargetCache = require('../services/feedbackTargets/feedbackTargetCache')
 
 const CURRENT_YEAR = new Date().getFullYear()
 
