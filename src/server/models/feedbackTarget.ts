@@ -21,7 +21,7 @@ import _ from 'lodash'
 
 import { LocalizedString } from '@common/types'
 import { Organisation } from './organisation'
-import CourseRealisation from './courseRealisation'
+import { CourseRealisation } from './courseRealisation'
 import { User } from './user'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
@@ -305,7 +305,6 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
           as: 'courseRealisation',
           where: {
             startDate: {
-              // @ts-expect-error täsäfy
               [Op.lt]: (await courseRealisation).startDate,
             },
           },
