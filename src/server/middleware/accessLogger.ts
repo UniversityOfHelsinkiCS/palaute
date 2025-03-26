@@ -1,8 +1,9 @@
-const morgan = require('morgan')
-const { inProduction } = require('../util/config')
-const { logger } = require('../util/logger')
+import morgan from 'morgan'
+import { Request } from 'express'
+import { inProduction } from '../util/config'
+import { logger } from '../util/logger'
 
-const accessLogger = morgan((tokens, req, res) => {
+export const accessLogger = morgan((tokens, req: Request, res) => {
   const { uid } = req.headers
 
   const method = tokens.method(req, res)
@@ -27,6 +28,6 @@ const accessLogger = morgan((tokens, req, res) => {
     : {}
 
   logger.info(message, additionalInfo)
-})
 
-module.exports = accessLogger
+  return undefined
+})
