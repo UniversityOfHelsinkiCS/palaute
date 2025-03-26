@@ -1,16 +1,8 @@
-const { QueryTypes } = require('sequelize')
-const Survey = require('../../models/survey')
-const { sequelize } = require('../../db/dbConnection')
+import { QueryTypes } from 'sequelize'
+import { Survey } from '../../models/survey'
+import { sequelize } from '../../db/dbConnection'
 
-/**
- *
- * @param {string} courseUnitId
- * @returns {Promise<Survey[]>} programme surveys for course unit
- */
-const getProgrammeSurveysByCourseUnit = async courseUnitId => {
-  /**
-   * @type {Survey[]}
-   */
+export const getProgrammeSurveysByCourseUnit = async (courseUnitId: string) => {
   const programmeSurveys = await sequelize.query(
     `
     SELECT s.*, o.public_question_ids as "publicQuestionIds"
@@ -37,12 +29,7 @@ const getProgrammeSurveysByCourseUnit = async courseUnitId => {
   return programmeSurveys
 }
 
-/**
- *
- * @param {string} code
- * @returns {Promise<Survey>} programme survey
- */
-const getProgrammeSurvey = async code => {
+export const getProgrammeSurvey = async (code: string) => {
   const survey = await Survey.findOne({
     where: { type: 'programme', typeId: code },
   })
@@ -50,9 +37,4 @@ const getProgrammeSurvey = async code => {
     await survey.populateQuestions()
   }
   return survey
-}
-
-module.exports = {
-  getProgrammeSurveysByCourseUnit,
-  getProgrammeSurvey,
 }

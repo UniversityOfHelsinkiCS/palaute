@@ -1,11 +1,12 @@
-const { Question, Survey } = require('../../models')
+import { Question, Survey } from '../../models'
+import type { FeedbackTarget } from '../../models/feedbackTarget'
 
 /**
  *
  * @param {Survey} previousSurvey
  * @returns {Promise<number[]>} questionIds
  */
-const getClonedQuestionIds = async previousSurvey => {
+const getClonedQuestionIds = async (previousSurvey: Survey): Promise<number[]> => {
   if (!previousSurvey) return []
 
   const previousQuestions = await Question.findAll({
@@ -32,7 +33,7 @@ const getClonedQuestionIds = async previousSurvey => {
  * @param {Survey} previousSurvey
  * @returns {Promise<Survey>} new survey
  */
-const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
+const createTeacherSurvey = async (feedbackTargetId: number, previousSurvey: Survey): Promise<Survey> => {
   const clonedQuestionIds = await getClonedQuestionIds(previousSurvey)
 
   const teacherSurvey = await Survey.create({
@@ -48,7 +49,7 @@ const createTeacherSurvey = async (feedbackTargetId, previousSurvey) => {
  * @param {FeedbackTarget} feedbackTarget
  * @returns {Promise<Survey>} teacher survey
  */
-const getOrCreateTeacherSurvey = async feedbackTarget => {
+export const getOrCreateTeacherSurvey = async (feedbackTarget: FeedbackTarget): Promise<Survey> => {
   const existingTeacherSurvey = await Survey.findOne({
     where: {
       feedbackTargetId: feedbackTarget.id,
@@ -75,5 +76,3 @@ const getOrCreateTeacherSurvey = async feedbackTarget => {
   await teacherSurvey.populateQuestions()
   return teacherSurvey
 }
-
-module.exports = getOrCreateTeacherSurvey

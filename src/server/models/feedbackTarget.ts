@@ -28,7 +28,7 @@ import { sequelize } from '../db/dbConnection'
 import Feedback from './feedback'
 import CourseUnit from './courseUnit'
 import { Question } from './question'
-import Survey from './survey'
+import { Survey } from './survey'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
   // --- Acual DB columns ---

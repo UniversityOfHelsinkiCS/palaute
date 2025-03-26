@@ -1,4 +1,4 @@
-const Survey = require('../../models/survey')
+import { Survey } from '../../models/survey'
 
 /**
  * Gets the university survey.
@@ -9,7 +9,7 @@ const Survey = require('../../models/survey')
  * but can always change publicity of uni open questions.
  * @returns {Promise<Survey>} university survey
  */
-const getUniversitySurvey = async () => {
+export const getUniversitySurvey = async () => {
   const universitySurvey = await Survey.findOne({
     where: { type: 'university' },
   })
@@ -26,5 +26,3 @@ const getUniversitySurvey = async () => {
 
   return universitySurvey
 }
-
-module.exports = getUniversitySurvey
