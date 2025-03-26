@@ -1,5 +1,5 @@
 import { Summary } from '../../models'
-import { feedbackTargetCache } from '../feedbackTargets'
+import feedbackTargetCache from '../feedbackTargets/feedbackTargetCache'
 import { getOrCreateSummary } from './getOrCreateSummary'
 
 export const updateSummaryAfterFeedbackResponseCreated = async (feedbackTargetId: number) => {

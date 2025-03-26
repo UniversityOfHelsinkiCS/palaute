@@ -1,6 +1,6 @@
 const { UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
-const cache = require('./cache')
+const cache = require('./feedbackTargetCache')
 const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
 
 const deleteTeacher = async ({ feedbackTargetId, teacherId, user }) => {

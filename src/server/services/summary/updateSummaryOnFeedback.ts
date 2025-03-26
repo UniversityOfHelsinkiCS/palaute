@@ -1,4 +1,4 @@
-import { feedbackTargetCache } from '../feedbackTargets'
+import feedbackTargetCache from '../feedbackTargets/feedbackTargetCache'
 import { Feedback, Summary, UserFeedbackTarget } from '../../models'
 import { addFeedbackDataToSummary, removeFeedbackDataFromSummary } from './utils'
 import { createSummaryForFeedbackTarget } from './createSummary'

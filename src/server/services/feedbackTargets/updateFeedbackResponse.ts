@@ -39,9 +39,9 @@ export const updateFeedbackResponse = async ({
 
   await feedbackTarget.save()
 
-  if (responseText.length > 0) {
+  if (responseText.length > 0 && !(previousResponse?.length > 0)) {
     await updateSummaryAfterFeedbackResponseCreated(feedbackTarget.id)
-  } else {
+  } else if (responseText.length === 0 && previousResponse.length > 0) {
     await updateSummaryAfterFeedbackResponseDeleted(feedbackTarget.id)
   }
 

@@ -1,4 +1,4 @@
-const feedbackTargetCache = require('./cache')
+const feedbackTargetCache = require('./feedbackTargetCache')
 const { sequelize } = require('../../db/dbConnection')
 const { Feedback, UserFeedbackTarget } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
