@@ -13,18 +13,83 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  ForeignKey,
+  HasOneGetAssociationMixin,
 } from 'sequelize'
 
 import _ from 'lodash'
 
+import { LocalizedString } from '@common/types'
 import Organisation from './organisation'
 import CourseRealisation from './courseRealisation'
 import User from './user'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
+import Feedback from './feedback'
+import CourseUnit from './courseUnit'
+import { Question } from './question'
+import Survey from './survey'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
+  // --- Acual DB columns ---
+  // ------------------------
   declare id: CreationOptional<number>
+  declare feedbackType: 'courseRealisation' | 'assessmentItem' | 'studySubGroup'
+  declare typeId: string
+  declare courseUnitId: ForeignKey<string>
+  declare courseRealisationId: string
+  declare name: LocalizedString
+  declare hidden: CreationOptional<boolean>
+  declare hiddenCount: CreationOptional<number>
+  declare opensAt: Date
+  declare closesAt: Date
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
+  declare publicQuestionIds: CreationOptional<number[]>
+  declare feedbackResponse: string
+  declare feedbackResponseEmailSent: boolean
+  declare feedbackOpeningReminderEmailSent: boolean
+  declare feedbackResponseReminderEmailSent: boolean
+  declare feedbackReminderLastSentAt: CreationOptional<Date | null>
+  declare feedbackVisibility: CreationOptional<string>
+  declare feedbackDatesEditedByTeacher: CreationOptional<boolean>
+  declare settingsReadByTeacher: CreationOptional<boolean>
+  declare continuousFeedbackEnabled: CreationOptional<boolean>
+  declare sendContinuousFeedbackDigestEmail: CreationOptional<boolean>
+  declare tokenEnrolmentEnabled: CreationOptional<boolean>
+  declare userCreated: CreationOptional<boolean>
+
+  // --- Virtual fields. ---------
+  // --- ideally refactor away ---
+  // -----------------------------
+  declare surveys?: any
+  declare questions?: Question[]
+  declare questionOrder?: any
+  declare responsibleTeachers?: any
+  declare teachers?: any
+  declare administrativePersons?: any
+  declare tags?: any
+  declare studentCount?: number
+  declare continuousFeedbackCount?: number
+  declare userFeedbackTargets?: UserFeedbackTarget[]
+
+  // --- Association methods -----------------------------
+  // --- only the ones that are used are declared here ---
+  // -----------------------------------------------------
+  declare getCourseUnit: HasOneGetAssociationMixin<CourseUnit>
+
+  // --- Association includes ------
+  // --- not sure how to do this ---
+  // -------------------------------
+  // declare userFeedbackTargets?: NonAttribute<UserFeedbackTarget[]>
+
+  // --- Helper methods ---
+  // ----------------------
+  declare getSurveys: () => Promise<{
+    programmeSurveys: Survey[]
+    teacherSurvey: Survey
+    universitySurvey: Survey
+  }>
 
   isOpen() {
     if (!this.opensAt || !this.closesAt) {
@@ -96,11 +161,11 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     })
   }
 
-  getPublicQuestionIds(surveys) {
+  getPublicQuestionIds(surveys: any) {
     const targetPublicQuestionIds = this.publicQuestionIds ?? []
 
     const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
-    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(s => s.publicQuestionIds)
+    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap((s: any) => s.publicQuestionIds)
 
     const publicQuestionIds = _.uniq([
       ...programmePublicQuestionIds,
@@ -111,11 +176,11 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     return publicQuestionIds
   }
 
-  getPublicityConfigurableQuestionIds(surveys) {
+  getPublicityConfigurableQuestionIds(surveys: any) {
     this.populateQuestions(surveys)
 
     const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
-    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap(s => s.publicQuestionIds)
+    const programmePublicQuestionIds = surveys.programmeSurveys.flatMap((s: any) => s.publicQuestionIds)
 
     const questionIds = this.questions
       .filter(({ id }) => !globallyPublicQuestionIds?.includes(id) && !programmePublicQuestionIds?.includes(id))
@@ -124,9 +189,9 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     return questionIds
   }
 
-  populateQuestions(surveys) {
+  populateQuestions(surveys: any) {
     const programmeSurveyQuestions = surveys.programmeSurveys
-      ? surveys.programmeSurveys.flatMap(s => s.questions)
+      ? surveys.programmeSurveys.flatMap((s: any) => s.questions)
       : null
 
     const questions = [
@@ -142,12 +207,13 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     )
   }
 
-  populateSurveys(surveys) {
+  populateSurveys(surveys: any) {
     this.set('surveys', surveys)
     this.populateQuestions(surveys)
   }
 
-  async getPublicFeedbacks(feedbacks, { accessStatus, isAdmin, userOrganisationAccess } = {}) {
+  // @ts-expect-error täsäfy
+  async getPublicFeedbacks(feedbacks: Feedback[], { accessStatus, isAdmin, userOrganisationAccess } = {}) {
     const publicFeedbacks = feedbacks.map(f => f.toPublicObject())
 
     const isTeacher = accessStatus === 'RESPONSIBLE_TEACHER' || accessStatus === 'TEACHER'
@@ -194,8 +260,10 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
 
     if (!courseUnit) return false
 
+    // @ts-expect-error täsäfy
     const { organisations } = courseUnit
 
+    // @ts-expect-error täsäfy
     return organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
   }
 
@@ -237,6 +305,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
           as: 'courseRealisation',
           where: {
             startDate: {
+              // @ts-expect-error täsäfy
               [Op.lt]: (await courseRealisation).startDate,
             },
           },
@@ -269,6 +338,11 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
 
 FeedbackTarget.init(
   {
+    id: {
+      type: INTEGER,
+      primaryKey: true,
+      autoIncrement: true,
+    },
     feedbackType: {
       type: ENUM,
       values: ['courseRealisation', 'assessmentItem', 'studySubGroup'],
@@ -306,6 +380,12 @@ FeedbackTarget.init(
       type: DATE,
     },
     closesAt: {
+      type: DATE,
+    },
+    createdAt: {
+      type: DATE,
+    },
+    updatedAt: {
       type: DATE,
     },
     // potentially cached

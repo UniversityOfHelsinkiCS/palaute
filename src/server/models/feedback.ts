@@ -15,6 +15,7 @@ import { UserFeedbackTarget } from './userFeedbackTarget'
 export type QuestionAnswer = {
   questionId: number
   data: string
+  hidden?: boolean
 }
 
 export type FeedbackData = QuestionAnswer[]
