@@ -26,7 +26,7 @@ export type OrganisationWithAccess = {
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // --- Acual DB columns ---
   // ------------------------
-  declare id: CreationOptional<string>
+  declare id: string
   declare username: string
   declare firstName: CreationOptional<string | null>
   declare lastName: CreationOptional<string | null>

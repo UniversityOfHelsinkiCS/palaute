@@ -18,7 +18,7 @@ import type Summary from './summary'
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---
   // ------------------------
-  declare id: CreationOptional<string>
+  declare id: string
   declare name: LocalizedString
   declare code: string
   declare parentId: string

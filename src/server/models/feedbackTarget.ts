@@ -25,10 +25,10 @@ import CourseRealisation from './courseRealisation'
 import { User } from './user'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
-import Feedback from './feedback'
-import CourseUnit from './courseUnit'
-import { Question } from './question'
-import { Survey } from './survey'
+import type Feedback from './feedback'
+import type { CourseUnit } from './courseUnit'
+import type { Question } from './question'
+import type { Survey } from './survey'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
   // --- Acual DB columns ---
