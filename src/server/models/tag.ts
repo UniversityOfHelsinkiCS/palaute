@@ -1,11 +1,18 @@
-const { JSONB } = require('sequelize')
-const { VIRTUAL } = require('sequelize')
-const { Model, INTEGER, STRING } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import {
+  Model,
+  INTEGER,
+  STRING,
+  JSONB,
+  VIRTUAL,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
+import { sequelize } from '../db/dbConnection'
 
 /* eslint-disable */
 // https://stackoverflow.com/questions/7616461/generate-a-hash-from-string-in-javascript
-const hash = s =>
+const hash = (s: string): number =>
   Math.abs(
     s.split('').reduce((a, b) => {
       a = (a << 5) - a + b.charCodeAt(0)
@@ -14,7 +21,15 @@ const hash = s =>
   )
 /* eslint-enable */
 
-class Tag extends Model {}
+class Tag extends Model<InferAttributes<Tag>, InferCreationAttributes<Tag>> {
+  declare id: CreationOptional<number>
+  declare organisationId: string
+  declare name: { fi: string; [key: string]: any }
+  declare hash: CreationOptional<number>
+  declare summary?: any
+
+  getHash = (): number => hash(this.name.fi)
+}
 
 Tag.init(
   {
@@ -35,8 +50,8 @@ Tag.init(
     },
     hash: {
       type: VIRTUAL,
-      get() {
-        return hash(this.name.fi)
+      get(this: Tag) {
+        return this.getHash()
       },
     },
     summary: {
@@ -49,4 +64,4 @@ Tag.init(
   }
 )
 
-module.exports = Tag
+export { Tag }
