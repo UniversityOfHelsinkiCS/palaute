@@ -1,10 +1,15 @@
-const { ENUM, DATE, Op } = require('sequelize')
-const { Model, JSONB } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import { Model, JSONB, ENUM, DATE, Op } from 'sequelize'
+import { sequelize } from '../db/dbConnection'
+import type { User } from './user'
 
 class Banner extends Model {
-  static async getForUser(user) {
-    let access = ['STUDENT']
+  declare data: object
+  declare accessGroup: 'STUDENT' | 'TEACHER' | 'ORG' | 'ADMIN'
+  declare startDate: Date
+  declare endDate: Date
+
+  static getForUser = async (user: User): Promise<Banner[]> => {
+    let access: string[] = ['STUDENT']
 
     const isTeacher = await user.isTeacher()
     const hasOrgAccess = (await user.getOrganisationAccess())?.length > 0
@@ -42,8 +47,7 @@ Banner.init(
       allowNull: false,
     },
     accessGroup: {
-      type: ENUM,
-      values: ['STUDENT', 'TEACHER', 'ORG', 'ADMIN'],
+      type: ENUM('STUDENT', 'TEACHER', 'ORG', 'ADMIN'),
     },
     startDate: {
       type: DATE,
@@ -61,4 +65,4 @@ Banner.init(
   }
 )
 
-module.exports = Banner
+export { Banner }
