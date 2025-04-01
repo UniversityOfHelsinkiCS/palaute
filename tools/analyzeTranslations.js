@@ -50,7 +50,10 @@ const LANGUAGES = ['fi', 'sv', 'en']
 const NAMESPACE = 'translation'
 
 /**
- * Evil thing of the past
+ * Imports a translation object from an ES module file.
+ * This function uses `eval` to parse the file, which is generally unsafe.
+ * @param {string} f - The file path to the translation module.
+ * @returns {Promise<Object>} The imported translation object.
  */
 const importTranslationObjectFromESModule = async f => {
   const content = await fs.readFile(f, 'utf8')
@@ -81,7 +84,7 @@ const log = (...msg) => {
 }
 
 /**
- * Main
+ * Main execution block
  */
 ;(async () => {
   if (args.help) {
@@ -94,11 +97,14 @@ const log = (...msg) => {
   const translationKeyReferences = new Map()
   let fileCount = 0
   log0(`Analyzing ${ROOT_PATH}...`)
+
+  // Walk through the directory structure and analyze files
   for await (const file of walk(ROOT_PATH)) {
     fileCount += 1
     const contents = await fs.readFile(file, 'utf8')
     let lineNumber = 1
     for (const line of contents.split('\n')) {
+      // Match translation keys using regex and store their locations
       ;[...line.matchAll(TRANSLATION_KEY_REFERENCE_MATCHER)]
         .concat([...line.matchAll(TRANSLATION_KEY_REFERENCE_MATCHER_2)])
         .flat()
@@ -121,6 +127,7 @@ const log = (...msg) => {
 
   const locales = {}
 
+  // Load translation files for each language
   for await (const lang of LANGUAGES) {
     locales[lang] = require(`../${LOCALES_PATH}/${lang}/${NAMESPACE}.json`)
   }
@@ -128,6 +135,12 @@ const log = (...msg) => {
 
   const translationsNotUsed = new Set()
 
+  /**
+   * Recursively finds all keys in a nested object.
+   * @param {Object} obj - The object to traverse.
+   * @param {string} path - The current path in the object.
+   * @returns {string[]} An array of keys found in the object.
+   */
   const findKeysRecursively = (obj, path) => {
     const keys = []
     Object.keys(obj).forEach(k => {
@@ -140,6 +153,7 @@ const log = (...msg) => {
     return keys
   }
 
+  // Collect all translation keys from the loaded locales
   Object.entries(locales).forEach(([_, t]) => {
     findKeysRecursively(t, '').forEach(k => translationsNotUsed.add(k.slice(1)))
   })
@@ -156,6 +170,7 @@ const log = (...msg) => {
   let missingCount = 0
   const missingByLang = Object.fromEntries(argLangs.map(l => [l, []]))
 
+  // Check for missing translations
   translationKeyReferences.forEach((v, k) => {
     const missing = []
     const parts = k.split(':')
@@ -203,9 +218,17 @@ const log = (...msg) => {
   }
 })()
 
+/**
+ * Prints missing translations for a given key.
+ * @param {string} translationKey - The translation key.
+ * @param {Location[]} referenceLocations - Locations where the key is referenced.
+ * @param {string[]} missingLangs - Languages missing the translation.
+ * @param {number} longestKey - The length of the longest key for padding.
+ * @returns {number} The number of missing languages.
+ */
 const printMissing = (translationKey, referenceLocations, missingLangs, longestKey) => {
   let msg = translationKey
-  // add padding
+  // Add padding
   for (let i = 0; i < longestKey - translationKey.length; i++) {
     msg += ' '
   }
@@ -223,6 +246,11 @@ const printMissing = (translationKey, referenceLocations, missingLangs, longestK
   return missingLangs.length
 }
 
+/**
+ * Prints potentially unused translations.
+ * @param {Set<string>} translationsNotUsed - Set of unused translation keys.
+ * @param {number} numberOfTranslations - Total number of translations.
+ */
 const printUnused = (translationsNotUsed, numberOfTranslations) => {
   console.log(
     `${Underscore}Potentially unused translations (${translationsNotUsed.size}/${numberOfTranslations}): ${Reset}`
@@ -231,6 +259,10 @@ const printUnused = (translationsNotUsed, numberOfTranslations) => {
   translationsNotUsed.forEach(t => console.log(`  ${t.split(':').join(`${FgMagenta}:${Reset}`)}`))
 }
 
+/**
+ * Prompts the user to create missing translations and writes them to files.
+ * @param {Object} missingByLang - Object mapping languages to missing keys.
+ */
 const createMissingTranslations = async missingByLang => {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -246,6 +278,7 @@ const createMissingTranslations = async missingByLang => {
 
   const promptInfosByKeys = {}
 
+  // Group missing keys by language
   Object.entries(missingByLang).forEach(([lang, missingKeys]) => {
     missingKeys.forEach(k => {
       if (!promptInfosByKeys[k]) {
@@ -259,6 +292,7 @@ const createMissingTranslations = async missingByLang => {
     })
   })
 
+  // Prompt user for translations
   for (const [k, info] of Object.entries(promptInfosByKeys)) {
     console.log(`\nAdd translations for ${FgYellow}${k}${Reset}`)
     for (const i of info) {
@@ -269,6 +303,7 @@ const createMissingTranslations = async missingByLang => {
 
   const newTranslationsByLang = {}
 
+  // Organize new translations into a nested structure
   Object.entries(promptInfosByKeys).forEach(([k, info]) => {
     info.forEach(i => {
       if (!i.value) {
@@ -309,6 +344,9 @@ const createMissingTranslations = async missingByLang => {
   )
 }
 
+/**
+ * Prints help information for the script.
+ */
 function printHelp() {
   console.log('Usage:')
   console.log('--lang fi,sv,en')
@@ -319,8 +357,9 @@ function printHelp() {
 }
 
 /**
- * Recursive filewalk
- * @param {} dir
+ * Recursively walks through a directory and yields file paths.
+ * @param {string} dir - The directory to walk.
+ * @returns {AsyncGenerator<string>} An async generator yielding file paths.
  */
 async function* walk(dir) {
   for await (const d of await fs.opendir(dir)) {
@@ -331,7 +370,7 @@ async function* walk(dir) {
 }
 
 /**
- * A line location in file
+ * Represents a line location in a file.
  */
 class Location {
   constructor(file, line) {

@@ -37,6 +37,7 @@ jobs:
             interimFeedback,
             organisationSurvey,
             programme,
+            search,
             teacherview,
             universitySurvey,
             userfeedbacks,
