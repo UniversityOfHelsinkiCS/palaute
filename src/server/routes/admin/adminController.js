@@ -542,7 +542,7 @@ const getInactiveCourseRealisations = async (req, res) => {
   const inactiveCourseRealisations = await InactiveCourseRealisation.findAll({
     where: {
       endDate: {
-        [Op.gt]: subMonths(new Date(), 3),
+        [Op.gt]: subMonths(new Date(), 6),
       },
     },
   })
