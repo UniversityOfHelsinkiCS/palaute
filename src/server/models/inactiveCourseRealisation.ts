@@ -1,8 +1,22 @@
-const { STRING, BOOLEAN } = require('sequelize')
-const { Model, JSONB, DATE } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import { STRING, BOOLEAN, Model, InferAttributes, InferCreationAttributes, DATE, JSONB } from 'sequelize'
+import type { LocalizedString } from '@common/types'
+import { sequelize } from '../db/dbConnection'
 
-class InactiveCourseRealisation extends Model {}
+class InactiveCourseRealisation extends Model<
+  InferAttributes<InactiveCourseRealisation>,
+  InferCreationAttributes<InactiveCourseRealisation>
+> {
+  declare id: string
+  declare endDate: Date
+  declare startDate: Date
+  declare name: LocalizedString
+  declare educationalInstitutionUrn: string | null
+  declare isMoocCourse: boolean
+  declare teachingLanguages: string[] | null
+  declare manuallyEnabled: boolean
+  declare createdAt: Date
+  declare updatedAt: Date
+}
 
 // Store independent work CURs and possible other inactive CURs
 // so that they can be activated manually if needed
@@ -44,6 +58,14 @@ InactiveCourseRealisation.init(
       defaultValue: false,
       allowNull: false,
     },
+    createdAt: {
+      type: DATE,
+      allowNull: false,
+    },
+    updatedAt: {
+      type: DATE,
+      allowNull: false,
+    },
   },
   {
     underscored: true,
@@ -51,4 +73,4 @@ InactiveCourseRealisation.init(
   }
 )
 
-module.exports = InactiveCourseRealisation
+export { InactiveCourseRealisation }

@@ -1,8 +1,12 @@
-const { DATE, NOW, STRING } = require('sequelize')
-const { Model } = require('sequelize')
-const { sequelize } = require('../db/dbConnection')
+import { DATE, InferCreationAttributes, Model, NOW, STRING } from 'sequelize'
+import { sequelize } from '../db/dbConnection'
 
-class UpdaterStatus extends Model {}
+class UpdaterStatus extends Model<InferCreationAttributes<UpdaterStatus>, InferCreationAttributes<UpdaterStatus>> {
+  declare startedAt: Date
+  declare finishedAt: Date | null
+  declare status: string
+  declare jobType: string
+}
 
 UpdaterStatus.init(
   {
@@ -33,4 +37,4 @@ UpdaterStatus.init(
   }
 )
 
-module.exports = UpdaterStatus
+export { UpdaterStatus }
