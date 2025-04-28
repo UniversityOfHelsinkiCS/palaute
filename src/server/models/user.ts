@@ -48,7 +48,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare specialGroup?: any
   declare isAdmin?: boolean
   declare isEmployee?: boolean
-  declare mockedBy?: string
+  declare mockedBy?: User
   declare iamGroups?: string[]
 
   // --- Helper methods ---

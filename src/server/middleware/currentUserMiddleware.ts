@@ -26,7 +26,7 @@ const setLoggedInAsUser = async (req: AuthenticatedRequest) => {
   if (loggedInAsUser) {
     const originalUser = req.user
     req.user = loggedInAsUser
-    req.user.mockedBy = originalUser.username
+    req.user.mockedBy = originalUser
     req.loginAs = true
   }
 }

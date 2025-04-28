@@ -48,6 +48,7 @@ const LoginAsSelector = () => {
         label="Email, Username, sisu id or student number"
         variant="outlined"
         onChange={handleChange}
+        autoFocus
       />
 
       <div style={{ paddingTop: 10 }}>

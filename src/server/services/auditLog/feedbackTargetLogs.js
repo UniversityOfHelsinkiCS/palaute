@@ -4,7 +4,7 @@ const { Question, FeedbackTargetLog } = require('../../models')
 
 const createFromData = async (feedbackTargetId, user, data) => {
   if (user.mockedBy) {
-    data.mockedBy = user.mockedBy
+    data.mockedBy = user.mockedBy.username
   }
 
   const log = await FeedbackTargetLog.create({

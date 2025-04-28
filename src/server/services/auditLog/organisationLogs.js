@@ -4,7 +4,7 @@ const { OrganisationLog, Organisation, Question, User } = require('../../models'
 
 const createFromData = async (organisationId, user, data) => {
   if (user.mockedBy) {
-    data.mockedBy = user.mockedBy
+    data.mockedBy = user.mockedBy.username
   }
 
   const log = await OrganisationLog.create({
