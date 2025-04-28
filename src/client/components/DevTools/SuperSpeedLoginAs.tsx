@@ -26,6 +26,8 @@ export const SuperSpeedLoginAs = () => {
 
   return (
     <Dialog
+      fullWidth
+      maxWidth="md"
       open={open}
       onClose={() => setOpen(false)}
       aria-labelledby="super-speed-login-dialog-title"

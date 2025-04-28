@@ -44,7 +44,7 @@ const LoginAsSelector = () => {
   return (
     <Box my={4} onKeyDown={handleKeyPress}>
       <TextField
-        style={{ width: '30em' }}
+        style={{ width: '100%' }}
         label="Email, Username, sisu id or student number"
         variant="outlined"
         onChange={handleChange}

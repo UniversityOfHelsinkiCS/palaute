@@ -100,7 +100,7 @@ const getUser = async (req, res) => {
 
 const getUserDetails = async (req, res) => {
   const { id } = req.params
-  if (id !== req.user.id && !req.user.isAdmin) {
+  if (id !== req.user.id && !req.user.isAdmin && !req.user.mockedBy?.isAdmin) {
     throw new ApplicationError('Non-admin can only view own user details', 403)
   }
 
