@@ -80,9 +80,11 @@ const getStudents = async ({ feedbackTargetId, user }) => {
    * - Showing feedback status is enabled for organisation
    * - Course is no longer open so that feedback status cannot change
    * - At least 5 students have given feedback
+   * - Or the user is admin
    */
   const showFeedbackGiven =
-    studentListVisible && !feedbackTarget.isOpen() && studentsWithFeedback.filter(u => u.feedbackGiven).length >= 5
+    (studentListVisible && !feedbackTarget.isOpen() && studentsWithFeedback.filter(u => u.feedbackGiven).length >= 5) ||
+    access.canSeeAllFeedbacks()
 
   // Previous functionality to not show any student data if feedback given status is not shown
   if (!ALWAYS_SHOW_STUDENT_LIST && !showFeedbackGiven) return []

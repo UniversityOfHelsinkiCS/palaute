@@ -1,4 +1,4 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
 // Actions 'enum'
 // HEY YOU THERE if you can think of better solution, its your responsibility to implement!!!
@@ -21,39 +21,33 @@ const CREATE_INTERIM_FEEDBACK = 14
 const DELETE_ANSWER = 15
 const UPDATE_ORGANISATION_SURVEYS = 16
 const ENABLE_TOKEN_ENROLMENT = 17 // @feat Gradu survey
-
-const ALL = [
-  UPDATE,
-  UPDATE_RESPONSE,
-  ALL_FEEDBACKS,
-  PUBLIC_FEEDBACKS,
-  STUDENTS,
-  CONTINUOUS_FEEDBACKS,
-  CONTINUOUS_FEEDBACK_RESPONSE,
-  GIVE_CONTINUOUS_FEEDBACK,
-  GIVE_FEEDBACK,
-  HIDE_FEEDBACK,
-  LOGS,
-  DELETE_TEACHER,
-  TOKENS,
-  SEND_REMINDER_EMAIL,
-  CREATE_INTERIM_FEEDBACK,
-  DELETE_ANSWER,
-  UPDATE_ORGANISATION_SURVEYS,
-  ENABLE_TOKEN_ENROLMENT,
-].sort()
-
-Object.freeze(ALL)
-
-// Validate that there are no duplicate numberings
-if (!_.isEqual(_.uniq(ALL), ALL))
-  throw new Error('Access actions are invalidly numbered. Fix them at... (see trace below)')
+const ALWAYS_SEE_STUDENTS = 18
 
 /**
  * Describes what actions are allowed, given some access status
  */
 const RIGHTS = {
-  ADMIN: ALL,
+  ADMIN: [
+    UPDATE,
+    UPDATE_RESPONSE,
+    ALL_FEEDBACKS,
+    PUBLIC_FEEDBACKS,
+    STUDENTS,
+    CONTINUOUS_FEEDBACKS,
+    CONTINUOUS_FEEDBACK_RESPONSE,
+    GIVE_CONTINUOUS_FEEDBACK,
+    GIVE_FEEDBACK,
+    HIDE_FEEDBACK,
+    LOGS,
+    DELETE_TEACHER,
+    TOKENS,
+    SEND_REMINDER_EMAIL,
+    CREATE_INTERIM_FEEDBACK,
+    DELETE_ANSWER,
+    UPDATE_ORGANISATION_SURVEYS,
+    ENABLE_TOKEN_ENROLMENT,
+    ALWAYS_SEE_STUDENTS,
+  ],
   ORGANISATION_ADMIN: [
     UPDATE,
     ALL_FEEDBACKS,
@@ -82,8 +76,19 @@ const RIGHTS = {
   ],
   TEACHER: [PUBLIC_FEEDBACKS],
   STUDENT: [PUBLIC_FEEDBACKS, GIVE_CONTINUOUS_FEEDBACK, GIVE_FEEDBACK],
-  NONE: [],
-}
+  NONE: [] as number[],
+} as const
+
+const ALL = RIGHTS.ADMIN
+
+Object.freeze(ALL)
+
+// Validate that there are no duplicate numberings
+if (!_.isEqual(_.uniq(ALL), ALL))
+  throw new Error('Access actions are invalidly numbered. Fix them at... (see trace below)')
+
+type ROLE = keyof typeof RIGHTS
+type Actions = (typeof ALL)[number]
 
 // peace of mind
 Object.freeze(RIGHTS)
@@ -91,10 +96,16 @@ Object.freeze(RIGHTS)
 /**
  * Checks whether given access status allows given action
  */
-const hasRight = (accessStatuses, action) => accessStatuses.some(accessStatus => RIGHTS[accessStatus].includes(action))
+const hasRight = (accessStatuses: ROLE[], action: Actions) =>
+  accessStatuses.some(accessStatus => {
+    const allowedActions = RIGHTS[accessStatus] as number[]
+    return allowedActions.includes(action)
+  })
 
 class Access {
-  constructor(accessStatus) {
+  accessStatus: ROLE[]
+
+  constructor(accessStatus: ROLE[]) {
     this.accessStatus = accessStatus
   }
 
@@ -170,6 +181,10 @@ class Access {
     return hasRight(this.accessStatus, ENABLE_TOKEN_ENROLMENT)
   }
 
+  canAlwaysSeeStudents() {
+    return hasRight(this.accessStatus, ALWAYS_SEE_STUDENTS)
+  }
+
   // Role enum
 
   static ADMIN = new Access(['ADMIN'])
@@ -186,13 +201,13 @@ class Access {
 
   static NONE = new Access(['NONE'])
 
-  static mergeAccesses(accesses) {
+  static mergeAccesses(accesses: Access[]) {
     const accessStatuses = accesses.map(a => a.accessStatus)
 
     return new Access(accessStatuses.flat())
   }
 
-  static For(accessStatuses) {
+  static For(accessStatus: ROLE) {
     return (
       [
         this.ADMIN,
@@ -201,7 +216,7 @@ class Access {
         this.ORGANISATION_ADMIN,
         this.ORGANISATION_READ,
         this.STUDENT,
-      ].find(a => accessStatuses.includes(a.accessStatus)) ?? this.NONE
+      ].find(a => a.accessStatus.includes(accessStatus)) ?? this.NONE
     )
   }
 
@@ -216,6 +231,4 @@ class Access {
 // Important! Dont let anyone mess with this object
 Object.freeze(Access)
 
-module.exports = {
-  Access,
-}
+export { Access }
