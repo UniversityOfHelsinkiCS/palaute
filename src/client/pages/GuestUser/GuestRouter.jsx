@@ -27,15 +27,15 @@ const ParseToken = () => {
   window.sessionStorage.setItem('token', token)
   window.sessionStorage.setItem('tokenUser', userId)
 
-  return <Navigate to="/noad/courses" />
+  return <Navigate to="/noad/feedbacks" />
 }
 
 const GuestRouter = () => (
   <Container sx={styles.container}>
     <Routes>
-      <Route path="/" exact element={<Navigate to="/noad/courses" />} />
+      <Route path="/" exact element={<Navigate to="/noad/feedbacks" />} />
       <Route path="/token/:token" element={<ParseToken />} />
-      <Route path="/courses" element={<GuestCourses />} />
+      <Route path="/feedbacks" element={<GuestCourses />} />
       <Route path="/targets/:id/*" element={<GuestFeedbackTargetView />} />
     </Routes>
   </Container>
