@@ -44,7 +44,7 @@ const FeedbackTargetResultsView = () => {
   }
 
   if (!feedbackTarget || !feedbackTargetData) {
-    return <Navigate to="/noad/courses" />
+    return <Navigate to="/noad/feedbacks" />
   }
 
   const { feedbacks, feedbackVisible } = feedbackTargetData

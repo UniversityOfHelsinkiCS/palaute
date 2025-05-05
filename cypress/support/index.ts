@@ -51,7 +51,12 @@ declare global {
   // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Cypress {
     interface Chainable {
-      loginAs(headers: any)
+      loginAs(headers: any): Chainable
+      createFeedbackTarget(options: { extraStudents?: number }): Chainable
+      setFeedbackActive(): Chainable
+      setFeedbackInactive(): Chainable
+      getTestFbtId(): Chainable
+      getUniversityQuestions(): Chainable
     }
   }
 }

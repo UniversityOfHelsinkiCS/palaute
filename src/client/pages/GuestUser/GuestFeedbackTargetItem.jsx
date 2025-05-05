@@ -28,7 +28,7 @@ const NoFeedbackActions = ({ editPath }) => {
   const { t } = useTranslation()
 
   return (
-    <ActionButton color="primary" to={editPath} component={Link}>
+    <ActionButton color="primary" to={editPath} component={Link} data-cy="give-feedback-link">
       {t('userFeedbacks:giveFeedbackButton')}
     </ActionButton>
   )

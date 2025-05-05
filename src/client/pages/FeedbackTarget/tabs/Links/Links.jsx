@@ -15,7 +15,7 @@ const Links = () => {
     return <LoadingProgress />
   }
 
-  const sortedUsers = users.sort((a, b) => a.firstName.localeCompare(b.firstName))
+  const sortedUsers = users.sort((a, b) => a.lastName?.localeCompare(b.lastName) ?? 0)
 
   return (
     <Box>
@@ -25,7 +25,7 @@ const Links = () => {
           <Typography variant="body1" component="p">
             {user.firstName} {user.lastName}
           </Typography>
-          <Typography variant="body2" component="p">
+          <Typography variant="body2" component="p" data-cy={`noad-token-${user.studentNumber}`}>
             http://{window.location.host}/noad/token/{user.token}
           </Typography>
         </Box>

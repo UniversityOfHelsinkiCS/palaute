@@ -61,7 +61,7 @@ const FormContainer = ({
             </Card>
 
             <Box mt={2}>
-              <NorButton disabled={disabled} color="primary" type="submit">
+              <NorButton disabled={disabled} color="primary" type="submit" data-cy="feedback-view-give-feedback">
                 {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
               </NorButton>
             </Box>
