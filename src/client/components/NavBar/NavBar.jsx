@@ -216,10 +216,11 @@ const NavBar = ({ guest = false }) => {
       to: '/feedbacks',
       badgeCount: waitingFeedbackCount,
     },
-    PUBLIC_COURSE_BROWSER_ENABLED && {
-      label: t('navBar:browseCourses'),
-      to: '/search',
-    },
+    PUBLIC_COURSE_BROWSER_ENABLED &&
+      !guest && {
+        label: t('navBar:browseCourses'),
+        to: '/search',
+      },
     courseSummaryIsAccessible && {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
