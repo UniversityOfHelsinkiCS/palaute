@@ -35,6 +35,7 @@ jobs:
             emailStatsView.spec.js,
             feedbackResults.spec.js,
             interimFeedback.spec.js,
+            noad.spec.ts,
             organisationSurvey.spec.js,
             programme.spec.js,
             search.spec.ts,
