@@ -84,7 +84,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   const { userCreated } = feedbackTarget
   const courseName = userCreated
     ? getLanguageValue(feedbackTarget.courseRealisation?.name, language)
-    : getLanguageValue(feedbackTarget.courseUnit?.name)
+    : getLanguageValue(feedbackTarget.courseUnit?.name, language)
   const { courseCode } = feedbackTarget.courseUnit
 
   let courseNamesAndUrlsDisplayName = courseName
