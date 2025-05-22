@@ -84,7 +84,7 @@ const getStudents = async ({ feedbackTargetId, user }) => {
    */
   const showFeedbackGiven =
     (studentListVisible && !feedbackTarget.isOpen() && studentsWithFeedback.filter(u => u.feedbackGiven).length >= 5) ||
-    access.canSeeAllFeedbacks()
+    access.canAlwaysSeeStudents()
 
   // Previous functionality to not show any student data if feedback given status is not shown
   if (!ALWAYS_SHOW_STUDENT_LIST && !showFeedbackGiven) return []
