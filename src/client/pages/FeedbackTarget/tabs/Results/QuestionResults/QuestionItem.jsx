@@ -74,10 +74,20 @@ const QuestionItem = ({
       return
     }
 
-    const confirmation = window.confirm(t('questionResults:publicQuestionConfirmation'))
-    if (confirmation) {
+    const toggleAccepted = question.type !== 'OPEN' || window.confirm(t('questionResults:publicQuestionConfirmation'))
+
+    if (toggleAccepted) {
       onPublicityToggle(true)
     }
+
+    // if (question.type === 'OPEN') {
+    //   const confirmation = window.confirm(t('questionResults:publicQuestionConfirmation'))
+    //   if (confirmation) {
+    //     onPublicityToggle(true)
+    //   }
+    // } else {
+    //   onPublicityToggle(true)
+    // }
   }
 
   const Component = componentByType[question.type]
