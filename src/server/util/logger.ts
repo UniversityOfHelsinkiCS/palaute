@@ -62,7 +62,7 @@ if (inProduction) {
 
   transports.push(
     new LokiTransport({
-      host: 'loki-svc:3100',
+      host: 'http://loki-svc.toska-lokki.svc.cluster.local:3100',
       labels: { app: 'norppa', environment: process.env.NODE_ENV || 'production' },
     })
   )
