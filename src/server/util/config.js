@@ -37,6 +37,9 @@ const UPDATER_URL = process.env.UPDATER_URL || ''
 
 const DATABASE_URL = process.env.DATABASE_URL || ''
 
+const LOKI_HOST = process.env.LOKI_HOST || 'localhost'
+const GELF_HOST = process.env.GELF_HOST || 'localhost'
+
 const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
 const WORKLOAD_QUESTION_ID_ORDER = config.get('WORKLOAD_QUESTION_ID_ORDER') ?? []
 const DEV_ADMINS = config.get('DEV_ADMINS') ?? []
@@ -85,6 +88,8 @@ module.exports = {
   inStaging,
   basePath,
   GIT_SHA,
+  LOKI_HOST,
+  GELF_HOST,
   NOAD_LINK_EXPIRATION_DAYS,
   FEEDBACK_TARGET_CACHE_TTL,
   USER_CACHE_TTL,

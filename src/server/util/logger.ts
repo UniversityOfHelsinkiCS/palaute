@@ -6,7 +6,7 @@ import winston from 'winston'
 import { WinstonGelfTransporter } from 'unfack-winston-gelf-transporter'
 import LokiTransport from 'winston-loki'
 
-import { inProduction, GELF_TRANSPORT_ENABLED } from './config'
+import { inProduction, GELF_TRANSPORT_ENABLED, GELF_HOST, LOKI_HOST } from './config'
 
 const { combine, timestamp, printf, splat } = winston.format
 
@@ -62,7 +62,7 @@ if (inProduction) {
 
   transports.push(
     new LokiTransport({
-      host: 'http://loki-svc.toska-lokki.svc.cluster.local:3100',
+      host: LOKI_HOST,
       labels: { app: 'norppa', environment: process.env.NODE_ENV || 'production' },
     })
   )
@@ -71,7 +71,7 @@ if (inProduction) {
     transports.push(
       new WinstonGelfTransporter({
         handleExceptions: true,
-        host: 'svm-116.cs.helsinki.fi',
+        host: GELF_HOST,
         port: 9503,
         protocol: 'udp',
         hostName: os.hostname(),
