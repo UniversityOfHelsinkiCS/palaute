@@ -4,6 +4,7 @@
 import os from 'os'
 import winston from 'winston'
 import { WinstonGelfTransporter } from 'unfack-winston-gelf-transporter'
+import LokiTransport from 'winston-loki'
 
 import { inProduction, GELF_TRANSPORT_ENABLED } from './config'
 
@@ -59,6 +60,13 @@ if (inProduction) {
 
   transports.push(new winston.transports.Console({ format: prodFormat }))
 
+  transports.push(
+    new LokiTransport({
+      host: 'loki-svc:3100',
+      labels: { app: 'norppa', environment: process.env.NODE_ENV || 'production' },
+    })
+  )
+
   if (GELF_TRANSPORT_ENABLED) {
     transports.push(
       new WinstonGelfTransporter({
@@ -69,7 +77,7 @@ if (inProduction) {
         hostName: os.hostname(),
         additional: {
           app: 'norppa',
-          environment: 'production',
+          environment: process.env.NODE_ENV || 'production',
         },
       })
     )
