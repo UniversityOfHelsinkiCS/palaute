@@ -79,15 +79,6 @@ const QuestionItem = ({
     if (toggleAccepted) {
       onPublicityToggle(true)
     }
-
-    // if (question.type === 'OPEN') {
-    //   const confirmation = window.confirm(t('questionResults:publicQuestionConfirmation'))
-    //   if (confirmation) {
-    //     onPublicityToggle(true)
-    //   }
-    // } else {
-    //   onPublicityToggle(true)
-    // }
   }
 
   const Component = componentByType[question.type]
