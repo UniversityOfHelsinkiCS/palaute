@@ -22,13 +22,13 @@ import { FileCopyOutlined } from '@mui/icons-material'
 import { NorButton } from '../common/NorButton'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
-import { useOrganisationSurveys } from '../../pages/Organisation/useOrganisationSurveys'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
 import { getLanguageValue } from '../../util/languageUtils'
 import formatDate from '../../util/formatDate'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { getOrganisationSurveyCourseUnit } from './utils'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
+import { useOrganisationSurveysForUser } from '../../pages/Organisation/useOrganisationsSurveysForUser'
 
 const styles = {
   listItem: {
@@ -96,7 +96,8 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
     courseUnit: { name, organisations, userCreated },
   } = feedbackTarget
   const { courseUnits = [] } = useTeacherCourseUnits()
-  const { surveys = [] } = useOrganisationSurveys(organisations[0]?.code, userCreated)
+  const { organisationsWithSurveys = [] } = useOrganisationSurveysForUser(userCreated)
+  const surveys = organisationsWithSurveys.flatMap(org => org.surveys)
   const [value, setValue] = useState(null)
 
   const options = courseUnits ?? []

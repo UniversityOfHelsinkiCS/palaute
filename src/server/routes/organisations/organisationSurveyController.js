@@ -169,8 +169,24 @@ const removeOrganisationSurvey = async (req, res) => {
   return res.status(204).send()
 }
 
+const getOrganisationSurveysForUser = async (req, res) => {
+  const { user } = req
+  const organisationAccess = await user.getOrganisationAccess()
+  const organisationSurveys = await Promise.all(
+    organisationAccess
+      .filter(organisationAccess => organisationAccess.access.admin)
+      .map(async organisationAccess => {
+        const surveys = await getSurveysForOrganisation(organisationAccess.organisation.id)
+        return { organisation: organisationAccess.organisation, surveys }
+      })
+  )
+
+  return res.send(organisationSurveys)
+}
+
 const router = Router()
 
+router.get('/surveys-for-user', getOrganisationSurveysForUser)
 router.get('/:code/surveys/:id', getOrganisationSurvey)
 router.get('/:code/surveys', getOrganisationSurveys)
 router.post('/:code/surveys', createOrganisationSurvey)

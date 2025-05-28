@@ -258,6 +258,7 @@ const findFeedbackTargets = async (req, res) => {
 
 const router = Router()
 
+if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.get('/', getOrganisations)
 router.get('/data', getOrganisationData)
 router.get('/list', getOrganisationsListHandler)
@@ -266,7 +267,6 @@ router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)
 router.get('/:code/courses', findFeedbackTargets)
-if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.use('/', feedbackCorrespondentRouter)
 
 module.exports = router
