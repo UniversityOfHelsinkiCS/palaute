@@ -119,7 +119,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
     t => t.surveys?.teacherSurvey?.questions?.length > 0 && t.id !== feedbackTarget.id
   )
 
-  const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions?.length > 0
+  const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions?.length === 0
 
   useEffect(() => {
     if (userCreated) setValue(organisationSurvey)
