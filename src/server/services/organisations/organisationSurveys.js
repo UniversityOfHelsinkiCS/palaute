@@ -368,6 +368,11 @@ const getSurveysForOrganisation = async organisationId => {
     order: [['courseRealisation', 'endDate', 'DESC']],
   })
 
+  for (const target of organisationSurveys) {
+    const surveys = await target.getSurveys()
+    target.populateSurveys(surveys)
+  }
+
   return organisationSurveys
 }
 

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 
 import {
   Dialog,
@@ -26,7 +26,6 @@ import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTarge
 import { getLanguageValue } from '../../util/languageUtils'
 import formatDate from '../../util/formatDate'
 import { LoadingProgress } from '../common/LoadingProgress'
-import { getOrganisationSurveyCourseUnit } from './utils'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { useOrganisationSurveysForUser } from '../../pages/Organisation/useOrganisationsSurveysForUser'
 
@@ -76,38 +75,61 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   )
 }
 
-const FeedbackTargetList = ({ feedbackTargets, onCopy }) => (
-  <List>
-    {feedbackTargets.map((feedbackTarget, index) => (
-      <FeedbackTargetItem
-        key={feedbackTarget.id}
-        feedbackTarget={feedbackTarget}
-        divider={index < feedbackTargets.length - 1}
-        onCopy={onCopy}
-      />
-    ))}
-  </List>
-)
+const FeedbackTargetList = ({ feedbackTargets, onCopy, organisation }) => {
+  return (
+    <Box>
+      {organisation && feedbackTargets.length > 0 && (
+        <Typography component="h3" variant="h6">
+          {organisation}
+        </Typography>
+      )}
+      <List>
+        {feedbackTargets.map((feedbackTarget, index) => (
+          <FeedbackTargetItem
+            key={feedbackTarget.id}
+            feedbackTarget={feedbackTarget}
+            divider={index < feedbackTargets.length - 1}
+            onCopy={onCopy}
+          />
+        ))}
+      </List>
+    </Box>
+  )
+}
+
+const FeedbackTargetListForCourseSurvey = ({
+  feedbackTargetsWithQuestions,
+  onCopy,
+  noQuestionsText,
+  chooseCourseText,
+}) => {
+  return (
+    <Box>
+      {chooseCourseText.length > 0 && (
+        <Typography color="textSecondary" align="center">
+          {chooseCourseText}
+        </Typography>
+      )}
+      {feedbackTargetsWithQuestions.length > 0 && (
+        <FeedbackTargetList feedbackTargets={feedbackTargetsWithQuestions} onCopy={onCopy} />
+      )}
+      {noQuestionsText.length > 0 && feedbackTargetsWithQuestions?.length === 0 && (
+        <Typography color="textSecondary" align="center">
+          {noQuestionsText}
+        </Typography>
+      )}
+    </Box>
+  )
+}
 
 const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget } = useFeedbackTargetContext()
-  const {
-    courseUnit: { name, organisations, userCreated },
-  } = feedbackTarget
-  const { courseUnits = [] } = useTeacherCourseUnits()
-  const { organisationsWithSurveys = [] } = useOrganisationSurveysForUser(userCreated)
-  const surveys = organisationsWithSurveys.flatMap(org => org.surveys)
+  const { userCreated } = feedbackTarget // userCreated is true for organisation surveys
+
   const [value, setValue] = useState(null)
-
+  const { courseUnits = [] } = useTeacherCourseUnits()
   const options = courseUnits ?? []
-  const organisationSurvey = getOrganisationSurveyCourseUnit(surveys)
-
-  const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
-    feedbackType: 'courseRealisation',
-    includeSurveys: true,
-    isOrganisationSurvey: userCreated,
-  })
 
   const getOptionLabel = option => `${option.courseCode} ${getLanguageValue(option.name, i18n.language)}`
 
@@ -115,15 +137,20 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const handleValueChange = (event, newValue) => setValue(newValue)
 
-  const feedbackTargetsWithQuestions = (feedbackTargets ?? []).filter(
-    t => t.surveys?.teacherSurvey?.questions?.length > 0 && t.id !== feedbackTarget.id
-  )
+  const { organisationsWithSurveys = [] } = useOrganisationSurveysForUser(userCreated)
 
-  const noQuestions = value && !feedbackTargetsIsLoading && feedbackTargetsWithQuestions?.length === 0
+  const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
+    feedbackType: 'courseRealisation',
+    includeSurveys: true,
+    isOrganisationSurvey: userCreated,
+  })
 
-  useEffect(() => {
-    if (userCreated) setValue(organisationSurvey)
-  }, [surveys])
+  const getSurveysWithQuestions = surveys => {
+    const surveysWithQuestions = (surveys ?? []).filter(
+      s => s.surveys?.teacherSurvey?.questions?.length > 0 && s.id !== feedbackTarget.id
+    )
+    return surveysWithQuestions
+  }
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -132,11 +159,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         <Box mb={2}>
           <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>
         </Box>
-        {userCreated ? (
-          <Typography component="h3" variant="h6">
-            {getLanguageValue(name, i18n.language)}
-          </Typography>
-        ) : (
+        {!userCreated && (
           <Box mb={2}>
             <Autocomplete
               value={value}
@@ -147,20 +170,29 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
             />
           </Box>
         )}
-        {!value && (
-          <Typography color="textSecondary" align="center">
-            {t('editFeedbackTarget:copyFromCourseChooseCourse')}
-          </Typography>
-        )}
         {feedbackTargetsIsLoading && <LoadingProgress />}
-        {feedbackTargetsWithQuestions?.length > 0 && (
-          <FeedbackTargetList feedbackTargets={feedbackTargetsWithQuestions} onCopy={onCopy} />
+        {!userCreated && (
+          <FeedbackTargetListForCourseSurvey
+            feedbackTargetsWithQuestions={getSurveysWithQuestions(feedbackTargets)}
+            onCopy={onCopy}
+            noQuestionsText={
+              value && !feedbackTargetsIsLoading ? t('editFeedbackTarget:copyFromCourseNoQuestions') : ''
+            }
+            chooseCourseText={!value && !userCreated ? t('editFeedbackTarget:copyFromCourseChooseCourse') : ''}
+          />
         )}
-        {noQuestions && (
-          <Typography color="textSecondary" align="center">
-            {t('editFeedbackTarget:copyFromCourseNoQuestions')}
-          </Typography>
-        )}
+        {userCreated &&
+          organisationsWithSurveys.map(org => {
+            const surveysWithQuestions = getSurveysWithQuestions(org.surveys)
+            return (
+              <FeedbackTargetList
+                key={org.organisation.id}
+                feedbackTargets={surveysWithQuestions}
+                onCopy={onCopy}
+                organisation={getLanguageValue(org.organisation.name, i18n.language)}
+              />
+            )
+          })}
       </DialogContent>
       <DialogActions>
         <NorButton color="primary" sx={{ margin: '0 10px 10px 0' }} onClick={onClose}>
