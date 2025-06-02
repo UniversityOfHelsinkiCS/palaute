@@ -236,6 +236,7 @@
     "copyFromCourseInfoAlert": "You can copy questions from courses that you teach. First, choose the course and then the realisation from which you want to copy the questions",
     "copyFromCourseChooseCourse": "Choose a course to see its realisations",
     "copyFromCourseNoQuestions": "None of the realisations on the course have any questions",
+    "copyFromCourseNoOrganisationQuestions": "This organisation does not have any questions to copy",
     "copyFromCourseQuestionCount": "{{count}} questions",
     "copyFromCourseSearchLabel": "Course",
     "openFeedbackImmediatelyDialogTitle": "Warning!",

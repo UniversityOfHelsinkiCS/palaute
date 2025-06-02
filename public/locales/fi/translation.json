@@ -235,6 +235,7 @@
     "copyFromCourseInfoAlert": "Voit kopioida kysymyksiä opettamiltasi kursseilta. Valitse ensin kurssi ja sen jälkeen toteutus, jonka kysymykset haluat kopioida",
     "copyFromCourseChooseCourse": "Valitse kurssi nähdäksesi sen toteutukset",
     "copyFromCourseNoQuestions": "Millään kurssin toteutuksella ei ole omia kysymyksiä",
+    "copyFromCourseNoOrganisationQuestions": "Tällä organisaatiolla ei ole kopioitavia kysymyksiä",
     "copyFromCourseQuestionCount": "{{count}} kysymystä",
     "copyFromCourseSearchLabel": "Kurssi",
     "openFeedbackImmediatelyDialogTitle": "Varoitus!",

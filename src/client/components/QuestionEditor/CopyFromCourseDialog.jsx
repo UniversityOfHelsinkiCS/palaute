@@ -75,14 +75,9 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   )
 }
 
-const FeedbackTargetList = ({ feedbackTargets, onCopy, organisation }) => {
+const FeedbackTargetList = ({ feedbackTargets, onCopy }) => {
   return (
     <Box>
-      {organisation && feedbackTargets.length > 0 && (
-        <Typography component="h3" variant="h6">
-          {organisation}
-        </Typography>
-      )}
       <List>
         {feedbackTargets.map((feedbackTarget, index) => (
           <FeedbackTargetItem
@@ -185,12 +180,19 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
           organisationsWithSurveys.map(org => {
             const surveysWithQuestions = getSurveysWithQuestions(org.surveys)
             return (
-              <FeedbackTargetList
-                key={org.organisation.id}
-                feedbackTargets={surveysWithQuestions}
-                onCopy={onCopy}
-                organisation={getLanguageValue(org.organisation.name, i18n.language)}
-              />
+              <Box key={org.organisation.id}>
+                <Typography component="h3" variant="h6" marginTop={2}>
+                  {getLanguageValue(org.organisation.name, i18n.language)}
+                </Typography>
+                {surveysWithQuestions.length === 0 && (
+                  <Typography color="textSecondary">
+                    {t('editFeedbackTarget:copyFromCourseNoOrganisationQuestions')}
+                  </Typography>
+                )}
+                {surveysWithQuestions.length > 0 && (
+                  <FeedbackTargetList feedbackTargets={surveysWithQuestions} onCopy={onCopy} />
+                )}
+              </Box>
             )
           })}
       </DialogContent>
