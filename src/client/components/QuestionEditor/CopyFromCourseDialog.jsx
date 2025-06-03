@@ -75,47 +75,43 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   )
 }
 
-const FeedbackTargetList = ({ feedbackTargets, onCopy }) => {
-  return (
-    <Box>
-      <List>
-        {feedbackTargets.map((feedbackTarget, index) => (
-          <FeedbackTargetItem
-            key={feedbackTarget.id}
-            feedbackTarget={feedbackTarget}
-            divider={index < feedbackTargets.length - 1}
-            onCopy={onCopy}
-          />
-        ))}
-      </List>
-    </Box>
-  )
-}
+const FeedbackTargetList = ({ feedbackTargets, onCopy }) => (
+  <Box>
+    <List>
+      {feedbackTargets.map((feedbackTarget, index) => (
+        <FeedbackTargetItem
+          key={feedbackTarget.id}
+          feedbackTarget={feedbackTarget}
+          divider={index < feedbackTargets.length - 1}
+          onCopy={onCopy}
+        />
+      ))}
+    </List>
+  </Box>
+)
 
 const FeedbackTargetListForCourseSurvey = ({
   feedbackTargetsWithQuestions,
   onCopy,
   noQuestionsText,
   chooseCourseText,
-}) => {
-  return (
-    <Box>
-      {chooseCourseText.length > 0 && (
-        <Typography color="textSecondary" align="center">
-          {chooseCourseText}
-        </Typography>
-      )}
-      {feedbackTargetsWithQuestions.length > 0 && (
-        <FeedbackTargetList feedbackTargets={feedbackTargetsWithQuestions} onCopy={onCopy} />
-      )}
-      {noQuestionsText.length > 0 && feedbackTargetsWithQuestions?.length === 0 && (
-        <Typography color="textSecondary" align="center">
-          {noQuestionsText}
-        </Typography>
-      )}
-    </Box>
-  )
-}
+}) => (
+  <Box>
+    {chooseCourseText.length > 0 && (
+      <Typography color="textSecondary" align="center">
+        {chooseCourseText}
+      </Typography>
+    )}
+    {feedbackTargetsWithQuestions.length > 0 && (
+      <FeedbackTargetList feedbackTargets={feedbackTargetsWithQuestions} onCopy={onCopy} />
+    )}
+    {noQuestionsText.length > 0 && feedbackTargetsWithQuestions?.length === 0 && (
+      <Typography color="textSecondary" align="center">
+        {noQuestionsText}
+      </Typography>
+    )}
+  </Box>
+)
 
 const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { t, i18n } = useTranslation()
