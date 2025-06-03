@@ -232,6 +232,7 @@
     "copyFromCourseDialogTitle": "Copy questions from another survey",
     "copySuccessSnackbar": "The questions have been copied into the survey",
     "copyQuestionsButton": "Copy questions",
+    "copyUniversityQuestions": "Copy university level questions",
     "copyFromCourseButton": "Copy questions from another survey",
     "copyFromCourseInfoAlert": "You can copy questions from courses that you teach. First, choose the course and then the realisation from which you want to copy the questions",
     "copyFromCourseChooseCourse": "Choose a course to see its realisations",

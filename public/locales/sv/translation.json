@@ -216,6 +216,7 @@
     "copyFromCourseDialogTitle": "Kopiera frågor från en annan undersökning",
     "copySuccessSnackbar": "Frågorna har kopierats till förfrågan",
     "copyQuestionsButton": "Kopiera frågor",
+    "copyUniversityQuestions": "Kopiera frågor på universitetsnivå",
     "copyFromCourseButton": "Kopiera frågor från en annan undersökning",
     "copyFromCourseInfoAlert": "Du kan kopiera frågor från de kurser du undervisar. Välj först kursen och sedan genomförningen vars frågor du vill kopiera",
     "copyFromCourseChooseCourse": "Välj kurs för att se dess genomförningar",

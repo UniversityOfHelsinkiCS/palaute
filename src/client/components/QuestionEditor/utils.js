@@ -42,7 +42,7 @@ const createQuestionData = type => {
   }
 }
 
-export const getQuestionId = question => (question ? question.id ?? question[TEMP_ID] : undefined)
+export const getQuestionId = question => (question ? (question.id ?? question[TEMP_ID]) : undefined)
 
 /**
  *
@@ -119,4 +119,13 @@ export const getOrganisationSurveyCourseUnit = surveys => {
   if (!surveys || surveys.length === 0) return null
 
   return surveys[0]?.courseUnit ?? null
+}
+
+export const copyQuestionsFromUniversitySurvey = survey => {
+  const questions = survey?.questions ?? []
+
+  return questions.map(q => ({
+    ...copyQuestion(q),
+    editable: true,
+  }))
 }
