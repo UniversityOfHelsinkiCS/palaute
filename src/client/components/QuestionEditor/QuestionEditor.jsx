@@ -206,6 +206,7 @@ const QuestionEditor = ({
   handlePublicityToggle,
   copyFromCourseDialog,
   groupingQuestionSettings,
+  userCreated,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
@@ -217,7 +218,11 @@ const QuestionEditor = ({
         publicQuestionIds={publicQuestionIds}
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
-        actions={copyFromCourseDialog && <QuestionEditorActions onCopy={handleSubmit} />}
+        actions={
+          copyFromCourseDialog && (
+            <QuestionEditorActions onCopy={handleSubmit} copyUniversityQuestionsButton={userCreated} />
+          )
+        }
         groupingQuestionSettings={groupingQuestionSettings}
       />
     )}
