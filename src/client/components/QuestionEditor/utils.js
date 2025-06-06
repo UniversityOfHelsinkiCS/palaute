@@ -112,6 +112,8 @@ export const copyQuestionsFromFeedbackTarget = feedbackTarget => {
   return questions.map(q => ({
     ...copyQuestion(q),
     editable: true,
+    public: false,
+    publicityConfigurable: true,
   }))
 }
 
@@ -127,5 +129,7 @@ export const copyQuestionsFromUniversitySurvey = survey => {
   return questions.map(q => ({
     ...copyQuestion(q),
     editable: true,
+    public: false,
+    publicityConfigurable: true,
   }))
 }
