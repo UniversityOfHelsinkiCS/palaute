@@ -70,14 +70,14 @@ const FormContainer = ({
               <Box mt={2}>
                 <NorButton
                   data-cy="feedback-view-give-feedback"
-                  disabled={disabled || (lessThanFiveEnrolled && !values.activateSubmit)}
+                  disabled={disabled || (lessThanFiveEnrolled && !values.activateSubmit && !isEdit)}
                   color="secondary"
                   variant="contained"
                   type="submit"
                 >
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </NorButton>
-                {lessThanFiveEnrolled && (
+                {lessThanFiveEnrolled && !isEdit && (
                   <FormikCheckbox
                     name="activateSubmit"
                     label={t('feedbackView:allowSubmitCheckbox')}
