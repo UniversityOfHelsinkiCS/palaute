@@ -151,7 +151,8 @@
     "cannotSubmitText": "Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille tai ilmoittautumisesi ei ole vielä päivittynyt järjestelmäämme. Ilmoittautumiset päivittyvät 24 tunnin välein.",
     "feedbackClosedError": "Palautteenanto on sulkeutunut",
     "endedInfo": "Palautteenanto on sulkeutunut. <2>Katso palautteita</2>",
-    "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun kurssi on käynnissä. Tämä palaute annetaan anonyymisti."
+    "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun kurssi on käynnissä. Tämä palaute annetaan anonyymisti.",
+    "allowSubmitCheckbox": "Vastaukseni saa näkyä opettajalle, vaikka kurssille on ilmoittautunut alle viisi opiskelijaa."
   },
   "teacherView": {
     "mainHeading": "Kyselyni",

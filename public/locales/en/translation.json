@@ -151,7 +151,8 @@
     "cannotSubmitText": "You cannot submit because you are not enrolled in this course or your enrollment has not updated to our system yet. Enrollments update every 24 hours.",
     "feedbackClosedError": "Feedback is closed",
     "endedInfo": "The feedback period has ended. <2>Take a look at the feedback</2>",
-    "continuousFeedbackInfo": "You can give continuous feedback while the course is ongoing. This feedback is anonymous."
+    "continuousFeedbackInfo": "You can give continuous feedback while the course is ongoing. This feedback is anonymous.",
+    "allowSubmitCheckbox": "The teacher can see my answers even though there are less than five students enrolled in this course."
   },
   "teacherView": {
     "mainHeading": "My surveys",

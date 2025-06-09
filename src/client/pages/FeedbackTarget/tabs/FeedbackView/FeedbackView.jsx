@@ -8,6 +8,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import { NorButton } from '../../../../components/common/NorButton'
+import FormikCheckbox from '../../../../components/common/FormikCheckbox'
 
 import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from './FeedbackForm'
@@ -34,12 +35,18 @@ const FormContainer = ({
   showCannotSubmitText = false,
   showSubmitButton = true,
   isEdit = false,
+  lessThanFiveEnrolled,
 }) => {
   const { t } = useTranslation()
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} validateOnChange={false}>
-      {({ isSubmitting }) => {
+    <Formik
+      initialValues={{ ...initialValues, activateSubmit: false }}
+      onSubmit={onSubmit}
+      validate={validate}
+      validateOnChange={false}
+    >
+      {({ values, isSubmitting, setFieldValue }) => {
         const disabled = isSubmitting || disabledProp
 
         return (
@@ -63,13 +70,23 @@ const FormContainer = ({
               <Box mt={2}>
                 <NorButton
                   data-cy="feedback-view-give-feedback"
-                  disabled={disabled}
+                  disabled={disabled || (lessThanFiveEnrolled && !values.activateSubmit)}
                   color="secondary"
                   variant="contained"
                   type="submit"
                 >
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </NorButton>
+                {lessThanFiveEnrolled && (
+                  <FormikCheckbox
+                    name="activateSubmit"
+                    label={t('feedbackView:allowSubmitCheckbox')}
+                    onChange={({ target }) => {
+                      setFieldValue('activateSubmit', target.checked)
+                    }}
+                    sx={{ ml: '1rem' }}
+                  />
+                )}
                 {showCannotSubmitText && (
                   <Box mt={1}>
                     <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
@@ -95,6 +112,7 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
 
   const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
+  const studentCount = feedbackTarget.summary?.data?.studentCount
   const isLoading = !feedbackTarget
 
   if (isLoading) {
@@ -213,6 +231,7 @@ const FeedbackView = () => {
           showCannotSubmitText={isOutsider}
           onOpenPrivacyDialog={handleOpenPrivacyDialog}
           isEdit={Boolean(feedback)}
+          lessThanFiveEnrolled={studentCount < 5}
         />
       )}
 

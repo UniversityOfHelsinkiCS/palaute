@@ -145,7 +145,8 @@
     "editButton": "Redigera respons",
     "feedbackInfoTitle": "Hur används mina svar och min information?",
     "feedbackInfoContent": "Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Svaren behandlas och visas alltid anonymt. Läraren kan inte koppla responser till enskilda studerande. \n Inloggningsinformation används till att visa rätta responser till studerande.",
-    "continuousFeedbackInfo": "Du kan ge kontinuerlig repons medan kursen är igång. Responsen ges anonymt."
+    "continuousFeedbackInfo": "Du kan ge kontinuerlig respons medan kursen är igång. Responsen ges anonymt.",
+    "allowSubmitCheckbox": "Läraren kan se mina svar även om färre än fem studenter är anmälda till denna kurs."
   },
   "teacherView": {
     "mainHeading": "Mina undersökningar",
