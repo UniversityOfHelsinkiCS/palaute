@@ -125,7 +125,9 @@
     "deleted": "Din respons har tagits bort",
     "noFeedbackGiven": "Ditt beslut att inte ge feedback har noterats",
     "noFeedbackGivenChip": "Jag gav ingen feedback",
-    "summaryAvailableWhenEnded": "Sammanfattning av feedback kommer att finnas tillgänglig efter att feedbackperioden har avslutats."
+    "summaryAvailableWhenEnded": "Sammanfattning av feedback kommer att finnas tillgänglig efter att feedbackperioden har avslutats.",
+    "attention": "Obs!",
+    "lessThanFiveStudentsWarning": "Färre än fem studenter har anmält sig till denna kurs. Genom att fortsätta bekräftar du att du är medveten om att även om läraren inte får tillgång till deltagarnas personuppgifter, kan det ändå vara möjligt att koppla svaren till enskilda individer."
   },
   "feedbackView": {
     "submitButton": "Ge respons",

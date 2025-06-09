@@ -5,6 +5,7 @@ const {
   CourseUnit,
   Organisation,
   CourseRealisation,
+  Summary,
 } = require('../../models')
 
 const feedbackTargetToJSON = feedbackTarget => {
@@ -26,6 +27,11 @@ const getFeedbackTargetsForStudent = async userId => {
         required: true,
         where: { userId, accessStatus: 'STUDENT' },
         include: { model: Feedback, as: 'feedback' },
+      },
+      {
+        model: Summary,
+        as: 'summary',
+        required: false,
       },
       {
         model: CourseUnit,

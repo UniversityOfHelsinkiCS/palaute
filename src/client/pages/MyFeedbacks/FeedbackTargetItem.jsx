@@ -24,24 +24,44 @@ import feedbackTargetNotGivingFeedback from '../../util/feedbackTargetNotGivingF
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/common'
 import { getCourseCode } from '../../util/courseIdentifiers'
 import { NorButton } from '../../components/common/NorButton'
+import ConfirmGivingFeedbackDialog from './ConfirmGivingFeedbackDialog'
 
-const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }) => {
+const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback, studentCount }) => {
   const { t } = useTranslation()
+  const [open, setOpen] = useState(false)
+
+  const handleClose = () => {
+    setOpen(false)
+  }
+
+  const handleOpenDialog = () => {
+    setOpen(true)
+  }
 
   return (
-    <div>
-      <NorButton
-        color="primary"
-        to={editPath}
-        component={Link}
-        data-cy="feedback-item-give-feedback"
-        sx={{ mr: '1rem' }}
-      >
-        {t('userFeedbacks:giveFeedbackButton')}
-      </NorButton>
+    <Box>
+      {studentCount >= 5 && (
+        <NorButton
+          color="primary"
+          to={editPath}
+          component={Link}
+          data-cy="feedback-item-give-feedback"
+          sx={{ mr: '1rem' }}
+        >
+          {t('userFeedbacks:giveFeedbackButton')}
+        </NorButton>
+      )}
+      {studentCount < 5 && (
+        <Box>
+          <ConfirmGivingFeedbackDialog onClose={handleClose} editPath={editPath} open={open} />
+          <NorButton color="primary" onClick={handleOpenDialog} sx={{ mr: '1rem' }}>
+            {t('userFeedbacks:giveFeedbackButton')}
+          </NorButton>
+        </Box>
+      )}
 
       <NotGivingFeedbackButton noFeedbackAllowed={noFeedbackAllowed} onNotGivingFeedback={onNotGivingFeedback} />
-    </div>
+    </Box>
   )
 }
 
@@ -270,7 +290,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit } = feedbackTarget
+  const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit, summary } = feedbackTarget
 
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
@@ -281,6 +301,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const courseName = getCourseName(feedbackTarget, t)
   const visibleCourseCode = getCourseCode(courseUnit)
   const translatedName = getLanguageValue(courseName, i18n.language)
+  const { studentCount } = summary.data
 
   const editPath = `/targets/${id}/feedback`
   const viewPath = `/targets/${id}/results`
@@ -356,6 +377,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
             editPath={editPath}
             noFeedbackAllowed={noFeedbackAllowedEnabled}
             onNotGivingFeedback={onNotGivingFeedback}
+            studentCount={studentCount}
           />
         )}
       </Box>

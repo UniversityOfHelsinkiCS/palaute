@@ -131,7 +131,9 @@
     "summaryAvailableWhenEnded": "Feedback summary will be available after the feedback period has ended.",
     "waitingBadgeLabel": "{{count}} feedbacks missing",
     "noFeedbackGiven": "Your decision to not give feedback has been noted",
-    "noFeedbackGivenChip": "I did not give feedback"
+    "noFeedbackGivenChip": "I did not give feedback",
+    "attention": "Attention!",
+    "lessThanFiveStudentsWarning": "Less than 5 students have enrolled in this course. By continuing, you acknowledge that although the teacher will not see the respondents' personal information, it may still be possible to associate responses with specific individuals."
   },
   "feedbackView": {
     "submitButton": "Give feedback",

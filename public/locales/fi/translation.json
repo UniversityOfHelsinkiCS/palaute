@@ -131,7 +131,9 @@
     "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen.",
     "waitingBadgeLabel": "{{count}} kappaletta puuttuvia palautteita",
     "noFeedbackGiven": "Päätöksesi olla antamatta palautetta on tallennettu",
-    "noFeedbackGivenChip": "En antanut palautetta"
+    "noFeedbackGivenChip": "En antanut palautetta",
+    "attention": "Huom!",
+    "lessThanFiveStudentsWarning": "Tälle kurssille on ilmoittautunut alle 5 opiskelijaa. Jatkamalla tiedostat, että vaikka vastaajien tietoja ei näytetä opettajalle, vastaukset voi olla mahdollista yhdistää tiettyyn henkilöön."
   },
   "feedbackView": {
     "submitButton": "Lähetä palaute",
