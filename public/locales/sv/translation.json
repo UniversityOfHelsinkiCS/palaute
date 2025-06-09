@@ -258,7 +258,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Förfrågans resultat visas inte på grund av för få responser",
-    "notEnoughStudentsInfo": "För att bibehålla anonymitet visas inte enkätresultat när det finns färre än {{count}} anmälda studenter.",
+    "notEnoughStudentsInfo": "För att bibehålla anonymitet visas inte enkätresultat när det finns färre än {{count}} anmälda studenter. Läraren kan se återkopplingen om studenten har gett sitt samtycke.",
     "onlyForEnrolledInfo": "Resultaten av förfrågan visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare",
     "teacherAccessInfo": "Du har lärarbehörighet på kursen, d.v.s. du kan bara se svaren på frågor som är offentliga. Om du behöver breda insyn, be om rollen som ansvarslärare via Sisu.",
     "studentsWithFeedbackHeading": "Studeranden som givit respons",

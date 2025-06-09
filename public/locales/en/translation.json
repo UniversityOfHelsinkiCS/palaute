@@ -274,7 +274,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet",
-    "notEnoughStudentsInfo": "To protect the anonymity of feedback, survey results are not shown when there are fewer than {{count}} enrolled students.",
+    "notEnoughStudentsInfo": "To protect the anonymity of feedback, survey results are not shown when there are fewer than {{count}} enrolled students. The teacher can see the feedback if the student has given their consent.",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",
     "studentsWithFeedbackHeading": "Students who have given feedback",

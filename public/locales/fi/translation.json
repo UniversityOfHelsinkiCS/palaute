@@ -273,7 +273,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu",
-    "notEnoughStudentsInfo": "Palautteen anonyymiuden suojaamiseksi tuloksia ei näytetä, kun ilmoittautuneita opiskelijoita on alle {{count}}.",
+    "notEnoughStudentsInfo": "Palautteen anonyymiuden suojaamiseksi tuloksia ei näytetä, kun ilmoittautuneita opiskelijoita on alle {{count}}. Opettaja voi nähdä palautteen, jos opiskelija on antanut siihen suostumuksensa.",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",
     "studentsWithFeedbackHeading": "Opiskelijat, jotka ovat antaneet palautetta",
