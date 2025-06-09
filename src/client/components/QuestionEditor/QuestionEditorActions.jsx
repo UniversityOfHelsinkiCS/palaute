@@ -7,7 +7,7 @@ import { FileCopyOutlined } from '@mui/icons-material'
 import { NorButton } from '../common/NorButton'
 
 import useUniversitySurvey from '../../hooks/useUniversitySurvey'
-import CopyUniversityQuestionsDialog from './CopyUniversityQuestionsDialoq'
+import CopyUniversityQuestionsDialog from './CopyUniversityQuestionsDialog'
 import CopyFromCourseDialog from './CopyFromCourseDialog'
 import { copyQuestionsFromFeedbackTarget, copyQuestionsFromUniversitySurvey } from './utils'
 
