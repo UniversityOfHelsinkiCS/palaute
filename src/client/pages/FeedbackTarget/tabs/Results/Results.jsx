@@ -152,7 +152,6 @@ const Results = () => {
 
   const enoughFeedbacks = feedbackCount > 0
   const enoughStudents = !FEEDBACK_HIDDEN_STUDENT_COUNT || studentCount >= FEEDBACK_HIDDEN_STUDENT_COUNT
-  const showFeedback = enoughFeedbacks && enoughStudents
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
   const filtersVisible = isOrganisationReader || isResponsibleTeacher
@@ -160,6 +159,8 @@ const Results = () => {
   const feedbacks = feedbackTargetData?.feedbacks ?? []
   const groupFeedbackCount = feedbacks.length
   const groupStudentCount = feedbackTargetData?.studentCount ?? 0
+
+  const showFeedback = enoughFeedbacks && (enoughStudents || (feedbacks.length > 0 && isResponsibleTeacher))
 
   return (
     <>
@@ -184,7 +185,7 @@ const Results = () => {
           </Alert>
         )}
 
-        {!isMobile && enoughStudents && (
+        {!isMobile && showFeedback && (
           <FeedbackChart
             feedbacks={feedbacks}
             studentCount={groupStudentCount}

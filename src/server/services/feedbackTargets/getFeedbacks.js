@@ -119,6 +119,8 @@ const getGroupingQuestion = surveys => surveys.teacherSurvey?.questions?.find(q 
  * @returns
  */
 const getFeedbacks = async (id, user, groupId) => {
+  let feedbackTargetsToShow = []
+
   const [feedbackTarget, additionalData] = await Promise.all([
     getFeedbackTarget(id, user.id),
     getAdditionalDataFromCacheOrDb(id),
@@ -148,21 +150,31 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
+  feedbackTargetsToShow = studentFeedbackTargets
 
-  // Hide feedbacks for small courses to protect anonymity
+  // Hide feedbacks for small courses to protect anonymity unless consent has been given (consent has been asked since 10/06/2025)
   if (studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
-    return {
-      feedbacks: [],
-      feedbackVisible: false,
-      accessStatus: null,
+    const feedbacksGivenWithConsent = studentFeedbackTargets.filter(
+      fbt => Date.parse(fbt.dataValues.updatedAt) > Date.parse('2025-06-10T10:00:00Z')
+    )
+
+    if (feedbacksGivenWithConsent.length > 0) {
+      feedbackTargetsToShow = feedbacksGivenWithConsent
+    } else {
+      return {
+        feedbacks: [],
+        feedbackVisible: false,
+        accessStatus: null,
+      }
     }
   }
 
   const groupingQuestionId = getGroupingQuestion(surveys)?.id
-  const groupsAvailable = isGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
+  // const groupsAvailable = isGroupsAvailable(studentFeedbackTargets, groupingQuestionId)
+  const groupsAvailable = isGroupsAvailable(feedbackTargetsToShow, groupingQuestionId)
 
   const studentFeedbackTargetsOfGroup = filterByGroupId(
-    studentFeedbackTargets,
+    feedbackTargetsToShow, //studentFeedbackTargets,
     groupId,
     groupsAvailable,
     groupingQuestionId
