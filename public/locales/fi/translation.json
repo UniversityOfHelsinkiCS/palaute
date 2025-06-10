@@ -133,7 +133,7 @@
     "noFeedbackGiven": "Päätöksesi olla antamatta palautetta on tallennettu",
     "noFeedbackGivenChip": "En antanut palautetta",
     "attention": "Huom!",
-    "lessThanFiveStudentsWarning": "Tälle kurssille on ilmoittautunut alle 5 opiskelijaa. Jatkamalla tiedostat, että vaikka vastaajien tietoja ei näytetä opettajalle, vastaukset voi olla mahdollista yhdistää tiettyyn henkilöön."
+    "smallCourseWarning": "Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Jatkamalla tiedostat, että vaikka vastaajien tietoja ei näytetä opettajalle, vastaukset voi olla mahdollista yhdistää tiettyyn henkilöön."
   },
   "feedbackView": {
     "submitButton": "Lähetä palaute",
@@ -152,7 +152,7 @@
     "feedbackClosedError": "Palautteenanto on sulkeutunut",
     "endedInfo": "Palautteenanto on sulkeutunut. <2>Katso palautteita</2>",
     "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun kurssi on käynnissä. Tämä palaute annetaan anonyymisti.",
-    "allowSubmitCheckbox": "Vastaukseni saa näkyä opettajalle, vaikka kurssille on ilmoittautunut alle viisi opiskelijaa."
+    "allowSubmitCheckbox": "Vastaukseni saa näkyä opettajalle, vaikka kurssille on ilmoittautunut alle {{count}} opiskelijaa."
   },
   "teacherView": {
     "mainHeading": "Kyselyni",

@@ -23,7 +23,7 @@ import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedba
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../../../util/common'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 
 const FormContainer = ({
   onSubmit,
@@ -35,7 +35,7 @@ const FormContainer = ({
   showCannotSubmitText = false,
   showSubmitButton = true,
   isEdit = false,
-  lessThanFiveEnrolled,
+  fewEnrolled,
 }) => {
   const { t } = useTranslation()
 
@@ -70,17 +70,19 @@ const FormContainer = ({
               <Box mt={2}>
                 <NorButton
                   data-cy="feedback-view-give-feedback"
-                  disabled={disabled || (lessThanFiveEnrolled && !values.activateSubmit && !isEdit)}
+                  disabled={disabled || (fewEnrolled && !values.activateSubmit && !isEdit)}
                   color="secondary"
                   variant="contained"
                   type="submit"
                 >
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </NorButton>
-                {lessThanFiveEnrolled && !isEdit && (
+                {fewEnrolled && !isEdit && (
                   <FormikCheckbox
                     name="activateSubmit"
-                    label={t('feedbackView:allowSubmitCheckbox')}
+                    label={t('feedbackView:allowSubmitCheckbox', {
+                      count: FEEDBACK_HIDDEN_STUDENT_COUNT,
+                    })}
                     onChange={({ target }) => {
                       setFieldValue('activateSubmit', target.checked)
                     }}
@@ -231,7 +233,7 @@ const FeedbackView = () => {
           showCannotSubmitText={isOutsider}
           onOpenPrivacyDialog={handleOpenPrivacyDialog}
           isEdit={Boolean(feedback)}
-          lessThanFiveEnrolled={studentCount < 5}
+          fewEnrolled={studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT}
         />
       )}
 

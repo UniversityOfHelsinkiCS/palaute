@@ -6,6 +6,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Typography } from '@
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../components/common/NorButton'
+import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../util/common'
 
 type ConfirmGivingFeedbackDialogProps = {
   onClose: () => void
@@ -20,7 +21,11 @@ const ConfirmGivingFeedbackDialog = ({ onClose, editPath, open = false }: Confir
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>{t('userFeedbacks:attention')}</DialogTitle>
       <DialogContent>
-        <Typography sx={{ mb: '1rem' }}>{t('userFeedbacks:lessThanFiveStudentsWarning')}</Typography>
+        <Typography sx={{ mb: '1rem' }}>
+          {t('userFeedbacks:smallCourseWarning', {
+            count: FEEDBACK_HIDDEN_STUDENT_COUNT,
+          })}
+        </Typography>
         <NorButton color="secondary" to={editPath} component={Link} sx={{ mr: '1rem' }}>
           {t('userFeedbacks:giveFeedbackButton')}
         </NorButton>

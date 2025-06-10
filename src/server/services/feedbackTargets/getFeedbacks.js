@@ -31,7 +31,7 @@ const isGroupsAvailable = (studentFeedbackTargets, groupingQuestionId) => {
     : countGroupsByGroupIds(studentFeedbackTargets)
 
   // check whether each group has 0 or 5+ feedbacks
-  return Object.values(feedbacksGroupIds).every(count => count === 0 || count >= 5)
+  return Object.values(feedbacksGroupIds).every(count => count === 0 || count >= FEEDBACK_HIDDEN_STUDENT_COUNT)
 }
 
 const getFeedbackTarget = (id, userId) =>
@@ -152,10 +152,10 @@ const getFeedbacks = async (id, user, groupId) => {
   const studentFeedbackTargets = await getStudentFeedbackTargets(id)
   feedbackTargetsToShow = studentFeedbackTargets
 
-  // Hide feedbacks for small courses to protect anonymity unless consent has been given (consent has been asked since 10/06/2025)
+  // Hide feedbacks for small courses to protect anonymity unless consent has been given (consent has been required to give feedback since 10/06/2025)
   if (studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
     const feedbacksGivenWithConsent = studentFeedbackTargets.filter(
-      fbt => Date.parse(fbt.dataValues.updatedAt) > Date.parse('2025-06-10T10:00:00Z')
+      fbt => Date.parse(fbt.dataValues.updatedAt) > Date.parse('2025-06-10T12:00:00Z')
     )
 
     if (feedbacksGivenWithConsent.length > 0) {

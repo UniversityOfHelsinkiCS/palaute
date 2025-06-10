@@ -133,7 +133,7 @@
     "noFeedbackGiven": "Your decision to not give feedback has been noted",
     "noFeedbackGivenChip": "I did not give feedback",
     "attention": "Attention!",
-    "lessThanFiveStudentsWarning": "Less than 5 students have enrolled in this course. By continuing, you acknowledge that although the teacher will not see the respondents' personal information, it may still be possible to associate responses with specific individuals."
+    "smallCourseWarning": "Less than {{count}} students have enrolled in this course. By continuing, you acknowledge that although the teacher will not see the respondents' personal information, it may still be possible to associate responses with specific individuals."
   },
   "feedbackView": {
     "submitButton": "Give feedback",
@@ -152,7 +152,7 @@
     "feedbackClosedError": "Feedback is closed",
     "endedInfo": "The feedback period has ended. <2>Take a look at the feedback</2>",
     "continuousFeedbackInfo": "You can give continuous feedback while the course is ongoing. This feedback is anonymous.",
-    "allowSubmitCheckbox": "The teacher can see my answers even though there are less than five students enrolled in this course."
+    "allowSubmitCheckbox": "The teacher can see my answers even though there are less than {{count}} students enrolled in this course."
   },
   "teacherView": {
     "mainHeading": "My surveys",
