@@ -79,6 +79,7 @@ const FormContainer = ({
                 </NorButton>
                 {fewEnrolled && !isEdit && (
                   <FormikCheckbox
+                    data-cy="feedback-view-consent-checkbox"
                     name="activateSubmit"
                     label={t('feedbackView:allowSubmitCheckbox', {
                       count: FEEDBACK_HIDDEN_STUDENT_COUNT,

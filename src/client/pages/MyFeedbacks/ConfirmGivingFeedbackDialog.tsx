@@ -26,12 +26,23 @@ const ConfirmGivingFeedbackDialog = ({ onClose, editPath, open = false }: Confir
             count: FEEDBACK_HIDDEN_STUDENT_COUNT,
           })}
         </Typography>
-        <NorButton color="secondary" to={editPath} component={Link} sx={{ mr: '1rem' }}>
+        <NorButton
+          color="secondary"
+          to={editPath}
+          component={Link}
+          sx={{ mr: '1rem' }}
+          data-cy="confirm-giving-feedback-dialog-give-feedback"
+        >
           {t('userFeedbacks:giveFeedbackButton')}
         </NorButton>
       </DialogContent>
       <DialogActions>
-        <NorButton color="primary" sx={{ margin: '0 10px 10px 0' }} onClick={onClose}>
+        <NorButton
+          color="primary"
+          sx={{ margin: '0 10px 10px 0' }}
+          onClick={onClose}
+          data-cy="confirm-giving-feedback-dialog-close"
+        >
           {t('common:close')}
         </NorButton>
       </DialogActions>
