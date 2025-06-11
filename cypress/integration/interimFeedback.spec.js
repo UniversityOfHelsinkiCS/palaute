@@ -1,5 +1,5 @@
 /* eslint-disable cypress/unsafe-to-chain-command */
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 const { student, teacher, admin } = require('../fixtures/headers')
 

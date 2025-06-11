@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 import { admin, student, teacher } from '../fixtures/headers'
 

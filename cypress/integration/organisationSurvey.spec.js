@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 import {
   admin,
@@ -170,7 +170,8 @@ describe('Feedback Correspondents', () => {
       .should('be.visible')
       .click()
 
-    cy.get('@studentInput').clear().type('0148959{enter}')
+    cy.get('@studentInput').clear()
+    cy.get('@studentInput').type('0148959{enter}')
     cy.get('[data-cy="formik-student-number-input-field-chip-0148959"]').should('exist')
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
@@ -233,7 +234,8 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy^="organisation-survey-show-feedback-"').should('exist').click()
     cy.get('[data-cy="feedback-target-edit-organisation-survey"]').should('exist').click()
 
-    cy.get('[data-cy="formik-locales-field-en-name"]').clear().type('Greatest survey of them all!')
+    cy.get('[data-cy="formik-locales-field-en-name"]').clear()
+    cy.get('[data-cy="formik-locales-field-en-name"]').type('Greatest survey of them all!')
 
     cy.get('[data-cy="organisation-survey-editor-save"]').click()
 
@@ -425,23 +427,30 @@ describe('Feedback Correspondents', () => {
     // Add likert question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
-    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
-    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+    cy.get('[id="likert-question-en-questions.0"]').clear()
+    cy.get('[id="likert-question-en-questions.0"]').type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear()
+    cy.get('[id="likert-description-en-questions.0"]').type('Something something')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
 
     // Add another question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
-    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
-    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+    cy.get('[id="choice-question-en-questions.1"]').clear()
+    cy.get('[id="choice-question-en-questions.1"]').type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear()
+    cy.get('[id="choice-description-en-questions.1"]').type('Something something else')
 
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').type('E2E testing')
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').type('Unit testing')
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').type('Manual testing')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })
@@ -822,23 +831,30 @@ describe('Admin Users', () => {
     // Add likert question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
-    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
-    cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
+    cy.get('[id="likert-question-en-questions.0"]').clear()
+    cy.get('[id="likert-question-en-questions.0"]').type('Rate the importance of testing')
+    cy.get('[id="likert-description-en-questions.0"]').clear()
+    cy.get('[id="likert-description-en-questions.0"]').type('Something something')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
 
     // Add another question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-single-choice"]').click()
-    cy.get('[id="choice-question-en-questions.1"]').clear().type('What is your favorite type of testing')
-    cy.get('[id="choice-description-en-questions.1"]').clear().type('Something something else')
+    cy.get('[id="choice-question-en-questions.1"]').clear()
+    cy.get('[id="choice-question-en-questions.1"]').type('What is your favorite type of testing')
+    cy.get('[id="choice-description-en-questions.1"]').clear()
+    cy.get('[id="choice-description-en-questions.1"]').type('Something something else')
 
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear().type('E2E testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').clear()
+    cy.get('[data-cy="option-editor-new-option-en-name.0"]').type('E2E testing')
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear().type('Unit testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').clear()
+    cy.get('[data-cy="option-editor-new-option-en-name.1"]').type('Unit testing')
     cy.get('[data-cy="option-editor-add-option"]').click()
-    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear().type('Manual testing')
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').clear()
+    cy.get('[data-cy="option-editor-new-option-en-name.2"]').type('Manual testing')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
   })

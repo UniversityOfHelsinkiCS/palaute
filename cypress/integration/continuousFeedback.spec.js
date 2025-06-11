@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 const { teacher, student } = require('../fixtures/headers')
 

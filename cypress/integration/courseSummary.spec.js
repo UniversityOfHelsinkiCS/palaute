@@ -1,4 +1,4 @@
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 const path = require('path')
 const { summaryUser } = require('../fixtures/headers')

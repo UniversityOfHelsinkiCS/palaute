@@ -1,6 +1,6 @@
 const { teacher, student } = require('../fixtures/headers')
 
-/// <reference types="Cypress" />
+/// <reference types="cypress" />
 
 describe('Feedback results', () => {
   beforeEach(() => {
