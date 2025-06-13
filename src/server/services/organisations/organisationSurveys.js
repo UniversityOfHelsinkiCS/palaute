@@ -302,6 +302,7 @@ const getSurveysForOrganisation = async organisationId => {
       'feedbackResponseEmailSent',
       'opensAt',
       'closesAt',
+      'userCreated',
     ],
     include: [
       {
