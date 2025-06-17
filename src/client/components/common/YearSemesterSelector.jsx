@@ -259,8 +259,10 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
   const handleOptionChange = event => {
     if (event.target.value === 'year') {
       handleYearChange(year)
-    } else {
+    } else if (event.target.value === 'semester') {
       handleSemesterChange(currentSemester)
+    } else {
+      handlePeriodChange(selectedPeriod)
     }
     setOption(event.target.value)
   }
