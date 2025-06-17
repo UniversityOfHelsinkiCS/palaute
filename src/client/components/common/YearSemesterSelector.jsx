@@ -290,7 +290,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
         {option !== 'all' && (
           <Box>
             {option === 'year' && (
-              <AcademicYearSelector value={year} nChange={handleYearChange} labelledBy="year-semester-selector" />
+              <AcademicYearSelector value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
             )}
             {option === 'semester' && (
               <SemesterSelector
