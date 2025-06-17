@@ -13,6 +13,7 @@ import {
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
+import { usePeriods } from '../../util/periodUtils'
 import { STUDY_YEAR_START_MONTH } from '../../util/common'
 
 const styles = {
@@ -194,6 +195,37 @@ const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.
   )
 }
 
+// Can be refactored with the previous component after this works
+const PeriodSelector = ({ value, onChange, periods, labelledBy, sx = styles.selectorContainer }) => {
+  const { t } = useTranslation()
+
+  return (
+    <FormControl sx={sx} size="small">
+      {!labelledBy && <InputLabel id="period-selector-label">{t('courseSummary:period')}</InputLabel>}
+      <Select
+        id="period-selector"
+        labelId={!labelledBy ? 'period-selector-label' : undefined}
+        label={!labelledBy ? t('courseSummary:period') : undefined}
+        aria-labelledby={labelledBy ?? undefined}
+        value={value}
+        onChange={event => onChange(event.target.value)}
+      >
+        {periods.map(p => {
+          const periodName = `${p.start.getFullYear()} ${
+            p.name === 'Summer' ? t('courseSummary:summer') : `${t('courseSummary:period')} ${p.name}`
+          }`
+
+          return (
+            <MenuItem data-cy={`period-selector-item-${periodName}`} value={p} key={p.start}>
+              {periodName}
+            </MenuItem>
+          )
+        })}
+      </Select>
+    </FormControl>
+  )
+}
+
 /**
  *
  * @param {{
@@ -209,6 +241,7 @@ const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.
 export const YearSemesterSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
   const { t } = useTranslation()
   const { year, semesters, currentSemester } = useYearSemesters(value?.start ?? new Date(), futureYears)
+  const { periods, selectedPeriod } = usePeriods(value?.start ?? new Date())
 
   const handleYearChange = year => {
     const range = getStudyYearRange(new Date(`${year + 1}-01-01`))
@@ -216,6 +249,10 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
   }
 
   const handleSemesterChange = ({ start, end }) => {
+    onChange({ start, end })
+  }
+
+  const handlePeriodChange = ({ start, end }) => {
     onChange({ start, end })
   }
 
@@ -244,16 +281,28 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
           <ToggleButton value="semester" size="small">
             {t('courseSummary:semester')}
           </ToggleButton>
+          <ToggleButton value="period" size="small">
+            {t('courseSummary:period')}
+          </ToggleButton>
         </ToggleButtonGroup>
         {option !== 'all' && (
           <Box>
-            {option === 'year' ? (
-              <AcademicYearSelector value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
-            ) : (
+            {option === 'year' && (
+              <AcademicYearSelector value={year} nChange={handleYearChange} labelledBy="year-semester-selector" />
+            )}
+            {option === 'semester' && (
               <SemesterSelector
                 value={currentSemester}
                 onChange={handleSemesterChange}
                 semesters={semesters}
+                labelledBy="year-semester-selector"
+              />
+            )}
+            {option === 'period' && (
+              <PeriodSelector
+                value={selectedPeriod}
+                onChange={handlePeriodChange}
+                periods={periods}
                 labelledBy="year-semester-selector"
               />
             )}

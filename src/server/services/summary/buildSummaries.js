@@ -19,6 +19,7 @@ const { sequelize } = require('../../db/dbConnection')
 const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
 const { logger } = require('../../util/logger')
 const { prefixTagId } = require('../../util/common')
+const { getPeriodDates } = require('../../../common/studyPeriods')
 
 /**
  * Find all root organisation ids. There usually should be only one, which in config is UNIVERSITY_ROOT_ID,
@@ -525,6 +526,12 @@ const buildSummaries = async (forceAll = false) => {
         end: endOfAcademicYear,
       })
     }
+
+    const studyPeriods = getPeriodDates(new Date())
+    for (const studyPeriod of studyPeriods) {
+      dates.push(studyPeriod)
+    }
+
     return dates
   })()
 
