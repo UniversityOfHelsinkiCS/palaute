@@ -484,7 +484,9 @@
     "onlyOpenUni": "Visa endast öppna uni-kurser",
     "feedbackResponsePercentage": "Kurser där återkoppling ges",
     "treeView": "Visa i en hierarki",
-    "flatView": "Visa i en lista"
+    "flatView": "Visa i en lista",
+    "filter": "Filtrera",
+    "notSelected": "Inte valt"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",

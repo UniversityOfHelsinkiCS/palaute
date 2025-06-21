@@ -408,6 +408,14 @@ export const getPeriodsUntil = (until: Date): Period[] => {
   return pastPeriods
 }
 
+export const getPeriods = (from: Date, to: Date): Period[] => {
+  const periods = getAllPeriods()
+  const periodsMatchingFrom = from ? periods.filter(p => p.start >= from) : periods
+  const periodsMatchingTo = to ? periodsMatchingFrom.filter(p => p.start <= to) : periodsMatchingFrom
+
+  return periodsMatchingTo
+}
+
 export const getPeriodDates = (until: Date): Period[] => {
   const periods = getPeriodsUntil(until)
   const periodDates = periods.map(p => ({ start: p.start, end: p.end }))

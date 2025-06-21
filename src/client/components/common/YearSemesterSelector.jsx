@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import {
   Box,
   FormControl,
@@ -12,9 +12,11 @@ import {
 } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
+// import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
 import { usePeriods } from '../../util/periodUtils'
 import { STUDY_YEAR_START_MONTH } from '../../util/common'
+import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
+import { useSemesters } from '../../util/semesterUtils'
 
 const styles = {
   stepper: {
@@ -34,7 +36,6 @@ const styles = {
   selectorContainer: {
     display: 'flex',
     alignItems: 'center',
-    paddingLeft: '1.5rem',
   },
   stepperValue: {
     whiteSpace: 'nowrap',
@@ -165,28 +166,34 @@ export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
   )
 }
 
-const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.selectorContainer }) => {
+const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayName }) => {
   const { t } = useTranslation()
 
   return (
-    <FormControl sx={sx} size="small">
-      {!labelledBy && <InputLabel id="semester-selector-label">{t('courseSummary:semester')}</InputLabel>}
+    <FormControl sx={styles.selectorContainer} size="small">
+      <InputLabel id={`${selectorTarget}-selector-label`}>{t(`courseSummary:${selectorTarget}`)}</InputLabel>
       <Select
-        id="semester-selector"
-        labelId={!labelledBy ? 'semester-selector-label' : undefined}
-        label={!labelledBy ? t('courseSummary:semester') : undefined}
-        aria-labelledby={labelledBy ?? undefined}
+        id={`${selectorTarget}-selector`}
+        labelId={`${selectorTarget}-selector-label`}
+        label={t(`courseSummary:${selectorTarget}`)}
         value={value}
         onChange={event => onChange(event.target.value)}
       >
-        {semesters.map(s => {
-          const semesterName = `${s.start.getFullYear()} ${
-            s.spring ? t('courseSummary:spring') : t('courseSummary:fall')
-          }`
+        {options.map(option => {
+          const displayName = getDisplayName(option)
 
           return (
-            <MenuItem data-cy={`semester-selector-item-${semesterName}`} value={s} key={s.start}>
-              {semesterName}
+            <MenuItem
+              data-cy={`${selectorTarget}-selector-item-${displayName}`}
+              value={option}
+              key={displayName}
+              onClick={() => {
+                if (option === value) {
+                  onChange(option)
+                }
+              }}
+            >
+              {displayName}
             </MenuItem>
           )
         })}
@@ -195,34 +202,61 @@ const SemesterSelector = ({ value, onChange, semesters, labelledBy, sx = styles.
   )
 }
 
-// Can be refactored with the previous component after this works
-const PeriodSelector = ({ value, onChange, periods, labelledBy, sx = styles.selectorContainer }) => {
+const YearSelector = ({ value, onChange, years }) => (
+  <FilterSelector
+    selectorTarget="year"
+    value={value}
+    onChange={onChange}
+    options={years}
+    getDisplayName={getYearDisplayName}
+  />
+)
+
+const SemesterSelector = ({ value, onChange, semesters }) => {
   const { t } = useTranslation()
 
-  return (
-    <FormControl sx={sx} size="small">
-      {!labelledBy && <InputLabel id="period-selector-label">{t('courseSummary:period')}</InputLabel>}
-      <Select
-        id="period-selector"
-        labelId={!labelledBy ? 'period-selector-label' : undefined}
-        label={!labelledBy ? t('courseSummary:period') : undefined}
-        aria-labelledby={labelledBy ?? undefined}
-        value={value}
-        onChange={event => onChange(event.target.value)}
-      >
-        {periods.map(p => {
-          const periodName = `${p.start.getFullYear()} ${
-            p.name === 'Summer' ? t('courseSummary:summer') : `${t('courseSummary:period')} ${p.name}`
-          }`
+  const getSemesterDisplayName = semester => {
+    if (semester.season === 'both') return t('courseSummary:notSelected')
 
-          return (
-            <MenuItem data-cy={`period-selector-item-${periodName}`} value={p} key={p.start}>
-              {periodName}
-            </MenuItem>
-          )
-        })}
-      </Select>
-    </FormControl>
+    const displayName = `${semester.start.getFullYear()} ${
+      semester.season === 'spring' ? t('courseSummary:spring') : t('courseSummary:fall')
+    }`
+
+    return displayName
+  }
+
+  return (
+    <FilterSelector
+      selectorTarget="semester"
+      value={value}
+      onChange={onChange}
+      options={semesters}
+      getDisplayName={getSemesterDisplayName}
+    />
+  )
+}
+
+const PeriodSelector = ({ value, onChange, periods }) => {
+  const { t } = useTranslation()
+
+  const getPeriodDisplayName = period => {
+    if (period.name === 'not selected') return t('courseSummary:notSelected')
+
+    const displayName = `${period.start.getFullYear()} ${
+      period.name === 'Summer' ? t('courseSummary:summer') : `${t('courseSummary:period')} ${period.name}`
+    }`
+
+    return displayName
+  }
+
+  return (
+    <FilterSelector
+      selectorTarget="period"
+      value={value}
+      onChange={onChange}
+      options={periods}
+      getDisplayName={getPeriodDisplayName}
+    />
   )
 }
 
@@ -239,75 +273,70 @@ const PeriodSelector = ({ value, onChange, periods, labelledBy, sx = styles.sele
  * @returns
  */
 export const YearSemesterSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
+  const [semesterReset, setSemesterReset] = useState(true)
+  const [periodReset, setPeriodReset] = useState(true)
   const { t } = useTranslation()
-  const { year, semesters, currentSemester } = useYearSemesters(value?.start ?? new Date(), futureYears)
-  const { periods, selectedPeriod } = usePeriods(value?.start ?? new Date())
 
-  const handleYearChange = year => {
-    const range = getStudyYearRange(new Date(`${year + 1}-01-01`))
-    onChange(range)
+  const { academicYears, selectedYear } = useAcademicYears(value?.start ?? new Date(), futureYears)
+  const { semesters, selectedSemester } = useSemesters(value?.start ?? new Date(), semesterReset)
+  const { periods, selectedPeriod } = usePeriods(value?.start ?? new Date(), periodReset, semesterReset)
+
+  const handleOptionChange = event => {
+    setOption(event.target.value)
+  }
+
+  const handleYearChange = ({ start, end }) => {
+    setPeriodReset(true)
+    setSemesterReset(true)
+    onChange({ start, end })
   }
 
   const handleSemesterChange = ({ start, end }) => {
+    setPeriodReset(true)
+
+    if (start.getMonth() === STUDY_YEAR_START_MONTH - 1 && end.getMonth() === STUDY_YEAR_START_MONTH - 2) {
+      setSemesterReset(true)
+    } else {
+      setSemesterReset(false)
+    }
+
     onChange({ start, end })
   }
 
   const handlePeriodChange = ({ start, end }) => {
-    onChange({ start, end })
-  }
+    const fourMonthsFromStart = new Date(start)
+    fourMonthsFromStart.setMonth(fourMonthsFromStart.getMonth() + 4)
 
-  const handleOptionChange = event => {
-    if (event.target.value === 'year') {
-      handleYearChange(year)
-    } else if (event.target.value === 'semester') {
-      handleSemesterChange(currentSemester)
+    if (end > fourMonthsFromStart) {
+      setPeriodReset(true)
     } else {
-      handlePeriodChange(selectedPeriod)
+      setPeriodReset(false)
     }
-    setOption(event.target.value)
+
+    onChange({ start, end })
   }
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div onClick={event => event.stopPropagation()}>
       <Box sx={styles.stepper}>
-        <ToggleButtonGroup id="year-semester-selector" value={option} onChange={handleOptionChange} color="primary">
-          {allowAll && (
-            <ToggleButton value="all" size="small">
-              {t('courseSummary:all')}
+        {allowAll && (
+          <ToggleButtonGroup id="all-filter-selector" value={option} onChange={handleOptionChange} color="primary">
+            {allowAll && (
+              <ToggleButton value="all" size="small">
+                {t('courseSummary:all')}
+              </ToggleButton>
+            )}
+            <ToggleButton value="filter" size="small">
+              {t('courseSummary:filter')}
             </ToggleButton>
-          )}
-          <ToggleButton value="year" size="small">
-            {t('courseSummary:year')}
-          </ToggleButton>
-          <ToggleButton value="semester" size="small">
-            {t('courseSummary:semester')}
-          </ToggleButton>
-          <ToggleButton value="period" size="small">
-            {t('courseSummary:period')}
-          </ToggleButton>
-        </ToggleButtonGroup>
+          </ToggleButtonGroup>
+        )}
         {option !== 'all' && (
-          <Box>
-            {option === 'year' && (
-              <AcademicYearSelector value={year} onChange={handleYearChange} labelledBy="year-semester-selector" />
-            )}
-            {option === 'semester' && (
-              <SemesterSelector
-                value={currentSemester}
-                onChange={handleSemesterChange}
-                semesters={semesters}
-                labelledBy="year-semester-selector"
-              />
-            )}
-            {option === 'period' && (
-              <PeriodSelector
-                value={selectedPeriod}
-                onChange={handlePeriodChange}
-                periods={periods}
-                labelledBy="year-semester-selector"
-              />
-            )}
+          <Box sx={styles.stepper}>
+            <YearSelector value={selectedYear} onChange={handleYearChange} years={academicYears} />
+            <SemesterSelector value={selectedSemester} onChange={handleSemesterChange} semesters={semesters} />
+            <PeriodSelector value={selectedPeriod} onChange={handlePeriodChange} periods={periods} />
           </Box>
         )}
       </Box>

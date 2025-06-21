@@ -500,7 +500,9 @@
     "flatView": "Näytä listana",
     "includeOpenUni": "Sisällytä Avoin yo -kurssit",
     "excludeOpenUni": "Näytä ilman Avoin yo -kursseja",
-    "onlyOpenUni": "Näytä vain Avoin yo -kursseilla"
+    "onlyOpenUni": "Näytä vain Avoin yo -kursseilla",
+    "filter": "Rajaa",
+    "notSelected": "Ei valittu"
   },
   "generateReport": {
     "selectIncluded": "Valitse sisältö",

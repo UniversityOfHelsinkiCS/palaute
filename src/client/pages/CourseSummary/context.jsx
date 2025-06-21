@@ -33,7 +33,7 @@ const summaryContext = React.createContext({
   setShowSummariesWithNoFeedback: () => {},
   dateRange: getStudyYearRange(new Date()),
   setDateRange: () => {},
-  option: 'year',
+  option: 'filter',
   setOption: () => {},
   sortBy: ['code', 'asc'],
   setSortBy: () => {},
@@ -118,7 +118,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
 
   const [option, setOption] = React.useState(() => {
     const option = params.get('option')
-    return option || 'year'
+    return option || 'filter'
   })
 
   const updateOptionQS = React.useCallback(option => {

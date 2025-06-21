@@ -500,7 +500,9 @@
     "flatView": "Show in a list",
     "includeOpenUni": "Include open uni courses",
     "excludeOpenUni": "Exclude open uni courses",
-    "onlyOpenUni": "Show only open uni courses"
+    "onlyOpenUni": "Show only open uni courses",
+    "filter": "Filter",
+    "notSelected": "Not selected"
   },
   "generateReport": {
     "selectIncluded": "Select content",
