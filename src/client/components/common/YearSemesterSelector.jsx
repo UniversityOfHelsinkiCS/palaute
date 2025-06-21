@@ -12,7 +12,6 @@ import {
 } from '@mui/material'
 import { ChevronLeft, ChevronRight } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
-// import { getStudyYearRange, useYearSemesters } from '../../util/yearSemesterUtils'
 import { usePeriods } from '../../util/periodUtils'
 import { STUDY_YEAR_START_MONTH } from '../../util/common'
 import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
