@@ -1,16 +1,5 @@
 import React, { useState } from 'react'
-import {
-  Box,
-  FormControl,
-  IconButton,
-  InputLabel,
-  MenuItem,
-  Select,
-  ToggleButton,
-  ToggleButtonGroup,
-  Typography,
-} from '@mui/material'
-import { ChevronLeft, ChevronRight } from '@mui/icons-material'
+import { Box, FormControl, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { usePeriods } from '../../util/periodUtils'
 import { STUDY_YEAR_START_MONTH } from '../../util/common'
@@ -18,151 +7,17 @@ import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
 import { useSemesters } from '../../util/semesterUtils'
 
 const styles = {
-  stepper: {
+  filters: {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
     gap: '8px',
     minHeight: '70px',
   },
-  stepperContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: '4px',
-    paddingRight: '4px',
-    marginBottom: '4px',
-  },
   selectorContainer: {
     display: 'flex',
     alignItems: 'center',
   },
-  stepperValue: {
-    whiteSpace: 'nowrap',
-    userSelect: 'none',
-  },
-  button: {
-    color: theme => theme.palette.info.main,
-    '&:hover': {
-      background: theme => theme.palette.action.hover,
-      color: theme => theme.palette.text.primary,
-    },
-    '&:active': {
-      background: theme => theme.palette.action.selected,
-    },
-    marginX: '0.4rem',
-  },
-  disabledButton: {
-    opacity: '0.0',
-    zIndex: -10,
-  },
-}
-
-export const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
-  const NOW = new Date()
-  const MIN_YEAR = 2020
-  const CURRENT_YEAR = NOW.getFullYear() + (NOW.getMonth() + 1 >= STUDY_YEAR_START_MONTH ? 1 : 0)
-
-  const displayValue = `${value} – ${value + 1}`
-
-  const canIncrease = value + 1 < CURRENT_YEAR
-  const canDecrease = value > MIN_YEAR
-
-  const handleIncrease = (increment = 1) => {
-    if (value + increment <= CURRENT_YEAR) {
-      onChange(value + increment)
-    }
-    if (value + increment >= CURRENT_YEAR) {
-      onChange(CURRENT_YEAR - 1)
-    }
-  }
-
-  const handleDecrease = (decrement = 1) => {
-    if (value - decrement >= MIN_YEAR) {
-      onChange(value - decrement)
-    }
-  }
-
-  const handleSetMaxValue = () => {
-    onChange(CURRENT_YEAR - 1)
-  }
-
-  const handleSetMinValue = () => {
-    onChange(MIN_YEAR)
-  }
-
-  // Handle keyboard events per the following document: https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/
-  const handleKeyPress = event => {
-    let flag = false
-
-    switch (event.code) {
-      case 'ArrowDown':
-        handleDecrease()
-        flag = true
-        break
-
-      case 'ArrowUp':
-        handleIncrease()
-        flag = true
-        break
-
-      case 'Home':
-        handleSetMinValue()
-        flag = true
-        break
-
-      case 'End':
-        handleSetMaxValue()
-        flag = true
-        break
-
-      default:
-        break
-    }
-
-    if (flag) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
-  }
-
-  return (
-    <Box
-      id="academic-year-selector"
-      tabIndex={0}
-      sx={styles.stepperContainer}
-      role="spinbutton"
-      aria-labelledby={labelledBy ?? undefined}
-      aria-valuenow={value}
-      aria-valuemin={MIN_YEAR}
-      aria-valuemax={CURRENT_YEAR - 1}
-      aria-valuetext={displayValue}
-      onKeyDown={handleKeyPress}
-    >
-      <IconButton
-        tabIndex={-1}
-        onClick={() => handleDecrease()}
-        disabled={!canDecrease}
-        sx={[!canDecrease ? styles.disabledButton : {}, styles.button]}
-        size="small"
-        disableTouchRipple
-      >
-        <ChevronLeft />
-      </IconButton>
-      <Typography component="span" sx={styles.stepperValue}>
-        {displayValue}
-      </Typography>
-      <IconButton
-        tabIndex={-1}
-        onClick={() => handleIncrease()}
-        disabled={!canIncrease}
-        sx={[!canIncrease ? styles.disabledButton : {}, styles.button]}
-        size="small"
-        disableTouchRipple
-      >
-        <ChevronRight />
-      </IconButton>
-    </Box>
-  )
 }
 
 const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayName }) => {
@@ -318,7 +173,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div onClick={event => event.stopPropagation()}>
-      <Box sx={styles.stepper}>
+      <Box sx={styles.filters}>
         {allowAll && (
           <ToggleButtonGroup id="all-filter-selector" value={option} onChange={handleOptionChange} color="primary">
             {allowAll && (
@@ -332,7 +187,7 @@ export const YearSemesterSelector = ({ value, onChange, option, setOption, allow
           </ToggleButtonGroup>
         )}
         {option !== 'all' && (
-          <Box sx={styles.stepper}>
+          <Box sx={styles.filters}>
             <YearSelector value={selectedYear} onChange={handleYearChange} years={academicYears} />
             <SemesterSelector value={selectedSemester} onChange={handleSemesterChange} semesters={semesters} />
             <PeriodSelector value={selectedPeriod} onChange={handlePeriodChange} periods={periods} />

@@ -10,7 +10,7 @@ import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
 import ExternalLink from '../../components/common/ExternalLink'
 import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
-import { getSemesterRange } from '../../util/yearSemesterUtils'
+import { getSemesterRange } from '../../util/semesterUtils'
 import useOrganisationsList from '../../hooks/useOrganisationsList'
 
 const styles: {

@@ -37,7 +37,7 @@ import { NorButton } from '../../components/common/NorButton'
 import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
-import { getStudyYearRange } from '../../util/yearSemesterUtils'
+import { getYearRange } from '../../util/yearUtils'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 
 const SelectionContext = React.createContext({})
@@ -554,7 +554,7 @@ const SemesterOverview = ({ organisation }) => {
   const editMode = React.useRef(false)
   const [sidebarEditMode, setSidebarEditMode] = React.useState(false)
 
-  const studyYearRange = getStudyYearRange(new Date())
+  const studyYearRange = getYearRange(new Date())
   const [filters, setFilters] = React.useState({
     startDate: studyYearRange.start,
     endDate: studyYearRange.end,
