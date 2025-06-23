@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { usePeriods } from '../../util/periodUtils'
@@ -127,9 +127,10 @@ const PeriodSelector = ({ value, onChange, periods }) => {
  * @returns
  */
 export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
+  const { t } = useTranslation()
+
   const [semesterReset, setSemesterReset] = useState(true)
   const [periodReset, setPeriodReset] = useState(true)
-  const { t } = useTranslation()
 
   const { academicYears, selectedYear } = useAcademicYears(value?.start ?? new Date(), futureYears)
   const { semesters, selectedSemester } = useSemesters(value?.start ?? new Date(), semesterReset)
@@ -169,6 +170,13 @@ export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption,
 
     onChange({ start, end })
   }
+
+  useEffect(() => {
+    if (!allowAll) {
+      setOption('filter')
+      handleYearChange(selectedYear)
+    }
+  }, [allowAll])
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
