@@ -114,7 +114,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     }
   })
 
-  // Option: year or semester
+  // Option: all or filter
 
   const [option, setOption] = React.useState(() => {
     const option = params.get('option')
