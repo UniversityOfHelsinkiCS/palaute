@@ -484,8 +484,8 @@ const CalendarView = React.memo(({ feedbackTargets }) => {
   const { i18n } = useTranslation()
 
   return (
-    <>
-      {feedbackTargets.years.map(([year, months]) => (
+    <Box>
+      {feedbackTargets?.years?.map(([year, months]) => (
         <Box display="flex" key={year}>
           <Box sx={[styles.date, styles.year]} mt={1.5}>
             {year}
@@ -515,7 +515,7 @@ const CalendarView = React.memo(({ feedbackTargets }) => {
           </Box>
         </Box>
       ))}
-    </>
+    </Box>
   )
 })
 
