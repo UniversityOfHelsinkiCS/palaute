@@ -5,7 +5,7 @@ import { useFormikContext } from 'formik'
 import { LocalizedString } from '@common/types'
 import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
 import { useDebounce } from './useDebounce'
-import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
+import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { getSemesterRange } from '../../util/semesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -97,7 +97,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) =
         />
       </Grid>
       <Grid size={2}>
-        <YearSemesterSelector
+        <YearSemesterPeriodSelector
           value={dateRange ?? { start: new Date(), end: new Date() }}
           onChange={handleDateRangeChange}
           option={rangeOption}

@@ -30,7 +30,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { getLanguageValue } from '../../util/languageUtils'
 import TeacherChip from '../../components/common/TeacherChip'
 import MultiSelect from '../../components/common/MultiSelect'
-import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
+import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 import { TagChip } from '../../components/common/TagChip'
 import { NorButton } from '../../components/common/NorButton'
@@ -414,7 +414,7 @@ const Filters = React.memo(({ onChange, value, organisation }) => {
           <Box display="flex" width="100%" alignItems="center" pl={1}>
             {t('organisationSettings:filters')}
             <Box mx={2}>{activeCount > 0 ? <Chip label={activeCount} size="small" /> : ''}</Box>
-            <YearSemesterSelector
+            <YearSemesterPeriodSelector
               value={{ start: value.startDate, end: value.endDate }}
               option={timeOption}
               onChange={v => onChange({ ...value, startDate: v.start, endDate: v.end })}

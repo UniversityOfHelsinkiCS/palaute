@@ -7,7 +7,7 @@ import { useReactToPrint } from 'react-to-print'
 import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
 import { filterCoursesWithNoResponses, filterCoursesByDate, formateDates } from './utils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
+import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 import ExportButton from '../../components/common/ExportButton'
 import { NorButton } from '../../components/common/NorButton'
@@ -152,7 +152,13 @@ const ProgrammeOpenQuestions = () => {
 
   return (
     <Box>
-      <YearSemesterSelector value={dateRange} onChange={setDateRange} option={option} setOption={setOption} allowAll />
+      <YearSemesterPeriodSelector
+        value={dateRange}
+        onChange={setDateRange}
+        option={option}
+        setOption={setOption}
+        allowAll
+      />
       <Box sx={styles.buttonContainer}>
         <ExportButton label={t('feedbackTargetResults:export')}>
           <ExportPdfLink componentRef={componentRef} />

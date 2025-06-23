@@ -9,7 +9,7 @@ import useURLSearchParams from '../../hooks/useURLSearchParams'
 import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
 import ExternalLink from '../../components/common/ExternalLink'
-import { YearSemesterSelector } from '../../components/common/YearSemesterSelector'
+import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { getSemesterRange } from '../../util/semesterUtils'
 import useOrganisationsList from '../../hooks/useOrganisationsList'
 
@@ -203,7 +203,7 @@ const Search = () => {
           noOptionsText={t('search:noOptions')}
         />
       )}
-      <YearSemesterSelector
+      <YearSemesterPeriodSelector
         value={dateRange}
         onChange={updateDateRangeQS}
         futureYears={1}

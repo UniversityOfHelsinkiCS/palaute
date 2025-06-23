@@ -2,7 +2,7 @@ import React from 'react'
 import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useSummaryContext } from '../context'
-import { YearSemesterSelector } from '../../../components/common/YearSemesterSelector'
+import { YearSemesterPeriodSelector } from '../../../components/common/YearSemesterPeriodSelector'
 import Sort from './Sort'
 import { getLanguageValue } from '../../../util/languageUtils'
 import RowHeader from './RowHeader'
@@ -83,7 +83,7 @@ const SorterRowWithFilters = ({ allTime = false, filterComponents }) => {
   }
 
   const filterComponent = (
-    <YearSemesterSelector
+    <YearSemesterPeriodSelector
       value={dateRange ?? { start: new Date(), end: new Date() }}
       onChange={handleChangeTimeRange}
       option={option}

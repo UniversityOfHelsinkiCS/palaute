@@ -126,7 +126,7 @@ const PeriodSelector = ({ value, onChange, periods }) => {
  * }} params§
  * @returns
  */
-export const YearSemesterSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
+export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
   const [semesterReset, setSemesterReset] = useState(true)
   const [periodReset, setPeriodReset] = useState(true)
   const { t } = useTranslation()
