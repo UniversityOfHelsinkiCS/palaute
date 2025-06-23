@@ -25,8 +25,10 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
         <GenerateReport organisationId={initialOrganisation.id} />
         <Box sx={{ mt: 1 }} />
-        {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-        <SorterRowWithFilters />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', minHeight: '70px' }}>
+          {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
+          <SorterRowWithFilters />
+        </Box>
         {isLoading ? (
           <LinearProgress />
         ) : (
