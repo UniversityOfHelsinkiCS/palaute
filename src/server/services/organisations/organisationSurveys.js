@@ -266,7 +266,7 @@ const getSurveyById = async feedbackTargetId => {
 
   if (!courseRealisationIds) throw new Error('Course realisation IDs not found')
 
-  const excludeStudents = await getOrganisationSurveyCourseStudents(
+  const courseStudents = await getOrganisationSurveyCourseStudents(
     courseRealisationIds.map(({ courseRealisationId }) => courseRealisationId)
   )
 
@@ -276,14 +276,17 @@ const getSurveyById = async feedbackTargetId => {
     },
     attributes: ['id', 'name', 'startDate', 'endDate'],
   })
-  const excludeStudentNumbers = new Set(excludeStudents.map(student => student.studentNumber))
+  const courseStudentNumbers = new Set(courseStudents.map(student => student.studentNumber))
   const independentStudents = organisationSurvey.students.filter(
-    ({ user }) => !excludeStudentNumbers.has(user.studentNumber)
+    ({ user }) => !courseStudentNumbers.has(user.studentNumber)
   )
 
   return {
     ...organisationSurvey.dataValues,
-    students: independentStudents,
+    students: {
+      independentStudents,
+      courseStudents,
+    },
     courses,
   }
 }

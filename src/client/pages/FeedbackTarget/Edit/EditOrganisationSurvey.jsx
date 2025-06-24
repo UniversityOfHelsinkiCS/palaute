@@ -27,7 +27,7 @@ const EditOrganisationSurvey = () => {
     name: organisationSurvey.name,
     startDate: organisationSurvey.opensAt,
     endDate: organisationSurvey.closesAt,
-    studentNumbers: organisationSurvey.students.map(s => s.user.studentNumber),
+    studentNumbers: organisationSurvey.students.independentStudents.map(s => s.user.studentNumber),
     teachers: organisationSurvey.userFeedbackTargets.map(t => t.user),
     courses: organisationSurvey.courses,
   }

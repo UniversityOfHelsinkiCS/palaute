@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const { Router } = require('express')
 
+const feedbackTargetCache = require('../../services/feedbackTargets/feedbackTargetCache')
 const {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
@@ -136,7 +137,15 @@ const editOrganisationSurvey = async (req, res) => {
   const updatedSurvey = await updateOrganisationSurvey(id, updates)
 
   // Update summary
-  feedbackTarget.summary.data.studentCount = updatedSurvey.students.length
+  feedbackTarget.summary.data.studentCount =
+    updatedSurvey.students.independentStudents.length + updatedSurvey.students.courseStudents.length
+
+  const cachedFbt = await feedbackTargetCache.get(feedbackTarget.id)
+  if (cachedFbt) {
+    cachedFbt.summary = feedbackTarget.summary
+    await feedbackTargetCache.set(feedbackTarget.id, cachedFbt)
+  }
+
   await Summary.update(
     { data: feedbackTarget.summary.data },
     {
