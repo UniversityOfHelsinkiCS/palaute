@@ -413,7 +413,7 @@
       "newline": "Rivinvaihdolla"
     },
     "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
-    "confirmStudentDelete": "Haluatko varmasti poistaa opiskelijan: {{ studentNumber }} tästä kyselystä?",
+    "confirmStudentDelete": "Haluatko varmasti poistaa opiskelijan {{ studentNumber }} tästä kyselystä?",
     "startDate": "Alkaen",
     "endDate": "Loppuen",
     "surveys": "kyselyt",
@@ -423,7 +423,7 @@
     "removeSuccess": "Koulutusohjelman kysely poistettu",
     "feedbacksGivenRatio": "Palautteita annettu / Opiskelijoiden määrä",
     "addCourses": "Lisää opiskelijoita kursseilta",
-    "removeCourse": "Poista kurssi"
+    "removeCourse": "Haluatko varmasti poistaa kurssin '{{ course }}' opiskelijat tästä kyselystä?"
   },
   "interimFeedback": {
     "interimFeedback": "Välipalaute",

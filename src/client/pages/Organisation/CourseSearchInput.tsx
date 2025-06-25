@@ -10,21 +10,22 @@ import { getSemesterRange } from '../../util/semesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import { DateRange } from '../../types/DateRange'
-import { CourseRealisation, FeedbackTarget } from '../../types'
+import { CourseRealisation, FeedbackTarget, User } from '../../types'
 
 export interface InitialValues {
   name: LocalizedString
   startDate: Date
   endDate: Date
-  studentNumbers: []
-  teachers: []
-  courses: []
+  studentNumbers: string[]
+  teachers: User[]
+  courses: CourseRealisation[]
 }
 
 const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
   const formikProps = useFormikContext<InitialValues>()
+  const [coursesValue, setCoursesValue] = useState(formikProps.initialValues.courses)
   const [courseSearch, setCourseSearch] = useState('')
   const debounceSearch = useDebounce(courseSearch, 700)
   const [dateRange, setDateRange] = useState<DateRange>(() => getSemesterRange(new Date()))
@@ -62,17 +63,18 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) =
           id="courses"
           disableCloseOnSelect
           multiple
-          defaultValue={formikProps.initialValues.courses}
+          value={coursesValue}
           onChange={(_, courses, reason, detail) => {
             if (
               reason === 'removeOption' &&
               !window.confirm(
                 t('organisationSurveys:removeCourse', {
-                  course: detail?.option,
+                  course: getLanguageValue(detail?.option.name, language),
                 })
               )
             )
               return
+            setCoursesValue(courses)
             formikProps.setFieldValue('courses', courses)
           }}
           inputValue={courseSearch}

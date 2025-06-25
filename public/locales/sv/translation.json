@@ -398,13 +398,13 @@
     "viewFeedback": "Visa undersökningen",
     "givenFeedback": "Feedback har getts",
     "confirmRemoveSurvey": "Är du säker på att du vill ta bort programundersökningen?",
-    "confirmStudentDelete": "Är du säker på att du vill ta bort studenten: {{ studentNumber }} från den här undersökningen?",
+    "confirmStudentDelete": "Är du säker på att du vill ta bort student {{ studentNumber }} från den här undersökningen?",
     "removeSuccess": "Programundersökningen är borttagen",
     "responsibleTeachers": "Ansvarsperson",
     "remove": "Ta bort",
     "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden",
     "addCourses": "Fler studenter från kurser",
-    "removeCourses": "Ta bort kurser"
+    "removeCourse": "Är du säker på att du vill ta bort studenterna från kursen '{{ course }}' från den här undersökningen?"
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",

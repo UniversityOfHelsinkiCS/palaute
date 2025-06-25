@@ -413,7 +413,7 @@
       "newline": "Newline"
     },
     "studentNumberExampleInput": "For example, as follows",
-    "confirmStudentDelete": "Are you sure you want to remove the student: {{ studentNumber }} from this survey?",
+    "confirmStudentDelete": "Are you sure you want to remove student {{ studentNumber }} from this survey?",
     "startDate": "From",
     "endDate": "To",
     "surveys": "surveys",
@@ -423,7 +423,7 @@
     "removeSuccess": "Programme survey removed",
     "feedbacksGivenRatio": "Feedbacks given / Student count",
     "addCourses": "Add students from courses",
-    "removeCourse": "Remove course"
+    "removeCourse": "Are you sure you want to remove the students of the course '{{ course }}' from this survey?"
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",
