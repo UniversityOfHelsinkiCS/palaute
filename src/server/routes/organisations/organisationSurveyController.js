@@ -1,7 +1,6 @@
 const _ = require('lodash')
 const { Router } = require('express')
 
-const feedbackTargetCache = require('../../services/feedbackTargets/feedbackTargetCache')
 const {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
@@ -21,7 +20,9 @@ const { validateStudentNumbers } = require('../../services/organisations/validat
 const { ApplicationError } = require('../../util/customErrors')
 const { getAccessAndOrganisation } = require('./util')
 const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
-const { Summary } = require('../../models')
+const {
+  updateSummaryOnOrganisationSurveyEdit,
+} = require('../../services/summary/updateSummaryOnOrganisationSurveyEdit')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
@@ -135,26 +136,12 @@ const editOrganisationSurvey = async (req, res) => {
   }
 
   const updatedSurvey = await updateOrganisationSurvey(id, updates)
-
-  // Update summary
-  feedbackTarget.summary.data.studentCount =
+  const updatedStudentCount =
     updatedSurvey.students.independentStudents.length + updatedSurvey.students.courseStudents.length
 
-  const cachedFbt = await feedbackTargetCache.get(feedbackTarget.id)
-  if (cachedFbt) {
-    cachedFbt.summary = feedbackTarget.summary
-    await feedbackTargetCache.set(feedbackTarget.id, cachedFbt)
-  }
+  const updatedSummary = await updateSummaryOnOrganisationSurveyEdit(feedbackTarget.id, updatedStudentCount)
 
-  await Summary.update(
-    { data: feedbackTarget.summary.data },
-    {
-      where: {
-        feedbackTargetId: feedbackTarget.id,
-      },
-    }
-  )
-  updatedSurvey.summary = feedbackTarget.summary
+  updatedSurvey.summary = updatedSummary
 
   return res.send(updatedSurvey)
 }
