@@ -116,10 +116,6 @@ const editOrganisationSurvey = async (req, res) => {
   const { user, body } = req
   const { id } = req.params
 
-  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
-
-  updates.studentNumbers = [...new Set([...updates.studentNumbers])]
-
   const { access, feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: id,
     user,
@@ -129,6 +125,13 @@ const editOrganisationSurvey = async (req, res) => {
     return ApplicationError.Forbidden('Not allowed to update organisation survey')
 
   if (!feedbackTarget) throw new Error('Organisation survey not found')
+
+  if (!feedbackTarget.userCreated)
+    throw new ApplicationError(`Feedback target ${id} is not an organisation survey`, 400)
+
+  const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
+
+  updates.studentNumbers = [...new Set([...updates.studentNumbers])]
 
   if (updates.studentNumbers) {
     const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
@@ -154,6 +157,14 @@ const removeOrganisationSurvey = async (req, res) => {
   })
 
   if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can remove organisation surveys', 403)
+
+  const { feedbackTarget } = await getFeedbackTargetContext({
+    feedbackTargetId: id,
+    user,
+  })
+
+  if (!feedbackTarget.userCreated)
+    throw new ApplicationError(`Feedback target ${id} is not an organisation survey`, 400)
 
   const allowDelete = await getDeletionAllowed(id)
 
