@@ -56,7 +56,7 @@ const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayNa
   )
 }
 
-const YearSelector = ({ value, onChange, years }) => (
+export const YearSelector = ({ value, onChange, years }) => (
   <FilterSelector
     selectorTarget="year"
     value={value}

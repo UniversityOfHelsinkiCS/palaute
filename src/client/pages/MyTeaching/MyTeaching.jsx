@@ -5,8 +5,7 @@ import { format, isValid } from 'date-fns'
 import { useLocation } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useTheme } from '@mui/material/styles'
-import { Alert, Box, Typography, Skeleton, IconButton } from '@mui/material'
-import { ChevronLeft, ChevronRight } from '@mui/icons-material'
+import { Alert, Box, Typography, Skeleton } from '@mui/material'
 import OngoingIcon from '@mui/icons-material/Schedule'
 import UpcomingIcon from '@mui/icons-material/Event'
 import EndedIcon from '@mui/icons-material/Done'
@@ -26,38 +25,9 @@ import CourseUnitGroupGridColumn from './CourseUnitGroup/CourseUnitGroupGridColu
 import Title from '../../components/common/Title'
 import CourseUnitItemContainer from './CourseUnitGroup/CourseUnitItemContainer'
 import { useMyTeachingTabCounts } from './useMyTeachingTabCounts'
-import { useYear, getYearRange } from '../../util/yearUtils'
-import { STUDY_YEAR_START_MONTH } from '../../util/common'
+import { useAcademicYears, getYearRange } from '../../util/yearUtils'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
-
-const styles = {
-  stepperContainer: {
-    display: 'flex',
-    alignItems: 'center',
-    paddingLeft: '4px',
-    paddingRight: '4px',
-    marginBottom: '4px',
-  },
-  stepperValue: {
-    whiteSpace: 'nowrap',
-    userSelect: 'none',
-  },
-  button: {
-    color: theme => theme.palette.info.main,
-    '&:hover': {
-      background: theme => theme.palette.action.hover,
-      color: theme => theme.palette.text.primary,
-    },
-    '&:active': {
-      background: theme => theme.palette.action.selected,
-    },
-    marginX: '0.4rem',
-  },
-  disabledButton: {
-    opacity: '0.0',
-    zIndex: -10,
-  },
-}
+import { YearSelector } from '../../components/common/YearSemesterPeriodSelector'
 
 const CourseUnitGroupSkeleton = () => (
   <>
@@ -98,139 +68,24 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
   )
 }
 
-const AcademicYearSelector = ({ value, onChange, labelledBy }) => {
-  const NOW = new Date()
-  const MIN_YEAR = 2020
-  const CURRENT_YEAR = NOW.getFullYear() + (NOW.getMonth() + 1 >= STUDY_YEAR_START_MONTH ? 1 : 0)
-
-  const displayValue = `${value} – ${value + 1}`
-
-  const canIncrease = value + 1 < CURRENT_YEAR
-  const canDecrease = value > MIN_YEAR
-
-  const handleIncrease = (increment = 1) => {
-    if (value + increment <= CURRENT_YEAR) {
-      onChange(value + increment)
-    }
-    if (value + increment >= CURRENT_YEAR) {
-      onChange(CURRENT_YEAR - 1)
-    }
-  }
-
-  const handleDecrease = (decrement = 1) => {
-    if (value - decrement >= MIN_YEAR) {
-      onChange(value - decrement)
-    }
-  }
-
-  const handleSetMaxValue = () => {
-    onChange(CURRENT_YEAR - 1)
-  }
-
-  const handleSetMinValue = () => {
-    onChange(MIN_YEAR)
-  }
-
-  // Handle keyboard events per the following document: https://www.w3.org/WAI/ARIA/apg/patterns/spinbutton/
-  const handleKeyPress = event => {
-    let flag = false
-
-    switch (event.code) {
-      case 'ArrowDown':
-        handleDecrease()
-        flag = true
-        break
-
-      case 'ArrowUp':
-        handleIncrease()
-        flag = true
-        break
-
-      case 'Home':
-        handleSetMinValue()
-        flag = true
-        break
-
-      case 'End':
-        handleSetMaxValue()
-        flag = true
-        break
-
-      default:
-        break
-    }
-
-    if (flag) {
-      event.preventDefault()
-      event.stopPropagation()
-    }
-  }
-
-  return (
-    <Box
-      id="academic-year-selector"
-      tabIndex={0}
-      sx={styles.stepperContainer}
-      role="spinbutton"
-      aria-labelledby={labelledBy ?? undefined}
-      aria-valuenow={value}
-      aria-valuemin={MIN_YEAR}
-      aria-valuemax={CURRENT_YEAR - 1}
-      aria-valuetext={displayValue}
-      onKeyDown={handleKeyPress}
-    >
-      <IconButton
-        tabIndex={-1}
-        onClick={() => handleDecrease()}
-        disabled={!canDecrease}
-        sx={[!canDecrease ? styles.disabledButton : {}, styles.button]}
-        size="small"
-        disableTouchRipple
-      >
-        <ChevronLeft />
-      </IconButton>
-      <Typography component="span" sx={styles.stepperValue}>
-        {displayValue}
-      </Typography>
-      <IconButton
-        tabIndex={-1}
-        onClick={() => handleIncrease()}
-        disabled={!canIncrease}
-        sx={[!canIncrease ? styles.disabledButton : {}, styles.button]}
-        size="small"
-        disableTouchRipple
-      >
-        <ChevronRight />
-      </IconButton>
-    </Box>
-  )
-}
-
 const FilterRow = ({ dateRange, setDateRange }) => {
-  const { t } = useTranslation()
   const [params, setParams] = useURLSearchParams()
-
-  const year = useYear(dateRange.start)
-  const range = getYearRange(new Date(`${year + 1}-01-01`))
+  const { academicYears, selectedYear } = useAcademicYears(dateRange?.start ?? new Date())
 
   useEffect(() => {
     if (!params.get('startDate') || !params.get('endDate')) {
-      params.set('startDate', format(new Date(range.start), 'yyyy-MM-dd'))
-      params.set('endDate', format(new Date(range.end), 'yyyy-MM-dd'))
+      params.set('startDate', format(new Date(selectedYear.start), 'yyyy-MM-dd'))
+      params.set('endDate', format(new Date(selectedYear.end), 'yyyy-MM-dd'))
       setParams(params)
-      setDateRange({ start: range.start, end: range.end })
+      setDateRange({ start: selectedYear.start, end: selectedYear.end })
     }
   }, [params, setParams])
 
-  const handleChangeTimeRange = nextYear => {
-    const newRange = getYearRange(new Date(`${nextYear + 1}-01-01`))
-
-    setDateRange(newRange)
-    if (isValid(newRange.start) && isValid(newRange.end)) {
-      params.set('startDate', format(new Date(newRange.start), 'yyyy-MM-dd'))
-      params.set('endDate', format(new Date(newRange.end), 'yyyy-MM-dd'))
-      setParams(params)
-    }
+  const handleYearChange = ({ start, end }) => {
+    setDateRange({ start, end })
+    params.set('startDate', format(new Date(start), 'yyyy-MM-dd'))
+    params.set('endDate', format(new Date(end), 'yyyy-MM-dd'))
+    setParams(params)
   }
 
   return (
@@ -244,14 +99,7 @@ const FilterRow = ({ dateRange, setDateRange }) => {
         alignItems: 'center',
       }}
     >
-      <Typography component="p" id="my-teaching-academic-year-label" variant="body2">
-        {t('teacherView:academicYearSelectLabel')}
-      </Typography>
-      <AcademicYearSelector
-        value={year}
-        onChange={handleChangeTimeRange}
-        labelledBy="my-teaching-academic-year-label"
-      />
+      <YearSelector value={selectedYear} onChange={handleYearChange} years={academicYears} />
     </Box>
   )
 }

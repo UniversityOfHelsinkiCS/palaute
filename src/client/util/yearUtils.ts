@@ -43,10 +43,3 @@ export const getYearDisplayName = (year: Year) => {
 
   return displayName
 }
-
-export const useYear = (selectedStart: Date): number => {
-  const now = new Date()
-  const year = Math.min(selectedStart.getFullYear(), startOfStudyYear(now).getFullYear())
-
-  return year
-}
