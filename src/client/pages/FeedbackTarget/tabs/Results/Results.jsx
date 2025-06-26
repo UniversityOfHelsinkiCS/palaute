@@ -33,11 +33,19 @@ const NotEnoughStudents = ({ t }) => (
   </Box>
 )
 
+const SmallCourseInfo = ({ t }) => (
+  <Box sx={{ marginTop: '16px', marginBottom: '40px' }}>
+    <Alert severity="warning" data-cy="smallCourseInfo">
+      {t('feedbackTargetResults:smallCourseInfo', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}
+    </Alert>
+  </Box>
+)
+
 const FeedbackNotVisibleAlert = ({ enoughStudents, enoughFeedbacks }) => {
   const { t } = useTranslation()
 
-  if (!enoughStudents) return <NotEnoughStudents t={t} />
   if (!enoughFeedbacks) return <NotEnoughFeedbacks t={t} />
+  if (!enoughStudents) return <NotEnoughStudents t={t} />
 
   return null
 }
@@ -184,6 +192,8 @@ const Results = () => {
             {t('feedbackTargetResults:thankYouMessage')}
           </Alert>
         )}
+
+        {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
         {!isMobile && showFeedback && (
           <FeedbackChart
