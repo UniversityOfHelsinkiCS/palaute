@@ -84,8 +84,8 @@ const EmailAccordion = () => {
               </TableRow>
             </TableHead>
             <TableBody>
-              {emails.map(email => (
-                <TableRow key={email.to}>
+              {emails.map((email, idx) => (
+                <TableRow key={`${email.to}${idx}`}>
                   <TableCell>{email.to}</TableCell>
                   <TableCell>{email.subject}</TableCell>
                   <TableCell>

@@ -1,11 +1,12 @@
 const { addDays, format } = require('date-fns')
 const { Op } = require('sequelize')
-const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } = require('../../models')
+const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User, Summary } = require('../../models')
 const {
   TEACHER_REMINDER_DAYS_TO_OPEN,
   PUBLIC_URL,
   FEEDBACK_SYSTEM,
   SHOW_COURSE_CODES_WITH_COURSE_NAMES,
+  FEEDBACK_HIDDEN_STUDENT_COUNT,
 } = require('../../util/config')
 const { pate } = require('../pateClient')
 const { createRecipientsForFeedbackTargets } = require('./util')
@@ -55,6 +56,10 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
           },
         },
       },
+      {
+        model: Summary,
+        as: 'summary',
+      },
     ],
   })
 
@@ -89,7 +94,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   teacherFeedbackTargets.sort((a, b) => a.name[language]?.localeCompare(b.name[language]))
 
   for (const feedbackTarget of teacherFeedbackTargets) {
-    const { id, name, opensAt, closesAt, teacherQuestions } = feedbackTarget
+    const { id, name, opensAt, closesAt, teacherQuestions, summary } = feedbackTarget
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
     const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
     const fbtCourseCode = feedbackTarget.courseUnit.courseCode
@@ -116,10 +121,13 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
     const questionsText = `${t('mails:reminderAboutSurveyOpeningToTeachers:questionsText')}
       - ${teacherQuestions?.length > 0 ? teacherQuestions.map(q => getLanguageValue(q.data.label, language)).join('<br/>- ') : ''}`
 
+    const smallCourseWarning = `${t('mails:reminderAboutSurveyOpeningToTeachers:smallCourseWarning', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}<br/>`
+
     courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
         ${displayName}
         </a> (${openFrom[language]} ${closesOn[language]})
-        ${teacherQuestions.length > 0 ? questionsText : ''} <br/>`
+        ${summary?.data.studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT ? smallCourseWarning : ''}
+        ${teacherQuestions.length > 0 ? `${questionsText}<br/>` : ''}`
   }
 
   const subject = hasMultipleFeedbackTargets

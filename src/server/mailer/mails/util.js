@@ -117,6 +117,7 @@ const createRecipientsForFeedbackTargets = async (
               username: user.username,
               courseUnit: feedbackTarget.courseUnit,
               teacherQuestions: feedbackTarget.questions,
+              summary: feedbackTarget.summary,
             },
           ])
         })
