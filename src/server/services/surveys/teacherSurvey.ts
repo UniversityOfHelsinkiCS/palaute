@@ -16,8 +16,9 @@ const getClonedQuestionIds = async (previousSurvey: Survey): Promise<number[]> =
   })
 
   const clonedQuestions = await Question.bulkCreate(
-    previousQuestions.map(({ type, required, data }) => ({
+    previousQuestions.map(({ type, secondaryType, required, data }) => ({
       type,
+      secondaryType,
       required,
       data,
     })),
