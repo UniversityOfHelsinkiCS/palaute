@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import LocalizationProvider from '../components/LocalizationProvider'
 import CustomUiConfigProvider from '../components/CustomUiConfigProvider'
+import EscSnackbarCloser from '../components/SnackBar/EscSnackbarCloser'
 import AdUser from './AdUser'
 import GuestUser from './GuestUser'
 import useTheme from '../theme'
@@ -57,6 +58,7 @@ const App = () => {
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 style={{ fontSize: '24px', padding: '24px' }}
               >
+                <EscSnackbarCloser />
                 <Routes>
                   <Route path="/noad/*" element={<GuestUser />} />
                   <Route path="/*" element={<AdUser />} />
