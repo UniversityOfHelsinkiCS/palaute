@@ -2,7 +2,7 @@ import React, { Suspense, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { SnackbarProvider } from 'notistack'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
-import { CssBaseline } from '@mui/material'
+import { CssBaseline, GlobalStyles } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import LocalizationProvider from '../components/LocalizationProvider'
@@ -35,12 +35,27 @@ const App = () => {
         <CustomUiConfigProvider value={customUiConfig}>
           <ThemeProvider theme={theme}>
             <CssBaseline />
+            <GlobalStyles
+              styles={{
+                '.notistack-SnackbarContainer': {
+                  top: '50% !important',
+                  left: '50% !important',
+                  bottom: 'auto !important',
+                  right: 'auto !important',
+                  transform: 'translate(-50%, -50%)',
+                  width: 'auto',
+                  maxWidth: '80vw',
+                  zIndex: 1400,
+                },
+              }}
+            />
             <Suspense fallback={null}>
               <SnackbarProvider
                 maxSnack={3}
                 preventDuplicate
                 autoHideDuration={20_000}
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                style={{ fontSize: '24px', padding: '24px' }}
               >
                 <Routes>
                   <Route path="/noad/*" element={<GuestUser />} />
