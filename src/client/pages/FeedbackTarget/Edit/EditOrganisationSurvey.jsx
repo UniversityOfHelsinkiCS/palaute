@@ -5,7 +5,11 @@ import { useTranslation } from 'react-i18next'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
-import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from '../../Organisation/utils'
+import {
+  getOverlappingStudentTeachers,
+  getOrganisationSurveySchema,
+  getTotalStudentCountOfCourses,
+} from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { NorButton } from '../../../components/common/NorButton'
 
@@ -56,10 +60,21 @@ const EditOrganisationSurvey = () => {
       courseRealisationIds: data.courses.map(c => c.id),
     }
 
+    const totalStudentCountWithDuplicates = getTotalStudentCountOfCourses(organisationSurvey.courses)
+    const removedDuplicateStudentCount =
+      totalStudentCountWithDuplicates - organisationSurvey.students.courseStudents.length
+
     await editMutation.mutateAsync(values, {
       onSuccess: () => {
         handleClose()
-        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+        enqueueSnackbar(
+          removedDuplicateStudentCount > 0
+            ? `${t('common:saveSuccess')} ${t('organisationSurveys:removedDuplicateStudents', {
+                count: removedDuplicateStudentCount,
+              })}`
+            : t('common:saveSuccess'),
+          { variant: 'success' }
+        )
       },
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {

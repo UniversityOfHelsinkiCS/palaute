@@ -13,7 +13,7 @@
     "noAccess": "Du har inte tillgång till denna resurs.",
     "supportContact": "Vid problemfall, kontakta supporten: ",
     "save": "Spara",
-    "saveSuccess": "Informationen har sparats",
+    "saveSuccess": "Informationen har sparats.",
     "course": "Kurs",
     "courseCode": "Kurskod",
     "name": "Namn",
@@ -406,7 +406,8 @@
     "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden",
     "addCourses": "Fler studenter från kurser",
     "removeCourse": "Är du säker på att du vill ta bort studenterna från kursen '{{ course }}' från den här enkäten?",
-    "studentCount": "{{ count }} studenter"
+    "studentCount": "{{ count }} studenter",
+    "removedDuplicateStudents": "{{ count }} dubbletter av studenter togs bort."
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",

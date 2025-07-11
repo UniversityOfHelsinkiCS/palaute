@@ -93,3 +93,10 @@ export const getOverlappingStudentTeachers = data => {
 
   return overlappingStudentTeachers
 }
+
+export const getTotalStudentCountOfCourses = courses => {
+  const courseStudentCounts = courses.map(course => course.studentCount)
+  const totalStudentCount = courseStudentCounts.reduce((partialSum, currentVal) => partialSum + currentVal, 0) // counts all duplicates
+
+  return totalStudentCount
+}

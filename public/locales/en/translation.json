@@ -13,7 +13,7 @@
     "noAccess": "You have no access to the requested resource.",
     "supportContact": "If you are not able to resolve this issue, please contact support: ",
     "save": "Save",
-    "saveSuccess": "Information has been saved",
+    "saveSuccess": "Information has been saved.",
     "course": "Course",
     "courseCode": "Course code",
     "name": "Name",
@@ -425,7 +425,8 @@
     "feedbacksGivenRatio": "Feedbacks given / Student count",
     "addCourses": "Add students from courses",
     "removeCourse": "Are you sure you want to remove the students of the course '{{ course }}' from this survey?",
-    "studentCount": "{{ count }} students"
+    "studentCount": "{{ count }} students",
+    "removedDuplicateStudents": "{{ count }} duplicate students were removed."
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",

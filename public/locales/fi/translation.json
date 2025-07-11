@@ -13,7 +13,7 @@
     "noAccess": "Sinulla ei ole pääsyoikeutta tähän resurssiin.",
     "supportContact": "Ongelmatilanteessa ota yhteyttä tukeen: ",
     "save": "Tallenna",
-    "saveSuccess": "Tiedot tallennettiin onnistuneesti",
+    "saveSuccess": "Tiedot tallennettiin onnistuneesti.",
     "course": "Kurssi",
     "courseCode": "Kurssikoodi",
     "name": "Nimi",
@@ -425,7 +425,8 @@
     "feedbacksGivenRatio": "Palautteita annettu / Opiskelijoiden määrä",
     "addCourses": "Lisää opiskelijoita kursseilta",
     "removeCourse": "Haluatko varmasti poistaa kurssin '{{ course }}' opiskelijat tästä kyselystä?",
-    "studentCount": "{{ count }} opiskelijaa"
+    "studentCount": "{{ count }} opiskelijaa",
+    "removedDuplicateStudents": "{{ count }} kopiota opiskelijoista poistettiin."
   },
   "interimFeedback": {
     "interimFeedback": "Välipalaute",
