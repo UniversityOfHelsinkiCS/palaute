@@ -11,7 +11,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize'
-import { LocalizedString } from '@common/types'
+import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import type Summary from './summary'
 

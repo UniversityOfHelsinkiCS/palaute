@@ -1,11 +1,11 @@
 import React from 'react'
 import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import type { User } from '@common/types/user'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
-import { User } from '../../../../types'
 import { sortGroups } from './utils'
 
 interface GroupOption {

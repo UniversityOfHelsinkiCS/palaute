@@ -12,16 +12,10 @@ import {
 } from 'sequelize'
 import _ from 'lodash'
 
-import { OrganisationAccess } from '@common/types'
+import type { OrganisationWithAccess } from '@common/types/organisation'
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
-import type { Organisation } from './organisation'
 import type { FeedbackTarget } from './feedbackTarget'
-
-export type OrganisationWithAccess = {
-  access: OrganisationAccess
-  organisation: Organisation
-}
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // --- Acual DB columns ---

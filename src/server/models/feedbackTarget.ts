@@ -19,7 +19,7 @@ import {
 
 import _ from 'lodash'
 
-import { LocalizedString } from '@common/types'
+import type { LocalizedString } from '@common/types/common'
 import { Organisation } from './organisation'
 import { CourseRealisation } from './courseRealisation'
 import { User } from './user'

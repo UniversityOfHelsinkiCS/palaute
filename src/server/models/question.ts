@@ -8,7 +8,7 @@ import {
   CreationOptional,
   INTEGER,
 } from 'sequelize'
-import { QuestionData, QuestionSecondaryType, QuestionType } from '@common/questionTypes'
+import type { QuestionData, QuestionSecondaryType, QuestionType } from '@common/types/question'
 import { sequelize } from '../db/dbConnection'
 import { WORKLOAD_QUESTION_ID } from '../util/config'
 

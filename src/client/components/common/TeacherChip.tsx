@@ -1,6 +1,6 @@
 import { Chip, Tooltip } from '@mui/material'
 import React, { CSSProperties } from 'react'
-import { User } from '../../types'
+import type { User } from '@common/types/user'
 
 interface TeacherChipProps {
   user: User

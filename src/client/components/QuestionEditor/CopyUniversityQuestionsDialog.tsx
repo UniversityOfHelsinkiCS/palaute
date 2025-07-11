@@ -13,10 +13,10 @@ import {
 import { FileCopyOutlined, Circle } from '@mui/icons-material'
 
 import { useTranslation } from 'react-i18next'
+import type { Survey } from '@common/types/survey'
 import { getLanguageValue } from '../../util/languageUtils'
 
 import { NorButton } from '../common/NorButton'
-import { Survey } from '../../types/Survey'
 
 type CopyUniversityQuestionsDialogProps = {
   survey: Survey
@@ -48,7 +48,7 @@ const CopyUniversityQuestionsDialog = ({
               )}
               <ListItemText
                 primary={
-                  q.data.content
+                  'content' in q.data
                     ? getLanguageValue(q.data.content, i18n.language)
                     : getLanguageValue(q.data.label, i18n.language)
                 }

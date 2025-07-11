@@ -1,55 +1,53 @@
-import { Container } from '@mui/material'
+import { Container, type SxProps, type Theme } from '@mui/material'
 import React, { Suspense } from 'react'
-import { Route, Routes, Navigate } from 'react-router-dom'
+import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import { PUBLIC_COURSE_BROWSER_ENABLED } from '../util/common'
 
 import Admin from './Admin'
-import MyTeaching from './MyTeaching/MyTeaching'
 import CourseRealisation from './CourseRealisation'
-import Organisation from './Organisation'
-import FeedbackTarget from './FeedbackTarget'
-import NorppaFeedback from './NorppaFeedback'
-import MyFeedbacks from './MyFeedbacks'
 import Summary from './CourseSummary/Summary'
+import FeedbackTarget from './FeedbackTarget'
+import MyFeedbacks from './MyFeedbacks'
+import MyTeaching from './MyTeaching/MyTeaching'
+import NorppaFeedback from './NorppaFeedback'
+import Organisation from './Organisation'
 import Search from './Search/Search'
 
-const styles = {
-  container: theme => ({
-    padding: '2rem',
-    [theme.breakpoints.up('xl')]: {
-      maxWidth: '80vw',
-    },
-    [theme.breakpoints.down('md')]: {
-      padding: '1rem',
-    },
-    [theme.breakpoints.down('sm')]: {
-      padding: '0.6rem',
-    },
-    marginTop: '1rem',
-  }),
-}
+const containerStyle: SxProps<Theme> = theme => ({
+  padding: '2rem',
+  [theme.breakpoints.up('xl')]: {
+    maxWidth: '80vw',
+  },
+  [theme.breakpoints.down('md')]: {
+    padding: '1rem',
+  },
+  [theme.breakpoints.down('sm')]: {
+    padding: '0.6rem',
+  },
+  marginTop: '1rem',
+})
 
 const Home = () => {
   const { authorizedUser, isLoading } = useAuthorizedUser()
-  const preferences = authorizedUser?.preferences ?? {}
-  const defaultView = preferences.defaultView ?? 'feedbacks'
 
-  if (isLoading) {
+  if (isLoading || !authorizedUser) {
     return <LoadingProgress />
   }
+
+  const defaultView = authorizedUser.preferences.defaultView ?? 'feedbacks'
 
   return <Navigate to={`/${defaultView}`} />
 }
 
 const Router = () => (
-  <Container sx={styles.container}>
+  <Container sx={containerStyle}>
     <Suspense fallback={<LoadingProgress />}>
       <Routes>
-        <Route path="/feedbacks" element={<MyFeedbacks />} exact />
-        <Route path="/courses" element={<MyTeaching />} exact />
+        <Route path="/feedbacks" element={<MyFeedbacks />} />
+        <Route path="/courses" element={<MyTeaching />} />
         <Route path="/targets/:id/*" element={<FeedbackTarget />} />
         <Route path="/organisations/:code/*" element={<Organisation />} />
         <Route path="/course-summary/*" element={<Summary />} />

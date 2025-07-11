@@ -1,5 +1,5 @@
 import { STRING, BOOLEAN, Model, InferAttributes, InferCreationAttributes, DATE, JSONB } from 'sequelize'
-import type { LocalizedString } from '@common/types'
+import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 
 class InactiveCourseRealisation extends Model<

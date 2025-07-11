@@ -1,4 +1,4 @@
-import { LocalizedString } from '@common/types'
+import type { LocalizedString } from '@common/types/common'
 
 export type CourseRealisation = {
   id: string

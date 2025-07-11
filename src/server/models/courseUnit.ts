@@ -9,7 +9,7 @@ import {
   CreationOptional,
   DATE,
 } from 'sequelize'
-import { LocalizedString } from '@common/types'
+import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import { logger } from '../util/logger'
 import type Summary from './summary'
@@ -41,7 +41,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   // ----------------------
   async isStudentListVisible() {
     const organisations = await sequelize.query(
-      `SELECT O.* from organisations O, course_units_organisations C 
+      `SELECT O.* from organisations O, course_units_organisations C
          WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'`,
       {
         replacements: {

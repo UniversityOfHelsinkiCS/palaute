@@ -5,9 +5,3 @@ export type LocalizedString = {
   fi?: string
   sv?: string
 }
-
-export type OrganisationAccess = {
-  read?: boolean
-  write?: boolean
-  admin?: boolean
-}

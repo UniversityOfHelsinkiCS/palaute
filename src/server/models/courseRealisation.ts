@@ -8,7 +8,7 @@ import {
   Model,
   CreationOptional,
 } from 'sequelize'
-import { LanguageId, LocalizedString } from '@common/types'
+import type { LanguageId, LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 
 export type CourseRealisationTeachingLanguages = LanguageId[]
