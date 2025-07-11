@@ -405,7 +405,8 @@
     "remove": "Ta bort",
     "feedbacksGivenRatio": "Given feeback (antal) / Antal studeranden",
     "addCourses": "Fler studenter från kurser",
-    "removeCourse": "Är du säker på att du vill ta bort studenterna från kursen '{{ course }}' från den här enkäten?"
+    "removeCourse": "Är du säker på att du vill ta bort studenterna från kursen '{{ course }}' från den här enkäten?",
+    "studentCount": "{{ count }} studenter"
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",

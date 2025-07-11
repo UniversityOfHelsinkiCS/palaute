@@ -424,7 +424,8 @@
     "removeSuccess": "Programme survey removed",
     "feedbacksGivenRatio": "Feedbacks given / Student count",
     "addCourses": "Add students from courses",
-    "removeCourse": "Are you sure you want to remove the students of the course '{{ course }}' from this survey?"
+    "removeCourse": "Are you sure you want to remove the students of the course '{{ course }}' from this survey?",
+    "studentCount": "{{ count }} students"
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",

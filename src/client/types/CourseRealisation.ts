@@ -5,4 +5,5 @@ export type CourseRealisation = {
   name: LocalizedString
   startDate: string
   endDate: string
+  studentCount?: number // used in CourseSearchInput to show student counts
 }

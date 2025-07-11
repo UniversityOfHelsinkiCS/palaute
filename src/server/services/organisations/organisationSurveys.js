@@ -196,6 +196,26 @@ const getOrganisationSurveyCourseStudents = async courseRealisationIds => {
   return students
 }
 
+const getFeedbackTargetStudentCountForCourseRealisation = async courseRealisationId => {
+  const feedbackTargets = await FeedbackTarget.findAll({
+    attributes: ['id'],
+    where: {
+      courseRealisationId,
+      feedbackType: 'courseRealisation',
+    },
+    include: [
+      {
+        model: Summary,
+        as: 'summary',
+      },
+    ],
+  })
+
+  const { studentCount } = feedbackTargets[0]?.summary?.data || 0
+
+  return studentCount
+}
+
 const getSurveyById = async feedbackTargetId => {
   const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: [
@@ -281,13 +301,20 @@ const getSurveyById = async feedbackTargetId => {
     ({ user }) => !courseStudentNumbers.has(user.studentNumber)
   )
 
+  const coursesWithStudentCounts = await Promise.all(
+    courses.map(async course => {
+      const studentCount = await getFeedbackTargetStudentCountForCourseRealisation(course.id)
+      return { ...course.dataValues, studentCount }
+    })
+  )
+
   return {
     ...organisationSurvey.dataValues,
     students: {
       independentStudents,
       courseStudents,
     },
-    courses,
+    courses: coursesWithStudentCounts,
   }
 }
 

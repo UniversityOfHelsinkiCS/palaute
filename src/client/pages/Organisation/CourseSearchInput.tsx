@@ -38,18 +38,25 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) =
     endDate: dateRange.end,
   })
 
-  const options = data
-    ?.flatMap(({ feedbackTargets }: { feedbackTargets: FeedbackTarget[] }) =>
-      feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
-    )
-    .sort((a: CourseRealisation, b: CourseRealisation) =>
-      a.name[language as keyof LocalizedString]?.localeCompare(b.name[language as keyof LocalizedString] ?? '')
-    )
+  const courseRealisationsWithStudentCounts = data?.flatMap(
+    ({ feedbackTargets }: { feedbackTargets: FeedbackTarget[] }) =>
+      feedbackTargets.map(feedbackTarget => ({
+        ...feedbackTarget.courseRealisation,
+        studentCount: feedbackTarget.summary?.data.studentCount || 0,
+      }))
+  )
+
+  const options = courseRealisationsWithStudentCounts?.sort((a: CourseRealisation, b: CourseRealisation) =>
+    a.name[language as keyof LocalizedString]?.localeCompare(b.name[language as keyof LocalizedString] ?? '')
+  )
 
   const getOptionLabel = (course: CourseRealisation) => {
     const [startDate, endDate] = getStartAndEndString(course?.startDate, course?.endDate)
     const courseName = getLanguageValue(course?.name, language)
-    return `${courseName || ''} (${startDate} - ${endDate})`
+    const studentCountText = `, ${t('organisationSurveys:studentCount', {
+      count: course?.studentCount || 0,
+    })}`
+    return `${courseName || ''} (${startDate} - ${endDate}${studentCountText})`
   }
 
   const handleDateRangeChange = (nextDateRange: DateRange) => {

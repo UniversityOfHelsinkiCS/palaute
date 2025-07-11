@@ -12,6 +12,7 @@ const {
   CourseRealisation,
   CourseUnitsOrganisation,
   FeedbackTarget,
+  Summary,
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../services/auditLog')
@@ -230,6 +231,10 @@ const findFeedbackTargets = async (req, res) => {
                 }),
             },
           },
+          {
+            model: Summary,
+            as: 'summary',
+          },
         ],
       },
       {
@@ -253,7 +258,24 @@ const findFeedbackTargets = async (req, res) => {
     },
   })
 
-  return res.send(courseUnits)
+  // Only send studentCount to frontend in fbt summary
+  const courseUnitsWithFilteredSummary = courseUnits?.map(cu => {
+    const plainCU = cu.get({ plain: true })
+
+    return {
+      ...plainCU,
+      feedbackTargets: plainCU.feedbackTargets.map(fbt => ({
+        ...fbt,
+        summary: {
+          data: {
+            studentCount: fbt.summary?.data?.studentCount,
+          },
+        },
+      })),
+    }
+  })
+
+  return res.send(courseUnitsWithFilteredSummary)
 }
 
 const router = Router()
