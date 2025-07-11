@@ -54,7 +54,11 @@ mkdir -p ${BACKUPS}
 
 echo "Fetching a new dump"
 get_username
-scp -r -o ProxyCommand="ssh -l $username -W %h:%p melkki.cs.helsinki.fi" $username@$SERVER:$PALAUTE_SERVER_FILE $JAMI_SERVER_FILE $BACKUPS
+
+# Use -J for jump host and connection multiplexing
+scp -J $username@melkki.cs.helsinki.fi \
+    -o ControlMaster=auto -o ControlPath=/tmp/ssh-%r@%h:%p -o ControlPersist=10m \
+    $username@$SERVER:$PALAUTE_SERVER_FILE $username@$SERVER:$JAMI_SERVER_FILE $BACKUPS
 
 echo "Removing database and related volume"
 docker compose -f $DOCKER_COMPOSE down -v
