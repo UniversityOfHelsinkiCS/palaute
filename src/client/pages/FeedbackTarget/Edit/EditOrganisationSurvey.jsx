@@ -21,7 +21,11 @@ const EditOrganisationSurvey = () => {
   const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
   const allowEdit = isAdmin || isResponsibleTeacher || isOrganisationAdmin
-  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
+  const {
+    survey: organisationSurvey,
+    isLoading,
+    refetch,
+  } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
 
   const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
 
@@ -60,17 +64,22 @@ const EditOrganisationSurvey = () => {
       courseRealisationIds: data.courses.map(c => c.id),
     }
 
-    const totalStudentCountWithDuplicates = getTotalStudentCountOfCourses(organisationSurvey.courses)
-    const removedDuplicateStudentCount =
-      totalStudentCountWithDuplicates - organisationSurvey.students.courseStudents.length
-
     await editMutation.mutateAsync(values, {
-      onSuccess: () => {
+      onSuccess: async () => {
         handleClose()
+        const { data: updatedSurvey } = await refetch()
+
+        const removedIndependentStudentCount =
+          data.studentNumbers.length - updatedSurvey.students.independentStudents.length
+        const updatedTotalCourseStudentCountWithDuplicates = getTotalStudentCountOfCourses(updatedSurvey.courses)
+        const removedCourseStudentCount =
+          updatedTotalCourseStudentCountWithDuplicates - updatedSurvey.students.courseStudents.length
+        const removedDuplicateStudentCountTotal = removedIndependentStudentCount + removedCourseStudentCount
+
         enqueueSnackbar(
-          removedDuplicateStudentCount > 0
+          removedDuplicateStudentCountTotal > 0
             ? `${t('common:saveSuccess')} ${t('organisationSurveys:removedDuplicateStudents', {
-                count: removedDuplicateStudentCount,
+                count: removedDuplicateStudentCountTotal,
               })}`
             : t('common:saveSuccess'),
           { variant: 'success' }

@@ -12,13 +12,18 @@ export const useOrganisationSurvey = (organisationCode, surveyId, enable = true)
     return data
   }
 
-  const { data: survey, ...rest } = useQuery({
+  const query = useQuery({
     queryKey: ['organisationSurvey', surveyId],
     queryFn,
     enabled: enable && ORGANISATION_SURVEYS_ENABLED,
   })
 
-  return { survey, rest }
+  return {
+    survey: query.data,
+    isLoading: query.isLoading,
+    refetch: query.refetch,
+    ...query,
+  }
 }
 
 export const useOrganisationSurveys = (organisationCode, enable = true) => {
