@@ -95,11 +95,20 @@ export const getOverlappingStudentTeachers = data => {
   return overlappingStudentTeachers
 }
 
-export const getTotalStudentCountOfCourses = courses => {
+const getTotalStudentCountOfCourses = courses => {
   const courseStudentCounts = courses.map(course => course.studentCount)
   const totalStudentCount = courseStudentCounts.reduce((partialSum, currentVal) => partialSum + currentVal, 0) // counts all duplicates
 
   return totalStudentCount
+}
+
+export const calculateRemovedDuplicateStudentCount = (submittedStudentNumberCount, updatedSurvey) => {
+  const removedIndependentStudentCount = submittedStudentNumberCount - updatedSurvey.students.independentStudents.length
+
+  const totalCourseStudentCountWithDuplicates = getTotalStudentCountOfCourses(updatedSurvey.courses)
+  const removedCourseStudentCount = totalCourseStudentCountWithDuplicates - updatedSurvey.students.courseStudents.length
+
+  return removedIndependentStudentCount + removedCourseStudentCount
 }
 
 export const formatEditSuccessMessage = (t, removedCount, courseCount) => {

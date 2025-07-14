@@ -8,8 +8,8 @@ import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganis
 import {
   getOverlappingStudentTeachers,
   getOrganisationSurveySchema,
-  getTotalStudentCountOfCourses,
   formatEditSuccessMessage,
+  calculateRemovedDuplicateStudentCount,
 } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { NorButton } from '../../../components/common/NorButton'
@@ -68,14 +68,12 @@ const EditOrganisationSurvey = () => {
     await editMutation.mutateAsync(values, {
       onSuccess: async () => {
         handleClose()
-        const { data: updatedSurvey } = await refetch()
 
-        const removedIndependentStudentCount =
-          data.studentNumbers.length - updatedSurvey.students.independentStudents.length
-        const updatedTotalCourseStudentCountWithDuplicates = getTotalStudentCountOfCourses(updatedSurvey.courses)
-        const removedCourseStudentCount =
-          updatedTotalCourseStudentCountWithDuplicates - updatedSurvey.students.courseStudents.length
-        const removedDuplicateStudentCountTotal = removedIndependentStudentCount + removedCourseStudentCount
+        const { data: updatedSurvey } = await refetch()
+        const removedDuplicateStudentCountTotal = calculateRemovedDuplicateStudentCount(
+          data.studentNumbers.length,
+          updatedSurvey
+        )
 
         const successMessage = formatEditSuccessMessage(
           t,
