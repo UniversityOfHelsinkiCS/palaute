@@ -80,7 +80,7 @@ const EditOrganisationSurvey = () => {
           removedDuplicateStudentCountTotal,
           updatedSurvey.courses.length
         )
-        enqueueSnackbar(successMessage, { variant: 'success' })
+        enqueueSnackbar(successMessage, { variant: 'success', key: 'successful-save' })
       },
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
