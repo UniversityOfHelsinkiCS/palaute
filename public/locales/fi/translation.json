@@ -426,7 +426,7 @@
     "addCourses": "Lisää opiskelijoita kursseilta",
     "removeCourse": "Haluatko varmasti poistaa kurssin '{{ course }}' opiskelijat tästä kyselystä?",
     "studentCount": "{{ count }} opiskelijaa",
-    "removedDuplicateStudents": "Jotkin opiskelijat lisättiin useaan kertaan joko opiskelijanumeroina tai valituilta kursseilta. Nämä opiskelijakopiot ({{ count }}) poistettiin automaattisesti.",
+    "removedDuplicateStudents": "Osa opiskelijoista lisättiin useaan kertaan joko opiskelijanumeroina tai valituilta kursseilta. Nämä opiskelijakopiot ({{ count }}) poistettiin automaattisesti.",
     "noAutomaticStudentUpdateNotice": "Huom. Kurssien opiskelijoita ei päivitetä automaattisesti. Jos kursseille ilmoittautuu lisää opiskelijoita, sinun pitää lisätä kurssit uudelleen tai syöttää opiskelijanumerot erikseen."
   },
   "interimFeedback": {
