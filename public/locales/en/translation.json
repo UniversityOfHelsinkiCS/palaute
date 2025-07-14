@@ -426,7 +426,7 @@
     "addCourses": "Add students from courses",
     "removeCourse": "Are you sure you want to remove the students of the course '{{ course }}' from this survey?",
     "studentCount": "{{ count }} students",
-    "removedDuplicateStudents": "{{ count }} duplicate students were removed."
+    "removedDuplicateStudents": "Some students were added multiple times as student numbers or from the selected courses. These duplicate students ({{ count }}) were removed automatically."
   },
   "interimFeedback": {
     "interimFeedback": "Interim Feedback",
