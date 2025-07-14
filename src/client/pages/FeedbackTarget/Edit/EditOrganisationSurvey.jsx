@@ -9,6 +9,7 @@ import {
   getOverlappingStudentTeachers,
   getOrganisationSurveySchema,
   getTotalStudentCountOfCourses,
+  formatEditSuccessMessage,
 } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { NorButton } from '../../../components/common/NorButton'
@@ -76,14 +77,12 @@ const EditOrganisationSurvey = () => {
           updatedTotalCourseStudentCountWithDuplicates - updatedSurvey.students.courseStudents.length
         const removedDuplicateStudentCountTotal = removedIndependentStudentCount + removedCourseStudentCount
 
-        enqueueSnackbar(
-          removedDuplicateStudentCountTotal > 0
-            ? `${t('common:saveSuccess')} ${t('organisationSurveys:removedDuplicateStudents', {
-                count: removedDuplicateStudentCountTotal,
-              })}`
-            : t('common:saveSuccess'),
-          { variant: 'success' }
+        const successMessage = formatEditSuccessMessage(
+          t,
+          removedDuplicateStudentCountTotal,
+          updatedSurvey.courses.length
         )
+        enqueueSnackbar(successMessage, { variant: 'success' })
       },
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {

@@ -407,7 +407,8 @@
     "addCourses": "Fler studenter från kurser",
     "removeCourse": "Är du säker på att du vill ta bort studenterna från kursen '{{ course }}' från den här enkäten?",
     "studentCount": "{{ count }} studenter",
-    "removedDuplicateStudents": "Vissa studenter lades till flera gånger, antingen via studentnummer eller från de valda kurserna. Dubbletter ({{ count }}) har tagits bort automatiskt."
+    "removedDuplicateStudents": "Vissa studenter lades till flera gånger, antingen via studentnummer eller från de valda kurserna. Dubbletter ({{ count }}) har tagits bort automatiskt.",
+    "noAutomaticStudentUpdateNotice": "Observera: Kursstudenter uppdateras inte automatiskt. Om fler studenter registrerar sig på de valda kurserna måste du lägga till kurserna igen eller ange studentnumren manuellt."
   },
   "interimFeedback": {
     "interimFeedback": "Mellanrespons",

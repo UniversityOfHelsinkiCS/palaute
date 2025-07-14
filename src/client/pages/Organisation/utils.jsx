@@ -1,3 +1,4 @@
+import React from 'react'
 import * as Yup from 'yup'
 import { format, parseISO } from 'date-fns'
 
@@ -99,4 +100,31 @@ export const getTotalStudentCountOfCourses = courses => {
   const totalStudentCount = courseStudentCounts.reduce((partialSum, currentVal) => partialSum + currentVal, 0) // counts all duplicates
 
   return totalStudentCount
+}
+
+export const formatEditSuccessMessage = (t, removedCount, courseCount) => {
+  const messages = [t('common:saveSuccess')]
+
+  if (removedCount > 0) {
+    messages.push(
+      t('organisationSurveys:removedDuplicateStudents', {
+        count: removedCount,
+      })
+    )
+  }
+
+  if (courseCount > 0) {
+    messages.push(t('organisationSurveys:noAutomaticStudentUpdateNotice'))
+  }
+
+  return (
+    <span style={{ marginLeft: '16px' }}>
+      {messages.map((msg, idx) => (
+        <div key={idx} style={{ marginBottom: idx < messages.length - 1 ? '16px' : 0 }}>
+          {msg}
+          {idx < messages.length - 1 && <br />}
+        </div>
+      ))}
+    </span>
+  )
 }
