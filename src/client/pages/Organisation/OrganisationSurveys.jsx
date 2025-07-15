@@ -17,12 +17,7 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { NorButton } from '../../components/common/NorButton'
 
-import {
-  getOverlappingStudentTeachers,
-  getOrganisationSurveySchema,
-  calculateRemovedDuplicateStudentCount,
-  formatEditSuccessMessage,
-} from './utils'
+import { getOverlappingStudentTeachers, getOrganisationSurveySchema, getSuccessMessage } from './utils'
 
 const styles = {
   dates: {
@@ -95,13 +90,8 @@ const OrganisationSurveys = () => {
         handleClose()
         navigate(`/targets/${surveyData.id}/edit`)
 
-        const removedDuplicateStudentCountTotal = calculateRemovedDuplicateStudentCount(
-          data.studentNumbers.length,
-          surveyData
-        )
-
-        const successMessage = formatEditSuccessMessage(t, removedDuplicateStudentCountTotal, surveyData.courses.length)
-        enqueueSnackbar(successMessage, { variant: 'success', key: 'successful-save' })
+        const { successMessage, messageKey } = getSuccessMessage(t, data.studentNumbers.length, surveyData)
+        enqueueSnackbar(successMessage, { variant: 'success', key: messageKey })
       },
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {

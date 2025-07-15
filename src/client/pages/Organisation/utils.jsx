@@ -102,7 +102,7 @@ const getTotalStudentCountOfCourses = courses => {
   return totalStudentCount
 }
 
-export const calculateRemovedDuplicateStudentCount = (submittedStudentNumberCount, updatedSurvey) => {
+const calculateRemovedDuplicateStudentCount = (submittedStudentNumberCount, updatedSurvey) => {
   const removedIndependentStudentCount = submittedStudentNumberCount - updatedSurvey.students.independentStudents.length
 
   const totalCourseStudentCountWithDuplicates = getTotalStudentCountOfCourses(updatedSurvey.courses)
@@ -111,7 +111,7 @@ export const calculateRemovedDuplicateStudentCount = (submittedStudentNumberCoun
   return removedIndependentStudentCount + removedCourseStudentCount
 }
 
-export const formatEditSuccessMessage = (t, removedCount, courseCount) => {
+const formatSuccessMessage = (t, removedCount, courseCount) => {
   const messages = [t('common:saveSuccess')]
 
   if (removedCount > 0) {
@@ -136,4 +136,17 @@ export const formatEditSuccessMessage = (t, removedCount, courseCount) => {
       ))}
     </span>
   )
+}
+
+export const getSuccessMessage = (t, submittedStudentNumberCount, updatedSurvey) => {
+  const removedDuplicateStudentCountTotal = calculateRemovedDuplicateStudentCount(
+    submittedStudentNumberCount,
+    updatedSurvey
+  )
+
+  const successMessage = formatSuccessMessage(t, removedDuplicateStudentCountTotal, updatedSurvey.courses.length)
+
+  const messageKey = `save-success-${removedDuplicateStudentCountTotal}`
+
+  return { successMessage, messageKey }
 }

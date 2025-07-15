@@ -5,12 +5,7 @@ import { useTranslation } from 'react-i18next'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
-import {
-  getOverlappingStudentTeachers,
-  getOrganisationSurveySchema,
-  formatEditSuccessMessage,
-  calculateRemovedDuplicateStudentCount,
-} from '../../Organisation/utils'
+import { getOverlappingStudentTeachers, getOrganisationSurveySchema, getSuccessMessage } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { NorButton } from '../../../components/common/NorButton'
 
@@ -65,17 +60,8 @@ const EditOrganisationSurvey = () => {
       onSuccess: updatedSurvey => {
         handleClose()
 
-        const removedDuplicateStudentCountTotal = calculateRemovedDuplicateStudentCount(
-          data.studentNumbers.length,
-          updatedSurvey
-        )
-
-        const successMessage = formatEditSuccessMessage(
-          t,
-          removedDuplicateStudentCountTotal,
-          updatedSurvey.courses.length
-        )
-        enqueueSnackbar(successMessage, { variant: 'success', key: 'successful-save' })
+        const { successMessage, messageKey } = getSuccessMessage(t, data.studentNumbers.length, updatedSurvey)
+        enqueueSnackbar(successMessage, { variant: 'success', key: messageKey })
       },
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
