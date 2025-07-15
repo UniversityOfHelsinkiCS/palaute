@@ -22,11 +22,7 @@ const EditOrganisationSurvey = () => {
   const { feedbackTarget, isAdmin, isResponsibleTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
   const { id, courseUnit: { organisations } = [] } = feedbackTarget
   const allowEdit = isAdmin || isResponsibleTeacher || isOrganisationAdmin
-  const {
-    survey: organisationSurvey,
-    isLoading,
-    refetch,
-  } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
+  const { survey: organisationSurvey, isLoading } = useOrganisationSurvey(organisations[0]?.code, id, allowEdit)
 
   const editMutation = useEditOrganisationSurveyMutation(organisations[0]?.code)
 
@@ -66,10 +62,9 @@ const EditOrganisationSurvey = () => {
     }
 
     await editMutation.mutateAsync(values, {
-      onSuccess: async () => {
+      onSuccess: updatedSurvey => {
         handleClose()
 
-        const { data: updatedSurvey } = await refetch()
         const removedDuplicateStudentCountTotal = calculateRemovedDuplicateStudentCount(
           data.studentNumbers.length,
           updatedSurvey
