@@ -17,7 +17,12 @@ import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { NorButton } from '../../components/common/NorButton'
 
-import { getOverlappingStudentTeachers, getOrganisationSurveySchema } from './utils'
+import {
+  getOverlappingStudentTeachers,
+  getOrganisationSurveySchema,
+  calculateRemovedDuplicateStudentCount,
+  formatEditSuccessMessage,
+} from './utils'
 
 const styles = {
   dates: {
@@ -86,11 +91,17 @@ const OrganisationSurveys = () => {
     }
 
     await mutation.mutateAsync(values, {
-      onSuccess: data => {
+      onSuccess: surveyData => {
         handleClose()
+        navigate(`/targets/${surveyData.id}/edit`)
 
-        navigate(`/targets/${data.id}/edit`)
-        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+        const removedDuplicateStudentCountTotal = calculateRemovedDuplicateStudentCount(
+          data.studentNumbers.length,
+          surveyData
+        )
+
+        const successMessage = formatEditSuccessMessage(t, removedDuplicateStudentCountTotal, surveyData.courses.length)
+        enqueueSnackbar(successMessage, { variant: 'success', key: 'successful-save' })
       },
       onError: error => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
