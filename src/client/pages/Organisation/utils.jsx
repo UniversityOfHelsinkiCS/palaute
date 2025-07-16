@@ -129,7 +129,10 @@ const formatSuccessMessage = (t, removedCount, courseCount) => {
   return (
     <span style={{ marginLeft: '16px' }}>
       {messages.map((msg, idx) => (
-        <div key={idx} style={{ marginBottom: idx < messages.length - 1 ? '16px' : 0 }}>
+        <div
+          key={idx}
+          style={{ fontSize: idx === 0 ? '24px' : '18px', marginBottom: idx < messages.length - 1 ? '16px' : 0 }}
+        >
           {msg}
           {idx < messages.length - 1 && <br />}
         </div>
