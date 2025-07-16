@@ -5,7 +5,12 @@ import { useTranslation } from 'react-i18next'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
-import { getOverlappingStudentTeachers, getOrganisationSurveySchema, getSuccessMessage } from '../../Organisation/utils'
+import {
+  getOverlappingStudentTeachers,
+  getOrganisationSurveySchema,
+  getSuccessMessage,
+  hasNewCourses,
+} from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { NorButton } from '../../../components/common/NorButton'
 
@@ -60,7 +65,21 @@ const EditOrganisationSurvey = () => {
       onSuccess: updatedSurvey => {
         handleClose()
 
-        const { successMessage, messageKey } = getSuccessMessage(t, data.studentNumbers.length, updatedSurvey)
+        const submittedStudentNumberCount = data.studentNumbers.length
+        const duplicateStudentSubmitted =
+          submittedStudentNumberCount > updatedSurvey.students.independentStudents.length
+        const newCourseSubmitted = hasNewCourses(
+          values.courseRealisationIds,
+          organisationSurvey.courses.map(c => c.id)
+        )
+
+        const { successMessage, messageKey } = getSuccessMessage(
+          t,
+          submittedStudentNumberCount,
+          updatedSurvey,
+          duplicateStudentSubmitted || newCourseSubmitted
+        )
+
         enqueueSnackbar(successMessage, { variant: 'success', key: messageKey })
       },
       onError: error => {
