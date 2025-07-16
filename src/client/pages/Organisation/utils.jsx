@@ -146,7 +146,7 @@ export const hasNewCourses = (submittedCourseIds, initialCourseIds) => {
   return false
 }
 
-export const getSuccessMessage = (t, submittedStudentNumberCount, updatedSurvey, shouldShowExtraInfo = false) => {
+export const getSuccessMessage = (t, submittedStudentNumberCount, updatedSurvey, shouldShowExtraInfo = true) => {
   let successMessage = t('common:saveSuccess')
   let messageKey = 'save-success'
 
