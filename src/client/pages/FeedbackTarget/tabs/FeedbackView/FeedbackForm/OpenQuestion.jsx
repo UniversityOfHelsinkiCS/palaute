@@ -5,7 +5,7 @@ import FormikTextField from '../../../../../components/common/FormikTextField'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 
-const OpenQuestion = ({ question, name }) => {
+const OpenQuestion = ({ question, name, disabled }) => {
   const { i18n } = useTranslation()
   const { language } = i18n
   const label = getLanguageValue(question.data?.label, language) ?? ''
@@ -21,7 +21,7 @@ const OpenQuestion = ({ question, name }) => {
       description={description}
       labelProps={{ component: 'label', htmlFor: labelId }}
     >
-      <FormikTextField name={name} id={labelId} fullWidth multiline />
+      <FormikTextField name={name} id={labelId} disabled={disabled} fullWidth multiline />
     </QuestionBase>
   )
 }

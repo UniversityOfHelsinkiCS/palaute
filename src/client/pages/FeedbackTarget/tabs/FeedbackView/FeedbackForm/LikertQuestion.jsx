@@ -22,7 +22,7 @@ const styles = {
 
 const options = [1, 2, 3, 4, 5, 0]
 
-const LikertQuestion = ({ question, name }) => {
+const LikertQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
   const { i18n, t } = useTranslation()
   const { language } = i18n
@@ -62,6 +62,7 @@ const LikertQuestion = ({ question, name }) => {
                 label={parseOption(option)}
                 key={option}
                 sx={option !== 0 ? styles.optionLabel : styles.dontKnowLabel}
+                disabled={disabled}
               />
             ))}
           </RadioGroup>

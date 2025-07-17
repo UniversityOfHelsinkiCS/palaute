@@ -31,11 +31,11 @@ const FormContainer = ({
   onOpenPrivacyDialog,
   validate,
   questions,
+  fewEnrolled,
   disabled: disabledProp,
   showCannotSubmitText = false,
   showSubmitButton = true,
   isEdit = false,
-  fewEnrolled,
 }) => {
   const { t } = useTranslation()
 
@@ -62,7 +62,7 @@ const FormContainer = ({
                   </Alert>
                 </Box>
 
-                <FeedbackForm questions={questions} name="answers" />
+                <FeedbackForm questions={questions} name="answers" disabled={disabledProp && showSubmitButton} />
               </CardContent>
             </Card>
 

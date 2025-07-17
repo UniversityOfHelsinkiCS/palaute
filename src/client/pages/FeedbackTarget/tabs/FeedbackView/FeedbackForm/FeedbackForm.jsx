@@ -23,17 +23,17 @@ const styles = {
   },
 }
 
-const QuestionItem = ({ question, name }) => {
+const QuestionItem = ({ question, name, disabled }) => {
   const QuestionComponent = componentByType[question.type]
 
   return (
     <Box sx={styles.questionItem}>
-      <QuestionComponent question={question} name={name} />
+      <QuestionComponent question={question} name={name} disabled={disabled} />
     </Box>
   )
 }
 
-const FeedbackForm = ({ questions = [], name = 'answers' }) => (
+const FeedbackForm = ({ questions = [], name = 'answers', disabled }) => (
   <div>
     {questions.map(question => (
       <QuestionItem
@@ -41,6 +41,7 @@ const FeedbackForm = ({ questions = [], name = 'answers' }) => (
         type={question.type}
         question={question}
         key={question.id}
+        disabled={disabled}
       />
     ))}
   </div>

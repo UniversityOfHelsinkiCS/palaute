@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 
-const SingleChoiceQuestion = ({ question, name }) => {
+const SingleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
   const { t, i18n } = useTranslation()
   const { language } = i18n
@@ -41,6 +41,7 @@ const SingleChoiceQuestion = ({ question, name }) => {
                 control={<Radio color="primary" />}
                 label={getLanguageValue(option.label, language)}
                 key={option.id}
+                disabled={disabled}
               />
             ))}
           </RadioGroup>

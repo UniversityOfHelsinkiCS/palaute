@@ -8,7 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 
-const MultipleChoiceQuestion = ({ question, name }) => {
+const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
   const { i18n, t } = useTranslation()
   const { language } = i18n
@@ -45,6 +45,7 @@ const MultipleChoiceQuestion = ({ question, name }) => {
                     onBlur={() => helpers.setTouched(true)}
                     color="primary"
                     name={option.id}
+                    disabled={disabled}
                   />
                 }
                 label={getLanguageValue(option.label, language)}
