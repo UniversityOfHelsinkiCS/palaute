@@ -74,12 +74,20 @@ export const useEditOrganisationSurveyMutation = organisationCode => {
 export const useDeleteOrganisationSurveyMutation = organisationCode => {
   const mutationFn = async surveyId => {
     await apiClient.delete(`/organisations/${organisationCode}/surveys/${surveyId}`)
+
+    return surveyId
   }
 
   const mutation = useMutation({
     mutationFn,
-    onSuccess: () => {
+    onSuccess: surveyId => {
       queryClient.invalidateQueries(queryKey)
+      queryClient.removeQueries({
+        queryKey: ['organisationSurvey', surveyId],
+      })
+      queryClient.removeQueries({
+        queryKey: ['feedbackTarget', surveyId.toString()],
+      })
     },
   })
 
