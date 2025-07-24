@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box } from '@mui/material'
+import * as Sentry from '@sentry/browser'
 import { NorButton } from '../../components/common/NorButton'
 
 const ErrorCausingComponent = () => {
@@ -15,6 +16,14 @@ const CrashDebug = () => {
     <Box>
       <NorButton onClick={() => setErr(true)} color="error" size="small" data-cy="errorButton">
         Throw error
+      </NorButton>
+      <NorButton
+        onClick={() => Sentry.captureMessage('Greetings from admin panel! This is a drill.')}
+        color="success"
+        size="small"
+        data-cy="successButton"
+      >
+        Test sentry message
       </NorButton>
       {err && <ErrorCausingComponent />}
     </Box>
