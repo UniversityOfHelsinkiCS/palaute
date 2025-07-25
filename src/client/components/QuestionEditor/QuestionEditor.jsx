@@ -202,6 +202,7 @@ const QuestionEditor = ({
   editable = true,
   publicQuestionIds,
   publicityConfigurableQuestionIds,
+  teacherQuestionIds,
   handleSubmit,
   handlePublicityToggle,
   copyFromCourseDialog,
@@ -220,7 +221,11 @@ const QuestionEditor = ({
         handlePublicityToggle={handlePublicityToggle}
         actions={
           copyFromCourseDialog && (
-            <QuestionEditorActions onCopy={handleSubmit} copyUniversityQuestionsButton={userCreated} />
+            <QuestionEditorActions
+              onSubmit={handleSubmit}
+              copyUniversityQuestionsButton={userCreated}
+              deletableQuestionIds={teacherQuestionIds}
+            />
           )
         }
         groupingQuestionSettings={groupingQuestionSettings}

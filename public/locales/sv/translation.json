@@ -187,8 +187,8 @@
     "removeOption": "Radera alternativ",
     "label": "Fråga",
     "content": "Innehåll",
-    "removeQuestionConfirmation": "Är du säker, att du vill radera frågan?",
-    "removeOptionConfirmation": "Är du säker, att du vill radera alternativet?",
+    "removeQuestionConfirmation": "Är du säker på att du vill radera frågan?",
+    "removeOptionConfirmation": "Är du säker på att du vill radera alternativet?",
     "description": "Beskrivning",
     "done": "Spara",
     "languageInfo": "Då håller för tillfället på att redigera språkversionen \"{{language}}\" av frågan",
@@ -198,7 +198,11 @@
     "uneditableTooltip": "Detta är förinställt och läggs automatiskt till i enkäten. Det kan inte redigeras eller tas bort.",
     "duplicate": "Duplicera",
     "markDownSupport": "Dessa fält stöder <2>Markdown</2> innehåll.",
-    "addTextualContent": "Lägg till textfält"
+    "addTextualContent": "Lägg till textfält",
+    "removeMany": "Ta bort många frågor",
+    "selectToRemove": "Välj frågor att ta bort",
+    "removeSelected": "Ta bort valda frågor",
+    "removeManyConfirmation": "Är du säker på att du vill ta bort de {{count}} valda frågorna?"
   },
   "editFeedbackTarget": {
     "closesAt": "Stängs",

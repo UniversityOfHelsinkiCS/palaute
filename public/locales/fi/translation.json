@@ -216,7 +216,11 @@
     "programmeQuestion": "Koulutusohjelmataso",
     "uneditableTooltip": "Tämä on määritetty etukäteen ja lisätään automaattisesti kyselyyn eikä sitä voi muokata tai poistaa",
     "duplicate": "Duplikoi",
-    "markDownSupport": "Kentät tukevat <2>Markdown</2> sisältöä"
+    "markDownSupport": "Kentät tukevat <2>Markdown</2> sisältöä",
+    "removeMany": "Poista monta kysymystä",
+    "selectToRemove": "Valitse poistettavat kysymykset",
+    "removeSelected": "Poista valitut kysymykset",
+    "removeManyConfirmation": "Haluatko varmasti poistaa valitut {{count}} kysymystä?"
   },
   "editFeedbackTarget": {
     "closesAt": "Sulkeutuu",

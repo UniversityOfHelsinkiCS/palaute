@@ -216,7 +216,11 @@
     "programmeQuestion": "Programme level",
     "uneditableTooltip": "This is predefined and automatically added to the survey and it can not be edited or removed",
     "duplicate": "Duplicate",
-    "markDownSupport": "These fields supports <2>Markdown</2> content"
+    "markDownSupport": "These fields supports <2>Markdown</2> content",
+    "removeMany": "Remove many questions",
+    "selectToRemove": "Select questions to remove",
+    "removeSelected": "Remove selected questions",
+    "removeManyConfirmation": "Are you sure you want to remove the selected {{count}} questions?"
   },
   "editFeedbackTarget": {
     "closesAt": "Closes at",
