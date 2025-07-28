@@ -61,15 +61,7 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   )
 }
 
-const QuestionEditorForm = ({
-  onStopEditing,
-  onRemoveQuestion,
-  onCopyQuestion,
-  editable,
-  handlePublicityToggle,
-  actions,
-  groupingQuestionSettings,
-}) => {
+const QuestionEditorForm = ({ saveChanges, editable, handlePublicityToggle, actions, groupingQuestionSettings }) => {
   const addButtonRef = useRef()
   const { t, i18n } = useTranslation()
   const [questionsField] = useField('questions')
@@ -80,7 +72,7 @@ const QuestionEditorForm = ({
   const handleStopEditing = async () => {
     if (editingQuestionId) {
       setEditingQuestionId(null)
-      onStopEditing()
+      saveChanges()
     }
   }
 
@@ -100,7 +92,7 @@ const QuestionEditorForm = ({
             onRemove={() => {
               groupingQuestionHelpers.setValue(null)
               setEditingQuestionId(null)
-              onRemoveQuestion()
+              saveChanges()
             }}
             groupingQuestion={groupingQuestionField.value}
             isEditing={editingQuestionId === getQuestionId(groupingQuestionField.value)}
@@ -119,19 +111,19 @@ const QuestionEditorForm = ({
                   onRemove={() => {
                     arrayHelpers.remove(index)
                     handleStopEditing()
-                    onRemoveQuestion()
+                    saveChanges()
                   }}
                   onMoveUp={() => {
                     arrayHelpers.swap(index - 1, index)
-                    onStopEditing()
+                    saveChanges()
                   }}
                   onMoveDown={() => {
                     arrayHelpers.swap(index + 1, index)
-                    onStopEditing()
+                    saveChanges()
                   }}
                   onCopy={() => {
                     arrayHelpers.insert(index + 1, copyQuestion(question))
-                    onCopyQuestion()
+                    saveChanges()
                   }}
                   moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
                   moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
@@ -213,9 +205,7 @@ const QuestionEditor = ({
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
       <QuestionEditorForm
-        onStopEditing={handleSubmit}
-        onRemoveQuestion={handleSubmit}
-        onCopyQuestion={handleSubmit}
+        saveChanges={handleSubmit}
         editable={editable}
         publicQuestionIds={publicQuestionIds}
         publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
