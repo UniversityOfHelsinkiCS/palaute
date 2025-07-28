@@ -19,6 +19,7 @@ const QuestionEditorActions = ({
 }) => {
   const { t } = useTranslation()
   const [, meta, helpers] = useField('questions')
+  const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const [universityQuestionsDialogOpen, setUniversityQuestionsDialogOpen] = React.useState(false)
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const [deleteManyDialogOpen, setDeleteManyDialogOpen] = React.useState(false)
@@ -66,6 +67,10 @@ const QuestionEditorActions = ({
 
     handleCloseDeleteManyDialog()
 
+    if (questionIds.has(getQuestionId(groupingQuestionField.value))) {
+      groupingQuestionHelpers.setValue(null)
+    }
+
     const questionsNotDeleted = [...meta.value].filter(q => !questionIds.has(getQuestionId(q)))
 
     helpers.setValue(questionsNotDeleted)
@@ -73,7 +78,11 @@ const QuestionEditorActions = ({
     onSubmit()
   }
 
-  const deletableQuestions = [...meta.value].filter(q => !q.id || deletableQuestionIds.includes(q.id))
+  let deletableQuestions = groupingQuestionField.value ? [groupingQuestionField.value] : []
+
+  deletableQuestions = deletableQuestions.concat(
+    [...meta.value].filter(q => !q.id || deletableQuestionIds.includes(q.id))
+  )
 
   return (
     <Box display="flex" gap="15px" alignItems="center">
