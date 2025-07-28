@@ -20,29 +20,19 @@ const QuestionEditorActions = ({
   const { t } = useTranslation()
   const [, meta, helpers] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
-  const [universityQuestionsDialogOpen, setUniversityQuestionsDialogOpen] = React.useState(false)
-  const [dialogOpen, setDialogOpen] = React.useState(false)
-  const [deleteManyDialogOpen, setDeleteManyDialogOpen] = React.useState(false)
+  const [dialogs, setDialogs] = React.useState({
+    universityQuestions: false,
+    copyQuestions: false,
+    deleteMany: false,
+  })
   const { enqueueSnackbar } = useSnackbar()
   const { survey, isLoading: surveyIsLoading } = useUniversitySurvey()
 
-  const handleCloseUniversityQuestionsDialog = () => setUniversityQuestionsDialogOpen(false)
+  const openDialog = key => setDialogs(previousValues => ({ ...previousValues, [key]: true }))
 
-  const handleOpenUniversityQuestionsDialog = () => setUniversityQuestionsDialogOpen(true)
+  const closeDialog = key => setDialogs(previousValues => ({ ...previousValues, [key]: false }))
 
-  const handleCloseDialog = () => setDialogOpen(false)
-
-  const handleOpenDialog = () => setDialogOpen(true)
-
-  const handleCloseDeleteManyDialog = () => setDeleteManyDialogOpen(false)
-
-  const handleOpenDeleteManyDialog = () => setDeleteManyDialogOpen(true)
-
-  const handleCopyUniversityQuestions = () => {
-    handleCloseUniversityQuestionsDialog()
-
-    helpers.setValue([...meta.value, ...copyQuestionsFromUniversitySurvey(survey)])
-
+  const showCopySuccessSnackbarAndHandleSubmit = () => {
     enqueueSnackbar(t('editFeedbackTarget:copySuccessSnackbar'), {
       variant: 'info',
     })
@@ -50,22 +40,26 @@ const QuestionEditorActions = ({
     onSubmit()
   }
 
+  const handleCopyUniversityQuestions = () => {
+    closeDialog('universityQuestions')
+
+    helpers.setValue([...meta.value, ...copyQuestionsFromUniversitySurvey(survey)])
+
+    showCopySuccessSnackbarAndHandleSubmit()
+  }
+
   const handleCopy = feedbackTarget => {
-    handleCloseDialog()
+    closeDialog('copyQuestions')
 
     helpers.setValue([...meta.value, ...copyQuestionsFromFeedbackTarget(feedbackTarget)])
 
-    enqueueSnackbar(t('editFeedbackTarget:copySuccessSnackbar'), {
-      variant: 'info',
-    })
-
-    onSubmit()
+    showCopySuccessSnackbarAndHandleSubmit()
   }
 
   const handleDeleteMany = questionIds => {
     if (!window.confirm(t('questionEditor:removeManyConfirmation', { count: questionIds.size }))) return
 
-    handleCloseDeleteManyDialog()
+    closeDialog('deleteMany')
 
     if (questionIds.has(getQuestionId(groupingQuestionField.value))) {
       groupingQuestionHelpers.setValue(null)
@@ -91,32 +85,36 @@ const QuestionEditorActions = ({
           {!surveyIsLoading && (
             <CopyUniversityQuestionsDialog
               survey={survey}
-              onClose={handleCloseUniversityQuestionsDialog}
+              onClose={() => closeDialog('universityQuestions')}
               onCopy={handleCopyUniversityQuestions}
-              open={universityQuestionsDialogOpen}
+              open={dialogs.universityQuestions}
             />
           )}
 
-          <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={handleOpenUniversityQuestionsDialog}>
+          <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={() => openDialog('universityQuestions')}>
             {t('editFeedbackTarget:copyUniversityQuestions')}
           </NorButton>
         </Box>
       )}
 
-      <CopyFromCourseDialog open={dialogOpen} onClose={handleCloseDialog} onCopy={handleCopy} />
+      <CopyFromCourseDialog
+        open={dialogs.copyQuestions}
+        onClose={() => closeDialog('copyQuestions')}
+        onCopy={handleCopy}
+      />
 
-      <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={handleOpenDialog}>
+      <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={() => openDialog('copyQuestions')}>
         {t('editFeedbackTarget:copyFromCourseButton')}
       </NorButton>
 
       <DeleteManyDialog
-        onClose={handleCloseDeleteManyDialog}
+        onClose={() => closeDialog('deleteMany')}
         onDelete={handleDeleteMany}
-        open={deleteManyDialogOpen}
+        open={dialogs.deleteMany}
         questions={deletableQuestions}
       />
 
-      <NorButton color="secondary" icon={<DeleteOutlined />} onClick={handleOpenDeleteManyDialog}>
+      <NorButton color="secondary" icon={<DeleteOutlined />} onClick={() => openDialog('deleteMany')}>
         {t('questionEditor:removeMany')}
       </NorButton>
     </Box>
