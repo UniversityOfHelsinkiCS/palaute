@@ -24,17 +24,16 @@ type DeletableQuestionProps = {
 }
 
 const DeletableQuestion = ({ question, questionsToDelete, setQuestionsToDelete }: DeletableQuestionProps) => {
-  const [checked, setChecked] = React.useState(false)
+  const checked = questionsToDelete.has(question.id)
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked)
-    if (questionsToDelete.has(question.id)) {
-      questionsToDelete.delete(question.id)
-      setQuestionsToDelete(questionsToDelete)
+    const newSet = new Set(questionsToDelete)
+    if (event.target.checked) {
+      newSet.add(question.id)
     } else {
-      questionsToDelete.add(question.id)
-      setQuestionsToDelete(questionsToDelete)
+      newSet.delete(question.id)
     }
+    setQuestionsToDelete(newSet)
   }
 
   return <FormControlLabel label={question.label} control={<Checkbox checked={checked} onChange={handleChange} />} />
@@ -72,11 +71,25 @@ const DeleteManyDialog = ({ onClose, onDelete, open = false, questions = [] }: D
             <DeletableQuestion
               key={q.id}
               question={q}
-              questionsToDelete={new Set(questionsToDelete)}
+              questionsToDelete={questionsToDelete}
               setQuestionsToDelete={setQuestionsToDelete}
             />
           ))}
         </FormGroup>
+        <NorButton
+          color="secondary"
+          onClick={() => setQuestionsToDelete(new Set(questionOptions.map(q => q.id)))}
+          style={{ marginTop: '16px', marginRight: '8px' }}
+        >
+          {t('questionEditor:selectAll')}
+        </NorButton>
+        <NorButton
+          color="secondary"
+          onClick={() => setQuestionsToDelete(new Set())}
+          style={{ marginTop: '16px', marginRight: '8px' }}
+        >
+          {t('questionEditor:deselectAll')}
+        </NorButton>
         <NorButton
           icon={<DeleteOutlined />}
           color="secondary"

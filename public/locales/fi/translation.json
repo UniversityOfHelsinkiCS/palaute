@@ -220,7 +220,9 @@
     "removeMany": "Poista monta kysymystä",
     "selectToRemove": "Valitse poistettavat kysymykset",
     "removeSelected": "Poista valitut kysymykset",
-    "removeManyConfirmation": "Haluatko varmasti poistaa valitut {{count}} kysymystä?"
+    "removeManyConfirmation": "Haluatko varmasti poistaa valitut {{count}} kysymystä?",
+    "selectAll": "Valitse kaikki",
+    "deselectAll": "Tyhjennä valinnat"
   },
   "editFeedbackTarget": {
     "closesAt": "Sulkeutuu",

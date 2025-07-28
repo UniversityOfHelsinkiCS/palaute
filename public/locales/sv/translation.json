@@ -202,7 +202,9 @@
     "removeMany": "Ta bort många frågor",
     "selectToRemove": "Välj frågor att ta bort",
     "removeSelected": "Ta bort valda frågor",
-    "removeManyConfirmation": "Är du säker på att du vill ta bort de {{count}} valda frågorna?"
+    "removeManyConfirmation": "Är du säker på att du vill ta bort de {{count}} valda frågorna?",
+    "selectAll": "Markera alla",
+    "deselectAll": "Avmarkera alla"
   },
   "editFeedbackTarget": {
     "closesAt": "Stängs",
