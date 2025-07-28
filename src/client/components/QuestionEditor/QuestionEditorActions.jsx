@@ -16,6 +16,7 @@ const QuestionEditorActions = ({
   onSubmit = () => {},
   copyUniversityQuestionsButton = false,
   deletableQuestionIds = [],
+  disabled = false,
 }) => {
   const { t } = useTranslation()
   const [, meta, helpers] = useField('questions')
@@ -91,7 +92,12 @@ const QuestionEditorActions = ({
             />
           )}
 
-          <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={() => openDialog('universityQuestions')}>
+          <NorButton
+            color="secondary"
+            icon={<FileCopyOutlined />}
+            onClick={() => openDialog('universityQuestions')}
+            disabled={disabled}
+          >
             {t('editFeedbackTarget:copyUniversityQuestions')}
           </NorButton>
         </Box>
@@ -103,7 +109,12 @@ const QuestionEditorActions = ({
         onCopy={handleCopy}
       />
 
-      <NorButton color="secondary" icon={<FileCopyOutlined />} onClick={() => openDialog('copyQuestions')}>
+      <NorButton
+        color="secondary"
+        icon={<FileCopyOutlined />}
+        onClick={() => openDialog('copyQuestions')}
+        disabled={disabled}
+      >
         {t('editFeedbackTarget:copyFromCourseButton')}
       </NorButton>
 
@@ -114,7 +125,12 @@ const QuestionEditorActions = ({
         questions={deletableQuestions}
       />
 
-      <NorButton color="secondary" icon={<DeleteOutlined />} onClick={() => openDialog('deleteMany')}>
+      <NorButton
+        color="secondary"
+        icon={<DeleteOutlined />}
+        onClick={() => openDialog('deleteMany')}
+        disabled={disabled}
+      >
         {t('questionEditor:removeMany')}
       </NorButton>
     </Box>

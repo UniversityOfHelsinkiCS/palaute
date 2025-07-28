@@ -99,6 +99,7 @@ const QuestionEditorForm = ({
             }}
             onRemove={() => {
               groupingQuestionHelpers.setValue(null)
+              setEditingQuestionId(null)
               onRemoveQuestion()
             }}
             groupingQuestion={groupingQuestionField.value}
@@ -187,7 +188,7 @@ const QuestionEditorForm = ({
                     </NorButton>
                   </Box>
                 )}
-                {actions && <Box>{actions}</Box>}
+                {actions && <Box>{React.cloneElement(actions, { disabled: Boolean(editingQuestionId) })}</Box>}
               </Box>
             </>
           )}
