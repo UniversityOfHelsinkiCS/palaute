@@ -95,6 +95,7 @@ const DeleteManyDialog = ({ onClose, onDelete, open = false, questions = [] }: D
           color="secondary"
           onClick={() => onDelete(questionsToDelete)}
           style={{ marginTop: '16px' }}
+          disabled={questionsToDelete.size === 0}
         >
           {t('questionEditor:removeSelected')}
         </NorButton>
