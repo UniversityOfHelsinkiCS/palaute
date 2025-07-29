@@ -129,7 +129,7 @@ const QuestionEditorActions = ({
         color="secondary"
         icon={<DeleteOutlined />}
         onClick={() => openDialog('deleteMany')}
-        disabled={disabled}
+        disabled={disabled || deletableQuestions.length < 2}
       >
         {t('questionEditor:removeMany')}
       </NorButton>
