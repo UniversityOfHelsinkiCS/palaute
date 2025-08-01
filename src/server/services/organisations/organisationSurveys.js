@@ -21,6 +21,7 @@ const {
   OrganisationSurveyCourse,
   Summary,
 } = require('../../models')
+const cache = require('../feedbackTargets/feedbackTargetCache')
 
 const getOrganisationCourseUnit = async organisationId => {
   const organisationCourseUnit = await CourseUnit.findOne({
@@ -511,6 +512,8 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   if (studentIds.length >= 0) {
     await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
   }
+
+  cache.invalidate(feedbackTargetId)
 
   const survey = await getSurveyById(feedbackTargetId)
 
