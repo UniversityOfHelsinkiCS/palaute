@@ -406,11 +406,11 @@
     "newSurveyName": "Survey name",
     "responsibleTeachers": "Responsible persons",
     "responsibleTeacherTitle": "Add a responsible person to this survey",
-    "editResponsibleTeacherTitle": "Edit surveys responsible persons",
+    "editResponsibleTeacherTitle": "Edit survey's responsible persons",
     "responsibleTeacherEmail": "Email",
     "students": "Students",
     "studentNumberTitle": "Add students to this survey",
-    "editStudentNumberTitle": "Edit surveys students",
+    "editStudentNumberTitle": "Edit survey's students",
     "studentNumberInputLabel": "Paste student numbers here",
     "studentNumberInformation": "Student numbers can be separated by the following characters",
     "studentNumberDelimeters": {
