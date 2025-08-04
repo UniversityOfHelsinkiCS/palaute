@@ -689,7 +689,9 @@
     "reminderAboutSurveyOpeningToTeachers": {
       "subject": "Palautejakso opettamallesi kurssille {{courseName}} on alkamassa",
       "subjectMultiple": "Palautejakso opettamillesi kursseille on alkamassa",
-      "text": "Hyvä opettaja! <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon sisällä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)",
+      "greeting": "Hyvä opettaja!",
+      "greetingWithWelcome": "Hyvä opettaja, tervetuloa käyttämään Norppa-kurssipalautejärjestelmää!",
+      "text": "{{greeting}} <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon sisällä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Yliopisto- ja ohjelmatason kysymysten lisäksi kyselyllä on seuraavat lisäkysymykset:",
       "smallCourseWarning": "Huomio! Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa, mikä voi vaarantaa palautteen anonyymiyden. Tästä syystä palaute kerätään ja näytetään opettajalle vain, jos opiskelijat antavat siihen suostumuksensa."
     },

@@ -89,12 +89,14 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   const { courseCode } = teacherFeedbackTargets[0].courseUnit
 
   let courseNamesAndUrls = ''
+  let greeting = t('mails:reminderAboutSurveyOpeningToTeachers:greeting')
 
   // Sort them so they come neatly in order in the email
   teacherFeedbackTargets.sort((a, b) => a.name[language]?.localeCompare(b.name[language]))
 
   for (const feedbackTarget of teacherFeedbackTargets) {
-    const { id, name, opensAt, closesAt, teacherQuestions, summary } = feedbackTarget
+    const { id, name, opensAt, closesAt, teacherQuestions, summary, userIsNewTeacher } = feedbackTarget
+
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
     const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
     const fbtCourseCode = feedbackTarget.courseUnit.courseCode
@@ -128,6 +130,10 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
         </a> (${openFrom[language]} ${closesOn[language]})
         ${summary?.data.studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT ? smallCourseWarning : ''}
         ${teacherQuestions.length > 0 ? `${questionsText}<br/>` : ''}`
+
+    if (userIsNewTeacher) {
+      greeting = t('mails:reminderAboutSurveyOpeningToTeachers:greetingWithWelcome')
+    }
   }
 
   const subject = hasMultipleFeedbackTargets
@@ -137,7 +143,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   const email = {
     to: emailAddress,
     subject,
-    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { courseNamesAndUrls, FEEDBACK_SYSTEM }),
+    text: t('mails:reminderAboutSurveyOpeningToTeachers:text', { greeting, courseNamesAndUrls, FEEDBACK_SYSTEM }),
   }
 
   return email

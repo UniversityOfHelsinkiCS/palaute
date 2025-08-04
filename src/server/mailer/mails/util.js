@@ -7,6 +7,7 @@ const {
   PUBLIC_URL,
   SHOW_COURSE_CODES_WITH_COURSE_NAMES,
 } = require('../../util/config')
+const { FeedbackTarget, User } = require('../../models')
 
 const getNoAdUrl = (username, userId, days) => {
   const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })
@@ -80,19 +81,52 @@ const getFeedbackTargetLink = feedbackTarget => {
   return `<i><a href=${adUrl}>${displayName}</a></i> (${openUntil[language]})<br/>`
 }
 
+const getFeedbackTargetsWithOpeningReminderSentForTeacher = async teacherId => {
+  const feedbackTargetsWithOpeningReminderSent = await FeedbackTarget.findAll({
+    where: {
+      feedbackOpeningReminderEmailSent: true,
+      feedbackType: 'courseRealisation',
+      userCreated: false,
+    },
+    include: [
+      {
+        model: User,
+        as: 'users',
+        attributes: ['id'],
+        required: true,
+        through: {
+          where: {
+            accessStatus: 'RESPONSIBLE_TEACHER',
+            userId: teacherId,
+          },
+        },
+      },
+    ],
+  })
+
+  return feedbackTargetsWithOpeningReminderSent
+}
+
 const createRecipientsForFeedbackTargets = async (
   feedbackTargets,
   options = { primaryOnly: false, whereOpenEmailNotSent: false }
 ) => {
-  // Leo if you are reading this you are allowed to refactor :)
-  // Too late 😤
-
   const emails = {}
 
-  feedbackTargets.forEach(feedbackTarget => {
-    feedbackTarget.users
-      .filter(options.whereOpenEmailNotSent ? u => !u.UserFeedbackTarget.feedbackOpenEmailSent : () => true)
-      .forEach(user => {
+  for (const feedbackTarget of feedbackTargets) {
+    for (const user of feedbackTarget.users) {
+      if (!(options.whereOpenEmailNotSent && user.UserFeedbackTarget.feedbackOpenEmailSent)) {
+        let userIsNewTeacher = false
+        if (user.UserFeedbackTarget.dataValues.accessStatus !== 'STUDENT') {
+          const feedbackTargetsWithOpeningReminderSent = await getFeedbackTargetsWithOpeningReminderSentForTeacher(
+            user.id
+          )
+          const isNewTeacher = feedbackTargetsWithOpeningReminderSent.length === 0
+          if (isNewTeacher) {
+            userIsNewTeacher = true
+          }
+        }
+
         const certainlyNoAdUser = user.username === user.id
         const possiblyNoAdUser = feedbackTarget.courseRealisation.isMoocCourse && !user.degreeStudyRight
 
@@ -118,11 +152,13 @@ const createRecipientsForFeedbackTargets = async (
               courseUnit: feedbackTarget.courseUnit,
               teacherQuestions: feedbackTarget.questions,
               summary: feedbackTarget.summary,
+              userIsNewTeacher,
             },
           ])
         })
-      })
-  })
+      }
+    }
+  }
 
   return emails
 }
