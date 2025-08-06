@@ -1,11 +1,15 @@
+import type { User } from '@common/types/user'
+import { useQuery } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
-import useQuery from './useQuery'
 
 const useNorppaFeedbacks = (options = {}) => {
   const queryKey = 'norppaFeedbacks'
 
   const queryFn = async () => {
-    const { data } = await apiClient.get('/norppa-feedback')
+    const { data } =
+      await apiClient.get<
+        Array<{ id: number; createdAt: string; data: string; responseWanted: boolean; solved: boolean; user: User }>
+      >('/norppa-feedback')
 
     return data
   }

@@ -20,11 +20,12 @@ const NorppaFeedbackView = () => {
     return <LoadingProgress />
   }
 
-  const sortedFeedbacks = feedbacks
-    .filter(f => !filterActionRequired || !f.solved)
-    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
+  const sortedFeedbacks =
+    feedbacks
+      ?.filter(f => !filterActionRequired || !f.solved)
+      ?.sort((a, b) => Date.parse(b.createdAt) - Date.parse(a.createdAt)) ?? []
 
-  const handleMarkAsSolved = async (id, solved) => {
+  const handleMarkAsSolved = async (id: number, solved: boolean) => {
     try {
       await apiClient.put(`/norppa-feedback/${id}`, { solved })
       refetch()
