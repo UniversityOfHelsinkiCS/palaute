@@ -4,7 +4,7 @@ const { teacher, student } = require('../fixtures/headers')
 
 describe('Continuous feedback', () => {
   beforeEach(() => {
-    cy.createFeedbackTarget()
+    cy.createFeedbackTarget({ extraStudents: 5 })
 
     cy.loginAs(teacher)
   })
