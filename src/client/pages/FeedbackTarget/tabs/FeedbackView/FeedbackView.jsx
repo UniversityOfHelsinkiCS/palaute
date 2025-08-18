@@ -24,6 +24,7 @@ import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+import ConfirmGivingFeedbackDialog from '../../../MyFeedbacks/ConfirmGivingFeedbackDialog'
 
 const FormContainer = ({
   onSubmit,
@@ -113,6 +114,7 @@ const FeedbackView = () => {
 
   const submitMutation = useSaveValues()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
+  const [smallCourseDialogOpen, setSmallCourseDialogOpen] = useState(true)
 
   const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
   const studentCount = feedbackTarget.summary?.data?.studentCount
@@ -216,6 +218,10 @@ const FeedbackView = () => {
   return (
     <>
       <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
+
+      {isStudent && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && (
+        <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
+      )}
 
       {showContinuousFeedback && <ContinuousFeedback />}
 

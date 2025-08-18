@@ -133,7 +133,8 @@
     "noFeedbackGiven": "Päätöksesi olla antamatta palautetta on tallennettu",
     "noFeedbackGivenChip": "En antanut palautetta",
     "attention": "Huom!",
-    "smallCourseWarning": "Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Jatkamalla tiedostat, että vaikka vastaajien tietoja ei näytetä opettajalle, vastaukset voi olla mahdollista yhdistää tiettyyn henkilöön."
+    "smallCourseWarning": "Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Jatkamalla tiedostat, että vaikka vastaajien tietoja ei näytetä opettajalle, vastaukset voi olla mahdollista yhdistää tiettyyn henkilöön.",
+    "continue": "Jatka palautteeseen"
   },
   "feedbackView": {
     "submitButton": "Lähetä palaute",

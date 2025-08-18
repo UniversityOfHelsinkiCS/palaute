@@ -127,7 +127,8 @@
     "noFeedbackGivenChip": "Jag gav ingen feedback",
     "summaryAvailableWhenEnded": "Sammanfattning av feedback kommer att finnas tillgänglig efter att feedbackperioden har avslutats.",
     "attention": "Obs!",
-    "smallCourseWarning": "Färre än {{count}} studenter har anmält sig till denna kurs. Genom att fortsätta bekräftar du att du är medveten om att även om läraren inte får tillgång till deltagarnas personuppgifter, kan det ändå vara möjligt att koppla svaren till enskilda individer."
+    "smallCourseWarning": "Färre än {{count}} studenter har anmält sig till denna kurs. Genom att fortsätta bekräftar du att du är medveten om att även om läraren inte får tillgång till deltagarnas personuppgifter, kan det ändå vara möjligt att koppla svaren till enskilda individer.",
+    "continue": "Fortsätt till responsen"
   },
   "feedbackView": {
     "submitButton": "Ge respons",

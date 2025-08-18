@@ -21,50 +21,24 @@ import { getStartAndEndString } from '../../util/getDateRangeString'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetCourseIsOngoing from '../../util/feedbackTargetCourseIsOngoing'
 import feedbackTargetNotGivingFeedback from '../../util/feedbackTargetNotGivingFeedback'
-import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../util/common'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/common'
 import { getCourseCode } from '../../util/courseIdentifiers'
 import { NorButton } from '../../components/common/NorButton'
-import ConfirmGivingFeedbackDialog from './ConfirmGivingFeedbackDialog'
 
-const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback, studentCount }) => {
+const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }) => {
   const { t } = useTranslation()
-  const [open, setOpen] = useState(false)
-
-  const handleClose = () => {
-    setOpen(false)
-  }
-
-  const handleOpenDialog = () => {
-    setOpen(true)
-  }
 
   return (
     <Box>
-      {studentCount >= FEEDBACK_HIDDEN_STUDENT_COUNT && (
-        <NorButton
-          color="primary"
-          to={editPath}
-          component={Link}
-          data-cy="feedback-item-give-feedback"
-          sx={{ mr: '1rem' }}
-        >
-          {t('userFeedbacks:giveFeedbackButton')}
-        </NorButton>
-      )}
-      {studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && (
-        <Box>
-          <ConfirmGivingFeedbackDialog onClose={handleClose} editPath={editPath} open={open} />
-          <NorButton
-            color="primary"
-            onClick={handleOpenDialog}
-            data-cy="feedback-item-give-feedback-small-course"
-            sx={{ mr: '1rem' }}
-          >
-            {t('userFeedbacks:giveFeedbackButton')}
-          </NorButton>
-        </Box>
-      )}
-
+      <NorButton
+        color="primary"
+        to={editPath}
+        component={Link}
+        data-cy="feedback-item-give-feedback"
+        sx={{ mr: '1rem' }}
+      >
+        {t('userFeedbacks:giveFeedbackButton')}
+      </NorButton>
       <NotGivingFeedbackButton noFeedbackAllowed={noFeedbackAllowed} onNotGivingFeedback={onNotGivingFeedback} />
     </Box>
   )

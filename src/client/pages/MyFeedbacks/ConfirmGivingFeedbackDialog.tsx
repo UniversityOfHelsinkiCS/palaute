@@ -10,11 +10,10 @@ import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../util/common'
 
 type ConfirmGivingFeedbackDialogProps = {
   onClose: () => void
-  editPath: string
   open?: boolean
 }
 
-const ConfirmGivingFeedbackDialog = ({ onClose, editPath, open = false }: ConfirmGivingFeedbackDialogProps) => {
+const ConfirmGivingFeedbackDialog = ({ onClose, open = false }: ConfirmGivingFeedbackDialogProps) => {
   const { t } = useTranslation()
 
   return (
@@ -26,24 +25,24 @@ const ConfirmGivingFeedbackDialog = ({ onClose, editPath, open = false }: Confir
             count: FEEDBACK_HIDDEN_STUDENT_COUNT,
           })}
         </Typography>
-        <NorButton
-          color="secondary"
-          to={editPath}
-          component={Link}
-          sx={{ mr: '1rem' }}
-          data-cy="confirm-giving-feedback-dialog-give-feedback"
-        >
-          {t('userFeedbacks:giveFeedbackButton')}
-        </NorButton>
       </DialogContent>
       <DialogActions>
+        <NorButton
+          color="secondary"
+          to="/feedbacks"
+          component={Link}
+          sx={{ margin: '0 10px 10px 0' }}
+          data-cy="confirm-giving-feedback-dialog-cancel"
+        >
+          {t('common:cancel')}
+        </NorButton>
         <NorButton
           color="primary"
           sx={{ margin: '0 10px 10px 0' }}
           onClick={onClose}
-          data-cy="confirm-giving-feedback-dialog-close"
+          data-cy="confirm-giving-feedback-dialog-give-feedback"
         >
-          {t('common:close')}
+          {t('userFeedbacks:continue')}
         </NorButton>
       </DialogActions>
     </Dialog>
