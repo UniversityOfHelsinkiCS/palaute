@@ -657,7 +657,7 @@
       "subject": "Tidsperioden för kursrespons på kursen {{courseName}} börjar",
       "subjectMultiple": "Perioden för kursrespons börjar på dina kurser",
       "greeting": "Bästa lärare!",
-      "greetingWithWelcome": "Bästa lärare, välkommen till Norppa-kursresponssystemet!",
+      "greetingWithWelcome": "Bästa lärare, välkommen till Helsingfors universitets Norppa-kursresponssystem!",
       "text": "{{greeting}} <br/>\nKursresponsblanketten för följande kurser öppnas inom en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Utöver universitets- och programnivåns frågor har följande frågor lagts till i enkäten:",
       "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter, vilket kan äventyra anonymiteten i återkopplingen. Av denna anledning kommer återkopplingen endast att samlas in och visas för läraren om studenten ger sitt samtycke."

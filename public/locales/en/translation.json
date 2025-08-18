@@ -690,7 +690,7 @@
       "subject": "Feedback for the course {{courseName}} is about to start",
       "subjectMultiple": "The feedback for your courses are about to start",
       "greeting": "Dear teacher!",
-      "greetingWithWelcome": "Dear teacher, welcome to the Norppa course feedback system!",
+      "greetingWithWelcome": "Dear teacher, welcome to the University of Helsinki Norppa course feedback system!",
       "text": "{{greeting}} <br/>\nThe course feedback form for the following courses will open within a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "In addition to the university and programme level questions, the following questions have been added to the survey:",
       "smallCourseWarning": "Attention! This course has fewer than {{count}} enrolled students, which might compromise the anonymity of the feedback. For this reason, the feedback will only be collected and shown to the teacher if the student gives their consent."
