@@ -7,28 +7,25 @@ describe('When course has only one enrolled student', () => {
     cy.getTestFbtId().as('fbtId')
   })
 
-  describe('After logging in and navigating to My feedback page', () => {
+  describe('After logging in and opening feedback survey', () => {
     beforeEach(() => {
       cy.loginAs(student)
       cy.get('[data-cy="navbar-link-My feedback"]').click()
+      cy.get('[data-cy=feedback-item-give-feedback]').click()
     })
 
     it('Student gets a warning about small course when opening the feedback form', () => {
-      cy.get('[data-cy=feedback-item-give-feedback-small-course]').click()
       cy.contains('Attention!')
     })
 
-    it('Student can close small course warning', () => {
-      cy.get('[data-cy="navbar-link-My feedback"]').click()
-      cy.get('[data-cy=feedback-item-give-feedback-small-course]').click()
-      cy.get('[data-cy=confirm-giving-feedback-dialog-close]').click()
+    it('Student can cancel giving feedback and is redirected to My feedback page', () => {
+      cy.get('[data-cy=confirm-giving-feedback-dialog-cancel]').click()
       cy.contains('Attention!').should('not.exist')
-      cy.get('[data-cy=feedback-item-give-feedback-small-course]').should('exist')
+      cy.contains('Awaiting')
+      cy.get('[data-cy=feedback-item-give-feedback]').should('exist')
     })
 
-    it('Student can open feedback form after reading the warning', () => {
-      cy.get('[data-cy="navbar-link-My feedback"]').click()
-      cy.get('[data-cy=feedback-item-give-feedback-small-course]').click()
+    it('Student can close the warning and continue to feedback form after reading the warning', () => {
       cy.get('[data-cy=confirm-giving-feedback-dialog-give-feedback]').click()
       cy.contains('Attention!').should('not.exist')
       cy.contains('Testikysymys 1 *')
@@ -39,6 +36,7 @@ describe('When course has only one enrolled student', () => {
     beforeEach(() => {
       cy.loginAs(student)
       cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+      cy.get('[data-cy=confirm-giving-feedback-dialog-give-feedback]').click()
       cy.get('input[value=5]').each($el => {
         cy.wrap($el).click()
       })
