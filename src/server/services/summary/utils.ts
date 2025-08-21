@@ -2,7 +2,7 @@ import _ from 'lodash'
 import * as datefns from 'date-fns'
 import { FeedbackData } from 'models/feedback'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
-import { Summary } from '../../models'
+import { Summary, Organisation } from '../../models'
 import { SummaryData, SummaryResult } from '../../models/summary'
 
 const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
@@ -237,4 +237,17 @@ export const removeFeedbackDataFromSummary = (summaryData: SummaryData, feedback
   return summaryData
 }
 
-export { sumSummaryDatas, mapOptionIdToValue, sumSummaries, getScopedSummary }
+const getOrganisationCodeById = async (organisationId: string) => {
+  if (!organisationId) return undefined
+
+  const organisationCode = await Organisation.findOne({
+    attributes: ['code'],
+    where: {
+      id: organisationId,
+    },
+  })
+
+  return organisationCode.code
+}
+
+export { sumSummaryDatas, mapOptionIdToValue, sumSummaries, getScopedSummary, getOrganisationCodeById }

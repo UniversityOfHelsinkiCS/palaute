@@ -12,7 +12,7 @@ const {
   CourseRealisation,
   CourseUnitsOrganisation,
 } = require('../../models')
-const { getScopedSummary, sumSummaries } = require('./utils')
+const { getScopedSummary, sumSummaries, getOrganisationCodeById } = require('./utils')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
 const { getTeacherSummary } = require('./getTeacherSummary')
@@ -31,7 +31,10 @@ const exportXLSX = async ({
   const workbook = XLSX.utils.book_new()
 
   const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
-  const questions = await getSummaryQuestions()
+
+  const organisationCode = organisationId ? await getOrganisationCodeById(organisationId) : undefined
+
+  const questions = await getSummaryQuestions(organisationCode)
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
 
   if (organisationId && !accessibleOrganisationIds.includes(organisationId)) {
