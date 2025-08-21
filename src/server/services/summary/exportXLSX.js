@@ -113,7 +113,10 @@ const exportXLSX = async ({
       return org.toJSON()
     })
 
-    const allOrganisations = _.uniqBy(organisationsJson.concat(teacherOrganisations), 'id')
+    const allOrganisations = _.uniqBy(
+      organisationId ? organisationsJson : organisationsJson.concat(teacherOrganisations),
+      'id'
+    )
 
     // In xlsx terms aoa = array of arrays
     const organisationsAoa = allOrganisations.map(org => [
@@ -139,7 +142,10 @@ const exportXLSX = async ({
       return cu.toJSON()
     })
 
-    const allCourseUnits = _.uniqBy(courseUnitsJson.concat(teacherOrganisations.flatMap(org => org.courseUnits)), 'id')
+    const allCourseUnits = _.uniqBy(
+      organisationId ? courseUnitsJson : courseUnitsJson.concat(teacherOrganisations.flatMap(org => org.courseUnits)),
+      'id'
+    )
 
     const courseUnitsAoa = allCourseUnits.map(cu => [
       cu.groupId,
@@ -204,9 +210,11 @@ const exportXLSX = async ({
     })
 
     const allCourseRealisations = _.uniqBy(
-      courseRealisations.concat(
-        teacherOrganisations.flatMap(org => org.courseUnits.flatMap(cu => cu.courseRealisations))
-      ),
+      organisationId
+        ? courseRealisations
+        : courseRealisations.concat(
+            teacherOrganisations.flatMap(org => org.courseUnits.flatMap(cu => cu.courseRealisations))
+          ),
       'id'
     )
 
