@@ -163,11 +163,41 @@ const exportXLSX = async ({
       where: {
         id: _.uniq(organisationCourseRealisationIds),
       },
-      include: {
-        model: scopedSummary,
-        as: 'summary',
-        required: true,
-      },
+      include: [
+        {
+          model: scopedSummary,
+          as: 'summary',
+          required: true,
+        },
+        {
+          model: FeedbackTarget,
+          as: 'feedbackTargets',
+          attributes: ['id'],
+          required: true,
+          include: {
+            model: CourseUnit,
+            as: 'courseUnit',
+            attributes: ['courseCode'],
+            required: true,
+          },
+        },
+      ],
+    })
+
+    const curIdToCourseCode = {}
+
+    const teacherOrgCUs = teacherOrganisations.flatMap(org => org.courseUnits)
+
+    teacherOrgCUs.forEach(cu => {
+      cu.courseRealisations.forEach(cur => {
+        curIdToCourseCode[cur.id] = cu.courseCode
+      })
+    })
+
+    courseRealisations.forEach(cur => {
+      cur.feedbackTargets.forEach(fbt => {
+        curIdToCourseCode[cur.id] = fbt.courseUnit.courseCode
+      })
     })
 
     const allCourseRealisations = _.uniqBy(
@@ -180,9 +210,11 @@ const exportXLSX = async ({
     const courseRealisationsAoa = allCourseRealisations.map(cur => {
       earliestStartDate = cur.summary.startDate
       latestEndDate = cur.summary.endDate
+      const courseCode = curIdToCourseCode[cur.id] || ''
 
       return [
         cur.id,
+        courseCode,
         getLanguageValue(cur.name, user.language),
         cur.startDate,
         cur.endDate,
@@ -193,7 +225,9 @@ const exportXLSX = async ({
       ]
     })
 
-    const headers = [['id', t('common:name'), t('common:startDate'), t('common:endDate'), ...defaultHeaders]]
+    const headers = [
+      ['id', t('common:courseCode'), t('common:name'), t('common:startDate'), t('common:endDate'), ...defaultHeaders],
+    ]
 
     XLSX.utils.book_append_sheet(
       workbook,
