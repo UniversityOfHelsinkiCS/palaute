@@ -18,7 +18,7 @@ We used two tools to analyse the accessibility of the software:
 
 #### Feedback
 
-If you notice any accessibility issues while using the software please give us feedback by either contacting the support email at [coursefeedback@helsinki.fi](mailto:coursefeedback@helsinki.fi) or by [creating an issue through github](https://github.com/UniversityOfHelsinkiCS/palaute/issues/new). We are glad to recieve information on how to improve the accessibility for Norppa.
+If you notice any accessibility issues while using the software please give us feedback by either contacting the support email at [kurssipalaute@helsinki.fi](mailto:kurssipalaute@helsinki.fi) or by [creating an issue through github](https://github.com/UniversityOfHelsinkiCS/palaute/issues/new). We are glad to recieve information on how to improve the accessibility for Norppa.
 
 If you are not satisfied with the answer or do not receive an answer within two weeks, you may file a complaint with the [Regional State Administrative Agency for Southern Finland](https://www.saavutettavuusvaatimukset.fi/kayttajan-oikeudet/). The website of the Regional State Administrative Agency for Southern Finland contains information on how to submit a complaint and how the matter is processed.
 
