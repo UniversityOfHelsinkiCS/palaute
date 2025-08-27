@@ -28,6 +28,6 @@ Accessibility supervision unit
 
 www.saavutettavuusvaatimukset.fi
 
-saavutettavuus(at)avi.fi
+saavutettavuus@traficom.fi
 
 phone +358 29501 6000 (switchboard)
