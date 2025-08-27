@@ -1,6 +1,6 @@
 ### Accessibility document for the course feedback system of the University of Helsinki
 
-This accessibility document is about the accessibility of [coursefeedback.helsinki.fi](coursefeedback.helsinki.fi) and was created on 11.10.2021. The accessibility analysis of the software was done by the developers.
+This accessibility document is about the accessibility of [norppa.helsinki.fi](norppa.helsinki.fi) and was created on 11.10.2021. The accessibility analysis of the software was done by the developers.
 
 #### Accessibility status
 
