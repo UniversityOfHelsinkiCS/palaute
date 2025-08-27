@@ -16,6 +16,7 @@ const { getScopedSummary, sumSummaries, getOrganisationCodeById } = require('./u
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
 const { getTeacherSummary } = require('./getTeacherSummary')
+const { getAccessibleCourseRealisationIds } = require('./access')
 const { ApplicationError } = require('../../util/customErrors')
 
 const exportXLSX = async ({
@@ -167,6 +168,9 @@ const exportXLSX = async ({
       .flatMap(org => org.courseRealisationsOrganisations.map(curo => curo.courseRealisationId))
       .concat(courseUnits.flatMap(cu => cu.feedbackTargets.map(fbt => fbt.courseRealisationId)))
 
+    const orgAccess = await user.getOrganisationAccess()
+    const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
+
     const courseRealisations = await CourseRealisation.findAll({
       attributes: ['id', 'name', 'startDate', 'endDate'],
       where: {
@@ -176,6 +180,12 @@ const exportXLSX = async ({
         {
           model: scopedSummary,
           as: 'summary',
+          required: true,
+        },
+        {
+          model: CourseRealisationsOrganisation,
+          as: 'courseRealisationsOrganisations',
+          attributes: ['organisationId'],
           required: true,
         },
         {
@@ -218,7 +228,15 @@ const exportXLSX = async ({
       'id'
     )
 
-    const courseRealisationsAoa = allCourseRealisations.map(cur => {
+    const accessibleCourseRealisations = allCourseRealisations.filter(cur => {
+      const curOrgIds = cur.courseRealisationsOrganisations?.map(curo => curo.organisationId) ?? []
+      const hasOrgAccess = Object.values(orgAccess).some(o => curOrgIds.includes(o.organisation.id))
+      if (user.isAdmin || hasOrgAccess) return true
+
+      return accessibleCurIds.includes(cur.id)
+    })
+
+    const courseRealisationsAoa = accessibleCourseRealisations.map(cur => {
       earliestStartDate = cur.summary.startDate
       latestEndDate = cur.summary.endDate
       const courseCode = curIdToCourseCode[cur.id] || ''
