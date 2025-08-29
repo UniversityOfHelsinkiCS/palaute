@@ -2,7 +2,7 @@ import _ from 'lodash'
 import * as datefns from 'date-fns'
 import { FeedbackData } from 'models/feedback'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
-import { Summary, Organisation } from '../../models'
+import { Summary, Organisation, CourseRealisation } from '../../models'
 import { SummaryData, SummaryResult } from '../../models/summary'
 
 const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
@@ -250,4 +250,30 @@ const getOrganisationCodeById = async (organisationId: string) => {
   return organisationCode.code
 }
 
-export { sumSummaryDatas, mapOptionIdToValue, sumSummaries, getScopedSummary, getOrganisationCodeById }
+const mapCourseIdsToCourseCodes = (teacherOrganisations: Organisation[], courseRealisations: CourseRealisation[]) => {
+  const curIdToCourseCodeMapping: Record<string, string> = {}
+  const teacherOrgCUs = teacherOrganisations.flatMap(org => org.courseUnits)
+
+  teacherOrgCUs.forEach(cu => {
+    cu.courseRealisations.forEach((cur: CourseRealisation) => {
+      curIdToCourseCodeMapping[cur.id] = cu.courseCode
+    })
+  })
+
+  courseRealisations.forEach(cur => {
+    cur.feedbackTargets.forEach(fbt => {
+      curIdToCourseCodeMapping[cur.id] = fbt.courseUnit.courseCode
+    })
+  })
+
+  return curIdToCourseCodeMapping
+}
+
+export {
+  sumSummaryDatas,
+  mapOptionIdToValue,
+  sumSummaries,
+  getScopedSummary,
+  getOrganisationCodeById,
+  mapCourseIdsToCourseCodes,
+}

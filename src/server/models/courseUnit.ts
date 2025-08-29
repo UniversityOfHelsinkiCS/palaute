@@ -14,6 +14,7 @@ import { sequelize } from '../db/dbConnection'
 import { logger } from '../util/logger'
 import type Summary from './summary'
 import { Organisation } from './organisation'
+import { CourseRealisation } from './courseRealisation'
 
 export type CourseUnitValidityPeriod = {
   startDate: Date
@@ -36,6 +37,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   // --- ideally refactor away ---
   // -----------------------------
   declare summary?: Summary
+  declare courseRealisations?: CourseRealisation[]
 
   // --- Helper methods ---
   // ----------------------
@@ -98,6 +100,9 @@ CourseUnit.init(
       type: DATE,
     },
     summary: {
+      type: VIRTUAL,
+    },
+    courseRealisations: {
       type: VIRTUAL,
     },
   },

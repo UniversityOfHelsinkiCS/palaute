@@ -15,6 +15,7 @@ import {
   CreationOptional,
   ForeignKey,
   HasOneGetAssociationMixin,
+  NonAttribute,
 } from 'sequelize'
 
 import _ from 'lodash'
@@ -72,6 +73,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare studentCount?: number
   declare continuousFeedbackCount?: number
   declare userFeedbackTargets?: UserFeedbackTarget[]
+  declare courseUnit?: NonAttribute<CourseUnit>
 
   // --- Association methods -----------------------------
   // --- only the ones that are used are declared here ---

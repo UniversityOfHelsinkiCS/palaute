@@ -10,10 +10,12 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  NonAttribute,
 } from 'sequelize'
 import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import type Summary from './summary'
+import type { CourseUnit } from './courseUnit'
 
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---
@@ -32,6 +34,7 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   // --- ideally refactor away ---
   // -----------------------------
   declare summary?: Summary
+  declare courseUnits?: NonAttribute<CourseUnit[]>
 
   // --- Helper methods ---
   // ----------------------

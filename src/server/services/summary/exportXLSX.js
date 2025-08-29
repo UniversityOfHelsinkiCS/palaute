@@ -12,7 +12,7 @@ const {
   CourseRealisation,
   CourseUnitsOrganisation,
 } = require('../../models')
-const { getScopedSummary, sumSummaries, getOrganisationCodeById } = require('./utils')
+const { getScopedSummary, sumSummaries, getOrganisationCodeById, mapCourseIdsToCourseCodes } = require('./utils')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
 const { getTeacherSummary } = require('./getTeacherSummary')
@@ -173,25 +173,6 @@ const getJSON = (targets, targetType) => {
   })
 
   return targetJSON
-}
-
-const mapCourseIdsToCourseCodes = (teacherOrganisations, courseRealisations) => {
-  const curIdToCourseCodeMapping = {}
-  const teacherOrgCUs = teacherOrganisations.flatMap(org => org.courseUnits)
-
-  teacherOrgCUs.forEach(cu => {
-    cu.courseRealisations.forEach(cur => {
-      curIdToCourseCodeMapping[cur.id] = cu.courseCode
-    })
-  })
-
-  courseRealisations.forEach(cur => {
-    cur.feedbackTargets.forEach(fbt => {
-      curIdToCourseCodeMapping[cur.id] = fbt.courseUnit.courseCode
-    })
-  })
-
-  return curIdToCourseCodeMapping
 }
 
 const getOrganisationCourseRealisationIds = (organisations, courseUnits) =>

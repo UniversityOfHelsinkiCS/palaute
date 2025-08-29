@@ -7,9 +7,11 @@ import {
   DATE,
   Model,
   CreationOptional,
+  NonAttribute,
 } from 'sequelize'
 import type { LanguageId, LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
+import type { FeedbackTarget } from './feedbackTarget'
 
 export type CourseRealisationTeachingLanguages = LanguageId[]
 
@@ -26,6 +28,8 @@ class CourseRealisation extends Model<InferAttributes<CourseRealisation>, InferC
   declare userCreated: CreationOptional<boolean>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
+
+  declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
 }
 
 CourseRealisation.init(
