@@ -2,7 +2,7 @@ import _ from 'lodash'
 import * as datefns from 'date-fns'
 import { FeedbackData } from 'models/feedback'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
-import { Summary, Organisation, CourseRealisation } from '../../models'
+import { Summary, Organisation, CourseUnit, CourseRealisation } from '../../models'
 import { SummaryData, SummaryResult } from '../../models/summary'
 
 const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
@@ -269,6 +269,11 @@ const mapCourseIdsToCourseCodes = (teacherOrganisations: Organisation[], courseR
   return curIdToCourseCodeMapping
 }
 
+const getOrganisationCourseRealisationIds = (organisations: Organisation[], courseUnits: CourseUnit[]) =>
+  organisations
+    .flatMap(org => org.courseRealisationsOrganisations.map(curo => curo.courseRealisationId))
+    .concat(courseUnits.flatMap(cu => cu.feedbackTargets.map(fbt => fbt.courseRealisationId)))
+
 export {
   sumSummaryDatas,
   mapOptionIdToValue,
@@ -276,4 +281,5 @@ export {
   getScopedSummary,
   getOrganisationCodeById,
   mapCourseIdsToCourseCodes,
+  getOrganisationCourseRealisationIds,
 }

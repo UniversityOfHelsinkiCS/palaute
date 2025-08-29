@@ -8,13 +8,15 @@ import {
   InferCreationAttributes,
   CreationOptional,
   DATE,
+  NonAttribute,
 } from 'sequelize'
 import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import { logger } from '../util/logger'
 import type Summary from './summary'
 import { Organisation } from './organisation'
-import { CourseRealisation } from './courseRealisation'
+import type { CourseRealisation } from './courseRealisation'
+import type { FeedbackTarget } from './feedbackTarget'
 
 export type CourseUnitValidityPeriod = {
   startDate: Date
@@ -38,6 +40,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   // -----------------------------
   declare summary?: Summary
   declare courseRealisations?: CourseRealisation[]
+  declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
 
   // --- Helper methods ---
   // ----------------------

@@ -16,6 +16,7 @@ import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import type Summary from './summary'
 import type { CourseUnit } from './courseUnit'
+import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---
@@ -35,6 +36,7 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   // -----------------------------
   declare summary?: Summary
   declare courseUnits?: NonAttribute<CourseUnit[]>
+  declare courseRealisationsOrganisations?: NonAttribute<CourseRealisationsOrganisation[]>
 
   // --- Helper methods ---
   // ----------------------

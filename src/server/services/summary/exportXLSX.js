@@ -12,7 +12,13 @@ const {
   CourseRealisation,
   CourseUnitsOrganisation,
 } = require('../../models')
-const { getScopedSummary, sumSummaries, getOrganisationCodeById, mapCourseIdsToCourseCodes } = require('./utils')
+const {
+  getScopedSummary,
+  sumSummaries,
+  getOrganisationCodeById,
+  mapCourseIdsToCourseCodes,
+  getOrganisationCourseRealisationIds,
+} = require('./utils')
 const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
 const { i18n } = require('../../util/i18n')
 const { getTeacherSummary } = require('./getTeacherSummary')
@@ -174,11 +180,6 @@ const getJSON = (targets, targetType) => {
 
   return targetJSON
 }
-
-const getOrganisationCourseRealisationIds = (organisations, courseUnits) =>
-  organisations
-    .flatMap(org => org.courseRealisationsOrganisations.map(curo => curo.courseRealisationId))
-    .concat(courseUnits.flatMap(cu => cu.feedbackTargets.map(fbt => fbt.courseRealisationId)))
 
 const exportXLSX = async ({
   user,
