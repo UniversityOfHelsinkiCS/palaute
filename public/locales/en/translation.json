@@ -282,7 +282,7 @@
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet.",
     "notEnoughStudentsInfo": "To protect the anonymity of feedback, survey results are not shown when there are fewer than {{count}} enrolled students. The teacher can see the feedback if the student has given their consent.",
-    "smallCourseInfo": "Note: This course has fewer than {{count}} enrolled students. The feedback is only shown to the teacher if the students have given their consent.",
+    "smallCourseInfo": "Note: This course has fewer than {{count}} enrolled students. Feedback has been collected only from students who have given their consent to it.",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",
     "studentsWithFeedbackHeading": "Students who have given feedback",
@@ -694,7 +694,7 @@
       "greetingWithWelcome": "Dear teacher, welcome to the University of Helsinki Norppa course feedback system!",
       "text": "{{greeting}} <br/>\nThe course feedback form for the following courses will open within a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "In addition to the university and programme level questions, the following questions have been added to the survey:",
-      "smallCourseWarning": "Attention! This course has fewer than {{count}} enrolled students, which might compromise the anonymity of the feedback. For this reason, the feedback will only be collected and shown to the teacher if the student gives their consent."
+      "smallCourseWarning": "Attention! This course has fewer than {{count}} enrolled students, which might compromise the anonymity of the feedback. Feedback will be collected only from students who give their consent to it."
     },
     "instructionsAndSupport": "Contact support."
   },

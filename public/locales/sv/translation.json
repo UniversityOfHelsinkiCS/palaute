@@ -266,7 +266,7 @@
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Enkätresultaten visas inte eftersom ingen återkoppling har lämnats ännu.",
     "notEnoughStudentsInfo": "Enkätresultaten visas inte om kursen har färre än {{count}} anmälda studenter. Läraren kan se återkopplingen om studenten har gett sitt samtycke.",
-    "smallCourseInfo": "Observera: Den här kursen har färre än {{count}} anmälda studenter. Återkopplingen visas till läraren endast om studenterna har gett sitt samtycke.",
+    "smallCourseInfo": "Observera: Den här kursen har färre än {{count}} anmälda studenter. Återkopplingen har samlats in endast från studenter som har gett sitt samtycke till det.",
     "onlyForEnrolledInfo": "Resultaten av enkäten visas inte eftersom kursens lärare har ställt in responsen synlig endast för kursens deltagare",
     "teacherAccessInfo": "Du har lärarbehörighet på kursen, d.v.s. du kan bara se svaren på frågor som är offentliga. Om du behöver breda insyn, be om rollen som ansvarslärare via Sisu.",
     "studentsWithFeedbackHeading": "Studeranden som givit respons",
@@ -661,7 +661,7 @@
       "greetingWithWelcome": "Bästa lärare, välkommen till Helsingfors universitets Norppa-kursresponssystem!",
       "text": "{{greeting}} <br/>\nKursresponsblanketten för följande kurser öppnas inom en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Utöver universitets- och programnivåns frågor har följande frågor lagts till i enkäten:",
-      "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter, vilket kan äventyra anonymiteten i återkopplingen. Av denna anledning kommer återkopplingen endast att samlas in och visas för läraren om studenten ger sitt samtycke."
+      "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter, vilket kan äventyra anonymiteten i återkopplingen. Återkoppling samlas in endast från studenter som ger sitt samtycke till det."
     },
     "instructionsAndSupport": "Kontakta stödet."
   }
