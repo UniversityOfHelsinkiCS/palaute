@@ -181,16 +181,7 @@ const getJSON = (targets, targetType) => {
   return targetJSON
 }
 
-const exportXLSX = async ({
-  user,
-  startDate,
-  endDate,
-  includeOrgs,
-  includeCUs,
-  includeCURs,
-  allTime,
-  organisationId,
-}) => {
+const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, includeCURs, organisationId }) => {
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
 
   if (organisationId && !accessibleOrganisationIds.includes(organisationId)) {
@@ -209,9 +200,9 @@ const exportXLSX = async ({
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(headers.concat(dataAoa)), sheetName)
   }
 
-  const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
+  const scopedSummary = getScopedSummary({ startDate, endDate })
 
-  const teacherOrganisations = await getTeacherSummary({ user, startDate, endDate, allTime })
+  const teacherOrganisations = await getTeacherSummary({ user, startDate, endDate })
 
   const organisationIds = organisationId ? [organisationId] : accessibleOrganisationIds
   const organisations = await getOrganisations(scopedSummary, organisationIds)

@@ -26,8 +26,8 @@ const filterHiddenCount = async ({ user, organisationsJson }) => {
   return organisationsJson
 }
 
-const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode, allTime }) => {
-  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode, allTime })
+const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode }) => {
+  const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],

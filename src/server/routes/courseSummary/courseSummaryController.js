@@ -220,7 +220,6 @@ const getXLSX = async (req, res) => {
     includeOrgs: includeOrgsString,
     includeCUs: includeCUsString,
     includeCURs: includeCURsString,
-    allTime: allTimeString,
     organisationId,
   } = req.query
 
@@ -235,7 +234,6 @@ const getXLSX = async (req, res) => {
     includeOrgs: includeOrgsString === 'true',
     includeCUs: includeCUsString === 'true',
     includeCURs: includeCURsString === 'true',
-    allTime: allTimeString === 'true',
     organisationId,
   })
 

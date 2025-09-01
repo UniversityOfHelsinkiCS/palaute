@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  Checkbox,
-  CircularProgress,
-  FormControl,
-  FormControlLabel,
-  FormGroup,
-  FormLabel,
-  Popover,
-  Radio,
-  RadioGroup,
-} from '@mui/material'
+import { Checkbox, CircularProgress, FormControl, FormControlLabel, FormGroup, FormLabel, Popover } from '@mui/material'
 import { Download } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
@@ -26,7 +16,6 @@ const GenerateReport = ({ organisationId }) => {
   const [includeOrgs, setIncludeOrgs] = React.useState(true)
   const [includeCUs, setIncludeCUs] = React.useState(false)
   const [includeCURs, setIncludeCURs] = React.useState(false)
-  const [allTime, setAllTime] = React.useState(false)
   const isValid = includeOrgs || includeCUs || includeCURs
 
   const [isLoading, setIsLoading] = React.useState(false)
@@ -45,7 +34,6 @@ const GenerateReport = ({ organisationId }) => {
           includeCURs,
           startDate: dateRange.start,
           endDate: dateRange.end,
-          allTime,
           organisationId,
         },
       })
@@ -100,17 +88,6 @@ const GenerateReport = ({ organisationId }) => {
                 label={t('generateReport:courseRealisations')}
               />
             </FormGroup>
-            <FormLabel id="include-timerange-label" sx={{ mt: '1rem' }}>
-              {t('generateReport:selectTimeRange')}
-            </FormLabel>
-            <RadioGroup
-              aria-labelledby="include-timerange-label"
-              value={allTime}
-              onChange={(_, value) => setAllTime(value)}
-            >
-              <FormControlLabel value={false} control={<Radio />} label={t('generateReport:selectedTime')} />
-              <FormControlLabel value control={<Radio />} label={t('generateReport:allTime')} />
-            </RadioGroup>
             <NorButton
               data-cy="export-xlsx-submit"
               color="primary"
