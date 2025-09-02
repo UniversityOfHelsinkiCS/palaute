@@ -150,7 +150,7 @@ const QuestionEditorForm = ({ saveChanges, editable, handlePublicityToggle, acti
 
               <Box sx={{ display: 'flex' }}>
                 {editable && (
-                  <Box>
+                  <Box sx={{ display: 'flex' }}>
                     <NorButton
                       data-cy="question-editor-add-question"
                       icon={<Add />}

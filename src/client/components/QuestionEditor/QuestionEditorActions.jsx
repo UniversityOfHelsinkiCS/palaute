@@ -80,7 +80,7 @@ const QuestionEditorActions = ({
   )
 
   return (
-    <Box display="flex" gap="15px" alignItems="center">
+    <Box display="flex" gap="15px" alignItems="center" flexWrap="wrap">
       {copyUniversityQuestionsButton && (
         <Box>
           {!surveyIsLoading && (
