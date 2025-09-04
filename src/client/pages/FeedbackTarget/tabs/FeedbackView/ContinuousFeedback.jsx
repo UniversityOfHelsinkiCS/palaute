@@ -18,6 +18,7 @@ const styles = {
   },
   button: {
     width: 'fit-content',
+    marginTop: '16px',
   },
   container: {
     display: 'flex',
