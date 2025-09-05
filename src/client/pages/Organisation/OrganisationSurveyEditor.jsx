@@ -70,6 +70,11 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
             label={t('organisationSurveys:responsibleTeachers')}
           />
         )}
+        renderOption={(props, option) => (
+          <li {...props} key={option.id}>
+            {`${option.firstName} ${option.lastName} (${option.email})`}
+          </li>
+        )}
       />
     </Box>
   )
