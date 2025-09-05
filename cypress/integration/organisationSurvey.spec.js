@@ -92,7 +92,7 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="formik-responsible-teacher-input-field-chip"]').as('teacherChipTag')
     cy.get('@teacherChipTag').should('exist')
     cy.get('@teacherChipTag').should('have.attr', 'data-tag-index', '0')
-    cy.get('@teacherChipTag').should('have.text', 'Correspondent Tester')
+    cy.get('@teacherChipTag').should('have.text', 'Correspondent Tester (cs.correspondent@helsinki.fi)')
 
     // Add a new responsible teacher by inserting the email or name
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').type('Tommi Testaaja')
