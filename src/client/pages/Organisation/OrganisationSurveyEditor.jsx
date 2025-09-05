@@ -39,18 +39,20 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
       </Typography>
 
       <Autocomplete
+        {...props}
         data-cy="formik-responsible-teacher-input"
         id={name}
         name={name}
         multiple
         fullWidth
-        defaultValue={formikProps.initialValues.teachers}
+        value={formikProps.values.teachers}
         onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
         options={potentialUsers}
-        filterOptions={options => options}
+        getOptionDisabled={option => formikProps.values.teachers.some(v => v.id === option.id)}
         onInputChange={handleChange}
-        getOptionLabel={option => `${option.firstName} ${option.lastName}`}
-        freeSolo
+        getOptionLabel={option => `${option.firstName} ${option.lastName} (${option.email})`}
+        isOptionEqualToValue={(option, value) => option.id === value.id}
+        autoHighlight
         slotProps={{
           chip: {
             'data-cy': `formik-responsible-teacher-input-field-chip`,
@@ -68,7 +70,6 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
             label={t('organisationSurveys:responsibleTeachers')}
           />
         )}
-        {...props}
       />
     </Box>
   )
