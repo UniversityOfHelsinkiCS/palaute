@@ -153,6 +153,7 @@ const createRecipientsForFeedbackTargets = async (
               teacherQuestions: feedbackTarget.questions,
               summary: feedbackTarget.summary,
               userIsNewTeacher,
+              userIsAdministrativePerson: user.UserFeedbackTarget.dataValues.isAdministrativePerson,
             },
           ])
         })

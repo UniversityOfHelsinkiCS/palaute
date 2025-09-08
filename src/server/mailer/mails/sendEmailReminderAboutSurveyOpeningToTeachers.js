@@ -88,14 +88,16 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   const courseName = getLanguageValue(teacherFeedbackTargets[0].name, language)
   const { courseCode } = teacherFeedbackTargets[0].courseUnit
 
+  const userIsAdministrativePerson = teacherFeedbackTargets.some(fbt => fbt.userIsAdministrativePerson)
+  const { userIsNewTeacher } = teacherFeedbackTargets[0]
+
   let courseNamesAndUrls = ''
-  let greeting = t('mails:reminderAboutSurveyOpeningToTeachers:greeting')
 
   // Sort them so they come neatly in order in the email
   teacherFeedbackTargets.sort((a, b) => a.name[language]?.localeCompare(b.name[language]))
 
   for (const feedbackTarget of teacherFeedbackTargets) {
-    const { id, name, opensAt, closesAt, teacherQuestions, summary, userIsNewTeacher } = feedbackTarget
+    const { id, name, opensAt, closesAt, teacherQuestions, summary } = feedbackTarget
 
     const humanOpensAtDate = format(new Date(opensAt), 'dd.MM.yyyy')
     const humanClosesAtDate = format(new Date(closesAt), 'dd.MM.yyyy')
@@ -130,11 +132,17 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
         </a> (${openFrom[language]} ${closesOn[language]})
         ${summary?.data.studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT ? smallCourseWarning : ''}
         ${teacherQuestions.length > 0 ? `${questionsText}<br/>` : ''}`
-
-    if (userIsNewTeacher) {
-      greeting = t('mails:reminderAboutSurveyOpeningToTeachers:greetingWithWelcome')
-    }
   }
+
+  let greeting = t('mails:reminderAboutSurveyOpeningToTeachers:greeting')
+
+  if (userIsAdministrativePerson) {
+    greeting = `${greeting} ${t('mails:reminderAboutSurveyOpeningToTeachers:administrativePersonGreetingAddition')}`
+  }
+
+  greeting = userIsNewTeacher
+    ? `${greeting}, ${t('mails:reminderAboutSurveyOpeningToTeachers:greetingWithWelcome')}`
+    : `${greeting}!`
 
   const subject = hasMultipleFeedbackTargets
     ? t('mails:reminderAboutSurveyOpeningToTeachers:subjectMultiple')
