@@ -22,7 +22,7 @@ describe('Admin email stats view', () => {
     cy.contains('Email statistics').click()
     cy.contains('Student emails TODAY: 0')
     cy.contains('Teacher emails TODAY: 1')
-    cy.contains('Dear teacher, welcome to the University of Helsinki Norppa course feedback system!')
+    cy.contains('Dear responsible teacher, welcome to the University of Helsinki Norppa course feedback system!')
     cy.contains('Testauskurssi')
 
     // No custom questions:
@@ -54,7 +54,7 @@ describe('Admin email stats view', () => {
     cy.contains('Email statistics').click()
     cy.contains('Student emails TODAY: 0')
     cy.contains('Teacher emails TODAY: 1')
-    cy.contains('Dear teacher, welcome to the University of Helsinki Norppa course feedback system!')
+    cy.contains('Dear responsible teacher, welcome to the University of Helsinki Norppa course feedback system!')
     cy.contains('Testauskurssi')
     cy.contains('the following questions have been added to the survey:')
     cy.contains('Minthu custom question')
