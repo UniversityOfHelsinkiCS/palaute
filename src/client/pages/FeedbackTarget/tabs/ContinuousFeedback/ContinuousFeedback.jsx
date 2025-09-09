@@ -16,6 +16,7 @@ import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 import CardSection from '../../../../components/common/CardSection'
 import useDeleteContinuousFeedback from './useDeleteContinuousFeedback'
+import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -125,6 +126,14 @@ const ContinuousFeedbackList = ({ canRespond }) => {
   )
 }
 
+const SmallCourseInfo = ({ t }) => (
+  <Box sx={{ marginTop: '16px', marginBottom: '40px' }}>
+    <Alert severity="warning" data-cy="smallCourseInfo">
+      {t('feedbackTargetResults:smallCourseInfo', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}
+    </Alert>
+  </Box>
+)
+
 const ContinuousFeedback = () => {
   const { id } = useParams()
   const { t } = useTranslation()
@@ -135,6 +144,10 @@ const ContinuousFeedback = () => {
   const showSettings = isResponsibleTeacher || isAdmin || isOrganisationAdmin
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
+
+  const studentCount = feedbackTarget.summary?.data?.studentCount ?? 0
+
+  const isSmallCourse = studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT
 
   const { continuousFeedbackEnabled, continuousFeedbackCount } = feedbackTarget
 
@@ -163,6 +176,8 @@ const ContinuousFeedback = () => {
               <TeacherInfo enabled={feedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
             </Box>
           )}
+
+          {(isResponsibleTeacher || isAdmin) && isSmallCourse && <SmallCourseInfo t={t} />}
 
           <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />
 
