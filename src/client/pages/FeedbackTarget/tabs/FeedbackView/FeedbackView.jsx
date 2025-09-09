@@ -25,6 +25,7 @@ import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import ConfirmGivingFeedbackDialog from '../../../MyFeedbacks/ConfirmGivingFeedbackDialog'
+import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 
 const FormContainer = ({
   onSubmit,
@@ -117,8 +118,9 @@ const FeedbackView = () => {
   const [smallCourseDialogOpen, setSmallCourseDialogOpen] = useState(true)
 
   const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
+  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
   const studentCount = feedbackTarget.summary?.data?.studentCount
-  const isLoading = !feedbackTarget
+  const isLoading = !feedbackTarget || !continuousFeedbacks
 
   if (isLoading) {
     return <LoadingProgress />
@@ -132,6 +134,7 @@ const FeedbackView = () => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
   const showContinuousFeedback = isStudent && isOngoing && continuousFeedbackEnabled
+  const continuousFeedbacksGiven = continuousFeedbacks?.length > 0
   const showClosedAlert = isOngoing && !showContinuousFeedback
   const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
   const formIsDisabled = !isOpen || isTeacher || isOutsider || isOrganisationAdmin
@@ -219,9 +222,11 @@ const FeedbackView = () => {
     <>
       <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
-      {isStudent && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && (
-        <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
-      )}
+      {isStudent &&
+        studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT &&
+        !(showContinuousFeedback && continuousFeedbacksGiven) && (
+          <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
+        )}
 
       {showContinuousFeedback && <ContinuousFeedback />}
 
