@@ -228,7 +228,7 @@ const FeedbackView = () => {
           <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
         )}
 
-      {showContinuousFeedback && <ContinuousFeedback />}
+      {showContinuousFeedback && <ContinuousFeedback fewEnrolled={studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT} />}
 
       {showClosedAlert && closedAlert}
 

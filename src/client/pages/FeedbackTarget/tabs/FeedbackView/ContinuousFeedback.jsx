@@ -6,8 +6,10 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
+import FormikCheckbox from '../../../../components/common/FormikCheckbox'
 import { saveContinuousFeedback } from './utils'
 import { NorButton } from '../../../../components/common/NorButton'
+import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 
 const styles = {
   description: {
@@ -18,7 +20,6 @@ const styles = {
   },
   button: {
     width: 'fit-content',
-    marginTop: '16px',
   },
   container: {
     display: 'flex',
@@ -26,7 +27,7 @@ const styles = {
   },
 }
 
-const ContinuousFeedback = () => {
+const ContinuousFeedback = ({ fewEnrolled }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
@@ -62,17 +63,32 @@ const ContinuousFeedback = () => {
         {t('feedbackView:continuousFeedbackInfo')}
       </Typography>
       <Formik initialValues={{ feedback: '' }} onSubmit={handleSubmit}>
-        {({ values, isSubmitting }) => (
+        {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
             <FormikTextField name="feedback" label={t('norppaFeedback:feedback')} fullWidth minRows={4} multiline />
-            <NorButton
-              type="submit"
-              color="primary"
-              disabled={!values.feedback.length || isSubmitting}
-              sx={styles.button}
-            >
-              {t('norppaFeedback:submit')}
-            </NorButton>
+            <Box sx={{ mt: '1rem' }}>
+              <NorButton
+                type="submit"
+                color="primary"
+                disabled={!values.feedback.length || isSubmitting || (fewEnrolled && !values.activateSubmit)}
+                sx={styles.button}
+              >
+                {t('norppaFeedback:submit')}
+              </NorButton>
+              {fewEnrolled && (
+                <FormikCheckbox
+                  data-cy="feedback-view-consent-checkbox"
+                  name="activateSubmit"
+                  label={t('feedbackView:allowSubmitCheckbox', {
+                    count: FEEDBACK_HIDDEN_STUDENT_COUNT,
+                  })}
+                  onChange={({ target }) => {
+                    setFieldValue('activateSubmit', target.checked)
+                  }}
+                  sx={{ ml: '1rem' }}
+                />
+              )}
+            </Box>
           </Form>
         )}
       </Formik>
