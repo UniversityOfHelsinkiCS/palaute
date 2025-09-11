@@ -62,7 +62,7 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
       <Typography variant="body1" component="p" sx={styles.description}>
         {t('feedbackView:continuousFeedbackInfo')}
       </Typography>
-      <Formik initialValues={{ feedback: '' }} onSubmit={handleSubmit}>
+      <Formik initialValues={{ feedback: '', activateSubmit: false }} onSubmit={handleSubmit}>
         {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
             <FormikTextField name="feedback" label={t('norppaFeedback:feedback')} fullWidth minRows={4} multiline />
@@ -77,7 +77,7 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
               </NorButton>
               {fewEnrolled && (
                 <FormikCheckbox
-                  data-cy="feedback-view-consent-checkbox"
+                  data-cy="continuous-feedback-consent-checkbox"
                   name="activateSubmit"
                   label={t('feedbackView:allowSubmitCheckbox', {
                     count: FEEDBACK_HIDDEN_STUDENT_COUNT,
