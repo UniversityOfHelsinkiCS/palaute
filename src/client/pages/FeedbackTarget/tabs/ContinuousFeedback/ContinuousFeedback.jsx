@@ -141,6 +141,8 @@ const ContinuousFeedback = () => {
   const { feedbackTarget, isTeacher, isResponsibleTeacher, isAdmin, isOrganisationAdmin, isStudent } =
     useFeedbackTargetContext()
 
+  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
+
   const showSettings = isResponsibleTeacher || isAdmin || isOrganisationAdmin
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
@@ -149,7 +151,7 @@ const ContinuousFeedback = () => {
 
   const isSmallCourse = studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT
 
-  const { continuousFeedbackEnabled, continuousFeedbackCount } = feedbackTarget
+  const { continuousFeedbackEnabled } = feedbackTarget
 
   const [feedbackEnabled, setFeedbackEnabled] = useState(continuousFeedbackEnabled)
 
@@ -173,7 +175,7 @@ const ContinuousFeedback = () => {
 
           {(isTeacher || isResponsibleTeacher) && (
             <Box mb={2}>
-              <TeacherInfo enabled={feedbackEnabled} hasFeedback={continuousFeedbackCount > 0} />
+              <TeacherInfo enabled={feedbackEnabled} hasFeedback={continuousFeedbacks?.length > 0} />
             </Box>
           )}
 

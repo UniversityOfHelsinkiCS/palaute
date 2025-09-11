@@ -71,7 +71,6 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare administrativePersons?: any
   declare tags?: any
   declare studentCount?: number
-  declare continuousFeedbackCount?: number
   declare userFeedbackTargets?: UserFeedbackTarget[]
   declare courseUnit?: NonAttribute<CourseUnit>
 
@@ -461,12 +460,6 @@ FeedbackTarget.init(
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,
-    },
-    continuousFeedbackCount: {
-      type: VIRTUAL,
-      get() {
-        return this.dataValues.continuousFeedbackCount ?? 0
-      },
     },
     sendContinuousFeedbackDigestEmail: {
       type: BOOLEAN,

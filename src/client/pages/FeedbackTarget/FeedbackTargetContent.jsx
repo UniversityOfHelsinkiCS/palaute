@@ -45,11 +45,13 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import Title from '../../components/common/Title'
 import { TabGroup, TabGroupsContainer, TabGroupTab } from '../../components/common/TabGroup'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
+import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
     useFeedbackTargetContext()
+  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
 
   const {
     courseUnit,
@@ -57,7 +59,6 @@ const FeedbackTargetContent = () => {
     feedback,
     feedbackResponseEmailSent,
     settingsReadByTeacher,
-    continuousFeedbackCount,
     continuousFeedbackEnabled,
     feedbackCanBeGiven,
     userCreated,
@@ -194,8 +195,8 @@ const FeedbackTargetContent = () => {
                   data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
                   label={t('feedbackTargetView:continuousFeedbackTab')}
                   to={`${pathnameBase}/continuous-feedback`}
-                  badge={continuousFeedbackCount}
-                  badgeContent={continuousFeedbackCount}
+                  badge={continuousFeedbacks?.length}
+                  badgeContent={continuousFeedbacks?.length}
                   badgeVisible={!isStudent}
                   badgeColor="grey"
                   icon={<ReviewsOutlined />}

@@ -8,7 +8,6 @@ const {
   Feedback,
   User,
   Tag,
-  ContinuousFeedback,
   Group,
   Summary,
 } = require('../../models')
@@ -75,11 +74,6 @@ const getFromDb = async id => {
         as: 'summary',
       },
       {
-        model: ContinuousFeedback,
-        as: 'continuousFeedbacks',
-        attributes: ['id'],
-      },
-      {
         model: CourseUnit,
         as: 'courseUnit',
         required: true,
@@ -144,7 +138,6 @@ const getFromDb = async id => {
       'lastName'
     )
   )
-  fbt.set('continuousFeedbackCount', fbt.continuousFeedbacks.length)
   fbt.set('tags', _.uniqBy((fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []), 'id'))
   populateGroupInformation(fbt)
 
@@ -179,7 +172,7 @@ const getUserFeedbackTarget = (userId, feedbackTargetId) =>
 const getFeedbackTarget = feedbackTargetId =>
   FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: {
-      /* These we get from cache */ exclude: ['studentCount', 'publicQuestionIds', 'continuousFeedbackCount'],
+      /* These we get from cache */ exclude: ['studentCount', 'publicQuestionIds'],
     },
     include: [{ model: CourseRealisation, as: 'courseRealisation' }],
   })
