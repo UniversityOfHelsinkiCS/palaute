@@ -8,7 +8,6 @@ import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import { NorButton } from '../../../../components/common/NorButton'
-import FormikCheckbox from '../../../../components/common/FormikCheckbox'
 
 import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from './FeedbackForm'
@@ -26,6 +25,7 @@ import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import ConfirmGivingFeedbackDialog from '../../../MyFeedbacks/ConfirmGivingFeedbackDialog'
 import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
+import { ConsentCheckbox } from './ConsentCheckbox'
 
 const FormContainer = ({
   onSubmit,
@@ -80,16 +80,12 @@ const FormContainer = ({
                   {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
                 </NorButton>
                 {fewEnrolled && !isEdit && (
-                  <FormikCheckbox
-                    data-cy="feedback-view-consent-checkbox"
-                    name="activateSubmit"
+                  <ConsentCheckbox
+                    dataCy="feedback-view-consent-checkbox"
                     label={t('feedbackView:allowSubmitCheckbox', {
                       count: FEEDBACK_HIDDEN_STUDENT_COUNT,
                     })}
-                    onChange={({ target }) => {
-                      setFieldValue('activateSubmit', target.checked)
-                    }}
-                    sx={{ ml: '1rem' }}
+                    handleChange={setFieldValue}
                   />
                 )}
                 {showCannotSubmitText && (

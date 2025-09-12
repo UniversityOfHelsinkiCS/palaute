@@ -2,7 +2,7 @@ import React from 'react'
 import { useField } from 'formik'
 import { Checkbox, FormControlLabel } from '@mui/material'
 
-const FormikCheckbox = ({ name, helperText, label, ...props }) => {
+const FormikCheckbox = ({ name, label, ...props }) => {
   const [field, meta, helpers] = useField(name)
 
   const showError = meta.error && meta.touched

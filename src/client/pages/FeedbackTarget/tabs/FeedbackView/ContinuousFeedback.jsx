@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
-import FormikCheckbox from '../../../../components/common/FormikCheckbox'
 import { saveContinuousFeedback } from './utils'
 import { NorButton } from '../../../../components/common/NorButton'
+import { ConsentCheckbox } from './ConsentCheckbox'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 
 const styles = {
@@ -76,16 +76,12 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
                 {t('norppaFeedback:submit')}
               </NorButton>
               {fewEnrolled && (
-                <FormikCheckbox
-                  data-cy="continuous-feedback-consent-checkbox"
-                  name="activateSubmit"
+                <ConsentCheckbox
+                  dataCy="continuous-feedback-consent-checkbox"
                   label={t('feedbackView:allowSubmitCheckbox', {
                     count: FEEDBACK_HIDDEN_STUDENT_COUNT,
                   })}
-                  onChange={({ target }) => {
-                    setFieldValue('activateSubmit', target.checked)
-                  }}
-                  sx={{ ml: '1rem' }}
+                  handleChange={setFieldValue}
                 />
               )}
             </Box>
