@@ -210,7 +210,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   )
 }
 
-const OrganisationSurveyForm = ({ organisationCode }) => {
+const OrganisationSurveyForm = ({ organisationCode, editView }) => {
   const { t } = useTranslation()
 
   return (
@@ -227,7 +227,11 @@ const OrganisationSurveyForm = ({ organisationCode }) => {
       <Grid size={12}>
         <ResponsibleTeachersSelector
           name="teacherIds"
-          title={t('organisationSurveys:responsibleTeacherTitle')}
+          title={
+            editView
+              ? t('organisationSurveys:editResponsibleTeacherTitle')
+              : t('organisationSurveys:responsibleTeacherTitle')
+          }
           label={t('organisationSurveys:responsibleTeacherEmail')}
         />
       </Grid>
@@ -235,44 +239,11 @@ const OrganisationSurveyForm = ({ organisationCode }) => {
       <Grid size={12}>
         <StudentNumberInput
           name="studentNumbers"
-          title={t('organisationSurveys:studentNumberTitle')}
+          title={
+            editView ? t('organisationSurveys:editStudentNumberTitle') : t('organisationSurveys:studentNumberTitle')
+          }
           label={t('organisationSurveys:studentNumberInputLabel')}
-        />
-      </Grid>
-      <CourseSearchInput organisationCode={organisationCode} />
-    </Grid>
-  )
-}
-
-const EditOrganisationSurveyForm = ({ organisationCode }) => {
-  const { t } = useTranslation()
-
-  return (
-    <Grid spacing={4} container>
-      <FormikLocalesFieldEditor name="name" localesLabelString="organisationSurveys:newSurveyName" />
-
-      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-        <FormikDatePicker name="startDate" label={t('organisationSurveys:startDate')} />
-      </Grid>
-
-      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-        <FormikDatePicker name="endDate" label={t('organisationSurveys:endDate')} />
-      </Grid>
-
-      <Grid size={12}>
-        <ResponsibleTeachersSelector
-          name="teacherIds"
-          title={t('organisationSurveys:editResponsibleTeacherTitle')}
-          label={t('organisationSurveys:responsibleTeacherEmail')}
-        />
-      </Grid>
-
-      <Grid size={12}>
-        <StudentNumberInput
-          name="studentNumbers"
-          title={t('organisationSurveys:editStudentNumberTitle')}
-          label={t('organisationSurveys:studentNumberInputLabel')}
-          editView
+          editView={editView}
         />
       </Grid>
       <CourseSearchInput organisationCode={organisationCode} />
@@ -307,12 +278,7 @@ const OrganisationSurveyEditor = ({
           return (
             <Form>
               <Box sx={{ m: 4 }}>
-                {editView ? (
-                  <EditOrganisationSurveyForm organisationCode={organisationCode} />
-                ) : (
-                  <OrganisationSurveyForm organisationCode={organisationCode} />
-                )}
-
+                <OrganisationSurveyForm organisationCode={organisationCode} editView={editView} />
                 <Box sx={{ mt: 4, display: 'flex', justifyContent: 'right', gap: 2 }}>
                   <NorButton
                     data-cy="organisation-survey-editor-cancel"
