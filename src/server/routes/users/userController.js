@@ -88,6 +88,9 @@ const getUser = async (req, res) => {
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
       ...where,
+      employee_number: {
+        [Op.ne]: null,
+      },
     },
     limit: 10,
   })
