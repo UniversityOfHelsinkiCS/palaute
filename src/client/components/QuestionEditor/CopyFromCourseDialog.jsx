@@ -12,13 +12,16 @@ import {
   ListItem,
   Link,
   ListItemText,
+  ListItemIcon,
   Alert,
   Autocomplete,
 } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
-import { FileCopyOutlined } from '@mui/icons-material'
+import { FileCopyOutlined, Circle } from '@mui/icons-material'
+import styled from '@mui/material/styles/styled'
+import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { NorButton } from '../common/NorButton'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
@@ -37,6 +40,25 @@ const styles = {
   },
 }
 
+const CustomWidthTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)({
+  [`& .${tooltipClasses.tooltip}`]: {
+    maxWidth: '600px',
+  },
+})
+
+const QuestionList = ({ questions }) => (
+  <List sx={{ maxWidth: '580px', maxHeight: '600px', overflowY: 'auto' }}>
+    {questions.map((q, i) => (
+      <ListItem key={`question${i}`}>
+        <ListItemIcon>
+          <Circle fontSize="inherit" />
+        </ListItemIcon>
+        <ListItemText primary={q} />
+      </ListItem>
+    ))}
+  </List>
+)
+
 const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { courseRealisation, surveys } = feedbackTarget
@@ -49,26 +71,25 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
 
   return (
     <ListItem sx={styles.listItem} disableGutters>
-      <ListItemText
-        primary={
-          <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener" underline="hover">
-            {getLanguageValue(courseRealisation?.name, i18n.language)}
-          </Link>
-        }
-        secondary={periodInfo}
-      />
-      {questionNames.length > 0 && (
+      <CustomWidthTooltip
+        title={<QuestionList questions={questionNames} />}
+        placement="right-start"
+        sx={{ display: 'flex' }}
+      >
         <ListItemText
           primary={
-            <>
-              {t('editFeedbackTarget:copyFromCourseQuestionCount', {
-                count: questionNames.length,
-              })}
-              : {questionNames.join(', ')}
-            </>
+            <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener" underline="hover">
+              {`${getLanguageValue(courseRealisation?.name, i18n.language)} (${t(
+                'editFeedbackTarget:copyFromCourseQuestionCount',
+                {
+                  count: questionNames.length,
+                }
+              )})`}
+            </Link>
           }
+          secondary={periodInfo}
         />
-      )}
+      </CustomWidthTooltip>
       <NorButton icon={<FileCopyOutlined />} color="secondary" onClick={() => onCopy(feedbackTarget)}>
         {t('editFeedbackTarget:copyQuestionsButton')}
       </NorButton>
