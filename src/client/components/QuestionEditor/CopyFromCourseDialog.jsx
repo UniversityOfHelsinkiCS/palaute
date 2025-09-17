@@ -20,9 +20,8 @@ import {
 import { useTranslation } from 'react-i18next'
 
 import { FileCopyOutlined, Circle } from '@mui/icons-material'
-import styled from '@mui/material/styles/styled'
-import Tooltip, { tooltipClasses } from '@mui/material/Tooltip'
 import { NorButton } from '../common/NorButton'
+import CustomWidthTooltip from '../common/CustomWidthTooltip'
 
 import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
@@ -40,17 +39,11 @@ const styles = {
   },
 }
 
-const CustomWidthTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)({
-  [`& .${tooltipClasses.tooltip}`]: {
-    maxWidth: '600px',
-  },
-})
-
 const QuestionList = ({ questions }) => (
-  <List sx={{ maxWidth: '580px', maxHeight: '600px', overflowY: 'auto' }}>
+  <List sx={{ maxWidth: '560px', maxHeight: '600px', overflowY: 'auto' }}>
     {questions.map((q, i) => (
       <ListItem key={`question${i}`}>
-        <ListItemIcon>
+        <ListItemIcon sx={{ minWidth: '32px' }}>
           <Circle fontSize="inherit" />
         </ListItemIcon>
         <ListItemText primary={q} />
@@ -71,11 +64,7 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
 
   return (
     <ListItem sx={styles.listItem} disableGutters>
-      <CustomWidthTooltip
-        title={<QuestionList questions={questionNames} />}
-        placement="right-start"
-        sx={{ display: 'flex' }}
-      >
+      <CustomWidthTooltip title={<QuestionList questions={questionNames} />} placement="right-start">
         <ListItemText
           primary={
             <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener" underline="hover">
