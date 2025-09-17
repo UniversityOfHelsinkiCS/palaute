@@ -28,6 +28,7 @@ import formatDate from '../../util/formatDate'
 import { LoadingProgress } from '../common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { useOrganisationSurveysForUser } from '../../pages/Organisation/useOrganisationsSurveysForUser'
+import { sortOrganisations, getSurveysWithQuestions } from './utils'
 
 const styles = {
   listItem: {
@@ -129,19 +130,13 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const handleValueChange = (event, newValue) => setValue(newValue)
 
   const { organisationsWithSurveys = [] } = useOrganisationSurveysForUser(userCreated)
+  const sortedOrganisationsWithSurveys = sortOrganisations(organisationsWithSurveys, feedbackTarget, i18n.language)
 
   const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
     feedbackType: 'courseRealisation',
     includeSurveys: true,
     isOrganisationSurvey: userCreated,
   })
-
-  const getSurveysWithQuestions = surveys => {
-    const surveysWithQuestions = (surveys ?? []).filter(
-      s => s.surveys?.teacherSurvey?.questions?.length > 0 && s.id !== feedbackTarget.id
-    )
-    return surveysWithQuestions
-  }
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth>
@@ -164,7 +159,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         {feedbackTargetsIsLoading && <LoadingProgress />}
         {!userCreated && (
           <FeedbackTargetListForCourseSurvey
-            feedbackTargetsWithQuestions={getSurveysWithQuestions(feedbackTargets)}
+            feedbackTargetsWithQuestions={getSurveysWithQuestions(feedbackTargets, feedbackTarget.id)}
             onCopy={onCopy}
             noQuestionsText={
               value && !feedbackTargetsIsLoading ? t('editFeedbackTarget:copyFromCourseNoQuestions') : ''
@@ -173,24 +168,21 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
           />
         )}
         {userCreated &&
-          organisationsWithSurveys.map(org => {
-            const surveysWithQuestions = getSurveysWithQuestions(org.surveys)
-            return (
-              <Box key={org.organisation.id}>
-                <Typography component="h3" variant="h6" marginTop={2}>
-                  {getLanguageValue(org.organisation.name, i18n.language)}
+          sortedOrganisationsWithSurveys.map(org => (
+            <Box key={org.organisation.id}>
+              <Typography component="h3" variant="h6" marginTop={2}>
+                {getLanguageValue(org.organisation.name, i18n.language)}
+              </Typography>
+              {org.surveysWithQuestions.length === 0 && (
+                <Typography color="textSecondary">
+                  {t('editFeedbackTarget:copyFromCourseNoOrganisationQuestions')}
                 </Typography>
-                {surveysWithQuestions.length === 0 && (
-                  <Typography color="textSecondary">
-                    {t('editFeedbackTarget:copyFromCourseNoOrganisationQuestions')}
-                  </Typography>
-                )}
-                {surveysWithQuestions.length > 0 && (
-                  <FeedbackTargetList feedbackTargets={surveysWithQuestions} onCopy={onCopy} />
-                )}
-              </Box>
-            )
-          })}
+              )}
+              {org.surveysWithQuestions.length > 0 && (
+                <FeedbackTargetList feedbackTargets={org.surveysWithQuestions} onCopy={onCopy} />
+              )}
+            </Box>
+          ))}
       </DialogContent>
       <DialogActions>
         <NorButton color="primary" sx={{ margin: '0 10px 10px 0' }} onClick={onClose}>

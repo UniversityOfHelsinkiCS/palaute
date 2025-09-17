@@ -1,4 +1,6 @@
 import { v4 as uuidv4 } from 'uuid'
+import { sortBy } from 'lodash-es'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const TEMP_ID = Symbol('tempId')
 
@@ -132,4 +134,48 @@ export const copyQuestionsFromUniversitySurvey = survey => {
     public: false,
     publicityConfigurable: true,
   }))
+}
+
+export const getSurveysWithQuestions = (surveys, fbtId) => {
+  const surveysWithQuestions = (surveys ?? []).filter(
+    s => s.surveys?.teacherSurvey?.questions?.length > 0 && s.id !== fbtId
+  )
+  return surveysWithQuestions
+}
+
+// Sorting order is alphabetical with two exceptions:
+// The organisation(s) of the current feedback target is (are) at the top of the list
+// The organisations that don't have any questions to copy are at the bottom of the list
+export const sortOrganisations = (availableOrganisations, fbt, language) => {
+  if (availableOrganisations.length === 0) return []
+
+  const alphabeticallySortedOrgs = sortBy(availableOrganisations, org =>
+    getLanguageValue(org.organisation.name, language)
+  )
+
+  const orgsWithSurveysWithQuestions = alphabeticallySortedOrgs.map(org => ({
+    ...org,
+    surveysWithQuestions: getSurveysWithQuestions(org.surveys, fbt.id),
+  }))
+
+  const orgsWithSurveys = orgsWithSurveysWithQuestions.filter(org => org.surveysWithQuestions.length > 0)
+  const orgsWithoutSurveys = orgsWithSurveysWithQuestions.filter(org => org.surveysWithQuestions.length === 0)
+
+  const fbtOrgCodes = fbt.courseUnit?.organisations?.map(org => org.code) ?? []
+
+  const sortedOrgs = []
+  const notFbtOrgsWithSurveys = []
+
+  for (const org of orgsWithSurveys) {
+    if (fbtOrgCodes.includes(org.organisation.code)) {
+      sortedOrgs.push(org)
+    } else {
+      notFbtOrgsWithSurveys.push(org)
+    }
+  }
+
+  sortedOrgs.push(...notFbtOrgsWithSurveys)
+  sortedOrgs.push(...orgsWithoutSurveys)
+
+  return sortedOrgs
 }
