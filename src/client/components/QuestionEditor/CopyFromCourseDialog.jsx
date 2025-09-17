@@ -139,7 +139,8 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const handleValueChange = (event, newValue) => setValue(newValue)
 
-  const { organisationsWithSurveys = [] } = useOrganisationSurveysForUser(userCreated)
+  const { organisationsWithSurveys = [], isLoading: organisationsIsLoading } =
+    useOrganisationSurveysForUser(userCreated)
   const sortedOrganisationsWithSurveys = sortOrganisations(organisationsWithSurveys, feedbackTarget, i18n.language)
 
   const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
@@ -152,8 +153,15 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
     <Dialog open={open} onClose={onClose} fullWidth>
       <DialogTitle>{t('editFeedbackTarget:copyFromCourseDialogTitle')}</DialogTitle>
       <DialogContent>
-        <Box mb={2}>
-          <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>
+        <Box mb={4}>
+          {!userCreated && <Alert severity="info">{t('editFeedbackTarget:copyFromCourseInfoAlert')}</Alert>}
+          {userCreated && !organisationsIsLoading && (
+            <Alert severity="info">
+              {sortedOrganisationsWithSurveys.length > 0
+                ? t('editFeedbackTarget:copyFromAnotherSurveyInfo')
+                : t('editFeedbackTarget:noQuestionsToCopy')}
+            </Alert>
+          )}
         </Box>
         {!userCreated && (
           <Box mb={2}>
@@ -166,7 +174,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
             />
           </Box>
         )}
-        {feedbackTargetsIsLoading && <LoadingProgress />}
+        {(feedbackTargetsIsLoading || organisationsIsLoading) && <LoadingProgress />}
         {!userCreated && (
           <FeedbackTargetListForCourseSurvey
             feedbackTargetsWithQuestions={getSurveysWithQuestions(feedbackTargets, feedbackTarget.id)}
@@ -180,7 +188,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
         {userCreated &&
           sortedOrganisationsWithSurveys.map(org => (
             <Box key={org.organisation.id}>
-              <Typography component="h3" variant="h6" marginTop={2}>
+              <Typography component="h3" variant="subtitle1" fontWeight="bold" marginTop={2}>
                 {getLanguageValue(org.organisation.name, i18n.language)}
               </Typography>
               {org.surveysWithQuestions.length === 0 && (
