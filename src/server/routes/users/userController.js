@@ -88,16 +88,22 @@ const getUser = async (req, res) => {
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
     where: {
       ...where,
-      employee_number: {
-        [Op.ne]: null,
-      },
     },
     limit: 10,
   })
 
+  const employees = []
+
+  for (const person of persons) {
+    const iamGroups = await getUserIams(person.id)
+    if (iamGroups.includes('hy-employees')) {
+      employees.push(person)
+    }
+  }
+
   return res.send({
     params,
-    persons,
+    persons: employees,
   })
 }
 
