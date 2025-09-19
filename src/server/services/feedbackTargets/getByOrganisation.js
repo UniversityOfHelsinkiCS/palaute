@@ -55,10 +55,11 @@ const getPublicByOrganisation = async ({ organisationCode, startDate, endDate })
         where: {
           startDate: {
             [Op.gte]: start,
-          },
-          endDate: {
             [Op.lte]: end,
           },
+          // endDate: { // the problem might be here
+          //   [Op.lte]: end,
+          // },
         },
       },
       {
