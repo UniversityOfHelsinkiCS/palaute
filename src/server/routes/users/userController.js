@@ -39,6 +39,10 @@ const login = async (req, res) => {
   })
 }
 
+// This is currently used in OrganisationSurveyEditor and FeedbackCorrespondent.
+// In both cases users should be limited to HY employees,
+// so only the users that belong to 'hy-employees' IAM group are returned.
+// If getUser is laer needed in some new feature, this filtering can be made conditional.
 const getUser = async (req, res) => {
   const {
     query: { user },
@@ -92,6 +96,7 @@ const getUser = async (req, res) => {
     limit: 10,
   })
 
+  // Filter to 'hy-employees'
   const employees = []
 
   for (const person of persons) {
