@@ -33,7 +33,7 @@ const getPublicByOrganisation = async ({ organisationCode, startDate, endDate })
   const start = startDate ? new Date(startDate) : new Date()
   const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
-  const feedbackTargets = await FeedbackTarget.findAll({
+  const feedbackTargetsThroughCourseRealisationsOrganisations = FeedbackTarget.findAll({
     attributes: ['id', 'name', 'opensAt', 'closesAt'],
     include: [
       {
@@ -57,9 +57,6 @@ const getPublicByOrganisation = async ({ organisationCode, startDate, endDate })
             [Op.gte]: start,
             [Op.lte]: end,
           },
-          // endDate: { // the problem might be here
-          //   [Op.lte]: end,
-          // },
         },
       },
       {
@@ -68,7 +65,52 @@ const getPublicByOrganisation = async ({ organisationCode, startDate, endDate })
         attributes: ['id', 'name', 'courseCode'],
       },
     ],
+    where: {
+      userCreated: false,
+    },
   })
+
+  const feedbackTargetsThroughCourseUnitsOrganisations = await FeedbackTarget.findAll({
+    attributes: ['id', 'name', 'opensAt', 'closesAt'],
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id', 'name', 'courseCode'],
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            attributes: [],
+            required: true,
+            where: {
+              code: organisationCode,
+            },
+          },
+        ],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        attributes: ['id', 'name', 'startDate', 'endDate', 'isMoocCourse', 'teachingLanguages'],
+        required: true,
+        where: {
+          startDate: {
+            [Op.gte]: start,
+            [Op.lte]: end,
+          },
+        },
+      },
+    ],
+    where: {
+      userCreated: false,
+    },
+  })
+
+  const feedbackTargets = (await feedbackTargetsThroughCourseRealisationsOrganisations).concat(
+    feedbackTargetsThroughCourseUnitsOrganisations
+  )
 
   const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.dataValues.courseRealisation.id)
   const fbtsWithStartDate = feedbackTargetsWithUniqueCurs.map(fbt => {
