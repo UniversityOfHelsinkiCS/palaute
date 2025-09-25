@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 import { format, isValid } from 'date-fns/esm'
 import { Alert, Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
+import type { LocalizedString } from '@common/types/common'
 import apiClient from '../../util/apiClient'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
@@ -28,6 +29,11 @@ const styles: {
   year: {
     color: theme => theme.palette.text.primary,
   },
+}
+
+interface Organisation {
+  name: LocalizedString
+  code: string
 }
 
 const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
@@ -156,6 +162,8 @@ const Search = () => {
     dateRange.end.toISOString()
   )
 
+  const selectedOrganisation = organisationsList?.find((org: Organisation) => org.code === code) || null
+
   return (
     <>
       <Title>{t('search:title')}</Title>
@@ -169,7 +177,7 @@ const Search = () => {
           data-cy="search-input"
           id="search"
           fullWidth
-          defaultValue={null}
+          value={selectedOrganisation}
           onChange={(_, r: any) => {
             if (r?.code) {
               searchParams.set('code', r.code)
