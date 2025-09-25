@@ -54,6 +54,19 @@ const getOrganisationData = async (req, res) => {
 const getOrganisationsListHandler = async (req, res) => {
   const organisationsList = await getOrganisationsList()
 
+  const openUniversity = {
+    name: {
+      en: 'Open University Studies',
+      fi: 'Avoimen yliopiston opinnot',
+      sv: 'Öppna universitetets studier',
+    },
+    code: 'H930',
+  }
+
+  if (!organisationsList.map(org => org.code).includes(openUniversity.code)) {
+    organisationsList.push(openUniversity)
+  }
+
   return res.send(organisationsList)
 }
 
