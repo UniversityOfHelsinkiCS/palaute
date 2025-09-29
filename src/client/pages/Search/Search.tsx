@@ -141,7 +141,6 @@ const Search = () => {
     const codesFromParams = searchParams.get('codes')
     return codesFromParams ? codesFromParams.split(',') : []
   })
-  const [programmeOptions, setProgrammeOptions] = React.useState<Organisation[]>(organisationsList ?? [])
 
   const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
   const [dateRange, setDateRange] = React.useState<DateRange>(() => {
@@ -151,10 +150,6 @@ const Search = () => {
 
     return isValid(start) && isValid(end) ? { start, end } : getSemesterRange(new Date())
   })
-
-  React.useEffect(() => {
-    setProgrammeOptions(organisationsList ?? [])
-  }, [organisationsList])
 
   const selectedValues = React.useMemo(
     () => (organisationsList ?? []).filter((org: Organisation) => codes.includes(org.code)),
@@ -189,26 +184,6 @@ const Search = () => {
     setSearchParams(next)
   }
 
-  const handleInputChange = (_: React.SyntheticEvent, value: string, reason: string) => {
-    setSearchedName(value)
-
-    const base = organisationsList ?? []
-
-    if (reason === 'reset') {
-      setProgrammeOptions(base)
-      return
-    }
-
-    const filteredOptions =
-      value.trim().length === 0
-        ? base
-        : base.filter((o: Organisation) =>
-            getLanguageValue(o.name, i18n.language).toLowerCase().includes(value.toLowerCase())
-          )
-
-    setProgrammeOptions(filteredOptions)
-  }
-
   return (
     <>
       <Title>{t('search:title')}</Title>
@@ -226,9 +201,10 @@ const Search = () => {
           value={selectedValues}
           onChange={handleCodesChange}
           inputValue={searchedName}
-          onInputChange={handleInputChange}
-          options={programmeOptions}
+          onInputChange={(_, v) => setSearchedName(v)}
+          options={organisationsList ?? []}
           getOptionLabel={(org: Organisation) => `${org.code} ${getLanguageValue(org.name, i18n.language)}`}
+          getOptionDisabled={op => selectedValues.some((v: Organisation) => v.code === op.code)}
           isOptionEqualToValue={(op, value) => op.code === value.code}
           renderInput={params => (
             <TextField
