@@ -49,13 +49,14 @@ adRouter.get('/for-organisation/:code', async (req: AuthenticatedRequest, res: R
 })
 
 if (PUBLIC_COURSE_BROWSER_ENABLED) {
-  adRouter.get('/for-organisation/:code/public', async (req: AuthenticatedRequest, res: Response) => {
-    const { code } = req.params
+  adRouter.get('/for-organisation/:codes/public', async (req: AuthenticatedRequest, res: Response) => {
+    const { codes } = req.params
+    const codeArray = codes.split(',')
     const { startDate, endDate } = req.query
-    if (!code) throw new ApplicationError('Missing code', 400)
+    if (!codes || !codes.length) throw new ApplicationError('Missing code', 400)
 
     const feedbackTargets = await getPublicFeedbackTargetsForOrganisation({
-      organisationCode: code,
+      organisationCodes: codeArray,
       startDate,
       endDate,
     })

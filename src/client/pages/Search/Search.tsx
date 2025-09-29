@@ -36,11 +36,11 @@ interface Organisation {
   code: string
 }
 
-const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, startDate: string, endDate: string) => {
-  const queryKey = ['publicOrganisationFeedbackTargets', organisationCode, startDate, endDate]
+const usePublicOrganisationFeedbackTargets = (organisationCodes: string, startDate: string, endDate: string) => {
+  const queryKey = ['publicOrganisationFeedbackTargets', organisationCodes, startDate, endDate]
   const queryFn = async () => {
     const { data: feedbackTargets } = await apiClient.get(
-      `/feedback-targets/for-organisation/${organisationCode}/public`,
+      `/feedback-targets/for-organisation/${organisationCodes}/public`,
       {
         params: { startDate, endDate },
       }
@@ -51,7 +51,7 @@ const usePublicOrganisationFeedbackTargets = (organisationCode: string | null, s
   const { data: feedbackTargets, ...rest } = useQuery({
     queryKey,
     queryFn,
-    enabled: !!organisationCode,
+    enabled: organisationCodes.length > 0,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
   })
@@ -133,12 +133,17 @@ type DateRange = { start: Date; end: Date }
 
 const Search = () => {
   const { t, i18n } = useTranslation()
+
   const { organisationsList, isLoading: isOrganisationsLoading } = useOrganisationsList()
   const [searchParams, setSearchParams] = useURLSearchParams()
   const [searchedName, setSearchedName] = React.useState<string>('')
-  const [code, setCode] = React.useState<string | null>(searchParams.get('code'))
-  const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
+  const [codes, setCodes] = React.useState<string[]>(() => {
+    const codesFromParams = searchParams.get('codes')
+    return codesFromParams ? codesFromParams.split(',') : []
+  })
+  const [programmeOptions, setProgrammeOptions] = React.useState<Organisation[]>(organisationsList ?? [])
 
+  const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
   const [dateRange, setDateRange] = React.useState<DateRange>(() => {
     // Converting to string is important, params.get may return 0 which would take us to the 70s
     const start = new Date(String(searchParams.get('startDate')))
@@ -146,6 +151,15 @@ const Search = () => {
 
     return isValid(start) && isValid(end) ? { start, end } : getSemesterRange(new Date())
   })
+
+  React.useEffect(() => {
+    setProgrammeOptions(organisationsList ?? [])
+  }, [organisationsList])
+
+  const selectedValues = React.useMemo(
+    () => (organisationsList ?? []).filter((org: Organisation) => codes.includes(org.code)),
+    [organisationsList, codes]
+  )
 
   const updateDateRangeQS = (newDateRange: DateRange) => {
     setDateRange(newDateRange)
@@ -157,12 +171,43 @@ const Search = () => {
   }
 
   const { feedbackTargetGrouping, isLoading } = usePublicOrganisationFeedbackTargets(
-    code,
+    codes.join(','),
     dateRange.start.toISOString(),
     dateRange.end.toISOString()
   )
 
-  const selectedOrganisation = organisationsList?.find((org: Organisation) => org.code === code) || null
+  const handleCodesChange = (_: React.SyntheticEvent, selectedOptions: Organisation[]) => {
+    const newCodes = selectedOptions.map(op => op.code)
+    setCodes(newCodes)
+
+    const next = new URLSearchParams(searchParams)
+    if (newCodes.length > 0) {
+      next.set('codes', newCodes.join(','))
+    } else {
+      next.delete('codes')
+    }
+    setSearchParams(next)
+  }
+
+  const handleInputChange = (_: React.SyntheticEvent, value: string, reason: string) => {
+    setSearchedName(value)
+
+    const base = organisationsList ?? []
+
+    if (reason === 'reset') {
+      setProgrammeOptions(base)
+      return
+    }
+
+    const filteredOptions =
+      value.trim().length === 0
+        ? base
+        : base.filter((o: Organisation) =>
+            getLanguageValue(o.name, i18n.language).toLowerCase().includes(value.toLowerCase())
+          )
+
+    setProgrammeOptions(filteredOptions)
+  }
 
   return (
     <>
@@ -174,28 +219,17 @@ const Search = () => {
       </Box>
       {!isOrganisationsLoading && (
         <Autocomplete
+          multiple
           data-cy="search-input"
           id="search"
           fullWidth
-          value={selectedOrganisation}
-          onChange={(_, r: any) => {
-            if (r?.code) {
-              searchParams.set('code', r.code)
-              setCode(r.code)
-            } else {
-              searchParams.delete('code')
-              setCode(null)
-            }
-            setSearchParams(searchParams)
-          }}
-          options={organisationsList}
-          filterOptions={options =>
-            options.filter(o =>
-              getLanguageValue(o.name, i18n.language).toLowerCase().includes(searchedName.toLowerCase())
-            )
-          }
-          onInputChange={(e, value) => setSearchedName(value)}
-          getOptionLabel={(org: any) => `${org.code} ${getLanguageValue(org.name, i18n.language)}`}
+          value={selectedValues}
+          onChange={handleCodesChange}
+          inputValue={searchedName}
+          onInputChange={handleInputChange}
+          options={programmeOptions}
+          getOptionLabel={(org: Organisation) => `${org.code} ${getLanguageValue(org.name, i18n.language)}`}
+          isOptionEqualToValue={(op, value) => op.code === value.code}
           renderInput={params => (
             <TextField
               {...params}
@@ -209,6 +243,7 @@ const Search = () => {
             />
           )}
           noOptionsText={t('search:noOptions')}
+          loading={isOrganisationsLoading}
         />
       )}
       <YearSemesterPeriodSelector
@@ -224,7 +259,7 @@ const Search = () => {
         allowAll={false}
       />
       {!isLoading &&
-        (code && feedbackTargetGrouping.years.length === 0 ? (
+        (codes.length > 0 && feedbackTargetGrouping.years.length === 0 ? (
           <Alert severity="info" data-cy="no-courses-alert">
             {t('search:noCourses')}
           </Alert>

@@ -29,7 +29,7 @@ const getYearGrouped = feedbackTargets => {
   )
 }
 
-const getPublicByOrganisation = async ({ organisationCode, startDate, endDate }) => {
+const getPublicByOrganisation = async ({ organisationCodes, startDate, endDate }) => {
   const start = startDate ? new Date(startDate) : new Date()
   const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
@@ -48,7 +48,9 @@ const getPublicByOrganisation = async ({ organisationCode, startDate, endDate })
             attributes: [],
             required: true,
             where: {
-              code: organisationCode,
+              code: {
+                [Op.in]: organisationCodes,
+              },
             },
           },
         ],
@@ -85,7 +87,9 @@ const getPublicByOrganisation = async ({ organisationCode, startDate, endDate })
             attributes: [],
             required: true,
             where: {
-              code: organisationCode,
+              code: {
+                [Op.in]: organisationCodes,
+              },
             },
           },
         ],
