@@ -108,7 +108,12 @@ const config = {
   /**
    * Dsn for Sentry reporting client
    */
-  SENTRY_DSN: '',
+  FRONTEND_SENTRY_DSN: '',
+
+  /**
+   * Dsn for Sentry reporting client
+   */
+  BACKEND_SENTRY_DSN: '',
 
   /**
    * Pate (mail service) url

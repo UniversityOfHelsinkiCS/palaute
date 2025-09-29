@@ -38,7 +38,7 @@ export const FEEDBACK_REMINDER_COOLDOWN = config?.FEEDBACK_REMINDER_COOLDOWN
 
 export const CONFIG_TEST_VALUE = config?.CONFIG_TEST_VALUE
 
-export const SENTRY_DSN = config?.SENTRY_DSN
+export const SENTRY_DSN = config?.FRONTEND_SENTRY_DSN
 
 export const GRAYLOG_URL = config?.GRAYLOG_URL
 

@@ -231,7 +231,9 @@ const config = {
 
   CONFIG_NAME: 'HY',
 
-  SENTRY_DSN: 'https://b41a87ca77fbe0da75b6c078381a66d4@toska.cs.helsinki.fi/15',
+  FRONTEND_SENTRY_DSN: 'https://2c78a2c16ba7561f4349c18833af4ddb@toska.it.helsinki.fi/6',
+
+  BACKEND_SENTRY_DSN: 'https://357864f8621e8443f2e8e74d484f1a2b@toska.it.helsinki.fi/7',
 
   PATE_URL: 'https://api-toska.apps.ocp-prod-0.k8s.it.helsinki.fi/pate',
 
