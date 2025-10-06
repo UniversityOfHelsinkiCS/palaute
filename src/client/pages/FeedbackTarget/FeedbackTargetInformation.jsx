@@ -45,15 +45,7 @@ const FeedbackTargetInformation = () => {
       <Box display="flex" flexDirection="column" gap="1rem">
         <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
           <Typography data-cy={`${dataCyPrefix}feedback-target-primary-course-name`} variant="h4" component="h1">
-            {primaryCourseName}
-          </Typography>
-          <Typography
-            data-cy={`${dataCyPrefix}feedback-target-visible-course-name`}
-            component="h2"
-            variant="h5"
-            color="textSecondary"
-          >
-            {visibleCourseCode}
+            {primaryCourseName} ({visibleCourseCode})
           </Typography>
         </Box>
         <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
