@@ -94,7 +94,7 @@ const FeedbackPeriodForm = () => {
                 i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
                 values={{ supportEmail: t('links:supportEmail') }}
                 components={{
-                  mailTo: <Link href={`mailto:${t('links:supportEmail')}`} underline="hover" />,
+                  mailTo: <Link key="mailTo" href={`mailto:${t('links:supportEmail')}`} underline="hover" />,
                 }}
               />
             </Alert>
