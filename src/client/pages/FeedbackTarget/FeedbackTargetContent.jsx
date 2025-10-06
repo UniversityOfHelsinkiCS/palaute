@@ -15,6 +15,7 @@ import {
   ShareOutlined,
   ReviewsOutlined,
   ForumOutlined,
+  VisibilityOutlined,
 } from '@mui/icons-material'
 
 import {
@@ -143,7 +144,7 @@ const FeedbackTargetContent = () => {
                 label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
                 to={`${pathnameBase}/feedback`}
                 badge={isOpen}
-                icon={<LiveHelpOutlined />}
+                icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
               />
             )}
             {showSettingsTab && (
