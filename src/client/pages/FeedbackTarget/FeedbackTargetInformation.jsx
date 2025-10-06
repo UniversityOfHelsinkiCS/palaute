@@ -34,7 +34,7 @@ const FeedbackTargetInformation = () => {
   const { isInterimFeedback, isOrganisationSurvey } = getSurveyType(courseUnit, feedbackTarget)
 
   // Show course code only if it is not already in the course name
-  const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
+  const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : `(${courseCode})`
   const showTags = !isStudent && feedbackTarget?.tags?.length > 0
 
   // This is necessary to identify which is related to interim feedback modal and which is related to the original fbt
@@ -45,7 +45,7 @@ const FeedbackTargetInformation = () => {
       <Box display="flex" flexDirection="column" gap="1rem">
         <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
           <Typography data-cy={`${dataCyPrefix}feedback-target-primary-course-name`} variant="h4" component="h1">
-            {primaryCourseName} ({visibleCourseCode})
+            {primaryCourseName} {visibleCourseCode}
           </Typography>
         </Box>
         <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
