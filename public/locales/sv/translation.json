@@ -573,7 +573,7 @@
     "editFeedbackTab": "Redigera responsen",
     "coursePage": "Kurssida",
     "courseSummary": "Sammandrag av kursens genomföranden",
-    "courseRealisationPage": "Course Sisu page",
+    "courseRealisationPage": "Kursen i Sisu",
     "teachers": "Lärare",
     "responsibleTeachers": "Ansvariga lärare",
     "administrativePersons": "Administratörer",
@@ -604,7 +604,10 @@
     "noAccessEndedCourse": "Återkopplingsperioden har avslutats och feedback kan inte längre ges för denna kurs. Kontrollera informationen ovan för att säkerställa att kursen är korrekt.",
     "surveyTabDisabledTooltip": "Enkäten kan inte längre redigeras efter att feedbacken har öppnats",
     "editFeedbackResponseTab": "Redigera återkopplingsfeedback",
-    "interimFeedbackTab": "Mellanrespons"
+    "interimFeedbackTab": "Mellanrespons",
+    "information": "Information",
+    "settings": "Inställningar",
+    "links": "Länkar"
   },
   "noadUser": {
     "noUser": "Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare",

@@ -26,6 +26,7 @@ const PercentageCell = ({ label, tooltip, percent, sx, ...rest }) => {
         <Chip
           {...rest}
           label={label}
+          variant={percent ? 'filled' : 'outlined'}
           sx={{
             background: theme => `${theme.palette.info.light}${hex}`,
           }}

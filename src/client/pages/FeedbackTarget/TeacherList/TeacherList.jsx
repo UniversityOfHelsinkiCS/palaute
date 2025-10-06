@@ -36,7 +36,7 @@ const TeacherList = ({ teachers, title, open, ...rest }) => {
       defaultExpanded={open}
     >
       <AccordionSummary sx={{ py: 0, mb: '-0.5rem' }} expandIcon={<ExpandMore />}>
-        <Typography variant="body2" sx={{ mr: '0.5rem' }}>
+        <Typography sx={{ mr: '0.5rem' }}>
           {title} ({teachers.length})
         </Typography>
       </AccordionSummary>
