@@ -83,7 +83,7 @@ const FeedbackTargetInformation = () => {
             paddingRight: '1rem',
           }}
         >
-          <Stack direction="column" spacing={1}>
+          <Stack direction="column" spacing={2}>
             <Typography fontWeight="bold">{t('feedbackTargetView:settings')}</Typography>
             {!isStudent && (
               <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
@@ -126,7 +126,7 @@ const FeedbackTargetInformation = () => {
           </Stack>
         </Grid>
         <Grid container size={{ xs: 12, md: 4 }} sx={{ paddingRight: '1rem' }}>
-          <Stack direction="column" spacing={1}>
+          <Stack direction="column" spacing={2}>
             <Typography fontWeight="bold">{t('feedbackTargetView:links')}</Typography>
             <FeedbackTargetLinks isInterimFeedback={isInterimFeedback} />
           </Stack>

@@ -20,34 +20,22 @@ const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
   const feedbackPeriod = getDateRangeString(opensAt, closesAt)
 
   return (
-    <Stack direction="column" spacing={1}>
+    <Stack direction="column" spacing={2}>
       <Typography fontWeight="bold">{t('feedbackTargetView:information')}</Typography>
       {!userCreated && (
         <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
-          <Typography color="textSecondary" component="dt">
-            {t('feedbackTargetView:coursePeriod')}:
-          </Typography>
-          <Typography color="textSecondary" component="dd">
-            {coursePeriod}
-          </Typography>
+          <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
+          <Typography component="dd">{coursePeriod}</Typography>
         </Box>
       )}
       <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
-        <Typography color="textSecondary" component="dt">
-          {t('feedbackTargetView:feedbackPeriod')}:
-        </Typography>
-        <Typography color="textSecondary" component="dd">
-          {feedbackPeriod}
-        </Typography>
+        <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
+        <Typography component="dd">{feedbackPeriod}</Typography>
       </Box>
       {isStudent && continuousFeedbackEnabled && (
         <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
-          <Typography color="textSecondary" component="dt">
-            {t('feedbackTargetView:continuousFeedbackTab')}:
-          </Typography>
-          <Typography color="textSecondary" component="dd">
-            {coursePeriod}
-          </Typography>
+          <Typography component="dt">{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
+          <Typography component="dd">{coursePeriod}</Typography>
         </Box>
       )}
       {isTeacher && (
@@ -59,9 +47,7 @@ const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
               gap="1rem"
               alignItems="center"
             >
-              <Typography color="textSecondary" component="dt">
-                {t('feedbackTargetView:continuousFeedbackTab')}:
-              </Typography>
+              <Typography component="dt">{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
               <Chip
                 label={continuousFeedbacks.length}
                 variant={continuousFeedbacks.length ? 'filled' : 'outlined'}
@@ -71,7 +57,7 @@ const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
             </Box>
           )}
           <Box data-cy={`${dataCyPrefix}feedback-target-feedback-count`} display="flex" gap="1rem" alignItems="center">
-            <Typography color="textSecondary">{t('feedbackTargetView:studentsWithFeedbackTab')}:</Typography>
+            <Typography>{t('feedbackTargetView:studentsWithFeedbackTab')}:</Typography>
             <PercentageCell
               data-cy={`${dataCyPrefix}feedback-target-feedback-count-percentage`}
               label={`${feedbackCount}/${studentCount}`}
