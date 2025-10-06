@@ -129,11 +129,7 @@ const FeedbackTargetContent = () => {
         }}
       >
         <TabGroupsContainer>
-          <TabGroup
-            data-cy={`${dataCyPrefix}feedback-target-feedback-tab-group`}
-            title={t('common:survey')}
-            hideTitle={isStudent}
-          >
+          <TabGroup data-cy={`${dataCyPrefix}feedback-target-feedback-tab-group`} title={t('common:survey')} hideTitle>
             {feedbackGiven && isOpen ? (
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
@@ -188,7 +184,7 @@ const FeedbackTargetContent = () => {
             <TabGroup
               data-cy={`${dataCyPrefix}feedback-target-additional-tab-group`}
               title={t('common:additional')}
-              hideTitle={isStudent}
+              hideTitle
             >
               {showContinuousFeedbackTab && (
                 <TabGroupTab
@@ -217,7 +213,7 @@ const FeedbackTargetContent = () => {
             <TabGroup
               data-cy={`${dataCyPrefix}feedback-target-result-tab-group`}
               title={t('feedbackTargetView:results')}
-              hideTitle={isStudent}
+              hideTitle
             >
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-results-tab`}
@@ -237,7 +233,7 @@ const FeedbackTargetContent = () => {
           )}
 
           {isAdmin && (
-            <TabGroup data-cy={`${dataCyPrefix}feedback-target-admin-tab-group`} title="Admin">
+            <TabGroup data-cy={`${dataCyPrefix}feedback-target-admin-tab-group`} title="Admin" hideTitle>
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
                 label="Togen"

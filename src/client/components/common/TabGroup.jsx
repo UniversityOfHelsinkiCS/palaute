@@ -98,7 +98,7 @@ export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
   </Box>
 )
 
-export const TabGroupsContainer = ({ children }) => {
+export const TabGroupsContainer = ({ children, showDivider = false }) => {
   const childElements = children.filter(child => Boolean(child))
 
   return (
@@ -115,16 +115,18 @@ export const TabGroupsContainer = ({ children }) => {
           borderRadius: '0.8rem',
         }}
       >
-        {React.Children.map(childElements, (child, i) => {
-          const lastChild = childElements.length === i + 1
+        {!showDivider && children}
+        {showDivider &&
+          React.Children.map(childElements, (child, i) => {
+            const lastChild = childElements.length === i + 1
 
-          return (
-            <>
-              {child}
-              {lastChild ? null : <Divider orientation="vertical" flexItem />}
-            </>
-          )
-        })}
+            return (
+              <>
+                {child}
+                {lastChild ? null : <Divider orientation="vertical" flexItem />}
+              </>
+            )
+          })}
       </Box>
     </Paper>
   )
