@@ -28,7 +28,18 @@ const TeacherList = ({ teachers, title, open, ...rest }) => {
   }
 
   return (
-    <Accordion {...rest} elevation={0} sx={{ bgcolor: 'transparent' }} disableGutters defaultExpanded={open}>
+    <Accordion
+      {...rest}
+      elevation={0}
+      sx={{
+        bgcolor: 'transparent',
+        '&::before': {
+          display: 'none', // remove the default divider line
+        },
+      }}
+      disableGutters
+      defaultExpanded={open}
+    >
       <AccordionSummary sx={{ py: 0, mb: '-0.5rem' }} expandIcon={<ExpandMore />}>
         <Typography sx={{ mr: '0.5rem' }}>
           {title} ({teachers.length})
