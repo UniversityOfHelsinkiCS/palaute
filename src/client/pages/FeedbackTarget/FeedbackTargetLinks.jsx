@@ -2,7 +2,7 @@ import React from 'react'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
-import { Stack, Typography } from '@mui/material'
+import { Stack } from '@mui/material'
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 
 import { useFeedbackTargetContext } from './FeedbackTargetContext'

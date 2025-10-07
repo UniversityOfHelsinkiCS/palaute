@@ -46,20 +46,17 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import Title from '../../components/common/Title'
 import { TabGroup, TabGroupsContainer, TabGroupTab } from '../../components/common/TabGroup'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
-import useFeedbackTargetContinuousFeedbacks from '../../hooks/useFeedbackTargetContinuousFeedbacks'
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
     useFeedbackTargetContext()
-  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
 
   const {
     courseUnit,
     courseRealisation,
     feedback,
     feedbackResponseEmailSent,
-    settingsReadByTeacher,
     continuousFeedbackEnabled,
     feedbackCanBeGiven,
     userCreated,
@@ -143,7 +140,6 @@ const FeedbackTargetContent = () => {
                 data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
                 label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
                 to={`${pathnameBase}/feedback`}
-                badge={isOpen}
                 icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
               />
             )}
@@ -154,7 +150,6 @@ const FeedbackTargetContent = () => {
                 to={`${pathnameBase}/edit`}
                 disabled={!isAdmin && isOpenOrClosed}
                 disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
-                badge={!settingsReadByTeacher && !isOpenOrClosed}
                 icon={<EditOutlined />}
               />
             )}
@@ -167,7 +162,6 @@ const FeedbackTargetContent = () => {
                     : t('feedbackTargetView:editFeedbackResponseTab')
                 }
                 to={`${pathnameBase}/edit-feedback-response`}
-                badge={!feedbackResponseEmailSent}
                 icon={<EditOutlined />}
               />
             )}
@@ -192,10 +186,6 @@ const FeedbackTargetContent = () => {
                   data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
                   label={t('feedbackTargetView:continuousFeedbackTab')}
                   to={`${pathnameBase}/continuous-feedback`}
-                  badge={continuousFeedbacks?.length}
-                  badgeContent={continuousFeedbacks?.length}
-                  badgeVisible={!isStudent}
-                  badgeColor="grey"
                   icon={<ReviewsOutlined />}
                 />
               )}
