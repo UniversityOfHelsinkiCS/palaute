@@ -565,7 +565,7 @@
     "feedbacksTab": "Responser",
     "giveFeedbackResponseTab": "Ge motrespons",
     "continuousFeedbackTab": "Kontinuerlig respons",
-    "studentsWithFeedbackTab": "De som gett respons",
+    "studentsWithFeedbackTab": "Respondenter",
     "linkCopied": "Länken till responsen har kopierats till urklippet",
     "copyLink": "Kopiera länken",
     "coursePeriod": "Kursen på gång",
@@ -605,9 +605,7 @@
     "surveyTabDisabledTooltip": "Enkäten kan inte längre redigeras efter att feedbacken har öppnats",
     "editFeedbackResponseTab": "Redigera återkopplingsfeedback",
     "interimFeedbackTab": "Mellanrespons",
-    "information": "Information",
-    "settings": "Inställningar",
-    "links": "Länkar"
+    "respondents": "Respondenter"
   },
   "noadUser": {
     "noUser": "Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare",

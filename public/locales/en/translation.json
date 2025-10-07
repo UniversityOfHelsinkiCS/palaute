@@ -633,9 +633,7 @@
     "noAccessEndedCourse": "The feedback period has ended, and feedback can no longer be given for this course. Please check the information above to ensure that the course is correct.",
     "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct",
     "interimFeedbackTab": "Interim feedbacks",
-    "information": "Information",
-    "settings": "Settings",
-    "links": "Links"
+    "respondents": "Respondents"
   },
   "noadUser": {
     "noUser": "Something went wrong, you are currently not logged in. Try going through the email link again or contact the course teacher",

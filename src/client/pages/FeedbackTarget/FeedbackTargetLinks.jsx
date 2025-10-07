@@ -2,7 +2,7 @@ import React from 'react'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
-import { Box } from '@mui/material'
+import { Stack, Typography } from '@mui/material'
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
@@ -57,18 +57,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   }
 
   return (
-    <Box
-      sx={{
-        pb: '0.8rem',
-        display: 'flex',
-        flexDirection: 'column',
-        rowGap: '0.4rem',
-        alignItems: 'start',
-        '@media print': {
-          display: 'none',
-        },
-      }}
-    >
+    <Stack direction="column" spacing={2} sx={{ alignItems: 'baseline' }}>
       {isTeacher && (
         <NorButton
           color="secondary"
@@ -79,57 +68,54 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
           {t('feedbackTargetView:copyLink')}
         </NorButton>
       )}
-
-      {organisation && (
-        <LinkButton
-          data-cy={`${dataCyPrefix}feedback-target-organisation-link`}
-          to={`/organisations/${organisation.code}`}
-          title={getLanguageValue(organisation.name, i18n.language)}
-        />
-      )}
-
-      {isTeacher && showCourseSummaryLink && (
-        <LinkButton
-          data-cy={`${dataCyPrefix}feedback-target-course-summary-link`}
-          to={courseSummaryPath}
-          title={t('feedbackTargetView:courseSummary')}
-        />
-      )}
-
-      {!userCreated && (
-        <LinkButton
-          data-cy={`${dataCyPrefix}feedback-target-course-page-link`}
-          to={coursePageUrl}
-          title={t('feedbackTargetView:coursePage')}
-          external
-        />
-      )}
-
-      {isTeacher && (
-        <LinkButton
-          data-cy={`${dataCyPrefix}feedback-target-wiki-link`}
-          to={t('links:wikiTeacherHelp')}
-          title={t('footer:wikiLink')}
-          external
-        />
-      )}
-
-      {isAdmin && !userCreated && (
-        <LinkButton
-          data-cy={`${dataCyPrefix}feedback-target-sisu-page-link`}
-          to={realisationPageUrl}
-          title={t('feedbackTargetView:courseRealisationPage')}
-          external
-        />
-      )}
-      {isInterimFeedback && !isParentFeedbackLoading && (
-        <LinkButton
-          data-cy={`${dataCyPrefix}feedback-target-interim-feedback-parent-link`}
-          to={`/targets/${parentFeedback?.id}/interim-feedback`}
-          title={parentCourseName}
-        />
-      )}
-    </Box>
+      <Stack direction="column" spacing={1} sx={{ alignItems: 'baseline' }}>
+        {organisation && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-organisation-link`}
+            to={`/organisations/${organisation.code}`}
+            title={getLanguageValue(organisation.name, i18n.language)}
+          />
+        )}
+        {isTeacher && showCourseSummaryLink && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-course-summary-link`}
+            to={courseSummaryPath}
+            title={t('feedbackTargetView:courseSummary')}
+          />
+        )}
+        {!userCreated && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-course-page-link`}
+            to={coursePageUrl}
+            title={t('feedbackTargetView:coursePage')}
+            external
+          />
+        )}
+        {isTeacher && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-wiki-link`}
+            to={t('links:wikiTeacherHelp')}
+            title={t('footer:wikiLink')}
+            external
+          />
+        )}
+        {isAdmin && !userCreated && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-sisu-page-link`}
+            to={realisationPageUrl}
+            title={t('feedbackTargetView:courseRealisationPage')}
+            external
+          />
+        )}
+        {isInterimFeedback && !isParentFeedbackLoading && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-interim-feedback-parent-link`}
+            to={`/targets/${parentFeedback?.id}/interim-feedback`}
+            title={parentCourseName}
+          />
+        )}
+      </Stack>
+    </Stack>
   )
 }
 

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography, Grid2 as Grid, Stack } from '@mui/material'
+import { Box, Typography, Grid2 as Grid, Stack, Divider } from '@mui/material'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import FeedbackTargetDatesAndCounts from './Dates/Dates'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -48,7 +48,7 @@ const FeedbackTargetInformation = () => {
             {primaryCourseName} {visibleCourseCode}
           </Typography>
         </Box>
-        <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
+        <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center" sx={{ mb: '2rem' }}>
           <Typography
             data-cy={`${dataCyPrefix}feedback-target-secondary-course-name`}
             variant="body1"
@@ -60,6 +60,7 @@ const FeedbackTargetInformation = () => {
           {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
         </Box>
       </Box>
+      <Divider />
       <Grid container spacing={4} size={{ xs: 12, md: 4 }} sx={{ marginTop: '2rem', marginBottom: '2rem' }}>
         <Grid
           container
@@ -84,21 +85,15 @@ const FeedbackTargetInformation = () => {
           }}
         >
           <Stack direction="column" spacing={2}>
-            <Typography fontWeight="bold">{t('feedbackTargetView:settings')}</Typography>
             {!isStudent && (
               <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
             )}
             <Box
-              sx={theme => ({
+              sx={{
                 display: 'flex',
                 flexDirection: 'column',
                 alignItems: 'start',
-                [theme.breakpoints.up('md')]: {
-                  ml: 'auto',
-                  pr: '2rem',
-                  alignItems: 'normal',
-                },
-              })}
+              }}
             >
               {!!responsibleTeachers?.length && (
                 <TeacherList
@@ -126,10 +121,7 @@ const FeedbackTargetInformation = () => {
           </Stack>
         </Grid>
         <Grid container size={{ xs: 12, md: 4 }} sx={{ paddingRight: '1rem' }}>
-          <Stack direction="column" spacing={2}>
-            <Typography fontWeight="bold">{t('feedbackTargetView:links')}</Typography>
-            <FeedbackTargetLinks isInterimFeedback={isInterimFeedback} />
-          </Stack>
+          <FeedbackTargetLinks isInterimFeedback={isInterimFeedback} />
         </Grid>
       </Grid>
     </Box>
