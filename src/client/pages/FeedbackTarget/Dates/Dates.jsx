@@ -21,22 +21,24 @@ const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
 
   return (
     <Stack direction="column" spacing={2}>
-      {!userCreated && (
-        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
-          <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
-          <Typography component="dd">{coursePeriod}</Typography>
+      <Box component="dl">
+        {!userCreated && (
+          <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
+            <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
+            <Typography component="dd">{coursePeriod}</Typography>
+          </Box>
+        )}
+        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mt: 2 }}>
+          <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
+          <Typography component="dd">{feedbackPeriod}</Typography>
         </Box>
-      )}
-      <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
-        <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
-        <Typography component="dd">{feedbackPeriod}</Typography>
+        {isStudent && continuousFeedbackEnabled && (
+          <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mt: 2 }}>
+            <Typography component="dt">{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
+            <Typography component="dd">{coursePeriod}</Typography>
+          </Box>
+        )}
       </Box>
-      {isStudent && continuousFeedbackEnabled && (
-        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
-          <Typography component="dt">{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
-          <Typography component="dd">{coursePeriod}</Typography>
-        </Box>
-      )}
       {isTeacher && (
         <>
           {continuousFeedbackEnabled && continuousFeedbacks && (
@@ -46,7 +48,7 @@ const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
               gap="1rem"
               alignItems="center"
             >
-              <Typography component="dt">{t('feedbackTargetView:continuousFeedbackGiven')}:</Typography>
+              <Typography>{t('feedbackTargetView:continuousFeedbackGiven')}:</Typography>
               <Chip
                 label={continuousFeedbacks.length}
                 variant={continuousFeedbacks.length ? 'filled' : 'outlined'}
