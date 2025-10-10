@@ -70,7 +70,6 @@ const EditInterimFeedback = () => {
         handleSubmit={handleSubmit}
         editing={showForm}
         onStopEditing={handleClose}
-        editView
       />
     </>
   )

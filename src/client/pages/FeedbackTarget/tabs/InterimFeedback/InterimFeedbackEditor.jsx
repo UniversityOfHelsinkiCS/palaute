@@ -24,32 +24,7 @@ const InterimFeedbackForm = () => {
   )
 }
 
-const EditInterimFeedbackForm = () => {
-  const { t } = useTranslation()
-
-  return (
-    <Grid spacing={4} container>
-      <FormikLocalesFieldEditor name="name" localesLabelString="interimFeedback:newSurveyName" />
-
-      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-        <FormikDatePicker name="startDate" label={t('interimFeedback:startDate')} />
-      </Grid>
-      <Grid size={{ xs: 12, sm: 12, md: 6 }}>
-        <FormikDatePicker name="endDate" label={t('interimFeedback:endDate')} />
-      </Grid>
-    </Grid>
-  )
-}
-
-const InterimFeedbackEditor = ({
-  title,
-  initialValues,
-  validationSchema,
-  handleSubmit,
-  editing,
-  onStopEditing,
-  editView = false,
-}) => {
+const InterimFeedbackEditor = ({ title, initialValues, validationSchema, handleSubmit, editing, onStopEditing }) => {
   const { t } = useTranslation()
 
   return (
@@ -67,8 +42,7 @@ const InterimFeedbackEditor = ({
           return (
             <Form>
               <Box sx={{ m: 4 }}>
-                {editView ? <EditInterimFeedbackForm /> : <InterimFeedbackForm />}
-
+                <InterimFeedbackForm />
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'right', gap: 2 }}>
                   <NorButton data-cy="interim-feedback-editor-cancel" color="cancel" onClick={onStopEditing}>
                     {t('common:cancel')}
