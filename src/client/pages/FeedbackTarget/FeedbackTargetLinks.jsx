@@ -21,7 +21,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { feedbackTarget, organisation, isTeacher, isAdmin, isStudent } = useFeedbackTargetContext()
+  const { feedbackTarget, organisation, isTeacher, isStudent } = useFeedbackTargetContext()
   const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
     enabled: isTeacher,
   })
@@ -91,14 +91,6 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
             external
           />
         )}
-        {isTeacher && (
-          <LinkButton
-            data-cy={`${dataCyPrefix}feedback-target-wiki-link`}
-            to={t('links:wikiTeacherHelp')}
-            title={t('footer:wikiLink')}
-            external
-          />
-        )}
         {!isStudent && !userCreated && (
           <LinkButton
             data-cy={`${dataCyPrefix}feedback-target-sisu-page-link`}
@@ -112,6 +104,14 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
             data-cy={`${dataCyPrefix}feedback-target-interim-feedback-parent-link`}
             to={`/targets/${parentFeedback?.id}/interim-feedback`}
             title={parentCourseName}
+          />
+        )}
+        {isTeacher && (
+          <LinkButton
+            data-cy={`${dataCyPrefix}feedback-target-wiki-link`}
+            to={t('links:wikiTeacherHelp')}
+            title={t('footer:wikiLink')}
+            external
           />
         )}
       </Stack>
