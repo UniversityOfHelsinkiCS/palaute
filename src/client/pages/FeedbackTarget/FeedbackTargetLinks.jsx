@@ -21,7 +21,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   const { i18n, t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { feedbackTarget, organisation, isTeacher, isAdmin } = useFeedbackTargetContext()
+  const { feedbackTarget, organisation, isTeacher, isAdmin, isStudent } = useFeedbackTargetContext()
   const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
     enabled: isTeacher,
   })
@@ -99,7 +99,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
             external
           />
         )}
-        {isAdmin && !userCreated && (
+        {!isStudent && !userCreated && (
           <LinkButton
             data-cy={`${dataCyPrefix}feedback-target-sisu-page-link`}
             to={realisationPageUrl}
