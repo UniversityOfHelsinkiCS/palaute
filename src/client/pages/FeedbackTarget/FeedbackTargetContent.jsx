@@ -146,7 +146,7 @@ const FeedbackTargetContent = () => {
             {showSettingsTab && (
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
-                label={t('feedbackTargetView:surveySettingsTab')}
+                label={t('feedbackTargetView:surveyQuestionsTab')}
                 to={`${pathnameBase}/edit`}
                 disabled={!isAdmin && isOpenOrClosed}
                 disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}

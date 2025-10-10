@@ -607,7 +607,7 @@
     "responsibleTeachers": "Responsible teachers",
     "administrativePersons": "Administrative persons",
     "shareTab": "Share",
-    "surveySettingsTab": "Edit",
+    "surveyQuestionsTab": "Questions",
     "surveyTabDisabledTooltip": "Survey can no longer be edited after the feedback has opened",
     "results": "Results",
     "continuousFeedbackInfo": "Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course, before the actual course feedback starts on the course end date.",

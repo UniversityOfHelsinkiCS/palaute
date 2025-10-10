@@ -607,7 +607,7 @@
     "administrativePersons": "Hallintohenkilöt",
     "shareTab": "Jaa",
     "results": "Tulokset",
-    "surveySettingsTab": "Muokkaus",
+    "surveyQuestionsTab": "Kysymykset",
     "surveyTabDisabledTooltip": "Kyselyä ei voi enää muokata palautteen aukeamisen jälkeen",
     "continuousFeedbackInfo": "Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken kurssin. Jatkuva palaute on käytössä kurssin aikana, ennen kuin varsinainen kurssipalaute aukeaa kurssin päättymispäivänä.",
     "activateContinuousFeedback": "Ota jatkuva palaute käyttöön kurssilla",
