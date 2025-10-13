@@ -31,22 +31,37 @@ const TeacherList = ({ teachers, title, open, ...rest }) => {
     <Accordion
       {...rest}
       elevation={0}
+      disableGutters
+      defaultExpanded={open}
       sx={{
+        m: 0,
+        p: 0,
         bgcolor: 'transparent',
         '&::before': {
           display: 'none', // remove the default divider line
         },
       }}
-      disableGutters
-      defaultExpanded={open}
     >
-      <AccordionSummary sx={{ py: 0, mb: '-0.5rem' }} expandIcon={<ExpandMore />}>
-        <Typography sx={{ mr: '0.5rem' }}>
+      <AccordionSummary
+        expandIcon={<ExpandMore />}
+        sx={{
+          p: 0,
+          m: 0,
+          minHeight: 'unset',
+          '& .MuiAccordionSummary-content': {
+            m: 0,
+            p: 0,
+          },
+          '&.Mui-expanded': { minHeight: 'unset' },
+          '& .MuiAccordionSummary-content.Mui-expanded': { margin: 0 },
+        }}
+      >
+        <Typography sx={{ m: 0, p: 0, mr: '1rem' }}>
           {title} ({teachers.length})
         </Typography>
       </AccordionSummary>
-      <AccordionDetails sx={{ py: 0 }}>
-        <List>
+      <AccordionDetails sx={{ m: 0, py: 0 }}>
+        <List sx={{ mt: '0.5rem' }}>
           {teachers.map(teacher => (
             <ListItem key={teacher.id} disablePadding>
               <TeacherChip user={teacher} onDelete={isAdmin ? () => handleDeleteTeacher(teacher) : undefined} />

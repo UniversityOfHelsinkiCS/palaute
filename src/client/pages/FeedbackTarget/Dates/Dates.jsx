@@ -5,8 +5,9 @@ import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import { getDateRangeString } from '../../../util/getDateRangeString'
 import useFeedbackTargetContinuousFeedbacks from '../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import PercentageCell from '../../CourseSummary/components/PercentageCell'
+import EditFeedbackTargetDates from './EditFeedbackTarget'
 
-const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
+const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) => {
   const { t } = useTranslation()
   const { feedbackTarget, isTeacher, isStudent } = useFeedbackTargetContext()
   const { courseRealisation, opensAt, closesAt, userCreated, continuousFeedbackEnabled, summary } = feedbackTarget
@@ -28,9 +29,10 @@ const FeedbackTargetDatesAndCounts = ({ dataCyPrefix = '' }) => {
             <Typography component="dd">{coursePeriod}</Typography>
           </Box>
         )}
-        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mt: 2 }}>
+        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" alignItems="center" sx={{ mt: 2 }}>
           <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
           <Typography component="dd">{feedbackPeriod}</Typography>
+          {!isStudent && isCourseFeedback && <EditFeedbackTargetDates />}
         </Box>
         {isStudent && continuousFeedbackEnabled && (
           <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mt: 2 }}>

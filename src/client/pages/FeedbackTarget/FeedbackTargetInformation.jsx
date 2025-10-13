@@ -41,23 +41,35 @@ const FeedbackTargetInformation = () => {
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
 
   return (
-    <Box sx={{ marginBottom: '1rem' }}>
+    <Box sx={{ marginBottom: '3rem' }}>
       <Box display="flex" flexDirection="column" gap="1rem">
         <Box display="flex" flexWrap="wrap" alignItems="end" columnGap="1rem" rowGap="0.3rem">
           <Typography data-cy={`${dataCyPrefix}feedback-target-primary-course-name`} variant="h4" component="h1">
             {primaryCourseName} {visibleCourseCode}
           </Typography>
         </Box>
-        <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center" sx={{ mb: '2rem' }}>
-          <Typography
-            data-cy={`${dataCyPrefix}feedback-target-secondary-course-name`}
-            variant="body1"
-            component="h2"
-            sx={{ mr: '1rem' }}
-          >
-            {secondaryCourseName}
-          </Typography>
-          {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
+        <Box
+          display="flex"
+          flexDirection="row"
+          flexWrap="wrap"
+          alignItems="center"
+          justifyContent="space-between"
+          sx={{ mb: '2rem' }}
+        >
+          <Box display="flex" flexDirection="row" flexWrap="wrap" alignItems="center">
+            <Typography
+              data-cy={`${dataCyPrefix}feedback-target-secondary-course-name`}
+              variant="body1"
+              component="h2"
+              sx={{ mr: '1rem' }}
+            >
+              {secondaryCourseName}
+            </Typography>
+            {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
+          </Box>
+          {!isStudent && (isInterimFeedback || isOrganisationSurvey) && (
+            <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
+          )}
         </Box>
       </Box>
       <Divider />
@@ -72,7 +84,10 @@ const FeedbackTargetInformation = () => {
             paddingRight: '1rem',
           }}
         >
-          <FeedbackTargetDatesAndCounts dataCyPrefix={dataCyPrefix} />
+          <FeedbackTargetDatesAndCounts
+            isCourseFeedback={!isInterimFeedback && !isOrganisationSurvey}
+            dataCyPrefix={dataCyPrefix}
+          />
         </Grid>
         <Grid
           container
@@ -84,46 +99,38 @@ const FeedbackTargetInformation = () => {
             paddingRight: '1rem',
           }}
         >
-          <Stack direction="column" spacing={2}>
-            {!isStudent && (
-              <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
+          <Stack direction="column" spacing={3}>
+            {!!responsibleTeachers?.length && (
+              <TeacherList
+                data-cy={`${dataCyPrefix}feedback-target-responsible-teacher-list`}
+                title={t('feedbackTargetView:responsibleTeachers')}
+                teachers={responsibleTeachers}
+                open={responsibleTeachers.length < 8}
+              />
             )}
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'start',
-              }}
-            >
-              {!!responsibleTeachers?.length && (
-                <TeacherList
-                  data-cy={`${dataCyPrefix}feedback-target-responsible-teacher-list`}
-                  title={t('feedbackTargetView:responsibleTeachers')}
-                  teachers={responsibleTeachers}
-                  open={responsibleTeachers.length < 8}
-                />
-              )}
-              {!!teachers?.length && (
-                <TeacherList
-                  data-cy={`${dataCyPrefix}feedback-target-teacher-list`}
-                  teachers={teachers}
-                  title={t('feedbackTargetView:teachers')}
-                />
-              )}
-              {!isStudent && !!administrativePersons?.length && (
-                <TeacherList
-                  data-cy={`${dataCyPrefix}feedback-target-responsible-administrative-person-list`}
-                  teachers={administrativePersons}
-                  title={t('feedbackTargetView:administrativePersons')}
-                />
-              )}
-            </Box>
+            {!!teachers?.length && (
+              <TeacherList
+                data-cy={`${dataCyPrefix}feedback-target-teacher-list`}
+                teachers={teachers}
+                title={t('feedbackTargetView:teachers')}
+              />
+            )}
+            {!isStudent && !!administrativePersons?.length && (
+              <TeacherList
+                data-cy={`${dataCyPrefix}feedback-target-responsible-administrative-person-list`}
+                teachers={administrativePersons}
+                title={t('feedbackTargetView:administrativePersons')}
+              />
+            )}
           </Stack>
         </Grid>
         <Grid container size={{ xs: 12, md: 4 }} sx={{ paddingRight: '1rem' }}>
           <FeedbackTargetLinks isInterimFeedback={isInterimFeedback} />
         </Grid>
       </Grid>
+      {!isStudent && (isInterimFeedback || isOrganisationSurvey) && (
+        <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
+      )}
     </Box>
   )
 }

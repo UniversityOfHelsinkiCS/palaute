@@ -24,7 +24,7 @@ const EditFeedbackTargetDates = () => {
         color="secondary"
         icon={<Edit />}
       >
-        {t('feedbackTargetSettings:editPeriodTitle')}
+        {t('common:edit')}
       </NorButton>
 
       <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
