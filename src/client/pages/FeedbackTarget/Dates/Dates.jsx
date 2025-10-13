@@ -24,12 +24,12 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
     <Stack direction="column" spacing={2}>
       <Box component="dl">
         {!userCreated && (
-          <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem">
+          <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mb: 2 }}>
             <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
             <Typography component="dd">{coursePeriod}</Typography>
           </Box>
         )}
-        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" alignItems="center" sx={{ mt: 2 }}>
+        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" alignItems="center">
           <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
           <Typography component="dd">{feedbackPeriod}</Typography>
           {!isStudent && isCourseFeedback && <EditFeedbackTargetDates />}
