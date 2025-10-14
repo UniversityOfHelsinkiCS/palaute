@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Edit } from '@mui/icons-material'
+import { SettingsOutlined } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
@@ -104,10 +104,10 @@ const EditOrganisationSurvey = () => {
     <>
       <NorButton
         data-cy="feedback-target-edit-organisation-survey"
-        sx={{ textAlign: 'left', justifyContent: 'start' }}
+        sx={{ textAlign: 'center', justifyContent: 'center' }}
         onClick={handleClose}
-        color="secondary"
-        icon={<Edit />}
+        color="primary"
+        icon={<SettingsOutlined />}
       >
         {t('organisationSurveys:editSurvey')}
       </NorButton>

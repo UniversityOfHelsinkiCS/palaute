@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Edit } from '@mui/icons-material'
+import { SettingsOutlined } from '@mui/icons-material'
 
 import { useSnackbar } from 'notistack'
 import { useParams } from 'react-router-dom'
@@ -54,11 +54,11 @@ const EditInterimFeedback = () => {
   return (
     <>
       <NorButton
-        sx={{ textAlign: 'left', justifyContent: 'start' }}
+        sx={{ textAlign: 'center', justifyContent: 'center' }}
         data-cy="feedback-target-edit-interim-feedback"
         onClick={handleClose}
-        color="secondary"
-        icon={<Edit />}
+        color="primary"
+        icon={<SettingsOutlined />}
       >
         {t('interimFeedback:editSurvey')}
       </NorButton>

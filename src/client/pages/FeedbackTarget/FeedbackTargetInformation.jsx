@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography, Grid2 as Grid, Stack, Divider } from '@mui/material'
+import { Box, Typography, Grid2 as Grid, Stack, Divider, Link } from '@mui/material'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import FeedbackTargetDatesAndCounts from './Dates/Dates'
 import { getLanguageValue } from '../../util/languageUtils'
@@ -31,6 +31,7 @@ const FeedbackTargetInformation = () => {
     i18n.language
   )
   const courseCode = getCourseCode(courseUnit)
+  const courseUnitOrganisationCode = courseUnit?.organisations[0]?.code
   const { isInterimFeedback, isOrganisationSurvey } = getSurveyType(courseUnit, feedbackTarget)
 
   // Show course code only if it is not already in the course name
@@ -63,7 +64,13 @@ const FeedbackTargetInformation = () => {
               component="h2"
               sx={{ mr: '1rem' }}
             >
-              {secondaryCourseName}
+              {isOrganisationSurvey && courseUnitOrganisationCode ? (
+                <Link href={`/organisations/${courseUnitOrganisationCode}/organisation-surveys`} underline="always">
+                  {secondaryCourseName}
+                </Link>
+              ) : (
+                secondaryCourseName
+              )}
             </Typography>
             {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
           </Box>
@@ -128,9 +135,6 @@ const FeedbackTargetInformation = () => {
           <FeedbackTargetLinks isInterimFeedback={isInterimFeedback} />
         </Grid>
       </Grid>
-      {!isStudent && (isInterimFeedback || isOrganisationSurvey) && (
-        <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
-      )}
     </Box>
   )
 }
