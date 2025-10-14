@@ -22,7 +22,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
 
   return (
     <Stack direction="column" spacing={2}>
-      <Box component="dl">
+      <Box component="dl" data-cy={`${dataCyPrefix}feedback-target-feedback-dates`}>
         {!userCreated && (
           <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mb: 2 }}>
             <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
