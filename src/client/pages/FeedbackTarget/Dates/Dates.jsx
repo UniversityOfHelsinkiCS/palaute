@@ -10,7 +10,7 @@ import EditFeedbackTargetDates from './EditFeedbackTarget'
 const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) => {
   const { t } = useTranslation()
   const { feedbackTarget, isTeacher, isStudent } = useFeedbackTargetContext()
-  const { courseRealisation, opensAt, closesAt, userCreated, continuousFeedbackEnabled, summary } = feedbackTarget
+  const { id, courseRealisation, opensAt, closesAt, userCreated, continuousFeedbackEnabled, summary } = feedbackTarget
 
   const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
 
@@ -52,6 +52,9 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
             >
               <Typography>{t('feedbackTargetView:continuousFeedbackGiven')}:</Typography>
               <Chip
+                clickable
+                component="a"
+                href={`/targets/${id}/continuous-feedback`}
                 label={continuousFeedbacks.length}
                 variant={continuousFeedbacks.length ? 'filled' : 'outlined'}
                 color={continuousFeedbacks.length ? 'primary' : 'lightGray'}
@@ -66,6 +69,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}
               tooltip={t('common:feedbacksGivenRatio')}
+              href={`/targets/${id}/results`}
             />
           </Box>
         </>
