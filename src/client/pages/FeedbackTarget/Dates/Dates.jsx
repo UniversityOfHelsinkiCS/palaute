@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router'
 import { Box, Typography, Stack, Chip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
@@ -53,8 +54,8 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
               <Typography>{t('feedbackTargetView:continuousFeedbackGiven')}:</Typography>
               <Chip
                 clickable
-                component="a"
-                href={`/targets/${id}/continuous-feedback`}
+                component={Link}
+                to={`/targets/${id}/continuous-feedback`}
                 label={continuousFeedbacks.length}
                 variant={continuousFeedbacks.length ? 'filled' : 'outlined'}
                 color={continuousFeedbacks.length ? 'primary' : 'lightGray'}
@@ -69,7 +70,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}
               tooltip={t('common:feedbacksGivenRatio')}
-              href={`/targets/${id}/results`}
+              linkTo={`/targets/${id}/results`}
             />
           </Box>
         </>

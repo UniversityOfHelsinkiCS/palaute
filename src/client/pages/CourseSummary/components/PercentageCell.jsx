@@ -1,5 +1,6 @@
-import { Box, Chip, Tooltip } from '@mui/material'
 import React from 'react'
+import { Link } from 'react-router'
+import { Box, Chip, Tooltip } from '@mui/material'
 
 const styles = {
   cell: {
@@ -14,7 +15,7 @@ const styles = {
  * @param {{ string, number }} { label, percent }
  * @returns
  */
-const PercentageCell = ({ label, tooltip, percent, sx, href, ...rest }) => {
+const PercentageCell = ({ label, tooltip, percent, sx, linkTo, ...rest }) => {
   let hex = Number(percent * 2.55).toString(16)
   const indexOfDot = hex.indexOf('.')
   hex = indexOfDot === -1 ? hex : hex.substring(0, indexOfDot)
@@ -25,9 +26,9 @@ const PercentageCell = ({ label, tooltip, percent, sx, href, ...rest }) => {
       <Box sx={{ ...styles.cell, ...(sx ?? {}) }}>
         <Chip
           {...rest}
-          clickable={href}
-          component={href ? 'a' : undefined}
-          href={href || undefined}
+          clickable={linkTo}
+          component={linkTo ? Link : undefined}
+          to={linkTo || undefined}
           label={label}
           variant={percent ? 'filled' : 'outlined'}
           sx={{
