@@ -21,7 +21,7 @@ export const TabGroupTab = ({
   const active = !!matchPath({ path: stripSearch(to) }, pathname)
 
   let content = icon ? (
-    <Box display="flex" alignItems="center">
+    <Box display="flex" alignItems="center" sx={{ flexShrink: 0 }}>
       {icon}
       <Box ml="0.5rem" />
       {label}
@@ -50,6 +50,7 @@ export const TabGroupTab = ({
         py: '0.2rem',
         px: '0.2rem',
         borderColor: active ? 'primary.main' : 'transparent',
+        flexShrink: 0,
       }}
     >
       <Tab
@@ -81,7 +82,7 @@ export const TabGroupTab = ({
 }
 
 export const TabGroup = ({ title, hideTitle = false, Icon, children }) => (
-  <Box display="flex">
+  <Box display="flex" sx={{ flexShrink: 0 }}>
     <Box display="flex" flexDirection="column" pt="0.6rem">
       {!hideTitle && (
         <Box display="flex" gap="0.5rem" px="1.5rem" mb="auto" color="textSecondary" alignItems="center">
@@ -102,32 +103,49 @@ export const TabGroupsContainer = ({ children, showDivider = false }) => {
   const childElements = children.filter(child => Boolean(child))
 
   return (
-    <Paper>
+    <Box
+      mb="2rem"
+      sx={{
+        '@media print': { display: 'none' },
+      }}
+    >
       <Box
-        display="flex"
-        px="0.2rem"
-        alignItems="stretch"
         sx={{
-          overflowX: 'auto',
-          '::-webkit-scrollbar': {
-            display: 'none',
-          },
           borderRadius: '0.8rem',
+          boxShadow: 2,
+          overflowX: 'auto',
+          overflowY: 'hidden',
+          WebkitOverflowScrolling: 'touch',
+          scrollbarWidth: 'thin',
+          '&::-webkit-scrollbar': { height: 8 },
         }}
       >
-        {!showDivider && children}
-        {showDivider &&
-          React.Children.map(childElements, (child, i) => {
-            const lastChild = childElements.length === i + 1
+        <Paper>
+          <Box
+            display="flex"
+            flexDirection="row"
+            flexWrap="nowrap"
+            px="0.2rem"
+            alignItems="stretch"
+            sx={{
+              overflowX: 'auto',
+            }}
+          >
+            {!showDivider && children}
+            {showDivider &&
+              React.Children.map(childElements, (child, i) => {
+                const lastChild = childElements.length === i + 1
 
-            return (
-              <>
-                {child}
-                {lastChild ? null : <Divider orientation="vertical" flexItem />}
-              </>
-            )
-          })}
+                return (
+                  <>
+                    {child}
+                    {lastChild ? null : <Divider orientation="vertical" flexItem />}
+                  </>
+                )
+              })}
+          </Box>
+        </Paper>
       </Box>
-    </Paper>
+    </Box>
   )
 }
