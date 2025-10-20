@@ -22,7 +22,13 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, organisation, isTeacher, isStudent } = useFeedbackTargetContext()
-  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget.courseUnit.courseCode, {
+  const { courseCode } = feedbackTarget.courseUnit
+
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) here and replaced back before querying database
+  // Tilde should not be used in any course codes
+  const safeCourseCode = courseCode.replace('/', '~')
+  const { courseRealisationSummaries } = useCourseRealisationSummaries(safeCourseCode, {
     enabled: isTeacher,
   })
   const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(

@@ -125,8 +125,12 @@ const getByCourseUnit = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde before making request (~) and has to be replaced back before querying database
+  const correctCode = code.replace('~', '/')
+
   const courseUnits = await CourseUnit.findAll({
-    where: { courseCode: code },
+    where: { courseCode: correctCode },
     include: [
       {
         model: Organisation,
@@ -144,13 +148,13 @@ const getByCourseUnit = async (req, res) => {
   const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
     user.dataValues.isAdmin || (await user.getOrganisationAccessByCourseUnitId(courseUnits[0].id))?.read,
     getAccessibleCourseRealisationIds(user),
-    getSummaryQuestions(code),
+    getSummaryQuestions(correctCode),
   ])
 
   const courseRealisations = await getCourseRealisationSummaries({
     accessibleCourseRealisationIds,
     organisationAccess,
-    courseCode: code,
+    courseCode: correctCode,
     questions,
   })
 
