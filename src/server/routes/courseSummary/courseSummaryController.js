@@ -126,7 +126,7 @@ const getByCourseUnit = async (req, res) => {
   const { code } = req.params
 
   // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde before making request (~) and has to be replaced back before querying database
+  // Slash is replaced with tilde (~) before making request and has to be replaced back before querying database
   const correctCode = code.replace('~', '/')
 
   const courseUnits = await CourseUnit.findAll({
@@ -171,9 +171,13 @@ const getCourseUnitGroup = async (req, res) => {
   const { startDate, endDate } = parseDates(startDateString, endDateString)
   const allTime = allTimeString === 'true'
 
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) before making request and has to be replaced back before querying database
+  const correctCourseCode = courseCode.replace('~', '/')
+
   const courseUnitGroup = await getCourseUnitGroupSummaries({
     user,
-    courseCode,
+    courseCode: correctCourseCode,
     startDate,
     endDate,
     allTime,

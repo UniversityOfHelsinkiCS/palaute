@@ -124,7 +124,12 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions, startDate, endDate
     />
   )
 
-  const courseLinkURL = new URL(`/course-summary/course-unit/${courseUnit.courseCode}`, 'http://dummy')
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) here and replaced back before querying database
+  // Tilde should not be used in any course codes
+  const safeCourseCode = courseUnit.courseCode.replace('/', '~')
+
+  const courseLinkURL = new URL(`/course-summary/course-unit/${safeCourseCode}`, 'http://dummy')
   if (isValid(startDate) && isValid(endDate)) {
     courseLinkURL.searchParams.append('startDate', format(startDate, 'yyyy-MM-dd'))
     courseLinkURL.searchParams.append('endDate', format(endDate, 'yyyy-MM-dd'))
