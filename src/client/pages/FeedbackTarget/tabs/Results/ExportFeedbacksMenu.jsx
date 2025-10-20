@@ -87,7 +87,11 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
 
   const data = [headers, ...questions]
 
-  const filename = `${feedbackTarget.courseUnit.courseCode}_${getCourseStartDate(feedbackTarget)}`
+  const { courseCode } = feedbackTarget.courseUnit
+
+  const safeCourseCode = courseCode.replace('/', '_')
+
+  const filename = `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
 
   const worksheet = utils.aoa_to_sheet(data)
   const workbook = utils.book_new()
