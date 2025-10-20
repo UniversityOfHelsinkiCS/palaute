@@ -143,7 +143,11 @@ const StudentTable = ({ students, feedbackTarget }) => {
     [students]
   )
 
-  const fileName = `${feedbackTarget.courseUnit.courseCode}_${format(
+  const { courseCode } = feedbackTarget.courseUnit
+
+  const safeCourseCode = courseCode.replace('/', '_')
+
+  const fileName = `${safeCourseCode}_${format(
     parseISO(feedbackTarget.courseRealisation.startDate),
     'yyyyMMdd'
   )}student`
