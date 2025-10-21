@@ -46,8 +46,13 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     }),
   }
 
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) here and replaced back before querying database
+  // Tilde should not be used in any course codes
+  const safeCourseCode = code?.replace('/', '~')
+
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/feedback-targets/for-course-unit/${code}`, {
+    const { data } = await apiClient.get(`/feedback-targets/for-course-unit/${safeCourseCode}`, {
       params,
     })
 

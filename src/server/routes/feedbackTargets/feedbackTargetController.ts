@@ -91,6 +91,10 @@ adRouter.get('/for-course-unit/:code', async (req: AuthenticatedRequest, res: Re
   const courseCode = req.params.code
   const { user } = req
 
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) before making request and has to be replaced back before querying database
+  const acualCourseCode = courseCode.replace('~', '/')
+
   const {
     courseRealisationStartDateAfter: startDateAfter,
     courseRealisationStartDateBefore: startDateBefore,
@@ -103,7 +107,7 @@ adRouter.get('/for-course-unit/:code', async (req: AuthenticatedRequest, res: Re
 
   const feedbackTargets = await getFeedbackTargetsForCourseUnit({
     user,
-    courseCode,
+    courseCode: acualCourseCode,
     startDateAfter,
     startDateBefore,
     endDateAfter,

@@ -66,11 +66,16 @@ const CourseUnitItem = ({
 }) => {
   const labelId = `courseUnitItem-${courseCode}`
 
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) here and replaced back before querying database
+  // Tilde should not be used in any course codes
+  const safeCourseCode = courseCode.replace('/', '~')
+
   return (
     <TableRow>
       <TableCell>{courseCode}</TableCell>
       <TableCell>
-        <MuiLink component={Link} to={`/course-summary/course-unit/${courseCode}`}>
+        <MuiLink component={Link} to={`/course-summary/course-unit/${safeCourseCode}`}>
           {name}
         </MuiLink>
       </TableCell>

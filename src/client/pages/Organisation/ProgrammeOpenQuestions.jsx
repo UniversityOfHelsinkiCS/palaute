@@ -103,7 +103,7 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
             <Link
-              href={`/course-summary/course-unit/${course.code}`}
+              href={`/course-summary/course-unit/${course.code.replace('/', '~')}`} // avoid problems with course codes including slash character
               style={styles.courseTitle}
               replace
             >{`${course.code} - ${course.name[language]}`}</Link>

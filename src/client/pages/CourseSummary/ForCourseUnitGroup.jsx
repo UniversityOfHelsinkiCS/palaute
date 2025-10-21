@@ -12,9 +12,15 @@ import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
 const ForCourseUnitGroup = () => {
   const { t } = useTranslation()
   const { code } = useParams()
+
+  // There are course codes that include slash character (/), which is problematic in req parameter
+  // Slash is replaced with tilde (~) here and replaced back before querying database
+  // Tilde should not be used in any course codes
+  const safeCourseCode = code.replace('/', '~')
+
   const { dateRange, questions, option } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
-    courseCode: code,
+    courseCode: safeCourseCode,
     startDate: dateRange.start,
     endDate: dateRange.end,
     allTime: option === 'all',
