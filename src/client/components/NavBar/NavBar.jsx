@@ -165,7 +165,7 @@ const NavBar = ({ guest = false }) => {
 
   const preferences = authorizedUser?.preferences ?? {}
   const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
-  const myCoursesIsAccessible = (preferences?.hasCourseAccess || authorizedUser?.isTeacherOnSomeCourse) ?? false
+  const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)

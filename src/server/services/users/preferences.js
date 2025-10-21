@@ -106,9 +106,11 @@ const getPreferredTab = (user, fbts, hasSummaryAccess) => {
  */
 const getUserPreferences = async user => {
   const teachedFbts = await getTeachedFeedbackTargets(user)
+  const userIsTeacherOnSomeCourse = await user.isTeacher()
+
   const hasSummaryAccess =
     (user.isEmployee && teachedFbts.length > 0) || user.isAdmin || !_.isEmpty(user?.organisationAccess)
-  const hasCourseAccess = (user.isEmployee && teachedFbts.length > 0) || user.isAdmin
+  const hasCourseAccess = (user.isEmployee && teachedFbts.length > 0) || userIsTeacherOnSomeCourse || user.isAdmin
   const preferredTab = getPreferredTab(user, teachedFbts, hasSummaryAccess)
   const summaryView = hasSummaryAccess ? await getPreferredSummaryView(user) : null
 

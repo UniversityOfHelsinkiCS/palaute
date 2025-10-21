@@ -22,7 +22,7 @@ const login = async (req, res) => {
     }
   }
 
-  const [lastRestart, banners, organisations, preferences, isTeacherOnSomeCourse] = await Promise.all([
+  const [lastRestart, banners, organisations, preferences] = await Promise.all([
     getLastRestart(),
     Banner.getForUser(user),
     user.getOrganisationAccess(),
@@ -37,7 +37,6 @@ const login = async (req, res) => {
     banners,
     organisations,
     preferences,
-    isTeacherOnSomeCourse,
   })
 }
 
