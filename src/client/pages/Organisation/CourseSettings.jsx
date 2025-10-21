@@ -31,6 +31,7 @@ import { TagChip } from '../../components/common/TagChip'
 import CourseUnitTagSelector from './CourseUnitTagSelector'
 import { getLanguageValue } from '../../util/languageUtils'
 import queryClient from '../../util/queryClient'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, language = 'en') =>
   (courseUnits ?? []).map(({ id, courseCode, name, tags }) => ({
@@ -66,10 +67,7 @@ const CourseUnitItem = ({
 }) => {
   const labelId = `courseUnitItem-${courseCode}`
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) here and replaced back before querying database
-  // Tilde should not be used in any course codes
-  const safeCourseCode = courseCode.replace('/', '~')
+  const safeCourseCode = getSafeCourseCode({ courseCode })
 
   return (
     <TableRow>

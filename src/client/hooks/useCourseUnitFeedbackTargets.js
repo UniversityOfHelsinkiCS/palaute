@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
+import { getSafeCourseCode } from '../util/courseIdentifiers'
 
 const useCourseUnitFeedbackTargets = (code, options = {}) => {
   const {
@@ -46,10 +47,7 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
     }),
   }
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) here and replaced back before querying database
-  // Tilde should not be used in any course codes
-  const safeCourseCode = code?.replace('/', '~')
+  const safeCourseCode = getSafeCourseCode({ courseCode: code })
 
   const queryFn = async () => {
     const { data } = await apiClient.get(`/feedback-targets/for-course-unit/${safeCourseCode}`, {

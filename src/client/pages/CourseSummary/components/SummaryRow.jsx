@@ -13,6 +13,7 @@ import { useSummaryContext } from '../context'
 import RowHeader from './RowHeader'
 import CensoredCount from './CensoredCount'
 import FeedbackResponseIndicator from './FeedbackResponseIndicator'
+import { getSafeCourseCode } from '../../../util/courseIdentifiers'
 
 const styles = {
   resultCell: {
@@ -124,10 +125,7 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions, startDate, endDate
     />
   )
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) here and replaced back before querying database
-  // Tilde should not be used in any course codes
-  const safeCourseCode = courseUnit.courseCode.replace('/', '~')
+  const safeCourseCode = getSafeCourseCode({ courseCode: courseUnit?.courseCode })
 
   const courseLinkURL = new URL(`/course-summary/course-unit/${safeCourseCode}`, 'http://dummy')
   if (isValid(startDate) && isValid(endDate)) {

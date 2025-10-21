@@ -8,15 +8,13 @@ import SummaryScrollContainer from './components/SummaryScrollContainer'
 import SorterRowWithFilters from './components/SorterRow'
 import { useSummaryContext } from './context'
 import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const ForCourseUnitGroup = () => {
   const { t } = useTranslation()
   const { code } = useParams()
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) here and replaced back before querying database
-  // Tilde should not be used in any course codes
-  const safeCourseCode = code.replace('/', '~')
+  const safeCourseCode = getSafeCourseCode({ courseCode: code })
 
   const { dateRange, questions, option } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({

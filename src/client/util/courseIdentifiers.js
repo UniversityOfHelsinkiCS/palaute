@@ -42,3 +42,15 @@ export const getSecondaryCourseName = (courseRealisation, courseUnit, feedbackTa
 
   return courseRealisation.name
 }
+
+export const getSafeCourseCode = ({ courseCode, safeString = '~' }) => {
+  // There are course codes that include slash character (/), which is problematic in URLs and XLSX sheet names.
+  // Slash is replaced with given safeString, tilde (~) by default, and replaced back before querying database.
+  // Tilde should not be used in any course codes.
+
+  if (!courseCode) return undefined
+
+  const safeCourseCode = courseCode.replaceAll('/', safeString)
+
+  return safeCourseCode
+}

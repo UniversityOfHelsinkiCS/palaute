@@ -12,6 +12,7 @@ import { sortTable } from '../../../../util/tableUtils'
 import CardSection from '../../../../components/common/CardSection'
 import { SHOW_BUTTON_DOWNLOAD_SISU_CSV } from '../../../../util/common'
 import { NorButton } from '../../../../components/common/NorButton'
+import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 
 //This defines certain courserealisations at SISU. There is no other way to get this information
 //Name tells if courserealisation is used to gather information for SISU about who is given feedback and who is not
@@ -143,9 +144,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
     [students]
   )
 
-  const { courseCode } = feedbackTarget.courseUnit
-
-  const safeCourseCode = courseCode.replace('/', '_')
+  const safeCourseCode = getSafeCourseCode({ courseCode: feedbackTarget?.courseUnit?.courseCode, safeString: '_' })
 
   const fileName = `${safeCourseCode}_${format(
     parseISO(feedbackTarget.courseRealisation.startDate),

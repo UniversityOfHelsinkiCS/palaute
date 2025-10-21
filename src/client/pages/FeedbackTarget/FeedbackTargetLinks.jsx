@@ -13,7 +13,7 @@ import LinkButton from '../../components/common/LinkButton'
 import { NorButton } from '../../components/common/NorButton'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import { getPrimaryCourseName } from '../../util/courseIdentifiers'
+import { getPrimaryCourseName, getSafeCourseCode } from '../../util/courseIdentifiers'
 
 import { getCourseUnitSummaryPath, copyLink } from './utils'
 
@@ -22,12 +22,8 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, organisation, isTeacher, isStudent } = useFeedbackTargetContext()
-  const { courseCode } = feedbackTarget.courseUnit
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) here and replaced back before querying database
-  // Tilde should not be used in any course codes
-  const safeCourseCode = courseCode.replace('/', '~')
+  const safeCourseCode = getSafeCourseCode({ courseCode: feedbackTarget?.courseUnit?.courseCode })
   const { courseRealisationSummaries } = useCourseRealisationSummaries(safeCourseCode, {
     enabled: isTeacher,
   })

@@ -11,6 +11,7 @@ import { YearSemesterPeriodSelector } from '../../components/common/YearSemester
 import useHistoryState from '../../hooks/useHistoryState'
 import ExportButton from '../../components/common/ExportButton'
 import { NorButton } from '../../components/common/NorButton'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const styles = {
   courseTitle: {
@@ -103,10 +104,12 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
             <Link
-              href={`/course-summary/course-unit/${course.code.replace('/', '~')}`} // avoid problems with course codes including slash character
+              href={`/course-summary/course-unit/${getSafeCourseCode({ courseCode: course.code })}`}
               style={styles.courseTitle}
               replace
-            >{`${course.code} - ${course.name[language]}`}</Link>
+            >
+              {`${course.code} - ${course.name[language]}`}
+            </Link>
           </Typography>
           {course.realisations.map(realisation => (
             <RealisationItem key={realisation.id} realisation={realisation} language={language} />

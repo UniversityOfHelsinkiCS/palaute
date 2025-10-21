@@ -8,6 +8,7 @@ import { flatMap, keyBy, orderBy } from 'lodash-es'
 import ExportButton from '../../../../components/common/ExportButton'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../../../util/languageUtils'
+import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 
 const getHeaders = (questions, feedbacks, language) => {
   const orderOfIds = feedbacks[0].data.map(f => f.questionId)
@@ -87,9 +88,7 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
 
   const data = [headers, ...questions]
 
-  const { courseCode } = feedbackTarget.courseUnit
-
-  const safeCourseCode = courseCode.replace('/', '_')
+  const safeCourseCode = getSafeCourseCode({ courseCode: feedbackTarget?.courseUnit?.courseCode, safeString: '_' })
 
   const filename = `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
 
