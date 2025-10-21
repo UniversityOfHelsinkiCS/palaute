@@ -21,7 +21,7 @@ const EditFeedbackTargetDates = () => {
         sx={{ textAlign: 'center', justifyContent: 'center', maxWidth: 'fit-content' }}
         data-cy="feedback-target-edit-period"
         onClick={() => setDialogOpen(true)}
-        color="secondary"
+        color="primary"
         icon={<SettingsOutlined />}
       >
         {t('common:edit')}
