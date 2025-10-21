@@ -24,6 +24,7 @@ import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useUserIsTeacher from '../../hooks/useUserIsTeacher'
 import Logo from './Logo'
 import { handleLogout } from './utils'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
@@ -146,6 +147,7 @@ const NavBar = ({ guest = false }) => {
   const isMobile = useIsMobile()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
+  const { userIsTeacher } = useUserIsTeacher({ enabled: !guest })
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
 
   const [menuOpen, setMenuOpen] = useState(false)
@@ -165,7 +167,7 @@ const NavBar = ({ guest = false }) => {
 
   const preferences = authorizedUser?.preferences ?? {}
   const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
-  const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
+  const myCoursesIsAccessible = (preferences?.hasCourseAccess || userIsTeacher?.userIsTeacher) ?? false
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
