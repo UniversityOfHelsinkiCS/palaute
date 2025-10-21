@@ -13,6 +13,7 @@ export type LoggedInUser = User & {
   banners: any[]
   organisations: OrganisationWithAccess[]
   preferences: UserPreferences
+  isTeacherOnSomeCourse: boolean
 }
 
 export type UserPreferences = {

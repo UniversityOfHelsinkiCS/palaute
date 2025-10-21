@@ -22,11 +22,12 @@ const login = async (req, res) => {
     }
   }
 
-  const [lastRestart, banners, organisations, preferences] = await Promise.all([
+  const [lastRestart, banners, organisations, preferences, isTeacherOnSomeCourse] = await Promise.all([
     getLastRestart(),
     Banner.getForUser(user),
     user.getOrganisationAccess(),
     getUserPreferences(user),
+    user.isTeacher(),
   ])
 
   return res.send({
@@ -36,6 +37,7 @@ const login = async (req, res) => {
     banners,
     organisations,
     preferences,
+    isTeacherOnSomeCourse,
   })
 }
 
@@ -153,14 +155,6 @@ const logout = async (req, res) => {
   })
 }
 
-const userIsTeacher = async (req, res) => {
-  const teacherStatus = await req.user.isTeacher()
-
-  return res.send({
-    userIsTeacher: teacherStatus,
-  })
-}
-
 const router = Router()
 
 router.get('/login', login)
@@ -168,6 +162,5 @@ router.get('/logout', logout)
 router.get('/users', getUser)
 router.get('/users/access', getAllUserAccess)
 router.get('/users/:id', getUserDetails)
-router.get('/user-is-teacher', userIsTeacher)
 
 module.exports = router
