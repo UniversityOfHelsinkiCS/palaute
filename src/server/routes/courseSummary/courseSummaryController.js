@@ -125,9 +125,9 @@ const getByCourseUnit = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) before making request and has to be replaced back before querying database
-  const acualCode = code.replace('~', '/')
+  // There are course codes that include slash character (/), which is problematic in URLs.
+  // To avoid problems, course codes are encoded before attaching to URL and must be deboded here before querying database.
+  const acualCode = decodeURIComponent(code)
 
   const courseUnits = await CourseUnit.findAll({
     where: { courseCode: acualCode },
@@ -171,9 +171,9 @@ const getCourseUnitGroup = async (req, res) => {
   const { startDate, endDate } = parseDates(startDateString, endDateString)
   const allTime = allTimeString === 'true'
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) before making request and has to be replaced back before querying database
-  const acualCourseCode = courseCode.replace('~', '/')
+  // There are course codes that include slash character (/), which is problematic in URLs.
+  // To avoid problems, course codes are encoded before attaching to URL and must be deboded here before querying database.
+  const acualCourseCode = decodeURIComponent(courseCode)
 
   const courseUnitGroup = await getCourseUnitGroupSummaries({
     user,

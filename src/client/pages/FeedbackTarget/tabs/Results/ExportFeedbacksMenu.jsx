@@ -88,7 +88,10 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
 
   const data = [headers, ...questions]
 
-  const safeCourseCode = getSafeCourseCode({ courseCode: feedbackTarget?.courseUnit?.courseCode, safeString: '_' })
+  const safeCourseCode = getSafeCourseCode({
+    courseCode: feedbackTarget?.courseUnit?.courseCode,
+    forUrl: false,
+  })
 
   const filename = `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
 

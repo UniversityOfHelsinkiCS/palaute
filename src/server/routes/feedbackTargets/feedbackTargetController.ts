@@ -91,9 +91,9 @@ adRouter.get('/for-course-unit/:code', async (req: AuthenticatedRequest, res: Re
   const courseCode = req.params.code
   const { user } = req
 
-  // There are course codes that include slash character (/), which is problematic in req parameter
-  // Slash is replaced with tilde (~) before making request and has to be replaced back before querying database
-  const acualCourseCode = courseCode.replace('~', '/')
+  // There are course codes that include slash character (/), which is problematic in URLs.
+  // To avoid problems, course codes are encoded before attaching to URL and must be deboded here before querying database.
+  const acualCourseCode = decodeURIComponent(courseCode)
 
   const {
     courseRealisationStartDateAfter: startDateAfter,

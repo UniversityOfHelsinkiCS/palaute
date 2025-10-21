@@ -144,7 +144,10 @@ const StudentTable = ({ students, feedbackTarget }) => {
     [students]
   )
 
-  const safeCourseCode = getSafeCourseCode({ courseCode: feedbackTarget?.courseUnit?.courseCode, safeString: '_' })
+  const safeCourseCode = getSafeCourseCode({
+    courseCode: feedbackTarget?.courseUnit?.courseCode,
+    forUrl: false,
+  })
 
   const fileName = `${safeCourseCode}_${format(
     parseISO(feedbackTarget.courseRealisation.startDate),
