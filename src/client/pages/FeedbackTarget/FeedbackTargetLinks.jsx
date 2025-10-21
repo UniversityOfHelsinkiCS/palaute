@@ -52,7 +52,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
     : `${t('links:courseUnitPageStudent', { courseUnitId: feedbackTarget.courseUnit?.id })}`
   const realisationPageUrl = `${t('links:courseRealisationPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
-  const showCourseSummaryLink = courseRealisationSummaries?.feedbackTargets?.length > 0 && !userCreated
+  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
 
   const handleCopyLink = () => {
     const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
