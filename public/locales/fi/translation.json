@@ -355,7 +355,7 @@
   },
   "userInformation": {
     "iamGroups": "IAM-ryhmät",
-    "iamTooltip": "Näytetään vain Norppaan vaikutavat",
+    "iamTooltip": "Näytetään vain Norppaan vaikuttavat",
     "organisationAccess": "Organisaatio-oikeudet",
     "organisationCode": "Organisaatiokoodi",
     "access": "Oikeus",
