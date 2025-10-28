@@ -290,7 +290,8 @@
     "cancelReminder": "Avbryt",
     "modalTitle": "Skicka en påminnelse om respons via e-post",
     "writeAMessage": "Skriv ett meddelande till studerande",
-    "emailMessage": "Bästa studerande! \n Ge gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. Tack!\n << Meddelandet du skriver kommer synas här >>",
+    "emailMessage": "Bästa studerande!\nGe gärna respons på kursen {{courseName}}. Responsperioden tar slut {{closesAt}}. Tack!\n",
+    "customEmailMessage": "Bästa mottagare!\nVänligen besvara enkäten {{courseName}}. Svarstiden avslutas {{closesAt}}. Tack!\n",
     "emailMessageInfo": "(Meddelandets ingress är översatt till studentens föredragna språk)",
     "modalSubtitle": "Studeranden som har redan gett respons får inte påminnelsemeddelandet",
     "emailSent": "Påminnelse skickad",
@@ -633,7 +634,9 @@
   "mails": {
     "reminderOnFeedbackToStudents": {
       "subject": "Ge gärna respons på kursen {{courseName}}",
-      "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!\n\n{{reminder}}"
+      "customSubject": "Vänligen besvara enkäten {{courseName}}",
+      "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!",
+      "customText": "Bästa mottagare!\n\n Vänligen besvara enkäten <a href={{- url}}>{{courseName}}</a>. Svarstiden avslutas {{closesAt}}. Tack!"
     },
     "continuousFeedbackResponse": {
       "subject": "Läraren har svarat på din feedback i kursen {{courseName}}",

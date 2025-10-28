@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { NorButton } from '../../../../components/common/NorButton'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getInterimFeedbackName, getPrimaryCourseName } from '../../../../util/courseIdentifiers'
-import { formatClosesAt } from './utils'
+import { formatClosesAt, getDefaultMessageLanguage } from './utils'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
 import { useSendReminderEmail } from './api'
@@ -39,7 +39,6 @@ const styles = {
 }
 
 const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
-  const [reminder, setReminder] = useState('')
   const sendReminderEmail = useSendReminderEmail(feedbackTarget.id)
 
   const { t, i18n } = useTranslation()
@@ -47,28 +46,41 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const { courseUnit, courseRealisation, id, name, feedbackReminderLastSentAt, userCreated } = feedbackTarget
   const isInterimFeedback = userCreated && !courseUnit.userCreated
 
+  const { teachingLanguages } = courseRealisation
+
+  const defaultMessageLanguage = getDefaultMessageLanguage({ teachingLanguages, userLanguage: i18n.language })
+
   const courseName = isInterimFeedback
     ? getInterimFeedbackName(name, courseUnit.name, t)
     : getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget)
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
 
+  const closesAt = formatClosesAt(feedbackTarget.closesAt)
+
+  const defaultMessage = t(`feedbackTargetResults:${userCreated ? 'customEmailMessage' : 'emailMessage'}`, {
+    courseName: getLanguageValue(courseName, defaultMessageLanguage),
+    closesAt,
+    interpolation: { escapeValue: false },
+    lng: defaultMessageLanguage,
+  })
+
+  const [reminder, setReminder] = useState(defaultMessage)
+
   const sendEmailReminder = useInteractiveMutation(() =>
-    sendReminderEmail.mutateAsync({ id, data: { reminder, courseName } })
+    sendReminderEmail.mutateAsync({
+      id,
+      data: {
+        reminder: reminder === defaultMessage ? '' : reminder,
+        courseName,
+      },
+    })
   )
 
   const onEmailSend = () => {
     onClose()
     sendEmailReminder()
   }
-
-  const closesAt = formatClosesAt(feedbackTarget.closesAt)
-
-  const emailMessage = t(`feedbackTargetResults:${userCreated ? 'customEmailMessage' : 'emailMessage'}`, {
-    courseName: getLanguageValue(courseName, i18n.language),
-    closesAt,
-    interpolation: { escapeValue: false },
-  })
 
   return (
     <Modal open={open} onClose={onClose}>
@@ -79,14 +91,6 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         <Typography variant="body2" component="p" sx={styles.subtitle}>
           {t('feedbackTargetResults:modalSubtitle')}
         </Typography>
-        <Box mb={4} />
-        <Typography variant="body1" component="p" sx={styles.textField}>
-          {emailMessage}
-        </Typography>
-        <Typography variant="body2" component="p" sx={styles.subtitle}>
-          {t('feedbackTargetResults:emailMessageInfo')}
-        </Typography>
-        <Box mb={2} />
         <TextField
           label={t('feedbackTargetResults:writeAMessage')}
           value={reminder}

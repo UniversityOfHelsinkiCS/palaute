@@ -20,20 +20,28 @@ const sendReminderToGiveFeedbackToStudents = async (
     const courseName = getLanguageValue(courseNames, student.language)
 
     // Custom texts for user created feedback targets because they are not courses
+    // Default reminder text is used if reminder is empty
+    const emailText =
+      reminder.trim().length > 0
+        ? reminder
+        : t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
+            url: urlToGiveFeedback,
+            courseName,
+            closesAt,
+            courseCode,
+            interpolation: { escapeValue: false },
+          })
+
     const email = {
       to: student.email,
       subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, {
         courseName,
         courseCode,
+        interpolation: { escapeValue: false },
       }),
-      text: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
-        url: urlToGiveFeedback,
-        courseName,
-        reminder,
-        closesAt,
-        courseCode,
-      }),
+      text: emailText,
     }
+
     return email
   })
 

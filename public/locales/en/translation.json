@@ -306,8 +306,8 @@
     "cancelReminder": "Cancel",
     "modalTitle": "Send a reminder about feedback via email",
     "writeAMessage": "Write a message to students",
-    "emailMessage": "Dear student! \n Please give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >>",
-    "customEmailMessage": "Dear recipient! \n Please answer the survey {{courseName}}. The answering period ends on {{closesAt}}. Thank you!\n << The message you write will appear here >>",
+    "emailMessage": "Dear student!\nPlease give feedback for the course {{courseName}}. The feedback period ends on {{closesAt}}. Thank you!\n",
+    "customEmailMessage": "Dear recipient!\nPlease answer the survey {{courseName}}. The answering period ends on {{closesAt}}. Thank you!\n",
     "emailMessageInfo": "(The preamble is translated to the student's preferred language)",
     "modalSubtitle": "Students who have already given feedback wont receive this email",
     "emailSent": "Reminder email sent",
@@ -662,8 +662,8 @@
     "reminderOnFeedbackToStudents": {
       "subject": "Please give feedback on the course {{courseName}}",
       "customSubject": "Please answer the survey {{courseName}}",
-      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!\n\n{{reminder}}",
-      "customText": "Dear recipient!\n\n Please answer the survey <a href={{- url}}>{{courseName}}</a>. The answering period ends on {{closesAt}}. Thank you!\n\n{{reminder}}"
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!",
+      "customText": "Dear recipient!\n\n Please answer the survey <a href={{- url}}>{{courseName}}</a>. The answering period ends on {{closesAt}}. Thank you!"
     },
     "continuousFeedbackResponse": {
       "subject": "Your feedback received a response on on the course {{courseName}}",
