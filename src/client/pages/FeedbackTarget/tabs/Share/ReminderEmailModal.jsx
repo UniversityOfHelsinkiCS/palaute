@@ -67,6 +67,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const emailMessage = t(`feedbackTargetResults:${userCreated ? 'customEmailMessage' : 'emailMessage'}`, {
     courseName: getLanguageValue(courseName, i18n.language),
     closesAt,
+    interpolation: { escapeValue: false },
   })
 
   return (
