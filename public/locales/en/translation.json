@@ -663,7 +663,8 @@
       "subject": "Please give feedback on the course {{courseName}}",
       "customSubject": "Please answer the survey {{courseName}}",
       "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!",
-      "customText": "Dear recipient!\n\n Please answer the survey <a href={{- url}}>{{courseName}}</a>. The answering period ends on {{closesAt}}. Thank you!"
+      "customText": "Dear recipient!\n\n Please answer the survey <a href={{- url}}>{{courseName}}</a>. The answering period ends on {{closesAt}}. Thank you!",
+      "linkToSurvey": "{{reminder}}\n\nLink to the survey: <a href={{- url}}>{{courseName}}</a>"
     },
     "continuousFeedbackResponse": {
       "subject": "Your feedback received a response on on the course {{courseName}}",

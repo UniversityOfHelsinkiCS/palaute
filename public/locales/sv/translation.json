@@ -636,7 +636,8 @@
       "subject": "Ge gärna respons på kursen {{courseName}}",
       "customSubject": "Vänligen besvara enkäten {{courseName}}",
       "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!",
-      "customText": "Bästa mottagare!\n\n Vänligen besvara enkäten <a href={{- url}}>{{courseName}}</a>. Svarstiden avslutas {{closesAt}}. Tack!"
+      "customText": "Bästa mottagare!\n\n Vänligen besvara enkäten <a href={{- url}}>{{courseName}}</a>. Svarstiden avslutas {{closesAt}}. Tack!",
+      "linkToSurvey": "{{reminder}}\n\nLänk till enkäten: <a href={{- url}}>{{courseName}}</a>"
     },
     "continuousFeedbackResponse": {
       "subject": "Läraren har svarat på din feedback i kursen {{courseName}}",

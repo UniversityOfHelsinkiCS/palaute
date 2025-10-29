@@ -23,7 +23,12 @@ const sendReminderToGiveFeedbackToStudents = async (
     // Default reminder text is used if reminder is empty
     const emailText =
       reminder.trim().length > 0
-        ? reminder
+        ? t(`mails:reminderOnFeedbackToStudents:linkToSurvey`, {
+            url: urlToGiveFeedback,
+            courseName,
+            reminder,
+            interpolation: { escapeValue: false },
+          })
         : t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customText' : 'text'}`, {
             url: urlToGiveFeedback,
             courseName,

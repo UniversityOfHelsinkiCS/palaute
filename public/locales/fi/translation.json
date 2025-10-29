@@ -662,7 +662,8 @@
       "subject": "Anna palautetta kurssille {{courseName}}",
       "customSubject": "Vastaa kyselyyn {{courseName}}",
       "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!",
-      "customText": "Hyvä vastaanottaja!\n\n Vastaathan kyselyyn <a href={{- url}}>{{courseName}}</a>. Vastausaika päättyy {{closesAt}}. Kiitos!"
+      "customText": "Hyvä vastaanottaja!\n\n Vastaathan kyselyyn <a href={{- url}}>{{courseName}}</a>. Vastausaika päättyy {{closesAt}}. Kiitos!",
+      "linkToSurvey": "{{reminder}}\n\nLinkki kyselyyn: <a href={{- url}}>{{courseName}}</a>"
     },
     "continuousFeedbackResponse": {
       "subject": "Opettaja vastasi palautteeseesi kurssilla {{courseName}}",
