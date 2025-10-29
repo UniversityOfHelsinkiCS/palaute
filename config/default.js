@@ -93,7 +93,7 @@ const config = {
    * How often (hours) can teacher send manual reminder email
    * (automatic reminder is also considered for cooldown)
    */
-  FEEDBACK_REMINDER_COOLDOWN: 0,
+  FEEDBACK_REMINDER_COOLDOWN: 24,
 
   /**
    * This is a test, e2e tests may check its value
