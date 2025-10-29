@@ -4,7 +4,6 @@ const { ApplicationError } = require('../../util/customErrors')
 const { pate } = require('../pateClient')
 const { i18n } = require('../../util/i18n')
 const { getLanguageValue } = require('../../util/languageUtils')
-const { CourseUnit } = require('../../models')
 
 const sendReminderToGiveFeedbackToStudents = async (
   urlToGiveFeedback,
