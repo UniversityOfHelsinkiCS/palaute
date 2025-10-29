@@ -12,8 +12,7 @@ const sendReminderToGiveFeedbackToStudents = async (
   courseNames,
   reminder,
   closesAt,
-  userCreated,
-  courseCode
+  userCreated
 ) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
@@ -33,7 +32,6 @@ const sendReminderToGiveFeedbackToStudents = async (
             url: urlToGiveFeedback,
             courseName,
             closesAt,
-            courseCode,
             interpolation: { escapeValue: false },
           })
 
@@ -41,7 +39,6 @@ const sendReminderToGiveFeedbackToStudents = async (
       to: student.email,
       subject: t(`mails:reminderOnFeedbackToStudents:${userCreated ? 'customSubject' : 'subject'}`, {
         courseName,
-        courseCode,
         interpolation: { escapeValue: false },
       }),
       text: emailText,
@@ -60,7 +57,6 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
     throw new ApplicationError(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`, 403)
   }
 
-  const courseUnit = await CourseUnit.findByPk(feedbackTarget.CourseUnitId)
   const students = await feedbackTarget.getStudentsWhoHaveNotReactedToSurvey()
   const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/feedback`
   const formattedStudents = students
@@ -79,8 +75,7 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
       courseName,
       reminder,
       formattedClosesAt,
-      feedbackTarget.userCreated,
-      courseUnit.courseCode
+      feedbackTarget.userCreated
     )
 
     feedbackTarget.feedbackReminderLastSentAt = new Date()
