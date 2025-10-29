@@ -91,6 +91,9 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         <Typography variant="body2" component="p" sx={styles.subtitle}>
           {t('feedbackTargetResults:modalSubtitle')}
         </Typography>
+        <Typography variant="body2" component="p" sx={styles.subtitle}>
+          {t('feedbackTargetResults:emailMessageInfo')}
+        </Typography>
         <TextField
           label={t('feedbackTargetResults:writeAMessage')}
           value={reminder}

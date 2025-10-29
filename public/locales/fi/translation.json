@@ -307,7 +307,7 @@
     "writeAMessage": "Kirjoita viesti opiskelijoille",
     "emailMessage": "Hyvä opiskelija!\nVastaathan kurssin {{courseName}} palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!\n",
     "customEmailMessage": "Hyvä vastaanottaja!\nVastaathan kyselyyn {{courseName}}. Vastausaika päättyy {{closesAt}}. Kiitos!\n",
-    "emailMessageInfo": "(Viestin alkuosa kääntyy opiskelijan käyttämälle kielelle)",
+    "emailMessageInfo": "Alla näkyvä oletusviesti lähetetään kullekin opiskelijalle hänen käyttämällään kielellä, jos et muokkaa viestiä. Jos muokkaat viestiä, se lähetetään kaikille opiskelijoille sellaisenaan. Linkki kyselyyn lisätään automaattisesti muokatun viestin loppuun.",
     "modalSubtitle": "Opiskelijat, jotka ovat jo antaneet palautetta, eivät saa muistutusviestiä",
     "emailSent": "Muistutusviesti lähetetty",
     "setHidden": "Piilota näkyvistä",
