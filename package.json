@@ -99,7 +99,7 @@
     "sequelize": "6.37.5",
     "umzug": "3.8.2",
     "unfack-winston-gelf-transporter": "1.0.2",
-    "unfuck-spa-shibboleth-session": "4.1.0",
+    "unfuck-spa-shibboleth-session": "4.1.1",
     "unfuck-utf8-headers-middleware": "1.0.1",
     "uuid": "11.0.3",
     "vite": "5.4.21",
