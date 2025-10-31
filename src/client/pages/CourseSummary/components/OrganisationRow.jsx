@@ -66,7 +66,7 @@ const TagSummaryRow = ({ tag, questions, organisationId }) => {
           alignItems="stretch"
           gap="0.4rem"
         >
-          {isOpen && <CourseUnitsList organisationId={organisationId} questions={questions} />}
+          {isOpen && <CourseUnitsList organisationId={organisationId} questions={questions} tagId={tag.id} />}
         </Box>
       )}
     </Box>

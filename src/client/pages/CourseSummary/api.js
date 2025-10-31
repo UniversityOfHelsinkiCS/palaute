@@ -25,8 +25,8 @@ const fetchSummaries = async ({ startDate, endDate, entityId, include, tagId, ex
  * include can be 'childOrganisations' or 'courseUnits', in which case the organisation's
  * corresponding children are included in the response, allowing the row to be expanded.
  */
-export const useSummaries = ({ entityId, enabled, include }) => {
-  const { dateRange, tagId, extraOrgId, extraOrgMode } = useSummaryContext()
+export const useSummaries = ({ entityId, enabled, include, tagId }) => {
+  const { dateRange, extraOrgId, extraOrgMode } = useSummaryContext()
   const { start: startDate, end: endDate } = dateRange
 
   const queryKey = ['summaries-v2', entityId, startDate, endDate, include]
