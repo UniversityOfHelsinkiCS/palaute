@@ -68,6 +68,7 @@ export const TabGroupTab = ({
             backgroundColor: theme.palette.action.hover,
           },
         })}
+        tabIndex="0"
       />
     </Box>
   )
