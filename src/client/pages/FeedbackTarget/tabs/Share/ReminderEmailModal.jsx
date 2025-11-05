@@ -71,7 +71,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
     sendReminderEmail.mutateAsync({
       id,
       data: {
-        reminder: reminder === defaultMessage ? '' : reminder,
+        reminder: reminder.trim() === defaultMessage.trim() ? '' : reminder,
         courseName,
       },
     })
@@ -90,9 +90,6 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
         </Typography>
         <Typography variant="body2" component="p" sx={styles.subtitle}>
           {t('feedbackTargetResults:modalSubtitle')}
-        </Typography>
-        <Typography variant="body2" component="p" sx={styles.subtitle}>
-          {t('feedbackTargetResults:emailMessageInfo')}
         </Typography>
         <TextField
           label={t('feedbackTargetResults:writeAMessage')}
