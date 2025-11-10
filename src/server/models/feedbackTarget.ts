@@ -261,10 +261,8 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
 
     if (!courseUnit) return false
 
-    // @ts-expect-error täsäfy
     const { organisations } = courseUnit
 
-    // @ts-expect-error täsäfy
     return organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
   }
 
