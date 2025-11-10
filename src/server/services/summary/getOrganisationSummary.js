@@ -344,11 +344,11 @@ const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDa
     where: {
       entityId: tagEntityIds,
     },
-    attributes: ['entityId', 'data'],
   })
 
   organisation.tags = tags.map(tag => {
-    tag.summary = sumSummaries(summaries.filter(s => s.entityId === prefixTagId(tag.id)))
+    const tagSummaries = summaries.filter(s => s.entityId === prefixTagId(tag.id))
+    tag.summary = sumSummaries(tagSummaries)
     return tag.toJSON()
   })
 
