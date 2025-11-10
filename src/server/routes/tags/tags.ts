@@ -1,17 +1,18 @@
-const { Router } = require('express')
-const { Op } = require('sequelize')
-const { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { sequelize } = require('../../db/dbConnection')
-const CourseUnitsTag = require('../../models/courseUnitsTag')
-const { TAGS_ENABLED } = require('../../util/config')
+import { Router, Response } from 'express'
+import { Op, Transaction } from 'sequelize'
+import { AuthenticatedRequest } from 'types'
+import { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit } from '../../models'
+import { CourseUnitsTag } from '../../models/courseUnitsTag'
+import { ApplicationError } from '../../util/customErrors'
+import { sequelize } from '../../db/dbConnection'
+import { TAGS_ENABLED } from '../../util/config'
 
 /**
  * Check whether user has access to organisation with given code
  */
-const checkAccess = async (user, code, level = 'read') => {
+const checkAccess = async (user: any, code: string, level = 'read'): Promise<void> => {
   const orgAccess = await user.getOrganisationAccess()
-  const relevantOrg = orgAccess.find(oac => oac.organisation.code === code)
+  const relevantOrg = orgAccess.find((oac: any) => oac.organisation.code === code)
   if (!relevantOrg || !relevantOrg.access[level]) {
     throw new ApplicationError('You dont have the required rights', 403)
   }
@@ -20,7 +21,7 @@ const checkAccess = async (user, code, level = 'read') => {
 /**
  * Get tag ids from body and make sure its an array of integers
  */
-const parseTagIds = body => {
+const parseTagIds = (body: any): number[] => {
   const tagIds = body?.tagIds
   if (!Array.isArray(tagIds)) {
     throw new ApplicationError('Invalid tagIds, must be an array', 400)
@@ -40,12 +41,12 @@ const parseTagIds = body => {
  * Only the tags belonging to the organisation are allowed to be set.
  * Returns the new tag objects which match the given tag ids.
  */
-const updateCourseRealisationTags = async (req, res) => {
+const updateCourseRealisationTags = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
   const { courseRealisationIds } = req.body
-  if (!courseRealisationIds?.length > 0 || !Array.isArray(courseRealisationIds)) {
+  if (!courseRealisationIds?.length || !Array.isArray(courseRealisationIds)) {
     throw new ApplicationError('Invalid courseRealisationIds', 400)
   }
 
@@ -60,11 +61,13 @@ const updateCourseRealisationTags = async (req, res) => {
       as: 'organisations',
       required: true,
       where: { code },
-      include: {
-        model: Tag,
-        as: 'tags',
-        required: true,
-      },
+      include: [
+        {
+          model: Tag,
+          as: 'tags',
+          required: true,
+        },
+      ],
     },
   })
   if (courseRealisations.length !== courseRealisationIds.length) {
@@ -72,29 +75,27 @@ const updateCourseRealisationTags = async (req, res) => {
   }
 
   const organisation = courseRealisations[0].organisations[0] // there can be only one, becoz code in the where param
-  const availableTagIds = organisation.tags.map(t => t.id)
+  const availableTagIds = organisation.tags.map((t: any) => t.id)
   const tagIds = parseTagIds(req.body)
   if (tagIds.some(id => !availableTagIds.includes(id))) {
     throw new ApplicationError('Some of the given tags are not allowed for this cur', 400)
   }
 
-  const newTags = organisation.tags.filter(tag => tagIds.includes(tag.id))
+  const newTags = organisation.tags.filter((tag: any) => tagIds.includes(tag.id))
 
-  await sequelize.transaction(async transaction => {
+  await sequelize.transaction(async (transaction: Transaction) => {
     for (const courseRealisation of courseRealisations) {
       // delete its old tag associations and create new ones. NOTE that we only delete old tags of THIS organisation
-      await CourseRealisationsTag.destroy(
-        {
-          where: {
-            tagId: { [Op.in]: availableTagIds },
-            courseRealisationId: courseRealisation.id,
-          },
+      await CourseRealisationsTag.destroy({
+        where: {
+          tagId: { [Op.in]: availableTagIds },
+          courseRealisationId: courseRealisation.id,
         },
-        { transaction }
-      )
+        transaction,
+      })
 
       await CourseRealisationsTag.bulkCreate(
-        newTags.map(t => ({
+        newTags.map((t: any) => ({
           tagId: t.id,
           courseRealisationId: courseRealisation.id,
         })),
@@ -103,7 +104,7 @@ const updateCourseRealisationTags = async (req, res) => {
     }
   })
 
-  return res.send(newTags)
+  res.send(newTags)
 }
 
 /**
@@ -112,7 +113,7 @@ const updateCourseRealisationTags = async (req, res) => {
  * Only the tags belonging to the organisation are allowed to be set.
  * Returns the new tag objects which match the given tag ids.
  */
-const updateCourseUnitTags = async (req, res) => {
+const updateCourseUnitTags = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
@@ -123,36 +124,34 @@ const updateCourseUnitTags = async (req, res) => {
 
   const courseUnits = await CourseUnit.findAll({
     where: { courseCode },
-    include: { model: Organisation, as: 'organisations', where: { code }, include: { model: Tag, as: 'tags' } },
+    include: { model: Organisation, as: 'organisations', where: { code }, include: [{ model: Tag, as: 'tags' }] },
   })
   if (courseUnits.length === 0) {
     ApplicationError.NotFound()
   }
 
   const organisation = courseUnits[0].organisations[0] // there can be only one, becoz code in the where param
-  const availableTagIds = organisation.tags.map(t => t.id)
+  const availableTagIds = organisation.tags.map((t: any) => t.id)
 
   const tagIds = parseTagIds(req.body)
   if (tagIds.some(id => !availableTagIds.includes(id))) {
     throw new ApplicationError('Some of the given tags are not allowed for this cur', 400)
   }
 
-  const newTags = organisation.tags.filter(tag => tagIds.includes(tag.id))
+  const newTags = organisation.tags.filter((tag: any) => tagIds.includes(tag.id))
 
-  await sequelize.transaction(async transaction => {
+  await sequelize.transaction(async (transaction: Transaction) => {
     // delete its old tag associations and create new ones. NOTE that we only delete old tags of THIS organisation
-    await CourseUnitsTag.destroy(
-      {
-        where: {
-          tagId: { [Op.in]: availableTagIds },
-          courseCode,
-        },
+    await CourseUnitsTag.destroy({
+      where: {
+        tagId: { [Op.in]: availableTagIds },
+        courseCode,
       },
-      { transaction }
-    )
+      transaction,
+    })
 
     await CourseUnitsTag.bulkCreate(
-      newTags.map(t => ({
+      newTags.map((t: any) => ({
         tagId: t.id,
         courseCode,
       })),
@@ -160,26 +159,25 @@ const updateCourseUnitTags = async (req, res) => {
     )
   })
 
-  return res.send(newTags)
+  res.send(newTags)
 }
 
 /**
  * Get all tags belonging to an organisation.
  * User must have organisation access.
  */
-const getTags = async (req, res) => {
+const getTags = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
   if (!TAGS_ENABLED.includes(code)) throw new ApplicationError('Invalid organisation code', 400)
 
-  const { id: organisationId } = await Organisation.findOne({
-    where: {
-      code,
-    },
+  const org = await Organisation.findOne({
+    where: { code },
     attributes: ['id'],
   })
 
+  const organisationId = org?.id
   if (!organisationId) throw new ApplicationError('Organisation not found', 404)
 
   const tags = await Tag.findAll({
@@ -188,7 +186,7 @@ const getTags = async (req, res) => {
     },
   })
 
-  return res.send(tags)
+  res.send(tags)
 }
 
 const router = Router()
@@ -197,4 +195,4 @@ router.put('/:organisationCode/course-realisations', updateCourseRealisationTags
 router.put('/:organisationCode/course-units', updateCourseUnitTags)
 router.get('/:organisationCode', getTags)
 
-module.exports = router
+export { router }

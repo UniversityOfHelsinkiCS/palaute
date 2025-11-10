@@ -1,1 +1,3 @@
-module.exports = require('./tags')
+const { router } = require('./tags')
+
+module.exports = router

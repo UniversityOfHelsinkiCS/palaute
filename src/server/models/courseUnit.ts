@@ -41,6 +41,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   declare summary?: Summary
   declare courseRealisations?: CourseRealisation[]
   declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
+  declare organisations?: NonAttribute<Organisation[]>
 
   // --- Helper methods ---
   // ----------------------
