@@ -8,13 +8,10 @@ import SummaryScrollContainer from './components/SummaryScrollContainer'
 import SorterRowWithFilters from './components/SorterRow'
 import { useSummaryContext } from './context'
 import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
-// import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const ForCourseUnitGroup = () => {
   const { t } = useTranslation()
   const { code } = useParams()
-
-  // const safeCourseCode = getSafeCourseCode({ courseCode: code })
 
   const { dateRange, questions, option } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
