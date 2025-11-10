@@ -13,7 +13,7 @@ import LinkButton from '../../components/common/LinkButton'
 import { NorButton } from '../../components/common/NorButton'
 
 import { getLanguageValue } from '../../util/languageUtils'
-import { getPrimaryCourseName, getSafeCourseCode } from '../../util/courseIdentifiers'
+import { getPrimaryCourseName } from '../../util/courseIdentifiers'
 
 import { getCourseUnitSummaryPath, copyLink } from './utils'
 
@@ -23,8 +23,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
 
   const { feedbackTarget, organisation, isTeacher, isStudent } = useFeedbackTargetContext()
 
-  const safeCourseCode = getSafeCourseCode({ courseCode: feedbackTarget?.courseUnit?.courseCode })
-  const { courseRealisationSummaries } = useCourseRealisationSummaries(safeCourseCode, {
+  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget?.courseUnit?.courseCode, {
     enabled: isTeacher,
   })
   const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(

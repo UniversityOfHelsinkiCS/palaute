@@ -123,14 +123,10 @@ const getOrganisationsV2 = async (req, res) => {
 
 const getByCourseUnit = async (req, res) => {
   const { user } = req
-  const { code } = req.params
-
-  // There are course codes that include slash character (/), which is problematic in URLs.
-  // To avoid problems, course codes are encoded before attaching to URL and must be deboded here before querying database.
-  const acualCode = decodeURIComponent(code)
+  const { code } = req.params // Express decodes encoded params automatically. Relevant for course codes that include slash character.
 
   const courseUnits = await CourseUnit.findAll({
-    where: { courseCode: acualCode },
+    where: { courseCode: code },
     include: [
       {
         model: Organisation,
@@ -148,13 +144,13 @@ const getByCourseUnit = async (req, res) => {
   const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
     user.dataValues.isAdmin || (await user.getOrganisationAccessByCourseUnitId(courseUnits[0].id))?.read,
     getAccessibleCourseRealisationIds(user),
-    getSummaryQuestions(acualCode),
+    getSummaryQuestions(code),
   ])
 
   const courseRealisations = await getCourseRealisationSummaries({
     accessibleCourseRealisationIds,
     organisationAccess,
-    courseCode: acualCode,
+    courseCode: code,
     questions,
   })
 
@@ -171,8 +167,8 @@ const getCourseUnitGroup = async (req, res) => {
   const { startDate, endDate } = parseDates(startDateString, endDateString)
   const allTime = allTimeString === 'true'
 
-  // There are course codes that include slash character (/), which is problematic in URLs.
-  // To avoid problems, course codes are encoded before attaching to URL and must be deboded here before querying database.
+  // There are course codes that include slash character (/), which is problematic in requests.
+  // To avoid problems, course codes are encoded before attaching to request and must be decoded here before querying database.
   const acualCourseCode = decodeURIComponent(courseCode)
 
   const courseUnitGroup = await getCourseUnitGroupSummaries({
