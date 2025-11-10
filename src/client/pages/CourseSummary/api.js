@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../util/apiClient'
 import { useSummaryContext } from './context'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 
@@ -130,6 +131,8 @@ export const useOrganisationSummaries = () => {
 }
 
 export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate, allTime }) => {
+  const safeCourseCode = getSafeCourseCode({ courseCode })
+
   const queryKey = allTime
     ? ['summaries-course-unit-group', courseCode, 'all']
     : ['summaries-course-unit-group', courseCode, startDate, endDate]
@@ -137,7 +140,7 @@ export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate, al
   const queryFn = async () => {
     const { data } = await apiClient.get(`course-summaries/course-unit-group`, {
       params: {
-        courseCode,
+        courseCode: safeCourseCode,
         startDate,
         endDate,
         allTime,
