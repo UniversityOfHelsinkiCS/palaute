@@ -23,7 +23,8 @@ const styles = {
     width: '600px',
   },
   subtitle: {
-    marginBottom: 5,
+    marginTop: 4,
+    marginBottom: 4,
     color: '#4c4c4c',
   },
   buttons: {
@@ -89,7 +90,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
           {t('feedbackTargetResults:modalTitle')}
         </Typography>
         <Typography variant="body2" component="p" sx={styles.subtitle}>
-          {t('feedbackTargetResults:modalSubtitle')}
+          {t('feedbackTargetResults:emailMessageInfo')}
         </Typography>
         <TextField
           label={t('feedbackTargetResults:writeAMessage')}
