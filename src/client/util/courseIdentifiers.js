@@ -50,8 +50,6 @@ export const getSafeCourseCode = ({ courseCode, forUrl = true, safeString = '_' 
 
   if (!courseCode) return undefined
 
-  if (!courseCode.includes('/')) return courseCode
-
   if (forUrl) return encodeURIComponent(String(courseCode))
 
   const safeCourseCode = courseCode.replaceAll('/', safeString)
