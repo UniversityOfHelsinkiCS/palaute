@@ -11,7 +11,7 @@ const styles = {
     display: 'flex',
     flexWrap: 'wrap',
     alignItems: 'center',
-    gap: '8px',
+    gap: '12px 8px',
     minHeight: '70px',
   },
   selectorContainer: {

@@ -1,7 +1,7 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { format, isValid } from 'date-fns/esm'
-import { Alert, Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography } from '@mui/material'
+import { Alert, Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography, Stack } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import type { LocalizedString } from '@common/types/common'
 import apiClient from '../../util/apiClient'
@@ -13,6 +13,7 @@ import ExternalLink from '../../components/common/ExternalLink'
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { getSemesterRange } from '../../util/semesterUtils'
 import useOrganisationsList from '../../hooks/useOrganisationsList'
+import useIsMobile from '../../hooks/useIsMobile'
 
 const styles: {
   [key: string]: SxProps<Theme>
@@ -74,15 +75,16 @@ const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
       }}
     >
       <Box fontSize="16px" display="flex" alignItems="start" gap={1}>
-        <Typography color="textSecondary">{fbt.courseUnit.courseCode}</Typography>
-        <Typography fontWeight={400}>{getLanguageValue(fbt.courseUnit.name, i18n.language)}</Typography>
-        <ExternalLink href={t('links:courseRealisationPageStudent', { courseRealisationId: fbt.courseRealisation.id })}>
-          {t('search:coursePageLink')}
-        </ExternalLink>
+        <Typography>
+          {`${fbt.courseUnit.courseCode}  ${getLanguageValue(fbt.courseUnit.name, i18n.language)}`}
+        </Typography>
       </Box>
       <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
         {getLanguageValue(fbt.courseRealisation.name, i18n.language)}
       </Typography>
+      <ExternalLink href={t('links:courseRealisationPageStudent', { courseRealisationId: fbt.courseRealisation.id })}>
+        {t('search:coursePageLink')}
+      </ExternalLink>
     </Paper>
   )
 }
@@ -90,11 +92,42 @@ const FeedbackTargetItem = ({ fbt }: { fbt: any }) => {
 const toMonth = (date: string, locale: Intl.LocalesArgument) =>
   new Date(date).toLocaleString(locale, { month: 'short' })
 
-const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
+const CalendarViewMobile = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
   const { i18n } = useTranslation()
 
   return (
-    <>
+    <Stack spacing={4} sx={{ mt: '24px' }}>
+      {feedbackTargetGrouping.years.map(([year, months]) => (
+        <Stack key={year} spacing={1}>
+          <Box sx={{ pt: '12px', pb: '12px', pl: '12px', backgroundColor: '#00000014' }}>{year}</Box>
+          {months.map(([firstDayOfMonth, days]) => (
+            <Stack key={firstDayOfMonth} spacing={2} sx={{ pl: '12px' }}>
+              <Box sx={{ ...styles.date, position: 'static', pt: '16px', pb: '12px' }}>
+                {toMonth(firstDayOfMonth, i18n.language)}
+              </Box>
+              {days.map(([startDate, feedbackTargets]) => (
+                <Stack key={startDate} spacing={1}>
+                  <Box sx={{ ...styles.date, position: 'static' }}>{format(Date.parse(startDate), 'dd/MM')}</Box>
+                  <Stack spacing={1}>
+                    {feedbackTargets.map(fbt => (
+                      <FeedbackTargetItem key={fbt.id} fbt={fbt} />
+                    ))}
+                  </Stack>
+                </Stack>
+              ))}
+            </Stack>
+          ))}
+        </Stack>
+      ))}
+    </Stack>
+  )
+}
+
+const CalendarViewPC = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: FeedbackTargetGrouping }) => {
+  const { i18n } = useTranslation()
+
+  return (
+    <Box sx={{ mt: '1rem' }}>
       {feedbackTargetGrouping.years.map(([year, months]) => (
         <Box display="flex" key={year}>
           <Box sx={[styles.date, styles.year] as SxProps<Theme>} mt={1.5}>
@@ -125,15 +158,29 @@ const CalendarView = ({ feedbackTargetGrouping }: { feedbackTargetGrouping: Feed
           </Box>
         </Box>
       ))}
-    </>
+    </Box>
   )
+}
+
+const CalendarView = ({
+  feedbackTargetGrouping,
+  isMobile,
+}: {
+  feedbackTargetGrouping: FeedbackTargetGrouping
+  isMobile: boolean
+}) => {
+  if (isMobile) {
+    return <CalendarViewMobile feedbackTargetGrouping={feedbackTargetGrouping} />
+  }
+
+  return <CalendarViewPC feedbackTargetGrouping={feedbackTargetGrouping} />
 }
 
 type DateRange = { start: Date; end: Date }
 
 const Search = () => {
   const { t, i18n } = useTranslation()
-
+  const isMobile = useIsMobile()
   const { organisationsList, isLoading: isOrganisationsLoading } = useOrganisationsList()
   const [searchParams, setSearchParams] = useURLSearchParams()
   const [searchedName, setSearchedName] = React.useState<string>('')
@@ -187,7 +234,7 @@ const Search = () => {
   return (
     <>
       <Title>{t('search:title')}</Title>
-      <Box mb="1rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
+      <Box sx={{ mb: '2rem' }} display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
         <Typography variant="h4" component="h1">
           {t('search:title')}
         </Typography>
@@ -220,6 +267,7 @@ const Search = () => {
           )}
           noOptionsText={t('search:noOptions')}
           loading={isOrganisationsLoading}
+          sx={{ mb: isMobile ? '12px' : '6px' }}
         />
       )}
       <YearSemesterPeriodSelector
@@ -240,7 +288,7 @@ const Search = () => {
             {t('search:noCourses')}
           </Alert>
         ) : (
-          <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} />
+          <CalendarView feedbackTargetGrouping={feedbackTargetGrouping} isMobile={isMobile} />
         ))}
     </>
   )
