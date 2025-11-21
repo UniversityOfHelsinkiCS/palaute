@@ -1,12 +1,16 @@
-const { Router } = require('express')
-const { NorppaFeedback, User } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { adminAccess } = require('../../middleware/adminAccess')
+import { Router, type Response } from 'express'
+import type { AuthenticatedRequest } from 'types'
+import { ApplicationError } from 'util/customErrors'
+import { NorppaFeedback, User } from '../../models'
+import { adminAccess } from '../../middleware/adminAccess'
 
-const submitFeedback = async (req, res) => {
+const submitFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
-  if (!user) return res.send([])
+  if (!user) {
+    res.send([])
+    return
+  }
 
   const { feedback, anonymous, responseWanted } = req.body
 
@@ -20,22 +24,25 @@ const submitFeedback = async (req, res) => {
   feedbackUser.norppaFeedbackGiven = true
   await feedbackUser.save()
 
-  return res.send(newFeedback)
+  res.send(newFeedback)
 }
 
-const hideBanner = async (req, res) => {
+const hideBanner = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
-  if (!user) return res.sendStatus(500)
+  if (!user) {
+    res.sendStatus(500)
+    return
+  }
 
   const acualUser = await User.findByPk(user.id)
   acualUser.norppaFeedbackGiven = true
   await acualUser.save()
 
-  return res.sendStatus(200)
+  res.sendStatus(200)
 }
 
-const getFeedbacks = async (req, res) => {
+const getFeedbacks = async (req: AuthenticatedRequest, res: Response) => {
   const feedbacks = await NorppaFeedback.findAll({
     include: [
       {
@@ -46,10 +53,10 @@ const getFeedbacks = async (req, res) => {
     ],
   })
 
-  return res.send(feedbacks)
+  res.send(feedbacks)
 }
 
-const markAsSolved = async (req, res) => {
+const markAsSolved = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
 
   const { solved } = req.body
@@ -59,25 +66,25 @@ const markAsSolved = async (req, res) => {
   feedback.solved = solved
   await feedback.save()
 
-  return res.sendStatus(200)
+  res.sendStatus(200)
 }
 
-const getNorppaFeedbackCount = async (req, res) => {
+const getNorppaFeedbackCount = async (req: AuthenticatedRequest, res: Response) => {
   const feedbacks = await NorppaFeedback.count({
     where: {
       solved: false,
     },
   })
 
-  return res.send({ count: feedbacks })
+  res.send({ count: feedbacks })
 }
 
 const router = Router()
 
-router.get('/', getFeedbacks, adminAccess)
+router.get('/', [adminAccess], getFeedbacks)
 router.post('/', submitFeedback)
 router.put('/hide', hideBanner)
-router.put('/:id', markAsSolved, adminAccess)
-router.get('/count', getNorppaFeedbackCount, adminAccess)
+router.put('/:id', [adminAccess], markAsSolved)
+router.get('/count', [adminAccess], getNorppaFeedbackCount)
 
-module.exports = router
+export default router
