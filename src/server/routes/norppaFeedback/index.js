@@ -1,1 +1,3 @@
-module.exports = require('./norppaFeedbackController')
+const { router } = require('./norppaFeedbackController')
+
+module.exports = router

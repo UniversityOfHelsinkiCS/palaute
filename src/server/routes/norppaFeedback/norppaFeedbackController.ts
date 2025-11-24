@@ -1,6 +1,6 @@
 import { Router, type Response } from 'express'
 import type { AuthenticatedRequest } from 'types'
-import { ApplicationError } from 'util/customErrors'
+import { ApplicationError } from '../../util/customErrors'
 import { NorppaFeedback, User } from '../../models'
 import { adminAccess } from '../../middleware/adminAccess'
 
@@ -79,12 +79,10 @@ const getNorppaFeedbackCount = async (req: AuthenticatedRequest, res: Response) 
   res.send({ count: feedbacks })
 }
 
-const router = Router()
+export const router = Router()
 
 router.get('/', [adminAccess], getFeedbacks)
 router.post('/', submitFeedback)
 router.put('/hide', hideBanner)
 router.put('/:id', [adminAccess], markAsSolved)
 router.get('/count', [adminAccess], getNorppaFeedbackCount)
-
-export default router
