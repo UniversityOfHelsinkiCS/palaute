@@ -1,4 +1,4 @@
-const { sequelize } = require('./dbConnection')
+import { sequelize } from './dbConnection'
 
 const IS_TEACHER = `
   CREATE OR REPLACE FUNCTION is_teacher(access_status text) RETURNS boolean 
@@ -8,10 +8,6 @@ const IS_TEACHER = `
   LANGUAGE SQL;
 `
 
-const initializeFunctions = async () => {
+export const initializeFunctions = async () => {
   await sequelize.query(IS_TEACHER)
-}
-
-module.exports = {
-  initializeFunctions,
 }
