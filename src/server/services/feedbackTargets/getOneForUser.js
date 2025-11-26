@@ -142,12 +142,14 @@ const getFromDb = async id => {
   fbt.set('tags', _.uniqBy((fbt.courseUnit?.tags ?? []).concat(fbt.courseRealisation?.tags ?? []), 'id'))
   populateGroupInformation(fbt)
 
-  const studentListVisible = await fbt.courseUnit.isStudentListVisible()
-  const publicTarget = fbt.toPublicObject()
   const surveys = await getFeedbackTargetSurveys(fbt)
+  fbt.populateSurveys(surveys)
+  const studentListVisible = await fbt.courseUnit.isStudentListVisible()
   const publicQuestionIds = fbt.getPublicQuestionIds(surveys)
   const publicityConfigurableQuestionIds = fbt.getPublicityConfigurableQuestionIds(surveys)
   const feedbackCanBeGiven = await fbt.feedbackCanBeGiven()
+
+  const publicTarget = fbt.toPublicObject()
 
   const feedbackTargetJson = {
     ...publicTarget,

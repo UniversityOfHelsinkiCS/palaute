@@ -21,7 +21,7 @@ const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
 const organisationSurveyRouter = require('./organisationSurveyController')
 const { getOrganisationData: getOrganisationDataFromJami } = require('../../util/jami')
-const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
+const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()

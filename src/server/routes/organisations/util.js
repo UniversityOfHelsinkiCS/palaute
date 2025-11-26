@@ -1,4 +1,4 @@
-const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
+const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
 const { Organisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 

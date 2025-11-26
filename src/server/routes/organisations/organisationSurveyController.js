@@ -23,7 +23,7 @@ const { createSummaryForFeedbackTarget } = require('../../services/summary/creat
 const {
   updateSummaryOnOrganisationSurveyEdit,
 } = require('../../services/summary/updateSummaryOnOrganisationSurveyEdit')
-const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
+const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req

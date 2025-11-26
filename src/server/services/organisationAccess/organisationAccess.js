@@ -97,10 +97,10 @@ const populateUserAccess = async user => {
     ...(await getFeedbackCorrespondentAccess(user)),
   }
 
-  this.organisationAccess = organisationAccess
-  this.specialGroup = organisationAccess.specialGroup ?? {}
-  this.isAdmin = user.specialGroup.superAdmin
-  this.isEmployee = user.specialGroup.employee
+  user.organisationAccess = organisationAccess
+  user.specialGroup = organisationAccess.specialGroup ?? {}
+  user.isAdmin = user.specialGroup.superAdmin
+  user.isEmployee = user.specialGroup.employee
 
   // remove specialGroup from organisationAccess. Its confusing to have it there, other keys are organisation codes.
   delete user.organisationAccess.specialGroup

@@ -171,8 +171,6 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   }
 
   getPublicityConfigurableQuestionIds(surveys: any) {
-    this.populateQuestions(surveys)
-
     const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
     const programmePublicQuestionIds = surveys.programmeSurveys.flatMap((s: any) => s.publicQuestionIds)
 

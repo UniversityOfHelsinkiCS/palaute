@@ -9,7 +9,7 @@ const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
 const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
-const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
+const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
 
 const login = async (req, res) => {
   const { user, loginAs } = req

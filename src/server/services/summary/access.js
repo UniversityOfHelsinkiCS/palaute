@@ -1,4 +1,4 @@
-const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
+const { getUserOrganisationAccess } = require('../organisationAccess/organisationAccess')
 const { sequelize } = require('../../db/dbConnection')
 
 const getSummaryAccessibleOrganisationIds = async user => {
