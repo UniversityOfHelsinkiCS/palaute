@@ -54,7 +54,7 @@ const getUsernameFromShibboHeaders = (req: UnauthenticatedRequest) => {
 
   if (!username) throw new ApplicationError('Missing uid header', 403)
 
-  return username
+  return username as string
 }
 
 const isAdminLoginAs = (req: AuthenticatedRequest) => req.user.isAdmin && req.headers['x-admin-logged-in-as']

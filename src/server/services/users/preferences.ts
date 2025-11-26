@@ -5,11 +5,11 @@
  * These are computed automatically based on user access rights & teacher associations etc...
  */
 
-const _ = require('lodash')
-const { FeedbackTarget, UserFeedbackTarget, Summary, CourseRealisation } = require('../../models')
-const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
+import _ from 'lodash'
+import { FeedbackTarget, UserFeedbackTarget, Summary, CourseRealisation, User } from '../../models'
+import { startOfStudyYear, endOfStudyYear } from '../../util/common'
 
-const getTeachedFeedbackTargets = async user => {
+const getTeachedFeedbackTargets = async (user: User) => {
   const fbts = await FeedbackTarget.findAll({
     attributes: [],
     include: [
@@ -39,9 +39,9 @@ const getTeachedFeedbackTargets = async user => {
  * Depending on whether the user has courses with feedback in the current semester
  * and whether they have organisation access.
  */
-const getPreferredSummaryView = async user => {
+const getPreferredSummaryView = async (user: User) => {
   const { organisationAccess } = user
-  const hasOrganisationAccess = Object.values(organisationAccess).some(access => access.read)
+  const hasOrganisationAccess = Object.values(organisationAccess ?? {}).some((access: any) => access.read)
 
   // Check if user has courses with feedback in the current semester
   const startDate = startOfStudyYear(new Date())
@@ -81,7 +81,7 @@ const getPreferredSummaryView = async user => {
  * Otherwise if they have summary access, show "course-summary" tab by default.
  * Otherwise show "feedbacks" tab.
  */
-const getPreferredTab = (user, fbts, hasSummaryAccess) => {
+const getPreferredTab = (user: User, fbts: FeedbackTarget[], hasSummaryAccess: boolean) => {
   const now = new Date()
 
   const currentlyRunningAndUpcoming = _.sumBy(fbts, fbt =>
@@ -104,7 +104,7 @@ const getPreferredTab = (user, fbts, hasSummaryAccess) => {
 /**
  * Compute user preferences
  */
-const getUserPreferences = async user => {
+export const getUserPreferences = async (user: User) => {
   const teachedFbts = await getTeachedFeedbackTargets(user)
   const userIsTeacherOnSomeCourse = await user.isTeacher()
 
@@ -120,8 +120,4 @@ const getUserPreferences = async user => {
     summaryView,
     defaultView: preferredTab,
   }
-}
-
-module.exports = {
-  getUserPreferences,
 }

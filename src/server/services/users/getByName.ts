@@ -1,9 +1,9 @@
-const { User } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { NO_USER_USERNAME } = require('../../util/config')
-const cache = require('./cache')
+import { User } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { NO_USER_USERNAME } from '../../util/config'
+import cache from './cache'
 
-const getByUsername = async username => {
+export const getByUsername = async (username: string) => {
   let user = await cache.get(username)
 
   if (!user || user.username === NO_USER_USERNAME) {
@@ -24,5 +24,3 @@ const getByUsername = async username => {
 
   return user
 }
-
-module.exports = { getByUsername }

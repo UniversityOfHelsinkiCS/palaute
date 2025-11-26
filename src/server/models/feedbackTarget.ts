@@ -73,6 +73,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare studentCount?: number
   declare userFeedbackTargets?: UserFeedbackTarget[]
   declare courseUnit?: NonAttribute<CourseUnit>
+  declare courseRealisation?: NonAttribute<CourseRealisation>
 
   // --- Association methods -----------------------------
   // --- only the ones that are used are declared here ---

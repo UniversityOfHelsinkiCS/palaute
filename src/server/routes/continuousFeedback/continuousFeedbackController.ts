@@ -1,11 +1,13 @@
-const { Router } = require('express')
-const { ContinuousFeedback, UserFeedbackTarget } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { sendEmailContinuousFeedbackResponseToStudent } = require('../../mailer/mails')
-const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
-const { adminAccess } = require('../../middleware/adminAccess')
+import { Response, Router } from 'express'
+import { ContinuousFeedback, UserFeedbackTarget } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { sendEmailContinuousFeedbackResponseToStudent } from '../../mailer/mails'
+import { getFeedbackTargetContext } from '../../services/feedbackTargets'
+import { adminAccess } from '../../middleware/adminAccess'
+import { AuthenticatedRequest } from '../../types'
+import { Access } from '../../services/feedbackTargets/Access'
 
-const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
+const getStudentContinuousFeedbacks = async (user: any, feedbackTargetId: number) => {
   const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne({
     where: {
       userId: user.id,
@@ -25,12 +27,12 @@ const getStudentContinuousFeedbacks = async (user, feedbackTargetId) => {
   return continuousFeedbacks
 }
 
-const getFeedbacks = async (req, res) => {
+const getFeedbacks = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
 
-  const { access } = await getFeedbackTargetContext({
+  const { access }: { access: Access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
   })
@@ -38,7 +40,8 @@ const getFeedbacks = async (req, res) => {
   if (!access?.canSeeContinuousFeedbacks()) {
     const continuousFeedbacks = await getStudentContinuousFeedbacks(user, feedbackTargetId)
 
-    return res.send(continuousFeedbacks)
+    res.send(continuousFeedbacks)
+    return
   }
 
   const continuousFeedbacks = await ContinuousFeedback.findAll({
@@ -47,10 +50,10 @@ const getFeedbacks = async (req, res) => {
     },
   })
 
-  return res.send(continuousFeedbacks)
+  res.send(continuousFeedbacks)
 }
 
-const submitFeedback = async (req, res) => {
+const submitFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
@@ -78,10 +81,10 @@ const submitFeedback = async (req, res) => {
     sendInDigestEmail,
   })
 
-  return res.send(newFeedback)
+  res.send(newFeedback)
 }
 
-const respondToFeedback = async (req, res) => {
+const respondToFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
@@ -109,10 +112,10 @@ const respondToFeedback = async (req, res) => {
     sendEmailContinuousFeedbackResponseToStudent(id)
   }
 
-  return res.send(continuousFeedback)
+  res.send(continuousFeedback)
 }
 
-const deleteFeedback = async (req, res) => {
+const deleteFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
   const feedbackTargetId = Number(req.params.id)
@@ -129,7 +132,7 @@ const deleteFeedback = async (req, res) => {
 
   await continuousFeedback.destroy()
 
-  return res.send(continuousFeedback)
+  res.send(continuousFeedback)
 }
 
 const router = Router()
@@ -139,4 +142,4 @@ router.post('/:id', submitFeedback)
 router.post('/:id/response/:continuousFeedbackId', respondToFeedback)
 router.delete('/:id/:continuousFeedbackId', adminAccess, deleteFeedback)
 
-module.exports = router
+export default router

@@ -19,7 +19,7 @@ const client = {
   get: (key: string) => redisClient.get(key),
   set: (key: string, value: string, options = {}) => redisClient.set(key, value, options),
   expire: (key: string, seconds: number) => redisClient.expire(key, seconds),
-  delete: (key: string) => redisClient.del(key),
+  delete: (key: string | string[]) => redisClient.del(key),
   keys: (pattern: string) => redisClient.keys(pattern),
   mGet: (keys: string[]) => redisClient.mGet(keys),
   flushDb: () => redisClient.flushDb(),
