@@ -1,6 +1,7 @@
 const _ = require('lodash')
 const { Op } = require('sequelize')
 const { FeedbackTarget, CourseRealisation, UserFeedbackTarget, CourseUnit } = require('../../models')
+const { getFeedbackTargetSurveys } = require('../surveys/getFeedbackTargetSurveys')
 
 const getForCourseUnit = async ({
   courseCode,
@@ -82,7 +83,7 @@ const getForCourseUnit = async ({
 
   if (includeSurveys === 'true') {
     for (const target of feedbackTargets) {
-      const surveys = await target.getSurveys()
+      const surveys = await getFeedbackTargetSurveys(target)
       target.populateSurveys(surveys)
     }
   }

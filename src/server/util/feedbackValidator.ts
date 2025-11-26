@@ -1,5 +1,6 @@
 import { Question, QuestionAnswer } from '@common/types/question'
 import { FeedbackTarget } from '../models'
+import { getFeedbackTargetSurveys } from '../services/surveys/getFeedbackTargetSurveys'
 
 const validateLikertQuestion = (data: string, question: Question) => {
   try {
@@ -46,7 +47,7 @@ const mapTypeToValidator: Record<string, (data: any, question: Question) => bool
 
 export const validateFeedback = async (data: QuestionAnswer[], feedbackTarget: FeedbackTarget) => {
   try {
-    const surveys = await feedbackTarget.getSurveys()
+    const surveys = await getFeedbackTargetSurveys(feedbackTarget)
     feedbackTarget.populateQuestions(surveys)
     const idToQuestion: Record<number, Question> = {}
     feedbackTarget.questions.forEach(q => {

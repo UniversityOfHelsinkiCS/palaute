@@ -26,7 +26,6 @@ import { CourseRealisation } from './courseRealisation'
 import { User } from './user'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
-import type Feedback from './feedback'
 import type { CourseUnit } from './courseUnit'
 import type { Question } from './question'
 import type { Survey } from './survey'
@@ -214,40 +213,8 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     this.populateQuestions(surveys)
   }
 
-  // @ts-expect-error täsäfy
-  async getPublicFeedbacks(feedbacks: Feedback[], { accessStatus, isAdmin, userOrganisationAccess } = {}) {
-    const publicFeedbacks = feedbacks.map(f => f.toPublicObject())
-
-    const isTeacher = accessStatus === 'RESPONSIBLE_TEACHER' || accessStatus === 'TEACHER'
-
-    const isOrganisationAdmin = Boolean(userOrganisationAccess?.admin)
-
-    if (isAdmin || isOrganisationAdmin || isTeacher) {
-      return publicFeedbacks
-    }
-
-    const surveys = await this.getSurveys()
-    const publicQuestionIds = this.getPublicQuestionIds(surveys)
-
-    const censoredFeedbacks = publicFeedbacks.map(feedback => ({
-      ...feedback,
-      data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
-    }))
-
-    return censoredFeedbacks
-  }
-
-  async toPublicObject() {
-    const surveys = await this.getSurveys()
-    const publicQuestionIds = this.getPublicQuestionIds(surveys)
-    const publicityConfigurableQuestionIds = this.getPublicityConfigurableQuestionIds(surveys)
-
-    const feedbackTarget = {
-      ...this.toJSON(),
-      surveys,
-      publicQuestionIds,
-      publicityConfigurableQuestionIds,
-    }
+  toPublicObject() {
+    const feedbackTarget = this.toJSON()
 
     // Do not accidentally send this to client
     delete feedbackTarget.userFeedbackTargets

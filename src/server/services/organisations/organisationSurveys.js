@@ -22,6 +22,7 @@ const {
   Summary,
 } = require('../../models')
 const cache = require('../feedbackTargets/feedbackTargetCache')
+const { getFeedbackTargetSurveys } = require('../surveys/getFeedbackTargetSurveys')
 
 const getOrganisationCourseUnit = async organisationId => {
   const organisationCourseUnit = await CourseUnit.findOne({
@@ -401,7 +402,7 @@ const getSurveysForOrganisation = async organisationId => {
   })
 
   for (const target of organisationSurveys) {
-    const surveys = await target.getSurveys()
+    const surveys = await getFeedbackTargetSurveys(target)
     target.populateSurveys(surveys)
   }
 

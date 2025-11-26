@@ -15,40 +15,9 @@
 
 const { Op } = require('sequelize')
 const { getOrganisationAccess, getAdminOrganisationAccess } = require('../services/organisationAccess')
-const {
-  getUniversitySurvey,
-  getOrCreateTeacherSurvey,
-  getProgrammeSurveysByCourseUnit,
-} = require('../services/surveys')
 const { inProduction, DEV_ADMINS } = require('../util/config')
-const { FeedbackTarget } = require('./feedbackTarget')
 const { Organisation } = require('./organisation')
 const { User } = require('./user')
-
-FeedbackTarget.prototype.getSurveys = async function () {
-  const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([
-    getProgrammeSurveysByCourseUnit(this.courseUnitId),
-    getOrCreateTeacherSurvey(this),
-    getUniversitySurvey(),
-  ])
-
-  if (this.userCreated) {
-    universitySurvey.questionIds = []
-    universitySurvey.questions = []
-
-    return {
-      programmeSurveys: [],
-      teacherSurvey,
-      universitySurvey,
-    }
-  }
-
-  return {
-    programmeSurveys,
-    teacherSurvey,
-    universitySurvey,
-  }
-}
 
 /**
  * Gets, somewhat confusingly, the organisations user has access to, along the corresponding access objects.

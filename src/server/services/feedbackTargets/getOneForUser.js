@@ -14,6 +14,7 @@ const {
 const { ApplicationError } = require('../../util/customErrors')
 const cache = require('./feedbackTargetCache')
 const { getAccess } = require('./getAccess')
+const { getFeedbackTargetSurveys } = require('../surveys/getFeedbackTargetSurveys')
 
 const populateGroupInformation = feedbackTarget => {
   for (const group of feedbackTarget.groups ?? []) {
@@ -142,13 +143,19 @@ const getFromDb = async id => {
   populateGroupInformation(fbt)
 
   const studentListVisible = await fbt.courseUnit.isStudentListVisible()
-  const publicTarget = await fbt.toPublicObject()
+  const publicTarget = fbt.toPublicObject()
+  const surveys = await getFeedbackTargetSurveys(fbt)
+  const publicQuestionIds = fbt.getPublicQuestionIds(surveys)
+  const publicityConfigurableQuestionIds = fbt.getPublicityConfigurableQuestionIds(surveys)
   const feedbackCanBeGiven = await fbt.feedbackCanBeGiven()
 
   const feedbackTargetJson = {
     ...publicTarget,
     studentListVisible,
     feedbackCanBeGiven,
+    surveys,
+    publicQuestionIds,
+    publicityConfigurableQuestionIds,
   }
 
   return feedbackTargetJson
