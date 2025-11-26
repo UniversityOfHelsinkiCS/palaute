@@ -3,13 +3,14 @@ const _ = require('lodash')
 const { Router } = require('express')
 
 const { ApplicationError } = require('../../util/customErrors')
-const { User, Banner } = require('../../models')
+const { User } = require('../../models')
 const cache = require('../../services/users/cache')
 const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
 const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
 const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
+const { getBannersForUser } = require('../../services/banners/getForUser')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
@@ -25,7 +26,7 @@ const login = async (req, res) => {
 
   const [lastRestart, banners, organisations, preferences] = await Promise.all([
     getLastRestart(),
-    Banner.getForUser(user),
+    getBannersForUser(user),
     getUserOrganisationAccess(user),
     getUserPreferences(user),
     user.isTeacher(),

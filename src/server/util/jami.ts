@@ -1,6 +1,7 @@
 import axios from 'axios'
 import * as Sentry from '@sentry/node'
 
+import { OrganisationAccess } from '@common/types/organisation'
 import { User } from 'models'
 import { JAMI_URL, API_TOKEN, inProduction } from './config'
 import { logger } from './logger'
@@ -13,7 +14,10 @@ const jamiClient = axios.create({
   },
 })
 
-export const getUserIamAccess = async (user: User, attempt = 1): Promise<any> => {
+export const getUserIamAccess = async (
+  user: User,
+  attempt = 1
+): Promise<Record<string, OrganisationAccess | boolean>> => {
   if (user.iamGroups.length === 0) {
     return {}
   }
@@ -21,7 +25,7 @@ export const getUserIamAccess = async (user: User, attempt = 1): Promise<any> =>
   const { id, iamGroups } = user
 
   try {
-    const { data: iamAccess } = await jamiClient.post('/', {
+    const { data: iamAccess } = await jamiClient.post<Record<string, OrganisationAccess | boolean>>('/', {
       userId: id,
       iamGroups,
     })
@@ -68,7 +72,14 @@ export const getUserIams = async (userId: string) => {
 }
 
 export const getAllUserAccess = async () => {
-  const { data } = await jamiClient.get('/all-access')
+  const { data } = await jamiClient.get<
+    {
+      id: string
+      iamGroups: string[]
+      access: Record<string, OrganisationAccess>
+      specialGroup: Record<string, boolean>
+    }[]
+  >('/all-access')
 
   return data
 }

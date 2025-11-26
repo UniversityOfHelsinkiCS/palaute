@@ -1,7 +1,9 @@
-const { getUserOrganisationAccess } = require('../organisationAccess/organisationAccess')
-const { sequelize } = require('../../db/dbConnection')
+import { QueryTypes } from 'sequelize'
+import { User } from 'models'
+import { sequelize } from '../../db/dbConnection'
+import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
-const getSummaryAccessibleOrganisationIds = async user => {
+export const getSummaryAccessibleOrganisationIds = async (user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)
   const accessibleOrganisationIds = organisationAccess.flatMap(access => [
     access.organisation.id,
@@ -11,8 +13,8 @@ const getSummaryAccessibleOrganisationIds = async user => {
   return accessibleOrganisationIds
 }
 
-const getAccessibleCourseRealisationIds = async user => {
-  const rows = await sequelize.query(
+export const getAccessibleCourseRealisationIds = async (user: User) => {
+  const rows = await sequelize.query<{ id: string }>(
     `
     SELECT DISTINCT ON (course_realisations.id) course_realisations.id
     FROM user_feedback_targets
@@ -27,14 +29,9 @@ const getAccessibleCourseRealisationIds = async user => {
       replacements: {
         userId: user.id,
       },
-      type: sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
     }
   )
 
   return rows.map(row => row.id)
-}
-
-module.exports = {
-  getSummaryAccessibleOrganisationIds,
-  getAccessibleCourseRealisationIds,
 }

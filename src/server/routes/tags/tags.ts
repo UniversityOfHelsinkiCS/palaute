@@ -1,6 +1,7 @@
 import { Router, Response } from 'express'
 import { Op, Transaction } from 'sequelize'
 import { AuthenticatedRequest } from 'types'
+import { OrganisationAccess } from '@common/types/organisation'
 import { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit } from '../../models'
 import { CourseUnitsTag } from '../../models/courseUnitsTag'
 import { ApplicationError } from '../../util/customErrors'
@@ -11,7 +12,7 @@ import { getUserOrganisationAccess } from '../../services/organisationAccess/org
 /**
  * Check whether user has access to organisation with given code
  */
-const checkAccess = async (user: any, code: string, level = 'read'): Promise<void> => {
+const checkAccess = async (user: any, code: string, level: keyof OrganisationAccess = 'read'): Promise<void> => {
   const orgAccess = await getUserOrganisationAccess(user)
   const relevantOrg = orgAccess.find((oac: any) => oac.organisation.code === code)
   if (!relevantOrg || !relevantOrg.access[level]) {

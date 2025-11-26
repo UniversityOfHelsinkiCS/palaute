@@ -1,16 +1,16 @@
-const { Op, QueryTypes } = require('sequelize')
-const _ = require('lodash')
+import { Op, QueryTypes } from 'sequelize'
+import _ from 'lodash'
 
-const { User, Organisation } = require('../../models')
+import { OrganisationAccess, OrganisationWithAccess } from '@common/types/organisation'
+import { User, Organisation } from '../../models'
+import { normalizeOrganisationCode } from '../../util/common'
+import { getAllUserAccess, getAccessToAll, getUserIamAccess } from '../../util/jami'
+import { inProduction, DEV_ADMINS } from '../../util/config'
+import { sequelize } from '../../db/dbConnection'
 
-const { normalizeOrganisationCode } = require('../../util/common')
-const { getAllUserAccess, getAccessToAll, getUserIamAccess } = require('../../util/jami')
-const { inProduction, DEV_ADMINS } = require('../../util/config')
-const { sequelize } = require('../../db/dbConnection')
+export const getAdminOrganisationAccess = () => getAccessToAll()
 
-const getAdminOrganisationAccess = () => getAccessToAll()
-
-const getAllOrganisationAccess = async () => {
+export const getAllOrganisationAccess = async () => {
   const allAccess = await getAllUserAccess()
 
   const userIds = allAccess.map(({ id }) => id)
@@ -27,7 +27,7 @@ const getAllOrganisationAccess = async () => {
   for (const user of users) {
     const { iamGroups, access } = allAccess.find(({ id }) => id === user.id)
 
-    const normalizedAccess = {}
+    const normalizedAccess: Record<string, OrganisationAccess> = {}
     Object.keys(access).forEach(code => {
       normalizedAccess[normalizeOrganisationCode(code)] = access[code]
     })
@@ -46,7 +46,7 @@ const getAllOrganisationAccess = async () => {
       organisation: org,
     }))
 
-    const sortedOrganisationAccess = _.sortBy(organisationAccess, access => access.organisation.code)
+    const sortedOrganisationAccess = _.sortBy(organisationAccess, oa => oa.organisation.code)
 
     // eslint-disable-next-line no-continue
     if (!organisationAccess.length) continue
@@ -61,24 +61,24 @@ const getAllOrganisationAccess = async () => {
   return usersWithAccess
 }
 
-const getAccessFromIAMs = async user => {
-  const access = {}
+const getAccessFromIAMs = async (user: User) => {
+  const access: Record<string, OrganisationAccess> = {}
 
   const iamAccess = await getUserIamAccess(user)
 
   if (!_.isObject(iamAccess)) return access
   Object.keys(iamAccess).forEach(code => {
-    access[normalizeOrganisationCode(code)] = iamAccess[code]
+    access[normalizeOrganisationCode(code)] = iamAccess[code] as OrganisationAccess
   })
 
   return access
 }
 
-const getFeedbackCorrespondentAccess = async user => {
+const getFeedbackCorrespondentAccess = async (user: User) => {
   const organisations = await user.getOrganisations()
 
   if (organisations?.length > 0) {
-    const access = {}
+    const access: Record<string, OrganisationAccess> = {}
     organisations.forEach(org => {
       access[org.code] = { read: true, write: true, admin: true }
     })
@@ -88,7 +88,7 @@ const getFeedbackCorrespondentAccess = async user => {
   return {}
 }
 
-const populateUserAccess = async user => {
+export const populateUserAccess = async (user: User) => {
   if (user.organisationAccess) return
 
   // get organisation access and special groups based on IAMs
@@ -115,7 +115,7 @@ const populateUserAccess = async user => {
   }
 }
 
-const getUserOrganisationAccess = async user => {
+export const getUserOrganisationAccess = async (user: User): Promise<OrganisationWithAccess[]> => {
   await populateUserAccess(user)
   let { accessibleOrganisations } = user
 
@@ -141,7 +141,7 @@ const getUserOrganisationAccess = async user => {
   }))
 }
 
-const getOrganisationAccessByCourseUnitId = async (user, courseUnitId) => {
+export const getOrganisationAccessByCourseUnitId = async (user: User, courseUnitId: string) => {
   const organisations = await getUserOrganisationAccess(user)
 
   if (organisations.length === 0) {
@@ -176,7 +176,7 @@ const getOrganisationAccessByCourseUnitId = async (user, courseUnitId) => {
 
   const organisationIds = rows.flatMap(row => Object.values(row))
 
-  function getPriority(org) {
+  function getPriority(org: { access: OrganisationAccess }) {
     let weight = 0
     if (org.access.admin) {
       weight += 100
@@ -195,12 +195,4 @@ const getOrganisationAccessByCourseUnitId = async (user, courseUnitId) => {
     .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
 
   return organisationAccess ?? null
-}
-
-module.exports = {
-  populateUserAccess,
-  getUserOrganisationAccess,
-  getOrganisationAccessByCourseUnitId,
-  getAdminOrganisationAccess,
-  getAllOrganisationAccess,
 }

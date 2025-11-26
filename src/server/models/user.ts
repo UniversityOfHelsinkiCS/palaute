@@ -8,12 +8,14 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasManyGetAssociationsMixin,
 } from 'sequelize'
 import _ from 'lodash'
 
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 import type { FeedbackTarget } from './feedbackTarget'
+import type { Organisation } from './organisation'
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // --- Acual DB columns ---
@@ -36,12 +38,14 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // --- ideally refactor away ---
   // -----------------------------
   declare organisationAccess?: any
-  declare accessibleOrganisations?: any
+  declare accessibleOrganisations?: Organisation[]
   declare specialGroup?: any
   declare isAdmin?: boolean
   declare isEmployee?: boolean
   declare mockedBy?: User
   declare iamGroups?: string[]
+
+  declare getOrganisations: HasManyGetAssociationsMixin<Organisation>
 
   async isTeacher() {
     const teachings = await UserFeedbackTarget.findAll({

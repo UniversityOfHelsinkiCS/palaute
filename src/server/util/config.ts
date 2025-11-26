@@ -42,7 +42,7 @@ export const GELF_HOST = process.env.GELF_HOST || 'localhost'
 
 export const WORKLOAD_QUESTION_ID = Number(config.get('WORKLOAD_QUESTION_ID'))
 export const WORKLOAD_QUESTION_ID_ORDER = config.get<string[]>('WORKLOAD_QUESTION_ID_ORDER') ?? []
-export const DEV_ADMINS = config.get('DEV_ADMINS') ?? []
+export const DEV_ADMINS = config.get<string[]>('DEV_ADMINS') ?? []
 export const INCLUDE_COURSES = config.get('INCLUDE_COURSES') ?? []
 export const TAGS_ENABLED = config.get<string[]>('TAGS_ENABLED') ?? []
 export const NOAD_LINK_EXPIRATION_DAYS = Number(config.get('NOAD_LINK_EXPIRATION_DAYS'))
