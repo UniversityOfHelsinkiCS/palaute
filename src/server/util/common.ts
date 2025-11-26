@@ -1,9 +1,9 @@
-const { addYears, subDays, startOfDay, endOfDay } = require('date-fns')
-const { parseFromTimeZone } = require('date-fns-timezone')
+import { addYears, subDays, startOfDay, endOfDay } from 'date-fns'
+import { parseFromTimeZone } from 'date-fns-timezone'
 
-const isNumber = value => !Number.isNaN(parseInt(value, 10))
+const isNumber = (value: string) => !Number.isNaN(parseInt(value, 10))
 
-const normalizeOrganisationCode = r => {
+export const normalizeOrganisationCode = (r: string) => {
   if (r.startsWith('T')) {
     return r.replace('T', '7')
   }
@@ -26,7 +26,7 @@ const MONTH = 8
  * @param {Date | string | number} date
  * @return {Date} first day of study year
  */
-const startOfStudyYear = date => {
+export const startOfStudyYear = (date: Date | string | number) => {
   let d = null
   if (typeof date !== 'object') {
     d = new Date(date)
@@ -44,14 +44,21 @@ const startOfStudyYear = date => {
  * @param {Date | string | number} date
  * @returns {Date} last day of study year
  */
-const endOfStudyYear = date => {
+export const endOfStudyYear = (date: Date | string | number) => {
   const start = startOfStudyYear(date)
   return subDays(addYears(start, 1), 1)
 }
 
-const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
+const parseDate = (d: Date | string | number) =>
+  parseFromTimeZone(new Date(d) as unknown as string, { timeZone: 'Europe/Helsinki' })
 
-const formatActivityPeriod = ({ startDate, endDate }) => {
+export const formatActivityPeriod = ({
+  startDate,
+  endDate,
+}: {
+  startDate: Date | string | number
+  endDate: Date | string | number
+}) => {
   if (!startDate || !endDate) return null
 
   return {
@@ -66,12 +73,4 @@ const formatActivityPeriod = ({ startDate, endDate }) => {
  * @param {number} tagId - the original tagId
  * @returns {string} the prefixed tagId, e.g. 'norppa-tag-1234'
  */
-const prefixTagId = tagId => `norppa-tag-${tagId}`
-
-module.exports = {
-  normalizeOrganisationCode,
-  startOfStudyYear,
-  endOfStudyYear,
-  formatActivityPeriod,
-  prefixTagId,
-}
+export const prefixTagId = (tagId: number | string) => `norppa-tag-${tagId}`

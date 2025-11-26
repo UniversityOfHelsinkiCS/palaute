@@ -1,6 +1,9 @@
-class ApplicationError extends Error {
-  constructor(message, status, extra) {
-    super()
+export class ApplicationError extends Error {
+  status: number
+  extra: any
+
+  constructor(message: string, status?: number, extra?: any) {
+    super(message)
 
     Error.captureStackTrace(this, this.constructor)
 
@@ -54,8 +57,4 @@ class ApplicationError extends Error {
   static BadRequest(msg = 'Bad request') {
     throw new ApplicationError(msg, 400)
   }
-}
-
-module.exports = {
-  ApplicationError,
 }

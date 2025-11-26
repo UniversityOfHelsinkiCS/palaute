@@ -1,8 +1,9 @@
-const axios = require('axios')
-const Sentry = require('@sentry/node')
+import axios from 'axios'
+import * as Sentry from '@sentry/node'
 
-const { JAMI_URL, API_TOKEN, inProduction } = require('./config')
-const { logger } = require('./logger')
+import { User } from 'models'
+import { JAMI_URL, API_TOKEN, inProduction } from './config'
+import { logger } from './logger'
 
 const jamiClient = axios.create({
   baseURL: JAMI_URL,
@@ -12,7 +13,7 @@ const jamiClient = axios.create({
   },
 })
 
-const getUserIamAccess = async (user, attempt = 1) => {
+export const getUserIamAccess = async (user: User, attempt = 1): Promise<any> => {
   if (user.iamGroups.length === 0) {
     return {}
   }
@@ -38,25 +39,25 @@ const getUserIamAccess = async (user, attempt = 1) => {
   }
 }
 
-const getAccessToAll = async () => {
+export const getAccessToAll = async () => {
   const { data: access } = await jamiClient.get('/access-to-all')
   access['01'] = { read: true } // University (TEST)
 
   return access
 }
 
-const getOrganisationData = async () => {
+export const getOrganisationData = async () => {
   const { data } = await jamiClient.get('/organisation-data')
 
   return data
 }
 
-const getUserIams = async userId => {
+export const getUserIams = async (userId: string) => {
   try {
     const { data } = await jamiClient.get(`/${userId}`)
 
     return data.iamGroups
-  } catch (error) {
+  } catch (error: any) {
     if (error.response && error.response.status !== 404) {
       logger.error('[Jami] error: ', error)
       Sentry.captureException(error)
@@ -66,7 +67,7 @@ const getUserIams = async userId => {
   }
 }
 
-const getAllUserAccess = async () => {
+export const getAllUserAccess = async () => {
   const { data } = await jamiClient.get('/all-access')
 
   return data
@@ -84,5 +85,3 @@ const testJami = async () => {
 }
 
 testJami()
-
-module.exports = { getUserIamAccess, getAccessToAll, getOrganisationData, getUserIams, getAllUserAccess }

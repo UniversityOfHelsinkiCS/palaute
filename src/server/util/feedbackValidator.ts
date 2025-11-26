@@ -1,4 +1,7 @@
-const validateLikertQuestion = (data, question) => {
+import { Question, QuestionAnswer } from '@common/types/question'
+import { FeedbackTarget } from '../models'
+
+const validateLikertQuestion = (data: string, question: Question) => {
   try {
     if (!question.required && data === '') return true
     const value = parseInt(data, 10)
@@ -8,22 +11,26 @@ const validateLikertQuestion = (data, question) => {
   }
 }
 
-const validateSingleChoice = (data, question) => {
+const validateSingleChoice = (data: string, question: Question) => {
+  if (question.type !== 'SINGLE_CHOICE') return false
+
   try {
     if (!question.required && data === '') return true
-    return question.data.options.map(opt => opt.id).includes(data)
+    return question.data.options.map(opt => opt.id).includes(parseInt(data, 10))
   } catch (_) {
     return false
   }
 }
 
-const validateMultiChoice = (data, question) => {
+const validateMultiChoice = (data: string[], question: Question) => {
+  if (question.type !== 'MULTIPLE_CHOICE') return false
+
   try {
     if (!question.required) return true
     let valid = true
     const ids = question.data.options.map(opt => opt.id)
     data.forEach(id => {
-      valid = valid && ids.includes(id)
+      valid = valid && ids.includes(parseInt(id, 10))
     })
     return valid
   } catch (_) {
@@ -31,22 +38,25 @@ const validateMultiChoice = (data, question) => {
   }
 }
 
-const mapTypeToValidator = {
+const mapTypeToValidator: Record<string, (data: any, question: Question) => boolean> = {
   LIKERT: validateLikertQuestion,
   SINGLE_CHOICE: validateSingleChoice,
   MULTIPLE_CHOICE: validateMultiChoice,
 }
 
-const validateFeedback = async (data, feedbackTarget) => {
+export const validateFeedback = async (data: QuestionAnswer[], feedbackTarget: FeedbackTarget) => {
   try {
     const surveys = await feedbackTarget.getSurveys()
     feedbackTarget.populateQuestions(surveys)
-    const idToQuestion = {}
+    const idToQuestion: Record<number, Question> = {}
     feedbackTarget.questions.forEach(q => {
-      idToQuestion[q.id] = q
+      const question = q as Question
+      if (question.type === 'TEXT') return
+
+      idToQuestion[question.id] = question
     })
     let valid = true
-    const answerIds = new Set()
+    const answerIds = new Set<number>()
     data.forEach(answer => {
       const question = idToQuestion[answer.questionId]
       const validator = mapTypeToValidator[question.type]
@@ -65,8 +75,4 @@ const validateFeedback = async (data, feedbackTarget) => {
   } catch (e) {
     return false
   }
-}
-
-module.exports = {
-  validateFeedback,
 }

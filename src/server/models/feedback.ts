@@ -9,14 +9,9 @@ import {
   DATE,
   INTEGER,
 } from 'sequelize'
+import type { QuestionAnswer } from '@common/types/question'
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
-
-export type QuestionAnswer = {
-  questionId: number
-  data: string
-  hidden?: boolean
-}
 
 export type FeedbackData = QuestionAnswer[]
 

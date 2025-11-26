@@ -21,10 +21,23 @@ export type QuestionOption = {
   label: LocalizedString
 }
 
-export interface Question {
+export type Question = {
   id: number
-  type: QuestionType
   secondaryType: QuestionSecondaryType
   required: boolean
-  data: QuestionData
+} & (
+  | {
+      type: Exclude<QuestionType, 'TEXT'>
+      data: AnswerableQuestionData
+    }
+  | {
+      type: 'TEXT'
+      data: TextSectionData
+    }
+)
+
+export type QuestionAnswer = {
+  questionId: number
+  data: string
+  hidden?: boolean
 }
