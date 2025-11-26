@@ -28,7 +28,6 @@ import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
 import type { CourseUnit } from './courseUnit'
 import type { Question } from './question'
-import type { Survey } from './survey'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
   // --- Acual DB columns ---
@@ -70,9 +69,9 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare administrativePersons?: any
   declare tags?: any
   declare studentCount?: number
-  declare userFeedbackTargets?: UserFeedbackTarget[]
   declare courseUnit?: NonAttribute<CourseUnit>
   declare courseRealisation?: NonAttribute<CourseRealisation>
+  declare userFeedbackTargets?: UserFeedbackTarget[]
 
   // --- Association methods -----------------------------
   // --- only the ones that are used are declared here ---
@@ -82,15 +81,9 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   // --- Association includes ------
   // --- not sure how to do this ---
   // -------------------------------
-  // declare userFeedbackTargets?: NonAttribute<UserFeedbackTarget[]>
 
   // --- Helper methods ---
   // ----------------------
-  declare getSurveys: () => Promise<{
-    programmeSurveys: Survey[]
-    teacherSurvey: Survey
-    universitySurvey: Survey
-  }>
 
   isOpen() {
     if (!this.opensAt || !this.closesAt) {
@@ -248,7 +241,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
    * Gets the previous feedback target that has at least one same teacher
    * @returns {Promise<FeedbackTarget?>} its previous feedback target
    */
-  async getPrevious() {
+  async getPrevious(): Promise<FeedbackTarget | null> {
     if (this.userCreated) return null
 
     const courseRealisation = CourseRealisation.findByPk(this.courseRealisationId, { attributes: ['startDate'] })
@@ -260,7 +253,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
         accessStatus: { [Op.in]: ['RESPONSIBLE_TEACHER', 'TEACHER'] },
       },
     })
-    /* eslint-disable-next-line no-use-before-define */
+
     const allPreviousFeedbackTargets = await FeedbackTarget.findAll({
       where: {
         courseUnitId: this.courseUnitId,

@@ -14,10 +14,9 @@
  */
 
 const { Op } = require('sequelize')
-const { getOrganisationAccess, getAdminOrganisationAccess } = require('../services/organisationAccess')
-const { inProduction, DEV_ADMINS } = require('../util/config')
 const { Organisation } = require('./organisation')
 const { User } = require('./user')
+const { populateUserAccess } = require('../services/organisationAccess/organisationAccess')
 
 /**
  * Gets, somewhat confusingly, the organisations user has access to, along the corresponding access objects.
@@ -26,7 +25,7 @@ const { User } = require('./user')
  * @returns {Promise<{ access: object, organisation: Organisation }[]>}
  */
 User.prototype.getOrganisationAccess = async function () {
-  await this.populateAccess()
+  await populateUserAccess(this)
   let { accessibleOrganisations } = this
 
   if (!accessibleOrganisations) {
@@ -49,31 +48,4 @@ User.prototype.getOrganisationAccess = async function () {
     access: this.organisationAccess[org.code],
     organisation: org,
   }))
-}
-
-/**
- * Populates the user's organisationAccess, specialGroup and isAdmin fields.
- */
-User.prototype.populateAccess = async function () {
-  if (this.organisationAccess) return
-
-  // get organisation access and special groups based on IAMs
-  const organisationAccess = await getOrganisationAccess(this)
-
-  this.organisationAccess = organisationAccess
-  this.specialGroup = organisationAccess.specialGroup ?? {}
-  this.isAdmin = this.specialGroup.superAdmin
-  this.isEmployee = this.specialGroup.employee
-
-  // remove specialGroup from organisationAccess. Its confusing to have it there, other keys are organisation codes.
-  delete this.organisationAccess.specialGroup
-
-  // Give admin access to configured users in development
-  if (!inProduction) {
-    this.isAdmin = DEV_ADMINS.includes(this.username)
-  }
-
-  if (this.isAdmin) {
-    this.organisationAccess = await getAdminOrganisationAccess()
-  }
 }

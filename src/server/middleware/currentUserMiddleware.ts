@@ -7,11 +7,12 @@ import { User } from '../models'
 import { logger } from '../util/logger'
 import { getUserByUsername } from '../services/users'
 import { getUserIams } from '../util/jami'
+import { populateUserAccess } from '../services/organisationAccess/organisationAccess'
 
 const getLoggedInAsUser = async (loggedInAsUserId: string) => {
   const loggedInAsUser = await User.findByPk(loggedInAsUserId)
   loggedInAsUser.iamGroups = await getUserIams(loggedInAsUserId)
-  await loggedInAsUser.populateAccess()
+  await populateUserAccess(loggedInAsUser)
 
   return loggedInAsUser
 }
@@ -67,7 +68,7 @@ export const currentUserMiddleware = async (req: UnauthenticatedRequest, _res: R
   const user = await getUserByUsername(username)
 
   user.iamGroups = req.iamGroups
-  await user.populateAccess()
+  await populateUserAccess(user)
 
   const authenticatedReq: AuthenticatedRequest = Object.assign(req, {
     // req and authenticatedReq are now the same object but TS only trusts that authenticatedReq is acually AuthenticatedRequest
