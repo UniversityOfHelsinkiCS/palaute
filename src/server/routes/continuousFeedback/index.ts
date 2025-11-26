@@ -1,1 +1,3 @@
-module.exports = require('./continuousFeedbackController')
+import continuousFeedbackController from './continuousFeedbackController'
+
+export { continuousFeedbackController }

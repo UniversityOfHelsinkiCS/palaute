@@ -3,7 +3,7 @@ import { NextFunction, Request, Response } from 'express'
 import { ApplicationError } from '../util/customErrors'
 import { logger } from '../util/logger'
 
-export const errorHandler = (error: Error, req: Request, res: Response, next: NextFunction) => {
+export const errorMiddleware = (error: Error, req: Request, res: Response, next: NextFunction) => {
   logger.error(`${error.message} ${error.name} ${error.stack}`)
 
   Sentry.captureException(error)

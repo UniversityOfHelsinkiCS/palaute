@@ -3,4 +3,4 @@ import headersMiddleware from 'unfuck-utf8-headers-middleware'
 
 const headers = ['uid']
 
-export default headersMiddleware(headers)
+export const shibbolethCharsetMiddleware = headersMiddleware(headers)

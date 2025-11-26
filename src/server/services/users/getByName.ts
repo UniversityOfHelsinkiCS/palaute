@@ -1,10 +1,10 @@
 import { User } from '../../models'
 import { ApplicationError } from '../../util/customErrors'
 import { NO_USER_USERNAME } from '../../util/config'
-import cache from './cache'
+import { userCache } from './cache'
 
 export const getByUsername = async (username: string) => {
-  let user = await cache.get(username)
+  let user = await userCache.get(username)
 
   if (!user || user.username === NO_USER_USERNAME) {
     user = await User.findOne({
@@ -19,7 +19,7 @@ export const getByUsername = async (username: string) => {
         throw new ApplicationError(`User with username ${username} not found`, 404)
       }
     }
-    cache.set(username, user.toJSON())
+    userCache.set(username, user.toJSON())
   }
 
   return user

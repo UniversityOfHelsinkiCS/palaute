@@ -5,7 +5,7 @@ import { User } from '../../models'
 
 const getKey = (uid: string) => `user:${uid}`
 
-const cache = {
+export const userCache = {
   get: async (uid: string) => {
     const userJson = await redis.get(getKey(uid))
 
@@ -27,5 +27,3 @@ const cache = {
     if (keys?.length > 0) await redis.delete(keys)
   },
 }
-
-export default cache
