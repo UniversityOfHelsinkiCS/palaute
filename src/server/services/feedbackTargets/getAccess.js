@@ -1,3 +1,4 @@
+const { getOrganisationAccessByCourseUnitId } = require('../organisationAccess/organisationAccess')
 const { Access } = require('./Access')
 
 const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
@@ -13,7 +14,7 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
   }
 
   // User not directly associated. Let's check if they have access through organisation
-  const organisationAccess = await user.getOrganisationAccessByCourseUnitId(feedbackTarget.courseUnitId)
+  const organisationAccess = await getOrganisationAccessByCourseUnitId(user, feedbackTarget.courseUnitId)
   if (organisationAccess) {
     if (organisationAccess.admin) {
       accesses.push(Access.ORGANISATION_ADMIN)

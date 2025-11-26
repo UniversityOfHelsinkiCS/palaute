@@ -9,6 +9,7 @@ const { getUserIams } = require('../../util/jami')
 const { getAllOrganisationAccess } = require('../../services/organisationAccess')
 const { getLastRestart } = require('../../util/lastRestart')
 const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 
 const login = async (req, res) => {
   const { user, loginAs } = req
@@ -25,7 +26,7 @@ const login = async (req, res) => {
   const [lastRestart, banners, organisations, preferences] = await Promise.all([
     getLastRestart(),
     Banner.getForUser(user),
-    user.getOrganisationAccess(),
+    getUserOrganisationAccess(user),
     getUserPreferences(user),
     user.isTeacher(),
   ])
@@ -123,7 +124,7 @@ const getUserDetails = async (req, res) => {
   const iamGroups = await getUserIams(id)
 
   user.iamGroups = iamGroups
-  const access = _.sortBy(await user.getOrganisationAccess(), access => access.organisation.code)
+  const access = _.sortBy(await getUserOrganisationAccess(user), access => access.organisation.code)
 
   return res.send({
     ...user.dataValues,

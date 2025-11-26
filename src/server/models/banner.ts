@@ -1,6 +1,7 @@
 import { Model, JSONB, ENUM, DATE, Op } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
 import type { User } from './user'
+import { getUserOrganisationAccess } from '../services/organisationAccess/organisationAccess'
 
 class Banner extends Model {
   declare data: object
@@ -12,7 +13,7 @@ class Banner extends Model {
     let access: string[] = ['STUDENT']
 
     const isTeacher = await user.isTeacher()
-    const hasOrgAccess = (await user.getOrganisationAccess())?.length > 0
+    const hasOrgAccess = (await getUserOrganisationAccess(user))?.length > 0
 
     if (user.isAdmin) {
       access = access.concat(['TEACHER', 'ORG', 'ADMIN'])

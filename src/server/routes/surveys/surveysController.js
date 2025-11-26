@@ -3,9 +3,10 @@ const { ApplicationError } = require('../../util/customErrors')
 const { Survey, Question, Organisation } = require('../../models')
 const { createOrganisationSurveyLog } = require('../../services/auditLog')
 const { getUniversitySurvey: _getUniversitySurvey } = require('../../services/surveys')
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 
 const checkUserWriteAccess = async (survey, user) => {
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
 
   const organisation = organisationAccess.find(({ organisation }) => organisation.code === survey.typeId)
 

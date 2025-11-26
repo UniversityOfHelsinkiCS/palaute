@@ -21,6 +21,7 @@ const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
 const organisationSurveyRouter = require('./organisationSurveyController')
 const { getOrganisationData: getOrganisationDataFromJami } = require('../../util/jami')
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 
 const getUpdatedCourseCodes = async (updatedCourseCodes, organisation) => {
   const organisationCourseCodes = await organisation.getCourseCodes()
@@ -35,7 +36,7 @@ const getOrganisations = async (req, res) => {
     return res.send([])
   }
 
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
 
   const organisations = organisationAccess.map(({ organisation, access }) => ({
     ...organisation.toJSON(),
@@ -177,7 +178,7 @@ const getOpenQuestionsByOrganisation = async (req, res) => {
   const { user } = req
   const { code } = req.params
 
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
 
   const access = organisationAccess.filter(org => org.organisation.code === code)
 
@@ -194,7 +195,7 @@ const findFeedbackTargets = async (req, res) => {
   const { user, query } = req
   const { code } = req.params
 
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
 
   const { search } = query
 

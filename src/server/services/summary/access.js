@@ -1,7 +1,8 @@
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 const { sequelize } = require('../../db/dbConnection')
 
 const getSummaryAccessibleOrganisationIds = async user => {
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
   const accessibleOrganisationIds = organisationAccess.flatMap(access => [
     access.organisation.id,
     access.organisation.parentId,

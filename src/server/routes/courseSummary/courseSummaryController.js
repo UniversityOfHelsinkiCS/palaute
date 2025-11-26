@@ -18,6 +18,7 @@ const {
   exportXLSX,
 } = require('../../services/summary')
 const { startOfStudyYear, endOfStudyYear } = require('../../util/common')
+const { getOrganisationAccessByCourseUnitId } = require('../../services/organisationAccess/organisationAccess')
 
 const getAccessibleCourseRealisationIds = async user => {
   const rows = await sequelize.query(
@@ -146,7 +147,7 @@ const getByCourseUnit = async (req, res) => {
   }
 
   const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
-    user.dataValues.isAdmin || (await user.getOrganisationAccessByCourseUnitId(courseUnits[0].id))?.read,
+    user.dataValues.isAdmin || (await getOrganisationAccessByCourseUnitId(user, courseUnits[0].id))?.read,
     getAccessibleCourseRealisationIds(user),
     getSummaryQuestions(acualCode),
   ])

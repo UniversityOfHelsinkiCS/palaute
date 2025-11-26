@@ -11,9 +11,10 @@ const {
 const { sumSummaries, getScopedSummary } = require('./utils')
 const { getAccessibleCourseRealisationIds } = require('./access')
 const { ApplicationError } = require('../../util/customErrors')
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 
 const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDate, allTime }) => {
-  const orgAccess = await user.getOrganisationAccess()
+  const orgAccess = await getUserOrganisationAccess(user)
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
   const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
 

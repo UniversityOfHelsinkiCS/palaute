@@ -1,4 +1,4 @@
-const { Op } = require('sequelize')
+const { Op, QueryTypes } = require('sequelize')
 const _ = require('lodash')
 
 const { User, Organisation } = require('../../models')
@@ -6,6 +6,7 @@ const { User, Organisation } = require('../../models')
 const { normalizeOrganisationCode } = require('../../util/common')
 const { getAllUserAccess, getAccessToAll, getUserIamAccess } = require('../../util/jami')
 const { inProduction, DEV_ADMINS } = require('../../util/config')
+const { sequelize } = require('../../db/dbConnection')
 
 const getAdminOrganisationAccess = () => getAccessToAll()
 
@@ -114,8 +115,92 @@ const populateUserAccess = async user => {
   }
 }
 
+const getUserOrganisationAccess = async user => {
+  await populateUserAccess(user)
+  let { accessibleOrganisations } = user
+
+  if (!accessibleOrganisations) {
+    accessibleOrganisations = await Organisation.findAll({
+      attributes: ['id', 'name', 'code', 'parentId'],
+      where: {
+        code: {
+          [Op.in]: Object.keys(user.organisationAccess),
+        },
+      },
+      include: {
+        model: User,
+        as: 'users',
+        attributes: ['id', 'firstName', 'lastName', 'email'],
+      },
+    })
+  }
+
+  return accessibleOrganisations.map(org => ({
+    access: user.organisationAccess[org.code],
+    organisation: org,
+  }))
+}
+
+const getOrganisationAccessByCourseUnitId = async (user, courseUnitId) => {
+  const organisations = await getUserOrganisationAccess(user)
+
+  if (organisations.length === 0) {
+    return null
+  }
+
+  const rows = await sequelize.query(
+    `
+      SELECT DISTINCT
+        course_units_organisations.organisation_id AS cu_org_id,
+        course_realisations_organisations.organisation_id AS cur_org_id
+      FROM
+        course_units
+      LEFT JOIN
+        course_units_organisations ON course_units_organisations.course_unit_id = course_units.id
+      LEFT JOIN
+        feedback_targets ON feedback_targets.course_unit_id = course_units.id
+      LEFT JOIN
+        course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
+      LEFT JOIN
+        course_realisations_organisations ON course_realisations_organisations.course_realisation_id = course_realisations.id
+      WHERE
+        course_units.id = :courseUnitId;
+      `,
+    {
+      type: QueryTypes.SELECT,
+      replacements: {
+        courseUnitId,
+      },
+    }
+  )
+
+  const organisationIds = rows.flatMap(row => Object.values(row))
+
+  function getPriority(org) {
+    let weight = 0
+    if (org.access.admin) {
+      weight += 100
+    }
+    if (org.access.write) {
+      weight += 10
+    }
+    if (org.access.read) {
+      weight += 1
+    }
+    return weight
+  }
+  const organisationAccess = organisations
+    .filter(({ organisation }) => organisationIds.includes(organisation.id))
+    ?.sort((a, b) => getPriority(a) - getPriority(b)) // read, write, admin. Reduce on next line practically takes the last value
+    .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
+
+  return organisationAccess ?? null
+}
+
 module.exports = {
   populateUserAccess,
+  getUserOrganisationAccess,
+  getOrganisationAccessByCourseUnitId,
   getAdminOrganisationAccess,
   getAllOrganisationAccess,
 }

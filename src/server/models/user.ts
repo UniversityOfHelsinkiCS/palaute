@@ -4,7 +4,6 @@ import {
   Op,
   BOOLEAN,
   DATE,
-  QueryTypes,
   VIRTUAL,
   InferAttributes,
   InferCreationAttributes,
@@ -12,7 +11,6 @@ import {
 } from 'sequelize'
 import _ from 'lodash'
 
-import type { OrganisationWithAccess } from '@common/types/organisation'
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 import type { FeedbackTarget } from './feedbackTarget'
@@ -45,11 +43,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare mockedBy?: User
   declare iamGroups?: string[]
 
-  // --- Helper methods ---
-  // ----------------------
-  declare getOrganisationAccess: () => Promise<OrganisationWithAccess[]>
-  declare populateAccess: () => Promise<void>
-
   async isTeacher() {
     const teachings = await UserFeedbackTarget.findAll({
       where: {
@@ -59,62 +52,6 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     })
 
     return teachings?.length > 0
-  }
-
-  async getOrganisationAccessByCourseUnitId(courseUnitId: string) {
-    const organisations = await this.getOrganisationAccess()
-
-    if (organisations.length === 0) {
-      return null
-    }
-
-    const rows = await sequelize.query(
-      `
-      SELECT DISTINCT
-        course_units_organisations.organisation_id AS cu_org_id,
-        course_realisations_organisations.organisation_id AS cur_org_id
-      FROM
-        course_units
-      LEFT JOIN
-        course_units_organisations ON course_units_organisations.course_unit_id = course_units.id
-      LEFT JOIN
-        feedback_targets ON feedback_targets.course_unit_id = course_units.id
-      LEFT JOIN
-        course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-      LEFT JOIN
-        course_realisations_organisations ON course_realisations_organisations.course_realisation_id = course_realisations.id
-      WHERE
-        course_units.id = :courseUnitId;
-      `,
-      {
-        type: QueryTypes.SELECT,
-        replacements: {
-          courseUnitId,
-        },
-      }
-    )
-
-    const organisationIds = rows.flatMap(row => Object.values(row))
-
-    function getPriority(org: any) {
-      let weight = 0
-      if (org.access.admin) {
-        weight += 100
-      }
-      if (org.access.write) {
-        weight += 10
-      }
-      if (org.access.read) {
-        weight += 1
-      }
-      return weight
-    }
-    const organisationAccess = organisations
-      .filter(({ organisation }) => organisationIds.includes(organisation.id))
-      ?.sort((a, b) => getPriority(a) - getPriority(b)) // read, write, admin. Reduce on next line practically takes the last value
-      .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})
-
-    return organisationAccess ?? null
   }
 
   /**

@@ -6,12 +6,13 @@ import { CourseUnitsTag } from '../../models/courseUnitsTag'
 import { ApplicationError } from '../../util/customErrors'
 import { sequelize } from '../../db/dbConnection'
 import { TAGS_ENABLED } from '../../util/config'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 
 /**
  * Check whether user has access to organisation with given code
  */
 const checkAccess = async (user: any, code: string, level = 'read'): Promise<void> => {
-  const orgAccess = await user.getOrganisationAccess()
+  const orgAccess = await getUserOrganisationAccess(user)
   const relevantOrg = orgAccess.find((oac: any) => oac.organisation.code === code)
   if (!relevantOrg || !relevantOrg.access[level]) {
     throw new ApplicationError('You dont have the required rights', 403)

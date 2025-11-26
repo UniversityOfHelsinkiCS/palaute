@@ -1,8 +1,9 @@
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 const { Organisation } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 
 const getAccessAndOrganisation = async (user, code, requiredAccess) => {
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
 
   const { access } = organisationAccess.find(({ organisation }) => organisation.code === code) ?? {}
 

@@ -24,6 +24,7 @@ const { i18n } = require('../../util/i18n')
 const { getTeacherSummary } = require('./getTeacherSummary')
 const { getAccessibleCourseRealisationIds } = require('./access')
 const { ApplicationError } = require('../../util/customErrors')
+const { getUserOrganisationAccess } = require('../organisationAccess/organisationAccess')
 
 const getOrganisations = async (scopedSummary, organisationIds) => {
   const organisations = await Organisation.findAll({
@@ -120,7 +121,7 @@ const getCourseRealisations = async (scopedSummary, courseRealisationIds) => {
 }
 
 const getAccessibleCourseRealisations = async (user, courseRealisations) => {
-  const orgAccess = await user.getOrganisationAccess()
+  const orgAccess = await getUserOrganisationAccess(user)
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
 
   const accessibleCourseRealisations = courseRealisations.filter(cur => {

@@ -3,7 +3,7 @@ import { getOrCreateTeacherSurvey } from './teacherSurvey'
 import { getUniversitySurvey } from './universitySurvey'
 import { FeedbackTarget } from '../../models'
 
-export const getFeedbackTargetSurveys = async function (feedbackTarget: FeedbackTarget) {
+export const getFeedbackTargetSurveys = async (feedbackTarget: FeedbackTarget) => {
   const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([
     getProgrammeSurveysByCourseUnit(feedbackTarget.courseUnitId),
     getOrCreateTeacherSurvey(feedbackTarget),

@@ -23,6 +23,7 @@ const { createSummaryForFeedbackTarget } = require('../../services/summary/creat
 const {
   updateSummaryOnOrganisationSurveyEdit,
 } = require('../../services/summary/updateSummaryOnOrganisationSurveyEdit')
+const { getUserOrganisationAccess } = require('../services/organisationAccess/organisationAccess')
 
 const getOrganisationSurvey = async (req, res) => {
   const { user } = req
@@ -178,7 +179,7 @@ const removeOrganisationSurvey = async (req, res) => {
 
 const getOrganisationSurveysForUser = async (req, res) => {
   const { user } = req
-  const organisationAccess = await user.getOrganisationAccess()
+  const organisationAccess = await getUserOrganisationAccess(user)
   const organisationSurveys = await Promise.all(
     organisationAccess
       .filter(organisationAccess => organisationAccess.access.admin)
