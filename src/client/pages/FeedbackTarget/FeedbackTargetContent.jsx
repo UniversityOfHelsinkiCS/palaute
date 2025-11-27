@@ -44,7 +44,7 @@ import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import Title from '../../components/common/Title'
-import { TabGroup, TabGroupsContainer, TabGroupTab } from '../../components/common/TabGroup'
+import { TabGroupsContainer, TabGroupTab } from '../../components/common/TabGroup'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
@@ -127,85 +127,69 @@ const FeedbackTargetContent = () => {
         }}
       >
         <TabGroupsContainer>
-          <TabGroup data-cy={`${dataCyPrefix}feedback-target-feedback-tab-group`} title={t('common:survey')} hideTitle>
-            {feedbackGiven && isOpen ? (
-              <TabGroupTab
-                data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
-                label={t('feedbackTargetView:editFeedbackTab')}
-                to={`${pathnameBase}/feedback`}
-                icon={<EditOutlined />}
-              />
-            ) : (
-              <TabGroupTab
-                data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
-                label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
-                to={`${pathnameBase}/feedback`}
-                icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
-              />
-            )}
-            {showSettingsTab && (
-              <TabGroupTab
-                data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
-                label={t('feedbackTargetView:surveyQuestionsTab')}
-                to={`${pathnameBase}/edit`}
-                disabled={!isAdmin && isOpenOrClosed}
-                disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
-                icon={<EditOutlined />}
-              />
-            )}
-            {showEditFeedbackResponseTab && (
-              <TabGroupTab
-                data-cy={`${dataCyPrefix}feedback-target-feedback-response-tab`}
-                label={
-                  !feedbackResponseEmailSent
-                    ? t('feedbackTargetView:giveFeedbackResponseTab')
-                    : t('feedbackTargetView:editFeedbackResponseTab')
-                }
-                to={`${pathnameBase}/edit-feedback-response`}
-                icon={<EditOutlined />}
-              />
-            )}
-            {showLinksTab && (
-              <TabGroupTab
-                data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
-                label={t('feedbackTargetView:shareTab')}
-                to={`${pathnameBase}/share`}
-                icon={<ShareOutlined />}
-              />
-            )}
-          </TabGroup>
-
-          {(showContinuousFeedbackTab || showInterimFeedbackTab) && (
-            <TabGroup
-              data-cy={`${dataCyPrefix}feedback-target-additional-tab-group`}
-              title={t('common:additional')}
-              hideTitle
-            >
-              {showContinuousFeedbackTab && (
-                <TabGroupTab
-                  data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
-                  label={t('feedbackTargetView:continuousFeedbackTab')}
-                  to={`${pathnameBase}/continuous-feedback`}
-                  icon={<ReviewsOutlined />}
-                />
-              )}
-              {showInterimFeedbackTab && (
-                <TabGroupTab
-                  data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
-                  label={t('feedbackTargetView:interimFeedbackTab')}
-                  to={`${pathnameBase}/interim-feedback`}
-                  icon={<ForumOutlined />}
-                />
-              )}
-            </TabGroup>
+          {feedbackGiven && isOpen ? (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
+              label={t('feedbackTargetView:editFeedbackTab')}
+              to={`${pathnameBase}/feedback`}
+              icon={<EditOutlined />}
+            />
+          ) : (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
+              label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
+              to={`${pathnameBase}/feedback`}
+              icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
+            />
           )}
-
+          {showSettingsTab && (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
+              label={t('feedbackTargetView:surveyQuestionsTab')}
+              to={`${pathnameBase}/edit`}
+              disabled={!isAdmin && isOpenOrClosed}
+              disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
+              icon={<EditOutlined />}
+            />
+          )}
+          {showEditFeedbackResponseTab && (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-feedback-response-tab`}
+              label={
+                !feedbackResponseEmailSent
+                  ? t('feedbackTargetView:giveFeedbackResponseTab')
+                  : t('feedbackTargetView:editFeedbackResponseTab')
+              }
+              to={`${pathnameBase}/edit-feedback-response`}
+              icon={<EditOutlined />}
+            />
+          )}
+          {showLinksTab && (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
+              label={t('feedbackTargetView:shareTab')}
+              to={`${pathnameBase}/share`}
+              icon={<ShareOutlined />}
+            />
+          )}
+          {showContinuousFeedbackTab && (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
+              label={t('feedbackTargetView:continuousFeedbackTab')}
+              to={`${pathnameBase}/continuous-feedback`}
+              icon={<ReviewsOutlined />}
+            />
+          )}
+          {showInterimFeedbackTab && (
+            <TabGroupTab
+              data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
+              label={t('feedbackTargetView:interimFeedbackTab')}
+              to={`${pathnameBase}/interim-feedback`}
+              icon={<ForumOutlined />}
+            />
+          )}
           {showResultsSection && (
-            <TabGroup
-              data-cy={`${dataCyPrefix}feedback-target-result-tab-group`}
-              title={t('feedbackTargetView:results')}
-              hideTitle
-            >
+            <>
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-results-tab`}
                 label={t('feedbackTargetView:feedbacksTab')}
@@ -220,11 +204,10 @@ const FeedbackTargetContent = () => {
                   icon={<PeopleOutlined />}
                 />
               )}
-            </TabGroup>
+            </>
           )}
-
           {isAdmin && (
-            <TabGroup data-cy={`${dataCyPrefix}feedback-target-admin-tab-group`} title="Admin" hideTitle>
+            <>
               <TabGroupTab
                 data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
                 label="Togen"
@@ -237,7 +220,7 @@ const FeedbackTargetContent = () => {
                 to={`${pathnameBase}/logs`}
                 icon={<ListOutlined />}
               />
-            </TabGroup>
+            </>
           )}
         </TabGroupsContainer>
       </Box>
