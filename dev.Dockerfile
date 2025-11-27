@@ -8,7 +8,7 @@ WORKDIR /usr/src/app
 # Setup
 COPY package* ./
 RUN npm config set cache /tmp --global
-RUN npm i
+RUN npm ci
 
 EXPOSE $EXPOSE_PORT
 
