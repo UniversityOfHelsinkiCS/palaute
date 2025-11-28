@@ -1,18 +1,21 @@
-const { Op } = require('sequelize')
-const _ = require('lodash')
-const { Router } = require('express')
+import { InferAttributes, Op, WhereOptions } from 'sequelize'
+import _ from 'lodash'
+import { Response, Router } from 'express'
 
-const { ApplicationError } = require('../../util/customErrors')
-const { User } = require('../../models')
-const cache = require('../../services/users/cache')
-const { getUserIams } = require('../../util/jami')
-const { getAllOrganisationAccess } = require('../../services/organisationAccess')
-const { getLastRestart } = require('../../util/lastRestart')
-const { getUserPreferences, updateFeedbackCorrespondent } = require('../../services/users')
-const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
-const { getBannersForUser } = require('../../services/banners/getForUser')
+import { ApplicationError } from '../../util/customErrors'
+import { User } from '../../models'
+import { AuthenticatedRequest } from '../../types'
+import { userCache } from '../../services/users/cache'
+import { getUserIams } from '../../util/jami'
+import { getAllOrganisationAccess } from '../../services/organisationAccess'
+import { getLastRestart } from '../../util/lastRestart'
+import { getUserPreferences, updateFeedbackCorrespondent } from '../../services/users'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { getBannersForUser } from '../../services/banners/getForUser'
 
-const login = async (req, res) => {
+const router = Router()
+
+router.get('/login', async (req: AuthenticatedRequest, res: Response) => {
   const { user, loginAs } = req
   const iamGroups = req.noad ? [] : (req.user.iamGroups ?? [])
 
@@ -32,7 +35,7 @@ const login = async (req, res) => {
     user.isTeacher(),
   ])
 
-  return res.send({
+  res.send({
     ...user.toJSON(),
     iamGroups,
     lastRestart,
@@ -40,25 +43,26 @@ const login = async (req, res) => {
     organisations,
     preferences,
   })
-}
+})
 
 // This is currently used in OrganisationSurveyEditor and FeedbackCorrespondent.
 // In both cases users should be limited to HY employees,
 // so only the users that belong to 'hy-employees' IAM group are returned.
 // If getUser is laer needed in some new feature, this filtering can be made conditional.
-const getUser = async (req, res) => {
-  const {
-    query: { user },
-  } = req
+router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
+  const userQuery = req.query.user
+  if (!userQuery || typeof userQuery !== 'string' || userQuery.length < 3) {
+    throw new ApplicationError('Query parameter "user" must be at least 3 characters long', 400)
+  }
 
   let params = {}
-  let where = {}
+  let where: WhereOptions<InferAttributes<User>> = {}
 
-  const isFullName = user.split(' ').length === 2
-  const isEmail = user.includes('.') || user.includes('@')
+  const isFullName = userQuery.split(' ').length === 2
+  const isEmail = userQuery.includes('.') || userQuery.includes('@')
 
   if (isFullName) {
-    const [firstName, lastName] = user.split(' ')
+    const [firstName, lastName] = userQuery.split(' ')
     params = { firstName, lastName }
     where = {
       firstName: {
@@ -72,21 +76,23 @@ const getUser = async (req, res) => {
       },
     }
   } else if (isEmail) {
-    params = { email: user }
+    params = { email: userQuery }
 
     where = {
-      email: { [Op.iLike]: `${user}%` },
+      email: { [Op.iLike]: `${userQuery}%` },
     }
   } else {
-    where[Op.or] = {
-      firstName: {
-        [Op.iLike]: `%${user}%`,
-      },
-      lastName: {
-        [Op.iLike]: `%${user}%`,
-      },
-      email: {
-        [Op.ne]: null,
+    where = {
+      [Op.or]: {
+        firstName: {
+          [Op.iLike]: `%${userQuery}%`,
+        },
+        lastName: {
+          [Op.iLike]: `%${userQuery}%`,
+        },
+        email: {
+          [Op.ne]: null,
+        },
       },
     }
   }
@@ -109,13 +115,13 @@ const getUser = async (req, res) => {
     }
   }
 
-  return res.send({
+  res.send({
     params,
     persons: employees,
   })
-}
+})
 
-const getUserDetails = async (req, res) => {
+router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   if (id !== req.user.id && !req.user.isAdmin && !req.user.mockedBy?.isAdmin) {
     throw new ApplicationError('Non-admin can only view own user details', 403)
@@ -125,43 +131,35 @@ const getUserDetails = async (req, res) => {
   const iamGroups = await getUserIams(id)
 
   user.iamGroups = iamGroups
-  const access = _.sortBy(await getUserOrganisationAccess(user), access => access.organisation.code)
+  const access = _.sortBy(await getUserOrganisationAccess(user), oa => oa.organisation.code)
 
-  return res.send({
+  res.send({
     ...user.dataValues,
     iamGroups,
     access,
   })
-}
+})
 
-const getAllUserAccess = async (req, res) => {
+router.get('/users/access', async (req: AuthenticatedRequest, res: Response) => {
   if (!req.user.isAdmin) throw new ApplicationError('Forbidden', 403)
 
   const usersWithAccess = await getAllOrganisationAccess()
 
-  return res.send(usersWithAccess)
-}
+  res.send(usersWithAccess)
+})
 
-const logout = async (req, res) => {
+router.get('/logout', async (req: AuthenticatedRequest, res: Response) => {
   if (req.headers.uid) {
-    cache.invalidate(req.headers.uid)
+    userCache.invalidate(req.headers.uid as string)
   }
 
   const {
     headers: { shib_logout_url: shibLogoutUrl },
   } = req
 
-  return res.send({
+  res.send({
     url: shibLogoutUrl,
   })
-}
+})
 
-const router = Router()
-
-router.get('/login', login)
-router.get('/logout', logout)
-router.get('/users', getUser)
-router.get('/users/access', getAllUserAccess)
-router.get('/users/:id', getUserDetails)
-
-module.exports = router
+export { router }
