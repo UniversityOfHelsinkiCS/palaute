@@ -1,5 +1,5 @@
-import Feedback, { FeedbackData } from 'models/feedback'
-import { FeedbackTarget, UserFeedbackTarget } from '../models'
+import type { FeedbackData } from '../models/feedback'
+import { FeedbackTarget, UserFeedbackTarget, Feedback } from '../models'
 import { TEST_COURSE_REALISATION_ID } from './testIds'
 
 export const seedFeedbacks = async (feedbackDatas: FeedbackData[]) => {

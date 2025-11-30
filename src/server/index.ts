@@ -26,7 +26,7 @@ app.use('/api', (_: Request, res: Response) => {
 
 if (inDevelopment || inE2EMode) {
   // eslint-disable-next-line global-require
-  const testRouter = require('./test')
+  const { testRouter } = require('./test/index')
   app.use('/test', testRouter)
 }
 

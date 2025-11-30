@@ -1,6 +1,6 @@
-const _ = require('lodash')
-const { startOfDay, subDays } = require('date-fns')
-const {
+import _ from 'lodash'
+import { startOfDay, subDays } from 'date-fns'
+import {
   FeedbackTarget,
   User,
   Organisation,
@@ -12,22 +12,22 @@ const {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
   FeedbackTargetLog,
-} = require('../models')
-const { UNIVERSITY_ROOT_ID } = require('../util/config')
-const {
+} from '../models'
+import { UNIVERSITY_ROOT_ID } from '../util/config'
+import {
   TEST_ORGANISATION_ID,
   TEST_ORGANISATION_CODE,
   TEST_COURSE_UNIT_ID,
   TEST_COURSE_CODE,
   TEST_COURSE_REALISATION_ID,
-} = require('./testIds')
-const { createTestObject } = require('./utils')
-const { userCache } = require('../services/users/cache')
-const feedbackTargetCache = require('../services/feedbackTargets/feedbackTargetCache')
+} from './testIds'
+import { createTestObject } from './utils'
+import { userCache } from '../services/users/cache'
+import feedbackTargetCache from '../services/feedbackTargets/feedbackTargetCache'
 
 const CURRENT_YEAR = new Date().getFullYear()
 
-const seedUsers = async users => {
+export const seedUsers = async (users: { id: string }[]) => {
   for (const user of users) {
     await User.findOrCreate({
       where: {
@@ -38,7 +38,7 @@ const seedUsers = async users => {
   }
 }
 
-const seedOrganisationCorrespondent = async user => {
+export const seedOrganisationCorrespondent = async (user: { id: string }) => {
   await OrganisationFeedbackCorrespondent.create({
     userId: user.id,
     organisationId: TEST_ORGANISATION_ID,
@@ -84,9 +84,9 @@ const seedUniversity = async () => {
           required: false,
           data: {
             label: {
-              fi: `Avoin testikysymys`,
-              en: `Open test question`,
-              sv: `Öppen testfråga`,
+              fi: 'Avoin testikysymys',
+              en: 'Open test question',
+              sv: 'Öppen testfråga',
             },
           },
         }).then(q => q.id)
@@ -105,7 +105,7 @@ const seedUniversity = async () => {
   )
 }
 
-const seedDb = async () => {
+export const seedDb = async () => {
   // Reset caches
   await userCache.invalidateAll()
   await feedbackTargetCache.invalidateAll()
@@ -165,10 +165,4 @@ const seedDb = async () => {
     organisationId: TEST_ORGANISATION_ID,
     type: 'PRIMARY',
   })
-}
-
-module.exports = {
-  seedDb,
-  seedUsers,
-  seedOrganisationCorrespondent,
 }

@@ -1,23 +1,25 @@
-const Router = require('express')
-const _ = require('lodash')
-const morgan = require('morgan')
+import Router, { Response } from 'express'
+import _ from 'lodash'
+import morgan from 'morgan'
 
-const { FeedbackTarget } = require('../models')
+import { FeedbackTarget } from '../models'
 
-const { ApplicationError } = require('../util/customErrors')
-const { initTestSummary } = require('./seedSummary')
-const { seedFeedbackTargetsForTeacher } = require('./seedFeedbackTargets')
-const { seedDb, seedUsers, seedOrganisationCorrespondent } = require('./seed')
-const { TEST_COURSE_REALISATION_ID } = require('./testIds')
-const { inProduction } = require('../util/config')
-const { getUniversitySurvey } = require('../services/surveys')
+import { ApplicationError } from '../util/customErrors'
+import { initTestSummary } from './seedSummary'
+import { seedFeedbackTargetsForTeacher } from './seedFeedbackTargets'
+import { seedDb, seedUsers, seedOrganisationCorrespondent } from './seed'
+import { TEST_COURSE_REALISATION_ID } from './testIds'
+import { inProduction } from '../util/config'
+import { getUniversitySurvey } from '../services/surveys'
+import { AuthenticatedRequest } from '../types'
+import { seedFeedbacks } from './seedFeedbacks'
 
-const initSummary = async (req, res) => {
+const initSummary = async (req: AuthenticatedRequest, res: Response) => {
   await initTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
-  return res.send(200)
+  res.send(200)
 }
 
-const userHeadersToUser = userHeaders => ({
+const userHeadersToUser = (userHeaders: any) => ({
   id: userHeaders.hyPersonSisuId,
   username: userHeaders.uid,
   firstName: userHeaders.givenname,
@@ -26,19 +28,19 @@ const userHeadersToUser = userHeaders => ({
   studentNumber: userHeaders.studentNumber,
 })
 
-const seedTestUsers2 = async (req, res) => {
+const seedTestUsers2 = async (req: AuthenticatedRequest, res: Response) => {
   const users = req.body.map(userHeadersToUser)
   await seedUsers(users)
-  return res.send(201)
+  res.send(201)
 }
 
-const seedOrganisationCorrespondentHandler = async (req, res) => {
+const seedOrganisationCorrespondentHandler = async (req: AuthenticatedRequest, res: Response) => {
   const user = userHeadersToUser(req.body.user)
   await seedOrganisationCorrespondent(user)
-  return res.send(200)
+  res.send(200)
 }
 
-const seedFeedbackTargets = async (req, res) => {
+const seedFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
   const { teacher, student, opensAt, closesAt, extraStudents } = req.body
   const fbts = await seedFeedbackTargetsForTeacher({
     teacher: userHeadersToUser(teacher),
@@ -47,39 +49,39 @@ const seedFeedbackTargets = async (req, res) => {
     closesAt,
     extraStudents,
   })
-  return res.send(fbts)
+  res.send(fbts)
 }
 
-const resetDb = async (req, res) => {
+const resetDb = async (req: AuthenticatedRequest, res: Response) => {
   await seedDb()
-  return res.send(204)
+  res.send(204)
 }
 
-const seedFeedbacks = async (req, res) => {
+const seedFeedbacksHandler = async (req: AuthenticatedRequest, res: Response) => {
   const { feedbackDatas } = req.body
   await seedFeedbacks(feedbackDatas)
-  return res.send(201)
+  res.send(201)
 }
 
-const getTestFbtId = async (req, res) => {
+const getTestFbtId = async (req: AuthenticatedRequest, res: Response) => {
   const fbt = await FeedbackTarget.findOne({
     where: {
       courseRealisationId: TEST_COURSE_REALISATION_ID,
     },
   })
 
-  return res.send({ id: fbt.id })
+  res.send({ id: fbt.id })
 }
 
-const getUniversityQuestions = async (req, res) => {
+const getUniversityQuestions = async (req: AuthenticatedRequest, res: Response) => {
   const srv = await getUniversitySurvey()
-  return res.send(srv.questions)
+  res.send(srv.questions)
 }
 
-const router = Router()
+export const router = Router()
 
 // A double safeguard against running test routes in production. This should never happen.
-router.use((_, __, next) => {
+router.use((__, ___, next) => {
   if (inProduction) {
     throw new ApplicationError('Test router called in production.', 500)
   }
@@ -92,11 +94,9 @@ router.use(morgan('dev'))
 router.post('/init-summary', initSummary)
 router.post('/seed-users', seedTestUsers2)
 router.post('/seed-feedback-targets', seedFeedbackTargets)
-router.post('/seed-feedbacks', seedFeedbacks)
+router.post('/seed-feedbacks', seedFeedbacksHandler)
 router.post('/seed-organisation-correspondent', seedOrganisationCorrespondentHandler)
 router.post('/reset-db', resetDb)
 
 router.get('/test-fbt-id', getTestFbtId)
 router.get('/university-questions', getUniversityQuestions)
-
-module.exports = router

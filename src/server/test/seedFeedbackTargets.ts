@@ -1,8 +1,20 @@
-const { FeedbackTarget, UserFeedbackTarget, User } = require('../models')
-const { createTestObject } = require('./utils')
-const { TEST_COURSE_UNIT_ID, TEST_COURSE_REALISATION_ID } = require('./testIds')
+import { FeedbackTarget, UserFeedbackTarget, User } from '../models'
+import { createTestObject } from './utils'
+import { TEST_COURSE_UNIT_ID, TEST_COURSE_REALISATION_ID } from './testIds'
 
-const seedFeedbackTargetsForTeacher = async ({ teacher, student, opensAt, closesAt, extraStudents = 0 }) => {
+export const seedFeedbackTargetsForTeacher = async ({
+  teacher,
+  student,
+  opensAt,
+  closesAt,
+  extraStudents = 0,
+}: {
+  teacher: any
+  student: any
+  opensAt: string
+  closesAt: string
+  extraStudents?: number
+}) => {
   const fbt = await createTestObject(FeedbackTarget, {
     name: {
       fi: 'Palautekohde',
@@ -45,8 +57,4 @@ const seedFeedbackTargetsForTeacher = async ({ teacher, student, opensAt, closes
   }
 
   return [fbt]
-}
-
-module.exports = {
-  seedFeedbackTargetsForTeacher,
 }

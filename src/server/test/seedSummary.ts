@@ -1,5 +1,5 @@
-const { startOfDay, subDays } = require('date-fns')
-const {
+import { startOfDay, subDays } from 'date-fns'
+import {
   Organisation,
   CourseUnit,
   CourseRealisation,
@@ -10,10 +10,10 @@ const {
   OrganisationFeedbackCorrespondent,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
-} = require('../models')
-const { getUniversitySurvey } = require('../services/surveys')
-const { createTestObject } = require('./utils')
-const { buildSummaries } = require('../services/summary/buildSummaries')
+} from '../models'
+import { getUniversitySurvey } from '../services/surveys'
+import { createTestObject } from './utils'
+import { buildSummaries } from '../services/summary/buildSummaries'
 
 const CURRENT_YEAR = new Date().getFullYear()
 
@@ -35,7 +35,7 @@ const getTestData = async () => {
   const universitySurvey = await getUniversitySurvey()
   const TEST_FEEDBACKS = TEST_STUDENTS.map(({ id }) => ({
     userId: id,
-    data: universitySurvey.questions.map(({ id }) => ({ questionId: id, data: '5' })),
+    data: universitySurvey.questions.map(({ id: questionId }) => ({ questionId, data: '5' })),
   }))
 
   return {
@@ -48,7 +48,7 @@ const getTestData = async () => {
   }
 }
 
-const initTestSummary = async ({ user }) => {
+export const initTestSummary = async ({ user }: { user: any }) => {
   const testData = await getTestData()
 
   await createTestObject(User, { id: user.hyPersonSisuId, username: user.uid })
@@ -139,8 +139,4 @@ const initTestSummary = async ({ user }) => {
   }
 
   await buildSummaries()
-}
-
-module.exports = {
-  initTestSummary,
 }

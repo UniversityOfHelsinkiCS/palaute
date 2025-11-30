@@ -1,0 +1,5 @@
+export const TEST_COURSE_UNIT_ID = 'norppa-test-course-unit-id-2'
+export const TEST_COURSE_CODE = 'TEST_COURSE'
+export const TEST_COURSE_REALISATION_ID = 'norppa-test-course-unit-realisation-id-2'
+export const TEST_ORGANISATION_ID = 'norppa-test-organisation-id-2'
+export const TEST_ORGANISATION_CODE = 'TEST_ORG'
