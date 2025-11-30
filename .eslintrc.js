@@ -111,6 +111,8 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/lines-between-class-members': 'off',
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': 'off',
       },
     },
   ],

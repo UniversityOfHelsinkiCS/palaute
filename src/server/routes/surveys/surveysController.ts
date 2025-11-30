@@ -1,19 +1,20 @@
-const { Router } = require('express')
-const { ApplicationError } = require('../../util/customErrors')
-const { Survey, Question, Organisation } = require('../../models')
-const { createOrganisationSurveyLog } = require('../../services/auditLog')
-const { getUniversitySurvey: _getUniversitySurvey } = require('../../services/surveys')
-const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
+import { Response, Router } from 'express'
+import { ApplicationError } from '../../util/customErrors'
+import { Survey, Question, Organisation, User } from '../../models'
+import { createOrganisationSurveyLog } from '../../services/auditLog'
+import { getUniversitySurvey as _getUniversitySurvey } from '../../services/surveys'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { AuthenticatedRequest } from '../../types'
 
-const checkUserWriteAccess = async (survey, user) => {
+const checkUserWriteAccess = async (survey: Survey, user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)
 
-  const organisation = organisationAccess.find(({ organisation }) => organisation.code === survey.typeId)
+  const surveysOrganisation = organisationAccess.find(({ organisation }) => organisation.code === survey.typeId)
 
-  return organisation?.access?.write ?? false
+  return surveysOrganisation?.access?.write ?? false
 }
 
-const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
+const handleListOfUpdatedQuestionsAndReturnIds = async (questions: Question[]) => {
   const updatedQuestionIdsList = []
 
   /* eslint-disable */
@@ -40,21 +41,21 @@ const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   return updatedQuestionIdsList
 }
 
-const update = async (req, res) => {
+const update = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const survey = await Survey.findByPk(Number(req.params.id))
 
-  if (!survey) throw new ApplicationError('Not found', 404)
+  if (!survey) ApplicationError.NotFound('Survey not found')
 
-  if (survey.type === 'feedbackTarget') ApplicationError.Forbidden('Wrong endpoint to update fbt survey', 403)
+  if (survey.type === 'feedbackTarget') ApplicationError.Forbidden('Wrong endpoint to update fbt survey')
 
   const isUniversitySurvey = survey.type === 'university'
 
-  if (isUniversitySurvey && !user.isAdmin) throw new ApplicationError('Forbidden', 403)
+  if (isUniversitySurvey && !user.isAdmin) ApplicationError.Forbidden('Only admins can update university survey')
 
   if (survey.type === 'programme') {
     const writeAccess = await checkUserWriteAccess(survey, user)
-    if (!writeAccess) throw new ApplicationError('Forbidden', 403)
+    if (!writeAccess) ApplicationError.Forbidden('User does not have write access to this survey')
   }
 
   const { questions } = req.body
@@ -71,16 +72,16 @@ const update = async (req, res) => {
   const updatedSurvey = await survey.save()
   await updatedSurvey.populateQuestions()
 
-  return res.send(updatedSurvey)
+  res.send(updatedSurvey)
 }
 
-const getUniversitySurvey = async (req, res) => {
+const getUniversitySurvey = async (req: AuthenticatedRequest, res: Response) => {
   const survey = await _getUniversitySurvey()
 
-  return res.send(survey)
+  res.send(survey)
 }
 
-const getFullOrganisationSurvey = async (req, res) => {
+const getFullOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode } = req.params
 
   const universitySurvey = await _getUniversitySurvey()
@@ -92,7 +93,8 @@ const getFullOrganisationSurvey = async (req, res) => {
   })
 
   if (!survey) {
-    return res.send(universitySurvey)
+    res.send(universitySurvey)
+    return
   }
 
   await survey.populateQuestions()
@@ -101,10 +103,10 @@ const getFullOrganisationSurvey = async (req, res) => {
 
   const response = { ...universitySurvey, questions }
 
-  return res.send(response)
+  res.send(response)
 }
 
-const getProgrammeSurveyForEditor = async (req, res) => {
+const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Response) => {
   const { surveyCode } = req.params
 
   const [survey] = await Survey.findOrCreate({
@@ -131,14 +133,12 @@ const getProgrammeSurveyForEditor = async (req, res) => {
 
   const response = { ...survey.toJSON(), universitySurvey, organisation }
 
-  return res.send(response)
+  res.send(response)
 }
 
-const router = Router()
+export const router = Router()
 
 router.put('/:id', update)
 router.get('/university', getUniversitySurvey)
 router.get('/organisation/:organisationCode', getFullOrganisationSurvey)
 router.get('/programme/:surveyCode', getProgrammeSurveyForEditor)
-
-module.exports = router
