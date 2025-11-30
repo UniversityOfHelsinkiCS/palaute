@@ -52,7 +52,11 @@ router.get('/login', async (req: AuthenticatedRequest, res: Response) => {
 router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
   const userQuery = req.query.user
   if (!userQuery || typeof userQuery !== 'string' || userQuery.length < 3) {
-    throw new ApplicationError('Query parameter "user" must be at least 3 characters long', 400)
+    res.send({
+      params: {},
+      persons: [],
+    })
+    return
   }
 
   let params = {}
