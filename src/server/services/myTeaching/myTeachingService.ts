@@ -1,19 +1,19 @@
-const _ = require('lodash')
-const { Op } = require('sequelize')
+import _ from 'lodash'
+import { Op } from 'sequelize'
 
-const {
+import {
   UserFeedbackTarget,
   FeedbackTarget,
   CourseRealisation,
   CourseUnit,
   Organisation,
   Summary,
-} = require('../../models')
+  type User,
+} from '../../models'
 
-const { sequelize } = require('../../db/dbConnection')
-const { formatActivityPeriod } = require('../../util/common')
+import { DateRangeInput, formatActivityPeriod } from '../../util/common'
 
-const getAllTeacherCourseUnits = async (user, query) => {
+const getAllTeacherCourseUnits = async (user: User, query: DateRangeInput & { isOrganisationSurvey?: string }) => {
   const isOrganisationSurvey = query.isOrganisationSurvey === 'true'
 
   const activityPeriod = formatActivityPeriod(query)
@@ -40,7 +40,7 @@ const getAllTeacherCourseUnits = async (user, query) => {
           'opensAt',
           'closesAt',
           ['feedback_response_email_sent', 'feedbackResponseSent'],
-          [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
+          ['feedback_response', 'feedbackResponse'],
           'continuousFeedbackEnabled',
           'userCreated',
           'courseRealisationId',
@@ -102,7 +102,10 @@ const getAllTeacherCourseUnits = async (user, query) => {
   return teacherCourseUnits
 }
 
-const getGroupedCourseUnits = (courseUnits, query) => {
+const getGroupedCourseUnits = (
+  courseUnits: CourseUnit[],
+  query: DateRangeInput & { isOrganisationSurvey?: string; status?: string }
+) => {
   const acualCUs = courseUnits.map(courseUnit => {
     const initialCourseRealisations = courseUnit.feedbackTargets.map(feedbackTarget => feedbackTarget.courseRealisation)
 
@@ -133,6 +136,7 @@ const getGroupedCourseUnits = (courseUnits, query) => {
         // we need to fetch the student count and feedback count from the feedback target
         const feedbackTarget = {
           ...target.toJSON(),
+          feedbackResponseGiven: target.feedbackResponseGiven(),
           studentCount: target.summary?.data?.studentCount || 0,
           feedbackCount: target.summary?.data?.feedbackCount || 0,
         }
@@ -183,6 +187,7 @@ const getGroupedCourseUnits = (courseUnits, query) => {
       courseCode: courseUnit.dataValues.courseCode,
       userCreated: courseUnit.dataValues.userCreated,
       disabledCourse,
+      validityPeriod: courseUnit.dataValues.validityPeriod,
       courseRealisations: groupedCourseRealisations,
     }
   })
@@ -190,7 +195,7 @@ const getGroupedCourseUnits = (courseUnits, query) => {
   return acualCUs
 }
 
-const getTeacherCourseUnits = async (user, query) => {
+export const getTeacherCourseUnits = async (user: User, query: DateRangeInput & { isOrganisationSurvey?: string }) => {
   const teacherCourseUnits = await getAllTeacherCourseUnits(user, query)
 
   const groupedCourseUnits = getGroupedCourseUnits(teacherCourseUnits, query)
@@ -211,8 +216,4 @@ const getTeacherCourseUnits = async (user, query) => {
   })
 
   return resultCourseUnits
-}
-
-module.exports = {
-  getTeacherCourseUnits,
 }

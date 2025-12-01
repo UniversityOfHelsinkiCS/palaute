@@ -4,14 +4,9 @@ import { differenceInMonths, getYear } from 'date-fns'
 import { Op } from 'sequelize'
 import { UserFeedbackTarget, FeedbackTarget, CourseUnit, Summary, CourseRealisation, User } from '../../models'
 
-import { formatActivityPeriod } from '../../util/common'
+import { type DateRangeInput, formatActivityPeriod } from '../../util/common'
 
-interface DateRange {
-  startDate: Date | string | number
-  endDate: Date | string | number
-}
-
-const getTeacherCourseUnits = async (user: User, query: DateRange) => {
+const getTeacherCourseUnits = async (user: User, query: DateRangeInput) => {
   const activityPeriod = formatActivityPeriod(query)
 
   const teacherCourseUnits = await CourseUnit.findAll({
@@ -120,7 +115,7 @@ const getEndedFeedbacksWithMissingResponse = async (courseUnits: CourseUnit[]) =
   return latestEndedFeedbackTargets.filter(Boolean)
 }
 
-export const getMyTeachingTabCounts = async (user: User, query: DateRange) => {
+export const getMyTeachingTabCounts = async (user: User, query: DateRangeInput) => {
   const teacherCourseUnits = await getTeacherCourseUnits(user, query)
 
   const endedFeedbacksWithMissingResponse = await getEndedFeedbacksWithMissingResponse(teacherCourseUnits)

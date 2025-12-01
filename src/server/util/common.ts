@@ -52,13 +52,12 @@ export const endOfStudyYear = (date: Date | string | number) => {
 const parseDate = (d: Date | string | number) =>
   parseFromTimeZone(new Date(d) as unknown as string, { timeZone: 'Europe/Helsinki' })
 
-export const formatActivityPeriod = ({
-  startDate,
-  endDate,
-}: {
+export interface DateRangeInput {
   startDate: Date | string | number
   endDate: Date | string | number
-}) => {
+}
+
+export const formatActivityPeriod = ({ startDate, endDate }: DateRangeInput) => {
   if (!startDate || !endDate) return null
 
   return {
