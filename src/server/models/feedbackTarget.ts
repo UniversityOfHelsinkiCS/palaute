@@ -28,6 +28,7 @@ import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
 import type { CourseUnit } from './courseUnit'
 import type { Question } from './question'
+import type Summary from './summary'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
   // --- Acual DB columns ---
@@ -72,6 +73,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare courseUnit?: NonAttribute<CourseUnit>
   declare courseRealisation?: NonAttribute<CourseRealisation>
   declare userFeedbackTargets?: UserFeedbackTarget[]
+  declare summary?: Summary
 
   // --- Association methods -----------------------------
   // --- only the ones that are used are declared here ---

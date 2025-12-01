@@ -1,7 +1,7 @@
-const { Op } = require('sequelize')
-const { User } = require('../../models')
+import { Op } from 'sequelize'
+import { User } from '../../models'
 
-const validateStudentNumbers = async studentNumbers => {
+export const validateStudentNumbers = async (studentNumbers: string[]) => {
   const existingStudentNumbers = (
     await User.findAll({
       where: {
@@ -19,8 +19,4 @@ const validateStudentNumbers = async studentNumbers => {
     validStudentNumbers: existingStudentNumbers,
     invalidStudentNumbers: nonExistingStudentNumbers,
   }
-}
-
-module.exports = {
-  validateStudentNumbers,
 }

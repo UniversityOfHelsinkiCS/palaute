@@ -1,9 +1,43 @@
-const { QueryTypes } = require('sequelize')
-const { CourseUnit, Feedback } = require('../../models')
-const { getUniversitySurvey, getProgrammeSurvey } = require('../../services/surveys')
-const { sequelize } = require('../../db/dbConnection')
+import { QueryTypes } from 'sequelize'
+import { LocalizedString } from '@common/types/common'
+import { CourseUnit, Feedback, Question } from '../../models'
+import { getUniversitySurvey, getProgrammeSurvey } from '../surveys'
+import { sequelize } from '../../db/dbConnection'
 
-const getOpenFeedbackByOrganisation = async code => {
+interface FeedbackData {
+  questionId: number
+  data: string
+}
+
+interface FeedbackWithExtra extends Feedback {
+  course_code: string
+  feedback_target_id: number
+  name: LocalizedString
+  start_date: string
+  end_date: string
+  data: FeedbackData[]
+}
+
+interface QuestionWithResponses {
+  question: Question
+  responses: string[]
+}
+
+interface Realisation {
+  id: number
+  name: LocalizedString
+  startDate: string
+  endDate: string
+  questions: QuestionWithResponses[]
+}
+
+interface CourseWithRealisations {
+  code: string
+  name: LocalizedString
+  realisations: Realisation[]
+}
+
+const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRealisations[]> => {
   const universitySurvey = await getUniversitySurvey()
   const programmeSurvey = await getProgrammeSurvey(code)
 
@@ -11,18 +45,20 @@ const getOpenFeedbackByOrganisation = async code => {
 
   const questions = [...universitySurvey.questions, ...programmeQuestions].filter(q => q.type === 'OPEN')
 
-  const courseCodes = await sequelize.query(
+  const courseCodes = await sequelize.query<CourseUnit>(
     `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O 
     WHERE C.id = CO.course_unit_id AND CO.organisation_id = O.id AND O.code = :code`,
     {
       replacements: { code },
       type: QueryTypes.SELECT,
-      mapToModel: true,
-      model: CourseUnit,
     }
   )
 
-  const allFeedbacks = await sequelize.query(
+  if (courseCodes.length === 0) {
+    return []
+  }
+
+  const allFeedbacks = await sequelize.query<FeedbackWithExtra>(
     `SELECT DISTINCT ON (F.id) F.*, C.course_code, FT.id as feedback_target_id, CR.name, CR.start_date, CR.end_date
     FROM feedbacks F, user_feedback_targets UFT, feedback_targets FT, course_units C, course_realisations CR
     WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND FT.course_realisation_id = CR.id AND C.course_code IN (:codes)`,
@@ -30,31 +66,30 @@ const getOpenFeedbackByOrganisation = async code => {
       replacements: {
         codes: courseCodes.map(({ courseCode }) => courseCode),
       },
-      mapToModel: true,
-      model: Feedback,
+      type: QueryTypes.SELECT,
     }
   )
 
-  const feedbacksByCourseCode = {}
+  const feedbacksByCourseCode: { [key: string]: FeedbackWithExtra[] } = {}
 
   allFeedbacks.forEach(feedback => {
-    const code = feedback.dataValues.course_code
+    const courseCode = feedback.course_code
 
-    if (feedbacksByCourseCode[code]) {
-      feedbacksByCourseCode[code].push(feedback)
+    if (feedbacksByCourseCode[courseCode]) {
+      feedbacksByCourseCode[courseCode].push(feedback)
     } else {
-      feedbacksByCourseCode[code] = [feedback]
+      feedbacksByCourseCode[courseCode] = [feedback]
     }
   })
 
   const codesWithIds = courseCodes.map(({ courseCode, name }) => {
     const feedbacks = feedbacksByCourseCode[courseCode] || []
 
-    const feedbacksByTargetId = {}
-    const feedbackTargetIds = new Set()
+    const feedbacksByTargetId: { [key: number]: FeedbackWithExtra[] } = {}
+    const feedbackTargetIds = new Set<number>()
 
     feedbacks.forEach(feedback => {
-      const id = feedback.dataValues.feedback_target_id
+      const id = feedback.feedback_target_id
       feedbackTargetIds.add(id)
       if (feedbacksByTargetId[id]) {
         feedbacksByTargetId[id].push(feedback)
@@ -63,9 +98,9 @@ const getOpenFeedbackByOrganisation = async code => {
       }
     })
 
-    const realisations = Array.from(feedbackTargetIds).map(id => {
+    const realisations: Realisation[] = Array.from(feedbackTargetIds).map(id => {
       const targetFeedbacks = feedbacksByTargetId[id] || []
-      const allFeedbacksWithId = targetFeedbacks.map(feedback => feedback.dataValues.data).flat()
+      const allFeedbacksWithId = targetFeedbacks.map(feedback => feedback.data).flat()
 
       const questionsWithResponses = questions.map(question => ({
         question,
@@ -75,10 +110,10 @@ const getOpenFeedbackByOrganisation = async code => {
       }))
 
       return {
-        id: targetFeedbacks[0].dataValues.feedback_target_id,
-        name: targetFeedbacks[0].dataValues.name,
-        startDate: targetFeedbacks[0].dataValues.start_date,
-        endDate: targetFeedbacks[0].dataValues.end_date,
+        id: targetFeedbacks[0].feedback_target_id,
+        name: targetFeedbacks[0].name,
+        startDate: targetFeedbacks[0].start_date,
+        endDate: targetFeedbacks[0].end_date,
         questions: questionsWithResponses,
       }
     })
@@ -93,4 +128,4 @@ const getOpenFeedbackByOrganisation = async code => {
   return codesWithIds
 }
 
-module.exports = getOpenFeedbackByOrganisation
+export default getOpenFeedbackByOrganisation

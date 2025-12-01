@@ -1,12 +1,14 @@
-const { Op } = require('sequelize')
-const { v4: uuidv4 } = require('uuid')
-const { i18n } = require('../../util/i18n')
+import { addYears } from 'date-fns'
+import { LocalizedString } from '@common/types/common'
+import { Op } from 'sequelize'
+import { v4 as uuidv4 } from 'uuid'
+import { i18n } from '../../util/i18n'
 
-const { logger } = require('../../util/logger')
-const { formatActivityPeriod } = require('../../util/common')
-const { sequelize } = require('../../db/dbConnection')
-const { LANGUAGES } = require('../../util/config')
-const {
+import { logger } from '../../util/logger'
+import { formatActivityPeriod } from '../../util/common'
+import { sequelize } from '../../db/dbConnection'
+import { LANGUAGES } from '../../util/config'
+import {
   CourseUnit,
   CourseRealisation,
   CourseUnitsOrganisation,
@@ -20,11 +22,11 @@ const {
   User,
   OrganisationSurveyCourse,
   Summary,
-} = require('../../models')
-const cache = require('../feedbackTargets/feedbackTargetCache')
-const { getFeedbackTargetSurveys } = require('../surveys/getFeedbackTargetSurveys')
+} from '../../models'
+import cache from '../feedbackTargets/feedbackTargetCache'
+import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
 
-const getOrganisationCourseUnit = async organisationId => {
+const getOrganisationCourseUnit = async (organisationId: string) => {
   const organisationCourseUnit = await CourseUnit.findOne({
     where: {
       userCreated: true,
@@ -45,10 +47,10 @@ const getOrganisationCourseUnit = async organisationId => {
   return organisationCourseUnit
 }
 
-const getCourseUnitName = organisationName => {
-  const name = {}
+const getCourseUnitName = (organisationName: LocalizedString) => {
+  const name: LocalizedString = {}
 
-  LANGUAGES.forEach(language => {
+  LANGUAGES.forEach((language: keyof LocalizedString) => {
     const t = i18n.getFixedT(language)
     name[language] = `${organisationName[language]}: ${t('organisationSurveys:surveys')}`
   })
@@ -56,13 +58,13 @@ const getCourseUnitName = organisationName => {
   return name
 }
 
-const initializeOrganisationCourseUnit = async organisation => {
+export const initializeOrganisationCourseUnit = async (organisation: Organisation) => {
   const existingOrganisationCU = await getOrganisationCourseUnit(organisation.id)
 
   if (existingOrganisationCU) return
 
   const startDate = new Date()
-  const endDate = new Date().setFullYear(9999)
+  const endDate = addYears(new Date(), 9999)
 
   const organisationCourseUnit = await CourseUnit.create({
     id: uuidv4(),
@@ -82,7 +84,7 @@ const initializeOrganisationCourseUnit = async organisation => {
   })
 }
 
-const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData) => {
+export const createOrganisationFeedbackTarget = async (organisation: Organisation, feedbackTargetData: any) => {
   const { name } = feedbackTargetData
   const { startDate, endDate } = formatActivityPeriod(feedbackTargetData)
 
@@ -120,7 +122,7 @@ const createOrganisationFeedbackTarget = async (organisation, feedbackTargetData
   return organisationFeedbackTarget
 }
 
-const getStudentIds = async studentNumbers => {
+export const getStudentIds = async (studentNumbers: string[]) => {
   const students = await User.findAll({
     where: {
       studentNumber: { [Op.in]: studentNumbers },
@@ -133,7 +135,7 @@ const getStudentIds = async studentNumbers => {
   return studentIds
 }
 
-const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
+export const createUserFeedbackTargets = async (feedbackTargetId: number, userIds: string[], accessStatus: string) => {
   const createdUserFeedbackTargets = []
 
   for (const userId of userIds) {
@@ -154,7 +156,7 @@ const createUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus
   return createdUserFeedbackTargets
 }
 
-const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
+const getUserFeedbackTargets = async (feedbackTargetId: number, accessStatus: string) => {
   const userFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -166,7 +168,7 @@ const getUserFeedbackTargets = async (feedbackTargetId, accessStatus) => {
   return userFeedbackTargets
 }
 
-const getOrganisationSurveyCourseStudents = async courseRealisationIds => {
+export const getOrganisationSurveyCourseStudents = async (courseRealisationIds: string[]) => {
   if (!courseRealisationIds || courseRealisationIds.length === 0) return []
   const students = await User.findAll({
     include: [
@@ -198,7 +200,7 @@ const getOrganisationSurveyCourseStudents = async courseRealisationIds => {
   return students
 }
 
-const getFeedbackTargetStudentCountForCourseRealisation = async courseRealisationId => {
+const getFeedbackTargetStudentCountForCourseRealisation = async (courseRealisationId: string) => {
   const feedbackTargets = await FeedbackTarget.findAll({
     attributes: ['id'],
     where: {
@@ -213,12 +215,12 @@ const getFeedbackTargetStudentCountForCourseRealisation = async courseRealisatio
     ],
   })
 
-  const { studentCount } = feedbackTargets[0]?.summary?.data || 0
+  const studentCount = feedbackTargets[0]?.summary?.data?.studentCount || 1
 
   return studentCount
 }
 
-const getSurveyById = async feedbackTargetId => {
+export const getSurveyById = async (feedbackTargetId: number) => {
   const organisationSurvey = await FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: [
       'id',
@@ -251,28 +253,16 @@ const getSurveyById = async feedbackTargetId => {
         required: true,
       },
       {
-        model: UserFeedbackTarget.scope('students'),
-        attributes: ['id'],
-        as: 'students',
-        required: false,
-        include: {
-          model: User,
-          attributes: ['studentNumber'],
-          as: 'user',
-        },
-      },
-      {
         model: UserFeedbackTarget,
-        attributes: ['id'],
+        attributes: ['id', 'accessStatus'],
         as: 'userFeedbackTargets',
         required: false,
-        where: {
-          accessStatus: 'RESPONSIBLE_TEACHER',
-        },
-        include: {
-          model: User,
-          as: 'user',
-        },
+        include: [
+          {
+            model: User,
+            as: 'user',
+          },
+        ],
       },
     ],
   })
@@ -299,9 +289,12 @@ const getSurveyById = async feedbackTargetId => {
     attributes: ['id', 'name', 'startDate', 'endDate'],
   })
   const courseStudentNumbers = new Set(courseStudents.map(student => student.studentNumber))
-  const independentStudents = organisationSurvey.students.filter(
-    ({ user }) => !courseStudentNumbers.has(user.studentNumber)
+
+  const students = organisationSurvey.userFeedbackTargets.filter(({ accessStatus }) => accessStatus === 'STUDENT')
+  organisationSurvey.dataValues.userFeedbackTargets = organisationSurvey.userFeedbackTargets.filter(
+    ({ accessStatus }) => accessStatus === 'RESPONSIBLE_TEACHER'
   )
+  const independentStudents = students.filter(({ user }) => !courseStudentNumbers.has(user.studentNumber))
 
   const coursesWithStudentCounts = await Promise.all(
     courses.map(async course => {
@@ -320,7 +313,7 @@ const getSurveyById = async feedbackTargetId => {
   }
 }
 
-const getSurveysForOrganisation = async organisationId => {
+export const getSurveysForOrganisation = async (organisationId: string) => {
   const organisationSurveys = await FeedbackTarget.findAll({
     attributes: [
       'id',
@@ -378,11 +371,13 @@ const getSurveysForOrganisation = async organisationId => {
         as: 'students',
         required: false,
         where: { accessStatus: 'STUDENT' },
-        include: {
-          model: User,
-          attributes: ['studentNumber'],
-          as: 'user',
-        },
+        include: [
+          {
+            model: User,
+            attributes: ['studentNumber'],
+            as: 'user',
+          },
+        ],
       },
       {
         model: UserFeedbackTarget,
@@ -392,10 +387,12 @@ const getSurveysForOrganisation = async organisationId => {
         where: {
           accessStatus: 'RESPONSIBLE_TEACHER',
         },
-        include: {
-          model: User,
-          as: 'user',
-        },
+        include: [
+          {
+            model: User,
+            as: 'user',
+          },
+        ],
       },
     ],
     order: [['courseRealisation', 'endDate', 'DESC']],
@@ -409,7 +406,7 @@ const getSurveysForOrganisation = async organisationId => {
   return organisationSurveys
 }
 
-const getSurveysForTeacher = async (organisationCode, userId) => {
+export const getSurveysForTeacher = async (organisationCode: string, userId: string) => {
   const organisation = await Organisation.findOne({
     where: {
       code: organisationCode,
@@ -426,7 +423,7 @@ const getSurveysForTeacher = async (organisationCode, userId) => {
   return userSurveys
 }
 
-const getDeletionAllowed = async organisationSurveyId => {
+export const getDeletionAllowed = async (organisationSurveyId: number) => {
   const feedbackCount = await UserFeedbackTarget.count({
     where: {
       feedbackTargetId: organisationSurveyId,
@@ -437,7 +434,7 @@ const getDeletionAllowed = async organisationSurveyId => {
   return feedbackCount === 0
 }
 
-const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus) => {
+export const updateUserFeedbackTargets = async (feedbackTargetId: number, userIds: string[], accessStatus: string) => {
   await UserFeedbackTarget.destroy({
     where: {
       feedbackTargetId,
@@ -452,7 +449,7 @@ const updateUserFeedbackTargets = async (feedbackTargetId, userIds, accessStatus
   await createUserFeedbackTargets(feedbackTargetId, newUserIds, accessStatus)
 }
 
-const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+export const createOrganisationSurveyCourses = async (feedbackTargetId: number, students: any[]) => {
   const studentObjects = students.map(s => ({
     feedbackTargetId,
     courseRealisationId: s.userFeedbackTargets[0].feedbackTarget.courseRealisationId,
@@ -461,7 +458,7 @@ const createOrganisationSurveyCourses = async (feedbackTargetId, students) => {
   await OrganisationSurveyCourse.bulkCreate(studentObjects)
 }
 
-const updateOrganisationSurveyCourses = async (feedbackTargetId, students) => {
+export const updateOrganisationSurveyCourses = async (feedbackTargetId: number, students: any[]) => {
   await OrganisationSurveyCourse.destroy({
     where: {
       feedbackTargetId,
@@ -471,12 +468,22 @@ const updateOrganisationSurveyCourses = async (feedbackTargetId, students) => {
   await createOrganisationSurveyCourses(feedbackTargetId, students)
 }
 
-const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
+export const updateOrganisationSurvey = async (
+  feedbackTargetId: number,
+  updates: {
+    name?: LocalizedString
+    teacherIds?: string[]
+    studentNumbers?: string[]
+    courseRealisationIds?: string[]
+    startDate: string
+    endDate: string
+  }
+) => {
   const { name, teacherIds, studentNumbers, courseRealisationIds } = updates
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
-  const { startDate, endDate } = formatActivityPeriod(updates) ?? feedbackTarget
+  const { startDate, endDate } = formatActivityPeriod(updates)
 
   await feedbackTarget.update({
     name,
@@ -496,7 +503,7 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
     await updateUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
   }
 
-  let studentIds = []
+  let studentIds: string[] = []
 
   if (studentNumbers) {
     studentIds = await getStudentIds(studentNumbers)
@@ -521,7 +528,7 @@ const updateOrganisationSurvey = async (feedbackTargetId, updates) => {
   return survey
 }
 
-const deleteOrganisationSurvey = async feedbackTargetId => {
+export const deleteOrganisationSurvey = async (feedbackTargetId: number) => {
   const t = await sequelize.transaction()
 
   try {
@@ -600,7 +607,7 @@ const deleteOrganisationSurvey = async feedbackTargetId => {
   }
 }
 
-module.exports = {
+/*module.exports = {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
@@ -613,4 +620,4 @@ module.exports = {
   deleteOrganisationSurvey,
   getOrganisationSurveyCourseStudents,
   createOrganisationSurveyCourses,
-}
+}*/

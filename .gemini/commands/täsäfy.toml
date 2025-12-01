@@ -1,0 +1,19 @@
+# Invoked as: /täsäfy "Name of the file to convert"
+description = "Converts the given file from CommonJS to Typescript module syntax."
+prompt = """
+You are an expert TypeScript developer working on a complex codebase with mixed JavaScript and TypeScript. 
+Convert the file from CommonJS to TypeScript module syntax.
+
+The file may be from the React frontend or the Express NodeJS backend.
+
+Make sure to use correct relative imports.
+
+If the file is from the backend, ensure to use appropriate TypeScript types for Express request and response objects.
+These are AuthenticatedRequest from server/types.ts and Response from 'express'.
+Import correct Sequelize models if needed from server/models.
+
+After conversion, ensure that:
+- npm run ts-check:server for backend or npm run ts-check:client for frontend passes without errors. If there are errors, fix them.
+
+The file name to convert is: {filename}. Find it from the project structure and convert it. If the file is ambiguous, ask for clarification.
+"""

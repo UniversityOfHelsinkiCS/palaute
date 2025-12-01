@@ -1,3 +1,4 @@
+import { LanguageId } from '@common/types/common'
 import config from 'config'
 
 /**
@@ -66,7 +67,7 @@ export const PUBLIC_COURSE_BROWSER_ENABLED = config.get('PUBLIC_COURSE_BROWSER_E
 export const ALWAYS_SHOW_STUDENT_LIST = config.get('ALWAYS_SHOW_STUDENT_LIST')
 export const IAM_GROUPS_HEADER = config.get<string>('IAM_GROUPS_HEADER')
 export const TRANSLATION_NAMESPACE = config.get<string>('TRANSLATION_NAMESPACE')
-export const LANGUAGES = config.get('LANGUAGES')
+export const LANGUAGES = config.get<LanguageId[]>('LANGUAGES')
 export const GELF_TRANSPORT_ENABLED = config.get('GELF_TRANSPORT_ENABLED') ?? false
 export const SENTRY_DSN = config.get<string>('BACKEND_SENTRY_DSN')
 export const UI_CONFIG_NAME = config.get('UI_CONFIG_NAME')

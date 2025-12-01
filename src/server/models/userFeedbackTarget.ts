@@ -10,6 +10,7 @@ import {
   CreationOptional,
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
+import type { User } from './user'
 
 class UserFeedbackTarget extends Model<
   InferAttributes<UserFeedbackTarget>,
@@ -25,6 +26,8 @@ class UserFeedbackTarget extends Model<
   public isAdministrativePerson!: boolean
   public userCreated!: boolean
   public notGivingFeedback!: boolean
+
+  declare user?: User
 
   public hasTeacherAccess(): boolean {
     return this.accessStatus === 'RESPONSIBLE_TEACHER' || this.accessStatus === 'TEACHER'

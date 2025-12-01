@@ -16,7 +16,7 @@ const {
 } = require('../../models')
 const { ApplicationError } = require('../../util/customErrors')
 const { createOrganisationLog } = require('../../services/auditLog')
-const getOpenFeedbackByOrganisation = require('./getOpenFeedbackByOrganisation')
+const { getOpenFeedbackByOrganisation } = require('../../services/organisations/getOpenFeedbackByOrganisation')
 const { getAccessAndOrganisation } = require('./util')
 const feedbackCorrespondentRouter = require('./feedbackCorrespondentController')
 const organisationSurveyRouter = require('./organisationSurveyController')
