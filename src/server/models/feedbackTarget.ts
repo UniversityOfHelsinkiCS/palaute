@@ -107,6 +107,10 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     return now > this.closesAt
   }
 
+  feedbackResponseGiven() {
+    return this.feedbackResponse?.length > 3 || false
+  }
+
   async getStudentsForFeedbackTarget() {
     return User.findAll({
       include: {
