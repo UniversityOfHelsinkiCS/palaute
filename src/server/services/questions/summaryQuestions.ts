@@ -1,11 +1,7 @@
-const { WORKLOAD_QUESTION_ID } = require('../../util/config')
-const { getUniversitySurvey, getProgrammeSurvey } = require('../surveys')
+import { WORKLOAD_QUESTION_ID } from '../../util/config'
+import { getUniversitySurvey, getProgrammeSurvey } from '../surveys'
 
-/**
- * @param {string} organisationCode
- * @returns {Promise<object>} questions
- */
-const getSummaryQuestions = async organisationCode => {
+export const getSummaryQuestions = async (organisationCode: string) => {
   const [universityQuestions, programmeQuestions] = await Promise.all([
     (async () => {
       const universitySurvey = await getUniversitySurvey()
@@ -27,5 +23,3 @@ const getSummaryQuestions = async organisationCode => {
     secondaryType: question.id === WORKLOAD_QUESTION_ID ? 'WORKLOAD' : null,
   }))
 }
-
-module.exports = getSummaryQuestions
