@@ -1,14 +1,15 @@
-const { Op } = require('sequelize')
-const _ = require('lodash')
-const { OrganisationLog, Organisation, Question, User } = require('../../models')
+import { Op } from 'sequelize'
+import _ from 'lodash'
+import { OrganisationLog, Organisation, Question, User } from '../../models'
 
-const createFromData = async (organisationId, user, data) => {
+const createFromData = async (organisationId: string, user: User, data: object) => {
+  const logData: any = { ...data }
   if (user.mockedBy) {
-    data.mockedBy = user.mockedBy.username
+    logData.mockedBy = user.mockedBy.username
   }
 
   const log = await OrganisationLog.create({
-    data,
+    data: logData,
     organisationId,
     userId: user.id,
   })
@@ -16,8 +17,8 @@ const createFromData = async (organisationId, user, data) => {
   return log
 }
 
-const createOrganisationSurveyLog = async (survey, questions, user) => {
-  let previousQuestions = await Question.findAll({
+export const createOrganisationSurveyLog = async (survey: any, questions: any[], user: User) => {
+  let previousQuestions: any[] = await Question.findAll({
     where: {
       id: { [Op.in]: survey.questionIds },
     },
@@ -91,8 +92,8 @@ const createOrganisationSurveyLog = async (survey, questions, user) => {
   }
 }
 
-const createOrganisationLog = async (organisation, updates, user) => {
-  const data = {}
+export const createOrganisationLog = async (organisation: Organisation, updates: any, user: User) => {
+  const data: any = {}
 
   if (Array.isArray(updates.disabledCourseCodes)) {
     data.disabledCourseCodes = _.difference(updates.disabledCourseCodes, organisation.disabledCourseCodes)
@@ -132,9 +133,4 @@ const createOrganisationLog = async (organisation, updates, user) => {
   if (Object.keys(data).length === 0) return
 
   await createFromData(organisation.id, user, data)
-}
-
-module.exports = {
-  createOrganisationSurveyLog,
-  createOrganisationLog,
 }

@@ -14,6 +14,8 @@ Import correct Sequelize models if needed from server/models.
 
 After conversion, ensure that:
 - npm run ts-check:server for backend or npm run ts-check:client for frontend passes without errors. If there are errors, fix them.
+- npx eslint 'src/server/**/*.ts' --fix for backend or npx eslint 'src/client/**/*.tsx' --fix for frontend passes without errors. If there are errors, fix them.
+- npm run format to format the code with prettier.
 
 The file name to convert is: {filename}. Find it from the project structure and convert it. If the file is ambiguous, ask for clarification.
 """

@@ -1,23 +1,28 @@
-const _ = require('lodash')
+import _ from 'lodash'
+import { Question, FeedbackTargetLog, FeedbackTarget, User } from '../../models'
 
-const { Question, FeedbackTargetLog } = require('../../models')
-
-const createFromData = async (feedbackTargetId, user, data) => {
+const createFromData = async (feedbackTargetId: number, user: User, data: object) => {
+  const logData: any = { ...data }
   if (user.mockedBy) {
-    data.mockedBy = user.mockedBy.username
+    logData.mockedBy = user.mockedBy.username
   }
 
   const log = await FeedbackTargetLog.create({
-    data,
-    feedbackTargetId,
-    userId: user.id,
+    data: logData,
+    feedbackTargetId: String(feedbackTargetId),
+    userId: String(user.id),
   })
 
   return log
 }
 
-const createFeedbackTargetSurveyLog = async (feedbackTargetId, user, removedIds, newIds) => {
-  const data = {}
+export const createFeedbackTargetSurveyLog = async (
+  feedbackTargetId: number,
+  user: User,
+  removedIds: number[],
+  newIds: number[]
+) => {
+  const data: any = {}
 
   if (removedIds.length > 0) {
     const removedQuestions = await Question.findAll({
@@ -44,16 +49,16 @@ const createFeedbackTargetSurveyLog = async (feedbackTargetId, user, removedIds,
   await createFromData(feedbackTargetId, user, data)
 }
 
-const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
-  const data = {}
+export const createFeedbackTargetLog = async (feedbackTarget: FeedbackTarget, updates: any, user: User) => {
+  const data: any = {}
 
   if (Array.isArray(updates.publicQuestionIds)) {
     const enabledPublicQuestionIds = _.difference(updates.publicQuestionIds, feedbackTarget.publicQuestionIds).filter(
-      qId => (updates.questions?.length ? updates.questions.some(q => q.id === qId) : true)
+      (qId: number) => (updates.questions?.length ? updates.questions.some((q: any) => q.id === qId) : true)
     )
 
     const disabledPublicQuestionIds = _.difference(feedbackTarget.publicQuestionIds, updates.publicQuestionIds).filter(
-      qId => (updates.questions?.length ? updates.questions.some(q => q.id === qId) : true)
+      (qId: number) => (updates.questions?.length ? updates.questions.some((q: any) => q.id === qId) : true)
     )
 
     if (enabledPublicQuestionIds.length > 0) {
@@ -100,8 +105,22 @@ const createFeedbackTargetLog = async (feedbackTarget, updates, user) => {
   await createFromData(feedbackTarget.id, user, data)
 }
 
-const createFeedbackResponseLog = async ({ feedbackTarget, user, responseText, previousResponse, sendEmail }) => {
-  const data = {}
+interface FeedbackResponseLogData {
+  feedbackTarget: FeedbackTarget
+  user: User
+  responseText: string
+  previousResponse: string
+  sendEmail: boolean
+}
+
+export const createFeedbackResponseLog = async ({
+  feedbackTarget,
+  user,
+  responseText,
+  previousResponse,
+  sendEmail,
+}: FeedbackResponseLogData) => {
+  const data: any = {}
 
   if (previousResponse?.length > 0 && responseText?.length > 0) {
     data.feedbackResponse = 'updated'
@@ -114,10 +133,4 @@ const createFeedbackResponseLog = async ({ feedbackTarget, user, responseText, p
   }
 
   await createFromData(feedbackTarget.id, user, data)
-}
-
-module.exports = {
-  createFeedbackTargetSurveyLog,
-  createFeedbackTargetLog,
-  createFeedbackResponseLog,
 }
