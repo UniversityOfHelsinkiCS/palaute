@@ -1,8 +1,7 @@
-/* eslint-disable no-continue */
-const { Op, QueryTypes } = require('sequelize')
-const datefns = require('date-fns')
-const _ = require('lodash')
-const {
+import { Op, QueryTypes } from 'sequelize'
+import datefns from 'date-fns'
+import _ from 'lodash'
+import {
   Feedback,
   UserFeedbackTarget,
   FeedbackTarget,
@@ -13,13 +12,13 @@ const {
   Tag,
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
-} = require('../../models')
-const { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } = require('../../util/config')
-const { sequelize } = require('../../db/dbConnection')
-const { sumSummaryDatas, mapOptionIdToValue } = require('./utils')
-const { logger } = require('../../util/logger')
-const { prefixTagId } = require('../../util/common')
-const { getPeriodDates } = require('../../../common/studyPeriods')
+} from '../../models'
+import { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } from '../../util/config'
+import { sequelize } from '../../db/dbConnection'
+import { sumSummaryDatas, mapOptionIdToValue } from './utils'
+import { logger } from '../../util/logger'
+import { prefixTagId } from '../../util/common'
+import { getPeriodDates } from '../../../common/studyPeriods'
 
 /**
  * Find all root organisation ids. There usually should be only one, which in config is UNIVERSITY_ROOT_ID,
@@ -41,7 +40,7 @@ const getRootOrganisations = async () => {
  * Other types of questions are not displayed.
  */
 const getRelevantQuestionIds = async () => {
-  const [questions] = await sequelize.query(
+  const questions = await sequelize.query<{ id: number }>(
     `
     SELECT q.id
     FROM surveys s
@@ -49,7 +48,7 @@ const getRelevantQuestionIds = async () => {
     WHERE (s.type = 'university' OR s.type = 'programme')
     AND q.type = 'LIKERT' OR q.id = :workloadQuestionId;
   `,
-    { queryType: QueryTypes.SELECT, replacements: { workloadQuestionId: WORKLOAD_QUESTION_ID } }
+    { type: QueryTypes.SELECT, replacements: { workloadQuestionId: WORKLOAD_QUESTION_ID } }
   )
 
   const questionIds = questions.map(q => q.id)
@@ -60,7 +59,11 @@ const getRelevantQuestionIds = async () => {
 /**
  * Finds out the extraOrgIds that are responsible for this CUR
  */
-const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisationIds, extraOrgIds) =>
+const getCurExtraOrgIds = (
+  courseUnitOrganisationIds: string[],
+  courseRealisationOrganisationIds: string[],
+  extraOrgIds: string[]
+) =>
   extraOrgIds.filter(
     orgId => courseUnitOrganisationIds.includes(orgId) || courseRealisationOrganisationIds.includes(orgId)
   )
@@ -70,13 +73,22 @@ const getCurExtraOrgIds = (courseUnitOrganisationIds, courseRealisationOrganisat
  * If for example extraOrgId === OPEN_UNI_ORG_ID, one variant would have open uni fbtSums and the other non-open uni fbtSums.
  * If fbtSums of entity are one or another, only one entity would be yielded.
  */
-const getExtraOrgVariants = (entity, extraOrgId) =>
+const getExtraOrgVariants = (entity: any, extraOrgId: string) =>
   _.partition(entity.feedbackTargets, fbtsum => fbtsum.extraOrgIds.includes(extraOrgId))
     .filter(fbtSums => fbtSums.length > 0)
     .map(fbtSums => ({
       ..._.clone(entity),
       feedbackTargets: fbtSums,
     }))
+
+interface BuildSummariesForPeriodParams {
+  startDate: Date
+  endDate: Date
+  rootOrganisations: string[]
+  relevantQuestionIds: Set<number>
+  transaction: any
+  separateOrgId: string
+}
 
 const buildSummariesForPeriod = async ({
   startDate,
@@ -85,7 +97,7 @@ const buildSummariesForPeriod = async ({
   relevantQuestionIds,
   transaction,
   separateOrgId,
-}) => {
+}: BuildSummariesForPeriodParams) => {
   // ---------------- Phase 1: ------------------
   // Build summary entities from feedbacks for courses during this time period
   // We do this for the following entities, from "bottom up":
@@ -180,11 +192,13 @@ const buildSummariesForPeriod = async ({
         },
         required: true,
         separate: true, // Tested, DID improve performance
-        include: {
-          model: Feedback,
-          attributes: ['data', 'createdAt'],
-          as: 'feedback',
-        },
+        include: [
+          {
+            model: Feedback,
+            attributes: ['data', 'createdAt'],
+            as: 'feedback',
+          },
+        ],
       },
     ],
     transaction,
@@ -196,14 +210,16 @@ const buildSummariesForPeriod = async ({
   for (const fbt of feedbackTargets) {
     // Ignore those that have no students
     // eslint-disable-next-line no-continue
-    if (!fbt.userFeedbackTargets.length > 0) continue
+    if (!fbt.userFeedbackTargets.length) continue
 
-    const result = {}
+    const result: Record<string, { mean: number; distribution: Record<string, number> }> = {}
 
     // Go through each feedback of fbt
     for (const ufbt of fbt.userFeedbackTargets) {
       if (ufbt.feedback) {
         for (const { data, questionId } of ufbt.feedback.data) {
+          if (typeof data !== 'string') continue
+
           // Only consider LIKERT & WORKLOAD questions
           if (relevantQuestionIds.has(questionId)) {
             // Initialise question data
@@ -284,8 +300,8 @@ const buildSummariesForPeriod = async ({
     const { feedbackTargets } = cur
     delete cur.feedbackTargets // Now not needed anymore
 
-    cur.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
-    cur.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+    cur.data = sumSummaryDatas(feedbackTargets.map((fbtsum: any) => fbtsum.data))
+    cur.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
   // Make the initial CU summaries.
@@ -302,8 +318,8 @@ const buildSummariesForPeriod = async ({
     const { feedbackTargets } = cu
     delete cu.feedbackTargets // Now not needed anymore
 
-    cu.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
-    cu.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+    cu.data = sumSummaryDatas(feedbackTargets.map((fbtsum: any) => fbtsum.data))
+    cu.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
@@ -322,8 +338,8 @@ const buildSummariesForPeriod = async ({
     const { feedbackTargets } = cuGroup
     delete cuGroup.feedbackTargets // Now not needed anymore
 
-    cuGroup.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
-    cuGroup.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+    cuGroup.data = sumSummaryDatas(feedbackTargets.map((fbtsum: any) => fbtsum.data))
+    cuGroup.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
   // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
@@ -348,8 +364,8 @@ const buildSummariesForPeriod = async ({
     const { feedbackTargets } = tag
     delete tag.feedbackTargets // Now not needed anymore
 
-    tag.data = sumSummaryDatas(feedbackTargets.map(fbtsum => fbtsum.data))
-    tag.extraOrgIds = _.uniq(feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+    tag.data = sumSummaryDatas(feedbackTargets.map((fbtsum: any) => fbtsum.data))
+    tag.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
@@ -359,7 +375,7 @@ const buildSummariesForPeriod = async ({
     entityId: org.id,
     entityType: 'organisation',
     parentId: org.parentId,
-    parent: null,
+    parent: null as any,
     feedbackTargets: _.uniqBy(
       basicFeedbackTargetSummaries.filter(
         fbtsum => fbtsum.curOrgIds.includes(org.id) || fbtsum.cuOrgIds.includes(org.id)
@@ -379,7 +395,7 @@ const buildSummariesForPeriod = async ({
 
   do {
     // Find parent from list for each organisation. Also find parent org ids that are not in the list
-    const orgsMissingParentOrgs = []
+    const orgsMissingParentOrgs: typeof orgSummaries = []
     orgSummaries.forEach(org => {
       if (org.parent) return // Parent already found for this...
       org.parent = orgSummaries.find(o => o.entityId === org.parentId)
@@ -421,7 +437,7 @@ const buildSummariesForPeriod = async ({
   /**
    * Add CURs of organisation's parent from organisation, and then do the same for parent, recursively
    */
-  const populateParentsCURs = organisation => {
+  const populateParentsCURs = (organisation: (typeof orgSummaries)[number]) => {
     const { parent } = organisation
     if (!parent) return // organisation is a root
     parent.feedbackTargets = _.uniqBy(parent.feedbackTargets.concat(organisation.feedbackTargets), 'feedbackTargetId')
@@ -440,12 +456,19 @@ const buildSummariesForPeriod = async ({
 
   // Now we can actually calculate the org summaries from each org's CURs
   for (const org of orgSummariesWithVariants) {
-    org.data = sumSummaryDatas(org.feedbackTargets.map(fbtsum => fbtsum.data))
-    org.extraOrgIds = _.uniq(org.feedbackTargets.flatMap(fbtsum => fbtsum.extraOrgIds))
+    org.data = sumSummaryDatas(org.feedbackTargets.map((fbtsum: any) => fbtsum.data))
+    org.extraOrgIds = _.uniq(org.feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
     delete org.feedbackTargets
     delete org.parent
   }
 
+  type SummaryCreateParams = {
+    entityId: string
+    entityType: string
+    feedbackTargetId: number
+    data: any
+    extraOrgIds: string[]
+  }
   const relevantFields = ['entityId', 'entityType', 'feedbackTargetId', 'data', 'extraOrgIds']
   const allSummaries = feedbackTargetsSummaries
     .concat(courseRealisationSummaries)
@@ -454,7 +477,7 @@ const buildSummariesForPeriod = async ({
     .concat(tagSummaries)
     .concat(orgSummariesWithVariants)
     .filter(summary => summary.data && summary.data.studentCount > 0)
-    .map(summary => _.pick(summary, relevantFields))
+    .map(summary => _.pick(summary, relevantFields) as SummaryCreateParams)
     .map(summary => ({ ...summary, startDate, endDate }))
 
   // Write all summaries to db.
@@ -498,7 +521,7 @@ const summariesHaveToBeFullyRebuilt = async () => {
  *
  * If one would want to see periods of two years, summaries for 2021+2022 and 2023+2024 would have to be constructed in addition.
  */
-const buildSummaries = async (forceAll = false) => {
+export const buildSummaries = async (forceAll = false) => {
   let datePeriods = (() => {
     const startYear = 2020 // Nothing ending before this is considered
     const endYear = new Date().getFullYear() // Nothing ending after this is considered
@@ -545,7 +568,7 @@ const buildSummaries = async (forceAll = false) => {
     datePeriods = datePeriods.filter(({ end }) => end > T)
     logger.info(`Rebuilding summaries for ${datePeriods.length} time periods.`)
   } else {
-    logger.info(`Rebuilding summaries fully.`)
+    logger.info('Rebuilding summaries fully.')
   }
 
   // Initialize root organisations and relevant question ids
@@ -573,8 +596,4 @@ const buildSummaries = async (forceAll = false) => {
       })
     })
   }
-}
-
-module.exports = {
-  buildSummaries,
 }

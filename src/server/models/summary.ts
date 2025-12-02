@@ -34,8 +34,8 @@ class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Su
   declare entityId: string
   declare entityType: string
   declare feedbackTargetId: CreationOptional<number | null>
-  declare startDate: string
-  declare endDate: string
+  declare startDate: Date
+  declare endDate: Date
   declare extraOrgIds: string[]
   declare data: SummaryData
   declare children?: Summary[]

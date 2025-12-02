@@ -13,8 +13,8 @@ export const createSummaryForFeedbackTarget = async (
     entityId: String(feedbackTargetId),
     entityType: 'feedbackTarget',
     feedbackTargetId,
-    startDate: activityPeriod.startDate.toISOString(),
-    endDate: activityPeriod.endDate.toISOString(),
+    startDate: activityPeriod.startDate,
+    endDate: activityPeriod.endDate,
     extraOrgIds,
     data: {
       feedbackCount: 0,

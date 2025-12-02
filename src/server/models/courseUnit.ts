@@ -18,6 +18,7 @@ import { Organisation } from './organisation'
 import type { CourseRealisation } from './courseRealisation'
 import type { FeedbackTarget } from './feedbackTarget'
 import type { Tag } from './tag'
+import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
 
 export type CourseUnitValidityPeriod = {
   startDate: Date
@@ -43,6 +44,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   declare summaries?: Summary[]
   declare groupSummaries?: Summary[]
   declare courseRealisations?: CourseRealisation[]
+  declare courseUnitsOrganisations?: CourseUnitsOrganisation[]
   declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
   declare organisations?: NonAttribute<Organisation[]>
   declare tags?: NonAttribute<Tag[]>

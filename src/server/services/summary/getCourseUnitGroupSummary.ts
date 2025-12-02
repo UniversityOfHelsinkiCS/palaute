@@ -1,5 +1,5 @@
-const _ = require('lodash')
-const {
+import _ from 'lodash'
+import {
   CourseUnit,
   FeedbackTarget,
   CourseRealisation,
@@ -7,13 +7,27 @@ const {
   CourseUnitsOrganisation,
   UserFeedbackTarget,
   User,
-} = require('../../models')
-const { sumSummaries, getScopedSummary } = require('./utils')
-const { getAccessibleCourseRealisationIds } = require('./access')
-const { ApplicationError } = require('../../util/customErrors')
-const { getUserOrganisationAccess } = require('../organisationAccess/organisationAccess')
+} from '../../models'
+import { sumSummaries, getScopedSummary } from './utils'
+import { getAccessibleCourseRealisationIds } from './access'
+import { ApplicationError } from '../../util/customErrors'
+import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
-const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDate, allTime }) => {
+interface GetCourseUnitGroupSummaryParams {
+  user: User
+  courseCode: string
+  startDate?: string
+  endDate?: string
+  allTime?: boolean
+}
+
+export const getCourseUnitGroupSummaries = async ({
+  user,
+  courseCode,
+  startDate,
+  endDate,
+  allTime,
+}: GetCourseUnitGroupSummaryParams) => {
   const orgAccess = await getUserOrganisationAccess(user)
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
   const scopedSummary = getScopedSummary({ startDate, endDate, allTime })
@@ -66,11 +80,13 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDat
             model: UserFeedbackTarget.scope('teachers'),
             attributes: ['userId', 'accessStatus', 'isAdministrativePerson'],
             as: 'userFeedbackTargets',
-            include: {
-              model: User,
-              attributes: ['id', 'firstName', 'lastName', 'email'],
-              as: 'user',
-            },
+            include: [
+              {
+                model: User,
+                attributes: ['id', 'firstName', 'lastName', 'email'],
+                as: 'user',
+              },
+            ],
           },
         ],
       },
@@ -78,7 +94,7 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDat
     order: [['validityPeriod.startDate', 'desc']], // Ordering! Now [0] is the newest.
   })
 
-  if (!courseUnits?.length > 0) {
+  if (!courseUnits?.length) {
     return null
   }
 
@@ -107,8 +123,4 @@ const getCourseUnitGroupSummaries = async ({ user, courseCode, startDate, endDat
   }
 
   return courseUnitGroup
-}
-
-module.exports = {
-  getCourseUnitGroupSummaries,
 }
