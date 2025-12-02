@@ -1,6 +1,6 @@
 import { Op, QueryTypes } from 'sequelize'
 import _ from 'lodash'
-import { differenceInYears, subDays } from 'date-fns'
+import { differenceInYears, formatISO, subDays } from 'date-fns'
 import {
   Feedback,
   UserFeedbackTarget,
@@ -478,7 +478,7 @@ const buildSummariesForPeriod = async ({
     .concat(orgSummariesWithVariants)
     .filter(summary => summary.data && summary.data.studentCount > 0)
     .map(summary => _.pick(summary, relevantFields) as SummaryCreateParams)
-    .map(summary => ({ ...summary, startDate, endDate }))
+    .map(summary => ({ ...summary, startDate: formatISO(startDate), endDate: formatISO(endDate) }))
 
   // Write all summaries to db.
   await Summary.bulkCreate(allSummaries, { transaction })

@@ -238,7 +238,7 @@ const getOrganisationSummaryWithChildOrganisations = async ({
     return null
   }
 
-  let childOrganisations = rootOrganisation.childOrganisations.map(org => org.toJSON())
+  let { childOrganisations } = rootOrganisation
 
   // Skip some (configured) child organisations and get their children instead. Add them to the root organisations children.
   for (const organisationToSkip of childOrganisations.filter(org => SUMMARY_SKIP_ORG_IDS.includes(org.id))) {
@@ -259,15 +259,18 @@ const getOrganisationSummaryWithChildOrganisations = async ({
 
   // Each organisation may have multiple summaries if the time range is larger.
   // Merge them together.
-  rootOrganisation.summary = sumSummaries(rootOrganisation.summaries)
+  const summary = sumSummaries(rootOrganisation.summaries)
+  rootOrganisation.summary = summary
+  // console.log('root org summary', rootOrganisation.id, rootOrganisation.dataValues.summary, rootOrganisation.summaries)
   delete rootOrganisation.dataValues.summaries
   for (const org of childOrganisations) {
     org.summary = sumSummaries(org.summaries)
+    // console.log('org summary', org.id, org.summary)
     delete org.summaries
   }
 
   const organisation = rootOrganisation.toJSON()
-  organisation.childOrganisations = childOrganisations
+  organisation.childOrganisations = childOrganisations.map(org => org.toJSON())
 
   return organisation
 }

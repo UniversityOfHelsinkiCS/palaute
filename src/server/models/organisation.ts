@@ -10,7 +10,6 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
-  NonAttribute,
 } from 'sequelize'
 import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
@@ -40,9 +39,9 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   declare courseUnits?: CourseUnit[]
   declare summaries?: Summary[]
   declare groupSummaries?: Summary[]
-  declare courseRealisationsOrganisations?: NonAttribute<CourseRealisationsOrganisation[]>
-  declare courseUnitsOrganisations?: NonAttribute<CourseUnitsOrganisation[]>
-  declare tags?: NonAttribute<Tag[]>
+  declare courseRealisationsOrganisations?: CourseRealisationsOrganisation[]
+  declare courseUnitsOrganisations?: CourseUnitsOrganisation[]
+  declare tags?: Tag[]
 
   // --- Helper methods ---
   // ----------------------
