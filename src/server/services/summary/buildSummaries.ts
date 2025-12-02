@@ -1,6 +1,6 @@
 import { Op, QueryTypes } from 'sequelize'
-import datefns from 'date-fns'
 import _ from 'lodash'
+import { differenceInYears, subDays } from 'date-fns'
 import {
   Feedback,
   UserFeedbackTarget,
@@ -494,7 +494,7 @@ const summariesHaveToBeFullyRebuilt = async () => {
     return true
   }
 
-  const diff = datefns.differenceInYears(new Date(), new Date(latestSummary.endDate))
+  const diff = differenceInYears(new Date(), new Date(latestSummary.endDate))
   if (diff > 0) {
     return true
   }
@@ -536,12 +536,12 @@ export const buildSummaries = async (forceAll = false) => {
       dates.push({
         // kevät
         start: startOfSpringSemester,
-        end: datefns.subDays(startOfAutumnSemester, 1),
+        end: subDays(startOfAutumnSemester, 1),
       })
       dates.push({
         // syys
         start: startOfAutumnSemester,
-        end: datefns.subDays(startOfNextSpringSemester, 1),
+        end: subDays(startOfNextSpringSemester, 1),
       })
       dates.push({
         // full academic year
