@@ -1,7 +1,20 @@
-const _ = require('lodash')
-const { Op } = require('sequelize')
-const { FeedbackTarget, CourseRealisation, UserFeedbackTarget, CourseUnit } = require('../../models')
-const { getFeedbackTargetSurveys } = require('../surveys/getFeedbackTargetSurveys')
+import _ from 'lodash'
+import { Op } from 'sequelize'
+import { FeedbackTarget, CourseRealisation, UserFeedbackTarget, CourseUnit } from '../../models'
+import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
+import { User } from '../../models/user'
+
+interface GetForCourseUnitParams {
+  courseCode: string
+  user: User
+  startDateAfter?: string
+  startDateBefore?: string
+  endDateAfter?: string
+  endDateBefore?: string
+  feedbackType?: string
+  includeSurveys?: string
+  isOrganisationSurvey?: boolean
+}
 
 const getForCourseUnit = async ({
   courseCode,
@@ -13,8 +26,8 @@ const getForCourseUnit = async ({
   feedbackType,
   includeSurveys,
   isOrganisationSurvey,
-}) => {
-  const courseRealisationWhere = {
+}: GetForCourseUnitParams) => {
+  const courseRealisationWhere: any = {
     [Op.and]: [
       startDateAfter && {
         startDate: {
@@ -103,7 +116,7 @@ const getForCourseUnit = async ({
       'surveys',
       'userCreated',
     ]),
-    studentCount: target.students.length,
+    studentCount: (target as any).students.length,
     feedbackResponseGiven: target.feedbackResponse?.length > 3,
     feedbackResponseSent: target.feedbackResponseEmailSent,
   }))
@@ -111,6 +124,4 @@ const getForCourseUnit = async ({
   return formattedFeedbackTargets
 }
 
-module.exports = {
-  getForCourseUnit,
-}
+export { getForCourseUnit }

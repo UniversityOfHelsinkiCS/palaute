@@ -173,6 +173,8 @@ const getScopedSummary = ({
 export const addFeedbackDataToSummary = (summaryData: SummaryData, feedbackData: FeedbackData) => {
   // Update summary question results based on the feedback data
   for (const { questionId, data: optionId } of feedbackData) {
+    if (typeof optionId !== 'string') continue
+
     const optionValue = mapOptionIdToValue(optionId, questionId)
 
     // Make sure the value is not NaN
@@ -211,6 +213,8 @@ export const addFeedbackDataToSummary = (summaryData: SummaryData, feedbackData:
 export const removeFeedbackDataFromSummary = (summaryData: SummaryData, feedbackData: FeedbackData) => {
   // Update summary question results based on the feedback data
   for (const { questionId, data: optionId } of feedbackData) {
+    if (typeof optionId !== 'string') continue
+
     const summaryResultForQuestion = summaryData.result[questionId]
 
     const optionValue = mapOptionIdToValue(optionId, questionId)

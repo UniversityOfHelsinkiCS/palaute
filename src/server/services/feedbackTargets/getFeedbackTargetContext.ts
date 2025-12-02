@@ -1,6 +1,7 @@
-const { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Summary } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { getAccess } = require('./getAccess')
+import { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Summary } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { getAccess } from './getAccess'
+import { User } from '../../models/user'
 
 /**
  * Fetch fbt, ufbt and compute access object.
@@ -8,7 +9,12 @@ const { getAccess } = require('./getAccess')
  * where action is either viewing or mutating.
  * Throws 404 when id does not match anything, so you don't have to check that.
  */
-const getFeedbackTargetContext = async ({ feedbackTargetId, user }) => {
+interface GetFeedbackTargetContextParams {
+  feedbackTargetId: number | string
+  user: User
+}
+
+const getFeedbackTargetContext = async ({ feedbackTargetId, user }: GetFeedbackTargetContextParams) => {
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId, {
     include: [
       {
@@ -40,6 +46,4 @@ const getFeedbackTargetContext = async ({ feedbackTargetId, user }) => {
   }
 }
 
-module.exports = {
-  getFeedbackTargetContext,
-}
+export { getFeedbackTargetContext }

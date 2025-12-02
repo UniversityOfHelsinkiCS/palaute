@@ -1,8 +1,17 @@
-const { getOrganisationAccessByCourseUnitId } = require('../organisationAccess/organisationAccess')
-const { Access } = require('./Access')
+import { getOrganisationAccessByCourseUnitId } from '../organisationAccess/organisationAccess'
+import { Access } from './Access'
+import { User } from '../../models/user'
+import { FeedbackTarget } from '../../models/feedbackTarget'
+import { UserFeedbackTarget } from '../../models/userFeedbackTarget'
 
-const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
-  const accesses = []
+interface GetAccessParams {
+  userFeedbackTarget: UserFeedbackTarget | null
+  user: User
+  feedbackTarget: FeedbackTarget
+}
+
+const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }: GetAccessParams) => {
+  const accesses: Access[] = []
 
   if (user.dataValues.isAdmin) {
     accesses.push(Access.ADMIN)
@@ -31,4 +40,4 @@ const getAccess = async ({ userFeedbackTarget, user, feedbackTarget }) => {
   return Access.mergeAccesses(accesses)
 }
 
-module.exports = { getAccess }
+export { getAccess }

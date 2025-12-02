@@ -1,6 +1,6 @@
-const { FeedbackTarget, CourseUnit, CourseRealisation } = require('../../models')
+import { FeedbackTarget, CourseUnit, CourseRealisation } from '../../models'
 
-const getFeedbackErrorViewDetails = id =>
+const getFeedbackErrorViewDetails = (id: number | string) =>
   FeedbackTarget.findByPk(id, {
     attributes: ['id', 'name', 'userCreated', 'opensAt', 'closesAt'],
     include: [
@@ -19,4 +19,4 @@ const getFeedbackErrorViewDetails = id =>
     ],
   })
 
-module.exports = { getFeedbackErrorViewDetails }
+export { getFeedbackErrorViewDetails }

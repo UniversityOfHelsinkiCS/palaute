@@ -1,9 +1,16 @@
-const { UserFeedbackTarget } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const cache = require('./feedbackTargetCache')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+import { UserFeedbackTarget } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import cache from './feedbackTargetCache'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { User } from '../../models/user'
 
-const deleteTeacher = async ({ feedbackTargetId, teacherId, user }) => {
+interface DeleteTeacherParams {
+  feedbackTargetId: number
+  teacherId: string
+  user: User
+}
+
+const deleteTeacher = async ({ feedbackTargetId, teacherId, user }: DeleteTeacherParams) => {
   const { access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
@@ -27,6 +34,4 @@ const deleteTeacher = async ({ feedbackTargetId, teacherId, user }) => {
   cache.invalidate(feedbackTargetId)
 }
 
-module.exports = {
-  deleteTeacher,
-}
+export { deleteTeacher }

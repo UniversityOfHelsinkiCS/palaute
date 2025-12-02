@@ -1,15 +1,16 @@
-const _ = require('lodash')
-const { startOfDay, endOfDay } = require('date-fns')
-const { parseFromTimeZone } = require('date-fns-timezone')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
-const { ApplicationError } = require('../../util/customErrors')
-const { Survey, Question } = require('../../models')
-const { createFeedbackTargetSurveyLog, createFeedbackTargetLog } = require('../auditLog')
-const { updateOrganisationSurvey } = require('../organisations/organisationSurveys')
+import _ from 'lodash'
+import { startOfDay, endOfDay } from 'date-fns'
+import { parseFromTimeZone } from 'date-fns-timezone'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { ApplicationError } from '../../util/customErrors'
+import { Survey, Question, FeedbackTarget } from '../../models'
+import { createFeedbackTargetSurveyLog, createFeedbackTargetLog } from '../auditLog'
+import { updateOrganisationSurvey } from '../organisations/organisationSurveys'
+import { User } from '../../models/user'
 
-const filterUpdates = update => update !== undefined && update !== null
+const filterUpdates = (update: any) => update !== undefined && update !== null
 
-const parseUpdates = body => {
+const parseUpdates = (body: any) => {
   const {
     name,
     hidden,
@@ -22,7 +23,7 @@ const parseUpdates = body => {
     settingsReadByTeacher,
     tokenEnrolmentEnabled,
   } = body
-  const parseDate = d => parseFromTimeZone(new Date(d), { timeZone: 'Europe/Helsinki' })
+  const parseDate = (d: any) => parseFromTimeZone(d, { timeZone: 'Europe/Helsinki' })
 
   const updates = _.pickBy(
     {
@@ -30,7 +31,7 @@ const parseUpdates = body => {
       hidden,
       opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
       closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
-      publicQuestionIds: publicQuestionIds?.filter(id => !!Number(id)),
+      publicQuestionIds: publicQuestionIds?.filter((id: any) => !!Number(id)),
       feedbackVisibility,
       continuousFeedbackEnabled,
       sendContinuousFeedbackDigestEmail,
@@ -43,7 +44,7 @@ const parseUpdates = body => {
   return updates
 }
 
-const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQuestionIds) => {
+const parseUpdatedQuestionIds = (updatedPublicQuestionIds: number[], questions: any[], publicQuestionIds: number[]) => {
   let currentIds = updatedPublicQuestionIds ?? publicQuestionIds
   const configurable = questions.filter(q => q.publicityConfigurable)
   // remove nonpublic
@@ -57,7 +58,7 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds, questions, publicQues
   return _.uniq(currentIds).filter(Number)
 }
 
-const validateGroupingQuestions = questions => {
+const validateGroupingQuestions = (questions: any[]) => {
   const tooManyGroupingQuestions = _.countBy(questions, 'secondaryType').GROUPING > 1
   if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping question is allowed')
 
@@ -68,7 +69,7 @@ const validateGroupingQuestions = questions => {
     ApplicationError.BadRequest('Only single choice and multiple choice may be grouping questions')
 }
 
-const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
+const handleListOfUpdatedQuestionsAndReturnIds = async (questions: any[]) => {
   validateGroupingQuestions(questions)
 
   const updatedQuestionIdsList = []
@@ -96,7 +97,7 @@ const handleListOfUpdatedQuestionsAndReturnIds = async questions => {
   return updatedQuestionIdsList
 }
 
-const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
+const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId: number, questions: any[]) => {
   const survey = await Survey.findOne({
     where: {
       id: surveyId,
@@ -120,16 +121,22 @@ const updateSurvey = async (feedbackTarget, user, surveyId, questions) => {
 
   await survey.save()
 
-  createFeedbackTargetSurveyLog(feedbackTarget.id, user, removedIds, newIds)
+  await createFeedbackTargetSurveyLog(feedbackTarget.id, user, removedIds, newIds)
 
   return updates
 }
 
-const update = async ({ feedbackTargetId, user, body }) => {
+interface UpdateParams {
+  feedbackTargetId: number
+  user: User
+  body: any
+}
+
+const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canUpdate()) {
-    throw ApplicationError.Forbidden('No rights to update feedback target')
+    ApplicationError.Forbidden('No rights to update feedback target')
   }
 
   const updates = parseUpdates(body)
@@ -137,7 +144,7 @@ const update = async ({ feedbackTargetId, user, body }) => {
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
-      throw ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
+      ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
 
@@ -167,20 +174,19 @@ const update = async ({ feedbackTargetId, user, body }) => {
     } = await updateSurvey(feedbackTarget, user, surveyId, questions)
 
     if (newIds.length === 1) {
-      const newQuestion = questions.find(q => q.id === undefined)
+      const newQuestion = questions.find((q: any) => q.id === undefined)
       if (newQuestion?.public) {
         updates.publicQuestionIds.push(newIds[0])
       }
     }
 
-    updates.publicQuestionIds = updates.publicQuestionIds.filter(id => !removedIds.includes(id))
+    updates.publicQuestionIds = updates.publicQuestionIds.filter((id: any) => !removedIds.includes(id))
 
     updates.questions = updatedQuestions
   }
 
-  // @feat Gradu survey
   if (!feedbackTarget.userCreated && updates.tokenEnrolmentEnabled) {
-    throw ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
+    ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
   }
 
   await createFeedbackTargetLog(feedbackTarget, updates, user)
@@ -195,6 +201,4 @@ const update = async ({ feedbackTargetId, user, body }) => {
   return feedbackTarget
 }
 
-module.exports = {
-  update,
-}
+export { update }

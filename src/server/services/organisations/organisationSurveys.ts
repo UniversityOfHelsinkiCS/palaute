@@ -25,6 +25,7 @@ import {
 } from '../../models'
 import cache from '../feedbackTargets/feedbackTargetCache'
 import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
+import { AccessStatus } from '../../models/userFeedbackTarget'
 
 const getOrganisationCourseUnit = async (organisationId: string) => {
   const organisationCourseUnit = await CourseUnit.findOne({
@@ -135,7 +136,11 @@ export const getStudentIds = async (studentNumbers: string[]) => {
   return studentIds
 }
 
-export const createUserFeedbackTargets = async (feedbackTargetId: number, userIds: string[], accessStatus: string) => {
+export const createUserFeedbackTargets = async (
+  feedbackTargetId: number,
+  userIds: string[],
+  accessStatus: AccessStatus
+) => {
   const createdUserFeedbackTargets = []
 
   for (const userId of userIds) {
@@ -434,7 +439,11 @@ export const getDeletionAllowed = async (organisationSurveyId: number) => {
   return feedbackCount === 0
 }
 
-export const updateUserFeedbackTargets = async (feedbackTargetId: number, userIds: string[], accessStatus: string) => {
+export const updateUserFeedbackTargets = async (
+  feedbackTargetId: number,
+  userIds: string[],
+  accessStatus: AccessStatus
+) => {
   await UserFeedbackTarget.destroy({
     where: {
       feedbackTargetId,
@@ -606,18 +615,3 @@ export const deleteOrganisationSurvey = async (feedbackTargetId: number) => {
     throw err
   }
 }
-
-/*module.exports = {
-  initializeOrganisationCourseUnit,
-  createOrganisationFeedbackTarget,
-  createUserFeedbackTargets,
-  getStudentIds,
-  getSurveyById,
-  getSurveysForOrganisation,
-  getSurveysForTeacher,
-  getDeletionAllowed,
-  updateOrganisationSurvey,
-  deleteOrganisationSurvey,
-  getOrganisationSurveyCourseStudents,
-  createOrganisationSurveyCourses,
-}*/

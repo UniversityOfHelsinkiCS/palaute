@@ -15,7 +15,6 @@ import {
   CreationOptional,
   ForeignKey,
   HasOneGetAssociationMixin,
-  NonAttribute,
 } from 'sequelize'
 
 import _ from 'lodash'
@@ -29,6 +28,8 @@ import { sequelize } from '../db/dbConnection'
 import type { CourseUnit } from './courseUnit'
 import type { Question } from './question'
 import type Summary from './summary'
+import type { Tag } from './tag'
+import type { Group } from './group'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
   // --- Acual DB columns ---
@@ -68,12 +69,13 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare responsibleTeachers?: any
   declare teachers?: any
   declare administrativePersons?: any
-  declare tags?: any
+  declare tags?: Tag[]
   declare studentCount?: number
-  declare courseUnit?: NonAttribute<CourseUnit>
-  declare courseRealisation?: NonAttribute<CourseRealisation>
+  declare courseUnit?: CourseUnit
+  declare courseRealisation?: CourseRealisation
   declare userFeedbackTargets?: UserFeedbackTarget[]
   declare summary?: Summary
+  declare groups?: Group[]
 
   // --- Association methods -----------------------------
   // --- only the ones that are used are declared here ---

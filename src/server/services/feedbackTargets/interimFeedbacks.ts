@@ -1,9 +1,10 @@
-const { v4: uuidv4 } = require('uuid')
-const { sequelize } = require('../../db/dbConnection')
+import { v4 as uuidv4 } from 'uuid'
+import { LocalizedString } from '@common/types/common'
+import { sequelize } from '../../db/dbConnection'
 
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
-const {
+import {
   CourseUnit,
   CourseRealisation,
   FeedbackTarget,
@@ -12,13 +13,14 @@ const {
   Survey,
   User,
   Summary,
-} = require('../../models')
+} from '../../models'
 
-const { logger } = require('../../util/logger')
-const { formatActivityPeriod } = require('../../util/common')
-const { ApplicationError } = require('../../util/customErrors')
+import { logger } from '../../util/logger'
+import { DateRangeInput, formatActivityPeriod } from '../../util/common'
+import { ApplicationError } from '../../util/customErrors'
+import { User as UserType } from '../../models/user'
 
-const getInterimFeedbackParentFbt = async (interimFbtId, user) => {
+const getInterimFeedbackParentFbt = async (interimFbtId: number | string, user: UserType) => {
   const { access, feedbackTarget: interimFeedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId: interimFbtId,
     user,
@@ -49,7 +51,10 @@ const getInterimFeedbackParentFbt = async (interimFbtId, user) => {
   return parentFeedbackTarget
 }
 
-const createUserFeedbackTargets = async (parentFeedbackTargetId, interimFeedbackTargetId) => {
+const createUserFeedbackTargets = async (
+  parentFeedbackTargetId: number | string,
+  interimFeedbackTargetId: number | string
+) => {
   const parentUserFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId: parentFeedbackTargetId,
@@ -63,7 +68,7 @@ const createUserFeedbackTargets = async (parentFeedbackTargetId, interimFeedback
       userId,
       isAdministrativePerson,
       groupIds,
-      feedbackTargetId: interimFeedbackTargetId,
+      feedbackTargetId: Number(interimFeedbackTargetId),
       userCreated: true,
     }))
   )
@@ -71,7 +76,7 @@ const createUserFeedbackTargets = async (parentFeedbackTargetId, interimFeedback
   return userFeedbackTargets
 }
 
-const getInterimFeedbackById = async feedbackTargetId => {
+const getInterimFeedbackById = async (feedbackTargetId: number | string) => {
   const interimFeedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
   if (!interimFeedbackTarget) throw new Error('Interim feedback target not found')
@@ -79,7 +84,7 @@ const getInterimFeedbackById = async feedbackTargetId => {
   return interimFeedbackTarget
 }
 
-const getInterimFeedbackTargets = async (parentId, user) => {
+const getInterimFeedbackTargets = async (parentId: number | string, user: UserType) => {
   const { access, feedbackTarget: parentFbt } = await getFeedbackTargetContext({
     feedbackTargetId: parentId,
     user,
@@ -127,10 +132,12 @@ const getInterimFeedbackTargets = async (parentId, user) => {
         where: {
           accessStatus: 'RESPONSIBLE_TEACHER',
         },
-        include: {
-          model: User,
-          as: 'user',
-        },
+        include: [
+          {
+            model: User,
+            as: 'user',
+          },
+        ],
       },
     ],
     where: {
@@ -144,7 +151,15 @@ const getInterimFeedbackTargets = async (parentId, user) => {
   return interimFeedbacks
 }
 
-const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) => {
+type InterimFeedbackTargetData = {
+  name: LocalizedString
+} & DateRangeInput
+
+const createInterimFeedbackTarget = async (
+  parentId: number | string,
+  user: UserType,
+  feedbackTargetData: InterimFeedbackTargetData
+) => {
   const { name } = feedbackTargetData
   const { startDate, endDate } = formatActivityPeriod(feedbackTargetData)
 
@@ -175,7 +190,7 @@ const createInterimFeedbackTarget = async (parentId, user, feedbackTargetData) =
   return interimFeedbackTarget
 }
 
-const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
+const updateInterimFeedbackTarget = async (fbtId: number | string, user: UserType, updates: any) => {
   const { name } = updates
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
@@ -185,7 +200,7 @@ const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
 
   if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
 
-  const { startDate, endDate } = formatActivityPeriod(updates) ?? feedbackTarget
+  const { startDate, endDate } = formatActivityPeriod(updates) ?? (feedbackTarget as any)
 
   const updatedInterimFeedbackTarget = await feedbackTarget.update({
     name,
@@ -198,7 +213,7 @@ const updateInterimFeedbackTarget = async (fbtId, user, updates) => {
   return updatedInterimFeedbackTarget
 }
 
-const removeInterimFeedbackTarget = async (fbtId, user) => {
+const removeInterimFeedbackTarget = async (fbtId: number | string, user: UserType) => {
   const t = await sequelize.transaction()
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
@@ -256,7 +271,7 @@ const removeInterimFeedbackTarget = async (fbtId, user) => {
   }
 }
 
-module.exports = {
+export {
   getInterimFeedbackParentFbt,
   getInterimFeedbackById,
   getInterimFeedbackTargets,

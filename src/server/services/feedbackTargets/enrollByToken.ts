@@ -1,12 +1,16 @@
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
+import { UserFeedbackTarget } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { User } from '../../models/user'
 
-const { UserFeedbackTarget } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+interface EnrollByTokenParams {
+  user: User
+  token: string
+}
 
-// @feat Gradu survey
-const enrollByToken = async ({ user, token }) => {
-  const decoded = jwt.verify(token, process.env.JWT_KEY)
+const enrollByToken = async ({ user, token }: EnrollByTokenParams) => {
+  const decoded = jwt.verify(token, process.env.JWT_KEY as string) as { feedbackTargetId: number }
   const { feedbackTargetId } = decoded
 
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTargetContext({ feedbackTargetId, user })
@@ -32,6 +36,4 @@ const enrollByToken = async ({ user, token }) => {
   return newUserFeedbackTarget
 }
 
-module.exports = {
-  enrollByToken,
-}
+export { enrollByToken }

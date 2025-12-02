@@ -77,7 +77,8 @@ module.exports = {
       ],
       rules: {
         semi: 'off',
-        quotes: ['error', 'single'],
+        'no-continue': 'off',
+        quotes: ['warn', 'single'],
         'linebreak-style': ['error', 'unix'],
         'no-use-before-define': 'off',
         '@typescript-eslint/indent': 'off',
@@ -85,6 +86,8 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/lines-between-class-members': 'off',
+        'no-shadow': 'off',
+        '@typescript-eslint/no-shadow': 'off',
       },
     },
 
@@ -111,8 +114,6 @@ module.exports = {
         '@typescript-eslint/no-explicit-any': 0,
         '@typescript-eslint/comma-dangle': 'off',
         '@typescript-eslint/lines-between-class-members': 'off',
-        'no-shadow': 'off',
-        '@typescript-eslint/no-shadow': 'off',
       },
     },
   ],

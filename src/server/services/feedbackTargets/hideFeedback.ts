@@ -1,10 +1,19 @@
-const feedbackTargetCache = require('./feedbackTargetCache')
-const { sequelize } = require('../../db/dbConnection')
-const { Feedback, UserFeedbackTarget } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+import feedbackTargetCache from './feedbackTargetCache'
+import { sequelize } from '../../db/dbConnection'
+import { Feedback, UserFeedbackTarget } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { User } from '../../models/user'
 
-const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedbackContent }) => {
+interface HideFeedbackParams {
+  feedbackTargetId: number
+  questionId: number
+  hidden: boolean
+  user: User
+  feedbackContent: string
+}
+
+const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedbackContent }: HideFeedbackParams) => {
   if (typeof hidden !== 'boolean') {
     throw new ApplicationError('Invalid value for hidden', 400)
   }
@@ -53,14 +62,26 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
       { transaction }
     )
     for (const feedback of feedbacksToUpdate) {
-      feedback.save()
+      await feedback.save()
     }
   })
 
   return feedbacksToUpdate.length
 }
 
-const adminDeleteFeedback = async ({ feedbackTargetId, questionId, user, feedbackContent }) => {
+interface AdminDeleteFeedbackParams {
+  feedbackTargetId: number
+  questionId: number
+  user: User
+  feedbackContent: string
+}
+
+const adminDeleteFeedback = async ({
+  feedbackTargetId,
+  questionId,
+  user,
+  feedbackContent,
+}: AdminDeleteFeedbackParams) => {
   // check access
   const { feedbackTarget, access } = await getFeedbackTargetContext({
     feedbackTargetId,
@@ -99,14 +120,11 @@ const adminDeleteFeedback = async ({ feedbackTargetId, questionId, user, feedbac
   if (feedbacksToUpdate.length === 0) return ApplicationError.BadRequest('Matching feedback not found')
 
   for (const feedback of feedbacksToUpdate) {
-    feedback.save()
+    await feedback.save()
   }
   feedbackTargetCache.invalidate(feedbackTarget.id)
 
   return feedbacksToUpdate.length
 }
 
-module.exports = {
-  hideFeedback,
-  adminDeleteFeedback,
-}
+export { hideFeedback, adminDeleteFeedback }

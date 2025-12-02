@@ -1,5 +1,5 @@
-const _ = require('lodash')
-const {
+import _ from 'lodash'
+import {
   FeedbackTarget,
   CourseUnit,
   Organisation,
@@ -10,13 +10,14 @@ const {
   Tag,
   Group,
   Summary,
-} = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const cache = require('./feedbackTargetCache')
-const { getAccess } = require('./getAccess')
-const { getFeedbackTargetSurveys } = require('../surveys/getFeedbackTargetSurveys')
+} from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import cache from './feedbackTargetCache'
+import { getAccess } from './getAccess'
+import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
+import { User as UserType } from '../../models/user'
 
-const populateGroupInformation = feedbackTarget => {
+const populateGroupInformation = (feedbackTarget: FeedbackTarget) => {
   for (const group of feedbackTarget.groups ?? []) {
     const teachers = feedbackTarget.userFeedbackTargets.filter(
       ufbt => ufbt.groupIds?.includes(group.id) && ufbt.hasTeacherAccess()
@@ -48,7 +49,7 @@ const populateGroupInformation = feedbackTarget => {
  * @param {number} id
  * @returns {Promise<object>}
  */
-const getFromDb = async id => {
+const getFromDb = async (id: number | string) => {
   const fbt = await FeedbackTarget.findByPk(id, {
     attributes: [
       'id',
@@ -64,11 +65,13 @@ const getFromDb = async id => {
         model: UserFeedbackTarget,
         as: 'userFeedbackTargets',
         separate: true,
-        include: {
-          model: User,
-          as: 'user',
-          attributes: ['id', 'firstName', 'lastName', 'email'],
-        },
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'firstName', 'lastName', 'email'],
+          },
+        ],
       },
       {
         model: Summary,
@@ -163,8 +166,8 @@ const getFromDb = async id => {
   return feedbackTargetJson
 }
 
-const getAdditionalDataFromCacheOrDb = async id => {
-  let data = await cache.get(id)
+const getAdditionalDataFromCacheOrDb = async (id: number | string) => {
+  let data = (await cache.get(id)) as Awaited<ReturnType<typeof getFromDb>> | null
   if (!data) {
     data = await getFromDb(id)
     cache.set(data.id, data)
@@ -172,13 +175,13 @@ const getAdditionalDataFromCacheOrDb = async id => {
   return data
 }
 
-const getUserFeedbackTarget = (userId, feedbackTargetId) =>
+const getUserFeedbackTarget = (userId: string, feedbackTargetId: number | string) =>
   UserFeedbackTarget.findOne({
     where: { userId, feedbackTargetId },
     include: [{ model: Feedback, as: 'feedback' }],
   })
 
-const getFeedbackTarget = feedbackTargetId =>
+const getFeedbackTarget = (feedbackTargetId: number | string) =>
   FeedbackTarget.findByPk(feedbackTargetId, {
     attributes: {
       /* These we get from cache */ exclude: ['studentCount', 'publicQuestionIds'],
@@ -186,7 +189,7 @@ const getFeedbackTarget = feedbackTargetId =>
     include: [{ model: CourseRealisation, as: 'courseRealisation' }],
   })
 
-const getOneForUser = async (id, user) => {
+const getOneForUser = async (id: number, user: UserType) => {
   const [additionalData, userFeedbackTarget, feedbackTarget] = await Promise.all([
     getAdditionalDataFromCacheOrDb(id),
     getUserFeedbackTarget(user.id, id),
@@ -216,4 +219,4 @@ const getOneForUser = async (id, user) => {
   }
 }
 
-module.exports = { getOneForUser, getAdditionalDataFromCacheOrDb }
+export { getOneForUser, getAdditionalDataFromCacheOrDb }

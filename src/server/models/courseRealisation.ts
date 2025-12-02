@@ -13,6 +13,7 @@ import type { LanguageId, LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import type { FeedbackTarget } from './feedbackTarget'
 import type { Organisation } from './organisation'
+import type { Tag } from './tag'
 
 export type CourseRealisationTeachingLanguages = LanguageId[]
 
@@ -32,6 +33,7 @@ class CourseRealisation extends Model<InferAttributes<CourseRealisation>, InferC
 
   declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
   declare organisations?: NonAttribute<Organisation[]>
+  declare tags?: NonAttribute<Tag[]>
 }
 
 CourseRealisation.init(

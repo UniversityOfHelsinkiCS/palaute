@@ -1,11 +1,12 @@
-const { sequelize } = require('../../db/dbConnection')
-const { UserFeedbackTarget, User, Feedback, CourseUnit } = require('../../models')
-const { ALWAYS_SHOW_STUDENT_LIST } = require('../../util/config')
-const { ApplicationError } = require('../../util/customErrors')
-const { logger } = require('../../util/logger')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
+import { sequelize } from '../../db/dbConnection'
+import { UserFeedbackTarget, User, Feedback, CourseUnit } from '../../models'
+import { ALWAYS_SHOW_STUDENT_LIST } from '../../util/config'
+import { ApplicationError } from '../../util/customErrors'
+import { logger } from '../../util/logger'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { User as UserType } from '../../models/user'
 
-const getStudentListVisibility = async courseUnitId => {
+const getStudentListVisibility = async (courseUnitId: string) => {
   const organisationRows = await sequelize.query(
     'SELECT O.* from organisations O, course_units_organisations C ' +
       " WHERE C.course_unit_id = :cuId AND O.id = C.organisation_id AND c.type = 'PRIMARY'",
@@ -16,31 +17,29 @@ const getStudentListVisibility = async courseUnitId => {
     }
   )
 
-  if (organisationRows.length === 0) {
+  if (!organisationRows[0].length) {
     logger.error('NO PRIMARY ORGANISATION FOR COURSE', { courseUnitId })
     return false
   }
-
-  if (!organisationRows[0].length) return false
 
   const {
     student_list_visible: studentListVisible,
     student_list_visible_by_course: studentListVisibleByCourse,
     student_list_visible_course_codes: studentListVisibleCourseCodes,
-  } = organisationRows[0][0]
+  } = organisationRows[0][0] as any
 
   if (studentListVisibleByCourse) {
-    const { courseCode } = await CourseUnit.findByPk(courseUnitId, {
+    const courseUnit = await CourseUnit.findByPk(courseUnitId, {
       attributes: ['courseCode'],
     })
 
-    if (studentListVisibleCourseCodes.includes(courseCode)) return true
+    if (courseUnit && studentListVisibleCourseCodes.includes(courseUnit.courseCode)) return true
   }
 
   return studentListVisible ?? false
 }
 
-const getStudentsWithFeedbackStatus = async feedbackTargetId => {
+const getStudentsWithFeedbackStatus = async (feedbackTargetId: number) => {
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -66,7 +65,12 @@ const getStudentsWithFeedbackStatus = async feedbackTargetId => {
   return students
 }
 
-const getStudents = async ({ feedbackTargetId, user }) => {
+interface GetStudentsParams {
+  feedbackTargetId: number
+  user: UserType
+}
+
+const getStudents = async ({ feedbackTargetId, user }: GetStudentsParams) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canSeeStudents()) ApplicationError.Forbidden()
@@ -96,6 +100,4 @@ const getStudents = async ({ feedbackTargetId, user }) => {
   return studentsWithoutFeedback
 }
 
-module.exports = {
-  getStudents,
-}
+export { getStudents }

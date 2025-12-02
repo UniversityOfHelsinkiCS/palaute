@@ -33,6 +33,8 @@ class Feedback extends Model<InferAttributes<Feedback>, InferCreationAttributes<
   }
 }
 
+export type PublicFeedback = ReturnType<Feedback['toPublicObject']>
+
 Feedback.init(
   {
     id: {

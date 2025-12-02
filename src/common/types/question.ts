@@ -38,6 +38,6 @@ export type Question = {
 
 export type QuestionAnswer = {
   questionId: number
-  data: string
+  data: string | string[]
   hidden?: boolean
 }

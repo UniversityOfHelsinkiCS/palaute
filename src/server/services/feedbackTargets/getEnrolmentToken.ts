@@ -1,8 +1,9 @@
-const jwt = require('jsonwebtoken')
+import jwt from 'jsonwebtoken'
 
-const { ApplicationError } = require('../../util/customErrors')
-const { getFeedbackTargetContext } = require('./getFeedbackTargetContext')
-const { JWT_KEY } = require('../../util/config')
+import { ApplicationError } from '../../util/customErrors'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
+import { JWT_KEY } from '../../util/config'
+import { User } from '../../models/user'
 
 /**
  * @feat Gradu survey
@@ -11,7 +12,12 @@ const { JWT_KEY } = require('../../util/config')
  * Only teachers and org admins can get the enrolment token.
  * The enrolment token can always be fetched, but can only be used if the feedback target is open for enrolment.
  */
-const getEnrolmentToken = async ({ feedbackTargetId, user }) => {
+interface GetEnrolmentTokenParams {
+  feedbackTargetId: number
+  user: User
+}
+
+const getEnrolmentToken = async ({ feedbackTargetId, user }: GetEnrolmentTokenParams) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canSeeTokens()) ApplicationError.Forbidden()
@@ -22,6 +28,4 @@ const getEnrolmentToken = async ({ feedbackTargetId, user }) => {
   return jwt.sign({ feedbackTargetId }, JWT_KEY)
 }
 
-module.exports = {
-  getEnrolmentToken,
-}
+export { getEnrolmentToken }

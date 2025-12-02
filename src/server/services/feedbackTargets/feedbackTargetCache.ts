@@ -1,31 +1,30 @@
-// because of dark javascript import magic, important to require them directly (or try if it works the normal way)
-const { Organisation } = require('../../models/organisation')
-const { FeedbackTarget } = require('../../models/feedbackTarget')
-const { Survey } = require('../../models/survey')
-const { logger } = require('../../util/logger')
-const { redis } = require('../../util/redisClient')
-const { CourseRealisationsTag, CourseRealisation } = require('../../models')
-const { FEEDBACK_TARGET_CACHE_TTL } = require('../../util/config')
+import { Organisation } from '../../models/organisation'
+import { FeedbackTarget } from '../../models/feedbackTarget'
+import { Survey } from '../../models/survey'
+import { logger } from '../../util/logger'
+import { redis } from '../../util/redisClient'
+import { CourseRealisationsTag, CourseRealisation } from '../../models'
+import { FEEDBACK_TARGET_CACHE_TTL } from '../../util/config'
 
-const getKey = feedbackTargetId => `feedbackTarget:${feedbackTargetId}`
+const getKey = (feedbackTargetId: number | string) => `feedbackTarget:${feedbackTargetId}`
 
 const cache = {
-  get: async feedbackTargetId => {
+  get: async (feedbackTargetId: number | string) => {
     const feedbackTargetJson = await redis.get(getKey(feedbackTargetId))
 
     if (!feedbackTargetJson) return null
 
     return JSON.parse(feedbackTargetJson)
   },
-  set: (feedbackTargetId, feedbackTarget) =>
+  set: (feedbackTargetId: number | string, feedbackTarget: any) =>
     redis.set(getKey(feedbackTargetId), JSON.stringify(feedbackTarget), { EX: FEEDBACK_TARGET_CACHE_TTL }),
-  invalidate: feedbackTargetId => {
+  invalidate: (feedbackTargetId: number | string) => {
     if (redis.delete(getKey(feedbackTargetId))) {
       logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
     }
   },
   invalidateAll: async () => {
-    logger.info(`[CACHE] invalidate fbt ALL`)
+    logger.info('[CACHE] invalidate fbt ALL')
 
     const pattern = getKey('*')
     const keys = await redis.keys(pattern)
@@ -38,34 +37,34 @@ const cache = {
 
     const cachedFeedbackTargets = await redis.mGet(keys)
 
-    return cachedFeedbackTargets.map(JSON.parse).filter(Boolean)
+    return cachedFeedbackTargets.map((json: string | null) => (json ? JSON.parse(json) : null)).filter(Boolean)
   },
 }
 
-const onOrganisationChange = async organisationCode => {
+const onOrganisationChange = async (organisationCode: string) => {
   const cachedFeedbackTargets = await cache.entries()
   for (const fbt of cachedFeedbackTargets) {
-    if (fbt.courseUnit.organisations.some(org => org.code === organisationCode)) {
+    if (fbt.courseUnit.organisations.some((org: any) => org.code === organisationCode)) {
       cache.invalidate(fbt.id)
     }
   }
 }
 
-const onFeedbackTargetChange = feedbackTarget => {
+const onFeedbackTargetChange = (feedbackTarget: FeedbackTarget) => {
   cache.invalidate(feedbackTarget.id)
 }
 
-const onSurveyChange = survey => {
+const onSurveyChange = (survey: Survey) => {
   if (survey.type === 'feedbackTarget') {
-    cache.invalidate(survey.feedbackTargetId)
+    cache.invalidate(survey.feedbackTargetId as number)
   } else if (survey.type === 'programme') {
-    onOrganisationChange(survey.typeId)
+    onOrganisationChange(survey.typeId as string)
   } else {
     cache.invalidateAll()
   }
 }
 
-const onTagChange = async curTag => {
+const onTagChange = async (curTag: CourseRealisationsTag) => {
   const fbts = await FeedbackTarget.findAll({
     attributes: ['id'],
     include: {
@@ -89,4 +88,4 @@ Survey.afterSave(onSurveyChange)
 CourseRealisationsTag.afterCreate(onTagChange)
 CourseRealisationsTag.beforeDestroy(onTagChange)
 
-module.exports = cache
+export default cache

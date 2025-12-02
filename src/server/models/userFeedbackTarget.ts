@@ -8,16 +8,20 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  NonAttribute,
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
 import type { User } from './user'
+import type Feedback from './feedback'
+
+export type AccessStatus = 'STUDENT' | 'TEACHER' | 'RESPONSIBLE_TEACHER'
 
 class UserFeedbackTarget extends Model<
   InferAttributes<UserFeedbackTarget>,
   InferCreationAttributes<UserFeedbackTarget>
 > {
   public id!: CreationOptional<number>
-  public accessStatus!: string
+  public accessStatus!: AccessStatus
   public feedbackId!: number
   public groupIds: string[] | null
   public userId!: string
@@ -28,6 +32,7 @@ class UserFeedbackTarget extends Model<
   public notGivingFeedback!: boolean
 
   declare user?: User
+  declare feedback?: NonAttribute<Feedback>
 
   public hasTeacherAccess(): boolean {
     return this.accessStatus === 'RESPONSIBLE_TEACHER' || this.accessStatus === 'TEACHER'

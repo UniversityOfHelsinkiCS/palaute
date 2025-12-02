@@ -189,7 +189,7 @@ export const getOrganisationAccessByCourseUnitId = async (user: User, courseUnit
     }
     return weight
   }
-  const organisationAccess = organisations
+  const organisationAccess: OrganisationAccess = organisations
     .filter(({ organisation }) => organisationIds.includes(organisation.id))
     ?.sort((a, b) => getPriority(a) - getPriority(b)) // read, write, admin. Reduce on next line practically takes the last value
     .reduce((finalAccess, org) => ({ ...finalAccess, ...org.access }), {})

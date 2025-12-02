@@ -40,8 +40,8 @@ adRouter.get('/for-organisation/:code', async (req: AuthenticatedRequest, res: R
 
   const feedbackTargets = await getFeedbackTargetsForOrganisation({
     organisationCode: code,
-    startDate,
-    endDate,
+    startDate: startDate as string,
+    endDate: endDate as string,
     user,
   })
 
@@ -57,8 +57,8 @@ if (PUBLIC_COURSE_BROWSER_ENABLED) {
 
     const feedbackTargets = await getPublicFeedbackTargetsForOrganisation({
       organisationCodes: codeArray,
-      startDate,
-      endDate,
+      startDate: startDate as string,
+      endDate: endDate as string,
     })
 
     res.send(feedbackTargets)
@@ -108,13 +108,13 @@ adRouter.get('/for-course-unit/:code', async (req: AuthenticatedRequest, res: Re
   const feedbackTargets = await getFeedbackTargetsForCourseUnit({
     user,
     courseCode: acualCourseCode,
-    startDateAfter,
-    startDateBefore,
-    endDateAfter,
-    endDateBefore,
-    feedbackType,
-    includeSurveys,
-    isOrganisationSurvey,
+    startDateAfter: startDateAfter as string,
+    startDateBefore: startDateBefore as string,
+    endDateAfter: endDateAfter as string,
+    endDateBefore: endDateBefore as string,
+    feedbackType: feedbackType as string,
+    includeSurveys: includeSurveys as string,
+    isOrganisationSurvey: isOrganisationSurvey as unknown as boolean,
   })
 
   res.send(feedbackTargets)
@@ -265,7 +265,7 @@ adRouter.get('/:id/logs', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { id: feedbackTargetId } = req.params
 
-  const logs = await getFeedbackTargetLogs({ feedbackTargetId, user })
+  const logs = await getFeedbackTargetLogs({ feedbackTargetId: Number(feedbackTargetId), user })
 
   res.send(logs)
 })
@@ -274,7 +274,13 @@ adRouter.put('/:id/hide-feedback', async (req: AuthenticatedRequest, res: Respon
   const { user } = req
   const { id: feedbackTargetId } = req.params
   const { questionId, feedbackContent, hidden } = req.body
-  const count = await hideFeedback({ user, feedbackTargetId, questionId, feedbackContent, hidden })
+  const count = await hideFeedback({
+    user,
+    feedbackTargetId: Number(feedbackTargetId),
+    questionId,
+    feedbackContent,
+    hidden,
+  })
   res.send({ hidden, count })
 })
 
@@ -282,7 +288,12 @@ adRouter.put('/:id/delete-feedback', async (req: AuthenticatedRequest, res: Resp
   const { user } = req
   const { id: feedbackTargetId } = req.params
   const { questionId, feedbackContent } = req.body
-  const count = await adminDeleteFeedback({ user, feedbackTargetId, questionId, feedbackContent })
+  const count = await adminDeleteFeedback({
+    user,
+    feedbackTargetId: Number(feedbackTargetId),
+    questionId,
+    feedbackContent,
+  })
   res.send({ count })
 })
 

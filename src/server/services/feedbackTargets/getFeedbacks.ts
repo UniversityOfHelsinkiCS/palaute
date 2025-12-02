@@ -1,12 +1,14 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
-const { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } = require('../../util/config')
-const { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { getAccess } = require('./getAccess')
-const { getAdditionalDataFromCacheOrDb } = require('./getOneForUser')
+import { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/config'
+import { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { getAccess } from './getAccess'
+import { getAdditionalDataFromCacheOrDb } from './getOneForUser'
+import { User } from '../../models/user'
+import { PublicFeedback } from '../../models/feedback'
 
-const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets, groupingQuestionId) =>
+const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets: UserFeedbackTarget[], groupingQuestionId: number) =>
   _.countBy(
     studentFeedbackTargets
       .filter(ufbt => ufbt.feedback)
@@ -16,7 +18,7 @@ const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets, groupingQuesti
       })
   )
 
-const countGroupsByGroupIds = studentFeedbackTargets =>
+const countGroupsByGroupIds = (studentFeedbackTargets: UserFeedbackTarget[]) =>
   _.countBy(studentFeedbackTargets.filter(ufbt => ufbt.feedback).flatMap(ufbt => ufbt.groupIds))
 
 /**
@@ -24,7 +26,7 @@ const countGroupsByGroupIds = studentFeedbackTargets =>
  * @param {object[]} studentFeedbackTargets
  * @param {number?} groupingQuestionId leave this empty if survey does not have a grouping question
  */
-const isGroupsAvailable = (studentFeedbackTargets, groupingQuestionId) => {
+const isGroupsAvailable = (studentFeedbackTargets: UserFeedbackTarget[], groupingQuestionId?: number) => {
   // count how many feedbacks every group has
   const feedbacksGroupIds = groupingQuestionId
     ? countGroupsByGroupQuestionAnswer(studentFeedbackTargets, groupingQuestionId)
@@ -34,7 +36,7 @@ const isGroupsAvailable = (studentFeedbackTargets, groupingQuestionId) => {
   return Object.values(feedbacksGroupIds).every(count => count === 0 || count >= FEEDBACK_HIDDEN_STUDENT_COUNT)
 }
 
-const getFeedbackTarget = (id, userId) =>
+const getFeedbackTarget = (id: number, userId: string) =>
   FeedbackTarget.findByPk(id, {
     include: [
       {
@@ -53,7 +55,7 @@ const getFeedbackTarget = (id, userId) =>
     ],
   })
 
-const getStudentFeedbackTargets = async feedbackTargetId => {
+const getStudentFeedbackTargets = async (feedbackTargetId: number) => {
   const studentFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {
       feedbackTargetId,
@@ -68,7 +70,12 @@ const getStudentFeedbackTargets = async feedbackTargetId => {
   return studentFeedbackTargets
 }
 
-const filterByGroupId = (studentFeedbackTargets, groupId, groupsAvailable, groupingQuestionId) => {
+const filterByGroupId = (
+  studentFeedbackTargets: UserFeedbackTarget[],
+  groupId: string | undefined,
+  groupsAvailable: boolean,
+  groupingQuestionId?: number
+) => {
   //  not requested or not available, do nothing
   if (!groupId || !groupsAvailable) {
     return studentFeedbackTargets
@@ -88,10 +95,8 @@ const filterByGroupId = (studentFeedbackTargets, groupId, groupsAvailable, group
 
 /**
  * Shuffle feedbacks so that answers from the same student are not identifiable.
- * @param {object[]} feedbacks
- * @param {number[]} questionIds
  */
-const shuffleFeedbacks = (feedbacks, questionIds) => {
+const shuffleFeedbacks = (feedbacks: PublicFeedback[], questionIds: number[]) => {
   const shuffledAnswers = _.shuffle(feedbacks.flatMap(({ data }) => data))
   const answersByQuestion = _.groupBy(shuffledAnswers, 'questionId')
 
@@ -103,13 +108,14 @@ const shuffleFeedbacks = (feedbacks, questionIds) => {
   return shuffledFeedbacks
 }
 
-const getPublicFeedbacks = (allFeedbacks, publicQuestionIds) =>
+const getPublicFeedbacks = (allFeedbacks: PublicFeedback[], publicQuestionIds: number[]) =>
   allFeedbacks.map(feedback => ({
     ...feedback,
     data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
   }))
 
-const getGroupingQuestion = surveys => surveys.teacherSurvey?.questions?.find(q => q.secondaryType === 'GROUPING')
+const getGroupingQuestion = (surveys: any) =>
+  surveys.teacherSurvey?.questions?.find((q: any) => q.secondaryType === 'GROUPING')
 
 /**
  *
@@ -118,8 +124,8 @@ const getGroupingQuestion = surveys => surveys.teacherSurvey?.questions?.find(q 
  * @param {string?} groupId
  * @returns
  */
-const getFeedbacks = async (id, user, groupId) => {
-  let feedbackTargetsToShow = []
+const getFeedbacks = async (id: number, user: User, groupId?: string) => {
+  let feedbackTargetsToShow: UserFeedbackTarget[] = []
 
   const [feedbackTarget, additionalData] = await Promise.all([
     getFeedbackTarget(id, user.id),
@@ -140,12 +146,14 @@ const getFeedbacks = async (id, user, groupId) => {
 
   if (
     (!access?.canSeePublicFeedbacks() && feedbackVisibility !== 'ALL') ||
-    (access.accessStatus === 'STUDENT' && !feedbackTarget.isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING)
+    ((access as any).accessStatus === 'STUDENT' &&
+      !feedbackTarget.isEnded &&
+      SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING)
   ) {
     return {
-      feedbacks: [],
+      feedbacks: [] as any[],
       feedbackVisible: false,
-      accessStatus: null,
+      accessStatus: null as any,
     }
   }
 
@@ -155,16 +163,16 @@ const getFeedbacks = async (id, user, groupId) => {
   // Hide feedbacks for small courses to protect anonymity unless consent has been given (consent has been required to give feedback since 10/06/2025)
   if (studentFeedbackTargets.length < FEEDBACK_HIDDEN_STUDENT_COUNT) {
     const feedbacksGivenWithConsent = studentFeedbackTargets.filter(
-      fbt => Date.parse(fbt.dataValues.updatedAt) > Date.parse('2025-06-10T12:00:00Z')
+      fbt => Date.parse((fbt as any).dataValues.updatedAt) > Date.parse('2025-06-10T12:00:00Z')
     )
 
     if (feedbacksGivenWithConsent.length > 0) {
       feedbackTargetsToShow = feedbacksGivenWithConsent
     } else {
       return {
-        feedbacks: [],
+        feedbacks: [] as any[],
         feedbackVisible: false,
-        accessStatus: null,
+        accessStatus: null as any,
       }
     }
   }
@@ -186,7 +194,7 @@ const getFeedbacks = async (id, user, groupId) => {
     .filter(ufbt => ufbt.feedback)
     .map(ufbt => ufbt.feedback.toPublicObject())
 
-  const questionIds = questions.filter(({ type }) => type !== 'TEXT').map(({ id }) => id)
+  const questionIds = questions.filter(({ type }) => type !== 'TEXT').map(({ id: qId }) => qId)
   const shuffledFeedbacks = shuffleFeedbacks(allFeedbacks, questionIds)
 
   if (access.canSeeAllFeedbacks()) {
@@ -210,4 +218,4 @@ const getFeedbacks = async (id, user, groupId) => {
   }
 }
 
-module.exports = { getFeedbacks }
+export { getFeedbacks }
