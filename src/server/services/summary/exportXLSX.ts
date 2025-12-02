@@ -1,32 +1,37 @@
-const XLSX = require('xlsx')
-const _ = require('lodash')
-const { Op } = require('sequelize')
-const { getSummaryAccessibleOrganisationIds } = require('./access')
-const { getLanguageValue } = require('../../util/languageUtils')
-const { getSummaryQuestions } = require('../questions')
-const {
+import XLSX from 'xlsx'
+import _ from 'lodash'
+import { InferAttributes, ModelStatic, Op } from 'sequelize'
+import { TFunction } from 'i18next'
+import { LanguageId, LocalizedString } from '@common/types/common'
+
+import { getSummaryAccessibleOrganisationIds, getAccessibleCourseRealisationIds } from './access'
+import { getLanguageValue } from '../../util/languageUtils'
+import { getSummaryQuestions } from '../questions'
+import {
   Organisation,
   CourseUnit,
   FeedbackTarget,
   CourseRealisationsOrganisation,
   CourseRealisation,
   CourseUnitsOrganisation,
-} = require('../../models')
-const {
+  User,
+  Question,
+  Summary,
+} from '../../models'
+import {
   getScopedSummary,
   sumSummaries,
   getOrganisationCodeById,
   mapCourseIdsToCourseCodes,
   getOrganisationCourseRealisationIds,
-} = require('./utils')
-const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
-const { i18n } = require('../../util/i18n')
-const { getTeacherSummary } = require('./getTeacherSummary')
-const { getAccessibleCourseRealisationIds } = require('./access')
-const { ApplicationError } = require('../../util/customErrors')
-const { getUserOrganisationAccess } = require('../organisationAccess/organisationAccess')
+} from './utils'
+import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
+import { i18n } from '../../util/i18n'
+import { getTeacherSummary } from './getTeacherSummary'
+import { ApplicationError } from '../../util/customErrors'
+import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
-const getOrganisations = async (scopedSummary, organisationIds) => {
+const getOrganisations = async (scopedSummary: ModelStatic<Summary>, organisationIds: string[]) => {
   const organisations = await Organisation.findAll({
     attributes: ['id', 'name', 'code'],
     where: {
@@ -60,7 +65,7 @@ const getOrganisations = async (scopedSummary, organisationIds) => {
   return organisations
 }
 
-const getCourseUnits = async (scopedSummary, courseUnitIds) => {
+const getCourseUnits = async (scopedSummary: ModelStatic<Summary>, courseUnitIds: string[]) => {
   const courseUnits = await CourseUnit.findAll({
     where: {
       id: courseUnitIds,
@@ -84,7 +89,7 @@ const getCourseUnits = async (scopedSummary, courseUnitIds) => {
   return courseUnits
 }
 
-const getCourseRealisations = async (scopedSummary, courseRealisationIds) => {
+const getCourseRealisations = async (scopedSummary: ModelStatic<Summary>, courseRealisationIds: string[]) => {
   const courseRealisations = await CourseRealisation.findAll({
     attributes: ['id', 'name', 'startDate', 'endDate'],
     where: {
@@ -107,12 +112,14 @@ const getCourseRealisations = async (scopedSummary, courseRealisationIds) => {
         as: 'feedbackTargets',
         attributes: ['id'],
         required: true,
-        include: {
-          model: CourseUnit,
-          as: 'courseUnit',
-          attributes: ['courseCode'],
-          required: true,
-        },
+        include: [
+          {
+            model: CourseUnit,
+            as: 'courseUnit',
+            attributes: ['courseCode'],
+            required: true,
+          },
+        ],
       },
     ],
   })
@@ -120,7 +127,10 @@ const getCourseRealisations = async (scopedSummary, courseRealisationIds) => {
   return courseRealisations
 }
 
-const getAccessibleCourseRealisations = async (user, courseRealisations) => {
+const getAccessibleCourseRealisations = async (
+  user: User,
+  courseRealisations: InferAttributes<CourseRealisation>[]
+) => {
   const orgAccess = await getUserOrganisationAccess(user)
   const accessibleCurIds = await getAccessibleCourseRealisationIds(user)
 
@@ -135,21 +145,24 @@ const getAccessibleCourseRealisations = async (user, courseRealisations) => {
   return accessibleCourseRealisations
 }
 
-const getDefaultHeaders = (questions, t, language) => {
+const getDefaultHeaders = (questions: InferAttributes<Question>[], t: TFunction, language: LanguageId) => {
   const defaultHeaders = questions
-    .map(q => getLanguageValue(q.data?.label, language))
+    .map(q => ('label' in q.data ? getLanguageValue(q.data?.label, language) : ''))
     .concat([t('common:studentCount'), t('courseSummary:feedbackCount'), t('courseSummary:feedbackResponsePercentage')])
 
   return defaultHeaders
 }
 
 // In xlsx terms aoa = array of arrays
-const commonPartOfAoa = (language, questions, target) => {
+const commonPartOfAoa = (
+  language: LanguageId,
+  questions: InferAttributes<Question>[],
+  target: { summary?: Summary; name: LocalizedString }
+) => {
   const targetName = getLanguageValue(target.name, language)
-  const summaryData = target.summary.data
+  const summaryData = target.summary?.data
 
-  const questionResults = questions.map(q => summaryData.result[q.id]?.mean ?? 0)
-
+  const questionResults = questions.map(q => summaryData?.result[q.id]?.mean ?? 0)
   return [
     targetName,
     ...questionResults,
@@ -159,7 +172,7 @@ const commonPartOfAoa = (language, questions, target) => {
   ]
 }
 
-const getUniqueHeaders = (t, sheetName) => {
+const getUniqueHeaders = (t: TFunction, sheetName: string) => {
   if (sheetName === 'organisations') return [t('common:organisationCode'), t('common:name')]
 
   if (sheetName === 'course-units') return ['group_id', t('common:courseCode'), t('common:name')]
@@ -167,7 +180,7 @@ const getUniqueHeaders = (t, sheetName) => {
   return ['id', t('common:courseCode'), t('common:name'), t('common:startDate'), t('common:endDate')]
 }
 
-const getJSON = (targets, targetType) => {
+const getJSON = <T extends Organisation | CourseUnit>(targets: T[], targetType: string): InferAttributes<T>[] => {
   const targetJSON = targets.map(target => {
     target.summary = sumSummaries(targetType === 'org' ? target.summaries : target.groupSummaries)
     if (targetType === 'org') {
@@ -176,13 +189,31 @@ const getJSON = (targets, targetType) => {
       delete target.dataValues.groupSummaries
     }
 
-    return target.toJSON()
+    return target.toJSON() as InferAttributes<T>
   })
 
   return targetJSON
 }
 
-const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, includeCURs, organisationId }) => {
+interface ExportXLSXParams {
+  user: User
+  startDate: string
+  endDate: string
+  includeOrgs: boolean
+  includeCUs: boolean
+  includeCURs: boolean
+  organisationId?: string
+}
+
+export const exportXLSX = async ({
+  user,
+  startDate,
+  endDate,
+  includeOrgs,
+  includeCUs,
+  includeCURs,
+  organisationId,
+}: ExportXLSXParams) => {
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
 
   if (organisationId && !accessibleOrganisationIds.includes(organisationId)) {
@@ -196,14 +227,20 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
   const defaultHeaders = getDefaultHeaders(questions, t, user.language)
 
   const workbook = XLSX.utils.book_new()
-  const addSheetToWorkbook = (dataAoa, sheetName) => {
+  const addSheetToWorkbook = (dataAoa: any[][], sheetName: string) => {
     const headers = [[...getUniqueHeaders(t, sheetName), ...defaultHeaders]]
     XLSX.utils.book_append_sheet(workbook, XLSX.utils.aoa_to_sheet(headers.concat(dataAoa)), sheetName)
   }
 
   const scopedSummary = getScopedSummary({ startDate, endDate })
 
-  const teacherOrganisations = await getTeacherSummary({ user, startDate, endDate })
+  const teacherOrganisations = await getTeacherSummary({
+    user,
+    startDate,
+    endDate,
+    extraOrgId: undefined,
+    extraOrgMode: undefined,
+  })
 
   const organisationIds = organisationId ? [organisationId] : accessibleOrganisationIds
   const organisations = await getOrganisations(scopedSummary, organisationIds)
@@ -211,8 +248,11 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
   const courseUnitIds = organisations.flatMap(org => org.courseUnitsOrganisations.map(cuo => cuo.courseUnitId))
   const courseUnits = await getCourseUnits(scopedSummary, courseUnitIds)
 
-  const getAllTargets = (organisationTargets, targetType) => {
-    let teacherOrganisationsTargets = teacherOrganisations
+  const getAllTargets = <T extends Organisation | CourseUnit | CourseRealisation>(
+    organisationTargets: InferAttributes<T>[],
+    targetType: string
+  ) => {
+    let teacherOrganisationsTargets: InferAttributes<T>[] = teacherOrganisations as any
 
     if (targetType === 'cu') {
       teacherOrganisationsTargets = teacherOrganisations.flatMap(org => org.courseUnits)
@@ -257,7 +297,10 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
 
     const allCourseRealisations = getAllTargets(courseRealisations, 'cur')
 
-    const accessibleCourseRealisations = await getAccessibleCourseRealisations(user, allCourseRealisations)
+    const accessibleCourseRealisations = await getAccessibleCourseRealisations(
+      user,
+      allCourseRealisations as InferAttributes<CourseRealisation>[]
+    )
 
     const curIdToCourseCode = mapCourseIdsToCourseCodes(teacherOrganisations, courseRealisations)
 
@@ -278,8 +321,4 @@ const exportXLSX = async ({ user, startDate, endDate, includeOrgs, includeCUs, i
     xlsxFile,
     fileName,
   }
-}
-
-module.exports = {
-  exportXLSX,
 }

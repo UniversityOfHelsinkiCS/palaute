@@ -11,6 +11,7 @@ import {
   HasManyGetAssociationsMixin,
 } from 'sequelize'
 import _ from 'lodash'
+import { LanguageId } from '@common/types/common'
 
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
@@ -26,7 +27,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare lastName: CreationOptional<string | null>
   declare email: CreationOptional<string | null>
   declare secondaryEmail: CreationOptional<string | null>
-  declare language: CreationOptional<string | null>
+  declare language: CreationOptional<LanguageId | null>
   declare studentNumber: CreationOptional<string | null>
   declare degreeStudyRight: CreationOptional<boolean | null>
   declare norppaFeedbackGiven: CreationOptional<boolean>

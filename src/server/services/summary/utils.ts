@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import * as datefns from 'date-fns'
 import { FeedbackData } from 'models/feedback'
+import { InferAttributes } from 'sequelize'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
 import { Summary, Organisation, CourseUnit, CourseRealisation } from '../../models'
 import { SummaryData, SummaryResult } from '../../models/summary'
@@ -254,7 +255,10 @@ const getOrganisationCodeById = async (organisationId: string) => {
   return organisationCode.code
 }
 
-const mapCourseIdsToCourseCodes = (teacherOrganisations: Organisation[], courseRealisations: CourseRealisation[]) => {
+const mapCourseIdsToCourseCodes = (
+  teacherOrganisations: InferAttributes<Organisation>[],
+  courseRealisations: CourseRealisation[]
+) => {
   const curIdToCourseCodeMapping: Record<string, string> = {}
   const teacherOrgCUs = teacherOrganisations.flatMap(org => org.courseUnits)
 

@@ -17,7 +17,7 @@ export type AnswerableQuestionData = {
 }
 
 export type QuestionOption = {
-  id: number
+  id: string
   label: LocalizedString
 }
 

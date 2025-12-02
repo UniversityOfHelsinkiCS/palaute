@@ -1,6 +1,6 @@
-import { LanguageId } from '@common/types/common'
+import { LanguageId, LocalizedString } from '@common/types/common'
 
-export const getLanguageValue = (values: Record<LanguageId, string>, preferred: LanguageId) => {
+export const getLanguageValue = (values: LocalizedString, preferred: LanguageId) => {
   const possibleLangs = ['fi', 'en', 'sv'] as const
 
   if (values[preferred]) return values[preferred]

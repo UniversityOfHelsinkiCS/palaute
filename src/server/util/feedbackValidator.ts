@@ -17,7 +17,7 @@ const validateSingleChoice = (data: string, question: Question) => {
 
   try {
     if (!question.required && data === '') return true
-    return question.data.options.map(opt => opt.id).includes(parseInt(data, 10))
+    return question.data.options.map(opt => opt.id).includes(data)
   } catch (_) {
     return false
   }
@@ -31,7 +31,7 @@ const validateMultiChoice = (data: string[], question: Question) => {
     let valid = true
     const ids = question.data.options.map(opt => opt.id)
     data.forEach(id => {
-      valid = valid && ids.includes(parseInt(id, 10))
+      valid = valid && ids.includes(id)
     })
     return valid
   } catch (_) {

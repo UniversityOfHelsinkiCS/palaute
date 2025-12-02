@@ -40,6 +40,8 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   // --- ideally refactor away ---
   // -----------------------------
   declare summary?: Summary
+  declare summaries?: Summary[]
+  declare groupSummaries?: Summary[]
   declare courseRealisations?: CourseRealisation[]
   declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
   declare organisations?: NonAttribute<Organisation[]>

@@ -14,6 +14,7 @@ import { sequelize } from '../db/dbConnection'
 import type { FeedbackTarget } from './feedbackTarget'
 import type { Organisation } from './organisation'
 import type { Tag } from './tag'
+import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 
 export type CourseRealisationTeachingLanguages = LanguageId[]
 
@@ -34,6 +35,7 @@ class CourseRealisation extends Model<InferAttributes<CourseRealisation>, InferC
   declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
   declare organisations?: NonAttribute<Organisation[]>
   declare tags?: NonAttribute<Tag[]>
+  declare courseRealisationsOrganisations?: CourseRealisationsOrganisation[]
 }
 
 CourseRealisation.init(

@@ -18,6 +18,7 @@ import type Summary from './summary'
 import type { CourseUnit } from './courseUnit'
 import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 import type { Tag } from './tag'
+import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
 
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---
@@ -36,8 +37,11 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   // --- ideally refactor away ---
   // -----------------------------
   declare summary?: Summary
-  declare courseUnits?: NonAttribute<CourseUnit[]>
+  declare courseUnits?: CourseUnit[]
+  declare summaries?: Summary[]
+  declare groupSummaries?: Summary[]
   declare courseRealisationsOrganisations?: NonAttribute<CourseRealisationsOrganisation[]>
+  declare courseUnitsOrganisations?: NonAttribute<CourseUnitsOrganisation[]>
   declare tags?: NonAttribute<Tag[]>
 
   // --- Helper methods ---
