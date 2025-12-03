@@ -44,7 +44,7 @@ import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import Title from '../../components/common/Title'
-import { TabGroupsContainer, TabGroupTab } from '../../components/common/TabGroup'
+import { FeedbackTargetTabsContainer, FeedbackTargetTab } from '../../components/common/TabGroup'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
@@ -126,16 +126,16 @@ const FeedbackTargetContent = () => {
           },
         }}
       >
-        <TabGroupsContainer>
+        <FeedbackTargetTabsContainer>
           {feedbackGiven && isOpen ? (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
               label={t('feedbackTargetView:editFeedbackTab')}
               to={`${pathnameBase}/feedback`}
               icon={<EditOutlined />}
             />
           ) : (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
               label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
               to={`${pathnameBase}/feedback`}
@@ -143,7 +143,7 @@ const FeedbackTargetContent = () => {
             />
           )}
           {showSettingsTab && (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
               label={t('feedbackTargetView:surveyQuestionsTab')}
               to={`${pathnameBase}/edit`}
@@ -153,7 +153,7 @@ const FeedbackTargetContent = () => {
             />
           )}
           {showEditFeedbackResponseTab && (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-feedback-response-tab`}
               label={
                 !feedbackResponseEmailSent
@@ -165,7 +165,7 @@ const FeedbackTargetContent = () => {
             />
           )}
           {showLinksTab && (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
               label={t('feedbackTargetView:shareTab')}
               to={`${pathnameBase}/share`}
@@ -173,7 +173,7 @@ const FeedbackTargetContent = () => {
             />
           )}
           {showContinuousFeedbackTab && (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
               label={t('feedbackTargetView:continuousFeedbackTab')}
               to={`${pathnameBase}/continuous-feedback`}
@@ -181,7 +181,7 @@ const FeedbackTargetContent = () => {
             />
           )}
           {showInterimFeedbackTab && (
-            <TabGroupTab
+            <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
               label={t('feedbackTargetView:interimFeedbackTab')}
               to={`${pathnameBase}/interim-feedback`}
@@ -190,14 +190,14 @@ const FeedbackTargetContent = () => {
           )}
           {showResultsSection && (
             <>
-              <TabGroupTab
+              <FeedbackTargetTab
                 data-cy={`${dataCyPrefix}feedback-target-results-tab`}
                 label={t('feedbackTargetView:feedbacksTab')}
                 to={`${pathnameBase}/results`}
                 icon={<PollOutlined />}
               />
               {showStudentsWithFeedbackTab && (
-                <TabGroupTab
+                <FeedbackTargetTab
                   data-cy={`${dataCyPrefix}feedback-target-students-with-feedback-tab`}
                   label={t('feedbackTargetView:studentsWithFeedbackTab')}
                   to={`${pathnameBase}/students-with-feedback`}
@@ -208,13 +208,13 @@ const FeedbackTargetContent = () => {
           )}
           {isAdmin && (
             <>
-              <TabGroupTab
+              <FeedbackTargetTab
                 data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
                 label="Togen"
                 to={`${pathnameBase}/togen`}
                 icon={<ListOutlined />}
               />
-              <TabGroupTab
+              <FeedbackTargetTab
                 data-cy={`${dataCyPrefix}feedback-target-logs-tab`}
                 label="Logs"
                 to={`${pathnameBase}/logs`}
@@ -222,7 +222,7 @@ const FeedbackTargetContent = () => {
               />
             </>
           )}
-        </TabGroupsContainer>
+        </FeedbackTargetTabsContainer>
       </Box>
 
       <Routes>

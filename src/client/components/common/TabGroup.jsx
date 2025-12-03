@@ -1,26 +1,15 @@
 import React from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
 
-import { Tab, Tooltip, Badge, Box, Divider, Paper } from '@mui/material'
+import { Tab, Tooltip, Box, Paper } from '@mui/material'
 
 const stripSearch = path => path.split('?')[0]
 
-export const TabGroupTab = ({
-  icon,
-  label,
-  to,
-  disabled,
-  disabledTooltip,
-  badge,
-  badgeContent,
-  badgeColor = 'primary',
-  badgeVisible = true,
-  ...props
-}) => {
+export const FeedbackTargetTab = ({ icon, label, to, disabled, disabledTooltip, ...props }) => {
   const { pathname } = useLocation()
   const active = !!matchPath({ path: stripSearch(to) }, pathname)
 
-  let content = icon ? (
+  const content = icon ? (
     <Box display="flex" alignItems="center" sx={{ flexShrink: 0 }}>
       {icon}
       <Box ml="0.5rem" />
@@ -29,19 +18,6 @@ export const TabGroupTab = ({
   ) : (
     label
   )
-
-  if (badge && badgeVisible) {
-    content = (
-      <Badge
-        color={badgeColor}
-        variant={badgeContent ? 'standard' : 'dot'}
-        overlap="rectangular"
-        badgeContent={badgeContent}
-      >
-        {content}
-      </Badge>
-    )
-  }
 
   const tab = (
     <Box
@@ -82,53 +58,33 @@ export const TabGroupTab = ({
   return tab
 }
 
-export const TabGroupsContainer = ({ children, showDivider = false }) => {
-  const childElements = children.filter(child => Boolean(child))
-
-  return (
-    <Box
-      mb="2rem"
-      sx={{
-        '@media print': { display: 'none' },
-      }}
-    >
+export const FeedbackTargetTabsContainer = ({ children }) => (
+  <Box
+    sx={{
+      '@media print': { display: 'none' },
+      mb: '2rem',
+      borderRadius: '0.8rem',
+      boxShadow: 2,
+      overflowX: 'auto',
+      overflowY: 'hidden',
+      WebkitOverflowScrolling: 'touch',
+      scrollbarWidth: 'thin',
+      '&::-webkit-scrollbar': { height: 8 },
+    }}
+  >
+    <Paper>
       <Box
+        display="flex"
+        flexDirection="row"
+        flexWrap="nowrap"
+        px="0.2rem"
+        alignItems="stretch"
         sx={{
-          borderRadius: '0.8rem',
-          boxShadow: 2,
           overflowX: 'auto',
-          overflowY: 'hidden',
-          WebkitOverflowScrolling: 'touch',
-          scrollbarWidth: 'thin',
-          '&::-webkit-scrollbar': { height: 8 },
         }}
       >
-        <Paper>
-          <Box
-            display="flex"
-            flexDirection="row"
-            flexWrap="nowrap"
-            px="0.2rem"
-            alignItems="stretch"
-            sx={{
-              overflowX: 'auto',
-            }}
-          >
-            {!showDivider && children}
-            {showDivider &&
-              React.Children.map(childElements, (child, i) => {
-                const lastChild = childElements.length === i + 1
-
-                return (
-                  <>
-                    {child}
-                    {lastChild ? null : <Divider orientation="vertical" flexItem />}
-                  </>
-                )
-              })}
-          </Box>
-        </Paper>
+        {children}
       </Box>
-    </Box>
-  )
-}
+    </Paper>
+  </Box>
+)
