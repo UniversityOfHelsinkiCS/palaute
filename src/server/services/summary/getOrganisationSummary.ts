@@ -1,6 +1,6 @@
-const _ = require('lodash')
-const { Op } = require('sequelize')
-const {
+import _ from 'lodash'
+import { Op } from 'sequelize'
+import {
   Organisation,
   CourseUnit,
   CourseRealisation,
@@ -10,36 +10,63 @@ const {
   Tag,
   CourseUnitsTag,
   CourseRealisationsTag,
-} = require('../../models')
-const { sumSummaryDatas, sumSummaries, getScopedSummary } = require('./utils')
-const { ApplicationError } = require('../../util/customErrors')
-const { getSummaryAccessibleOrganisationIds } = require('./access')
-const {
+} from '../../models'
+import { sumSummaryDatas, sumSummaries, getScopedSummary } from './utils'
+import { ApplicationError } from '../../util/customErrors'
+import { getSummaryAccessibleOrganisationIds } from './access'
+import {
   SUMMARY_EXCLUDED_ORG_IDS,
   SUMMARY_SKIP_ORG_IDS,
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS,
-} = require('../../util/config')
-const { prefixTagId } = require('../../util/common')
+} from '../../util/config'
+import { prefixTagId } from '../../util/common'
 
 /**
  * Wrap a function that requires organisation access check.
  */
-const withOrganisationAccessCheck = asyncFunction => async params => {
-  const organisationIds = await getSummaryAccessibleOrganisationIds(params.user)
-  const userSpecialGroups = Object.keys(params.user.specialGroup)
-  const universityWideAccess = UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS.some(group => userSpecialGroups.includes(group))
+const withOrganisationAccessCheck =
+  <P, R>(asyncFunction: (params: P) => Promise<R>) =>
+  async (
+    params: P & {
+      user: any
+      organisationId: string
+      accessibleOrganisationIds?: string[]
+      universityWideAccess?: boolean
+    }
+  ) => {
+    const organisationIds = await getSummaryAccessibleOrganisationIds(params.user)
+    const userSpecialGroups = Object.keys(params.user.specialGroup)
+    const universityWideAccess = UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS.some(group =>
+      userSpecialGroups.includes(group)
+    )
 
-  if (!universityWideAccess && !organisationIds.includes(params.organisationId)) {
-    throw ApplicationError.Forbidden(`User does not have access to organisation with id ${params.organisationId}`)
+    if (!universityWideAccess && !organisationIds.includes(params.organisationId)) {
+      ApplicationError.Forbidden(`User does not have access to organisation with id ${params.organisationId}`)
+    }
+
+    params.accessibleOrganisationIds = organisationIds
+    params.universityWideAccess = universityWideAccess
+
+    return asyncFunction(params)
   }
 
-  params.accessibleOrganisationIds = organisationIds
-  params.universityWideAccess = universityWideAccess
-
-  return asyncFunction(params)
+interface GetCourseUnitSummariesParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  tagId?: string
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
 }
 
-const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }) => {
+const getCourseUnitSummaries = async ({
+  organisationId,
+  startDate,
+  endDate,
+  tagId,
+  extraOrgId,
+  extraOrgMode,
+}: GetCourseUnitSummariesParams) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const courseUnits = await CourseUnit.findAll({
@@ -87,6 +114,15 @@ const getCourseUnitSummaries = async ({ organisationId, startDate, endDate, tagI
   return aggregatedCourseUnits
 }
 
+interface GetCourseRealisationSummariesParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  tagId?: string
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
 const getCourseRealisationSummaries = async ({
   organisationId,
   startDate,
@@ -94,7 +130,7 @@ const getCourseRealisationSummaries = async ({
   tagId,
   extraOrgId,
   extraOrgMode,
-}) => {
+}: GetCourseRealisationSummariesParams) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const courseRealisations = await CourseRealisation.findAll({
@@ -117,12 +153,14 @@ const getCourseRealisationSummaries = async ({
         as: 'feedbackTargets',
         attributes: ['id'],
         required: true,
-        include: {
-          model: CourseUnit,
-          as: 'courseUnit',
-          attributes: ['name', 'id', 'courseCode', 'groupId'],
-          required: true,
-        },
+        include: [
+          {
+            model: CourseUnit,
+            as: 'courseUnit',
+            attributes: ['name', 'id', 'courseCode', 'groupId'],
+            required: true,
+          },
+        ],
       },
       ...(tagId
         ? [
@@ -143,7 +181,21 @@ const getCourseRealisationSummaries = async ({
   return courseRealisations
 }
 
-const getOrganisationSummary = async ({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }) => {
+interface GetOrganisationSummaryParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
+const getOrganisationSummary = async ({
+  organisationId,
+  startDate,
+  endDate,
+  extraOrgId,
+  extraOrgMode,
+}: GetOrganisationSummaryParams) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const rootOrganisation = await Organisation.findByPk(organisationId, {
@@ -169,6 +221,16 @@ const getOrganisationSummary = async ({ organisationId, startDate, endDate, extr
   return organisation
 }
 
+interface GetChildOrganisationsParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  organisationIds: string[]
+  universityWideAccess: boolean
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
 const getChildOrganisations = async ({
   organisationId,
   startDate,
@@ -177,7 +239,7 @@ const getChildOrganisations = async ({
   universityWideAccess,
   extraOrgId,
   extraOrgMode,
-}) => {
+}: GetChildOrganisationsParams) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const rootOrganisation = await Organisation.findByPk(organisationId, {
@@ -192,11 +254,13 @@ const getChildOrganisations = async ({
         model: Organisation,
         as: 'childOrganisations',
         attributes: ['name', 'id', 'code'],
-        include: {
-          model: scopedSummary,
-          as: 'summaries',
-          required: false,
-        },
+        include: [
+          {
+            model: scopedSummary,
+            as: 'summaries',
+            required: false,
+          },
+        ],
         where: {
           id: {
             // If user has university wide access, we don't need to filter by organisationIds
@@ -213,6 +277,16 @@ const getChildOrganisations = async ({
   return rootOrganisation
 }
 
+interface GetOrganisationSummaryWithChildOrganisationsParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  universityWideAccess: boolean
+  accessibleOrganisationIds: string[]
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
 const getOrganisationSummaryWithChildOrganisations = async ({
   organisationId,
   startDate,
@@ -221,7 +295,7 @@ const getOrganisationSummaryWithChildOrganisations = async ({
   accessibleOrganisationIds,
   extraOrgId,
   extraOrgMode,
-}) => {
+}: GetOrganisationSummaryWithChildOrganisationsParams) => {
   // Get the main organisation and its children
   const rootOrganisation = await getChildOrganisations({
     organisationId,
@@ -275,6 +349,15 @@ const getOrganisationSummaryWithChildOrganisations = async ({
   return organisation
 }
 
+interface GetOrganisationSummaryWithCourseUnitsParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  tagId?: string
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
 const getOrganisationSummaryWithCourseUnits = async ({
   organisationId,
   startDate,
@@ -282,7 +365,7 @@ const getOrganisationSummaryWithCourseUnits = async ({
   tagId,
   extraOrgId,
   extraOrgMode,
-}) => {
+}: GetOrganisationSummaryWithCourseUnitsParams) => {
   const [organisation, courseUnits, courseRealisations] = await Promise.all([
     getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
     getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
@@ -322,12 +405,26 @@ const getOrganisationSummaryWithCourseUnits = async ({
     }
   )
 
-  organisation.courseUnits = courseUnits.concat(partialCourseUnits)
+  organisation.courseUnits = partialCourseUnits.concat(courseUnits as any[]) as any[]
 
   return organisation
 }
 
-const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }) => {
+interface GetOrganisationSummaryWithTagsParams {
+  organisationId: string
+  startDate: string
+  endDate: string
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
+const getOrganisationSummaryWithTags = async ({
+  organisationId,
+  startDate,
+  endDate,
+  extraOrgId,
+  extraOrgMode,
+}: GetOrganisationSummaryWithTagsParams) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
   const organisation = await getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode })
 
@@ -358,7 +455,7 @@ const getOrganisationSummaryWithTags = async ({ organisationId, startDate, endDa
   return organisation
 }
 
-module.exports = {
+export const organisationSummaryService = {
   getOrganisationSummary: withOrganisationAccessCheck(getOrganisationSummary),
   getOrganisationSummaryWithChildOrganisations: withOrganisationAccessCheck(
     getOrganisationSummaryWithChildOrganisations

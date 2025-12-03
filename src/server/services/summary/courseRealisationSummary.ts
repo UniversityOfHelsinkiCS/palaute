@@ -1,9 +1,9 @@
-const _ = require('lodash')
+import _ from 'lodash'
 
-const { UserFeedbackTarget, User, CourseRealisation, CourseUnit, FeedbackTarget, Summary } = require('../../models')
-const languages = require('../../util/languages.json')
+import { UserFeedbackTarget, User, CourseRealisation, CourseUnit, FeedbackTarget, Summary } from '../../models'
+import languages from '../../util/languages.json'
 
-const getCourseRealisationSummaryEntities = async courseCode => {
+const getCourseRealisationSummaryEntities = async (courseCode: string) => {
   const courseRealisations = await CourseRealisation.findAll({
     include: [
       {
@@ -25,11 +25,13 @@ const getCourseRealisationSummaryEntities = async courseCode => {
           {
             model: UserFeedbackTarget.scope('teachers'),
             as: 'userFeedbackTargets',
-            include: {
-              model: User,
-              as: 'user',
-              attributes: ['id', 'firstName', 'lastName', 'email'],
-            },
+            include: [
+              {
+                model: User,
+                as: 'user',
+                attributes: ['id', 'firstName', 'lastName', 'email'],
+              },
+            ],
           },
         ],
       },
@@ -43,7 +45,17 @@ const getCourseRealisationSummaryEntities = async courseCode => {
   return courseRealisations
 }
 
-const getCourseRealisationSummaries = async ({ courseCode, accessibleCourseRealisationIds, organisationAccess }) => {
+interface GetCourseRealisationSummariesParams {
+  courseCode: string
+  accessibleCourseRealisationIds: string[]
+  organisationAccess: boolean
+}
+
+export const getCourseRealisationSummaries = async ({
+  courseCode,
+  accessibleCourseRealisationIds,
+  organisationAccess,
+}: GetCourseRealisationSummariesParams) => {
   const allCuSummaries = await getCourseRealisationSummaryEntities(courseCode)
 
   const courseRealisations = organisationAccess
@@ -84,5 +96,3 @@ const getCourseRealisationSummaries = async ({ courseCode, accessibleCourseReali
 
   return orderedResults
 }
-
-module.exports = getCourseRealisationSummaries

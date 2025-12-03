@@ -42,6 +42,7 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   declare courseRealisationsOrganisations?: CourseRealisationsOrganisation[]
   declare courseUnitsOrganisations?: CourseUnitsOrganisation[]
   declare tags?: Tag[]
+  declare childOrganisations?: Organisation[]
 
   // --- Helper methods ---
   // ----------------------
