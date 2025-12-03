@@ -255,11 +255,11 @@ export const exportXLSX = async ({
     let teacherOrganisationsTargets: InferAttributes<T>[] = teacherOrganisations as any
 
     if (targetType === 'cu') {
-      teacherOrganisationsTargets = teacherOrganisations.flatMap(org => org.courseUnits)
+      teacherOrganisationsTargets = teacherOrganisations.flatMap(org => org.courseUnits) as any
     } else if (targetType === 'cur') {
       teacherOrganisationsTargets = teacherOrganisations.flatMap(org =>
         org.courseUnits.flatMap(cu => cu.courseRealisations)
-      )
+      ) as any
     }
 
     const allTargets = _.uniqBy(
