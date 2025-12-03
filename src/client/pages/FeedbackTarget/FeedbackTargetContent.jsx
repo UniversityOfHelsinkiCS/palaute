@@ -44,7 +44,7 @@ import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import Title from '../../components/common/Title'
-import { FeedbackTargetTabsContainer, FeedbackTargetTab } from '../../components/common/TabGroup'
+import { FeedbackTargetTabsContainer, FeedbackTargetTab } from './FeedbackTargetTabs'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
 
 const FeedbackTargetContent = () => {
