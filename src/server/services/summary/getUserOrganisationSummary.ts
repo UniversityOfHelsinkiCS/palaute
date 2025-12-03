@@ -1,18 +1,27 @@
-const { Op } = require('sequelize')
-const { SUMMARY_EXCLUDED_ORG_IDS } = require('../../util/config')
-const { getSummaryAccessibleOrganisationIds } = require('./access')
-const { Organisation } = require('../../models')
-const { sumSummaries, getScopedSummary } = require('./utils')
-const { ApplicationError } = require('../../util/customErrors')
+import { Op } from 'sequelize'
+import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
+import { getSummaryAccessibleOrganisationIds } from './access'
+import { Organisation, User } from '../../models'
+import { sumSummaries, getScopedSummary } from './utils'
+import { ApplicationError } from '../../util/customErrors'
 
-const getUserOrganisationSummaries = async ({
+interface GetUserOrganisationSummariesParams {
+  startDate: string
+  endDate: string
+  user: User
+  viewingMode?: 'flat' | 'tree'
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
+export const getUserOrganisationSummaries = async ({
   startDate,
   endDate,
   user,
   viewingMode = 'flat',
   extraOrgId,
   extraOrgMode,
-}) => {
+}: GetUserOrganisationSummariesParams) => {
   const organisationIds = await getSummaryAccessibleOrganisationIds(user)
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
@@ -45,14 +54,16 @@ const getUserOrganisationSummaries = async ({
   if (viewingMode === 'tree') {
     const rootOrganisations = []
     for (const org of organisationsJson) {
-      const parentOrg = organisationsJson.find(o => o.id === org.parentId)
+      const parentOrg = organisationsJson.find(o => o.id === org.parentId) as (typeof organisationsJson)[0] & {
+        initiallyExpanded?: boolean
+      }
       if (!parentOrg) {
         rootOrganisations.push(org)
       } else {
         if (!parentOrg.childOrganisations) {
           parentOrg.childOrganisations = []
         }
-        parentOrg.childOrganisations.push(org)
+        parentOrg.childOrganisations.push(org as any)
         parentOrg.initiallyExpanded = true
       }
     }
@@ -61,8 +72,4 @@ const getUserOrganisationSummaries = async ({
   }
 
   return ApplicationError.BadRequest(`Invalid viewing mode ${viewingMode}`)
-}
-
-module.exports = {
-  getUserOrganisationSummaries,
 }

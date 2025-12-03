@@ -1,9 +1,15 @@
-const _ = require('lodash')
-const { Op } = require('sequelize')
-const { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation } = require('../../models')
-const { sumSummaries, getScopedSummary } = require('./utils')
+import _ from 'lodash'
+import { InferAttributes, Op } from 'sequelize'
+import { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation, User } from '../../models'
+import { sumSummaries, getScopedSummary } from './utils'
 
-const filterHiddenCount = async ({ user, organisationsJson }) => {
+const filterHiddenCount = async ({
+  user,
+  organisationsJson,
+}: {
+  user: User
+  organisationsJson: InferAttributes<Organisation>[]
+}) => {
   if (!user.isAdmin) {
     organisationsJson.forEach(org => {
       let hasAccess = false
@@ -26,7 +32,21 @@ const filterHiddenCount = async ({ user, organisationsJson }) => {
   return organisationsJson
 }
 
-const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOrgMode }) => {
+interface GetTeacherSummaryParams {
+  startDate: string
+  endDate: string
+  user: User
+  extraOrgId?: string
+  extraOrgMode?: 'include' | 'exclude'
+}
+
+export const getTeacherSummary = async ({
+  startDate,
+  endDate,
+  user,
+  extraOrgId,
+  extraOrgMode,
+}: GetTeacherSummaryParams) => {
   const scopedSummary = getScopedSummary({ startDate, endDate, extraOrgId, extraOrgMode })
 
   const organisations = await Organisation.findAll({
@@ -89,7 +109,7 @@ const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOr
     ],
   })
 
-  let organisationsJson = organisations.map(org => {
+  const organisationsJson = organisations.map(org => {
     org.summary = sumSummaries(org.summaries)
     delete org.dataValues.summaries
 
@@ -124,11 +144,5 @@ const getTeacherSummary = async ({ startDate, endDate, user, extraOrgId, extraOr
     }
   })
 
-  organisationsJson = await filterHiddenCount({ user, organisationsJson })
-
-  return organisationsJson
-}
-
-module.exports = {
-  getTeacherSummary,
+  return filterHiddenCount({ user, organisationsJson })
 }

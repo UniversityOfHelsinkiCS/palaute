@@ -45,7 +45,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   declare groupSummaries?: Summary[]
   declare courseRealisations?: CourseRealisation[]
   declare courseUnitsOrganisations?: CourseUnitsOrganisation[]
-  declare feedbackTargets?: NonAttribute<FeedbackTarget[]>
+  declare feedbackTargets?: FeedbackTarget[]
   declare organisations?: NonAttribute<Organisation[]>
   declare tags?: NonAttribute<Tag[]>
 

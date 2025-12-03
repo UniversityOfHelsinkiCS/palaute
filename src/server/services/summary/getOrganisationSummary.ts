@@ -455,11 +455,16 @@ const getOrganisationSummaryWithTags = async ({
   return organisation
 }
 
-export const organisationSummaryService = {
-  getOrganisationSummary: withOrganisationAccessCheck(getOrganisationSummary),
-  getOrganisationSummaryWithChildOrganisations: withOrganisationAccessCheck(
-    getOrganisationSummaryWithChildOrganisations
-  ),
-  getOrganisationSummaryWithCourseUnits: withOrganisationAccessCheck(getOrganisationSummaryWithCourseUnits),
-  getOrganisationSummaryWithTags: withOrganisationAccessCheck(getOrganisationSummaryWithTags),
+const checkedGetOrganisationSummary = withOrganisationAccessCheck(getOrganisationSummary)
+const checkedGetOrganisationSummaryWithChildOrganisations = withOrganisationAccessCheck(
+  getOrganisationSummaryWithChildOrganisations
+)
+const checkedGetOrganisationSummaryWithCourseUnits = withOrganisationAccessCheck(getOrganisationSummaryWithCourseUnits)
+const checkedGetOrganisationSummaryWithTags = withOrganisationAccessCheck(getOrganisationSummaryWithTags)
+
+export {
+  checkedGetOrganisationSummary as getOrganisationSummary,
+  checkedGetOrganisationSummaryWithChildOrganisations as getOrganisationSummaryWithChildOrganisations,
+  checkedGetOrganisationSummaryWithCourseUnits as getOrganisationSummaryWithCourseUnits,
+  checkedGetOrganisationSummaryWithTags as getOrganisationSummaryWithTags,
 }

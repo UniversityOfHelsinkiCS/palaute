@@ -1,16 +1,16 @@
-const getCourseRealisationSummaries = require('./courseRealisationSummary')
-const {
+import { getCourseRealisationSummaries } from './courseRealisationSummary'
+import {
   getOrganisationSummary,
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
   getOrganisationSummaryWithTags,
-} = require('./getOrganisationSummary')
-const { getTeacherSummary } = require('./getTeacherSummary')
-const { getUserOrganisationSummaries } = require('./getUserOrganisationSummary')
-const { getCourseUnitGroupSummaries } = require('./getCourseUnitGroupSummary')
-const { exportXLSX } = require('./exportXLSX')
+} from './getOrganisationSummary'
+import { getTeacherSummary } from './getTeacherSummary'
+import { getUserOrganisationSummaries } from './getUserOrganisationSummary'
+import { getCourseUnitGroupSummaries } from './getCourseUnitGroupSummary'
+import { exportXLSX } from './exportXLSX'
 
-module.exports = {
+export {
   getOrganisationSummary,
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
