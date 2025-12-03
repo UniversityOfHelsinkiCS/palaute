@@ -9,6 +9,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
   HasManyGetAssociationsMixin,
+  HasManyHasAssociationMixin,
 } from 'sequelize'
 import _ from 'lodash'
 import { LanguageId } from '@common/types/common'
@@ -47,6 +48,7 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare iamGroups?: string[]
 
   declare getOrganisations: HasManyGetAssociationsMixin<Organisation>
+  declare hasOrganisation: HasManyHasAssociationMixin<Organisation, string>
 
   async isTeacher() {
     const teachings = await UserFeedbackTarget.findAll({

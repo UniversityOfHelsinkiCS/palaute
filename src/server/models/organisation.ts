@@ -10,6 +10,7 @@ import {
   InferAttributes,
   InferCreationAttributes,
   CreationOptional,
+  HasManyGetAssociationsMixin,
 } from 'sequelize'
 import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
@@ -18,6 +19,7 @@ import type { CourseUnit } from './courseUnit'
 import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 import type { Tag } from './tag'
 import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
+import type { User } from './user'
 
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---
@@ -43,6 +45,8 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   declare courseUnitsOrganisations?: CourseUnitsOrganisation[]
   declare tags?: Tag[]
   declare childOrganisations?: Organisation[]
+
+  declare getUsers: HasManyGetAssociationsMixin<User>
 
   // --- Helper methods ---
   // ----------------------

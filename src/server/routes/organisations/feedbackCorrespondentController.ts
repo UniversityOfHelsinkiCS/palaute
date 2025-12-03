@@ -1,11 +1,12 @@
-const { Router } = require('express')
-const { User, OrganisationFeedbackCorrespondent } = require('../../models')
-const { ApplicationError } = require('../../util/customErrors')
-const { getAccessAndOrganisation } = require('./util')
-const { createOrganisationLog } = require('../../services/auditLog')
-const { ENABLE_CORRESPONDENT_MANAGEMENT } = require('../../util/config')
+import { Response, Router } from 'express'
+import { User, OrganisationFeedbackCorrespondent } from '../../models'
+import { ApplicationError } from '../../util/customErrors'
+import { getAccessAndOrganisation } from './util'
+import { createOrganisationLog } from '../../services/auditLog'
+import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/config'
+import { AuthenticatedRequest } from '../../types'
 
-const addOrganisationFeedbackCorrespondent = async (req, res) => {
+const addOrganisationFeedbackCorrespondent = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { code } = req.params
   const { userId } = req.body
@@ -16,10 +17,10 @@ const addOrganisationFeedbackCorrespondent = async (req, res) => {
 
   const userToAdd = await User.findByPk(userId)
   if (!userToAdd) {
-    throw new ApplicationError(`User not found`, 400)
+    throw new ApplicationError('User not found', 400)
   }
   if (await userToAdd.hasOrganisation(organisation)) {
-    throw new ApplicationError(`User already is feedback correspondent of that organisation`, 400)
+    throw new ApplicationError('User already is feedback correspondent of that organisation', 400)
   }
 
   await OrganisationFeedbackCorrespondent.create({
@@ -36,10 +37,10 @@ const addOrganisationFeedbackCorrespondent = async (req, res) => {
 
   const users = await organisation.getUsers()
 
-  return res.send(users)
+  res.send(users)
 }
 
-const removeOrganisationFeedbackCorrespondent = async (req, res) => {
+const removeOrganisationFeedbackCorrespondent = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { code, userId } = req.params
 
@@ -70,14 +71,12 @@ const removeOrganisationFeedbackCorrespondent = async (req, res) => {
 
   const users = await organisation.getUsers()
 
-  return res.send(users)
+  res.send(users)
 }
 
-const router = Router()
+export const router = Router()
 
 if (ENABLE_CORRESPONDENT_MANAGEMENT) {
   router.post('/:code/feedback-correspondents', addOrganisationFeedbackCorrespondent)
   router.delete('/:code/feedback-correspondents/:userId', removeOrganisationFeedbackCorrespondent)
 }
-
-module.exports = router
