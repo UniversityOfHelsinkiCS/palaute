@@ -1,13 +1,9 @@
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  CourseUnit,
-  Feedback,
-  CourseRealisation,
-  Organisation,
-} = require('../../models')
+import { Response } from 'express'
+import { Includeable } from 'sequelize'
+import { AuthenticatedRequest } from '../../types'
+import { UserFeedbackTarget, FeedbackTarget, CourseUnit, Feedback, CourseRealisation, Organisation } from '../../models'
 
-const getFeedbackTargetsIncludes = (userId, accessStatus) => {
+const getFeedbackTargetsIncludes = (userId: string, accessStatus?: string): Includeable[] => {
   // where parameter cant have undefined values
   const where = accessStatus ? { userId, accessStatus } : { userId }
   return [
@@ -16,7 +12,7 @@ const getFeedbackTargetsIncludes = (userId, accessStatus) => {
       as: 'userFeedbackTargets',
       required: true,
       where,
-      include: { model: Feedback, as: 'feedback' },
+      include: [{ model: Feedback, as: 'feedback' }],
     },
     {
       model: CourseUnit,
@@ -26,7 +22,7 @@ const getFeedbackTargetsIncludes = (userId, accessStatus) => {
         {
           model: Organisation,
           as: 'organisations',
-          through: { attributes: [] },
+          through: { attributes: [] as string[] },
           required: true,
         },
       ],
@@ -35,10 +31,13 @@ const getFeedbackTargetsIncludes = (userId, accessStatus) => {
   ]
 }
 
-const getCourses = async (req, res) => {
+export const getCourses = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
-  if (!user) return res.send([])
+  if (!user) {
+    res.send([])
+    return
+  }
 
   const feedbackTargets = await FeedbackTarget.findAll({
     include: getFeedbackTargetsIncludes(user.id, 'STUDENT'),
@@ -46,12 +45,10 @@ const getCourses = async (req, res) => {
 
   const filteredCourses = feedbackTargets.filter(feedbackTarget => feedbackTarget.isOpen())
 
-  return res.send(filteredCourses)
+  res.send(filteredCourses)
 }
 
-const getNoadUser = (req, res) => {
+export const getNoadUser = (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
-  return res.send(user)
+  res.send(user)
 }
-
-module.exports = { getCourses, getNoadUser }
