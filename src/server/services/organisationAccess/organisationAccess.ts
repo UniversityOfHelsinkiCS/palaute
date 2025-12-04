@@ -1,7 +1,7 @@
 import { Op, QueryTypes } from 'sequelize'
 import _ from 'lodash'
 
-import { OrganisationAccess, OrganisationWithAccess } from '@common/types/organisation'
+import { OrganisationAccess } from '@common/types/organisation'
 import { User, Organisation } from '../../models'
 import { normalizeOrganisationCode } from '../../util/common'
 import { getAllUserAccess, getAccessToAll, getUserIamAccess } from '../../util/jami'
@@ -115,7 +115,9 @@ export const populateUserAccess = async (user: User) => {
   }
 }
 
-export const getUserOrganisationAccess = async (user: User): Promise<OrganisationWithAccess[]> => {
+export const getUserOrganisationAccess = async (
+  user: User
+): Promise<{ access: OrganisationAccess; organisation: Organisation }[]> => {
   await populateUserAccess(user)
   let { accessibleOrganisations } = user
 

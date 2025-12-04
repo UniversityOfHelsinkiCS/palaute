@@ -1,7 +1,7 @@
-const _ = require('lodash')
-const { Router } = require('express')
+import _ from 'lodash'
+import { Response, Router } from 'express'
 
-const {
+import {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
   createUserFeedbackTargets,
@@ -14,18 +14,17 @@ const {
   getDeletionAllowed,
   getOrganisationSurveyCourseStudents,
   createOrganisationSurveyCourses,
-} = require('../../services/organisations/organisationSurveys')
-const { getFeedbackTargetContext } = require('../../services/feedbackTargets/getFeedbackTargetContext')
-const { validateStudentNumbers } = require('../../services/organisations/validator')
-const { ApplicationError } = require('../../util/customErrors')
-const { getAccessAndOrganisation } = require('./util')
-const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
-const {
-  updateSummaryOnOrganisationSurveyEdit,
-} = require('../../services/summary/updateSummaryOnOrganisationSurveyEdit')
-const { getUserOrganisationAccess } = require('../../services/organisationAccess/organisationAccess')
+} from '../../services/organisations/organisationSurveys'
+import { getFeedbackTargetContext } from '../../services/feedbackTargets/getFeedbackTargetContext'
+import { validateStudentNumbers } from '../../services/organisations/validator'
+import { ApplicationError } from '../../util/customErrors'
+import { getAccessAndOrganisation } from './util'
+import { createSummaryForFeedbackTarget } from '../../services/summary/createSummary'
+import { updateSummaryOnOrganisationSurveyEdit } from '../../services/summary/updateSummaryOnOrganisationSurveyEdit'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { AuthenticatedRequest } from '../../types'
 
-const getOrganisationSurvey = async (req, res) => {
+const getOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { id } = req.params
 
@@ -36,14 +35,12 @@ const getOrganisationSurvey = async (req, res) => {
 
   if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
 
-  if (!feedbackTarget) throw new Error('Organisation survey not found')
-
   const survey = await getSurveyById(feedbackTarget.id)
 
-  return res.send(survey)
+  res.send(survey)
 }
 
-const getOrganisationSurveys = async (req, res) => {
+const getOrganisationSurveys = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { code } = req.params
 
@@ -52,15 +49,16 @@ const getOrganisationSurveys = async (req, res) => {
   if (!hasReadAccess) {
     const teacherSurveys = await getSurveysForTeacher(code, user.id)
 
-    return res.send(teacherSurveys)
+    res.send(teacherSurveys)
+    return
   }
 
   const surveys = await getSurveysForOrganisation(organisation.id)
 
-  return res.send(surveys)
+  res.send(surveys)
 }
 
-const createOrganisationSurvey = async (req, res) => {
+const createOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { code } = req.params
   const {
@@ -76,16 +74,19 @@ const createOrganisationSurvey = async (req, res) => {
     admin: true,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can create organisation surveys', 403)
+  if (!hasAdminAccess) ApplicationError.Forbidden('Only organisation admins can create organisation surveys')
 
   const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
 
   // Remove duplicates from studentNumbers and teacherIds
   const studentNumbers = [...new Set([...initialStudentNumbers])]
-  const teacherIds = [...new Set(initialTeacherIds)]
+  const teacherIds = [...new Set(initialTeacherIds)] as string[]
 
   const { invalidStudentNumbers } = await validateStudentNumbers(studentNumbers)
-  if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
+  if (invalidStudentNumbers.length > 0) {
+    res.status(400).send({ invalidStudentNumbers })
+    return
+  }
 
   await initializeOrganisationCourseUnit(organisation)
 
@@ -107,28 +108,25 @@ const createOrganisationSurvey = async (req, res) => {
 
   const survey = await getSurveyById(feedbackTarget.id)
 
-  return res.status(201).send({
+  res.status(201).send({
     ...survey,
     userFeedbackTargets: [...studentFeedbackTargets, ...teacherFeedbackTargets],
   })
 }
 
-const editOrganisationSurvey = async (req, res) => {
+const editOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { user, body } = req
   const { id } = req.params
+  const feedbackTargetId = Number(id)
 
   const { access, feedbackTarget } = await getFeedbackTargetContext({
-    feedbackTargetId: id,
+    feedbackTargetId,
     user,
   })
 
-  if (!access?.canUpdateOrganisationSurvey())
-    return ApplicationError.Forbidden('Not allowed to update organisation survey')
+  if (!access?.canUpdateOrganisationSurvey()) ApplicationError.Forbidden('Not allowed to update organisation survey')
 
-  if (!feedbackTarget) throw new Error('Organisation survey not found')
-
-  if (!feedbackTarget.userCreated)
-    throw new ApplicationError(`Feedback target ${id} is not an organisation survey`, 400)
+  if (!feedbackTarget.userCreated) ApplicationError.BadRequest(`Feedback target ${id} is not an organisation survey`)
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
 
@@ -136,10 +134,13 @@ const editOrganisationSurvey = async (req, res) => {
 
   if (updates.studentNumbers) {
     const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
-    if (invalidStudentNumbers.length > 0) return res.status(400).send({ invalidStudentNumbers })
+    if (invalidStudentNumbers.length > 0) {
+      res.status(400).send({ invalidStudentNumbers })
+      return
+    }
   }
 
-  const updatedSurvey = await updateOrganisationSurvey(id, updates)
+  const updatedSurvey = await updateOrganisationSurvey(feedbackTargetId, updates)
   const updatedStudentCount =
     updatedSurvey.students.independentStudents.length + updatedSurvey.students.courseStudents.length
 
@@ -147,37 +148,37 @@ const editOrganisationSurvey = async (req, res) => {
 
   updatedSurvey.summary = updatedSummary
 
-  return res.send(updatedSurvey)
+  res.send(updatedSurvey)
 }
 
-const removeOrganisationSurvey = async (req, res) => {
+const removeOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { code, id } = req.params
+  const feedbackTargetId = Number(id)
   const { hasAdminAccess } = await getAccessAndOrganisation(user, code, {
     admin: true,
   })
 
-  if (!hasAdminAccess) throw new ApplicationError('Only organisation admins can remove organisation surveys', 403)
+  if (!hasAdminAccess) ApplicationError.Forbidden('Only organisation admins can remove organisation surveys')
 
   const { feedbackTarget } = await getFeedbackTargetContext({
-    feedbackTargetId: id,
+    feedbackTargetId,
     user,
   })
 
-  if (!feedbackTarget.userCreated)
-    throw new ApplicationError(`Feedback target ${id} is not an organisation survey`, 400)
+  if (!feedbackTarget.userCreated) ApplicationError.BadRequest(`Feedback target ${id} is not an organisation survey`)
 
-  const allowDelete = await getDeletionAllowed(id)
+  const allowDelete = await getDeletionAllowed(feedbackTargetId)
 
   if (!hasAdminAccess && !allowDelete)
-    throw new ApplicationError('Can not delete orgnanisation survey when feedbacks are given', 403)
+    ApplicationError.Forbidden('Can not delete orgnanisation survey when feedbacks are given')
 
-  await deleteOrganisationSurvey(id)
+  await deleteOrganisationSurvey(feedbackTargetId)
 
-  return res.status(204).send()
+  res.status(204).send()
 }
 
-const getOrganisationSurveysForUser = async (req, res) => {
+const getOrganisationSurveysForUser = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const organisationAccess = await getUserOrganisationAccess(user)
   const organisationSurveys = await Promise.all(
@@ -189,10 +190,10 @@ const getOrganisationSurveysForUser = async (req, res) => {
       })
   )
 
-  return res.send(organisationSurveys)
+  res.send(organisationSurveys)
 }
 
-const router = Router()
+export const router = Router()
 
 router.get('/surveys-for-user', getOrganisationSurveysForUser)
 router.get('/:code/surveys/:id', getOrganisationSurvey)
@@ -200,5 +201,3 @@ router.get('/:code/surveys', getOrganisationSurveys)
 router.post('/:code/surveys', createOrganisationSurvey)
 router.put('/:code/surveys/:id', editOrganisationSurvey)
 router.delete('/:code/surveys/:id', removeOrganisationSurvey)
-
-module.exports = router

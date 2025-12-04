@@ -20,6 +20,7 @@ import type { CourseRealisationsOrganisation } from './courseRealisationsOrganis
 import type { Tag } from './tag'
 import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
 import type { User } from './user'
+import type { OrganisationLog } from './organisationLog'
 
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---
@@ -44,9 +45,12 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   declare courseRealisationsOrganisations?: CourseRealisationsOrganisation[]
   declare courseUnitsOrganisations?: CourseUnitsOrganisation[]
   declare tags?: Tag[]
+  declare users?: User[]
   declare childOrganisations?: Organisation[]
+  declare organisationLogs?: OrganisationLog[]
 
   declare getUsers: HasManyGetAssociationsMixin<User>
+  declare getTags: HasManyGetAssociationsMixin<Tag>
 
   // --- Helper methods ---
   // ----------------------
