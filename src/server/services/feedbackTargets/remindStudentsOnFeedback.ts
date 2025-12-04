@@ -1,3 +1,4 @@
+import { LocalizedString } from '@common/types/common'
 import { mailer } from '../../mailer'
 import { ApplicationError } from '../../util/customErrors'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
@@ -6,7 +7,7 @@ import { User } from '../../models/user'
 interface RemindStudentsParams {
   feedbackTargetId: number
   reminderText: string
-  courseName: string
+  courseName: LocalizedString
   user: User
 }
 

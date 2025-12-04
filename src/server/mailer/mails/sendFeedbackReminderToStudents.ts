@@ -1,17 +1,19 @@
-const { differenceInHours, format } = require('date-fns')
-const { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } = require('../../util/config')
-const { ApplicationError } = require('../../util/customErrors')
-const { pate } = require('../pateClient')
-const { i18n } = require('../../util/i18n')
-const { getLanguageValue } = require('../../util/languageUtils')
+import { differenceInHours, format } from 'date-fns'
+import { LanguageId, LocalizedString } from '@common/types/common'
+import { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } from '../../util/config'
+import { ApplicationError } from '../../util/customErrors'
+import { pate } from '../pateClient'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
+import { FeedbackTarget } from '../../models'
 
 const sendReminderToGiveFeedbackToStudents = async (
-  urlToGiveFeedback,
-  students,
-  courseNames,
-  reminder,
-  closesAt,
-  userCreated
+  urlToGiveFeedback: string,
+  students: { email: string; language: LanguageId }[],
+  courseNames: LocalizedString,
+  reminder: string,
+  closesAt: string,
+  userCreated: boolean
 ) => {
   const emails = students.map(student => {
     const t = i18n.getFixedT(student.language ?? 'en')
@@ -21,7 +23,7 @@ const sendReminderToGiveFeedbackToStudents = async (
     // Default reminder text is used if reminder is empty
     const emailText =
       reminder.trim().length > 0
-        ? t(`mails:reminderOnFeedbackToStudents:linkToSurvey`, {
+        ? t('mails:reminderOnFeedbackToStudents:linkToSurvey', {
             url: urlToGiveFeedback,
             courseName,
             reminder,
@@ -51,7 +53,11 @@ const sendReminderToGiveFeedbackToStudents = async (
   return emails
 }
 
-const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseName) => {
+export const sendFeedbackReminderToStudents = async (
+  feedbackTarget: FeedbackTarget,
+  reminder: string,
+  courseName: LocalizedString
+) => {
   if (differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) < FEEDBACK_REMINDER_COOLDOWN) {
     throw new ApplicationError(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`, 403)
   }
@@ -62,7 +68,7 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
     .filter(student => student.email)
     .map(student => ({
       email: student.email,
-      language: student.language || 'en',
+      language: student.language || ('en' as LanguageId),
     }))
 
   const formattedClosesAt = format(new Date(feedbackTarget.closesAt), 'dd.MM.yyyy')
@@ -83,5 +89,3 @@ const sendFeedbackReminderToStudents = async (feedbackTarget, reminder, courseNa
     return emails
   })()
 }
-
-module.exports = { sendFeedbackReminderToStudents }

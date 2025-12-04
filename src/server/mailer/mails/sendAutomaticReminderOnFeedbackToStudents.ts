@@ -1,19 +1,20 @@
-const { sequelize } = require('../../db/dbConnection')
-const { FeedbackTarget } = require('../../models')
-const { FEEDBACK_REMINDER_COOLDOWN, STUDENT_REMINDER_DAYS_TO_CLOSE } = require('../../util/config')
-const { logger } = require('../../util/logger')
-const { sendFeedbackReminderToStudents } = require('./sendFeedbackReminderToStudents')
+import { sequelize } from '../../db/dbConnection'
+import { FeedbackTarget } from '../../models'
+import { FEEDBACK_REMINDER_COOLDOWN, STUDENT_REMINDER_DAYS_TO_CLOSE } from '../../util/config'
+import { logger } from '../../util/logger'
+import { sendFeedbackReminderToStudents } from './sendFeedbackReminderToStudents'
 
 /**
  * Automatically remind students 3 days before feedback closes
  * and feedback target has student list visible (SOS-feature)
  */
-const sendAutomaticReminderOnFeedbackToStudents = async () => {
+export const sendAutomaticReminderOnFeedbackToStudents = async () => {
   const feedbackTargets = await sequelize.query(
     `
-    SELECT DISTINCT fbt.*
+    SELECT DISTINCT fbt.*, cur.name as "courseRealisationName"
     FROM feedback_targets as fbt
 
+    INNER JOIN course_realisations as cur ON cur.id = fbt.course_realisation_id
     INNER JOIN course_units as cu ON cu.id = fbt.course_unit_id
     INNER JOIN course_units_organisations as cuo ON cu.id = cuo.course_unit_id
     INNER JOIN organisations as org ON org.id = cuo.organisation_id
@@ -37,13 +38,9 @@ const sendAutomaticReminderOnFeedbackToStudents = async () => {
   await Promise.all(
     feedbackTargets.map(async fbt => {
       if (await fbt?.feedbackCanBeGiven()) {
-        return sendFeedbackReminderToStudents(fbt, '')
+        return sendFeedbackReminderToStudents(fbt, '', fbt.get('courseRealisationName'))
       }
       return null
     })
   )
-}
-
-module.exports = {
-  sendAutomaticReminderOnFeedbackToStudents,
 }
