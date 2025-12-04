@@ -110,6 +110,8 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   }
 
   feedbackResponseGiven() {
+    // Some queries populate this field directly
+    if ('feedbackResponseGiven' in this.dataValues && this.dataValues.feedbackResponseGiven) return true
     return this.feedbackResponse?.length > 3 || false
   }
 

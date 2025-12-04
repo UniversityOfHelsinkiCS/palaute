@@ -1,8 +1,8 @@
-const { Router } = require('express')
-const { Op } = require('sequelize')
-const _ = require('lodash')
+import { Response, Router } from 'express'
+import { Op, QueryTypes } from 'sequelize'
+import _ from 'lodash'
 
-const {
+import {
   UserFeedbackTarget,
   FeedbackTarget,
   CourseRealisation,
@@ -10,17 +10,18 @@ const {
   Organisation,
   Tag,
   Summary,
-} = require('../../models')
+} from '../../models'
 
-const { sequelize } = require('../../db/dbConnection')
-const { INCLUDE_COURSES } = require('../../util/config')
+import { sequelize } from '../../db/dbConnection'
+import { INCLUDE_COURSES } from '../../util/config'
+import { AuthenticatedRequest } from '../../types'
 
-const getCourseUnitsForTeacher = async (req, res) => {
+const getCourseUnitsForTeacher = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
   const now = new Date()
 
-  const latestEndedCourseRealisationsRows = await sequelize.query(
+  const latestEndedCourseRealisationsRows = await sequelize.query<{ course_realisation_id: string }>(
     `
     SELECT DISTINCT ON (course_units.course_code)
       course_realisations.id AS course_realisation_id
@@ -44,7 +45,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         userId: user.id,
         courseRealisationEndDateAfter: new Date(2021, 3, 1),
       },
-      type: sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
     }
   )
 
@@ -66,8 +67,8 @@ const getCourseUnitsForTeacher = async (req, res) => {
           'name',
           'opensAt',
           'closesAt',
-          ['feedback_response_email_sent', 'feedbackResponseSent'],
-          [sequelize.literal(`length(feedback_response) > 3`), 'feedbackResponseGiven'],
+          'feedbackResponseReminderEmailSent',
+          [sequelize.literal('length(feedback_response) > 3'), 'feedbackResponseGiven'],
           'continuousFeedbackEnabled',
           'userCreated',
         ],
@@ -135,7 +136,7 @@ const getCourseUnitsForTeacher = async (req, res) => {
         !courseUnit.organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
     )
 
-  const courseUnitByCourseCode = targets.reduce(
+  const courseUnitByCourseCode: Record<string, CourseUnit> = targets.reduce(
     (acc, { courseUnit }) => ({
       ...acc,
       [courseUnit.courseCode]: courseUnit,
@@ -175,14 +176,14 @@ const getCourseUnitsForTeacher = async (req, res) => {
       ({ courseRealisation }) => courseRealisation.startDate
     )
 
-    const makeTargetObject = feedbackTarget =>
+    const makeTargetObject = (feedbackTarget: FeedbackTarget) =>
       feedbackTarget
         ? {
             ...feedbackTarget.courseRealisation.toJSON(),
-            feedbackResponseGiven: feedbackTarget.dataValues.feedbackResponseGiven,
-            feedbackResponseSent: feedbackTarget.dataValues.feedbackResponseSent,
-            feedbackCount: feedbackTarget.summary?.feedbackCount ?? 0,
-            studentCount: feedbackTarget.summary?.studentCount ?? 0,
+            feedbackResponseGiven: feedbackTarget.feedbackResponseGiven(),
+            feedbackResponseSent: feedbackTarget.feedbackResponseEmailSent,
+            feedbackCount: feedbackTarget.summary?.data.feedbackCount ?? 0,
+            studentCount: feedbackTarget.summary?.data.studentCount ?? 0,
             feedbackTarget: _.pick(feedbackTarget, targetFields),
           }
         : null
@@ -195,10 +196,10 @@ const getCourseUnitsForTeacher = async (req, res) => {
     }
   })
 
-  return res.send(courseUnits)
+  res.send(courseUnits)
 }
 
-const getCourseUnitsByOrganisation = async (req, res) => {
+const getCourseUnitsByOrganisation = async (req: AuthenticatedRequest, res: Response) => {
   const { code } = req.params
 
   const courseUnits = await CourseUnit.findAll({
@@ -229,18 +230,16 @@ const getCourseUnitsByOrganisation = async (req, res) => {
 
   // First sort by validity period start date. This ensures that when taking the uniq, the most recent CUs are preserved
   const uniqueCourseUnits = _.uniqBy(
-    _.orderBy(courseUnits, cu => Date.parse(cu.validityPeriod?.startDate), 'desc'),
+    _.orderBy(courseUnits, cu => cu.validityPeriod?.startDate, 'desc'),
     'courseCode'
   )
 
   const sortedCourseUnits = _.sortBy(uniqueCourseUnits, 'courseCode')
 
-  return res.send(sortedCourseUnits)
+  res.send(sortedCourseUnits)
 }
 
-const router = Router()
+export const router = Router()
 
 router.get('/responsible', getCourseUnitsForTeacher)
 router.get('/for-organisation/:code', getCourseUnitsByOrganisation)
-
-module.exports = router

@@ -13,6 +13,7 @@ import {
 import { sequelize } from '../db/dbConnection'
 import type { User } from './user'
 import type Feedback from './feedback'
+import type { FeedbackTarget } from './feedbackTarget'
 
 export type AccessStatus = 'STUDENT' | 'TEACHER' | 'RESPONSIBLE_TEACHER'
 
@@ -32,6 +33,7 @@ class UserFeedbackTarget extends Model<
   public notGivingFeedback!: boolean
 
   declare user?: User
+  declare feedbackTarget?: FeedbackTarget
   declare feedback?: NonAttribute<Feedback>
 
   public hasTeacherAccess(): boolean {
