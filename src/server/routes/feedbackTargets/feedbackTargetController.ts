@@ -4,7 +4,7 @@ import { ApplicationError } from '../../util/customErrors'
 
 import { createFeedbackTargetLog } from '../../services/auditLog'
 import { mailer } from '../../mailer'
-import interimFeedbackController from './interimFeedbackController'
+import { router as interimFeedbacksRouter } from './interimFeedbackController'
 import {
   getFeedbackTargetForUserById,
   getFeedbacksForUserById,
@@ -304,6 +304,6 @@ adRouter.put('/:id/not-giving-feedback', async (req: AuthenticatedRequest, res: 
   res.send({ result })
 })
 
-adRouter.use('/', interimFeedbackController)
+adRouter.use('/', interimFeedbacksRouter)
 
 export { adRouter, noadRouter }

@@ -1,16 +1,17 @@
-const { Router } = require('express')
-const Sentry = require('@sentry/node')
-const { ApplicationError } = require('../../util/customErrors')
-const { UserFeedbackTarget, FeedbackTarget, Feedback } = require('../../models')
-const { validateFeedback } = require('../../util/feedbackValidator')
-const { getFeedbackTargetContext } = require('../../services/feedbackTargets')
-const {
+import { Response, Router } from 'express'
+import Sentry from '@sentry/node'
+import { ApplicationError } from '../../util/customErrors'
+import { UserFeedbackTarget, FeedbackTarget, Feedback } from '../../models'
+import { validateFeedback } from '../../util/feedbackValidator'
+import { getFeedbackTargetContext } from '../../services/feedbackTargets'
+import {
   updateSummaryAfterFeedbackCreated,
   updateSummaryAfterFeedbackDestroyed,
-} = require('../../services/summary/updateSummaryOnFeedback')
-const { logger } = require('../../util/logger')
+} from '../../services/summary/updateSummaryOnFeedback'
+import { logger } from '../../util/logger'
+import { AuthenticatedRequest } from '../../types'
 
-const create = async (req, res) => {
+const create = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { data, feedbackTargetId } = req.body
   const { id: userId, degreeStudyRight } = req.user
@@ -53,10 +54,10 @@ const create = async (req, res) => {
     logger.error('Failed to update summary after feedback created', err)
   }
 
-  return res.send(newFeedback)
+  res.send(newFeedback)
 }
 
-const getFeedbackForUser = async req => {
+const getFeedbackForUser = async (req: AuthenticatedRequest) => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
   if (!feedback) ApplicationError.NotFound()
 
@@ -72,13 +73,13 @@ const getFeedbackForUser = async req => {
   return feedback
 }
 
-const getOne = async (req, res) => {
+const getOne = async (req: AuthenticatedRequest, res: Response) => {
   const feedback = await getFeedbackForUser(req)
 
-  return res.send(feedback)
+  res.send(feedback)
 }
 
-const update = async (req, res) => {
+const update = async (req: AuthenticatedRequest, res: Response) => {
   const feedback = await getFeedbackForUser(req)
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
@@ -108,10 +109,10 @@ const update = async (req, res) => {
 
   // @TODO: Update summary
 
-  return res.send(updatedFeedback)
+  res.send(updatedFeedback)
 }
 
-const destroy = async (req, res) => {
+const destroy = async (req: AuthenticatedRequest, res: Response) => {
   const feedback = await getFeedbackForUser(req)
 
   const userFeedbackTarget = await UserFeedbackTarget.findOne({
@@ -138,23 +139,18 @@ const destroy = async (req, res) => {
     logger.error('Failed to update summary after feedback destroyed', err)
   }
 
-  return res.sendStatus(200)
+  res.sendStatus(200)
 }
 
-const adRouter = Router()
+export const adRouter = Router()
 
 adRouter.post('/', create)
 adRouter.get('/:id', getOne)
 adRouter.put('/:id', update)
 adRouter.delete('/:id', destroy)
 
-const noadRouter = Router()
+export const noadRouter = Router()
 
 noadRouter.post('/', create)
 noadRouter.put('/:id', update)
 noadRouter.delete('/:id', destroy)
-
-module.exports = {
-  adRouter,
-  noadRouter,
-}
