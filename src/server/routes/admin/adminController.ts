@@ -1,13 +1,14 @@
-const Router = require('express')
+import Router, { Response } from 'express'
 
-const { Op } = require('sequelize')
-const _ = require('lodash')
-const { format, subMonths } = require('date-fns')
+import { IncludeOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
+import { LocalizedString } from '@common/types/common'
+import _ from 'lodash'
+import { format, subMonths } from 'date-fns'
 
-const { ApplicationError } = require('../../util/customErrors')
-const updaterClient = require('../../util/updaterClient')
+import { ApplicationError } from '../../util/customErrors'
+import updaterClient from '../../util/updaterClient'
 
-const {
+import {
   FeedbackTarget,
   CourseRealisation,
   CourseUnit,
@@ -15,28 +16,31 @@ const {
   User,
   UpdaterStatus,
   Organisation,
-  CourseUnitsOrganisation,
-  CourseRealisationsOrganisation,
   InactiveCourseRealisation,
   Banner,
-} = require('../../models')
+} from '../../models'
 
-const { sequelize } = require('../../db/dbConnection')
-const { logger } = require('../../util/logger')
+import { sequelize } from '../../db/dbConnection'
+import { logger } from '../../util/logger'
 
-const { mailer } = require('../../mailer')
-const { adminAccess } = require('../../middleware/adminAccess')
-const { buildSummaries } = require('../../services/summary/buildSummaries')
+import { mailer } from '../../mailer'
+import { adminAccess } from '../../middleware/adminAccess'
+import { buildSummaries } from '../../services/summary/buildSummaries'
+import { AuthenticatedRequest } from '../../types'
+import { getLanguageValue } from '../../util/languageUtils'
 
-const runUpdater = async (_, res) => {
+const runUpdater = async (req: AuthenticatedRequest, res: Response) => {
   logger.info('Running updater on demand')
   await updaterClient.run()
-  return res.send({})
+  res.send({})
 }
 
-const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
+const runUpdaterForEnrolmentsOfCourse = async (req: AuthenticatedRequest, res: Response) => {
   const curId = req.params?.courseRealisationId
-  if (!curId) return res.sendStatus(400)
+  if (!curId) {
+    res.sendStatus(400)
+    return
+  }
 
   try {
     await updaterClient.updateEnrolments(curId)
@@ -46,35 +50,33 @@ const runUpdaterForEnrolmentsOfCourse = async (req, res) => {
     }
   }
 
-  return res.send({})
+  res.send({})
 }
 
-const getUpdaterStatuses = async (req, res) => {
+const getUpdaterStatuses = async (req: AuthenticatedRequest, res: Response) => {
   const { jobType } = req.query
   const statuses = await UpdaterStatus.findAll({
-    where: jobType !== 'ALL' ? { jobType } : {},
+    where: jobType !== 'ALL' ? { jobType: jobType as string } : {},
     order: [['startedAt', 'desc']],
     limit: 50,
   })
-  return res.send(statuses)
+  res.send(statuses)
 }
 
-const runPate = async (_, res) => {
+const runPate = async (req: AuthenticatedRequest, res: Response) => {
   await mailer.runPateCron()
-  return res.sendStatus(204)
+  res.sendStatus(204)
 }
 
-const findUser = async (req, res) => {
-  const {
-    query: { user },
-  } = req
+const findUser = async (req: AuthenticatedRequest, res: Response) => {
+  const userQuery = req.query.user as string
 
-  let params = {}
-  let where = {}
+  let params: Record<string, string> = {}
+  let where: WhereOptions<User> = {}
 
-  if (user.split(' ').length === 2) {
-    const firstName = user.split(' ')[0]
-    const lastName = user.split(' ')[1]
+  if (userQuery.split(' ').length === 2) {
+    const firstName = userQuery.split(' ')[0]
+    const lastName = userQuery.split(' ')[1]
     params = { firstName, lastName }
     where = {
       firstName: {
@@ -85,32 +87,32 @@ const findUser = async (req, res) => {
       },
     }
   } else {
-    const isEmail = user.includes('.') || user.includes('@')
-    const isStudentNumber = !Number.isNaN(Number(user))
-    const isSisuId = !isStudentNumber && !Number.isNaN(Number(user[user.length - 1]))
+    const isEmail = userQuery.includes('.') || userQuery.includes('@')
+    const isStudentNumber = !Number.isNaN(Number(userQuery))
+    const isSisuId = !isStudentNumber && !Number.isNaN(Number(userQuery[userQuery.length - 1]))
     const isUsername = !isStudentNumber && !isSisuId
 
     if (isEmail) {
-      where[Op.or] = {
-        email: { [Op.iLike]: `${user}%` },
-        secondaryEmail: { [Op.iLike]: `${user}%` },
+      where = {
+        ...where,
+        [Op.or]: [{ email: { [Op.iLike]: `${userQuery}%` } }, { secondaryEmail: { [Op.iLike]: `${userQuery}%` } }],
       }
-      params.email = user
+      params.email = userQuery
     } else if (isStudentNumber) {
       where.studentNumber = {
-        [Op.iLike]: `${user}%`,
+        [Op.iLike]: `${userQuery}%`,
       }
-      params.studentNumber = user
+      params.studentNumber = userQuery
     } else if (isSisuId) {
       where.id = {
-        [Op.iLike]: `${user}%`,
+        [Op.iLike]: `${userQuery}%`,
       }
-      params.id = user
+      params.id = userQuery
     } else if (isUsername) {
       where.username = {
-        [Op.iLike]: `%${user}%`,
+        [Op.iLike]: `%${userQuery}%`,
       }
-      params.username = user
+      params.username = userQuery
     }
   }
 
@@ -119,7 +121,7 @@ const findUser = async (req, res) => {
     limit: 20,
   })
 
-  return res.send({
+  res.send({
     params,
     persons: persons.map(person => ({
       ...person.dataValues,
@@ -128,36 +130,39 @@ const findUser = async (req, res) => {
   })
 }
 
-const findFeedbackTargets = async (req, res) => {
+const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
   const {
     query: { id, code, name, language },
   } = req
-  const params = {}
+  const params: Record<string, unknown> = {}
+  const nameLength = (name.length ?? 0) as number
 
-  const include = [
+  const include: IncludeOptions[] = [
     {
       model: CourseUnit,
       attributes: ['courseCode', 'name'],
       as: 'courseUnit',
       required: true,
-      include: {
-        model: Organisation,
-        as: 'organisations',
-        attributes: ['id', 'code', 'name'],
-        through: { model: CourseUnitsOrganisation },
-      },
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          attributes: ['id', 'code', 'name'],
+        },
+      ],
     },
     {
       model: CourseRealisation,
       attributes: ['startDate', 'endDate', 'name'],
       as: 'courseRealisation',
       required: true,
-      include: {
-        model: Organisation,
-        as: 'organisations',
-        attributes: ['id', 'code', 'name'],
-        through: { model: CourseRealisationsOrganisation },
-      },
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          attributes: ['id', 'code', 'name'],
+        },
+      ],
     },
   ]
 
@@ -165,16 +170,17 @@ const findFeedbackTargets = async (req, res) => {
   if (numberId) {
     const result = await FeedbackTarget.findByPk(numberId, { include })
     params.id = numberId
-    return res.send({
+    res.send({
       params,
       feedbackTargets: result ? [result.toJSON()] : [],
     })
+    return
   }
 
   if (code) {
     include[0].where = { courseCode: { [Op.iLike]: `${code}%` } }
   }
-  if (name?.length > 2) {
+  if (nameLength > 2) {
     include[0].where = {
       [Op.or]: {
         [`name.${language}`]: { [Op.iLike]: `${name}%` },
@@ -187,20 +193,21 @@ const findFeedbackTargets = async (req, res) => {
     order: [['closesAt', 'DESC']],
     limit: 10,
   })
-  return res.send({
+  res.send({
     params,
     count,
     feedbackTargets: result.map(r => r.toJSON()),
   })
 }
 
-const findOrganisationSurveys = async (req, res) => {
+const findOrganisationSurveys = async (req: AuthenticatedRequest, res: Response) => {
   const {
     query: { id, orgCode, name, language },
   } = req
-  const params = {}
+  const params: Record<string, unknown> = {}
+  const nameLength = (name.length ?? 0) as number
 
-  const include = [
+  const include: IncludeOptions[] = [
     {
       model: CourseUnit,
       as: 'courseUnit',
@@ -225,13 +232,14 @@ const findOrganisationSurveys = async (req, res) => {
       as: 'courseRealisation',
       attributes: ['startDate', 'endDate', 'name'],
       required: true,
-      include: {
-        model: Organisation,
-        as: 'organisations',
-        attributes: ['id', 'code', 'name'],
-        through: { model: CourseRealisationsOrganisation },
-      },
-      ...(name?.length > 2 && {
+      include: [
+        {
+          model: Organisation,
+          as: 'organisations',
+          attributes: ['id', 'code', 'name'],
+        },
+      ],
+      ...(nameLength > 2 && {
         where: {
           [Op.or]: {
             [`name.${language}`]: { [Op.iLike]: `${name}%` },
@@ -245,11 +253,13 @@ const findOrganisationSurveys = async (req, res) => {
       as: 'students',
       required: false,
       where: { accessStatus: 'STUDENT' },
-      include: {
-        model: User,
-        attributes: ['studentNumber'],
-        as: 'user',
-      },
+      include: [
+        {
+          model: User,
+          attributes: ['studentNumber'],
+          as: 'user',
+        },
+      ],
     },
     {
       model: UserFeedbackTarget,
@@ -259,10 +269,12 @@ const findOrganisationSurveys = async (req, res) => {
       where: {
         accessStatus: 'RESPONSIBLE_TEACHER',
       },
-      include: {
-        model: User,
-        as: 'user',
-      },
+      include: [
+        {
+          model: User,
+          as: 'user',
+        },
+      ],
     },
   ]
 
@@ -270,10 +282,11 @@ const findOrganisationSurveys = async (req, res) => {
   if (numberId) {
     const result = await FeedbackTarget.findByPk(numberId, { include })
     params.id = numberId
-    return res.send({
+    res.send({
       params,
       feedbackTargets: result ? [result.toJSON()] : [],
     })
+    return
   }
 
   const organisationSurveys = await FeedbackTarget.findAll({
@@ -301,14 +314,14 @@ const findOrganisationSurveys = async (req, res) => {
     ],
   })
 
-  return res.send({
+  res.send({
     params,
     count: organisationSurveyCount,
     feedbackTargets: organisationSurveys,
   })
 }
 
-const resendFeedbackResponseEmail = async (req, res) => {
+const resendFeedbackResponseEmail = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.body
   const idNumber = Number(id)
   if (!idNumber) throw new ApplicationError('Invalid id', 400)
@@ -318,26 +331,24 @@ const resendFeedbackResponseEmail = async (req, res) => {
     feedbackTarget,
     feedbackTarget.feedbackResponse
   )
-  return res.send({ count: emailsSentTo.length })
+  res.send({ count: emailsSentTo.length })
 }
 
-const formatFeedbackTargets = async feedbackTargets => {
-  const convertSingle = async feedbackTarget => feedbackTarget.toPublicObject()
-
-  if (!Array.isArray(feedbackTargets)) return convertSingle(feedbackTargets)
+const formatFeedbackTargets = async (feedbackTargets: FeedbackTarget | FeedbackTarget[]) => {
+  if (!Array.isArray(feedbackTargets)) return [feedbackTargets.toPublicObject()]
 
   const responseReady = []
 
   for (const feedbackTarget of feedbackTargets) {
     if (feedbackTarget) {
-      responseReady.push(await convertSingle(feedbackTarget))
+      responseReady.push(feedbackTarget.toPublicObject())
     }
   }
 
   return responseReady
 }
 
-const getFeedbackTargets = async (req, res) => {
+const getFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
@@ -375,7 +386,7 @@ const getFeedbackTargets = async (req, res) => {
 
   const feedbackCountByFeedbackTargetId = _.zipObject(
     studentFeedbackTargets.map(target => target.get('feedbackTargetId')),
-    studentFeedbackTargets.map(target => parseInt(target.get('feedbackCount'), 10))
+    studentFeedbackTargets.map(target => parseInt(target.get('feedbackCount') as string, 10))
   )
 
   const formattedFeedbackTargets = await formatFeedbackTargets(feedbackTargets)
@@ -385,14 +396,14 @@ const getFeedbackTargets = async (req, res) => {
     feedbackCount: feedbackCountByFeedbackTargetId[target.id] ?? 0,
   }))
 
-  return res.send(feedbackTargetsWithCount)
+  res.send(feedbackTargetsWithCount)
 }
 
-const findEmailsForToday = async (_, res) => {
+const findEmailsForToday = async (req: AuthenticatedRequest, res: Response) => {
   const { students, teachers, teacherEmailCounts, studentEmailCounts } = await mailer.returnEmailsToBeSentToday()
 
   const emails = students.concat(teachers)
-  return res.send({
+  res.send({
     emails,
     studentEmails: students.length,
     teacherEmails: teachers.length,
@@ -401,10 +412,22 @@ const findEmailsForToday = async (_, res) => {
   })
 }
 
-const getNorppaStatistics = async (req, res) => {
+const getNorppaStatistics = async (req: AuthenticatedRequest, res: Response) => {
   const { opensAt, closesAt } = req.query
 
-  const results = await sequelize.query(
+  const results = await sequelize.query<{
+    id: number
+    ufbts: number
+    feedbacks: number
+    name: LocalizedString
+    course_code: string
+    start_date: Date
+    end_date: Date
+    feedback_response_given: boolean
+    organisation_name: LocalizedString
+    organisation_code: string
+    parent_name: LocalizedString
+  }>(
     `SELECT
 
     DISTINCT f.id,
@@ -440,7 +463,7 @@ const getNorppaStatistics = async (req, res) => {
         closesAt,
       },
 
-      type: sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
     }
   )
 
@@ -450,15 +473,15 @@ const getNorppaStatistics = async (req, res) => {
     end_date: format(r.end_date, 'dd.MM.yyyy'),
     organisation_name: r.organisation_name.fi,
     parent_name: r.parent_name.fi,
-    name: r.name.en ? r.name.en : r.name[0],
+    name: getLanguageValue(r.name, 'en'),
   }))
 
   const resultsWithBetterAvoin = resultsWithBetterNames.filter(r => r.organisation_name !== 'Lukuvuosi')
 
-  return res.send(resultsWithBetterAvoin)
+  res.send(resultsWithBetterAvoin)
 }
 
-const createBanner = async (req, res) => {
+const createBanner = async (req: AuthenticatedRequest, res: Response) => {
   const { body } = req
 
   const banner = Banner.build({
@@ -474,10 +497,10 @@ const createBanner = async (req, res) => {
     throw new ApplicationError('Fakd', 400)
   }
 
-  return res.send(banner)
+  res.send(banner)
 }
 
-const updateBanner = async (req, res) => {
+const updateBanner = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   const { body } = req
 
@@ -494,19 +517,19 @@ const updateBanner = async (req, res) => {
     throw new ApplicationError('Fakd', 400)
   }
 
-  return res.send(banner)
+  res.send(banner)
 }
 
-const deleteBanner = async (req, res) => {
+const deleteBanner = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   const destroyed = await Banner.destroy({ where: { id } })
   if (!destroyed) {
     throw new ApplicationError('Not found', 404)
   }
-  return res.send(200)
+  res.send(200)
 }
 
-const getFeedbackCorrespondents = async (req, res) => {
+const getFeedbackCorrespondents = async (req: AuthenticatedRequest, res: Response) => {
   const users = await sequelize.query(
     `
     SELECT 
@@ -528,14 +551,14 @@ const getFeedbackCorrespondents = async (req, res) => {
     ORDER BY org.code
   `,
     {
-      type: sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
     }
   )
 
-  return res.send(users)
+  res.send(users)
 }
 
-const getInactiveCourseRealisations = async (req, res) => {
+const getInactiveCourseRealisations = async (req: AuthenticatedRequest, res: Response) => {
   const inactiveCourseRealisations = await InactiveCourseRealisation.findAll({
     where: {
       endDate: {
@@ -544,10 +567,10 @@ const getInactiveCourseRealisations = async (req, res) => {
     },
   })
 
-  return res.send(inactiveCourseRealisations)
+  res.send(inactiveCourseRealisations)
 }
 
-const updateInactiveCourseRealisation = async (req, res) => {
+const updateInactiveCourseRealisation = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   const { manuallyEnabled } = req.body
 
@@ -564,15 +587,15 @@ const updateInactiveCourseRealisation = async (req, res) => {
 
   if (!manuallyEnabled) await updaterClient.deleteCourse(id)
 
-  return res.send(inactiveCourse)
+  res.send(inactiveCourse)
 }
 
-const getNodeConfigEnv = (_req, res) => {
+const getNodeConfigEnv = (_req: AuthenticatedRequest, res: Response) => {
   const { NODE_CONFIG_ENV } = process.env
-  return res.send({ NODE_CONFIG_ENV })
+  res.send({ NODE_CONFIG_ENV })
 }
 
-const updateSummariesTable = async (req, res) => {
+const updateSummariesTable = async (req: AuthenticatedRequest, res: Response) => {
   const { forceAll } = req.body
   logger.info('Starting to update summaries table')
 
@@ -580,10 +603,10 @@ const updateSummariesTable = async (req, res) => {
   await buildSummaries(forceAll) // force all determines if the summaries are completely rebuilt
   const duration = Date.now() - start
 
-  return res.send({ duration })
+  res.send({ duration })
 }
 
-const router = Router()
+export const router = Router()
 
 router.use(adminAccess)
 
@@ -606,4 +629,3 @@ router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
 router.get('/node-config-env', getNodeConfigEnv)
 router.post('/build-summaries', updateSummariesTable)
-module.exports = router

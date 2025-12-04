@@ -1,3 +1,1 @@
-const router = require('./adminController')
-
-module.exports = router
+export { router as adminRouter } from './adminRouter'
