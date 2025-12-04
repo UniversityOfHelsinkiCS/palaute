@@ -1,7 +1,7 @@
-const { Router } = require('express')
-const _ = require('lodash')
+import { Response, Router } from 'express'
+import _ from 'lodash'
 
-const {
+import {
   createUserFeedbackTargets,
   createInterimFeedbackTarget,
   getInterimFeedbackById,
@@ -9,28 +9,31 @@ const {
   updateInterimFeedbackTarget,
   removeInterimFeedbackTarget,
   getInterimFeedbackParentFbt,
-} = require('../../services/feedbackTargets/interimFeedbacks')
-const { createSummaryForFeedbackTarget } = require('../../services/summary/createSummary')
+} from '../../services/feedbackTargets/interimFeedbacks'
+import { createSummaryForFeedbackTarget } from '../../services/summary/createSummary'
+import { AuthenticatedRequest } from '../../types'
 
-const getInterimFeedbackParent = async (req, res) => {
+export const router = Router()
+
+router.get('/:fbtId/interimFeedbacks', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { interimFbtId } = req.params
 
   const parentFeedbackTarget = await getInterimFeedbackParentFbt(interimFbtId, user)
 
-  return res.send(parentFeedbackTarget)
-}
+  res.send(parentFeedbackTarget)
+})
 
-const getInterimFeedbacks = async (req, res) => {
+router.get('/interimFeedbacks/:interimFbtId/parent', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { fbtId } = req.params
 
   const interimFeedbackTargets = await getInterimFeedbackTargets(fbtId, user)
 
-  return res.send(interimFeedbackTargets)
-}
+  res.send(interimFeedbackTargets)
+})
 
-const createInterimFeedback = async (req, res) => {
+router.post('/:fbtId/interimFeedbacks', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { fbtId } = req.params
 
@@ -47,37 +50,27 @@ const createInterimFeedback = async (req, res) => {
     interimFeedbackTarget.closesAt
   )
 
-  return res.status(201).send({
+  res.status(201).send({
     ...interimFeedbackTarget.dataValues,
     summary,
     userFeedbackTargets,
   })
-}
+})
 
-const updateInterimFeedback = async (req, res) => {
+router.put('/interimFeedbacks/:interimFbtId', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { interimFbtId } = req.params
 
   const updatedInterimFeedbackTarget = await updateInterimFeedbackTarget(interimFbtId, user, req.body)
 
-  return res.send(updatedInterimFeedbackTarget)
-}
+  res.send(updatedInterimFeedbackTarget)
+})
 
-const removeInterimFeedback = async (req, res) => {
+router.delete('/interimFeedbacks/:interimFbtId', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { interimFbtId } = req.params
 
   await removeInterimFeedbackTarget(interimFbtId, user)
 
-  return res.status(204).send()
-}
-
-const router = Router()
-
-router.get('/:fbtId/interimFeedbacks', getInterimFeedbacks)
-router.get('/interimFeedbacks/:interimFbtId/parent', getInterimFeedbackParent)
-router.post('/:fbtId/interimFeedbacks', createInterimFeedback)
-router.put('/interimFeedbacks/:interimFbtId', updateInterimFeedback)
-router.delete('/interimFeedbacks/:interimFbtId', removeInterimFeedback)
-
-module.exports = router
+  res.status(204).send()
+})
