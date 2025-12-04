@@ -15,7 +15,7 @@ import { AuthenticatedRequest } from '../../types'
 
 export const router = Router()
 
-router.get('/:fbtId/interimFeedbacks', async (req: AuthenticatedRequest, res: Response) => {
+router.get('/interimFeedbacks/:interimFbtId/parent', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { interimFbtId } = req.params
 
@@ -24,7 +24,7 @@ router.get('/:fbtId/interimFeedbacks', async (req: AuthenticatedRequest, res: Re
   res.send(parentFeedbackTarget)
 })
 
-router.get('/interimFeedbacks/:interimFbtId/parent', async (req: AuthenticatedRequest, res: Response) => {
+router.get('/:fbtId/interimFeedbacks', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const { fbtId } = req.params
 
