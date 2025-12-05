@@ -81,6 +81,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   // --- only the ones that are used are declared here ---
   // -----------------------------------------------------
   declare getCourseUnit: HasOneGetAssociationMixin<CourseUnit>
+  declare getCourseRealisation: HasOneGetAssociationMixin<CourseRealisation>
 
   // --- Association includes ------
   // --- not sure how to do this ---
