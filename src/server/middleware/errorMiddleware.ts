@@ -9,10 +9,11 @@ export const errorMiddleware = (error: Error, req: Request, res: Response, next:
   Sentry.captureException(error)
 
   if (res.headersSent) {
-    return next(error)
+    next(error)
+    return
   }
 
   const normalizedError = error instanceof ApplicationError ? error : new ApplicationError(error.message)
 
-  return res.status(normalizedError.status).json(normalizedError)
+  res.status(normalizedError.status).json(normalizedError)
 }

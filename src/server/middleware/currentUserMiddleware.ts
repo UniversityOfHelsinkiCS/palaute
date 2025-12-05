@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { NextFunction } from 'express'
+import { NextFunction, Response } from 'express'
 import { AuthenticatedRequest, UnauthenticatedRequest } from 'types'
 import { ApplicationError } from '../util/customErrors'
 import { JWT_KEY } from '../util/config'
@@ -81,5 +81,5 @@ export const currentUserMiddleware = async (req: UnauthenticatedRequest, _res: R
     await setLoggedInAsUser(authenticatedReq)
   }
 
-  return next()
+  next()
 }
