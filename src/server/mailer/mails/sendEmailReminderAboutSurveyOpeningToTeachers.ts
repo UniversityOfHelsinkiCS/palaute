@@ -1,20 +1,21 @@
-const { addDays, format } = require('date-fns')
-const { Op } = require('sequelize')
-const { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User, Summary } = require('../../models')
-const {
+import { addDays, format } from 'date-fns'
+import { LanguageId } from '@common/types/common'
+import { Op } from 'sequelize'
+import { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User, Summary } from '../../models'
+import {
   TEACHER_REMINDER_DAYS_TO_OPEN,
   PUBLIC_URL,
   FEEDBACK_SYSTEM,
   SHOW_COURSE_CODES_WITH_COURSE_NAMES,
   FEEDBACK_HIDDEN_STUDENT_COUNT,
-} = require('../../util/config')
-const { pate } = require('../pateClient')
-const { createRecipientsForFeedbackTargets } = require('./util')
-const { i18n } = require('../../util/i18n')
-const { getLanguageValue } = require('../../util/languageUtils')
-const { getOrCreateTeacherSurvey } = require('../../services/surveys')
+} from '../../util/config'
+import { pate } from '../pateClient'
+import { createRecipientsForFeedbackTargets, OpeningEmailInfo } from './util'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
+import { getOrCreateTeacherSurvey } from '../../services/surveys'
 
-const getFeedbackTargetsAboutToOpenForTeachers = async () => {
+export const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
@@ -81,9 +82,12 @@ const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   return filteredFeedbackTargets
 }
 
-const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedbackTargets) => {
+export const emailReminderAboutSurveyOpeningToTeachers = (
+  emailAddress: string,
+  teacherFeedbackTargets: OpeningEmailInfo[]
+) => {
   const hasMultipleFeedbackTargets = teacherFeedbackTargets.length > 1
-  const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : 'en'
+  const language = teacherFeedbackTargets[0].language ? teacherFeedbackTargets[0].language : ('en' as LanguageId)
   const t = i18n.getFixedT(language)
   const courseName = getLanguageValue(teacherFeedbackTargets[0].name, language)
   const { courseCode } = teacherFeedbackTargets[0].courseUnit
@@ -123,7 +127,7 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
     }
 
     const questionsText = `${t('mails:reminderAboutSurveyOpeningToTeachers:questionsText')}
-      - ${teacherQuestions?.length > 0 ? teacherQuestions.map(q => getLanguageValue(q.data.label, language)).join('<br/>- ') : ''}`
+      - ${teacherQuestions?.length > 0 ? teacherQuestions.map(q => ('label' in q.data ? getLanguageValue(q.data.label, language) : '')).join('<br/>- ') : ''}`
 
     const smallCourseWarning = `${t('mails:reminderAboutSurveyOpeningToTeachers:smallCourseWarning', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}<br/>`
 
@@ -157,10 +161,13 @@ const emailReminderAboutSurveyOpeningToTeachers = (emailAddress, teacherFeedback
   return email
 }
 
-const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
+export const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
-  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, { primaryOnly: true })
+  const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, {
+    primaryOnly: true,
+    whereOpenEmailNotSent: false,
+  })
 
   const emailsToBeSent = Object.keys(teachersWithFeedbackTargets).map(teacher =>
     emailReminderAboutSurveyOpeningToTeachers(teacher, teachersWithFeedbackTargets[teacher])
@@ -184,10 +191,4 @@ const sendEmailReminderAboutSurveyOpeningToTeachers = async () => {
   await pate.send(emailsToBeSent, 'Remind teachers about feedback opening')
 
   return emailsToBeSent
-}
-
-module.exports = {
-  getFeedbackTargetsAboutToOpenForTeachers, // used by stats
-  emailReminderAboutSurveyOpeningToTeachers, // used by stats
-  sendEmailReminderAboutSurveyOpeningToTeachers,
 }
