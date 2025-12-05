@@ -1,26 +1,30 @@
-const { subDays, addDays, format } = require('date-fns')
-const _ = require('lodash')
-const { sequelize } = require('../../db/dbConnection')
+import { subDays, addDays, format } from 'date-fns'
+import _ from 'lodash'
+import { QueryTypes } from 'sequelize'
+import { sequelize } from '../../db/dbConnection'
 
-const { createRecipientsForFeedbackTargets } = require('./util')
+import { createRecipientsForFeedbackTargets } from './util'
 
-const {
+import {
   getFeedbackTargetsAboutToOpenForTeachers,
   emailReminderAboutSurveyOpeningToTeachers,
-} = require('./sendEmailReminderAboutSurveyOpeningToTeachers')
+} from './sendEmailReminderAboutSurveyOpeningToTeachers'
 
-const {
+import {
   getFeedbackTargetsWithoutResponseForTeachers,
   emailReminderAboutFeedbackResponseToTeachers,
-} = require('./sendEmailReminderAboutFeedbackResponseToTeacher')
+} from './sendEmailReminderAboutFeedbackResponseToTeacher'
 
-const {
+import {
   getOpenFeedbackTargetsForStudents,
   notificationAboutSurveyOpeningToStudents,
-} = require('./sendEmailAboutSurveyOpeningToStudents')
+} from './sendEmailAboutSurveyOpeningToStudents'
 
 const getStudentEmailCounts = async () => {
-  const studentEmailCounts = await sequelize.query(
+  const studentEmailCounts = await sequelize.query<{
+    opens_at: Date
+    count: string
+  }>(
     `SELECT f.opens_at, count(DISTINCT us.id) FROM feedback_targets f
         INNER JOIN user_feedback_targets u on u.feedback_target_id = f.id
         INNER JOIN course_realisations c on c.id = f.course_realisation_id
@@ -37,7 +41,7 @@ const getStudentEmailCounts = async () => {
         opensAtLow: subDays(new Date(), 1),
         opensAtHigh: addDays(new Date(), 28),
       },
-      type: sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
     }
   )
 
@@ -55,7 +59,10 @@ const getStudentEmailCounts = async () => {
 }
 
 const getTeacherEmailCounts = async () => {
-  const teacherEmailCounts = await sequelize.query(
+  const teacherEmailCounts = await sequelize.query<{
+    opens_at: Date
+    count: string
+  }>(
     `SELECT f.opens_at, count(DISTINCT us.id) FROM feedback_targets f
         INNER JOIN user_feedback_targets u on u.feedback_target_id = f.id
         INNER JOIN course_realisations c on c.id = f.course_realisation_id
@@ -72,7 +79,7 @@ const getTeacherEmailCounts = async () => {
         opensAtLow: addDays(new Date(), 6),
         opensAtHigh: addDays(new Date(), 35),
       },
-      type: sequelize.QueryTypes.SELECT,
+      type: QueryTypes.SELECT,
     }
   )
 
@@ -90,7 +97,7 @@ const getTeacherEmailCounts = async () => {
   return finalEmailCounts
 }
 
-const returnEmailsToBeSentToday = async () => {
+export const returnEmailsToBeSentToday = async () => {
   const studentFeedbackTargets = await getOpenFeedbackTargetsForStudents()
   const teacherFeedbackTargets = await getFeedbackTargetsAboutToOpenForTeachers()
 
@@ -99,10 +106,12 @@ const returnEmailsToBeSentToday = async () => {
 
   const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(studentFeedbackTargets, {
     whereOpenEmailNotSent: true,
+    primaryOnly: false,
   })
 
   const teachersWithFeedbackTargets = await createRecipientsForFeedbackTargets(teacherFeedbackTargets, {
     primaryOnly: true,
+    whereOpenEmailNotSent: false,
   })
 
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(student =>
@@ -126,8 +135,4 @@ const returnEmailsToBeSentToday = async () => {
     teacherEmailCounts: teacherEmailCountFor7Days,
     studentEmailCounts: studentEmailCountFor7Days,
   }
-}
-
-module.exports = {
-  returnEmailsToBeSentToday,
 }
