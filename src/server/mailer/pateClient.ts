@@ -1,10 +1,9 @@
-/* eslint-disable max-len */
-const axios = require('axios')
-const _ = require('lodash')
-const Sentry = require('@sentry/node')
+import axios from 'axios'
+import _ from 'lodash'
+import Sentry from '@sentry/node'
 
-const { inProduction, inStaging, PATE_URL, PATE_JWT } = require('../util/config')
-const { logger } = require('../util/logger')
+import { inProduction, inStaging, PATE_URL, PATE_JWT } from '../util/config'
+import { logger } from '../util/logger'
 
 const template = {
   from: 'Norppa',
@@ -28,13 +27,13 @@ const pateClient = axios.create({
 
 pateClient.defaults.headers.post['x-auth-token'] = PATE_JWT
 
-const sleep = time =>
+const sleep = (time: number) =>
   // eslint-disable-next-line no-promise-executor-return
-  new Promise(resolve => setTimeout(() => resolve(), time))
+  new Promise<void>(resolve => setTimeout(() => resolve(), time))
 
-const sizeOf = object => Buffer.byteLength(JSON.stringify(object), 'utf-8')
+const sizeOf = (object: unknown) => Buffer.byteLength(JSON.stringify(object), 'utf-8')
 
-const calculateGoodChunkSize = emails => {
+const calculateGoodChunkSize = (emails: EmailInfo[]) => {
   const safeByteLength = 8000 * 10 // kind of arbitrary. It also may go over this slightly but it shouldn't matter because this limit is so small
   const bytes = sizeOf(emails)
 
@@ -44,17 +43,22 @@ const calculateGoodChunkSize = emails => {
   return chunkSize
 }
 
-const sendToPate = async (options = {}) => {
-  if (!options.emails?.length > 0) {
+const sendToPate = async (options: { emails: EmailInfo[]; settings: object; template: object }) => {
+  if (!(options.emails?.length > 0)) {
     logger.info('[Pate] skipping email sending because 0 recipients')
     return options
   }
   const chunkSize = calculateGoodChunkSize(options.emails)
-  const chunkedEmails = _.chunk(options.emails, chunkSize).map(emails => ({
-    emails,
-    settings: options.settings,
-    template: options.template,
-  }))
+
+  const chunkEmails = (emails: EmailInfo[], size: number) =>
+    _.chunk(emails, size).map(emails => ({
+      emails,
+      settings: options.settings,
+      template: options.template,
+    }))
+
+  const chunkedEmails = chunkEmails(options.emails, chunkSize)
+
   logger.info(
     `[Pate] sending ${options.emails.length} emails (${sizeOf(options.emails)} bytes), in ${
       chunkedEmails.length
@@ -68,18 +72,18 @@ const sendToPate = async (options = {}) => {
     return null
   }
 
-  const sendChunkedMail = async chunk => {
+  const sendChunkedMail = async (chunk: (typeof chunkedEmails)[0]) => {
     try {
       await pateClient.post('/', chunk)
     } catch (error) {
       Sentry.captureException(error)
       logger.error('[Pate] error: ', [error])
       if (error?.response?.status !== 413) throw error
-      if (chunk?.length > 1) {
+      if (chunk?.emails.length > 1) {
         await sleep(1000)
-        const newChunkSize = Math.ceil(chunk.length / 2)
+        const newChunkSize = Math.ceil(chunk.emails.length / 2)
         logger.info(`[Pate] retrying with smaller chunk size ${newChunkSize}`)
-        for (const c of _.chunk(chunk, newChunkSize)) {
+        for (const c of chunkEmails(chunk.emails, newChunkSize)) {
           await sendChunkedMail(c)
         }
       } else {
@@ -95,7 +99,14 @@ const sendToPate = async (options = {}) => {
   return options
 }
 
-const sendEmail = async (listOfEmails, emailType = '') => {
+type EmailInfo = {
+  to: string
+  subject: string
+  text: string
+  html?: string
+}
+
+const sendEmail = async (listOfEmails: EmailInfo[], emailType = '') => {
   logger.info(`Sending email to ${listOfEmails.length} recipients, type = '${emailType}'`)
   const options = {
     template: {
@@ -108,8 +119,6 @@ const sendEmail = async (listOfEmails, emailType = '') => {
   await sendToPate(options)
 }
 
-const pate = {
+export const pate = {
   send: sendEmail,
 }
-
-module.exports = { pate }
