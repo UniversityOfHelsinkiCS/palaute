@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import path from 'path'
-import express, { Request, Response, NextFunction } from 'express'
+import express, { Request, Response } from 'express'
 import compression from 'compression'
 import { PORT, inProduction, inE2EMode, inDevelopment } from './util/config'
 import { connectToDatabase } from './db/dbConnection'
@@ -10,6 +10,7 @@ import { logger } from './util/logger'
 import { updateLastRestart } from './util/lastRestart'
 import { initializeFunctions } from './db/postgresFunctions'
 import updaterClient from './util/updaterClient'
+import routes from './routes'
 
 require('dotenv').config()
 require('express-async-errors')
@@ -19,7 +20,7 @@ const app = express()
 
 app.use(compression())
 // eslint-disable-next-line global-require
-app.use('/api', (req: Request, res: Response, next: NextFunction) => require('./routes')(req, res, next))
+app.use('/api', routes)
 app.use('/api', (_: Request, res: Response) => {
   res.sendStatus(404)
 })

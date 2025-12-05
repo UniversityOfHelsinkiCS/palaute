@@ -1,5 +1,5 @@
-import Router from 'express'
-import Sentry from '@sentry/node'
+import { Router, json } from 'express'
+import * as Sentry from '@sentry/node'
 import { accessLogger } from '../middleware/accessLogger'
 import { currentUserMiddleware } from '../middleware/currentUserMiddleware'
 import { shibbolethCharsetMiddleware } from '../middleware/shibbolethCharsetMiddleware'
@@ -25,7 +25,7 @@ export const router = Router()
 
 initializeSentry()
 
-router.use(Router.json())
+router.use(json())
 router.use(shibbolethCharsetMiddleware)
 router.use(accessLogger)
 
