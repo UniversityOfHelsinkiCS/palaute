@@ -1,25 +1,18 @@
-const { format } = require('date-fns')
-const { Op } = require('sequelize')
+import { format } from 'date-fns'
 
-const { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, CourseUnit } = require('../../models')
-const { PUBLIC_URL } = require('../../util/config')
-const { pate } = require('../pateClient')
-const { i18n } = require('../../util/i18n')
-const { getLanguageValue } = require('../../util/languageUtils')
+import { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, CourseUnit } from '../../models'
+import { PUBLIC_URL } from '../../util/config'
+import { pate } from '../pateClient'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
 
-const getStudentWithContinuousFeedbackResponse = async continuousFeedbackId => {
+const getStudentWithContinuousFeedbackResponse = async (continuousFeedbackId: number) => {
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId, {
-    where: {
-      response: {
-        [Op.ne]: null,
-      },
-      responseEmailSent: false,
-    },
     attributes: ['id', 'response'],
     include: [
       {
         model: FeedbackTarget,
-        as: 'feedback_target',
+        as: 'feedbackTarget',
         attributes: ['id'],
         required: true,
         include: [
@@ -49,8 +42,8 @@ const getStudentWithContinuousFeedbackResponse = async continuousFeedbackId => {
   return continuousFeedback
 }
 
-const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
-  const { response, user, feedback_target: feedbackTarget } = continuousFeedback
+const emailContinuousFeedbackResponseToStudent = (continuousFeedback: ContinuousFeedback) => {
+  const { response, user, feedbackTarget } = continuousFeedback
   const { language, email: studentEmail } = user
   const { name, startDate, endDate } = feedbackTarget.courseRealisation
   const { courseCode } = feedbackTarget.courseUnit
@@ -79,8 +72,11 @@ const emailContinuousFeedbackResponseToStudent = continuousFeedback => {
   return email
 }
 
-const sendEmailContinuousFeedbackResponseToStudent = async continuousFeedbackId => {
+export const sendEmailContinuousFeedbackResponseToStudent = async (continuousFeedbackId: number) => {
   const continuousFeedback = await getStudentWithContinuousFeedbackResponse(continuousFeedbackId)
+  if (continuousFeedback.response === null || continuousFeedback.responseEmailSent) {
+    return null
+  }
 
   const emailToBeSent = emailContinuousFeedbackResponseToStudent(continuousFeedback)
   ContinuousFeedback.update(
@@ -98,5 +94,3 @@ const sendEmailContinuousFeedbackResponseToStudent = async continuousFeedbackId 
 
   return emailToBeSent
 }
-
-module.exports = { sendEmailContinuousFeedbackResponseToStudent }

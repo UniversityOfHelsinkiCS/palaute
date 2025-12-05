@@ -169,7 +169,7 @@ User.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 FeedbackTarget.hasMany(FeedbackTargetLog, { as: 'feedbackTargetLogs' })
 
 ContinuousFeedback.belongsTo(FeedbackTarget, {
-  as: 'feedback_target',
+  as: 'feedbackTarget',
   foreignKey: 'feedback_target_id',
 })
 

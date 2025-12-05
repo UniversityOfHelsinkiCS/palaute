@@ -11,6 +11,8 @@ import {
   DATE,
 } from 'sequelize'
 import { sequelize } from '../db/dbConnection'
+import type { User } from './user'
+import type { FeedbackTarget } from './feedbackTarget'
 
 class ContinuousFeedback extends Model<
   InferAttributes<ContinuousFeedback>,
@@ -27,6 +29,9 @@ class ContinuousFeedback extends Model<
   declare responseEmailSent: CreationOptional<boolean>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
+
+  declare user?: User
+  declare feedbackTarget?: FeedbackTarget
 }
 
 ContinuousFeedback.init(
