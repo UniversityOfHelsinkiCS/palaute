@@ -47,6 +47,8 @@ class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   declare mockedBy?: User
   declare iamGroups?: string[]
 
+  declare userFeedbackTargets?: UserFeedbackTarget[]
+
   declare getOrganisations: HasManyGetAssociationsMixin<Organisation>
   declare hasOrganisation: HasManyHasAssociationMixin<Organisation, string>
 

@@ -1,19 +1,19 @@
-const _ = require('lodash')
-const { subDays } = require('date-fns')
-const { Op } = require('sequelize')
-const {
+import _ from 'lodash'
+import { subDays } from 'date-fns'
+import { Op } from 'sequelize'
+import {
   ContinuousFeedback,
   FeedbackTarget,
   CourseRealisation,
   User,
   UserFeedbackTarget,
   CourseUnit,
-} = require('../../models')
-const { logger } = require('../../util/logger')
-const { pate } = require('../pateClient')
-const { PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } = require('../../util/config')
-const { i18n } = require('../../util/i18n')
-const { getLanguageValue } = require('../../util/languageUtils')
+} from '../../models'
+import { logger } from '../../util/logger'
+import { pate } from '../pateClient'
+import { PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const getTeachersWithContinuousFeedback = async () => {
   const newContinuousFeedback = await ContinuousFeedback.findAll({
@@ -88,8 +88,8 @@ const getTeachersWithContinuousFeedback = async () => {
   )
 
   // Combine related courseRealisation and continuousFeedbacks under teacher's userFeedbackTargets
-  const teachersWithContinuousFeedback = teachers.map(({ dataValues: teacher }) => ({
-    ...teacher,
+  const teachersWithContinuousFeedback = teachers.map(teacher => ({
+    ...teacher.dataValues,
     userFeedbackTargets: teacher.userFeedbackTargets.map(({ dataValues: ufbt }) => ({
       ...ufbt,
       courseRealisation: courseRealisations.find(({ feedbackTargetId }) => feedbackTargetId === ufbt.feedbackTargetId),
@@ -113,7 +113,9 @@ const getTeachersWithContinuousFeedback = async () => {
   }
 }
 
-const emailContinuousFeedbackDigestToTeachers = teacher => {
+const emailContinuousFeedbackDigestToTeachers = (
+  teacher: Awaited<ReturnType<typeof getTeachersWithContinuousFeedback>>['teachersWithContinuousFeedback'][number]
+) => {
   const { language, userFeedbackTargets, email: teacherEmail } = teacher
 
   const hasMultipleFeedbackTargets = userFeedbackTargets.length > 1
@@ -152,7 +154,7 @@ const emailContinuousFeedbackDigestToTeachers = teacher => {
   return email
 }
 
-const sendEmailContinuousFeedbackDigestToTeachers = async () => {
+export const sendEmailContinuousFeedbackDigestToTeachers = async () => {
   const { teachersWithContinuousFeedback, newContinuousFeedback } = await getTeachersWithContinuousFeedback()
 
   const emailsToBeSent = teachersWithContinuousFeedback.map(teacher => emailContinuousFeedbackDigestToTeachers(teacher))
@@ -177,8 +179,4 @@ const sendEmailContinuousFeedbackDigestToTeachers = async () => {
   await pate.send(emailsToBeSent, 'Send continuous feedback digest to teachers')
 
   return emailsToBeSent
-}
-
-module.exports = {
-  sendEmailContinuousFeedbackDigestToTeachers,
 }
