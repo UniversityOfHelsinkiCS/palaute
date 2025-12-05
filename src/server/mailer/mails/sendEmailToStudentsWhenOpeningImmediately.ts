@@ -1,17 +1,10 @@
-const { Op } = require('sequelize')
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  CourseRealisation,
-  CourseUnit,
-  Organisation,
-  User,
-} = require('../../models')
-const { pate } = require('../pateClient')
-const { notificationAboutSurveyOpeningToStudents } = require('./sendEmailAboutSurveyOpeningToStudents')
-const { createRecipientsForFeedbackTargets } = require('./util')
+import { Op } from 'sequelize'
+import { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } from '../../models'
+import { pate } from '../pateClient'
+import { notificationAboutSurveyOpeningToStudents } from './sendEmailAboutSurveyOpeningToStudents'
+import { createRecipientsForFeedbackTargets } from './util'
 
-const getFeedbackTargetOpeningImmediately = async feedbackTargetId => {
+const getFeedbackTargetOpeningImmediately = async (feedbackTargetId: number) => {
   const feedbackTarget = await FeedbackTarget.findOne({
     where: {
       id: feedbackTargetId,
@@ -50,11 +43,12 @@ const getFeedbackTargetOpeningImmediately = async feedbackTargetId => {
   return feedbackTarget
 }
 
-const sendEmailToStudentsWhenOpeningImmediately = async feedbackTargetId => {
+export const sendEmailToStudentsWhenOpeningImmediately = async (feedbackTargetId: number) => {
   const feedbackTarget = await getFeedbackTargetOpeningImmediately(feedbackTargetId)
 
   const studentsWithFeedbackTarget = await createRecipientsForFeedbackTargets([feedbackTarget], {
     whereOpenEmailNotSent: true,
+    primaryOnly: false,
   })
 
   const studentEmailsToBeSent = Object.keys(studentsWithFeedbackTarget).map(student =>
@@ -79,8 +73,4 @@ const sendEmailToStudentsWhenOpeningImmediately = async feedbackTargetId => {
   await pate.send(studentEmailsToBeSent, 'Notify students about feedback opening immediately')
 
   return studentEmailsToBeSent
-}
-
-module.exports = {
-  sendEmailToStudentsWhenOpeningImmediately,
 }
