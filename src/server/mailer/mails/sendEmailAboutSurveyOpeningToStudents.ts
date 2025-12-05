@@ -1,19 +1,12 @@
-const { Op } = require('sequelize')
-const {
-  UserFeedbackTarget,
-  FeedbackTarget,
-  CourseRealisation,
-  CourseUnit,
-  Organisation,
-  User,
-} = require('../../models')
-const { pate } = require('../pateClient')
-const { createRecipientsForFeedbackTargets, getFeedbackTargetLink } = require('./util')
-const { i18n } = require('../../util/i18n')
-const { getLanguageValue } = require('../../util/languageUtils')
-const { SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE } = require('../../util/config')
+import { Op } from 'sequelize'
+import { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } from '../../models'
+import { pate } from '../pateClient'
+import { createRecipientsForFeedbackTargets, getFeedbackTargetLink, OpeningEmailInfo } from './util'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
+import { SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE } from '../../util/config'
 
-const getOpenFeedbackTargetsForStudents = async () => {
+export const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       opensAt: {
@@ -70,20 +63,20 @@ const getOpenFeedbackTargetsForStudents = async () => {
   return filteredFeedbackTargets
 }
 
-const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackTargets) => {
-  const { language, name } = studentFeedbackTargets[0]
-  const hasMultipleFeedbackTargets = studentFeedbackTargets.length > 1
+export const notificationAboutSurveyOpeningToStudents = (emailAddress: string, emailInfos: OpeningEmailInfo[]) => {
+  const { language, name } = emailInfos[0]
+  const hasMultipleFeedbackTargets = emailInfos.length > 1
 
   const emailLanguage = !language ? 'en' : language
 
   const courseName = getLanguageValue(name, emailLanguage)
-  const { courseCode } = studentFeedbackTargets[0].courseUnit
+  const { courseCode } = emailInfos[0].courseUnit
 
   let courseNamesAndUrls = ''
   const uftIds = []
-  for (const feedbackTarget of studentFeedbackTargets) {
-    courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(feedbackTarget)}`
-    uftIds.push(feedbackTarget.userFeedbackTargetId)
+  for (const emailInfo of emailInfos) {
+    courseNamesAndUrls = `${courseNamesAndUrls}${getFeedbackTargetLink(emailInfo)}`
+    uftIds.push(emailInfo.userFeedbackTargetId)
   }
 
   const t = i18n.getFixedT(language)
@@ -102,11 +95,12 @@ const notificationAboutSurveyOpeningToStudents = (emailAddress, studentFeedbackT
   return email
 }
 
-const sendEmailAboutSurveyOpeningToStudents = async () => {
+export const sendEmailAboutSurveyOpeningToStudents = async () => {
   const feedbackTargets = await getOpenFeedbackTargetsForStudents()
 
   const studentsWithFeedbackTargets = await createRecipientsForFeedbackTargets(feedbackTargets, {
     whereOpenEmailNotSent: true,
+    primaryOnly: false,
   })
 
   const emailsToBeSent = Object.keys(studentsWithFeedbackTargets).map(student =>
@@ -143,10 +137,4 @@ const sendEmailAboutSurveyOpeningToStudents = async () => {
   }
 
   return emailsToBeSent
-}
-
-module.exports = {
-  getOpenFeedbackTargetsForStudents, // used by stats
-  notificationAboutSurveyOpeningToStudents, // used by stats
-  sendEmailAboutSurveyOpeningToStudents,
 }

@@ -68,6 +68,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare questionOrder?: any
   declare responsibleTeachers?: any
   declare teachers?: any
+  declare users?: (User & { UserFeedbackTarget: UserFeedbackTarget })[]
   declare administrativePersons?: any
   declare tags?: Tag[]
   declare studentCount?: number

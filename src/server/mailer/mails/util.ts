@@ -1,23 +1,19 @@
-const { format } = require('date-fns')
-const jwt = require('jsonwebtoken')
-const { getLanguageValue } = require('../../util/languageUtils')
-const {
-  JWT_KEY,
-  NOAD_LINK_EXPIRATION_DAYS,
-  PUBLIC_URL,
-  SHOW_COURSE_CODES_WITH_COURSE_NAMES,
-} = require('../../util/config')
-const { FeedbackTarget, User } = require('../../models')
+import { format } from 'date-fns'
+import jwt from 'jsonwebtoken'
+import { LanguageId, LocalizedString } from '@common/types/common'
+import { getLanguageValue } from '../../util/languageUtils'
+import { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS, PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
+import { CourseUnit, FeedbackTarget, Question, Summary, User } from '../../models'
 
-const getNoAdUrl = (username, userId, days) => {
+const getNoAdUrl = (username: string, userId: string, days: number) => {
   const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })
   return `${PUBLIC_URL}/noad/token/${token}?userId=${userId}`
 }
 
-const getFeedbackTargetLink = feedbackTarget => {
-  const { noAdUser, possiblyNoAdUser, name, username, userId, id, closesAt } = feedbackTarget
-  const { courseCode } = feedbackTarget.courseUnit
-  const language = feedbackTarget.language ? feedbackTarget.language : 'en'
+export const getFeedbackTargetLink = (emailInfo: OpeningEmailInfo) => {
+  const { noAdUser, possiblyNoAdUser, name, username, userId, id, closesAt } = emailInfo
+  const { courseCode } = emailInfo.courseUnit
+  const language = emailInfo.language ? emailInfo.language : 'en'
 
   const closeDate = new Date(closesAt)
   const formattedCloseDate = format(closeDate, 'dd.MM.yyyy')
@@ -81,7 +77,7 @@ const getFeedbackTargetLink = feedbackTarget => {
   return `<i><a href=${adUrl}>${displayName}</a></i> (${openUntil[language]})<br/>`
 }
 
-const getFeedbackTargetsWithOpeningReminderSentForTeacher = async teacherId => {
+const getFeedbackTargetsWithOpeningReminderSentForTeacher = async (teacherId: string) => {
   const feedbackTargetsWithOpeningReminderSent = await FeedbackTarget.findAll({
     where: {
       feedbackOpeningReminderEmailSent: true,
@@ -107,11 +103,29 @@ const getFeedbackTargetsWithOpeningReminderSentForTeacher = async teacherId => {
   return feedbackTargetsWithOpeningReminderSent
 }
 
-const createRecipientsForFeedbackTargets = async (
-  feedbackTargets,
+export type OpeningEmailInfo = {
+  id: number
+  userFeedbackTargetId: number
+  name: LocalizedString
+  opensAt: Date
+  closesAt: Date
+  language: LanguageId
+  noAdUser: boolean
+  possiblyNoAdUser: boolean
+  userId: string
+  username: string
+  courseUnit: CourseUnit
+  teacherQuestions: Question[]
+  summary: Summary
+  userIsNewTeacher: boolean
+  userIsAdministrativePerson: boolean
+}
+
+export const createRecipientsForFeedbackTargets = async (
+  feedbackTargets: FeedbackTarget[],
   options = { primaryOnly: false, whereOpenEmailNotSent: false }
 ) => {
-  const emails = {}
+  const emails: Record<string, OpeningEmailInfo[]> = {}
 
   for (const feedbackTarget of feedbackTargets) {
     for (const user of feedbackTarget.users) {
@@ -132,9 +146,9 @@ const createRecipientsForFeedbackTargets = async (
 
         const sendToBothEmails = !options.primaryOnly && (certainlyNoAdUser || possiblyNoAdUser)
 
-        const userEmails = [user.email, sendToBothEmails ? user.secondaryEmail : false]
+        const userEmails = [user.email, sendToBothEmails ? user.secondaryEmail : undefined]
         // for some users, email === secondaryEmail. In that case, use only primary.
-        userEmails[1] = userEmails[0] === userEmails[1] ? false : userEmails[1]
+        userEmails[1] = userEmails[0] === userEmails[1] ? undefined : userEmails[1]
 
         userEmails.filter(Boolean).forEach(email => {
           emails[email] = (emails[email] ? emails[email] : []).concat([
@@ -162,9 +176,4 @@ const createRecipientsForFeedbackTargets = async (
   }
 
   return emails
-}
-
-module.exports = {
-  createRecipientsForFeedbackTargets,
-  getFeedbackTargetLink,
 }
