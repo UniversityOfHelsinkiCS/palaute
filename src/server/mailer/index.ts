@@ -1,4 +1,4 @@
-const {
+import {
   sendFeedbackReminderToStudents,
   sendFeedbackSummaryReminderToStudents,
   sendAutomaticReminderOnFeedbackToStudents,
@@ -6,13 +6,13 @@ const {
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailToStudentsWhenOpeningImmediately,
-} = require('./mails')
+} from './mails'
 
-const { returnEmailsToBeSentToday } = require('./mails/stats')
+import { returnEmailsToBeSentToday } from './mails/stats'
 
-const { runContinuousFeedbackCron, runPateCron, scheduleCronJobs } = require('./scheduleCronJobs')
+import { runContinuousFeedbackCron, runPateCron, scheduleCronJobs } from './scheduleCronJobs'
 
-const mailer = {
+export const mailer = {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailToStudentsWhenOpeningImmediately,
   sendEmailReminderAboutSurveyOpeningToTeachers,
@@ -25,5 +25,3 @@ const mailer = {
   scheduleCronJobs,
   runPateCron,
 }
-
-module.exports = { mailer }

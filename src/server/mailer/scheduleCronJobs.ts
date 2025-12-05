@@ -1,16 +1,16 @@
-const { inProduction, inStaging, SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED } = require('../util/config')
-const { logger } = require('../util/logger')
-const { schedule } = require('../util/cron/schedule')
+import { inProduction, inStaging, SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED } from '../util/config'
+import { logger } from '../util/logger'
+import { schedule } from '../util/cron/schedule'
 
-const {
+import {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,
   sendEmailReminderAboutFeedbackResponseToTeachers,
   sendAutomaticReminderOnFeedbackToStudents,
   sendEmailContinuousFeedbackDigestToTeachers,
-} = require('./mails')
+} from './mails'
 
-const runContinuousFeedbackCron = async () => {
+export const runContinuousFeedbackCron = async () => {
   logger.info('Running continuous feedback digest cron')
   await sendEmailContinuousFeedbackDigestToTeachers()
 }
@@ -25,7 +25,7 @@ const startContinuousFeedbackCron = async () => {
   return schedule(cronTime, runContinuousFeedbackCron)
 }
 
-const runPateCron = async () => {
+export const runPateCron = async () => {
   logger.info('Running pate cron')
   await sendEmailAboutSurveyOpeningToStudents()
   await sendEmailReminderAboutSurveyOpeningToTeachers()
@@ -46,13 +46,7 @@ const startPateCron = async () => {
   return schedule(cronTime, runPateCron)
 }
 
-const scheduleCronJobs = async () => {
+export const scheduleCronJobs = async () => {
   await startPateCron()
   await startContinuousFeedbackCron()
-}
-
-module.exports = {
-  scheduleCronJobs,
-  runPateCron,
-  runContinuousFeedbackCron,
 }
