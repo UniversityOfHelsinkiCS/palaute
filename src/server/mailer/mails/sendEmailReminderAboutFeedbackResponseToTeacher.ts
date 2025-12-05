@@ -1,20 +1,12 @@
-/* eslint-disable max-len */
-const { subDays } = require('date-fns')
-const { Op } = require('sequelize')
-const {
-  FeedbackTarget,
-  CourseRealisation,
-  CourseUnit,
-  Organisation,
-  User,
-  UserFeedbackTarget,
-} = require('../../models')
-const { PUBLIC_URL, FEEDBACK_SYSTEM, SHOW_COURSE_CODES_WITH_COURSE_NAMES } = require('../../util/config')
-const { pate } = require('../pateClient')
-const { i18n } = require('../../util/i18n')
-const { getLanguageValue } = require('../../util/languageUtils')
+import { subDays } from 'date-fns'
+import { Op } from 'sequelize'
+import { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User, UserFeedbackTarget } from '../../models'
+import { PUBLIC_URL, FEEDBACK_SYSTEM, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
+import { pate } from '../pateClient'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
 
-const getFeedbackTargetsWithoutResponseForTeachers = async () => {
+export const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({
     where: {
       closesAt: {
@@ -79,7 +71,11 @@ const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   return filteredByFeedbacks
 }
 
-const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, allTeachers) => {
+export const emailReminderAboutFeedbackResponseToTeachers = (
+  teacher: User,
+  feedbackTarget: FeedbackTarget,
+  allTeachers: User[]
+) => {
   const { language } = teacher
   const { userCreated } = feedbackTarget
   const courseName = userCreated
@@ -116,7 +112,7 @@ const emailReminderAboutFeedbackResponseToTeachers = (teacher, feedbackTarget, a
   return email
 }
 
-const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
+export const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
   const feedbackTargets = await getFeedbackTargetsWithoutResponseForTeachers()
 
   const emailsToBeSent = feedbackTargets.flatMap(fbt =>
@@ -125,7 +121,7 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
 
   const ids = feedbackTargets.map(target => target.id)
 
-  FeedbackTarget.update(
+  await FeedbackTarget.update(
     {
       feedbackResponseReminderEmailSent: true,
     },
@@ -141,10 +137,4 @@ const sendEmailReminderAboutFeedbackResponseToTeachers = async () => {
   await pate.send(emailsToBeSent, 'Remind teachers about giving counter feedback')
 
   return emailsToBeSent
-}
-
-module.exports = {
-  getFeedbackTargetsWithoutResponseForTeachers, // used by stats
-  emailReminderAboutFeedbackResponseToTeachers, // used by stats
-  sendEmailReminderAboutFeedbackResponseToTeachers,
 }
