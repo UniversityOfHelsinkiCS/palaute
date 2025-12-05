@@ -402,7 +402,7 @@ const getFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
 const findEmailsForToday = async (req: AuthenticatedRequest, res: Response) => {
   const { students, teachers, teacherEmailCounts, studentEmailCounts } = await mailer.returnEmailsToBeSentToday()
 
-  const emails = students.concat(teachers)
+  const emails = teachers.concat(students)
   res.send({
     emails,
     studentEmails: students.length,
