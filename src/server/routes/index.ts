@@ -1,3 +1,4 @@
-import { router } from './routes'
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { router } = require('./routes')
 
-export default router
+module.exports = router

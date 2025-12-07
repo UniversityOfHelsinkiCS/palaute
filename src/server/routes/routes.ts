@@ -1,4 +1,4 @@
-import { Router, json } from 'express'
+import express, { json } from 'express'
 import * as Sentry from '@sentry/node'
 import { accessLogger } from '../middleware/accessLogger'
 import { currentUserMiddleware } from '../middleware/currentUserMiddleware'
@@ -21,7 +21,7 @@ import { norppaFeedbackRouter } from './norppaFeedback'
 import { continuousFeedbackController } from './continuousFeedback'
 import { redirectFromCoursesPage } from './misc/coursesPageController'
 
-export const router = Router()
+export const router = express()
 
 initializeSentry()
 

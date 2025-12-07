@@ -1,4 +1,8 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable import/first */
+/* eslint-disable import/newline-after-import */
+import dotenv from 'dotenv'
+dotenv.config()
+
 import path from 'path'
 import express, { Request, Response } from 'express'
 import compression from 'compression'
@@ -10,25 +14,23 @@ import { logger } from './util/logger'
 import { updateLastRestart } from './util/lastRestart'
 import { initializeFunctions } from './db/postgresFunctions'
 import updaterClient from './util/updaterClient'
-import routes from './routes'
-
-require('dotenv').config()
-require('express-async-errors')
-require('./util/i18n')
+import 'express-async-errors'
+import './util/i18n'
 
 const app = express()
 
 app.use(compression())
-// eslint-disable-next-line global-require
-app.use('/api', routes)
+// eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
+app.use('/api', (req, res, next) => require('./routes')(req, res, next))
 app.use('/api', (_: Request, res: Response) => {
   res.sendStatus(404)
 })
 
 if (inDevelopment || inE2EMode) {
   // eslint-disable-next-line global-require
-  const { testRouter } = require('./test/index')
-  app.use('/test', testRouter)
+  import('./test').then(({ testRouter }) => {
+    app.use('/test', testRouter)
+  })
 }
 
 if (inProduction || inE2EMode) {
