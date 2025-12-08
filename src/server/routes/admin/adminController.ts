@@ -596,7 +596,6 @@ const getNodeConfigEnv = (_req: AuthenticatedRequest, res: Response) => {
 }
 
 const updateSummariesTable = async (req: AuthenticatedRequest, res: Response) => {
-  console.log(req.body)
   const { forceAll } = req.body
   logger.info('Starting to update summaries table')
 
