@@ -38,7 +38,7 @@ if (inProduction || inE2EMode) {
   const INDEX_PATH = path.resolve(BUILD_PATH, 'index.html')
 
   app.use(express.static(BUILD_PATH))
-  app.get('*', (_req: Request, res: Response) => res.sendFile(INDEX_PATH))
+  app.get('*static', (_req: Request, res: Response) => res.sendFile(INDEX_PATH))
 }
 
 const start = async () => {
