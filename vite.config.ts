@@ -1,7 +1,7 @@
 import react from '@vitejs/plugin-react-swc'
 import eslint from 'vite-plugin-eslint'
 
-import * as config from 'config'
+import config from 'config'
 import { defineConfig } from 'vite'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
 
@@ -33,11 +33,10 @@ export default defineConfig({
   define: {
     'process.env': process.env,
     CONFIG: (() => {
-      const configObj = config.util.toObject(undefined)
-      for (const key of config.get('PRIVATE_KEYS')) {
+      const configObj = config.util.toObject()
+      for (const key of config.get<string[]>('PRIVATE_KEYS')) {
         delete configObj[key]
       }
-
       return configObj
     })(),
   },
