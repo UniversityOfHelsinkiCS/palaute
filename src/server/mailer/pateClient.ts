@@ -1,6 +1,6 @@
 import axios from 'axios'
 import _ from 'lodash'
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 
 import { inProduction, inStaging, PATE_URL, PATE_JWT } from '../util/config'
 import { logger } from '../util/logger'

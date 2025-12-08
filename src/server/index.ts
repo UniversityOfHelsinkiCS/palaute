@@ -28,9 +28,9 @@ app.use('/api', (_: Request, res: Response) => {
 })
 
 if (inDevelopment || inE2EMode) {
-  // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-  const { testRouter } = require('./test')
-  app.use('/test', testRouter)
+  import('./test').then(({ testRouter }) => {
+    app.use('/test', testRouter)
+  })
 }
 
 if (inProduction || inE2EMode) {
