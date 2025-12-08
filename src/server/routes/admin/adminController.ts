@@ -526,7 +526,7 @@ const deleteBanner = async (req: AuthenticatedRequest, res: Response) => {
   if (!destroyed) {
     throw new ApplicationError('Not found', 404)
   }
-  res.send(200)
+  res.sendStatus(200)
 }
 
 const getFeedbackCorrespondents = async (req: AuthenticatedRequest, res: Response) => {
@@ -596,6 +596,7 @@ const getNodeConfigEnv = (_req: AuthenticatedRequest, res: Response) => {
 }
 
 const updateSummariesTable = async (req: AuthenticatedRequest, res: Response) => {
+  console.log(req.body)
   const { forceAll } = req.body
   logger.info('Starting to update summaries table')
 

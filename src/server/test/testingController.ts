@@ -16,7 +16,7 @@ import { seedFeedbacks } from './seedFeedbacks'
 
 const initSummary = async (req: AuthenticatedRequest, res: Response) => {
   await initTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
-  res.send(200)
+  res.sendStatus(200)
 }
 
 const userHeadersToUser = (userHeaders: any) => ({
@@ -31,13 +31,13 @@ const userHeadersToUser = (userHeaders: any) => ({
 const seedTestUsers2 = async (req: AuthenticatedRequest, res: Response) => {
   const users = req.body.map(userHeadersToUser)
   await seedUsers(users)
-  res.send(201)
+  res.sendStatus(201)
 }
 
 const seedOrganisationCorrespondentHandler = async (req: AuthenticatedRequest, res: Response) => {
   const user = userHeadersToUser(req.body.user)
   await seedOrganisationCorrespondent(user)
-  res.send(200)
+  res.sendStatus(200)
 }
 
 const seedFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
@@ -54,13 +54,13 @@ const seedFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
 
 const resetDb = async (req: AuthenticatedRequest, res: Response) => {
   await seedDb()
-  res.send(204)
+  res.sendStatus(204)
 }
 
 const seedFeedbacksHandler = async (req: AuthenticatedRequest, res: Response) => {
   const { feedbackDatas } = req.body
   await seedFeedbacks(feedbackDatas)
-  res.send(201)
+  res.sendStatus(201)
 }
 
 const getTestFbtId = async (req: AuthenticatedRequest, res: Response) => {

@@ -11,6 +11,7 @@ Cypress.Commands.add('buildSummaries', () => {
     method: 'POST',
     url: '/api/admin/build-summaries',
     headers: admin,
+    body: { forceAll: false },
   })
 })
 

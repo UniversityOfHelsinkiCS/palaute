@@ -14,7 +14,6 @@ import { logger } from './util/logger'
 import { updateLastRestart } from './util/lastRestart'
 import { initializeFunctions } from './db/postgresFunctions'
 import updaterClient from './util/updaterClient'
-import 'express-async-errors'
 import './util/i18n'
 
 const app = express()
