@@ -1,7 +1,7 @@
 const { BOOLEAN } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('feedback_targets', 'settings_read_by_teacher', {
       type: BOOLEAN,
       allowNull: false,
@@ -14,7 +14,7 @@ module.exports = {
       WHERE opens_at < NOW();
     `)
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('feedback_targets', 'settings_read_by_teacher')
   },
 }

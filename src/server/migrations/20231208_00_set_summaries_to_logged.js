@@ -1,6 +1,6 @@
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.sequelize.query(`ALTER TABLE summaries SET LOGGED;`)
   },
-  down: async queryInterface => {},
+  down: async ({ context: queryInterface }) => {},
 }

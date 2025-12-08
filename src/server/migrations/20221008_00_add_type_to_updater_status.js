@@ -1,7 +1,7 @@
 const { STRING } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('updater_statuses', 'job_type', {
       type: STRING(16),
       allowNull: true,
@@ -11,7 +11,7 @@ module.exports = {
       UPDATE updater_statuses SET job_type='NIGHTLY';
     `)
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('updater_statuses', 'type')
   },
 }

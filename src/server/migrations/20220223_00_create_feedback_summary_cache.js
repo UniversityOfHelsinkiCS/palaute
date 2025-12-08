@@ -1,7 +1,7 @@
 const { STRING, JSONB, INTEGER } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.createTable('feedback_summary_cache', {
       id: {
         type: INTEGER,
@@ -23,7 +23,7 @@ module.exports = {
       },
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('feedback_summary_cache')
   },
 }

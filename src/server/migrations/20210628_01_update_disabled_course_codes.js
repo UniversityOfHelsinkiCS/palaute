@@ -1,5 +1,5 @@
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.sequelize.query(`
     UPDATE organisations
     SET disabled_course_codes = ARRAY(
@@ -10,7 +10,7 @@ module.exports = {
     WHERE course_units_organisations.organisation_id = organisations.id);
     `)
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.sequelize.query(`
     UPDATE organisations
     SET disabled_course_codes = '{}';

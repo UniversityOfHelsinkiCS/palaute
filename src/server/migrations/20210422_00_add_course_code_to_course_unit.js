@@ -1,7 +1,7 @@
 const { STRING, JSONB } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('course_units', 'course_code', {
       type: STRING,
     })
@@ -9,7 +9,7 @@ module.exports = {
       type: JSONB,
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('course_units', 'course_code')
     await queryInterface.removeColumn('course_units', 'validity_period')
   },

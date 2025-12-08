@@ -1,5 +1,5 @@
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     queryInterface.sequelize.query(`
       DELETE FROM feedback_target_logs
       WHERE data::text = '{}'::jsonb::text;
@@ -10,5 +10,5 @@ module.exports = {
       WHERE data::text = '{ "enabledPublicQuestions": [],"disabledPublicQuestions": [] }'::jsonb::text;
     `)
   },
-  down: async queryInterface => {},
+  down: async ({ context: queryInterface }) => {},
 }

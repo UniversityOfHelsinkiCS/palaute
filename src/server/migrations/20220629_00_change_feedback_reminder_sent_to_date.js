@@ -2,7 +2,7 @@ const { BOOLEAN } = require('sequelize')
 const { DATE } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('feedback_targets', 'feedback_reminder_last_sent_at', {
       type: DATE,
       allowNull: true,
@@ -12,7 +12,7 @@ module.exports = {
     await queryInterface.removeColumn('feedback_targets', 'feedback_reminder_email_to_students_sent')
   },
 
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('feedback_targets', 'feedback_reminder_email_to_students_sent', {
       type: BOOLEAN,
       allowNull: false,

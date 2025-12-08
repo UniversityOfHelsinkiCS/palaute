@@ -1,13 +1,13 @@
 const { DataTypes } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('questions', 'secondary_type', {
       type: DataTypes.STRING,
       allowNull: true,
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropColumn('questions', 'secondary_type')
   },
 }

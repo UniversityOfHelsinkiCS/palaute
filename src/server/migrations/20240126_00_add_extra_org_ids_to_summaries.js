@@ -1,7 +1,7 @@
 const { STRING, ARRAY } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.removeIndex('summaries', 'summaries_entity_id_start_date_end_date')
     await queryInterface.sequelize.query(`
       DELETE FROM summaries WHERE true;
@@ -13,5 +13,5 @@ module.exports = {
       fields: ['entity_id', 'start_date', 'end_date'],
     })
   },
-  down: async queryInterface => {},
+  down: async ({ context: queryInterface }) => {},
 }

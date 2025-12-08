@@ -1,7 +1,7 @@
 const { QueryTypes } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.sequelize.transaction(async transaction => {
       try {
         console.log('CHECKING')
@@ -54,7 +54,7 @@ module.exports = {
       }
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('organisation_feedback_correspondents')
   },
 }

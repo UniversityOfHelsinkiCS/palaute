@@ -17,7 +17,7 @@ const questions = [
 ]
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.sequelize.query(`DELETE FROM surveys WHERE type = 'university'`)
 
     await queryInterface.sequelize.query(
@@ -28,7 +28,7 @@ module.exports = {
       await queryInterface.sequelize.query(`DELETE FROM questions where data = '${question}'`)
     }
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     const ids = []
     for (const [type, question] of questions) {
       await queryInterface.sequelize.query(

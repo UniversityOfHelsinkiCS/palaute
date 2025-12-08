@@ -1,7 +1,7 @@
 const { ARRAY, TEXT } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     try {
       await queryInterface.addColumn('organisations', 'student_list_visible_course_codes', {
         type: ARRAY(TEXT),
@@ -12,7 +12,7 @@ module.exports = {
       console.log('student list visible course codes already hopefully existed')
     }
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     try {
       await queryInterface.removeColumn('organisations', 'student_list_visible_course_codes')
     } catch (error) {

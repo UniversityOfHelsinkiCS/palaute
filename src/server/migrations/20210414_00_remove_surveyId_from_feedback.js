@@ -1,8 +1,8 @@
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('feedbacks', 'survey_id')
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('feedbacks', 'survey_id')
   },
 }

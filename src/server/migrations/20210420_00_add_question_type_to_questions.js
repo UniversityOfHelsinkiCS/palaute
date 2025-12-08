@@ -1,12 +1,12 @@
 const { STRING } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('questions', 'type', {
       type: STRING,
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('questions', 'type')
   },
 }

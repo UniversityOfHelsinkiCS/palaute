@@ -1,7 +1,7 @@
 const { STRING, ARRAY } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('course_units', 'primary_organisation_id', {
       type: STRING,
     })
@@ -9,7 +9,7 @@ module.exports = {
       type: ARRAY(STRING),
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('course_units', 'primary_organisation_id')
     await queryInterface.removeColumn('course_units', 'organisation_ids')
   },

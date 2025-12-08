@@ -1,7 +1,7 @@
 const { BOOLEAN } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     const [id] = await queryInterface.sequelize.query(
       `SELECT u.id FROM user_feedback_targets u 
         INNER JOIN feedback_targets f on u.feedback_target_id = f.id 
@@ -18,7 +18,7 @@ module.exports = {
 
     await queryInterface.removeColumn('feedback_targets', 'feedback_open_notification_email_sent')
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.addColumn('feedback_targets', 'feedback_open_notification_email_sent', { type: BOOLEAN })
 
     const [id] = await queryInterface.sequelize.query(

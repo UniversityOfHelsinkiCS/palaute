@@ -1,7 +1,7 @@
 const { STRING, DATE, INTEGER, JSONB, BOOLEAN } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.createTable('norppa_feedbacks', {
       id: {
         type: INTEGER,
@@ -32,7 +32,7 @@ module.exports = {
       },
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.dropTable('norppa_feedbacks')
   },
 }

@@ -1,7 +1,7 @@
 const { DATEONLY } = require('sequelize')
 
 module.exports = {
-  up: async queryInterface => {
+  up: async ({ context: queryInterface }) => {
     await queryInterface.sequelize.query(`
       DELETE FROM feedback_summary_cache WHERE true;
     `)
@@ -10,7 +10,7 @@ module.exports = {
       allowNull: false,
     })
   },
-  down: async queryInterface => {
+  down: async ({ context: queryInterface }) => {
     await queryInterface.removeColumn('feedback_summary_cache', 'course_realisation_start_date')
   },
 }
