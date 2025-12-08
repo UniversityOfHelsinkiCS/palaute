@@ -14,13 +14,15 @@ import { logger } from './util/logger'
 import { updateLastRestart } from './util/lastRestart'
 import { initializeFunctions } from './db/postgresFunctions'
 import updaterClient from './util/updaterClient'
+import { router } from './routes'
+
 import './util/i18n'
 
 const app = express()
 
 app.use(compression())
-// eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
-app.use('/api', (req, res, next) => require('./routes')(req, res, next))
+
+app.use('/api', router)
 app.use('/api', (_: Request, res: Response) => {
   res.sendStatus(404)
 })

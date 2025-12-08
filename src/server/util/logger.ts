@@ -1,6 +1,3 @@
-// This file could be changed to have a default export, but it requires to change
-// files that import it to ESM syntax to avoid imports like:
-// const logger = require('./util/logger').default
 import winston from 'winston'
 import LokiTransport from 'winston-loki'
 
