@@ -11,6 +11,7 @@ import FormikSelect from '../../../../components/common/FormikSelect'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import queryClient from '../../../../util/queryClient'
 import { NorButton } from '../../../../components/common/NorButton'
+import useBanners from '../../../../hooks/useBanners'
 
 const getHexColor = (theme, hue, lightness) => {
   const h = theme.palette[hue]
@@ -187,6 +188,7 @@ const BannerForm = ({ onSubmit, selected, open, setOpen }) => (
 
 const BannerView = () => {
   const { authorizedUser } = useAuthorizedUser()
+  const { banners } = useBanners()
   const [selected, setSelected] = React.useState(null)
   const [open, setOpen] = React.useState(false)
   const theme = useTheme()
@@ -198,7 +200,7 @@ const BannerView = () => {
       } else {
         await apiClient.post('/admin/banners', formValuesToBannerData(theme, bannerValues))
       }
-      queryClient.refetchQueries(['authorizedUser'])
+      queryClient.refetchQueries(['authorizedUser', 'banners'])
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)
@@ -209,7 +211,7 @@ const BannerView = () => {
     if (!window.confirm('Delete this banner for good?')) return
     try {
       await apiClient.delete(`/admin/banners/${id}`)
-      queryClient.refetchQueries(['authorizedUser'])
+      queryClient.refetchQueries(['authorizedUser', 'banners'])
     } catch (error) {
       // eslint-disable-next-line no-console
       console.error(error)
@@ -219,7 +221,7 @@ const BannerView = () => {
   return (
     <div>
       <BannerForm onSubmit={handleSubmit} selected={selected} open={open} setOpen={setOpen} />
-      {authorizedUser?.banners.map(banner => (
+      {banners?.map(banner => (
         <Box m={2} key={banner.id}>
           <Paper variant="outlined">
             <Box padding={2}>

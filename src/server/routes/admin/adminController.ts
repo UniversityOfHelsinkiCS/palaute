@@ -606,6 +606,18 @@ const updateSummariesTable = async (req: AuthenticatedRequest, res: Response) =>
   res.send({ duration })
 }
 
+const getBanners = async (req: AuthenticatedRequest, res: Response) => {
+  const banners = await Banner.findAll({
+    where: {
+      endDate: {
+        [Op.gt]: new Date(),
+      },
+    },
+  })
+
+  res.send(banners)
+}
+
 export const router = Router()
 
 router.use(adminAccess)
@@ -629,3 +641,4 @@ router.put('/banners/:id', updateBanner)
 router.delete('/banners/:id', deleteBanner)
 router.get('/node-config-env', getNodeConfigEnv)
 router.post('/build-summaries', updateSummariesTable)
+router.get('/banners', getBanners)
