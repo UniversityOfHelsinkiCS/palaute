@@ -17,7 +17,7 @@ import {
 
 import { logger } from '../../util/logger'
 import { DateRangeInput, formatActivityPeriod } from '../../util/common'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { User as UserType } from '../../models/user'
 
 const getInterimFeedbackParentFbt = async (interimFbtId: number | string, user: UserType) => {

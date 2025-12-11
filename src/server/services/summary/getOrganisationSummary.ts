@@ -12,7 +12,7 @@ import {
   CourseRealisationsTag,
 } from '../../models'
 import { sumSummaryDatas, sumSummaries, getScopedSummary } from './utils'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getSummaryAccessibleOrganisationIds } from './access'
 import {
   SUMMARY_EXCLUDED_ORG_IDS,

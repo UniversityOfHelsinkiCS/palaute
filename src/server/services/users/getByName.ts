@@ -1,5 +1,5 @@
 import { User } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { NO_USER_USERNAME } from '../../util/config'
 import { userCache } from './cache'
 

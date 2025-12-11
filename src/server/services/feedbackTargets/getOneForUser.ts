@@ -11,7 +11,7 @@ import {
   Group,
   Summary,
 } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import cache from './feedbackTargetCache'
 import { getAccess } from './getAccess'
 import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'

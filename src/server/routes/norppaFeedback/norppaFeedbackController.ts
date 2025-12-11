@@ -1,6 +1,6 @@
 import { Router, type Response } from 'express'
 import type { AuthenticatedRequest } from 'types'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { NorppaFeedback, User } from '../../models'
 import { adminAccess } from '../../middleware/adminAccess'
 

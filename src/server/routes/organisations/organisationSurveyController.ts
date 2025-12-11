@@ -17,7 +17,7 @@ import {
 } from '../../services/organisations/organisationSurveys'
 import { getFeedbackTargetContext } from '../../services/feedbackTargets/getFeedbackTargetContext'
 import { validateStudentNumbers } from '../../services/organisations/validator'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getAccessAndOrganisation } from './util'
 import { createSummaryForFeedbackTarget } from '../../services/summary/createSummary'
 import { updateSummaryOnOrganisationSurveyEdit } from '../../services/summary/updateSummaryOnOrganisationSurveyEdit'

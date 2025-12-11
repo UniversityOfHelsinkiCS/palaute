@@ -1,6 +1,6 @@
 import { Response, Router } from 'express'
 import Sentry from '@sentry/node'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { UserFeedbackTarget, FeedbackTarget, Feedback } from '../../models'
 import { validateFeedback } from '../../util/feedbackValidator'
 import { getFeedbackTargetContext } from '../../services/feedbackTargets'

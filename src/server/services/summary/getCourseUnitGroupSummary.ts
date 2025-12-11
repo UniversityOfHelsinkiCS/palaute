@@ -10,7 +10,7 @@ import {
 } from '../../models'
 import { sumSummaries, getScopedSummary } from './utils'
 import { getAccessibleCourseRealisationIds } from './access'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
 interface GetCourseUnitGroupSummaryParams {

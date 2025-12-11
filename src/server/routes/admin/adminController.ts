@@ -5,7 +5,7 @@ import { LocalizedString } from '@common/types/common'
 import _ from 'lodash'
 import { format, subMonths } from 'date-fns'
 
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import updaterClient from '../../util/updaterClient'
 
 import {

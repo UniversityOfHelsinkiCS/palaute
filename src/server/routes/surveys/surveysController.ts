@@ -1,5 +1,5 @@
 import { Response, Router } from 'express'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { Survey, Question, Organisation, User } from '../../models'
 import { createOrganisationSurveyLog } from '../../services/auditLog'
 import { getUniversitySurvey as _getUniversitySurvey } from '../../services/surveys'

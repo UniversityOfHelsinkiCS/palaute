@@ -4,7 +4,7 @@ import morgan from 'morgan'
 
 import { FeedbackTarget } from '../models'
 
-import { ApplicationError } from '../util/customErrors'
+import { ApplicationError } from '../util/ApplicationError'
 import { initTestSummary } from './seedSummary'
 import { seedFeedbackTargetsForTeacher } from './seedFeedbackTargets'
 import { seedDb, seedUsers, seedOrganisationCorrespondent } from './seed'

@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken'
 
 import { UserFeedbackTarget, User } from '../../models'
 import { JWT_KEY } from '../../util/config'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User as UserType } from '../../models/user'
 

@@ -1,6 +1,6 @@
 import { LocalizedString } from '@common/types/common'
 import { mailer } from '../../mailer'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'
 

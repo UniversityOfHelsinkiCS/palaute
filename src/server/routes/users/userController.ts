@@ -2,7 +2,7 @@ import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import _ from 'lodash'
 import { Response, Router } from 'express'
 
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { User } from '../../models'
 import { AuthenticatedRequest } from '../../types'
 import { userCache } from '../../services/users/cache'

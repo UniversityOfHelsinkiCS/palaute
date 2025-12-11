@@ -1,5 +1,5 @@
 import { UserFeedbackTarget } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 
 // Defining types for the input parameters
 interface NotGivingFeedbackParams {

@@ -1,7 +1,7 @@
 import { differenceInHours, format } from 'date-fns'
 import { LanguageId, LocalizedString } from '@common/types/common'
 import { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } from '../../util/config'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { pate } from '../pateClient'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'

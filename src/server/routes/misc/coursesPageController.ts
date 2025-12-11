@@ -1,5 +1,5 @@
 import { Response, Request } from 'express'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { FeedbackTarget } from '../../models'
 
 export const redirectFromCoursesPage = async (req: Request, res: Response) => {

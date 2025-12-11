@@ -1,6 +1,6 @@
 import { Response, Router } from 'express'
 import { AuthenticatedRequest } from 'types'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 
 import { createFeedbackTargetLog } from '../../services/auditLog'
 import { mailer } from '../../mailer'

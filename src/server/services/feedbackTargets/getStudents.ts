@@ -1,7 +1,7 @@
 import { sequelize } from '../../db/dbConnection'
 import { UserFeedbackTarget, User, Feedback, CourseUnit } from '../../models'
 import { ALWAYS_SHOW_STUDENT_LIST } from '../../util/config'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { logger } from '../../util/logger'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User as UserType } from '../../models/user'

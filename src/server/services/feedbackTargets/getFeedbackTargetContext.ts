@@ -1,5 +1,5 @@
 import { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Summary } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getAccess } from './getAccess'
 import { User } from '../../models/user'
 

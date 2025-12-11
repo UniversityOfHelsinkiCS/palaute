@@ -10,7 +10,7 @@ import {
   UserFeedbackTarget,
   User,
 } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 
 const getYearGrouped = (feedbackTargets: any[]) => {
   const dateGrouped = Object.entries(_.groupBy(feedbackTargets, fbt => fbt.startDate)).sort(([a], [b]) =>

@@ -1,5 +1,5 @@
 import { UserFeedbackTarget } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import cache from './feedbackTargetCache'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'

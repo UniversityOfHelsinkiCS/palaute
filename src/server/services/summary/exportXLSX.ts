@@ -28,7 +28,7 @@ import {
 import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
 import { i18n } from '../../util/i18n'
 import { getTeacherSummary } from './getTeacherSummary'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
 const getOrganisations = async (scopedSummary: ModelStatic<Summary>, organisationIds: string[]) => {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken'
 
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { JWT_KEY } from '../../util/config'
 import { User } from '../../models/user'

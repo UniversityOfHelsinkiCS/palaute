@@ -14,7 +14,7 @@ import {
   FeedbackTarget,
   Summary,
 } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { createOrganisationLog } from '../../services/auditLog'
 import getOpenFeedbackByOrganisation from '../../services/organisations/getOpenFeedbackByOrganisation'
 import { getAccessAndOrganisation } from './util'

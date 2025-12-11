@@ -2,7 +2,7 @@ import _ from 'lodash'
 
 import { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/config'
 import { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getAccess } from './getAccess'
 import { getAdditionalDataFromCacheOrDb } from './getOneForUser'
 import { User } from '../../models/user'

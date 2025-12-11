@@ -3,7 +3,7 @@ import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
 import { getSummaryAccessibleOrganisationIds } from './access'
 import { Organisation, User } from '../../models'
 import { sumSummaries, getScopedSummary } from './utils'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 
 interface GetUserOrganisationSummariesParams {
   startDate: string

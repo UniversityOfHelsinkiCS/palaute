@@ -5,7 +5,7 @@ import { QueryTypes } from 'sequelize'
 
 import { CourseUnit, Organisation, User } from '../../models'
 
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { sequelize } from '../../db/dbConnection'
 import { getSummaryQuestions } from '../../services/questions'
 import {

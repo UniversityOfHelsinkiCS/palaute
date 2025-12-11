@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 import { NextFunction, Response } from 'express'
 import { AuthenticatedRequest, UnauthenticatedRequest } from 'types'
-import { ApplicationError } from '../util/customErrors'
+import { ApplicationError } from '../util/ApplicationError'
 import { JWT_KEY } from '../util/config'
 import { User } from '../models'
 import { logger } from '../util/logger'

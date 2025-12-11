@@ -3,7 +3,7 @@ import {
   updateSummaryAfterFeedbackResponseDeleted,
 } from '../summary/updateSummaryOnFeedbackResponse'
 import { mailer } from '../../mailer'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { createFeedbackResponseLog } from '../auditLog/feedbackTargetLogs'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models'

@@ -1,5 +1,5 @@
 import { FeedbackTargetLog, User } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User as UserType } from '../../models/user'
 

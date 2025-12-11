@@ -1,7 +1,7 @@
 import { OrganisationAccess } from '@common/types/organisation'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import { Organisation, User } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 
 export const getAccessAndOrganisation = async (user: User, code: string, requiredAccess?: OrganisationAccess) => {
   const organisationAccess = await getUserOrganisationAccess(user)

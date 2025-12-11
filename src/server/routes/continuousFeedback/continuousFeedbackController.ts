@@ -1,6 +1,6 @@
 import { Response, Router } from 'express'
 import { ContinuousFeedback, UserFeedbackTarget } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { sendEmailContinuousFeedbackResponseToStudent } from '../../mailer/mails'
 import { getFeedbackTargetContext } from '../../services/feedbackTargets'
 import { adminAccess } from '../../middleware/adminAccess'

@@ -1,6 +1,6 @@
 import { Response, Router } from 'express'
 import { User, OrganisationFeedbackCorrespondent } from '../../models'
-import { ApplicationError } from '../../util/customErrors'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getAccessAndOrganisation } from './util'
 import { createOrganisationLog } from '../../services/auditLog'
 import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/config'
