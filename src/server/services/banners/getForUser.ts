@@ -21,9 +21,6 @@ export const getBannersForUser = async (user: User): Promise<Banner[]> => {
       accessGroup: {
         [Op.in]: access,
       },
-      startDate: {
-        [Op.lt]: new Date(),
-      },
       endDate: {
         [Op.gt]: new Date(),
       },
