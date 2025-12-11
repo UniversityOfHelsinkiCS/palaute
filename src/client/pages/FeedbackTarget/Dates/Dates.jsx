@@ -33,7 +33,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
         <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" alignItems="center">
           <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
           <Typography component="dd">{feedbackPeriod}</Typography>
-          {!isStudent && isCourseFeedback && <EditFeedbackTargetDates />}
+          {isTeacher && isCourseFeedback && <EditFeedbackTargetDates />}
         </Box>
         {isStudent && continuousFeedbackEnabled && (
           <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mt: 2 }}>

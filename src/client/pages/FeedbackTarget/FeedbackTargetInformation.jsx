@@ -18,7 +18,7 @@ import FeedbackTargetLinks from './FeedbackTargetLinks'
 const FeedbackTargetInformation = () => {
   const { i18n, t } = useTranslation()
 
-  const { feedbackTarget, isStudent } = useFeedbackTargetContext()
+  const { feedbackTarget, isStudent, isTeacher } = useFeedbackTargetContext()
 
   const { courseUnit, courseRealisation, administrativePersons, responsibleTeachers, teachers } = feedbackTarget
 
@@ -74,7 +74,7 @@ const FeedbackTargetInformation = () => {
             </Typography>
             {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
           </Box>
-          {!isStudent && (isInterimFeedback || isOrganisationSurvey) && (
+          {isTeacher && (isInterimFeedback || isOrganisationSurvey) && (
             <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
           )}
         </Box>
