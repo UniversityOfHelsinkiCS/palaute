@@ -18,7 +18,7 @@ import FeedbackTargetLinks from './FeedbackTargetLinks'
 const FeedbackTargetInformation = () => {
   const { i18n, t } = useTranslation()
 
-  const { feedbackTarget, isStudent, isTeacher } = useFeedbackTargetContext()
+  const { feedbackTarget, isStudent, isTeacher, isOrganisationAdmin } = useFeedbackTargetContext()
 
   const { courseUnit, courseRealisation, administrativePersons, responsibleTeachers, teachers } = feedbackTarget
 
@@ -40,6 +40,8 @@ const FeedbackTargetInformation = () => {
 
   // This is necessary to identify which is related to interim feedback modal and which is related to the original fbt
   const dataCyPrefix = isInterimFeedback ? 'interim-' : ''
+
+  const canEdit = (isTeacher && isInterimFeedback) || ((isTeacher || isOrganisationAdmin) && isOrganisationSurvey)
 
   return (
     <Box sx={{ marginBottom: '3rem' }}>
@@ -74,7 +76,7 @@ const FeedbackTargetInformation = () => {
             </Typography>
             {showTags && feedbackTarget.tags.map(tag => <TagChip key={tag.id} tag={tag} language={i18n.language} />)}
           </Box>
-          {isTeacher && (isInterimFeedback || isOrganisationSurvey) && (
+          {canEdit && (
             <FeedbackTargetEdit isInterimFeedback={isInterimFeedback} isOrganisationSurvey={isOrganisationSurvey} />
           )}
         </Box>
