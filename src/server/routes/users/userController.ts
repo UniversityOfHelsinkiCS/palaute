@@ -37,6 +37,7 @@ router.get('/login', async (req: AuthenticatedRequest, res: Response) => {
 
   res.send({
     ...user.toJSON(),
+    serverVersion: process.env.VERSION || 'unknown',
     iamGroups,
     lastRestart,
     banners,

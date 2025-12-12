@@ -529,7 +529,9 @@
     "contactSupport": "Ota yhteyttä tukeen",
     "wikiLink": "Käyttöohje",
     "accessibilityDocument": "Saavutettavuusseloste",
-    "lastUpdate": "Viimeisin julkaisu {{duration}} sitten"
+    "lastUpdate": "Viimeisin julkaisu {{duration}} sitten",
+    "server": "Palvelinversio {{version}}",
+    "client": "Selainversio {{version}}"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta"

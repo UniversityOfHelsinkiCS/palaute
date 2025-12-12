@@ -3,7 +3,7 @@ import React from 'react'
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
-import { formatDuration, intervalToDuration } from 'date-fns'
+import { formatDistanceToNow } from 'date-fns/esm'
 
 import ExternalLink from './common/ExternalLink'
 
@@ -24,15 +24,12 @@ const styles = {
 
 const Footer = ({ user }) => {
   const { t, i18n } = useTranslation()
-  const duration = Date.parse(user?.lastRestart)
-    ? formatDuration(
-        intervalToDuration({
-          start: Date.parse(user?.lastRestart),
-          end: Date.now(),
-        }),
-        { locale: localeForLanguage(i18n.language) }
-      )
-    : ''
+
+  const uptime = formatDistanceToNow(Date.parse(user?.lastRestart) ?? Date.now(), {
+    locale: localeForLanguage(i18n.language),
+  })
+  const serverVersion = user?.serverVersion
+  const clientVersion = import.meta.env.VITE_VERSION
 
   return (
     <Box component="footer" marginTop="auto" pt="1rem">
@@ -74,18 +71,11 @@ const Footer = ({ user }) => {
             <Link href={t('links:toska')} target="_blank" rel="noopener" underline="always">
               <img src={images.toska_color} loading="lazy" style={styles.logo} alt="Toska" />
             </Link>
-            {duration && (
-              <>
-                <Typography component="p" variant="subtitle1" fontSize={10}>
-                  {t('footer:lastUpdate', { duration })}
-                </Typography>
-                {user.isAdmin && (
-                  <Typography component="p" variant="subtitle1" fontSize={10}>
-                    BUILD = {GIT_SHA}
-                  </Typography>
-                )}
-              </>
-            )}
+            <Typography component="p" variant="subtitle1" fontSize={10}>
+              {t('footer:lastUpdate', { duration: uptime })}
+            </Typography>
+            <Typography variant="caption">{t('footer:server', { version: serverVersion })}</Typography>
+            <Typography variant="caption">{t('footer:client', { version: clientVersion })}</Typography>
           </Box>
         </Box>
       </Container>

@@ -505,7 +505,9 @@
     "contactSupport": "Kontakta stödet",
     "wikiLink": "Användarinstruktioner",
     "accessibilityDocument": "Tillgänglighetsutlåtande",
-    "lastUpdate": "Senaste versionen {{duration}} sedan"
+    "lastUpdate": "Senaste versionen {{duration}} sedan",
+    "server": "Serverversion {{version}}",
+    "client": "Klientversion {{version}}"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Det finns ingen respons tillgänglig för dig på denna kurs"

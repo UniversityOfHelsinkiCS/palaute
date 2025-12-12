@@ -28,6 +28,7 @@ jobs:
             NODE_CONFIG_ENV=hy
             BASE_PATH=
             GIT_SHA=${{ github.sha }}
+            VERSION=${{ github.ref_name }}
           # Extra args are needed to increase the number of open files
           # because of build EMFILE error: https://github.com/npm/cli/issues/4783#issuecomment-1908016260
           extra-args: |
