@@ -146,7 +146,7 @@ const NavBar = ({ guest = false }) => {
   const isMobile = useIsMobile()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
-  const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids')
+  const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids', [])
 
   const [menuOpen, setMenuOpen] = useState(false)
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
