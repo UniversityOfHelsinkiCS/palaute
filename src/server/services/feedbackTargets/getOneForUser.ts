@@ -197,7 +197,7 @@ const getOneForUser = async (id: number, user: UserType) => {
   ])
 
   if (!feedbackTarget) {
-    throw new ApplicationError('Not found', 404)
+    throw ApplicationError.NotFound()
   }
 
   const { accessStatus } = await getAccess({
@@ -207,7 +207,7 @@ const getOneForUser = async (id: number, user: UserType) => {
   })
 
   if (accessStatus.includes('NONE')) {
-    throw new ApplicationError('No access', 403)
+    throw ApplicationError.Forbidden()
   }
 
   return {

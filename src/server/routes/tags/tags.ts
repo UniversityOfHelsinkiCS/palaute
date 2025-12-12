@@ -16,7 +16,7 @@ const checkAccess = async (user: any, code: string, level: keyof OrganisationAcc
   const orgAccess = await getUserOrganisationAccess(user)
   const relevantOrg = orgAccess.find((oac: any) => oac.organisation.code === code)
   if (!relevantOrg || !relevantOrg.access[level]) {
-    throw new ApplicationError('You dont have the required rights', 403)
+    throw ApplicationError.Forbidden('You dont have the required rights')
   }
 }
 
@@ -26,12 +26,12 @@ const checkAccess = async (user: any, code: string, level: keyof OrganisationAcc
 const parseTagIds = (body: any): number[] => {
   const tagIds = body?.tagIds
   if (!Array.isArray(tagIds)) {
-    throw new ApplicationError('Invalid tagIds, must be an array', 400)
+    throw ApplicationError.BadRequest('Invalid tagIds, must be an array')
   }
 
   const numberTagIds = tagIds.map(Number)
   if (numberTagIds.some(id => !Number.isInteger(id) || !id)) {
-    throw new ApplicationError('tagIds had an invalid element, must be positive integers')
+    throw ApplicationError.BadRequest('tagIds had an invalid element, must be positive integers')
   }
 
   return numberTagIds
@@ -49,7 +49,7 @@ const updateCourseRealisationTags = async (req: AuthenticatedRequest, res: Respo
 
   const { courseRealisationIds } = req.body
   if (!courseRealisationIds?.length || !Array.isArray(courseRealisationIds)) {
-    throw new ApplicationError('Invalid courseRealisationIds', 400)
+    throw ApplicationError.BadRequest('Invalid courseRealisationIds')
   }
 
   const courseRealisations = await CourseRealisation.findAll({
@@ -73,14 +73,14 @@ const updateCourseRealisationTags = async (req: AuthenticatedRequest, res: Respo
     },
   })
   if (courseRealisations.length !== courseRealisationIds.length) {
-    throw new ApplicationError('Not found', 404)
+    throw ApplicationError.NotFound()
   }
 
   const organisation = courseRealisations[0].organisations[0] // there can be only one, becoz code in the where param
   const availableTagIds = organisation.tags.map((t: any) => t.id)
   const tagIds = parseTagIds(req.body)
   if (tagIds.some(id => !availableTagIds.includes(id))) {
-    throw new ApplicationError('Some of the given tags are not allowed for this cur', 400)
+    throw ApplicationError.BadRequest('Some of the given tags are not allowed for this cur')
   }
 
   const newTags = organisation.tags.filter((tag: any) => tagIds.includes(tag.id))
@@ -121,7 +121,7 @@ const updateCourseUnitTags = async (req: AuthenticatedRequest, res: Response) =>
 
   const { courseCode } = req.body
   if (!courseCode) {
-    throw new ApplicationError('Invalid courseCode', 400)
+    throw ApplicationError.BadRequest('Invalid courseCode')
   }
 
   const courseUnits = await CourseUnit.findAll({
@@ -137,7 +137,7 @@ const updateCourseUnitTags = async (req: AuthenticatedRequest, res: Response) =>
 
   const tagIds = parseTagIds(req.body)
   if (tagIds.some(id => !availableTagIds.includes(id))) {
-    throw new ApplicationError('Some of the given tags are not allowed for this cur', 400)
+    throw ApplicationError.BadRequest('Some of the given tags are not allowed for this cur')
   }
 
   const newTags = organisation.tags.filter((tag: any) => tagIds.includes(tag.id))
@@ -172,7 +172,7 @@ const getTags = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode: code } = req.params
   await checkAccess(req.user, code)
 
-  if (!TAGS_ENABLED.includes(code)) throw new ApplicationError('Invalid organisation code', 400)
+  if (!TAGS_ENABLED.includes(code)) throw ApplicationError.BadRequest('Invalid organisation code')
 
   const org = await Organisation.findOne({
     where: { code },
@@ -180,7 +180,7 @@ const getTags = async (req: AuthenticatedRequest, res: Response) => {
   })
 
   const organisationId = org?.id
-  if (!organisationId) throw new ApplicationError('Organisation not found', 404)
+  if (!organisationId) throw ApplicationError.NotFound('Organisation not found')
 
   const tags = await Tag.findAll({
     where: {

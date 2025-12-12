@@ -59,7 +59,7 @@ export const sendFeedbackReminderToStudents = async (
   courseName: LocalizedString
 ) => {
   if (differenceInHours(new Date(), feedbackTarget.feedbackReminderLastSentAt) < FEEDBACK_REMINDER_COOLDOWN) {
-    throw new ApplicationError(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`, 403)
+    throw ApplicationError.Forbidden(`Can send only 1 feedback reminder every ${FEEDBACK_REMINDER_COOLDOWN} hours`)
   }
 
   const students = await feedbackTarget.getStudentsWhoHaveNotReactedToSurvey()

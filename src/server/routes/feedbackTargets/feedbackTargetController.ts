@@ -36,7 +36,7 @@ adRouter.get('/for-organisation/:code', async (req: AuthenticatedRequest, res: R
   const { user } = req
   const { code } = req.params
   const { startDate, endDate } = req.query
-  if (!code) throw new ApplicationError('Missing code', 400)
+  if (!code) throw ApplicationError.BadRequest('Missing code')
 
   const feedbackTargets = await getFeedbackTargetsForOrganisation({
     organisationCode: code,
@@ -53,7 +53,7 @@ if (PUBLIC_COURSE_BROWSER_ENABLED) {
     const { codes } = req.params
     const codeArray = codes.split(',')
     const { startDate, endDate } = req.query
-    if (!codes || !codes.length) throw new ApplicationError('Missing code', 400)
+    if (!codes || !codes.length) throw ApplicationError.BadRequest('Missing code')
 
     const feedbackTargets = await getPublicFeedbackTargetsForOrganisation({
       organisationCodes: codeArray,
@@ -122,7 +122,7 @@ adRouter.get('/for-course-unit/:code', async (req: AuthenticatedRequest, res: Re
 
 const getOne = async (req: AuthenticatedRequest, res: Response) => {
   const feedbackTargetId = Number(req.params.id)
-  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+  if (!feedbackTargetId) throw ApplicationError.BadRequest('Missing id')
 
   const result = await getFeedbackTargetForUserById(feedbackTargetId, req.user)
   res.send(result)
@@ -135,7 +135,7 @@ adRouter.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const feedbackTargetId = Number(req.params?.id)
 
-  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+  if (!feedbackTargetId) throw ApplicationError.BadRequest('Missing id')
 
   const updatedFeedbackTarget = await updateFeedbackTarget({
     feedbackTargetId,
@@ -161,7 +161,7 @@ noadRouter.get('/:id/feedbacks', getFeedbacks)
 
 adRouter.get('/:id/error-view-details', async (req: AuthenticatedRequest, res: Response) => {
   const feedbackTargetId = Number(req.params.id)
-  if (!feedbackTargetId) throw new ApplicationError('Missing id', 400)
+  if (!feedbackTargetId) throw ApplicationError.BadRequest('Missing id')
 
   const feedbackTarget = await getFeedbackErrorViewDetails(feedbackTargetId)
 

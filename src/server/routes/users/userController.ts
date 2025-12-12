@@ -128,7 +128,7 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
 router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   if (id !== req.user.id && !req.user.isAdmin && !req.user.mockedBy?.isAdmin) {
-    throw new ApplicationError('Non-admin can only view own user details', 403)
+    throw ApplicationError.Forbidden('Non-admin can only view own user details')
   }
 
   const user = await User.findByPk(id)
@@ -145,7 +145,7 @@ router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
 })
 
 router.get('/users/access', async (req: AuthenticatedRequest, res: Response) => {
-  if (!req.user.isAdmin) throw new ApplicationError('Forbidden', 403)
+  if (!req.user.isAdmin) throw ApplicationError.Forbidden('Forbidden')
 
   const usersWithAccess = await getAllOrganisationAccess()
 

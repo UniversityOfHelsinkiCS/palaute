@@ -16,7 +16,7 @@ export const getByUsername = async (username: string) => {
         where: { username: NO_USER_USERNAME },
       })
       if (!user) {
-        throw new ApplicationError(`User with username ${username} not found`, 404)
+        throw ApplicationError.NotFound(`User with username ${username} not found`)
       }
     }
     userCache.set(username, user.toJSON())

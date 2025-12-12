@@ -102,7 +102,7 @@ const respondToFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId)
 
   if (!response && !continuousFeedback.responseEmailSent) {
-    throw new ApplicationError('Response missing', 400)
+    throw ApplicationError.BadRequest('Response missing')
   }
 
   continuousFeedback.response = response

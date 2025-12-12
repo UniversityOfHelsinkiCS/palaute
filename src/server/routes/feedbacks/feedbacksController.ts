@@ -28,10 +28,12 @@ const create = async (req: AuthenticatedRequest, res: Response) => {
   if (!access?.canGiveFeedback() || !userFeedbackTarget) throw ApplicationError.Forbidden('Not an enrolled student')
 
   if (userFeedbackTarget.feedbackId)
-    throw new ApplicationError('Attempt to create new feedback where one already exists. Use PUT to update the old')
+    throw ApplicationError.BadRequest(
+      'Attempt to create new feedback where one already exists. Use PUT to update the old'
+    )
 
   if (!(await validateFeedback(data, feedbackTarget))) {
-    throw new ApplicationError('Form data not valid', 400)
+    throw ApplicationError.BadRequest('Form data not valid')
   }
 
   // Updating userFeedbackTarget as well when the user gives feedback
@@ -96,9 +98,9 @@ const update = async (req: AuthenticatedRequest, res: Response) => {
 
   if (!feedbackTarget) throw ApplicationError.NotFound()
 
-  if (!feedbackTarget.isOpen()) throw new ApplicationError('Feedback is not open', 403)
+  if (!feedbackTarget.isOpen()) throw ApplicationError.Forbidden('Feedback is not open')
 
-  if (!(await validateFeedback(req.body.data, feedbackTarget))) throw new ApplicationError('Form data not valid', 400)
+  if (!(await validateFeedback(req.body.data, feedbackTarget))) throw ApplicationError.BadRequest('Form data not valid')
 
   // Updating userFeedbackTarget as well when the user gives feedback
   userFeedbackTarget.notGivingFeedback = false
@@ -123,12 +125,11 @@ const destroy = async (req: AuthenticatedRequest, res: Response) => {
     },
   })
 
-  if (!userFeedbackTarget) throw new ApplicationError('Not found', 404)
+  if (!userFeedbackTarget) throw ApplicationError.NotFound()
 
   const feedbackTarget = await FeedbackTarget.findByPk(userFeedbackTarget.feedbackTargetId)
 
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
-
+  if (!feedbackTarget) throw ApplicationError.NotFound()
   await feedback.destroy()
 
   // Update summary. Fail silently if fails

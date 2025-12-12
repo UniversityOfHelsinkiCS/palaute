@@ -17,10 +17,10 @@ const addOrganisationFeedbackCorrespondent = async (req: AuthenticatedRequest, r
 
   const userToAdd = await User.findByPk(userId)
   if (!userToAdd) {
-    throw new ApplicationError('User not found', 400)
+    throw ApplicationError.BadRequest('User not found')
   }
   if (await userToAdd.hasOrganisation(organisation)) {
-    throw new ApplicationError('User already is feedback correspondent of that organisation', 400)
+    throw ApplicationError.BadRequest('User already is feedback correspondent of that organisation')
   }
 
   await OrganisationFeedbackCorrespondent.create({
@@ -50,10 +50,10 @@ const removeOrganisationFeedbackCorrespondent = async (req: AuthenticatedRequest
 
   const userToRemove = await User.findByPk(userId)
   if (!userToRemove) {
-    throw new ApplicationError(`User ${userId} not found`, 400)
+    throw ApplicationError.BadRequest(`User ${userId} not found`)
   }
   if (!(await userToRemove.hasOrganisation(organisation))) {
-    throw new ApplicationError('User is not feedback correspondent of that organisation', 400)
+    throw ApplicationError.BadRequest('User is not feedback correspondent of that organisation')
   }
 
   await OrganisationFeedbackCorrespondent.destroy({

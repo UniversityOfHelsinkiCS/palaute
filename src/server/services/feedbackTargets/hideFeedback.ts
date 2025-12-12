@@ -15,7 +15,7 @@ interface HideFeedbackParams {
 
 const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedbackContent }: HideFeedbackParams) => {
   if (typeof hidden !== 'boolean') {
-    throw new ApplicationError('Invalid value for hidden', 400)
+    throw ApplicationError.BadRequest('Invalid value for hidden')
   }
 
   // check access

@@ -324,9 +324,9 @@ const findOrganisationSurveys = async (req: AuthenticatedRequest, res: Response)
 const resendFeedbackResponseEmail = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.body
   const idNumber = Number(id)
-  if (!idNumber) throw new ApplicationError('Invalid id', 400)
+  if (!idNumber) throw ApplicationError.BadRequest('Invalid id')
   const feedbackTarget = await FeedbackTarget.findByPk(idNumber)
-  if (!feedbackTarget) throw new ApplicationError('Not found', 404)
+  if (!feedbackTarget) throw ApplicationError.NotFound('Not found')
   const emailsSentTo = await mailer.sendFeedbackSummaryReminderToStudents(
     feedbackTarget,
     feedbackTarget.feedbackResponse
@@ -494,7 +494,7 @@ const createBanner = async (req: AuthenticatedRequest, res: Response) => {
   try {
     await banner.save()
   } catch (err) {
-    throw new ApplicationError('Fakd', 400)
+    throw ApplicationError.BadRequest('Fakd')
   }
 
   res.send(banner)
@@ -514,7 +514,7 @@ const updateBanner = async (req: AuthenticatedRequest, res: Response) => {
   try {
     await banner.save()
   } catch (err) {
-    throw new ApplicationError('Fakd', 400)
+    throw ApplicationError.BadRequest('Fakd')
   }
 
   res.send(banner)
@@ -524,7 +524,7 @@ const deleteBanner = async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   const destroyed = await Banner.destroy({ where: { id } })
   if (!destroyed) {
-    throw new ApplicationError('Not found', 404)
+    throw ApplicationError.NotFound('Not found')
   }
   res.sendStatus(200)
 }
@@ -576,7 +576,7 @@ const updateInactiveCourseRealisation = async (req: AuthenticatedRequest, res: R
 
   const inactiveCourse = await InactiveCourseRealisation.findByPk(id)
 
-  if (!inactiveCourse) throw new ApplicationError('Not found', 404)
+  if (!inactiveCourse) throw ApplicationError.NotFound('Not found')
 
   await inactiveCourse.update(
     {

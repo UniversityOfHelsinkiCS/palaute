@@ -26,7 +26,7 @@ export const updateFeedbackResponse = async ({
   }
 
   if (sendEmail && feedbackTarget.feedbackResponseEmailSent) {
-    throw new ApplicationError('Counter feedback email has already been sent', 400)
+    throw ApplicationError.BadRequest('Counter feedback email has already been sent')
   }
 
   const previousResponse = feedbackTarget.feedbackResponse

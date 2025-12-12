@@ -36,7 +36,7 @@ const getUsernameFromToken = (req: UnauthenticatedRequest) => {
   const { token, tokenuser } = req.headers
 
   if (typeof token !== 'string') {
-    throw new ApplicationError('Token must be a string', 403)
+    throw ApplicationError.Forbidden('Token must be a string')
   }
 
   const { username } = jwt.verify(token, JWT_KEY) as { username: string }
@@ -44,7 +44,7 @@ const getUsernameFromToken = (req: UnauthenticatedRequest) => {
   if (!username) {
     logger.info('Token broken', { token })
     logger.info('Token user', { tokenuser })
-    throw new ApplicationError('Token is missing username', 403)
+    throw ApplicationError.Forbidden('Token is missing username')
   }
 
   return username
@@ -53,7 +53,7 @@ const getUsernameFromToken = (req: UnauthenticatedRequest) => {
 const getUsernameFromShibboHeaders = (req: UnauthenticatedRequest) => {
   const { uid: username } = req.headers
 
-  if (!username) throw new ApplicationError('Missing uid header', 403)
+  if (!username) throw ApplicationError.Forbidden('Missing uid header')
 
   return username as string
 }
