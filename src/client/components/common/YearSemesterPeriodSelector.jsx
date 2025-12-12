@@ -184,11 +184,9 @@ export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption,
       <Box sx={styles.filters}>
         {allowAll && (
           <ToggleButtonGroup id="all-filter-selector" value={option} onChange={handleOptionChange} color="primary">
-            {allowAll && (
-              <ToggleButton value="all" size="small">
-                {t('courseSummary:all')}
-              </ToggleButton>
-            )}
+            <ToggleButton value="all" size="small">
+              {t('courseSummary:all')}
+            </ToggleButton>
             <ToggleButton value="filter" size="small">
               {t('courseSummary:filter')}
             </ToggleButton>

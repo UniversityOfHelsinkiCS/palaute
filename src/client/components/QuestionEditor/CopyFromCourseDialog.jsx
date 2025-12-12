@@ -182,7 +182,7 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
             noQuestionsText={
               value && !feedbackTargetsIsLoading ? t('editFeedbackTarget:copyFromCourseNoQuestions') : ''
             }
-            chooseCourseText={!value && !userCreated ? t('editFeedbackTarget:copyFromCourseChooseCourse') : ''}
+            chooseCourseText={!value ? t('editFeedbackTarget:copyFromCourseChooseCourse') : ''}
           />
         )}
         {userCreated &&
