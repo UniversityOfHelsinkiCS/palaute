@@ -45,17 +45,17 @@ const update = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
   const survey = await Survey.findByPk(Number(req.params.id))
 
-  if (!survey) ApplicationError.NotFound('Survey not found')
+  if (!survey) throw ApplicationError.NotFound('Survey not found')
 
-  if (survey.type === 'feedbackTarget') ApplicationError.Forbidden('Wrong endpoint to update fbt survey')
+  if (survey.type === 'feedbackTarget') throw ApplicationError.Forbidden('Wrong endpoint to update fbt survey')
 
   const isUniversitySurvey = survey.type === 'university'
 
-  if (isUniversitySurvey && !user.isAdmin) ApplicationError.Forbidden('Only admins can update university survey')
+  if (isUniversitySurvey && !user.isAdmin) throw ApplicationError.Forbidden('Only admins can update university survey')
 
   if (survey.type === 'programme') {
     const writeAccess = await checkUserWriteAccess(survey, user)
-    if (!writeAccess) ApplicationError.Forbidden('User does not have write access to this survey')
+    if (!writeAccess) throw ApplicationError.Forbidden('User does not have write access to this survey')
   }
 
   const { questions } = req.body

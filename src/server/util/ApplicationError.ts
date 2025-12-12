@@ -25,36 +25,36 @@ export class ApplicationError extends Error {
   /**
    *
    * @param {string} msg
-   * @throws {ApplicationError}
+   * @returns {ApplicationError}
    */
   static NotFound(msg = 'Not found') {
-    throw new ApplicationError(msg, 404)
+    return new ApplicationError(msg, 404)
   }
 
   /**
    *
    * @param {string} msg
-   * @throws {ApplicationError}
+   * @returns {ApplicationError}
    */
   static Forbidden(msg = 'Forbidden') {
-    throw new ApplicationError(msg, 403)
+    return new ApplicationError(msg, 403)
   }
 
   /**
    *
    * @param {string} msg
-   * @throws {ApplicationError}
+   * @returns {ApplicationError}
    */
   static Conflict(msg = 'Conflict') {
-    throw new ApplicationError(msg, 409)
+    return new ApplicationError(msg, 409)
   }
 
   /**
    *
    * @param {string} msg
-   * @throws {ApplicationError}
+   * @returns {ApplicationError}
    */
   static BadRequest(msg = 'Bad request') {
-    throw new ApplicationError(msg, 400)
+    return new ApplicationError(msg, 400)
   }
 }

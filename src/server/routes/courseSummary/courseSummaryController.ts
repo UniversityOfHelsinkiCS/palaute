@@ -88,8 +88,7 @@ const getOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
   if (!entityId || typeof entityId !== 'string') {
-    ApplicationError.BadRequest('Missing entityId')
-    return
+    throw ApplicationError.BadRequest('Missing entityId')
   }
 
   const { startDate, endDate } = parseDates(startDateString, endDateString)
@@ -161,7 +160,7 @@ const getByCourseUnit = async (req: AuthenticatedRequest, res: Response) => {
   })
 
   if (!courseUnits?.length) {
-    ApplicationError.NotFound(`Course unit with code ${acualCode} not found`)
+    throw ApplicationError.NotFound(`Course unit with code ${acualCode} not found`)
   }
 
   const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([

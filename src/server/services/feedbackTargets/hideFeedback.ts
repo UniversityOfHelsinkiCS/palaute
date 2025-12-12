@@ -24,7 +24,7 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
     user,
   })
   if (!access?.canHideFeedback())
-    return ApplicationError.Forbidden('Must be responsible teacher, organisation admin or admin')
+    throw ApplicationError.Forbidden('Must be responsible teacher, organisation admin or admin')
 
   const allFeedbacks = await Feedback.findAll({
     include: {
@@ -54,7 +54,7 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
     .filter(({ updated }) => updated)
     .map(({ feedback }) => feedback)
 
-  if (feedbacksToUpdate.length === 0) return ApplicationError.BadRequest('Matching feedback not found')
+  if (feedbacksToUpdate.length === 0) throw ApplicationError.BadRequest('Matching feedback not found')
 
   await sequelize.transaction(async transaction => {
     await feedbackTarget.increment(
@@ -87,7 +87,7 @@ const adminDeleteFeedback = async ({
     feedbackTargetId,
     user,
   })
-  if (!access?.canAdminDeleteFeedback()) return ApplicationError.Forbidden('Must be admin')
+  if (!access?.canAdminDeleteFeedback()) throw ApplicationError.Forbidden('Must be admin')
 
   const allFeedbacks = await Feedback.findAll({
     include: {
@@ -117,7 +117,7 @@ const adminDeleteFeedback = async ({
     .filter(({ updated }) => updated)
     .map(({ feedback }) => feedback)
 
-  if (feedbacksToUpdate.length === 0) return ApplicationError.BadRequest('Matching feedback not found')
+  if (feedbacksToUpdate.length === 0) throw ApplicationError.BadRequest('Matching feedback not found')
 
   for (const feedback of feedbacksToUpdate) {
     await feedback.save()

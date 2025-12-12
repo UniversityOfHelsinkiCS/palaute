@@ -132,7 +132,7 @@ const getFeedbacks = async (id: number, user: User, groupId?: string) => {
     getAdditionalDataFromCacheOrDb(id),
   ])
 
-  if (!feedbackTarget) ApplicationError.NotFound()
+  if (!feedbackTarget) throw ApplicationError.NotFound()
 
   const { publicQuestionIds, surveys, questions } = additionalData
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget

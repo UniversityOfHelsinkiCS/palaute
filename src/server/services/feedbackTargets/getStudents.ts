@@ -73,7 +73,7 @@ interface GetStudentsParams {
 const getStudents = async ({ feedbackTargetId, user }: GetStudentsParams) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
-  if (!access?.canSeeStudents()) ApplicationError.Forbidden()
+  if (!access?.canSeeStudents()) throw ApplicationError.Forbidden()
 
   const studentListVisible = await getStudentListVisibility(feedbackTarget.courseUnitId)
 

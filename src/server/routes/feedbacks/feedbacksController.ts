@@ -23,9 +23,9 @@ const create = async (req: AuthenticatedRequest, res: Response) => {
 
   const feedbackCanBeGiven = await feedbackTarget.feedbackCanBeGiven()
 
-  if (!feedbackCanBeGiven) ApplicationError.Forbidden('Feedback is not open')
+  if (!feedbackCanBeGiven) throw ApplicationError.Forbidden('Feedback is not open')
 
-  if (!access?.canGiveFeedback() || !userFeedbackTarget) ApplicationError.Forbidden('Not an enrolled student')
+  if (!access?.canGiveFeedback() || !userFeedbackTarget) throw ApplicationError.Forbidden('Not an enrolled student')
 
   if (userFeedbackTarget.feedbackId)
     throw new ApplicationError('Attempt to create new feedback where one already exists. Use PUT to update the old')
@@ -59,7 +59,7 @@ const create = async (req: AuthenticatedRequest, res: Response) => {
 
 const getFeedbackForUser = async (req: AuthenticatedRequest) => {
   const feedback = await Feedback.findByPk(Number(req.params.id))
-  if (!feedback) ApplicationError.NotFound()
+  if (!feedback) throw ApplicationError.NotFound()
 
   const feedbackTarget = await UserFeedbackTarget.findOne({
     where: {
@@ -68,7 +68,7 @@ const getFeedbackForUser = async (req: AuthenticatedRequest) => {
     },
   })
 
-  if (!feedbackTarget) ApplicationError.Forbidden()
+  if (!feedbackTarget) throw ApplicationError.Forbidden()
 
   return feedback
 }
@@ -90,11 +90,11 @@ const update = async (req: AuthenticatedRequest, res: Response) => {
     },
   })
 
-  if (!userFeedbackTarget) ApplicationError.NotFound()
+  if (!userFeedbackTarget) throw ApplicationError.NotFound()
 
   const feedbackTarget = await FeedbackTarget.findByPk(userFeedbackTarget.feedbackTargetId)
 
-  if (!feedbackTarget) ApplicationError.NotFound()
+  if (!feedbackTarget) throw ApplicationError.NotFound()
 
   if (!feedbackTarget.isOpen()) throw new ApplicationError('Feedback is not open', 403)
 

@@ -13,7 +13,7 @@ export const redirectFromCoursesPage = async (req: Request, res: Response) => {
   })
 
   if (!feedbackTarget) {
-    ApplicationError.NotFound(`Feedback target not found for course realisation ID: ${courseId}`)
+    throw ApplicationError.NotFound(`Feedback target not found for course realisation ID: ${courseId}`)
   }
 
   res.redirect(301, `/targets/${feedbackTarget.id}/feedback`)

@@ -505,7 +505,7 @@ const updateBanner = async (req: AuthenticatedRequest, res: Response) => {
   const { body } = req
 
   const banner = await Banner.findByPk(id)
-  if (!banner) ApplicationError.NotFound('bannerino no existo')
+  if (!banner) throw ApplicationError.NotFound('bannerino no existo')
   banner.data = body.data
   banner.accessGroup = body.accessGroup ?? body.accessGroup
   banner.startDate = new Date(body.startDate)

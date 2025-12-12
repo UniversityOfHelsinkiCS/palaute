@@ -14,7 +14,7 @@ interface GetStudentTokensParams {
 const getStudentTokens = async ({ feedbackTargetId, user }: GetStudentTokensParams) => {
   const { access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
-  if (!access?.canSeeTokens()) ApplicationError.Forbidden()
+  if (!access?.canSeeTokens()) throw ApplicationError.Forbidden()
 
   const userFeedbackTargets = await UserFeedbackTarget.findAll({
     where: {

@@ -142,7 +142,7 @@ interface GetByOrganisationParams {
 const getByOrganisation = async ({ organisationCode, startDate, endDate, user }: GetByOrganisationParams) => {
   const organisationAccess = await user.organisationAccess
 
-  if (!organisationAccess[organisationCode]?.read) ApplicationError.Forbidden()
+  if (!organisationAccess[organisationCode]?.read) throw ApplicationError.Forbidden()
 
   const start = startDate ? new Date(startDate) : new Date()
   const end = endDate ? new Date(endDate) : addMonths(start, 12)

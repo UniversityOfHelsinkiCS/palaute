@@ -60,13 +60,13 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds: number[], questions: 
 
 const validateGroupingQuestions = (questions: any[]) => {
   const tooManyGroupingQuestions = _.countBy(questions, 'secondaryType').GROUPING > 1
-  if (tooManyGroupingQuestions) ApplicationError.BadRequest('Maximum of one grouping question is allowed')
+  if (tooManyGroupingQuestions) throw ApplicationError.BadRequest('Maximum of one grouping question is allowed')
 
   const illegalGroupingQuestion = questions.some(
     q => q.secondaryType === 'GROUPING' && !['SINGLE_CHOICE', 'MULTIPLE_CHOICE'].includes(q.type)
   )
   if (illegalGroupingQuestion)
-    ApplicationError.BadRequest('Only single choice and multiple choice may be grouping questions')
+    throw ApplicationError.BadRequest('Only single choice and multiple choice may be grouping questions')
 }
 
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions: any[]) => {
@@ -104,7 +104,7 @@ const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId
       feedbackTargetId: feedbackTarget.id,
     },
   })
-  if (!survey) ApplicationError.NotFound('Survey not found')
+  if (!survey) throw ApplicationError.NotFound('Survey not found')
   const oldIds = survey.questionIds
   survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(questions)
   // assuming there is only 1 new. Find whether its going to be public, and update publicQuestionIds
@@ -136,7 +136,7 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canUpdate()) {
-    ApplicationError.Forbidden('No rights to update feedback target')
+    throw ApplicationError.Forbidden('No rights to update feedback target')
   }
 
   const updates = parseUpdates(body)
@@ -144,7 +144,7 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
-      ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
+      throw ApplicationError.BadRequest('ClosesAt cannot be before opensAt')
     }
     updates.feedbackDatesEditedByTeacher = true
 
@@ -186,7 +186,7 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
   }
 
   if (!feedbackTarget.userCreated && updates.tokenEnrolmentEnabled) {
-    ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
+    throw ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
   }
 
   await createFeedbackTargetLog(feedbackTarget, updates, user)

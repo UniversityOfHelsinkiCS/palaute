@@ -18,7 +18,7 @@ export const notGivingFeedback = async ({ feedbackTargetId, user }: NotGivingFee
   })
 
   if (userFeedbackTargets.length === 0 || userFeedbackTargets.length > 1) {
-    return ApplicationError.BadRequest('Matching userFeedbackTarget not found')
+    throw ApplicationError.BadRequest('Matching userFeedbackTarget not found')
   }
 
   const userFeedbackTarget = userFeedbackTargets[0]

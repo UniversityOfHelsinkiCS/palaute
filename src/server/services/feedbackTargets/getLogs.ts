@@ -15,7 +15,7 @@ const getLogs = async ({ feedbackTargetId, user }: GetLogsParams) => {
   })
 
   if (!access?.canSeeLogs()) {
-    ApplicationError.Forbidden()
+    throw ApplicationError.Forbidden()
   }
 
   const logs = await FeedbackTargetLog.findAll({

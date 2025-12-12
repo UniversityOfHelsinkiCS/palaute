@@ -17,7 +17,7 @@ const remindStudentsOnFeedback = async ({ feedbackTargetId, reminderText, course
     user,
   })
 
-  if (!access?.canSendReminderEmail()) ApplicationError.Forbidden('Not allowed to send reminder')
+  if (!access?.canSendReminderEmail()) throw ApplicationError.Forbidden('Not allowed to send reminder')
 
   await mailer.sendFeedbackReminderToStudents(feedbackTarget, reminderText, courseName)
 

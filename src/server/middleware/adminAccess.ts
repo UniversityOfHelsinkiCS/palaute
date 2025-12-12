@@ -7,7 +7,7 @@ const adminAccess = (req: AuthenticatedRequest, _res: Response, next: NextFuncti
     return next()
   }
 
-  return ApplicationError.Forbidden()
+  throw ApplicationError.Forbidden()
 }
 
 export { adminAccess }

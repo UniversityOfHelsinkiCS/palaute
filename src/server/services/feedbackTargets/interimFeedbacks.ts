@@ -26,7 +26,7 @@ const getInterimFeedbackParentFbt = async (interimFbtId: number | string, user: 
     user,
   })
 
-  if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
+  if (!access?.canSeePublicFeedbacks()) throw ApplicationError.Forbidden()
 
   const parentFeedbackTarget = await FeedbackTarget.findOne({
     where: {
@@ -90,7 +90,7 @@ const getInterimFeedbackTargets = async (parentId: number | string, user: UserTy
     user,
   })
 
-  if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
+  if (!access?.canSeePublicFeedbacks()) throw ApplicationError.Forbidden()
 
   if (!parentFbt) throw new Error('Parent feedback target not found')
 
@@ -168,7 +168,7 @@ const createInterimFeedbackTarget = async (
     user,
   })
 
-  if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
+  if (!access?.canCreateInterimFeedback()) throw ApplicationError.Forbidden()
 
   if (!parentFbt) throw new Error('Parent feedback target not found')
 
@@ -198,7 +198,7 @@ const updateInterimFeedbackTarget = async (fbtId: number | string, user: UserTyp
     user,
   })
 
-  if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
+  if (!access?.canCreateInterimFeedback()) throw ApplicationError.Forbidden()
 
   const { startDate, endDate } = formatActivityPeriod(updates) ?? (feedbackTarget as any)
 
@@ -221,7 +221,7 @@ const removeInterimFeedbackTarget = async (fbtId: number | string, user: UserTyp
     user,
   })
 
-  if (!access?.canCreateInterimFeedback()) ApplicationError.Forbidden()
+  if (!access?.canCreateInterimFeedback()) throw ApplicationError.Forbidden()
 
   try {
     logger.info(`Deleting interim feedback ${feedbackTarget.id}`)

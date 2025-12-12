@@ -41,7 +41,7 @@ const withOrganisationAccessCheck =
     )
 
     if (!universityWideAccess && !organisationIds.includes(params.organisationId)) {
-      ApplicationError.Forbidden(`User does not have access to organisation with id ${params.organisationId}`)
+      throw ApplicationError.Forbidden(`User does not have access to organisation with id ${params.organisationId}`)
     }
 
     params.accessibleOrganisationIds = organisationIds

@@ -29,7 +29,7 @@ const getFeedbackTargetContext = async ({ feedbackTargetId, user }: GetFeedbackT
     ],
   })
 
-  if (!feedbackTarget) ApplicationError.NotFound(`FeedbackTarget with id ${feedbackTargetId} not found`)
+  if (!feedbackTarget) throw ApplicationError.NotFound(`FeedbackTarget with id ${feedbackTargetId} not found`)
 
   const userFeedbackTarget = feedbackTarget.userFeedbackTargets ? feedbackTarget.userFeedbackTargets[0] : null
 

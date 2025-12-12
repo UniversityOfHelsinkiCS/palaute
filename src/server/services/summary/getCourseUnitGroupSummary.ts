@@ -34,7 +34,7 @@ export const getCourseUnitGroupSummaries = async ({
 
   // Early exit for students, "DOS prevention" :D
   if (Object.keys(orgAccess).length === 0 && accessibleCurIds.length === 0)
-    return ApplicationError.Forbidden('No access')
+    throw ApplicationError.Forbidden('No access')
 
   const courseUnits = await CourseUnit.findAll({
     where: {
@@ -111,7 +111,7 @@ export const getCourseUnitGroupSummaries = async ({
   if (!user.isAdmin && !hasOrgAccess) {
     const hasCurAccess = feedbackTargets.some(fbt => accessibleCurIds.includes(fbt.courseRealisation.id))
     if (!hasCurAccess) {
-      return ApplicationError.Forbidden('No access')
+      throw ApplicationError.Forbidden('No access')
     }
   }
 

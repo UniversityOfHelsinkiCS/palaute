@@ -217,7 +217,7 @@ export const exportXLSX = async ({
   const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
 
   if (organisationId && !accessibleOrganisationIds.includes(organisationId)) {
-    ApplicationError.Forbidden('User does not have access to the organisation')
+    throw ApplicationError.Forbidden('User does not have access to the organisation')
   }
 
   const t = i18n.getFixedT(user.language)

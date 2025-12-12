@@ -15,7 +15,7 @@ const getStudentContinuousFeedbacks = async (user: any, feedbackTargetId: number
     },
   })
 
-  if (!userFeedbackTarget) ApplicationError.Forbidden()
+  if (!userFeedbackTarget) throw ApplicationError.Forbidden()
 
   const continuousFeedbacks = await ContinuousFeedback.findAll({
     where: {
@@ -64,15 +64,16 @@ const submitFeedback = async (req: AuthenticatedRequest, res: Response) => {
     user,
   })
 
-  if (!access?.canGiveContinuousFeedback()) ApplicationError.Forbidden('User not allowed to give continuous feedback')
+  if (!access?.canGiveContinuousFeedback())
+    throw ApplicationError.Forbidden('User not allowed to give continuous feedback')
 
   const { continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail: sendInDigestEmail } = feedbackTarget
 
-  if (!continuousFeedbackEnabled) ApplicationError.Forbidden('Continuous feedback is disabled')
+  if (!continuousFeedbackEnabled) throw ApplicationError.Forbidden('Continuous feedback is disabled')
 
   const continuousFeedbackIsOver = (await feedbackTarget.feedbackCanBeGiven()) || feedbackTarget.isEnded()
 
-  if (continuousFeedbackIsOver) ApplicationError.Forbidden('Continuous feedback is closed')
+  if (continuousFeedbackIsOver) throw ApplicationError.Forbidden('Continuous feedback is closed')
 
   const newFeedback = await ContinuousFeedback.create({
     data: feedback,
@@ -96,7 +97,7 @@ const respondToFeedback = async (req: AuthenticatedRequest, res: Response) => {
     user,
   })
 
-  if (!access?.canRespondToContinuousFeedback()) ApplicationError.Forbidden()
+  if (!access?.canRespondToContinuousFeedback()) throw ApplicationError.Forbidden()
 
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId)
 
@@ -126,7 +127,7 @@ const deleteFeedback = async (req: AuthenticatedRequest, res: Response) => {
     user,
   })
 
-  if (!access?.canAdminDeleteFeedback()) ApplicationError.Forbidden()
+  if (!access?.canAdminDeleteFeedback()) throw ApplicationError.Forbidden()
 
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId)
 

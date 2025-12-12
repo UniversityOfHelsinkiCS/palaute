@@ -33,7 +33,7 @@ const getOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) =
     user,
   })
 
-  if (!access?.canSeePublicFeedbacks()) ApplicationError.Forbidden()
+  if (!access?.canSeePublicFeedbacks()) throw ApplicationError.Forbidden()
 
   const survey = await getSurveyById(feedbackTarget.id)
 
@@ -74,7 +74,7 @@ const createOrganisationSurvey = async (req: AuthenticatedRequest, res: Response
     admin: true,
   })
 
-  if (!hasAdminAccess) ApplicationError.Forbidden('Only organisation admins can create organisation surveys')
+  if (!hasAdminAccess) throw ApplicationError.Forbidden('Only organisation admins can create organisation surveys')
 
   const studentDataFromCourseIds = await getOrganisationSurveyCourseStudents(courseRealisationIds)
 
@@ -124,9 +124,11 @@ const editOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) 
     user,
   })
 
-  if (!access?.canUpdateOrganisationSurvey()) ApplicationError.Forbidden('Not allowed to update organisation survey')
+  if (!access?.canUpdateOrganisationSurvey())
+    throw ApplicationError.Forbidden('Not allowed to update organisation survey')
 
-  if (!feedbackTarget.userCreated) ApplicationError.BadRequest(`Feedback target ${id} is not an organisation survey`)
+  if (!feedbackTarget.userCreated)
+    throw ApplicationError.BadRequest(`Feedback target ${id} is not an organisation survey`)
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
 
@@ -159,19 +161,20 @@ const removeOrganisationSurvey = async (req: AuthenticatedRequest, res: Response
     admin: true,
   })
 
-  if (!hasAdminAccess) ApplicationError.Forbidden('Only organisation admins can remove organisation surveys')
+  if (!hasAdminAccess) throw ApplicationError.Forbidden('Only organisation admins can remove organisation surveys')
 
   const { feedbackTarget } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
   })
 
-  if (!feedbackTarget.userCreated) ApplicationError.BadRequest(`Feedback target ${id} is not an organisation survey`)
+  if (!feedbackTarget.userCreated)
+    throw ApplicationError.BadRequest(`Feedback target ${id} is not an organisation survey`)
 
   const allowDelete = await getDeletionAllowed(feedbackTargetId)
 
   if (!hasAdminAccess && !allowDelete)
-    ApplicationError.Forbidden('Can not delete orgnanisation survey when feedbacks are given')
+    throw ApplicationError.Forbidden('Can not delete orgnanisation survey when feedbacks are given')
 
   await deleteOrganisationSurvey(feedbackTargetId)
 

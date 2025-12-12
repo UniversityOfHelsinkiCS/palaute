@@ -129,7 +129,7 @@ const updateCourseUnitTags = async (req: AuthenticatedRequest, res: Response) =>
     include: { model: Organisation, as: 'organisations', where: { code }, include: [{ model: Tag, as: 'tags' }] },
   })
   if (courseUnits.length === 0) {
-    ApplicationError.NotFound()
+    throw ApplicationError.NotFound()
   }
 
   const organisation = courseUnits[0].organisations[0] // there can be only one, becoz code in the where param

@@ -20,10 +20,10 @@ interface GetEnrolmentTokenParams {
 const getEnrolmentToken = async ({ feedbackTargetId, user }: GetEnrolmentTokenParams) => {
   const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
-  if (!access?.canSeeTokens()) ApplicationError.Forbidden()
+  if (!access?.canSeeTokens()) throw ApplicationError.Forbidden()
 
   if (!feedbackTarget.userCreated)
-    ApplicationError.Forbidden('Only userCreated feedbackTargets can have enrolment tokens')
+    throw ApplicationError.Forbidden('Only userCreated feedbackTargets can have enrolment tokens')
 
   return jwt.sign({ feedbackTargetId }, JWT_KEY)
 }

@@ -16,14 +16,14 @@ const enrollByToken = async ({ user, token }: EnrollByTokenParams) => {
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!feedbackTarget.userCreated)
-    return ApplicationError.Forbidden('Only userCreated feedbackTargets can be enrolled to by token')
+    throw ApplicationError.Forbidden('Only userCreated feedbackTargets can be enrolled to by token')
 
   if (!feedbackTarget.tokenEnrolmentEnabled)
-    return ApplicationError.Forbidden('Token enrolment not enabled for this feedback target')
+    throw ApplicationError.Forbidden('Token enrolment not enabled for this feedback target')
 
   if (userFeedbackTarget) {
-    if (userFeedbackTarget.accessStatus === 'STUDENT') return ApplicationError.Conflict('User already enrolled')
-    return ApplicationError.Conflict('User already is staff on this course')
+    if (userFeedbackTarget.accessStatus === 'STUDENT') throw ApplicationError.Conflict('User already enrolled')
+    throw ApplicationError.Conflict('User already is staff on this course')
   }
 
   const newUserFeedbackTarget = await UserFeedbackTarget.create({

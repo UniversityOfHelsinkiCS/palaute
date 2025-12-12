@@ -71,5 +71,5 @@ export const getUserOrganisationSummaries = async ({
     return rootOrganisations
   }
 
-  return ApplicationError.BadRequest(`Invalid viewing mode ${viewingMode}`)
+  throw ApplicationError.BadRequest(`Invalid viewing mode ${viewingMode}`)
 }

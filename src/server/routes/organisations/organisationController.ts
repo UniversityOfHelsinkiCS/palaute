@@ -89,7 +89,7 @@ const updateOrganisation = async (req: AuthenticatedRequest, res: Response) => {
   ])
 
   if (!hasAdminAccess && (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)) {
-    ApplicationError.Forbidden('Course codes can only be updated by organisation admins')
+    throw ApplicationError.Forbidden('Course codes can only be updated by organisation admins')
   }
 
   if (updates.disabledCourseCodes) {
@@ -154,7 +154,7 @@ const getOrganisationLogs = async (req: AuthenticatedRequest, res: Response) => 
   const { code } = req.params
 
   if (!user.isAdmin) {
-    ApplicationError.Forbidden()
+    throw ApplicationError.Forbidden()
   }
 
   const { organisationLogs } = await Organisation.findOne({
@@ -188,7 +188,7 @@ const getOpenQuestionsByOrganisation = async (req: AuthenticatedRequest, res: Re
   const access = organisationAccess.filter(org => org.organisation.code === code)
 
   if (access.length === 0) {
-    ApplicationError.Forbidden()
+    throw ApplicationError.Forbidden()
   }
 
   const codesWithIds = await getOpenFeedbackByOrganisation(code)
@@ -212,7 +212,7 @@ router.get(
     const access = organisationAccess.filter(org => org.organisation.code === code)
 
     if (access.length === 0) {
-      ApplicationError.Forbidden()
+      throw ApplicationError.Forbidden()
     }
 
     const activityPeriod = formatActivityPeriod(req.query)

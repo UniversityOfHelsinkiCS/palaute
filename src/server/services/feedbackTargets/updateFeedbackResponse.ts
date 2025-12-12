@@ -22,7 +22,7 @@ export const updateFeedbackResponse = async ({
   const { feedbackTarget, access } = (await getFeedbackTargetContext({ feedbackTargetId, user })) as any // @TODO fix
 
   if (!access?.canUpdateResponse()) {
-    ApplicationError.Forbidden('No rights to update feedback response')
+    throw ApplicationError.Forbidden('No rights to update feedback response')
   }
 
   if (sendEmail && feedbackTarget.feedbackResponseEmailSent) {

@@ -16,7 +16,7 @@ const deleteTeacher = async ({ feedbackTargetId, teacherId, user }: DeleteTeache
     user,
   })
 
-  if (!access?.canDeleteTeacher()) ApplicationError.Forbidden()
+  if (!access?.canDeleteTeacher()) throw ApplicationError.Forbidden()
 
   const userFeedbackTargetToDelete = await UserFeedbackTarget.findOne({
     where: {
@@ -26,7 +26,7 @@ const deleteTeacher = async ({ feedbackTargetId, teacherId, user }: DeleteTeache
   })
 
   if (!userFeedbackTargetToDelete) {
-    ApplicationError.NotFound(`Teacher ${teacherId} not found on target ${feedbackTargetId}`)
+    throw ApplicationError.NotFound(`Teacher ${teacherId} not found on target ${feedbackTargetId}`)
   }
 
   await userFeedbackTargetToDelete.destroy()

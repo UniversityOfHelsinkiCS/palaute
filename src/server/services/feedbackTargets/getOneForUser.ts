@@ -117,7 +117,7 @@ const getFromDb = async (id: number | string) => {
       },
     ],
   })
-  if (!fbt) ApplicationError.NotFound(`FeedbackTarget ${id} doesn't exist`)
+  if (!fbt) throw ApplicationError.NotFound(`FeedbackTarget ${id} doesn't exist`)
 
   fbt.set(
     'administrativePersons',
