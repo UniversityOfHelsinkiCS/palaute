@@ -9,6 +9,10 @@ interface FeedbackData {
   data: string
 }
 
+interface CourseUnitWithExtra extends CourseUnit {
+  course_code: string
+}
+
 interface FeedbackWithExtra extends Feedback {
   course_code: string
   feedback_target_id: number
@@ -45,7 +49,7 @@ const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRe
 
   const questions = [...universitySurvey.questions, ...programmeQuestions].filter(q => q.type === 'OPEN')
 
-  const courseCodes = await sequelize.query<CourseUnit>(
+  const courseCodes = await sequelize.query<CourseUnitWithExtra>(
     `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O 
     WHERE C.id = CO.course_unit_id AND CO.organisation_id = O.id AND O.code = :code`,
     {
@@ -64,7 +68,7 @@ const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRe
     WHERE F.id = UFT.feedback_id AND UFT.feedback_target_id = FT.id AND FT.course_unit_id = C.id AND FT.course_realisation_id = CR.id AND C.course_code IN (:codes)`,
     {
       replacements: {
-        codes: courseCodes.map(({ courseCode }) => courseCode),
+        codes: courseCodes.map(({ course_code }) => course_code),
       },
       type: QueryTypes.SELECT,
     }
@@ -82,8 +86,8 @@ const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRe
     }
   })
 
-  const codesWithIds = courseCodes.map(({ courseCode, name }) => {
-    const feedbacks = feedbacksByCourseCode[courseCode] || []
+  const codesWithIds = courseCodes.map(({ course_code, name }) => {
+    const feedbacks = feedbacksByCourseCode[course_code] || []
 
     const feedbacksByTargetId: { [key: number]: FeedbackWithExtra[] } = {}
     const feedbackTargetIds = new Set<number>()
@@ -119,7 +123,7 @@ const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRe
     })
 
     return {
-      code: courseCode,
+      code: course_code,
       name,
       realisations,
     }
