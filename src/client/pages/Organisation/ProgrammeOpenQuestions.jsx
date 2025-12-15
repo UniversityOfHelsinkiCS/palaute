@@ -1,5 +1,5 @@
 import React, { useState, useRef, forwardRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, Link as RouterLink } from 'react-router-dom'
 import { Box, Typography, Divider, Link } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
@@ -63,7 +63,7 @@ const RealisationItem = ({ realisation, language }) => {
 
   return (
     <Box key={realisation.id} sx={styles.realisationContainer}>
-      <Link href={url} style={styles.realisationTitle} replace>
+      <Link to={url} style={styles.realisationTitle} component={RouterLink}>
         {realisation.name[language]}
       </Link>
       <Typography variant="body2" component="p" sx={styles.dates}>
@@ -104,9 +104,9 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
         <Box key={course.code} mb="4rem">
           <Typography component="h6" variant="h6">
             <Link
-              href={`/course-summary/course-unit/${getSafeCourseCode({ courseCode: course.code })}`}
+              to={`/course-summary/course-unit/${getSafeCourseCode({ courseCode: course.code })}`}
               style={styles.courseTitle}
-              replace
+              component={RouterLink}
             >
               {`${course.code} - ${course.name[language]}`}
             </Link>
