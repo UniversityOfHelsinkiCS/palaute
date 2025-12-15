@@ -60,9 +60,9 @@ const AccessTable = ({ access }) => {
             return (
               <TableRow key={id}>
                 <TableCell>{`${firstName} ${lastName}`}</TableCell>
-                <TableCell>{read ? 'true' : 'false'}</TableCell>
-                <TableCell>{write ? 'true' : 'false'}</TableCell>
-                <TableCell>{admin ? 'true' : 'false'}</TableCell>
+                <TableCell>{read ? '👌' : '-'}</TableCell>
+                <TableCell>{write ? '👍' : '-'}</TableCell>
+                <TableCell>{admin ? '👏' : '-'}</TableCell>
                 <TableCell>
                   {lastLoggedIn ? format(Date.parse(lastLoggedIn), 'dd/MM/yyyy HH.mm') : 'Not since 10.6.22'}
                 </TableCell>
