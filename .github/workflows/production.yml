@@ -57,7 +57,7 @@ jobs:
         run: docker cp palaute:/opt/app-root/src/build ./build
 
       - name: Create Sentry release
-        uses: getsentry/action-release@v1
+        uses: getsentry/action-release@v3
         env:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}
