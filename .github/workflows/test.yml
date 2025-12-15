@@ -70,7 +70,7 @@ jobs:
           command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}"
 
       - name: Upload video
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
