@@ -15,7 +15,7 @@ services:
       - JAMI_PORT=3003
       - JWT_KEY=minttujam
       - NODE_CONFIG_ENV=hy
-      - UPDATER_URL=http://updater:3000
+      - UPDATER_URL=http://updater:3003
     ports:
       - 3000:3000
       - 9229:9229
@@ -61,22 +61,27 @@ services:
       - 5433:5432
     volumes:
       - jami_data:/data
-  # updater:
-  #  build:
-  #    context: ../norppa-updater
-  #    dockerfile: ../norppa-updater/dev.Dockerfile
-  #  image: updater-dev
-  #  volumes:
-  #    - ../norppa-updater:/usr/src/app
-  #  environment:
-  #    - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
-  #    - REDIS_HOST=redis
-  #  ports:
-  #    - 8000:3000
-  #  container_name: updater-dev
-
+#   updater:
+#    build:
+#      context: ../norppa-updater
+#      dockerfile: ../norppa-updater/dev.Dockerfile
+#    image: updater-dev
+#    volumes:
+#      - ../norppa-updater:/usr/src/app
+#    environment:
+#      - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres
+#      - REDIS_HOST=redis
+#      - JAMI_HOST=jami
+#      - JAMI_PORT=3003
+#    ports:
+#      - 8000:3003
+#    container_name: updater-dev
+#    networks:
+#       - shared_net
+#       - default
+# networks:
+#   shared_net:
+#     external: true
 volumes:
   pg_data:
   jami_data:
-
-  
