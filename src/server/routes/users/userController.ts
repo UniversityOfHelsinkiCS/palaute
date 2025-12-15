@@ -126,6 +126,14 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
   })
 })
 
+router.get('/users/access', async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user.isAdmin) throw ApplicationError.Forbidden('Forbidden')
+
+  const usersWithAccess = await getAllOrganisationAccess()
+
+  res.send(usersWithAccess)
+})
+
 router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
   const { id } = req.params
   if (id !== req.user.id && !req.user.isAdmin && !req.user.mockedBy?.isAdmin) {
@@ -143,14 +151,6 @@ router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
     iamGroups,
     access,
   })
-})
-
-router.get('/users/access', async (req: AuthenticatedRequest, res: Response) => {
-  if (!req.user.isAdmin) throw ApplicationError.Forbidden('Forbidden')
-
-  const usersWithAccess = await getAllOrganisationAccess()
-
-  res.send(usersWithAccess)
 })
 
 router.get('/logout', async (req: AuthenticatedRequest, res: Response) => {

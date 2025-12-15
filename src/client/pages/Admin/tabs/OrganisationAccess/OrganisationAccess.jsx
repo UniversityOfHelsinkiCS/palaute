@@ -104,17 +104,17 @@ const Access = () => {
 
   const { t } = useTranslation()
 
-  const { usersWithAccess, isLoading } = getAllUserAccess()
-  const { data, isLoading: dataIsLoading } = useOrganisationData()
+  const { usersWithAccess, isSuccess: usersWithAccessIsSuccess } = getAllUserAccess()
+  const { data, isSuccess: dataIsSuccess } = useOrganisationData()
 
   useEffect(() => {
-    if (isLoading || dataIsLoading) return
+    if (!usersWithAccessIsSuccess || !dataIsSuccess) return
 
     const programmeAccess = getProgrammeAccessByFaculty(usersWithAccess, facultyCode, data)
     setAccess(programmeAccess)
-  }, [facultyCode, isLoading])
+  }, [facultyCode, usersWithAccessIsSuccess, dataIsSuccess])
 
-  if (isLoading) return <LoadingProgress />
+  if (!usersWithAccessIsSuccess || !dataIsSuccess) return <LoadingProgress />
 
   const faculties = getFaculties(data || [])
 
