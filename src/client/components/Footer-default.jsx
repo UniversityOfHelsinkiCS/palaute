@@ -25,7 +25,7 @@ const styles = {
 const Footer = ({ user }) => {
   const { t, i18n } = useTranslation()
 
-  const uptime = formatDistanceToNow(Date.parse(user?.lastRestart) ?? Date.now(), {
+  const uptime = formatDistanceToNow(user?.lastRestart ? Date.parse(user?.lastRestart) : Date.now(), {
     locale: localeForLanguage(i18n.language),
   })
   const serverVersion = user?.serverVersion
