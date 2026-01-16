@@ -155,7 +155,7 @@
     "rimraf": "6.1.2",
     "stream-browserify": "3.0.0",
     "ts-node": "10.9.2",
-    "typescript": "^5.9.3",
+    "typescript": "5.9.3",
     "util": "0.12.5",
     "vite-plugin-eslint": "1.8.1"
   },
