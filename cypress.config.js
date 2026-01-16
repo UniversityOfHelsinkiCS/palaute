@@ -7,6 +7,7 @@ module.exports = defineConfig({
   viewportWidth: 1800,
   viewportHeight: 1200,
   defaultCommandTimeout: 10000,
+  pageLoadTimeout: 60000,
   video: true,
   e2e: {
     baseUrl: 'http://localhost:3000',
