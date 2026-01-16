@@ -56,7 +56,17 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
     translatedName
   )
 
-  const languagesString = teachingLanguages?.map(teachingLanguage => teachingLanguage[language]).join(', ')
+  const languageToFlag = language => {
+    const flags = {
+      fi: '🇫🇮 ',
+      sv: '🇸🇪 ',
+      en: '🇬🇧 ',
+    }
+
+    return flags[language] || language
+  }
+
+  const languagesString = teachingLanguages?.map(language => languageToFlag(language))
 
   const teachers = feedbackTarget.userFeedbackTargets
     .filter(ufbt => ufbt.accessStatus === 'TEACHER')
