@@ -14,8 +14,8 @@ jobs:
     needs: test
 
     steps:
-      - uses: actions/checkout@v4
-  
+      - uses: actions/checkout@v6
+
       - name: Build image
         id: build-image
         uses: redhat-actions/buildah-build@v2
@@ -32,7 +32,7 @@ jobs:
           # Extra args are needed to increase the number of open files
           # because of build EMFILE error: https://github.com/npm/cli/issues/4783#issuecomment-1908016260
           extra-args: |
-            --ulimit nofile=4096:4096 
+            --ulimit nofile=4096:4096
 
       - name: Push to quay.io
         uses: redhat-actions/push-to-registry@v2
@@ -48,7 +48,7 @@ jobs:
     needs: build-and-push
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Pull image and create a container
         run: docker create --name palaute quay.io/toska/norppa:production
@@ -57,7 +57,7 @@ jobs:
         run: docker cp palaute:/opt/app-root/src/build ./build
 
       - name: Create Sentry release
-        uses: getsentry/action-release@v1
+        uses: getsentry/action-release@v3
         env:
           SENTRY_URL: ${{ secrets.SENTRY_URL }}
           SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_TOKEN }}

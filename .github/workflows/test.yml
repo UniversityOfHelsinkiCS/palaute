@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build project for linting
         run: npm ci
       - name: Run eslint and ts checks
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Build project for translations
         run: npm ci
       - name: Analyse translations
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: npm ci
         run: npm ci --no-audit --no-fund
@@ -61,7 +61,6 @@ jobs:
       - name: Start the application
         run: docker compose -f docker-compose.ci.yml up -d
 
- 
       - name: Run cypress tests with retry
         uses: nick-fields/retry@v3
         with:
@@ -70,7 +69,7 @@ jobs:
           command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}"
 
       - name: Upload video
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
