@@ -56,18 +56,6 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
     translatedName
   )
 
-  const languageToFlag = language => {
-    const flags = {
-      fi: '🇫🇮 ',
-      sv: '🇸🇪 ',
-      en: '🇬🇧 ',
-    }
-
-    return flags[language] || language
-  }
-
-  const languagesString = teachingLanguages?.map(language => languageToFlag(language))
-
   const teachers = feedbackTarget.userFeedbackTargets
     .filter(ufbt => ufbt.accessStatus === 'TEACHER')
     .map(ufbt => ufbt.user)
@@ -88,9 +76,6 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
           {datePeriod}
         </Typography>
         <Box mr={2} />
-        <Typography color="textSecondary" variant="subtitle2">
-          {languagesString}
-        </Typography>
       </Box>
       <TeacherChips
         teachers={teachers}
