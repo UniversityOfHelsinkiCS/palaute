@@ -113,10 +113,21 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
   const [smallCourseDialogOpen, setSmallCourseDialogOpen] = useState(true)
 
-  const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher } = useFeedbackTargetContext()
-  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
+  const {
+    feedbackTarget,
+    isStudent,
+    isResponsibleTeacher,
+    isOrganisationAdmin,
+    isTeacher,
+    isLoading: feedbackTargetContextIsLoading,
+  } = useFeedbackTargetContext()
+  const hookIsEnabled = isStudent
+  const { continuousFeedbacks, isLoading: continuousFeedbackIsLoading } = useFeedbackTargetContinuousFeedbacks(
+    feedbackTarget.id,
+    hookIsEnabled
+  )
   const studentCount = feedbackTarget.summary?.data?.studentCount
-  const isLoading = !feedbackTarget || !continuousFeedbacks
+  const isLoading = feedbackTargetContextIsLoading || continuousFeedbackIsLoading
 
   if (isLoading) {
     return <LoadingProgress />

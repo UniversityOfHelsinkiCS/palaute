@@ -10,10 +10,12 @@ import EditFeedbackTargetDates from './EditFeedbackTarget'
 
 const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) => {
   const { t } = useTranslation()
-  const { feedbackTarget, isTeacher, isStudent } = useFeedbackTargetContext()
+  const { feedbackTarget, isTeacher, isStudent, isAdmin, isResponsibleTeacher, isOrganisationAdmin } =
+    useFeedbackTargetContext()
   const { id, courseRealisation, opensAt, closesAt, userCreated, continuousFeedbackEnabled, summary } = feedbackTarget
 
-  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
+  const hookIsEnabled = isStudent || isTeacher || isAdmin || isResponsibleTeacher || isOrganisationAdmin
+  const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id, hookIsEnabled)
 
   const feedbackCount = summary?.data?.feedbackCount ?? 0
   const studentCount = summary?.data?.studentCount ?? 0

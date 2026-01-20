@@ -1,7 +1,7 @@
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useFeedbackTargetContinuousFeedbacks = (targetId, options = {}) => {
+const useFeedbackTargetContinuousFeedbacks = (targetId, isEnabled = true) => {
   const queryKey = ['feedbackTargetContinuousFeedbacks', targetId]
 
   const queryFn = async () => {
@@ -13,8 +13,7 @@ const useFeedbackTargetContinuousFeedbacks = (targetId, options = {}) => {
   const { data: continuousFeedbacks, ...rest } = useQuery({
     queryKey,
     queryFn,
-    enabled: Boolean(targetId),
-    ...options,
+    enabled: Boolean(targetId) && isEnabled,
   })
 
   return { continuousFeedbacks, ...rest }
