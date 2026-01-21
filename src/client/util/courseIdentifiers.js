@@ -32,15 +32,16 @@ export const getPrimaryCourseName = (courseUnit, courseRealisation, feedbackTarg
   if (isOrganisationSurvey) return courseRealisation.name
   if (isInterimFeedback) return feedbackTarget.name
 
-  return courseUnit.name
+  return courseRealisation.name
 }
 
-export const getSecondaryCourseName = (courseRealisation, courseUnit, feedbackTarget) => {
+export const getSecondaryCourseName = (courseRealisation, courseUnit, feedbackTarget, language) => {
   const { isOrganisationSurvey, isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
 
-  if (isOrganisationSurvey || isInterimFeedback) return courseUnit.name
+  if (isOrganisationSurvey) return getLanguageValue(courseUnit.name, language)
+  if (isInterimFeedback) return getLanguageValue(courseRealisation.name, language)
 
-  return courseRealisation.name
+  return getCourseCode(courseUnit)
 }
 
 export const getSafeCourseCode = ({ courseCode, forUrl = true, safeString = '_' }) => {
