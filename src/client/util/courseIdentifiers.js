@@ -3,14 +3,14 @@ import { getLanguageValue } from './languageUtils'
 
 export const getCourseCode = ({ courseCode, userCreated }) => (userCreated || !courseCode ? '' : courseCode)
 
-export const getInterimFeedbackName = (feedbackTargetName, courseUnitName, t) => {
+export const getInterimFeedbackName = (feedbackTargetName, courseRealisationName, t) => {
   const interimFeedbackName = {}
 
   LANGUAGES.forEach(language => {
     const fbtName = getLanguageValue(feedbackTargetName, language)
-    const cuName = getLanguageValue(courseUnitName, language)
+    const curName = getLanguageValue(courseRealisationName, language)
 
-    interimFeedbackName[language] = `${cuName}, ${t('interimFeedback:interimFeedback')}: ${fbtName}`
+    interimFeedbackName[language] = `${curName}, ${t('interimFeedback:interimFeedback')}: ${fbtName}`
   })
 
   return interimFeedbackName

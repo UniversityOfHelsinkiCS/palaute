@@ -52,7 +52,7 @@ const ReminderEmailModal = ({ open, onClose, feedbackTarget }) => {
   const defaultMessageLanguage = getDefaultMessageLanguage({ teachingLanguages, userLanguage: i18n.language })
 
   const courseName = isInterimFeedback
-    ? getInterimFeedbackName(name, courseUnit.name, t)
+    ? getInterimFeedbackName(name, courseRealisation.name, t)
     : getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget)
   const lastSentAt = Date.parse(feedbackReminderLastSentAt)
   const disabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
