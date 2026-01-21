@@ -100,10 +100,7 @@ const GuestFeedbackTargetView = () => {
     getPrimaryCourseName(courseUnit, courseRealisation, feedbackTarget),
     i18n.language
   )
-  const secondaryCourseName = getLanguageValue(
-    getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget),
-    i18n.language
-  )
+  const secondaryCourseName = getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget, i18n.language)
 
   return (
     <>

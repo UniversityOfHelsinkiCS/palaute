@@ -8,7 +8,7 @@ import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getDateRangeString } from '../../util/getDateRangeString'
-import { getCourseCode, getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
+import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
 
 const ErrorDetails = ({ feedbackTargetId, message, response }) => {
@@ -36,20 +36,14 @@ const ErrorDetails = ({ feedbackTargetId, message, response }) => {
     i18n.language
   )
 
-  const secondaryCourseName = getLanguageValue(
-    getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget),
-    i18n.language
-  )
-
-  const courseCode = getCourseCode(courseUnit)
-  const visibleCourseCode = primaryCourseName.indexOf(courseCode) > -1 ? '' : courseCode
+  const secondaryCourseName = getSecondaryCourseName(courseRealisation, courseUnit, feedbackTarget, i18n.language)
 
   const unauthorizedMessage = () =>
     isOld
       ? 'feedbackTargetView:noAccessOldCourse'
       : isEnded
-      ? 'feedbackTargetView:noAccessEndedCourse'
-      : 'feedbackTargetView:noAccess'
+        ? 'feedbackTargetView:noAccessEndedCourse'
+        : 'feedbackTargetView:noAccess'
 
   return (
     <Box sx={{ mb: '2rem' }}>
@@ -65,9 +59,6 @@ const ErrorDetails = ({ feedbackTargetId, message, response }) => {
       >
         <Typography variant="h4" component="h1">
           {primaryCourseName}
-        </Typography>
-        <Typography component="h2" variant="h5" color="textSecondary">
-          {visibleCourseCode}
         </Typography>
       </Box>
 
