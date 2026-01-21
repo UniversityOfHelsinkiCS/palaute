@@ -71,6 +71,13 @@ const getCourseUnitSummaries = async ({
 
   const courseUnits = await CourseUnit.findAll({
     attributes: ['id', 'name', 'groupId', 'courseCode'],
+    where: {
+      validityPeriod: {
+        startDate: {
+          [Op.lt]: new Date(),
+        },
+      },
+    },
     include: [
       {
         model: CourseUnitsOrganisation,
