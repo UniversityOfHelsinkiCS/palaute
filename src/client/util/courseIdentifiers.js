@@ -27,9 +27,8 @@ export const getSurveyType = (courseUnit, feedbackTarget = {}) => {
 }
 
 export const getPrimaryCourseName = (courseUnit, courseRealisation, feedbackTarget) => {
-  const { isOrganisationSurvey, isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
+  const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
 
-  if (isOrganisationSurvey) return courseRealisation.name
   if (isInterimFeedback) return feedbackTarget.name
 
   return courseRealisation.name
