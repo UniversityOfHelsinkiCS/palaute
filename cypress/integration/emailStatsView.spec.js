@@ -23,7 +23,7 @@ describe('Admin email stats view', () => {
     cy.contains('Student emails TODAY: 0')
     cy.contains('Teacher emails TODAY: 1')
     cy.contains('Dear responsible teacher, welcome to the University of Helsinki Norppa course feedback system!')
-    cy.contains('Testauskurssi')
+    cy.contains('Test course realisation')
 
     // No custom questions:
     cy.contains('the following questions have been added to the survey:').should('not.exist')
@@ -55,7 +55,7 @@ describe('Admin email stats view', () => {
     cy.contains('Student emails TODAY: 0')
     cy.contains('Teacher emails TODAY: 1')
     cy.contains('Dear responsible teacher, welcome to the University of Helsinki Norppa course feedback system!')
-    cy.contains('Testauskurssi')
+    cy.contains('Test course realisation')
     cy.contains('the following questions have been added to the survey:')
     cy.contains('Minthu custom question')
     cy.contains('Soju custom question')
@@ -68,7 +68,7 @@ describe('Admin email stats view', () => {
     cy.contains('Student emails TODAY: 1')
     cy.contains('Teacher emails TODAY: 0')
     cy.contains('opiskelija@toska.fi')
-    cy.contains('now open: Testauskurssi')
+    cy.contains('now open: Test course realisation')
   })
   it('shows the email when feedback response reminder should be sent', () => {
     cy.loginAs(admin)
@@ -80,7 +80,7 @@ describe('Admin email stats view', () => {
     cy.contains('Student emails TODAY: 0')
     cy.contains(/Teacher emails TODAY: [^0]/)
     cy.contains('Tommi.testaaja@toska.fi')
-    cy.contains('has ended: Testauskurssi')
+    cy.contains('has ended: Testauskurssin toteutus')
   })
   it('allows to run email cronjob and result in success', () => {
     cy.loginAs(admin)
