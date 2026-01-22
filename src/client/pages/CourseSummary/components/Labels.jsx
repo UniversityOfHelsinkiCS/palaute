@@ -40,7 +40,7 @@ const TeacherChips = ({ teachers, responsibleTeachers, administrativePersons }) 
 }
 
 export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
-  const { startDate, endDate, name, teachingLanguages } = feedbackTarget.courseRealisation
+  const { startDate, endDate, name } = feedbackTarget.courseRealisation
 
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')

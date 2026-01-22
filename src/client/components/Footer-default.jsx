@@ -7,7 +7,7 @@ import { formatDistanceToNow } from 'date-fns/esm'
 
 import ExternalLink from './common/ExternalLink'
 
-import { GIT_SHA, images, inProduction, inStaging } from '../util/common'
+import { images, inProduction, inStaging } from '../util/common'
 
 import { localeForLanguage } from '../util/languageUtils'
 
