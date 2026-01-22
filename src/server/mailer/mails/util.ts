@@ -155,7 +155,7 @@ export const createRecipientsForFeedbackTargets = async (
             {
               id: feedbackTarget.id,
               userFeedbackTargetId: user.UserFeedbackTarget.id,
-              name: feedbackTarget.courseUnit.name,
+              name: feedbackTarget.courseRealisation.name,
               opensAt: feedbackTarget.opensAt,
               closesAt: feedbackTarget.closesAt,
               language: user.language,

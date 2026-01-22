@@ -50,7 +50,7 @@ export const sendFeedbackSummaryReminderToStudents = async (
   feedbackResponse: string
 ) => {
   const courseUnit = await feedbackTarget.getCourseUnit()
-  const cr = await feedbackTarget.getCourseRealisation()
+  const courseRealisation = await feedbackTarget.getCourseRealisation()
   const students = await feedbackTarget.getStudentsForFeedbackTarget()
   const url = `${PUBLIC_URL}/targets/${feedbackTarget.id}/results`
   const formattedStudents = students
@@ -62,9 +62,9 @@ export const sendFeedbackSummaryReminderToStudents = async (
   return sendNotificationAboutFeedbackResponseToStudents(
     url,
     formattedStudents,
-    feedbackTarget.userCreated ? feedbackTarget.name : courseUnit.name,
-    cr.startDate,
-    cr.endDate,
+    feedbackTarget.userCreated ? feedbackTarget.name : courseRealisation.name,
+    courseRealisation.startDate,
+    courseRealisation.endDate,
     feedbackResponse,
     feedbackTarget.userCreated,
     courseUnit.courseCode
