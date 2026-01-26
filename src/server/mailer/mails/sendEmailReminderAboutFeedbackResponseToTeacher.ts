@@ -78,9 +78,7 @@ export const emailReminderAboutFeedbackResponseToTeachers = (
 ) => {
   const { language } = teacher
   const { userCreated } = feedbackTarget
-  const courseName = userCreated
-    ? getLanguageValue(feedbackTarget.courseRealisation?.name, language)
-    : getLanguageValue(feedbackTarget.courseUnit?.name, language)
+  const courseName = getLanguageValue(feedbackTarget.courseRealisation?.name, language)
   const { courseCode } = feedbackTarget.courseUnit
 
   let courseNamesAndUrlsDisplayName = courseName
