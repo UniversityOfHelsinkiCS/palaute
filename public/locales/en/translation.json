@@ -552,7 +552,7 @@
     "surveyTab": "Programme questions",
     "organisationSurveysTab": "Programme surveys",
     "summaryTab": "Summary",
-    "courseRealisationsTab": "Course realisations",
+    "courseRealisationsTab": "Courses",
     "openQuestionsTab": "Open questions",
     "editProgrammeQuestionsDialogTitle": "Warning!",
     "editProgrammeQuestionsDialogContent": "You are editing the questions shared by the whole programme. These questions are visible for all the courses of the programme. Are you sure you want to edit these questions?",
@@ -585,7 +585,8 @@
     "showCurName": "Show course realisation names",
     "searchUser": "Email or name",
     "basedOnIam": "Managed by IAM-groups. Deletion in Norppa is only temporary, remove from IAM-group instead.",
-    "addedInNorppa": "Added in Norppa"
+    "addedInNorppa": "Added in Norppa",
+    "allCourseUnitRealisations": "All course unit realisations"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "This feedback is disabled",

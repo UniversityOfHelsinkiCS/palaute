@@ -9,7 +9,7 @@ const Tags = ({ organisation }) => {
 
   return (
     <Box>
-      <Typography textTransform="uppercase">
+      <Typography textTransform="uppercase" style={{ marginBottom: '10px' }}>
         {t('common:studyTracks')} ({tags.length})
       </Typography>
       <Card>

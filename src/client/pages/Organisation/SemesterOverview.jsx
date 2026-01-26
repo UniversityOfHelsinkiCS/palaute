@@ -39,6 +39,7 @@ import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { getYearRange } from '../../util/yearUtils'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const SelectionContext = React.createContext({})
 
@@ -374,24 +375,32 @@ const FeedbackTargetButton = React.memo(({ feedbackTarget, onClick, selected, sh
   )
 })
 
-const FeedbackTargetItem = ({ code, cuName, curName, tags, language, showCurName }) => (
-  <Box m="0.3rem" display="flex" flexDirection="column" alignItems="start">
-    <Box fontSize="16px" display="flex" alignItems="start" columnGap="0.5rem">
-      <Typography color="textSecondary">{code}</Typography>
-      <Typography fontWeight={400}>{getLanguageValue(cuName, language)}</Typography>
-      <div>
-        {tags.map(tag => (
-          <TagChip key={tag.id} tag={tag} prefix={`${code}: `} language={language} compact />
-        ))}
-      </div>
+const FeedbackTargetItem = ({ code, cuName, curName, tags, language, showCurName }) => {
+  const { t } = useTranslation()
+  const safeCourseCode = getSafeCourseCode({ courseCode: code })
+
+  return (
+    <Box m="0.3rem" display="flex" flexDirection="column" alignItems="start">
+      <Box fontSize="16px" display="flex" alignItems="start" columnGap="0.5rem">
+        <Typography color="textSecondary">{code}</Typography>
+        <Typography fontWeight={400}>{getLanguageValue(cuName, language)}</Typography>
+        <div>
+          {tags.map(tag => (
+            <TagChip key={tag.id} tag={tag} prefix={`${code}: `} language={language} compact />
+          ))}
+        </div>
+      </Box>
+      {showCurName && (
+        <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
+          {getLanguageValue(curName, language)}
+        </Typography>
+      )}
+      <MuiLink component={Link} to={`/course-summary/course-unit/${safeCourseCode}?option=all`}>
+        {t('organisationSettings:allCourseUnitRealisations')}
+      </MuiLink>
     </Box>
-    {showCurName && (
-      <Typography color="textSecondary" fontSize="14px" fontWeight={400}>
-        {getLanguageValue(curName, language)}
-      </Typography>
-    )}
-  </Box>
-)
+  )
+}
 
 const Filters = React.memo(({ onChange, value, organisation }) => {
   const { t, i18n } = useTranslation()

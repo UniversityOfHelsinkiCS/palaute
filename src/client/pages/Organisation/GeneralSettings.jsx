@@ -10,6 +10,7 @@ import {
   Alert,
   Box,
   Typography,
+  Stack,
 } from '@mui/material'
 
 import { useMutation } from '@tanstack/react-query'
@@ -98,7 +99,7 @@ const GeneralSettingsContainer = ({ organisation }) => {
 
   return (
     <Box>
-      <Typography mb={2} textTransform="uppercase">
+      <Typography textTransform="uppercase" style={{ marginBottom: '10px' }}>
         {t('organisationSettings:generalSettings')}
       </Typography>
       <StudentListSettings organisation={organisation} />
@@ -116,23 +117,12 @@ const GeneralSettings = () => {
   }
 
   return (
-    <Box>
+    <Stack spacing={6}>
+      {ENABLE_CORRESPONDENT_MANAGEMENT && <FeedbackCorrespondent organisation={organisation} />}
       <GeneralSettingsContainer organisation={organisation} />
-      <Box mb="5rem" />
-      {ENABLE_CORRESPONDENT_MANAGEMENT && (
-        <>
-          <FeedbackCorrespondent organisation={organisation} />
-          <Box mb="5rem" />
-        </>
-      )}
-      {organisation.tags?.length > 0 && (
-        <>
-          <Tags organisation={organisation} />
-          <Box mb="5rem" />
-        </>
-      )}
       <CourseSettings />
-    </Box>
+      {organisation.tags?.length > 0 && <Tags organisation={organisation} />}
+    </Stack>
   )
 }
 

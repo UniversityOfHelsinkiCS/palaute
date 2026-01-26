@@ -77,6 +77,18 @@ const Organisation = () => {
       </Box>
       <Box mb="2rem">
         <RouterTabs variant="scrollable" scrollButtons="auto">
+          <RouterTab
+            label={t('organisationSettings:summaryTab')}
+            to={`${pathnameBase}/summary`}
+            icon={<PollOutlined />}
+          />
+          {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
+            <RouterTab
+              label={t('organisationSettings:courseRealisationsTab')}
+              to={`${pathnameBase}/upcoming`}
+              icon={<CalendarTodayOutlined />}
+            />
+          )}
           {hasAdminAccess && (
             <RouterTab
               label={t('organisationSettings:settingsTab')}
@@ -98,18 +110,6 @@ const Organisation = () => {
               to={`${pathnameBase}/organisation-surveys`}
             />
           )}
-          {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
-            <RouterTab
-              label={t('organisationSettings:courseRealisationsTab')}
-              to={`${pathnameBase}/upcoming`}
-              icon={<CalendarTodayOutlined />}
-            />
-          )}
-          <RouterTab
-            label={t('organisationSettings:summaryTab')}
-            to={`${pathnameBase}/summary`}
-            icon={<PollOutlined />}
-          />
           {hasAdminAccess && (
             <RouterTab
               label={t('organisationSettings:openQuestionsTab')}

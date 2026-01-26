@@ -552,7 +552,7 @@
     "surveyTab": "Koulutusohjelman kysymykset",
     "organisationSurveysTab": "Koulutusohjelman kyselyt",
     "summaryTab": "Yhteenveto",
-    "courseRealisationsTab": "Kurssitoteutukset",
+    "courseRealisationsTab": "Kurssit",
     "openQuestionsTab": "Avoimet kysymykset",
     "editProgrammeQuestionsDialogTitle": "Varoitus!",
     "editProgrammeQuestionsDialogContent": "Olet muokkaamassa koko koulutusohjelman yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla koulutusohjelman kursseilla. Oletko varma, että haluat muokata näitä kysymyksiä?",
@@ -585,7 +585,8 @@
     "showCurName": "Näytä kurssitoteutusten nimet",
     "searchUser": "Sähköposti tai nimi",
     "basedOnIam": "Perustuu IAM-ryhmiin. Norpan kautta poisto ei ole pysyvä, poista IAM-ryhmästä.",
-    "addedInNorppa": "Lisätty Norpassa"
+    "addedInNorppa": "Lisätty Norpassa",
+    "allCourseUnitRealisations": "Kaikki opintojakson toteutukset"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Tämä palaute ei ole käytössä",

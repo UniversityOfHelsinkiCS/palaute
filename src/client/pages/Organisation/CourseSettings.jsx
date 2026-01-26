@@ -286,7 +286,9 @@ const CourseSettings = () => {
 
   return (
     <Box>
-      <Typography textTransform="uppercase">{t('organisationSettings:courseSettings')}</Typography>
+      <Typography textTransform="uppercase" style={{ marginBottom: '10px' }}>
+        {t('organisationSettings:courseSettings')}
+      </Typography>
       <CourseSettingsContainer organisation={organisation} courseUnits={courseUnits} />
     </Box>
   )
