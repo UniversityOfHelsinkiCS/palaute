@@ -1,0 +1,1 @@
+- Opettaja pystyy etsimään opettamiensa kurssien palautteet navigaatiopalkin kautta senkin jälkeen kun opettaja ei enää ole ryhmän hy-employees jäsen (28.1.2026)
