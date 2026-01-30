@@ -148,6 +148,9 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user }:
   const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
   const feedbackTargets = await FeedbackTarget.findAll({
+    where: {
+      userCreated: false,
+    },
     attributes: ['id', 'name', 'opensAt', 'closesAt', 'feedbackResponseEmailSent'],
     include: [
       {
