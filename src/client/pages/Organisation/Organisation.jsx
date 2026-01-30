@@ -82,6 +82,13 @@ const Organisation = () => {
             to={`${pathnameBase}/summary`}
             icon={<PollOutlined />}
           />
+          {hasAdminAccess && (
+            <RouterTab
+              label={t('organisationSettings:openQuestionsTab')}
+              to={`${pathnameBase}/open`}
+              icon={<CommentOutlined />}
+            />
+          )}
           {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
             <RouterTab
               label={t('organisationSettings:courseRealisationsTab')}
@@ -108,13 +115,6 @@ const Organisation = () => {
               label={t('organisationSettings:organisationSurveysTab')}
               icon={<DynamicFormOutlined />}
               to={`${pathnameBase}/organisation-surveys`}
-            />
-          )}
-          {hasAdminAccess && (
-            <RouterTab
-              label={t('organisationSettings:openQuestionsTab')}
-              to={`${pathnameBase}/open`}
-              icon={<CommentOutlined />}
             />
           )}
           {isAdmin && <RouterTab label="Organisation Logs" to={`${pathnameBase}/logs`} />}

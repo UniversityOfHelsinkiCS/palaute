@@ -94,6 +94,7 @@ export const RouterTab = ({
           color: theme => theme.palette.primary.dark,
         },
       })}
+      tabIndex="0"
     />
   )
 
