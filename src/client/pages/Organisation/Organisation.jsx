@@ -96,6 +96,13 @@ const Organisation = () => {
               icon={<CalendarTodayOutlined />}
             />
           )}
+          {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
+            <RouterTab
+              label={t('organisationSettings:organisationSurveysTab')}
+              icon={<DynamicFormOutlined />}
+              to={`${pathnameBase}/organisation-surveys`}
+            />
+          )}
           {hasAdminAccess && (
             <RouterTab
               label={t('organisationSettings:settingsTab')}
@@ -108,13 +115,6 @@ const Organisation = () => {
               label={t('organisationSettings:surveyTab')}
               icon={<LiveHelpOutlined />}
               to={`${pathnameBase}/survey`}
-            />
-          )}
-          {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
-            <RouterTab
-              label={t('organisationSettings:organisationSurveysTab')}
-              icon={<DynamicFormOutlined />}
-              to={`${pathnameBase}/organisation-surveys`}
             />
           )}
           {isAdmin && <RouterTab label="Organisation Logs" to={`${pathnameBase}/logs`} />}
