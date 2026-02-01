@@ -200,7 +200,12 @@ export const getTeacherCourseUnits = async (user: User, query: DateRangeInput & 
 
   const groupedCourseUnits = getGroupedCourseUnits(teacherCourseUnits, query)
 
-  const filteredCourseUnits = groupedCourseUnits.filter(courseUnit => courseUnit.courseRealisations.length > 0)
+  const groupedCourseUnitsWithFbts = groupedCourseUnits.map(cu => ({
+    ...cu,
+    courseRealisations: cu.courseRealisations.filter(cur => cur.feedbackTargets.length > 0),
+  }))
+
+  const filteredCourseUnits = groupedCourseUnitsWithFbts.filter(courseUnit => courseUnit.courseRealisations.length > 0)
 
   const courseUnitsByCode = _.groupBy(filteredCourseUnits, 'courseCode')
 
