@@ -99,7 +99,7 @@ const GeneralSettingsContainer = ({ organisation }) => {
 
   return (
     <Box>
-      <Typography textTransform="uppercase" style={{ marginBottom: '10px' }}>
+      <Typography textTransform="uppercase" sx={{ marginBottom: '10px' }}>
         {t('organisationSettings:generalSettings')}
       </Typography>
       <StudentListSettings organisation={organisation} />
