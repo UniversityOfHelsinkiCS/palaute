@@ -10,6 +10,7 @@ import {
   PollOutlined,
   SettingsOutlined,
   DynamicFormOutlined,
+  PeopleOutlined,
 } from '@mui/icons-material'
 import { useTranslation } from 'react-i18next'
 
@@ -24,6 +25,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
+import Responsibles from './Responsibles'
 import Title from '../../components/common/Title'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
 import ErrorView from '../../components/common/ErrorView'
@@ -96,6 +98,13 @@ const Organisation = () => {
               icon={<CalendarTodayOutlined />}
             />
           )}
+          {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
+            <RouterTab
+              label={t('organisationSettings:responsiblesTab')}
+              to={`${pathnameBase}/responsibles`}
+              icon={<PeopleOutlined />}
+            />
+          )}
           {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
             <RouterTab
               label={t('organisationSettings:organisationSurveysTab')}
@@ -131,6 +140,8 @@ const Organisation = () => {
         />
 
         <Route path="/upcoming" element={<SemesterOverview organisation={organisation} />} />
+
+        <Route path="/responsibles" element={<Responsibles />} />
 
         <Route
           path="/survey"

@@ -562,7 +562,15 @@
     "showCurName": "Visa namnen på undervisningshändelse",
     "basedOnIam": "Baserat på IAM-grupper. Radering i Norppa är bara tillfällig, ta bort från IAM-gruppen i stället.",
     "addedInNorppa": "Tillagt i Norppa",
-    "allCourseUnitRealisations": "Alla undervisningshändelser för studieavsnittet"
+    "allCourseUnitRealisations": "Alla undervisningshändelser för studieavsnittet",
+    "responsiblesTab": "Ansvariga",
+    "responsiblesTitle": "Lärare och antal responsmål",
+    "teacherName": "Lärare",
+    "feedbackTargetCount": "Kurssar",
+    "noTeachersFound": "Inga lärare hittades för denna period",
+    "selectTimePeriod": "Välj tidsperiod för att visa lärare och antal deras kurssar",
+    "summary": "Sammandrag",
+    "detailed": "Detaljerad"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Denna respons är inte i bruk",
