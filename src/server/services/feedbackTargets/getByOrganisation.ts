@@ -122,7 +122,7 @@ const getPublicByOrganisation = async ({ organisationCodes, startDate, endDate }
     feedbackTargetsThroughCourseUnitsOrganisations
   )
 
-  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation.id)
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation.dataValues.id)
   const fbtsWithStartDate = feedbackTargetsWithUniqueCurs.map(fbt => {
     const fbtJson = fbt.toJSON() as InferAttributes<FeedbackTarget> & { startDate?: Date }
     fbtJson.startDate = fbt.courseRealisation.startDate
@@ -147,7 +147,7 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user }:
   const start = startDate ? new Date(startDate) : new Date()
   const end = endDate ? new Date(endDate) : addMonths(start, 12)
 
-  const feedbackTargets = await FeedbackTarget.findAll({
+  const feedbackTargetsThroughCourseRealisationsOrganisations = FeedbackTarget.findAll({
     where: {
       userCreated: false,
     },
@@ -211,7 +211,76 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user }:
     ],
   })
 
-  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.dataValues.id)
+  const feedbackTargetsThroughCourseUnitsOrganisations = await FeedbackTarget.findAll({
+    where: {
+      userCreated: false,
+    },
+    attributes: ['id', 'name', 'opensAt', 'closesAt', 'feedbackResponseEmailSent'],
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        attributes: ['id', 'name', 'courseCode'],
+        required: true,
+        include: [
+          {
+            model: Organisation,
+            as: 'organisations',
+            attributes: [],
+            required: true,
+            where: {
+              code: organisationCode,
+            },
+          },
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id', 'name', 'hash'],
+            through: { attributes: [] },
+          },
+        ],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        attributes: ['id', 'name', 'startDate', 'endDate', 'isMoocCourse', 'teachingLanguages'],
+        required: true,
+        include: [
+          {
+            model: Tag,
+            as: 'tags',
+            attributes: ['id', 'name', 'hash'],
+            through: { attributes: [] },
+          },
+        ],
+        where: {
+          startDate: {
+            [Op.gte]: start,
+            [Op.lte]: end,
+          },
+        },
+      },
+      {
+        model: UserFeedbackTarget,
+        as: 'userFeedbackTargets',
+        attributes: ['accessStatus'],
+        required: false,
+        include: [
+          {
+            model: User,
+            as: 'user',
+            attributes: ['id', 'firstName', 'lastName', 'email'],
+          },
+        ],
+      },
+    ],
+  })
+
+  const feedbackTargets = (await feedbackTargetsThroughCourseRealisationsOrganisations).concat(
+    feedbackTargetsThroughCourseUnitsOrganisations
+  )
+
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation.dataValues.id)
 
   const feedbackTargetsWithStudentCounts = feedbackTargetsWithUniqueCurs
     .map(fbt => {
