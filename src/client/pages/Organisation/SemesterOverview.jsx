@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { orderBy, sum, uniq } from 'lodash-es'
 import {
   Box,
@@ -22,7 +22,7 @@ import {
 import { ArrowDropDown, CalendarTodayOutlined, ChevronRight, Menu, List } from '@mui/icons-material'
 import { useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { format } from 'date-fns'
 import apiClient from '../../util/apiClient'
@@ -402,10 +402,36 @@ const FeedbackTargetItem = ({ code, cuName, curName, tags, language, showCurName
   )
 }
 
-const Filters = React.memo(({ onChange, value, organisation }) => {
+const Filters = React.memo(({ onChange, value, organisation, searchParams, setSearchParams }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = React.useState(false)
-  const [timeOption, setTimeOption] = useHistoryState('overviewTimeperiodOption', 'year')
+  const initialOption = searchParams?.get('option') || 'year'
+  const [timeOption, setTimeOption] = useHistoryState('overviewTimeperiodOption', initialOption)
+
+  // Set initial timeOption from URL if present
+  useEffect(() => {
+    if (searchParams?.get('option') && searchParams.get('option') !== timeOption) {
+      setTimeOption(searchParams.get('option'))
+    }
+  }, [])
+
+  // Sync timeOption to URL when it changes
+  const handleSetOption = React.useCallback(
+    newOption => {
+      setTimeOption(newOption)
+      if (setSearchParams) {
+        setSearchParams(
+          params => {
+            const newParams = new URLSearchParams(params)
+            if (newOption) newParams.set('option', newOption)
+            return newParams
+          },
+          { replace: true }
+        )
+      }
+    },
+    [setTimeOption, setSearchParams]
+  )
 
   const tags = organisation.tags.map(tag => ({
     hash: tag.hash,
@@ -427,7 +453,7 @@ const Filters = React.memo(({ onChange, value, organisation }) => {
               value={{ start: value.startDate, end: value.endDate }}
               option={timeOption}
               onChange={v => onChange({ ...value, startDate: v.start, endDate: v.end })}
-              setOption={setTimeOption}
+              setOption={handleSetOption}
             />
             <Box ml="auto">{open ? <ArrowDropDown /> : <Menu />}</Box>
           </Box>
@@ -563,16 +589,37 @@ const SemesterOverview = ({ organisation }) => {
   const editMode = React.useRef(false)
   const [sidebarEditMode, setSidebarEditMode] = React.useState(false)
 
+  const [searchParams, setSearchParams] = useSearchParams()
   const studyYearRange = getYearRange(new Date())
+
+  // Initialize filters from URL params or default values
+  const initialStartDate = searchParams.get('startDate') || studyYearRange.start
+  const initialEndDate = searchParams.get('endDate') || studyYearRange.end
+
   const [filters, setFilters] = React.useState({
-    startDate: studyYearRange.start,
-    endDate: studyYearRange.end,
+    startDate: initialStartDate,
+    endDate: initialEndDate,
     teacherQuery: '',
     courseQuery: '',
     includeWithoutTeachers: false,
     noTags: false,
     tags: [],
   })
+
+  // Sync URL params when dates change
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (filters.startDate) {
+      const formattedStartDate =
+        filters.startDate instanceof Date ? format(filters.startDate, 'yyyy-MM-dd') : filters.startDate
+      params.set('startDate', formattedStartDate)
+    }
+    if (filters.endDate) {
+      const formattedEndDate = filters.endDate instanceof Date ? format(filters.endDate, 'yyyy-MM-dd') : filters.endDate
+      params.set('endDate', formattedEndDate)
+    }
+    setSearchParams(params, { replace: true })
+  }, [filters.startDate, filters.endDate])
 
   const onFeedbackTargetClick = React.useCallback(feedbackTarget => {
     React.startTransition(() => {
@@ -665,7 +712,15 @@ const SemesterOverview = ({ organisation }) => {
         language={i18n.language}
         t={t}
       />
-      <Filters value={filters} onChange={setFilters} t={t} language={i18n.language} organisation={organisation} />
+      <Filters
+        value={filters}
+        onChange={setFilters}
+        t={t}
+        language={i18n.language}
+        organisation={organisation}
+        searchParams={searchParams}
+        setSearchParams={setSearchParams}
+      />
       <Box display="flex" columnGap="0.5rem">
         <FormControlLabel
           control={<Switch checked={sidebarEditMode} onChange={toggleEditMode} />}

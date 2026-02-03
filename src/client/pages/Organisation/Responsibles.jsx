@@ -1,9 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
+import { useSearchParams } from 'react-router-dom'
 import { orderBy } from 'lodash-es'
 import { useQuery } from '@tanstack/react-query'
 import { writeFileXLSX, utils } from 'xlsx'
+import { format } from 'date-fns'
 import {
   Box,
   Typography,
@@ -95,13 +97,39 @@ const Filters = React.memo(({ startDate, endDate, onChange, timeOption, setTimeO
 const Responsibles = () => {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
+  const [searchParams, setSearchParams] = useSearchParams()
 
   const [timeOption, setTimeOption] = useHistoryState('responsiblesTimeperiodOption', 'year')
   const studyYearRange = getYearRange(new Date())
-  const [startDate, setStartDate] = React.useState(studyYearRange.start)
-  const [endDate, setEndDate] = React.useState(studyYearRange.end)
+
+  // Initialize dates from URL params or default to current study year
+  const initialStartDate = searchParams.get('startDate') || studyYearRange.start
+  const initialEndDate = searchParams.get('endDate') || studyYearRange.end
+
+  const [startDate, setStartDate] = React.useState(initialStartDate)
+  const [endDate, setEndDate] = React.useState(initialEndDate)
   const [expandedTeacherId, setExpandedTeacherId] = React.useState(null)
   const [exportMenuAnchor, setExportMenuAnchor] = React.useState(null)
+
+  useEffect(() => {
+    if (searchParams.get('option') && searchParams.get('option') !== timeOption) {
+      setTimeOption(searchParams.get('option'))
+    }
+  }, [])
+
+  useEffect(() => {
+    const params = new URLSearchParams()
+    if (startDate) {
+      const formattedStartDate = startDate instanceof Date ? format(startDate, 'yyyy-MM-dd') : startDate
+      params.set('startDate', formattedStartDate)
+    }
+    if (endDate) {
+      const formattedEndDate = endDate instanceof Date ? format(endDate, 'yyyy-MM-dd') : endDate
+      params.set('endDate', formattedEndDate)
+    }
+    if (timeOption) params.set('option', timeOption)
+    setSearchParams(params, { replace: true })
+  }, [startDate, endDate, timeOption])
 
   const getCourseRealisationName = fbt =>
     fbt.courseRealisation.name[i18n.language] ||
