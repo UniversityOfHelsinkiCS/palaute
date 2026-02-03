@@ -139,9 +139,18 @@ const Organisation = () => {
           }
         />
 
-        <Route path="/upcoming" element={<SemesterOverview organisation={organisation} />} />
+        <Route path="/summary" element={<ForOrganisation organisation={organisation} />} />
 
-        <Route path="/responsibles" element={<Responsibles />} />
+        <Route
+          path="/open"
+          element={
+            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
+              <ProgrammeOpenQuestions />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route path="/upcoming" element={<SemesterOverview organisation={organisation} />} />
 
         <Route
           path="/survey"
@@ -163,16 +172,7 @@ const Organisation = () => {
           />
         )}
 
-        <Route path="/summary" element={<ForOrganisation organisation={organisation} />} />
-
-        <Route
-          path="/open"
-          element={
-            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
-              <ProgrammeOpenQuestions />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/responsibles" element={<Responsibles />} />
 
         <Route
           path="/logs"
