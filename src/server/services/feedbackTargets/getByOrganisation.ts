@@ -305,12 +305,17 @@ const getByOrganisation = async ({ organisationCode, startDate, endDate, user }:
         .filter((ufbt: any) => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' || ufbt.accessStatus === 'TEACHER')
         .map((ufbt: any) => ufbt.user)
 
+      const responsibleTeachers = (fbt as any).userFeedbackTargets
+        .filter((ufbt: any) => ufbt.accessStatus === 'RESPONSIBLE_TEACHER')
+        .map((ufbt: any) => ufbt.user)
+
       delete fbt.userFeedbackTargets
       return {
         ...fbt,
         startDate: (fbt as any).courseRealisation.startDate,
         studentCount,
         teachers,
+        responsibleTeachers,
       }
     })
 

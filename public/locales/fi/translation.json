@@ -561,6 +561,7 @@
     "selectTimePeriod": "Valitse aikajakso nähdäksesi opettajat ja heidän kurssiensa määrät",
     "summary": "Yhteenveto",
     "detailed": "Kursseittain",
+    "exportFilePrefix": "vastuuopettajat",
     "openQuestionsTab": "Avoimet kysymykset",
     "editProgrammeQuestionsDialogTitle": "Varoitus!",
     "editProgrammeQuestionsDialogContent": "Olet muokkaamassa koko koulutusohjelman yhteisiä kysymyksiä. Nämä muutokset näkyvät kaikilla koulutusohjelman kursseilla. Oletko varma, että haluat muokata näitä kysymyksiä?",

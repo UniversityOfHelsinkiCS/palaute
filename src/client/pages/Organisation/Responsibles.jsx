@@ -103,6 +103,12 @@ const Responsibles = () => {
   const [expandedTeacherId, setExpandedTeacherId] = React.useState(null)
   const [exportMenuAnchor, setExportMenuAnchor] = React.useState(null)
 
+  const getCourseRealisationName = fbt =>
+    fbt.courseRealisation.name[i18n.language] ||
+    fbt.courseRealisation.name.fi ||
+    fbt.courseRealisation.name.en ||
+    fbt.courseRealisation.name.sv
+
   const handleDateChange = (newStart, newEnd) => {
     setStartDate(newStart)
     setEndDate(newEnd)
@@ -127,13 +133,11 @@ const Responsibles = () => {
     enabled: startDate !== null,
   })
 
-  // Aggregate teachers and their feedback target counts
   const teacherStats = useMemo(() => {
     if (!feedbackTargets || !Array.isArray(feedbackTargets)) return []
 
     const stats = new Map()
 
-    // Flatten the nested structure: [[year, [[month, [[date, [feedbackTargets]]]]]]]
     feedbackTargets.forEach(([_year, months]) => {
       if (!Array.isArray(months)) return
 
@@ -144,8 +148,8 @@ const Responsibles = () => {
           if (!Array.isArray(fbts)) return
 
           fbts.forEach(fbt => {
-            if (fbt.teachers && Array.isArray(fbt.teachers)) {
-              fbt.teachers.forEach(teacher => {
+            if (fbt.responsibleTeachers && Array.isArray(fbt.responsibleTeachers)) {
+              fbt.responsibleTeachers.forEach(teacher => {
                 if (stats.has(teacher.id)) {
                   stats.get(teacher.id).count++
                   stats.get(teacher.id).feedbackTargets.push(fbt)
@@ -175,9 +179,10 @@ const Responsibles = () => {
 
     const worksheet = utils.aoa_to_sheet(data)
     const workbook = utils.book_new()
-    utils.book_append_sheet(workbook, worksheet, 'Yhteenveto')
+    utils.book_append_sheet(workbook, worksheet, t('organisationSettings:summary'))
 
-    writeFileXLSX(workbook, `${code}_vastuuopettajat_yhteenveto.xlsx`)
+    const fileName = `${code}_${t('organisationSettings:exportFilePrefix')}_${t('organisationSettings:summary')}.xlsx`
+    writeFileXLSX(workbook, fileName)
     handleCloseExportMenu()
   }
 
@@ -201,10 +206,7 @@ const Responsibles = () => {
           teacher.lastName,
           teacher.firstName,
           fbt.courseUnit.courseCode,
-          fbt.courseUnit.name[i18n.language] ||
-            fbt.courseUnit.name.fi ||
-            fbt.courseUnit.name.en ||
-            fbt.courseUnit.name.sv,
+          getCourseRealisationName(fbt),
           new Date(fbt.courseRealisation.startDate).toLocaleDateString(i18n.language),
           new Date(fbt.courseRealisation.endDate).toLocaleDateString(i18n.language),
         ])
@@ -213,9 +215,10 @@ const Responsibles = () => {
 
     const worksheet = utils.aoa_to_sheet(data)
     const workbook = utils.book_new()
-    utils.book_append_sheet(workbook, worksheet, 'Tarkka')
+    utils.book_append_sheet(workbook, worksheet, t('organisationSettings:detailed'))
 
-    writeFileXLSX(workbook, `${code}_vastuuopettajat_tarkka.xlsx`)
+    const fileName = `${code}_${t('organisationSettings:exportFilePrefix')}_${t('organisationSettings:detailed')}.xlsx`
+    writeFileXLSX(workbook, fileName)
     handleCloseExportMenu()
   }
 
@@ -297,12 +300,7 @@ const Responsibles = () => {
                                 {teacher.feedbackTargets.map(fbt => (
                                   <TableRow key={fbt.id}>
                                     <TableCell>{fbt.courseUnit.courseCode}</TableCell>
-                                    <TableCell>
-                                      {fbt.courseUnit.name[i18n.language] ||
-                                        fbt.courseUnit.name.fi ||
-                                        fbt.courseUnit.name.en ||
-                                        fbt.courseUnit.name.sv}
-                                    </TableCell>
+                                    <TableCell>{getCourseRealisationName(fbt)}</TableCell>
                                     <TableCell>
                                       {new Date(fbt.courseRealisation.startDate).toLocaleDateString(i18n.language)}
                                     </TableCell>

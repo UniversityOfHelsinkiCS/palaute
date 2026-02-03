@@ -570,7 +570,8 @@
     "noTeachersFound": "Inga lärare hittades för denna period",
     "selectTimePeriod": "Välj tidsperiod för att visa lärare och antal deras kurssar",
     "summary": "Sammandrag",
-    "detailed": "Detaljerad"
+    "detailed": "Detaljerad",
+    "exportFilePrefix": "ansvariga_larare"
   },
   "feedbackTargetView": {
     "feedbackDisabled": "Denna respons är inte i bruk",
