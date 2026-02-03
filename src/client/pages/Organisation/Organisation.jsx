@@ -79,6 +79,13 @@ const Organisation = () => {
       </Box>
       <Box mb="2rem">
         <RouterTabs variant="scrollable" scrollButtons="auto">
+          {hasAdminAccess && (
+            <RouterTab
+              label={t('organisationSettings:settingsTab')}
+              icon={<SettingsOutlined />}
+              to={`${pathnameBase}/settings`}
+            />
+          )}
           <RouterTab
             label={t('organisationSettings:summaryTab')}
             to={`${pathnameBase}/summary`}
@@ -98,11 +105,11 @@ const Organisation = () => {
               icon={<CalendarTodayOutlined />}
             />
           )}
-          {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
+          {hasWriteAccess && (
             <RouterTab
-              label={t('organisationSettings:responsiblesTab')}
-              to={`${pathnameBase}/responsibles`}
-              icon={<PeopleOutlined />}
+              label={t('organisationSettings:surveyTab')}
+              icon={<LiveHelpOutlined />}
+              to={`${pathnameBase}/survey`}
             />
           )}
           {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
@@ -112,18 +119,11 @@ const Organisation = () => {
               to={`${pathnameBase}/organisation-surveys`}
             />
           )}
-          {hasAdminAccess && (
+          {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
             <RouterTab
-              label={t('organisationSettings:settingsTab')}
-              icon={<SettingsOutlined />}
-              to={`${pathnameBase}/settings`}
-            />
-          )}
-          {hasWriteAccess && (
-            <RouterTab
-              label={t('organisationSettings:surveyTab')}
-              icon={<LiveHelpOutlined />}
-              to={`${pathnameBase}/survey`}
+              label={t('organisationSettings:responsiblesTab')}
+              to={`${pathnameBase}/responsibles`}
+              icon={<PeopleOutlined />}
             />
           )}
           {isAdmin && <RouterTab label="Organisation Logs" to={`${pathnameBase}/logs`} />}
