@@ -26,6 +26,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
 import SemesterOverview from './SemesterOverview'
 import Responsibles from './Responsibles'
+import ResponsiblesXlsx from './ResponsiblesXlsx'
 import Title from '../../components/common/Title'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
 import ErrorView from '../../components/common/ErrorView'
@@ -173,6 +174,7 @@ const Organisation = () => {
         )}
 
         <Route path="/responsibles" element={<Responsibles />} />
+        <Route path="/responsibles/xlsx" element={<ResponsiblesXlsx />} />
 
         <Route
           path="/logs"

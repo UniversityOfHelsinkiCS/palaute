@@ -2,8 +2,6 @@ import React, { useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 import { useSearchParams } from 'react-router-dom'
-import { orderBy } from 'lodash-es'
-import { useQuery } from '@tanstack/react-query'
 import { writeFileXLSX, utils } from 'xlsx'
 import { format } from 'date-fns'
 import {
@@ -30,8 +28,8 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useHistoryState from '../../hooks/useHistoryState'
 import { getYearRange } from '../../util/yearUtils'
-import apiClient from '../../util/apiClient'
 import { NorButton } from '../../components/common/NorButton'
+import { useOrganisationFeedbackTargets, getCourseRealisationName, generateTeacherStats } from './responsiblesUtils'
 
 const styles = {
   filtersHead: {
@@ -40,26 +38,6 @@ const styles = {
   filtersContent: {
     background: theme => theme.palette.background.default,
   },
-}
-
-const useOrganisationFeedbackTargets = ({ code, startDate, endDate, enabled }) => {
-  const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
-
-  const queryFn = async () => {
-    const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${code}`, {
-      params: { startDate, endDate },
-    })
-
-    return feedbackTargets
-  }
-
-  return useQuery({
-    queryKey,
-    queryFn,
-    enabled,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
-  })
 }
 
 const Filters = React.memo(({ startDate, endDate, onChange, timeOption, setTimeOption }) => {
@@ -131,12 +109,6 @@ const Responsibles = () => {
     setSearchParams(params, { replace: true })
   }, [startDate, endDate, timeOption])
 
-  const getCourseRealisationName = fbt =>
-    fbt.courseRealisation.name[i18n.language] ||
-    fbt.courseRealisation.name.fi ||
-    fbt.courseRealisation.name.en ||
-    fbt.courseRealisation.name.sv
-
   const handleDateChange = (newStart, newEnd) => {
     setStartDate(newStart)
     setEndDate(newEnd)
@@ -161,45 +133,7 @@ const Responsibles = () => {
     enabled: startDate !== null,
   })
 
-  const teacherStats = useMemo(() => {
-    if (!feedbackTargets || !Array.isArray(feedbackTargets)) return []
-
-    const stats = new Map()
-
-    feedbackTargets.forEach(([_year, months]) => {
-      if (!Array.isArray(months)) return
-
-      months.forEach(([_month, days]) => {
-        if (!Array.isArray(days)) return
-
-        days.forEach(([_date, fbts]) => {
-          if (!Array.isArray(fbts)) return
-
-          fbts.forEach(fbt => {
-            if (fbt.responsibleTeachers && Array.isArray(fbt.responsibleTeachers)) {
-              fbt.responsibleTeachers.forEach(teacher => {
-                if (stats.has(teacher.id)) {
-                  stats.get(teacher.id).count++
-                  stats.get(teacher.id).feedbackTargets.push(fbt)
-                } else {
-                  stats.set(teacher.id, {
-                    id: teacher.id,
-                    firstName: teacher.firstName,
-                    lastName: teacher.lastName,
-                    email: teacher.email,
-                    count: 1,
-                    feedbackTargets: [fbt],
-                  })
-                }
-              })
-            }
-          })
-        })
-      })
-    })
-
-    return orderBy(Array.from(stats.values()), ['lastName', 'firstName'], ['asc', 'asc'])
-  }, [feedbackTargets])
+  const teacherStats = useMemo(() => generateTeacherStats(feedbackTargets), [feedbackTargets])
 
   const exportSummary = () => {
     const headers = [t('common:lastName'), t('common:firstName'), t('organisationSettings:feedbackTargetCount')]
@@ -234,7 +168,7 @@ const Responsibles = () => {
           teacher.lastName,
           teacher.firstName,
           fbt.courseUnit.courseCode,
-          getCourseRealisationName(fbt),
+          getCourseRealisationName(fbt, i18n),
           new Date(fbt.courseRealisation.startDate).toLocaleDateString(i18n.language),
           new Date(fbt.courseRealisation.endDate).toLocaleDateString(i18n.language),
         ])
@@ -328,7 +262,7 @@ const Responsibles = () => {
                                 {teacher.feedbackTargets.map(fbt => (
                                   <TableRow key={fbt.id}>
                                     <TableCell>{fbt.courseUnit.courseCode}</TableCell>
-                                    <TableCell>{getCourseRealisationName(fbt)}</TableCell>
+                                    <TableCell>{getCourseRealisationName(fbt, i18n)}</TableCell>
                                     <TableCell>
                                       {new Date(fbt.courseRealisation.startDate).toLocaleDateString(i18n.language)}
                                     </TableCell>
