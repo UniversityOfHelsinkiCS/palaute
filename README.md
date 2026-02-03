@@ -58,6 +58,8 @@ Use feature flags for large new features or changes. Define them in [configurati
 
 ## Documentation
 
+[Deepwiki](https://deepwiki.com/UniversityOfHelsinkiCS/palaute)
+
 The source code and documentation in this repo is the only source of truth for the Norppa technicalities. The written docs are quite limited in scope. If you're using Norppa, we hope you aid in their improvement.
 
 Need something documented or see a problem in existing docs? Do not hesitate to create an issue or a PR. All kinds of contributions are welcome from everyone reading the Norppa documentation.
