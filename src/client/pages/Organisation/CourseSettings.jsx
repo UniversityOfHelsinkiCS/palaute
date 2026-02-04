@@ -97,7 +97,7 @@ const CourseUnitItem = ({
           onChange={onChangeDisabledCourses}
           tabIndex={-1}
           disableRipple
-          inputProps={{ 'aria-labelledby': labelId }}
+          slotProps={{ input: { 'aria-labelledby': labelId } }}
           color="primary"
           disabled={disabled}
         />
@@ -111,7 +111,7 @@ const CourseUnitItem = ({
             onChange={onChangeStudentList}
             tabIndex={-1}
             disableRipple
-            inputProps={{ 'aria-labelledby': labelId }}
+            slotProps={{ input: { 'aria-labelledby': labelId } }}
             color="primary"
             disabled={disabled}
           />
