@@ -551,6 +551,8 @@
     "feedbackCorrespondents": "Feedback liaisons",
     "surveyTab": "Programme questions",
     "organisationSurveysTab": "Programme surveys",
+    "surveyFacultyTab": "Faculty questions",
+    "organisationFacultySurveysTab": "Faculty surveys",
     "summaryTab": "Summary",
     "courseRealisationsTab": "Courses",
     "responsiblesTab": "Responsibles",

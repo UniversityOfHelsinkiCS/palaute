@@ -56,6 +56,8 @@ const Organisation = () => {
   const hasWriteAccess = Boolean(organisation?.access?.write)
   const hasAdminAccess = Boolean(organisation?.access?.admin)
 
+  const isFaculty = Boolean(organisation?.isFaculty)
+
   if (!hasReadAccess) {
     return <Navigate to="/" />
   }
@@ -108,14 +110,18 @@ const Organisation = () => {
           )}
           {hasWriteAccess && (
             <RouterTab
-              label={t('organisationSettings:surveyTab')}
+              label={t(isFaculty ? 'organisationSettings:surveyFacultyTab' : 'organisationSettings:surveyTab')}
               icon={<LiveHelpOutlined />}
               to={`${pathnameBase}/survey`}
             />
           )}
           {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
             <RouterTab
-              label={t('organisationSettings:organisationSurveysTab')}
+              label={t(
+                isFaculty
+                  ? 'organisationSettings:organisationFacultySurveysTab'
+                  : 'organisationSettings:organisationSurveysTab'
+              )}
               icon={<DynamicFormOutlined />}
               to={`${pathnameBase}/organisation-surveys`}
             />
@@ -173,7 +179,7 @@ const Organisation = () => {
           />
         )}
 
-        <Route path="/responsibles" element={<Responsibles />} />
+        <Route path="/responsibles" element={<Responsibles organisation={organisation} />} />
         <Route path="/responsibles/xlsx" element={<ResponsiblesXlsx />} />
 
         <Route

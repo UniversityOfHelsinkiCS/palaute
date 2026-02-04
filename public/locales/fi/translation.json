@@ -551,6 +551,8 @@
     "feedbackCorrespondents": "Palautevastaavat",
     "surveyTab": "Koulutusohjelman kysymykset",
     "organisationSurveysTab": "Koulutusohjelman kyselyt",
+    "surveyFacultyTab": "Tiedekunnan kysymykset",
+    "organisationFacultySurveysTab": "Tiedekunnan kyselyt",
     "summaryTab": "Yhteenveto",
     "courseRealisationsTab": "Kurssit",
     "responsiblesTab": "Vastuuopettajat",

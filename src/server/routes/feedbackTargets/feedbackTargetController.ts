@@ -1,6 +1,7 @@
 import { Response, Router } from 'express'
 import { AuthenticatedRequest } from 'types'
 import { ApplicationError } from '../../util/ApplicationError'
+import { Organisation } from '../../models'
 
 import { createFeedbackTargetLog } from '../../services/auditLog'
 import { mailer } from '../../mailer'
@@ -31,6 +32,52 @@ import { PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/config'
 
 const adRouter = Router()
 const noadRouter = Router()
+
+// TODO figure out if the two bellow functions could be united
+adRouter.get('/for-faculty/:code', async (req: AuthenticatedRequest, res: Response) => {
+  const { user } = req
+  const { code } = req.params
+  const { startDate, endDate } = req.query
+  if (!code) throw ApplicationError.BadRequest('Missing code')
+
+  const organisationAccess = await user.organisationAccess
+  if (!organisationAccess[code]?.read) throw ApplicationError.Forbidden()
+
+  const facultyOrganisation = await Organisation.findOne({
+    where: { code },
+    include: [
+      {
+        model: Organisation,
+        as: 'childOrganisations',
+        attributes: ['id', 'code'],
+      },
+    ],
+  })
+
+  if (!facultyOrganisation) throw ApplicationError.NotFound('Organisation not found')
+
+  const childOrgCodes =
+    facultyOrganisation.childOrganisations
+      ?.filter(child => organisationAccess[child.code]?.read)
+      .map(child => child.code) || []
+
+  const allOrganisationCodes = [code, ...childOrgCodes]
+
+  const feedbackTargetsPromises = allOrganisationCodes.map(orgCode =>
+    getFeedbackTargetsForOrganisation({
+      organisationCode: orgCode,
+      startDate: startDate as string,
+      endDate: endDate as string,
+      user,
+    })
+  )
+
+  const feedbackTargetsArrays = await Promise.all(feedbackTargetsPromises)
+
+  const feedbackTargets = feedbackTargetsArrays.flat()
+
+  res.send(feedbackTargets)
+})
 
 adRouter.get('/for-organisation/:code', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req

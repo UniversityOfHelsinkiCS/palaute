@@ -38,6 +38,7 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   // --- Virtual fields. ---------
   // --- ideally refactor away ---
   // -----------------------------
+  declare isFaculty?: boolean
   declare summary?: Summary
   declare courseUnits?: CourseUnit[]
   declare summaries?: Summary[]
@@ -119,6 +120,12 @@ Organisation.init(
       type: ARRAY(INTEGER),
       allowNull: false,
       defaultValue: [],
+    },
+    isFaculty: {
+      type: VIRTUAL,
+      get() {
+        return /^H\d{2}$/.test(this.code || '')
+      },
     },
     summary: {
       type: VIRTUAL,

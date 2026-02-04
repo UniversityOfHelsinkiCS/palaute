@@ -29,7 +29,12 @@ import { YearSemesterPeriodSelector } from '../../components/common/YearSemester
 import useHistoryState from '../../hooks/useHistoryState'
 import { getYearRange } from '../../util/yearUtils'
 import { NorButton } from '../../components/common/NorButton'
-import { useOrganisationFeedbackTargets, getCourseRealisationName, generateTeacherStats } from './responsiblesUtils'
+import {
+  useOrganisationFeedbackTargets,
+  getCourseRealisationName,
+  generateTeacherStats,
+  useFacultyFeedbackTargets,
+} from './responsiblesUtils'
 
 const styles = {
   filtersHead: {
@@ -72,7 +77,7 @@ const Filters = React.memo(({ startDate, endDate, onChange, timeOption, setTimeO
   )
 })
 
-const Responsibles = () => {
+const Responsibles = ({ organisation }) => {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
   const [searchParams, setSearchParams] = useSearchParams()
@@ -126,7 +131,8 @@ const Responsibles = () => {
     setExportMenuAnchor(null)
   }
 
-  const { data: feedbackTargets, isLoading } = useOrganisationFeedbackTargets({
+  const hookToUse = organisation.isFaculty ? useFacultyFeedbackTargets : useOrganisationFeedbackTargets
+  const { data: feedbackTargets, isLoading } = hookToUse({
     code,
     startDate,
     endDate,

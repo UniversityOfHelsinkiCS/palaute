@@ -22,6 +22,26 @@ export const useOrganisationFeedbackTargets = ({ code, startDate, endDate, enabl
   })
 }
 
+export const useFacultyFeedbackTargets = ({ code, startDate, endDate, enabled }) => {
+  const queryKey = ['facultyFeedbackTargets', code, startDate, endDate]
+
+  const queryFn = async () => {
+    const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-faculty/${code}`, {
+      params: { startDate, endDate },
+    })
+
+    return feedbackTargets
+  }
+
+  return useQuery({
+    queryKey,
+    queryFn,
+    enabled,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
+}
+
 export const getCourseRealisationName = (fbt, i18n) => {
   const name =
     fbt.courseRealisation.name[i18n.language] ||
