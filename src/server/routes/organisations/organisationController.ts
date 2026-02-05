@@ -20,7 +20,6 @@ import getOpenFeedbackByOrganisation from '../../services/organisations/getOpenF
 import { getAccessAndOrganisation } from './util'
 import { router as feedbackCorrespondentRouter } from './feedbackCorrespondentController'
 import { router as organisationSurveyRouter } from './organisationSurveyController'
-import { getOrganisationData as getOrganisationDataFromJami } from '../../util/jami'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 
 export const router = Router()
@@ -47,12 +46,6 @@ const getOrganisations = async (req: AuthenticatedRequest, res: Response) => {
   }))
 
   res.send(organisations)
-}
-
-const getOrganisationData = async (req: AuthenticatedRequest, res: Response) => {
-  const data = await getOrganisationDataFromJami()
-
-  res.send(data)
 }
 
 const getOrganisationsListHandler = async (req: AuthenticatedRequest, res: Response) => {
@@ -305,7 +298,6 @@ router.get(
 
 if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.get('/', getOrganisations)
-router.get('/data', getOrganisationData)
 router.get('/list', getOrganisationsListHandler)
 router.put('/:code', updateOrganisation)
 router.get('/:code', getOrganisationByCode)

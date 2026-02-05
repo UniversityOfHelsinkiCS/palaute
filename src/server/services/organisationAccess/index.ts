@@ -1,5 +1,4 @@
 import {
-  getAllOrganisationAccess,
   getAdminOrganisationAccess,
   getUserOrganisationAccess,
   getOrganisationAccessByCourseUnitId,
@@ -8,7 +7,6 @@ import {
 
 export {
   getUserOrganisationAccess,
-  getAllOrganisationAccess,
   getAdminOrganisationAccess,
   getOrganisationAccessByCourseUnitId,
   populateUserAccess,

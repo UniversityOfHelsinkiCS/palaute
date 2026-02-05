@@ -4,62 +4,11 @@ import _ from 'lodash'
 import { OrganisationAccess } from '@common/types/organisation'
 import { User, Organisation } from '../../models'
 import { normalizeOrganisationCode } from '../../util/common'
-import { getAllUserAccess, getAccessToAll, getUserIamAccess } from '../../util/jami'
+import { getAccessToAll, getUserIamAccess } from '../../util/jami'
 import { inProduction, DEV_ADMINS } from '../../util/config'
 import { sequelize } from '../../db/dbConnection'
 
 export const getAdminOrganisationAccess = () => getAccessToAll()
-
-export const getAllOrganisationAccess = async () => {
-  const allAccess = await getAllUserAccess()
-
-  const userIds = allAccess.map(({ id }) => id)
-
-  const users = await User.findAll({
-    where: {
-      id: {
-        [Op.in]: userIds,
-      },
-    },
-  })
-
-  const usersWithAccess = []
-  for (const user of users) {
-    const { iamGroups, access } = allAccess.find(({ id }) => id === user.id)
-
-    const normalizedAccess: Record<string, OrganisationAccess> = {}
-    Object.keys(access).forEach(code => {
-      normalizedAccess[normalizeOrganisationCode(code)] = access[code]
-    })
-
-    const organisationCodes = Object.keys(normalizedAccess)
-    const organisations = await Organisation.findAll({
-      where: {
-        code: {
-          [Op.in]: organisationCodes,
-        },
-      },
-    })
-
-    const organisationAccess = organisations.map(org => ({
-      access: normalizedAccess[org.code],
-      organisation: org,
-    }))
-
-    const sortedOrganisationAccess = _.sortBy(organisationAccess, oa => oa.organisation.code)
-
-    // eslint-disable-next-line no-continue
-    if (!organisationAccess.length) continue
-
-    usersWithAccess.push({
-      ...user.dataValues,
-      iamGroups,
-      access: sortedOrganisationAccess,
-    })
-  }
-
-  return usersWithAccess
-}
 
 const getAccessFromIAMs = async (user: User) => {
   const access: Record<string, OrganisationAccess> = {}

@@ -15,7 +15,6 @@ import { RouterTabs } from '../../components/common/RouterTabs'
 import MiscTab from './tabs/Misc/MiscTab'
 import FeedbackTargetInspector from './tabs/FeedbackTargetInspector/FeedbackTargetInspector'
 import UsersTab from './tabs/Users/UsersTab'
-import OrganisationAccess from './tabs/OrganisationAccess/OrganisationAccess'
 import FeedbackCorrespondents from './tabs/FeedbackCorrescpondents/FeedbackCorrespondents'
 import BannerView from './tabs/Banners/BannersView'
 import EnableCourses from './tabs/EnableCourses/EnableCourses'
@@ -58,7 +57,6 @@ const AdminView = () => {
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
           <Tab label="Users" component={Link} to="/admin/users" />
           <Tab label="Enable courses" component={Link} to="/admin/enable" />
-          <Tab label="Organisation Access" component={Link} to="/admin/access" />
           <Tab label="Norppa feedback" component={Link} to="/admin/feedback" />
           <Tab label="Norppa statistics" component={Link} to="/admin/statistics" />
           <Tab label="Search feedback targets" component={Link} to="/admin/feedback-targets" />
@@ -72,7 +70,6 @@ const AdminView = () => {
       <Routes>
         <Route path="/users" element={<UsersTab />} />
         <Route path="/enable" element={<EnableCourses />} />
-        <Route path="/access" element={<OrganisationAccess />} />
         <Route path="/feedback" element={<NorppaFeedbackView />} />
         <Route path="/statistics" element={<NorppaStatisticView />} />
         <Route path="/feedback-targets" element={<FeedbackTargetInspector />} />

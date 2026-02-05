@@ -71,19 +71,6 @@ export const getUserIams = async (userId: string) => {
   }
 }
 
-export const getAllUserAccess = async () => {
-  const { data } = await jamiClient.get<
-    {
-      id: string
-      iamGroups: string[]
-      access: Record<string, OrganisationAccess>
-      specialGroup: Record<string, boolean>
-    }[]
-  >('/all-access')
-
-  return data
-}
-
 const testJami = async () => {
   try {
     await jamiClient.get('/ping', { timeout: 4000 })

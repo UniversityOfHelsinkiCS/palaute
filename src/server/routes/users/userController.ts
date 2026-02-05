@@ -7,7 +7,6 @@ import { User } from '../../models'
 import { AuthenticatedRequest } from '../../types'
 import { userCache } from '../../services/users/cache'
 import { getUserIams } from '../../util/jami'
-import { getAllOrganisationAccess } from '../../services/organisationAccess'
 import { getLastRestart } from '../../util/lastRestart'
 import { getUserPreferences, updateFeedbackCorrespondent } from '../../services/users'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
@@ -124,14 +123,6 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
     params,
     persons: employees,
   })
-})
-
-router.get('/users/access', async (req: AuthenticatedRequest, res: Response) => {
-  if (!req.user.isAdmin) throw ApplicationError.Forbidden('Forbidden')
-
-  const usersWithAccess = await getAllOrganisationAccess()
-
-  res.send(usersWithAccess)
 })
 
 router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
