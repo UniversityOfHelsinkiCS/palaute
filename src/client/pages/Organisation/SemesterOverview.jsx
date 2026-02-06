@@ -43,11 +43,11 @@ import { getSafeCourseCode } from '../../util/courseIdentifiers'
 
 const SelectionContext = React.createContext({})
 
-const useOrganisationFeedbackTargets = ({ code, filters, language, enabled }) => {
+const useFilteredOrganisationFeedbackTargets = ({ code, filters, language, enabled }) => {
   const deferredFilters = React.useDeferredValue(filters)
   const { startDate, endDate, teacherQuery, courseQuery, tags, includeWithoutTeachers, noTags } = deferredFilters
 
-  const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
+  const queryKey = ['filteredOrganisationFeedbackTargets', code, startDate, endDate]
 
   const queryFn = async () => {
     const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${code}`, {
@@ -675,7 +675,7 @@ const SemesterOverview = ({ organisation }) => {
     })
   }, []) // And again
 
-  const { feedbackTargets, isLoading } = useOrganisationFeedbackTargets({
+  const { feedbackTargets, isLoading } = useFilteredOrganisationFeedbackTargets({
     code,
     filters,
     enabled: filters.startDate !== null,
