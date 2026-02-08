@@ -63,13 +63,13 @@ export const generateTeacherStats = feedbackTargets => {
 
   const stats = new Map()
 
-  feedbackTargets.forEach(([_year, months]) => {
+  feedbackTargets.forEach(([, months]) => {
     if (!Array.isArray(months)) return
 
-    months.forEach(([_month, days]) => {
+    months.forEach(([, days]) => {
       if (!Array.isArray(days)) return
 
-      days.forEach(([_date, fbts]) => {
+      days.forEach(([, fbts]) => {
         if (!Array.isArray(fbts)) return
 
         fbts.forEach(fbt => {
