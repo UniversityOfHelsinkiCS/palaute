@@ -40,6 +40,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { getYearRange } from '../../util/yearUtils'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
+import { organisationFeedbackTargetsQueryFn } from './responsiblesUtils'
 
 const SelectionContext = React.createContext({})
 
@@ -47,19 +48,11 @@ const useFilteredOrganisationFeedbackTargets = ({ code, filters, language, enabl
   const deferredFilters = React.useDeferredValue(filters)
   const { startDate, endDate, teacherQuery, courseQuery, tags, includeWithoutTeachers, noTags } = deferredFilters
 
-  const queryKey = ['filteredOrganisationFeedbackTargets', code, startDate, endDate]
-
-  const queryFn = async () => {
-    const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${code}`, {
-      params: { startDate, endDate },
-    })
-
-    return feedbackTargets
-  }
+  const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
   const { data: feedbackTargets, ...rest } = useQuery({
     queryKey,
-    queryFn,
+    queryFn: () => organisationFeedbackTargetsQueryFn(code, startDate, endDate),
     enabled,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

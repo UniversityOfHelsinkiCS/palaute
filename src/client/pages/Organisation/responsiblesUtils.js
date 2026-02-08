@@ -2,20 +2,20 @@ import { useQuery } from '@tanstack/react-query'
 import { orderBy } from 'lodash-es'
 import apiClient from '../../util/apiClient'
 
+export const organisationFeedbackTargetsQueryFn = async (code, startDate, endDate) => {
+  const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${code}`, {
+    params: { startDate, endDate },
+  })
+
+  return feedbackTargets
+}
+
 export const useOrganisationFeedbackTargets = ({ code, startDate, endDate, enabled }) => {
   const queryKey = ['organisationFeedbackTargets', code, startDate, endDate]
 
-  const queryFn = async () => {
-    const { data: feedbackTargets } = await apiClient.get(`/feedback-targets/for-organisation/${code}`, {
-      params: { startDate, endDate },
-    })
-
-    return feedbackTargets
-  }
-
   return useQuery({
     queryKey,
-    queryFn,
+    queryFn: () => organisationFeedbackTargetsQueryFn(code, startDate, endDate),
     enabled,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
