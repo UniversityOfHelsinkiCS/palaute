@@ -568,9 +568,9 @@
     "responsiblesTab": "Ansvariga",
     "responsiblesTitle": "Lärare och antal responsmål",
     "teacherName": "Lärare",
-    "feedbackTargetCount": "Kurssar",
+    "feedbackTargetCount": "Kurser",
     "noTeachersFound": "Inga lärare hittades för denna period",
-    "selectTimePeriod": "Välj tidsperiod för att visa lärare och antal deras kurssar",
+    "selectTimePeriod": "Välj tidsperiod för att visa lärare och deras kursantal",
     "summary": "Sammandrag",
     "detailed": "Detaljerad",
     "exportFilePrefix": "ansvariga_larare"

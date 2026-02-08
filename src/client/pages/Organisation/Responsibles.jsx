@@ -1,9 +1,8 @@
 import React, { useMemo, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
-import { useSearchParams } from 'react-router-dom'
 import { writeFileXLSX, utils } from 'xlsx'
-import { format } from 'date-fns'
+import { format, isValid } from 'date-fns'
 import {
   Box,
   Typography,
@@ -23,12 +22,11 @@ import {
   MenuItem,
 } from '@mui/material'
 import { ArrowDropDown, Menu as MenuIcon, KeyboardArrowDown, KeyboardArrowUp, Download } from '@mui/icons-material'
-
+import useURLSearchParams from '../../hooks/useURLSearchParams'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
-import useHistoryState from '../../hooks/useHistoryState'
-import { getYearRange } from '../../util/yearUtils'
+import { getYearRange, useAcademicYears } from '../../util/yearUtils'
 import { NorButton } from '../../components/common/NorButton'
+import { YearSelector } from '../../components/common/YearSemesterPeriodSelector'
 import {
   useOrganisationFeedbackTargets,
   getCourseRealisationName,
@@ -45,7 +43,7 @@ const styles = {
   },
 }
 
-const Filters = React.memo(({ startDate, endDate, onChange, timeOption, setTimeOption }) => {
+const Filters = React.memo(({ selectedYear, handleYearChange, academicYears }) => {
   const { t } = useTranslation()
   const [open, setOpen] = React.useState(false)
 
@@ -53,15 +51,9 @@ const Filters = React.memo(({ startDate, endDate, onChange, timeOption, setTimeO
     <Box position="sticky" top="0" mb={2} zIndex={1}>
       <Accordion onChange={() => setOpen(!open)} disableGutters>
         <AccordionSummary sx={styles.filtersHead}>
-          <Box display="flex" width="100%" alignItems="center" pl={1}>
-            {t('organisationSettings:filters')}
-            <Box mx={2} />
-            <YearSemesterPeriodSelector
-              value={{ start: startDate, end: endDate }}
-              option={timeOption}
-              onChange={v => onChange(v.start, v.end)}
-              setOption={setTimeOption}
-            />
+          <Box sx={{ display: 'flex', width: '100%', alignItems: 'center', pl: 1, pt: 2 }}>
+            <Typography sx={{ mr: 2 }}>{t('organisationSettings:filters')}</Typography>
+            <YearSelector value={selectedYear} onChange={handleYearChange} years={academicYears} />
             <Box ml="auto">{open ? <ArrowDropDown /> : <MenuIcon />}</Box>
           </Box>
         </AccordionSummary>
@@ -80,44 +72,42 @@ const Filters = React.memo(({ startDate, endDate, onChange, timeOption, setTimeO
 const Responsibles = ({ organisation }) => {
   const { t, i18n } = useTranslation()
   const { code } = useParams()
-  const [searchParams, setSearchParams] = useSearchParams()
+  const ongoingAcademicYearRange = getYearRange(new Date())
 
-  const [timeOption, setTimeOption] = useHistoryState('responsiblesTimeperiodOption', 'year')
-  const studyYearRange = getYearRange(new Date())
+  const [params, setParams] = useURLSearchParams()
+  const [dateRange, setDateRange] = React.useState(() => {
+    const paramsStart = params.get('startDate')
+    const paramsEnd = params.get('endDate')
 
-  // Initialize dates from URL params or default to current study year
-  const initialStartDate = searchParams.get('startDate') || studyYearRange.start
-  const initialEndDate = searchParams.get('endDate') || studyYearRange.end
+    const start = paramsStart ? new Date(String(params.get('startDate'))) : ongoingAcademicYearRange.start
+    const end = paramsEnd ? new Date(String(params.get('endDate'))) : ongoingAcademicYearRange.end
 
-  const [startDate, setStartDate] = React.useState(initialStartDate)
-  const [endDate, setEndDate] = React.useState(initialEndDate)
+    return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
+  })
+
+  const startDate = format(new Date(dateRange.start), 'yyyy-MM-dd')
+  const endDate = format(new Date(dateRange.end), 'yyyy-MM-dd')
+
+  const { academicYears, selectedYear } = useAcademicYears(dateRange?.start ?? new Date())
+
+  useEffect(() => {
+    if (!params.get('startDate') || !params.get('endDate')) {
+      params.set('startDate', format(new Date(selectedYear.start), 'yyyy-MM-dd'))
+      params.set('endDate', format(new Date(selectedYear.end), 'yyyy-MM-dd'))
+      setParams(params)
+      setDateRange({ start: selectedYear.start, end: selectedYear.end })
+    }
+  }, [params, setParams])
+
+  const handleYearChange = ({ start, end }) => {
+    setDateRange({ start, end })
+    params.set('startDate', format(new Date(start), 'yyyy-MM-dd'))
+    params.set('endDate', format(new Date(end), 'yyyy-MM-dd'))
+    setParams(params)
+  }
+
   const [expandedTeacherId, setExpandedTeacherId] = React.useState(null)
   const [exportMenuAnchor, setExportMenuAnchor] = React.useState(null)
-
-  useEffect(() => {
-    if (searchParams.get('option') && searchParams.get('option') !== timeOption) {
-      setTimeOption(searchParams.get('option'))
-    }
-  }, [])
-
-  useEffect(() => {
-    const params = new URLSearchParams()
-    if (startDate) {
-      const formattedStartDate = startDate instanceof Date ? format(startDate, 'yyyy-MM-dd') : startDate
-      params.set('startDate', formattedStartDate)
-    }
-    if (endDate) {
-      const formattedEndDate = endDate instanceof Date ? format(endDate, 'yyyy-MM-dd') : endDate
-      params.set('endDate', formattedEndDate)
-    }
-    if (timeOption) params.set('option', timeOption)
-    setSearchParams(params, { replace: true })
-  }, [startDate, endDate, timeOption])
-
-  const handleDateChange = (newStart, newEnd) => {
-    setStartDate(newStart)
-    setEndDate(newEnd)
-  }
 
   const handleRowClick = teacherId => {
     setExpandedTeacherId(expandedTeacherId === teacherId ? null : teacherId)
@@ -196,14 +186,7 @@ const Responsibles = ({ organisation }) => {
 
   return (
     <Box>
-      <Filters
-        startDate={startDate}
-        endDate={endDate}
-        onChange={handleDateChange}
-        timeOption={timeOption}
-        setTimeOption={setTimeOption}
-      />
-
+      <Filters selectedYear={selectedYear} handleYearChange={handleYearChange} academicYears={academicYears} />
       <Box display="flex" gap={1} mb={2}>
         <NorButton
           color="primary"
