@@ -62,7 +62,7 @@
     "classnames": "2.5.1",
     "compression": "1.8.1",
     "config": "3.3.12",
-    "date-fns": "2.30.0",
+    "date-fns": "4.1.0",
     "date-fns-timezone": "0.1.4",
     "dotenv": "16.6.1",
     "express": "5.2.1",
