@@ -1,10 +1,12 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import merge from 'lodash/merge'
-import { Box } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
+import merge from 'lodash/merge'
 import { Link } from 'react-router-dom'
+
+import Box from '@mui/material/Box'
 
 import hyLogo from '../../assets/hy_logo.svg'
 
@@ -43,16 +45,17 @@ const styles = {
 }
 
 const Logo = ({ guest = false }) => {
+  const { t } = useTranslation()
   const customUiConfig = useUiConfig()
   const customStyles = customUiConfig?.styles?.logo ?? {}
   const logoStyles = merge(styles, customStyles)
   const customLogo = customUiConfig?.images?.logo
 
   return (
-    <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }}>
+    <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }} aria-label={t('navBar:norppa')}>
       <Box sx={logoStyles.link}>
-        <img src={customLogo || hyLogo} alt="HY" style={logoStyles.image} />
-        <Box css={logoStyles.text}>Norppa</Box>
+        <img src={customLogo || hyLogo} alt="" aria-hidden="true" style={logoStyles.image} />
+        <span style={logoStyles.text}>Norppa</span>
       </Box>
     </Link>
   )

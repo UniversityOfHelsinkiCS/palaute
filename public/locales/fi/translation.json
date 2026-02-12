@@ -341,6 +341,7 @@
     "addGroupingQuestion": "Lisää ryhmittelykysymys"
   },
   "navBar": {
+    "norppa": "Norpan kotisivulle",
     "myFeedbacks": "Kurssipalautteeni",
     "browseCourses": "Selaa kursseja",
     "myCourses": "Kyselyni",
@@ -531,7 +532,8 @@
     "accessibilityDocument": "Saavutettavuusseloste",
     "lastUpdate": "Viimeisin julkaisu {{duration}} sitten",
     "server": "Palvelinversio {{version}}",
-    "client": "Selainversio {{version}}"
+    "client": "Selainversio {{version}}",
+    "toska": "Lue Norpan kehittäjistä."
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta"
