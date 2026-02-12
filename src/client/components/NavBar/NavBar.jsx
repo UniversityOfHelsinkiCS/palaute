@@ -1,4 +1,4 @@
-import React, { useRef, useState, forwardRef } from 'react'
+import React, { useRef, useState } from 'react'
 
 import {
   AppBar,
@@ -97,27 +97,11 @@ const styles = {
   mailIcon: {
     marginLeft: 1,
   },
-  container: {
-    display: 'flex',
-  },
-  item: {
-    flexGrow: 1,
-    justifyContent: 'center',
-  },
   activeItem: {
     color: theme => theme.palette.primary.main,
     fontWeight: theme => theme.typography.fontWeightMedium,
   },
 }
-const LanguageMenu = forwardRef(({ language, onLanguageChange }, ref) => (
-  <Box sx={styles.container} ref={ref}>
-    {LANGUAGES.map(l => (
-      <MenuItem key={l} sx={[styles.item, language === l && styles.activeItem]} onClick={() => onLanguageChange(l)}>
-        {l.toUpperCase()}
-      </MenuItem>
-    ))}
-  </Box>
-))
 
 const NavLabelWrapper = ({ renderBadge, children }) => {
   const { t } = useTranslation()
@@ -278,7 +262,11 @@ const NavBar = ({ guest = false }) => {
 
   const menu = (
     <Menu id="navBarMenu" anchorEl={() => menuButtonRef.current} keepMounted open={menuOpen} onClose={handleCloseMenu}>
-      <LanguageMenu language={i18n.language} onLanguageChange={changeLanguage} />
+      {LANGUAGES.map(l => (
+        <MenuItem key={l} sx={i18n.language === l && styles.activeItem} onClick={() => changeLanguage(l)}>
+          {l.toUpperCase()}
+        </MenuItem>
+      ))}
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
       {!guest && isMobile && mobileMenuLinks}
       {!guest && <MenuItem onClick={() => setPermissionsWindowOpen(true)}>{t('navBar:userInformation')}</MenuItem>}
