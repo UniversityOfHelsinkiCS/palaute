@@ -79,7 +79,8 @@
     "code": "Koodi",
     "organisationCode": "Organisaatiokoodi",
     "startDate": "Aloituspvm",
-    "endDate": "Lopetuspvm"
+    "endDate": "Lopetuspvm",
+    "opensInNewTab": ", avautuu uudelle välilehdelle"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",

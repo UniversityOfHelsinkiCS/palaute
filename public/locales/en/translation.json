@@ -79,7 +79,8 @@
     "code": "Code",
     "organisationCode": "Organisation code",
     "startDate": "Start date",
-    "endDate": "End date"
+    "endDate": "End date",
+    "opensInNewTab": ", opens in a new tab"
   },
   "validationErrors": {
     "required": "This field is required",
