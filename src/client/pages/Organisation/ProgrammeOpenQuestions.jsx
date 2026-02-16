@@ -97,12 +97,11 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
   let filteredCourses = filterCoursesWithNoResponses(codesWithIds)
 
   if (dateRange) filteredCourses = filterCoursesByDate(filteredCourses, dateRange)
-
   return (
     <span ref={ref}>
       {filteredCourses.map(course => (
         <Box key={course.code} mb="4rem">
-          <Typography component="h6" variant="h6">
+          <Typography component="h2" variant="h6">
             <Link
               to={`/course-summary/course-unit/${getSafeCourseCode({ courseCode: course.code })}`}
               style={styles.courseTitle}

@@ -21,7 +21,7 @@ const GuestFooter = () => {
   const { t } = useTranslation()
 
   return (
-    <Box component="footer" marginTop="auto">
+    <Box component="footer" role="contentinfo" marginTop="auto">
       <Divider />
       <Container>
         <Box my={2} display="flex" justifyContent="space-between" alignItems="center">

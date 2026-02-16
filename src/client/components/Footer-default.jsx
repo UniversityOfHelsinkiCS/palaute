@@ -32,7 +32,7 @@ const Footer = ({ user }) => {
   const clientVersion = import.meta.env.VITE_VERSION
 
   return (
-    <Box component="footer" marginTop="auto" pt="1rem">
+    <Box component="footer" role="contentinfo" marginTop="auto" pt="1rem">
       <Divider />
       <Container maxWidth="xl">
         <Box my="2rem" display="flex" justifyContent="space-between" alignItems="center">

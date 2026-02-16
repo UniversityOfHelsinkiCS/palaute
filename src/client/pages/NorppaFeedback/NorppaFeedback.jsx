@@ -59,7 +59,7 @@ const NorppaFeedback = () => {
   return (
     <Box>
       <Title>{t('common:norppaFeedback')}</Title>
-      <Typography variant="h4" component="h4">
+      <Typography variant="h4" component="h1">
         {t('norppaFeedback:title')}
       </Typography>
       <Typography variant="body1" component="p" sx={styles.description}>

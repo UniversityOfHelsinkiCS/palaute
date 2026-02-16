@@ -13,6 +13,7 @@ import {
   Container,
   Badge,
 } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
 import { uniq } from 'lodash-es'
 
 import { Link, useLocation, matchPath } from 'react-router-dom'
@@ -225,7 +226,7 @@ const NavBar = ({ guest = false }) => {
     }))
 
   const navBarLinks = (
-    <Box data-cy="navbar-links" sx={styles.linkContainer}>
+    <Box component="nav" role="navigation" data-cy="navbar-links" sx={styles.linkContainer}>
       {links.map(({ label, to, badgeCount, active }) => (
         <ButtonBase
           data-cy={`navbar-link-${label}`}
@@ -264,7 +265,8 @@ const NavBar = ({ guest = false }) => {
     <Menu id="navBarMenu" anchorEl={() => menuButtonRef.current} keepMounted open={menuOpen} onClose={handleCloseMenu}>
       {LANGUAGES.map(l => (
         <MenuItem key={l} sx={i18n.language === l && styles.activeItem} onClick={() => changeLanguage(l)}>
-          {l.toUpperCase()}
+          <span aria-hidden="true">{l.toUpperCase()}</span>
+          <span style={visuallyHidden}>{t(`common:languageMenu:${l}`)}</span>
         </MenuItem>
       ))}
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}

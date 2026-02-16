@@ -71,10 +71,7 @@ const Organisation = () => {
       <Title>{name}</Title>
       <Box mb="1rem" display="flex" flexWrap="wrap" alignItems="end" gap="1rem">
         <Typography variant="h4" component="h1">
-          {name}
-        </Typography>
-        <Typography variant="h5" color="textSecondary">
-          {organisation.code}
+          {name} ({organisation.code})
         </Typography>
       </Box>
       <Box mb="1rem">

@@ -7,7 +7,7 @@ import NavBar from '../../components/NavBar'
 const GuestUser = () => (
   <Box display="flex" flexDirection="column" height="100vh" sx={{ overflowX: 'hidden' }}>
     <NavBar guest />
-    <Box component="main" id="main-content">
+    <Box component="main" role="main" id="main-content">
       <GuestRouter />
     </Box>
     <GuestFooter />

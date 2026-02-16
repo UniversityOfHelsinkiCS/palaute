@@ -80,7 +80,12 @@
     "organisationCode": "Organisation code",
     "startDate": "Start date",
     "endDate": "End date",
-    "opensInNewTab": ", opens in a new tab"
+    "opensInNewTab": ", opens in a new tab",
+    "languageMenu": {
+      "fi": "Valitse kieli: suomi",
+      "sv": "Välj språk: svenska",
+      "en": "Select language: English"
+    }
   },
   "validationErrors": {
     "required": "This field is required",
