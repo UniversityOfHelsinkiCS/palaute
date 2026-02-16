@@ -115,7 +115,7 @@ const GuestFeedbackTargetView = () => {
           </Typography>
         </Box>
 
-        <Box sx={styles.datesContainer}>
+        <Box sx={styles.datesContainer} component="dl">
           <Typography color="textSecondary" variant="body2" component="dt">
             {t('feedbackTargetView:coursePeriod')}:
           </Typography>
