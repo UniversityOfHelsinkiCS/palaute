@@ -75,7 +75,8 @@
     "notEditable": "Inställningen kan inte ändras, då den har offentligjorts på en högre nivå.",
     "feedbacksGivenRatio": "Givna återkopplingar / Antal anmälda studenter",
     "additional": "Ytterligare",
-    "opensInNewTab": ", öppnas i en ny flik"
+    "opensInNewTab": ", öppnas i en ny flik",
+    "skipToContent": "Gå till innehållet"
   },
   "validationErrors": {
     "required": "Fältet krävs",

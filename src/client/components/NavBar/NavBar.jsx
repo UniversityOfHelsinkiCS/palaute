@@ -12,6 +12,7 @@ import {
   Box,
   Container,
   Badge,
+  Link as MuiLink,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { uniq } from 'lodash-es'
@@ -101,6 +102,22 @@ const styles = {
   activeItem: {
     color: theme => theme.palette.primary.main,
     fontWeight: theme => theme.typography.fontWeightMedium,
+  },
+  skipLink: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 1300,
+    px: 2,
+    py: 1,
+    bgcolor: '#01263a',
+    color: 'white',
+    // Hide visually but keep focusable
+    transform: 'translateY(-100%)',
+    '&:focus': {
+      transform: 'translateY(0)',
+      outline: '2px solid #fff',
+    },
   },
 }
 
@@ -279,6 +296,9 @@ const NavBar = ({ guest = false }) => {
 
   return (
     <Box component="header" role="banner" id="header">
+      <MuiLink href="#main-content" sx={styles.skipLink}>
+        {t('common:skipToContent')}
+      </MuiLink>
       <UserPermissionsWindow isOpen={permissionsWindowOpen} onClose={() => setPermissionsWindowOpen(false)} />
       {menu}
       <AppBar

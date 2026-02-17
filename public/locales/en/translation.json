@@ -85,7 +85,8 @@
       "fi": "Valitse kieli: suomi",
       "sv": "Välj språk: svenska",
       "en": "Select language: English"
-    }
+    },
+    "skipToContent": "Skip to content"
   },
   "validationErrors": {
     "required": "This field is required",

@@ -80,7 +80,8 @@
     "organisationCode": "Organisaatiokoodi",
     "startDate": "Aloituspvm",
     "endDate": "Lopetuspvm",
-    "opensInNewTab": ", avautuu uudelle välilehdelle"
+    "opensInNewTab": ", avautuu uudelle välilehdelle",
+    "skipToContent": "Siirry sisältöön"
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
