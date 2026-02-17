@@ -278,10 +278,11 @@ const NavBar = ({ guest = false }) => {
   )
 
   return (
-    <>
+    <Box component="header" role="banner" id="header">
       <UserPermissionsWindow isOpen={permissionsWindowOpen} onClose={() => setPermissionsWindowOpen(false)} />
       {menu}
       <AppBar
+        component={undefined}
         elevation={0}
         position="relative"
         sx={{
@@ -304,7 +305,7 @@ const NavBar = ({ guest = false }) => {
         ?.map(banner => (
           <Banner banner={banner} language={i18n.language} key={banner.id} onClose={handleBannerClose} />
         ))}
-    </>
+    </Box>
   )
 }
 
