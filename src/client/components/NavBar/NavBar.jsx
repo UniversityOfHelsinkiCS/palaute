@@ -109,7 +109,7 @@ const styles = {
     left: 0,
     zIndex: 1300,
     px: 2,
-    py: 1,
+    py: 2,
     bgcolor: '#01263a',
     color: 'white',
     // Hide visually but keep focusable
@@ -252,6 +252,12 @@ const NavBar = ({ guest = false }) => {
           sx={[styles.link, active && styles.activeLink]}
           to={to}
           focusRipple
+          onClick={() => {
+            const pageStartElement = document.getElementById('page-start')
+            if (pageStartElement) {
+              pageStartElement.focus()
+            }
+          }} // Focus is set to page start in navigation to make use of skip link
         >
           <NavLabelWrapper renderBadge={badgeCount}>{label}</NavLabelWrapper>
         </ButtonBase>
@@ -296,6 +302,12 @@ const NavBar = ({ guest = false }) => {
 
   return (
     <Box component="header" role="banner" id="header">
+      <div
+        id="page-start"
+        aria-hidden="true"
+        tabIndex="-1"
+        style={{ position: 'absolute', inset: '0 auto auto 0', width: 0, height: 0, overflow: 'hidden' }}
+      />
       <MuiLink href="#main-content" sx={styles.skipLink}>
         {t('common:skipToContent')}
       </MuiLink>
