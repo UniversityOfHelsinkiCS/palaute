@@ -226,7 +226,7 @@ const FeedbackView = () => {
   }
 
   return (
-    <>
+    <Box id="feedback-target-tab-content">
       <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
       {isStudent &&
@@ -266,7 +266,7 @@ const FeedbackView = () => {
           />
         </Box>
       )}
-    </>
+    </Box>
   )
 }
 

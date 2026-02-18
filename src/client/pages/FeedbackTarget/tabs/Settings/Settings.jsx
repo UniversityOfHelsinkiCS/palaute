@@ -20,7 +20,7 @@ const Settings = () => {
   }, [])
 
   return (
-    <Box>
+    <Box id="feedback-target-tab-content">
       <EditFeedbackTarget />
     </Box>
   )

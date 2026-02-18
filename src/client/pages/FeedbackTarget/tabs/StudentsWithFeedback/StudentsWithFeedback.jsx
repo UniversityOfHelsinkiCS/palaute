@@ -34,10 +34,10 @@ const StudentsWithFeedback = () => {
   const showStudentTable = students.length !== 0
 
   return (
-    <>
+    <Box id="feedback-target-tab-content">
       {!feedbackStatusAvailable && <NoFeedbackAlert isEnded={isEnded} />}
       {showStudentTable && <StudentTable students={students} feedbackTarget={feedbackTarget} />}
-    </>
+    </Box>
   )
 }
 

@@ -625,7 +625,8 @@
     "surveyTabDisabledTooltip": "Enkäten kan inte längre redigeras efter att feedbacken har öppnats",
     "editFeedbackResponseTab": "Redigera återkopplingsfeedback",
     "interimFeedbackTab": "Mellanrespons",
-    "respondents": "Respondenter"
+    "respondents": "Respondenter",
+    "skipToSelectedTab": "Gå till vald flik:"
   },
   "noadUser": {
     "noUser": "Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare",

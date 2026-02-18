@@ -18,7 +18,7 @@ const Links = () => {
   const sortedUsers = users.sort((a, b) => a.lastName?.localeCompare(b.lastName) ?? 0)
 
   return (
-    <Box>
+    <Box id="feedback-target-tab-content">
       <Typography variant="h6">Students and their respective feedback links</Typography>
       {sortedUsers.map(user => (
         <Box key={user.studentNumber} style={{ marginTop: 5 }}>

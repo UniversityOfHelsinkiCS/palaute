@@ -106,7 +106,7 @@ const Logs = () => {
   }
 
   return (
-    <Box display="flex" flexDirection="column">
+    <Box id="feedback-target-tab-content" display="flex" flexDirection="column">
       {!feedbackTargetLogs?.length > 0 && <Alert severity="info">No logs yet</Alert>}
       {feedbackTargetLogs.map((log, idx) => (
         <LogItem key={idx} log={log} parseLogMessage={getLogMessage} />

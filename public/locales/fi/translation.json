@@ -649,7 +649,8 @@
     "noAccessEndedCourse": "Palauteaika on päättynyt, eikä kurssille voi enää antaa palautetta. Tarkista ylläolevista tiedoista, että kurssi on oikea.",
     "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
     "interimFeedbackTab": "Välipalautteet",
-    "respondents": "Vastanneet"
+    "respondents": "Vastanneet",
+    "skipToSelectedTab": "Siirry valitulle välilehdelle:"
   },
   "noadUser": {
     "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan",

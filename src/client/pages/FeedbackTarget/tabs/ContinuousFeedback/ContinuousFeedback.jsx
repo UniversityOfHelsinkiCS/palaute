@@ -156,7 +156,7 @@ const ContinuousFeedback = () => {
   const [feedbackEnabled, setFeedbackEnabled] = useState(continuousFeedbackEnabled)
 
   return (
-    <Box>
+    <Box id="feedback-target-tab-content">
       {showSettings && (
         <ContinuousFeedbackSettings
           feedbackTarget={feedbackTarget}

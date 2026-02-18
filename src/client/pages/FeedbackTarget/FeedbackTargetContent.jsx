@@ -1,9 +1,9 @@
 import React from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useMatch, useLocation } from 'react-router-dom'
 
-import { Alert, Box } from '@mui/material'
+import { Alert, Box, Link } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import {
@@ -46,6 +46,26 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import Title from '../../components/common/Title'
 import { FeedbackTargetTabsContainer, FeedbackTargetTab } from './FeedbackTargetTabs'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
+import { getActiveTabName } from './utils'
+
+const styles = {
+  skipLink: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    zIndex: 1300,
+    px: 2,
+    py: 2,
+    bgcolor: '#01263a',
+    color: 'white',
+    // Hide visually but keep focusable
+    transform: 'translateY(-100%)',
+    '&:focus': {
+      transform: 'translateY(0)',
+      outline: '2px solid #fff',
+    },
+  },
+}
 
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
@@ -61,7 +81,7 @@ const FeedbackTargetContent = () => {
     feedbackCanBeGiven,
     userCreated,
   } = feedbackTarget
-
+  const { pathname } = useLocation()
   const fbtMatch = useMatch('/targets/:feedbackTargetId/*')
   const interimMatch = useMatch('/targets/:feedbackTargetId/interim-feedback/:interimFeedbackId/*')
   const pathnameBase = interimMatch?.pathnameBase || fbtMatch?.pathnameBase // This has to be done because of recursivity of interim feedbacks
@@ -115,9 +135,16 @@ const FeedbackTargetContent = () => {
     <>
       <Title>{`${visibleCourseCode} ${courseName}`}</Title>
       {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
-
+      <Link href="#feedback-target-tab-content" sx={styles.skipLink}>
+        {`${t('feedbackTargetView:skipToSelectedTab')} ${getActiveTabName({
+          currentPath: pathname,
+          feedbackGiven,
+          isOpen,
+          isStudent,
+          feedbackResponseEmailSent,
+        })}`}
+      </Link>
       <FeedbackTargetInformation />
-
       <Box
         mb="2rem"
         sx={{

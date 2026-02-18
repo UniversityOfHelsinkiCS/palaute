@@ -62,7 +62,7 @@ const EditFeedbackResponse = () => {
   }
 
   return (
-    <Card>
+    <Card id="feedback-target-tab-content">
       <CardContent>
         <Instructions title={t('feedbackResponse:instructionTitle')}>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>

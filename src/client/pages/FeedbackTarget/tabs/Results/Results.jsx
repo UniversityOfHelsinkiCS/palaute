@@ -171,7 +171,7 @@ const Results = () => {
   const showFeedback = enoughFeedbacks && (enoughStudents || (feedbacks.length > 0 && isResponsibleTeacher))
 
   return (
-    <>
+    <Box id="feedback-target-tab-content">
       {filtersVisible && (
         <FilterSection
           isLoading={isLoading}
@@ -223,7 +223,7 @@ const Results = () => {
           <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />
         )}
       </Box>
-    </>
+    </Box>
   )
 }
 
