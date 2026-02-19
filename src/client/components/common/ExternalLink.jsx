@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link } from '@mui/material'
+import { Link, Box } from '@mui/material'
 import ExternalLinkIcon from '@mui/icons-material/OpenInNew'
 import { visuallyHidden } from '@mui/utils'
 
@@ -18,7 +18,9 @@ const ExternalLink = ({ children, ...props }) => {
     <Link target="_blank" rel="noopener" {...props} underline="always">
       {children}
       <ExternalLinkIcon sx={styles.icon} aria-hidden="true" />
-      <span style={visuallyHidden}>{t('common:opensInNewTab')}</span>
+      <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>
+        {t('common:opensInNewTab')}
+      </Box>
     </Link>
   )
 }

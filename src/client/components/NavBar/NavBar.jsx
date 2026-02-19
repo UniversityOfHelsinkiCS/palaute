@@ -289,7 +289,7 @@ const NavBar = ({ guest = false }) => {
       {LANGUAGES.map(l => (
         <MenuItem key={l} sx={i18n.language === l && styles.activeItem} onClick={() => changeLanguage(l)}>
           <span aria-hidden="true">{l.toUpperCase()}</span>
-          <span style={visuallyHidden}>{t(`common:languageMenu:${l}`)}</span>
+          <span style={{ ...visuallyHidden, width: '0px', height: '0px' }}>{t(`common:languageMenu:${l}`)}</span>
         </MenuItem>
       ))}
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
