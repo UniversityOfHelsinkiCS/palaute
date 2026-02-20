@@ -33,9 +33,12 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
           opacity: 1,
         },
         '&.Mui-focusVisible': {
-          color: theme => theme.palette.primary.dark,
+          outline: '3px solid',
+          outlineColor: theme => theme.palette.primary.main,
+          outlineOffset: '2px',
         },
       }}
+      disableRipple
       {...props}
     />
   )
@@ -63,6 +66,8 @@ export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
       value={value}
       sx={{
         my: 3,
+        p: 1,
+        '& .MuiTabs-scroller': { overflow: 'visible' },
         '& .MuiTabs-indicator': {
           display: 'flex',
           justifyContent: 'center',
