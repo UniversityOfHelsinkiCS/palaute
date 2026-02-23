@@ -25,6 +25,11 @@ const styles = {
   button: {
     ml: '1rem',
     width: '170px',
+    '&.Mui-focusVisible': {
+      outline: '3px solid',
+      outlineColor: theme => theme.palette.primary.main,
+      outlineOffset: '3px',
+    },
   },
   link: {
     textDecoration: 'none',
@@ -65,6 +70,7 @@ const ExportXLSX = ({ students, fileName }) => {
   return (
     <NorButton
       sx={styles.button}
+      disableRipple
       color="primary"
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
@@ -263,6 +269,13 @@ const TableHeadCell = ({ id, name, order, orderBy, onRequestSort }) => {
         active={orderBy === id}
         direction={orderBy === id ? order : 'asc'}
         onClick={createSortHandler(id)}
+        sx={{
+          '&.Mui-focusVisible': {
+            outline: '3px solid',
+            outlineColor: theme => theme.palette.primary.main,
+            outlineOffset: '3px',
+          },
+        }}
       >
         {name}
       </TableSortLabel>
