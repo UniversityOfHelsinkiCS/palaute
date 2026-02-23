@@ -131,7 +131,7 @@
     "browserify-fs": "1.0.0",
     "concurrently": "9.2.1",
     "cypress": "15.9.0",
-    "eslint": "8.57.1",
+    "eslint": "10.0.2",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-typescript": "18.0.0",
     "cross-env": "10.1.0",
