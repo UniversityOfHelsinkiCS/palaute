@@ -34,7 +34,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
           color: theme => theme.palette.primary.light,
           opacity: 1,
         },
-        ...focusIndicatorStyle,
+        ...focusIndicatorStyle(),
       }}
       disableRipple
       {...props}

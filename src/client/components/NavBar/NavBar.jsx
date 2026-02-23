@@ -35,6 +35,9 @@ import useIsMobile from '../../hooks/useIsMobile'
 import Banner from '../common/Banner'
 import { LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/common'
 import useWaitingFeedbackCount from './useWaitingFeedbackCount'
+import { focusIndicatorStyle } from '../../util/accessibility'
+
+const whiteFocusIndicatorStyle = focusIndicatorStyle({ color: 'white' })
 
 const styles = {
   toolbar: {
@@ -60,6 +63,7 @@ const styles = {
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.22)',
     },
+    ...whiteFocusIndicatorStyle,
   },
   activeLink: {
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
@@ -80,6 +84,7 @@ const styles = {
     '&:hover': {
       backgroundColor: 'rgba(255, 255, 255, 0.22)',
     },
+    ...whiteFocusIndicatorStyle,
   },
   languageMenuDivider: {
     margin: theme => theme.spacing(1, 0),
@@ -95,9 +100,7 @@ const styles = {
     '&:hover': {
       background: theme => theme.palette.warning.light,
     },
-  },
-  mailIcon: {
-    marginLeft: 1,
+    ...whiteFocusIndicatorStyle,
   },
   activeItem: {
     color: theme => theme.palette.primary.main,
@@ -108,8 +111,7 @@ const styles = {
     top: 0,
     left: 0,
     zIndex: 1300,
-    px: 2,
-    py: 2,
+    p: 2,
     bgcolor: '#01263a',
     color: 'white',
     // Hide visually but keep focusable
@@ -194,7 +196,13 @@ const NavBar = ({ guest = false }) => {
   }
 
   const desktopMenuButton = (
-    <Button color="inherit" endIcon={<KeyboardArrowDownIcon />} sx={styles.menuButton} {...menuButtonProps}>
+    <Button
+      color="inherit"
+      endIcon={<KeyboardArrowDownIcon />}
+      sx={styles.menuButton}
+      {...menuButtonProps}
+      disableRipple
+    >
       <PersonOutlined />
       <Box fontSize={14} ml={1}>
         {menuLabel}
@@ -251,7 +259,7 @@ const NavBar = ({ guest = false }) => {
           key={label}
           sx={[styles.link, active && styles.activeLink]}
           to={to}
-          focusRipple
+          disableRipple
           onClick={() => {
             const pageStartElement = document.getElementById('page-start')
             if (pageStartElement) {
@@ -263,12 +271,15 @@ const NavBar = ({ guest = false }) => {
         </ButtonBase>
       ))}
       {isAdminUser && !isLoading && !!norppaFeedbackCount.count && (
-        <Link to="/admin/feedback" style={{ textDecoration: 'none' }}>
-          <Box sx={styles.norppaFeedback}>
-            {norppaFeedbackCount.count}
-            <MailOutlineIcon sx={styles.mailIcon} fontSize="small" />
-          </Box>
-        </Link>
+        <Button
+          component={Link}
+          to="/admin/feedback"
+          sx={styles.norppaFeedback}
+          endIcon={<MailOutlineIcon fontSize="small" />}
+          disableRipple
+        >
+          {norppaFeedbackCount.count}
+        </Button>
       )}
     </Box>
   )

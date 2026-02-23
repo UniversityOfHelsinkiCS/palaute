@@ -26,7 +26,7 @@ const styles = {
   button: {
     ml: '1rem',
     width: '170px',
-    ...focusIndicatorStyle,
+    ...focusIndicatorStyle(),
   },
   link: {
     textDecoration: 'none',
@@ -266,7 +266,7 @@ const TableHeadCell = ({ id, name, order, orderBy, onRequestSort }) => {
         active={orderBy === id}
         direction={orderBy === id ? order : 'asc'}
         onClick={createSortHandler(id)}
-        sx={focusIndicatorStyle}
+        sx={{ p: '2px', ...focusIndicatorStyle() }}
       >
         {name}
       </TableSortLabel>
