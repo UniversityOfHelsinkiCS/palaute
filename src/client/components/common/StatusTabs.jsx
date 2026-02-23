@@ -2,7 +2,7 @@ import React from 'react'
 import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-import { focusIndicatorStyle } from '../../util/accessibility'
+import { focusIndicatorStyle } from '../../util/accessibility.js'
 
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const labelElement = count ? (
