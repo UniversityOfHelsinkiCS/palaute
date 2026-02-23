@@ -13,6 +13,7 @@ import CardSection from '../../../../components/common/CardSection'
 import { SHOW_BUTTON_DOWNLOAD_SISU_CSV } from '../../../../util/common'
 import { NorButton } from '../../../../components/common/NorButton'
 import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
+import { focusIndicatorStyle } from '../../../../util/accessibility'
 
 //This defines certain courserealisations at SISU. There is no other way to get this information
 //Name tells if courserealisation is used to gather information for SISU about who is given feedback and who is not
@@ -25,11 +26,7 @@ const styles = {
   button: {
     ml: '1rem',
     width: '170px',
-    '&.Mui-focusVisible': {
-      outline: '3px solid',
-      outlineColor: theme => theme.palette.primary.main,
-      outlineOffset: '3px',
-    },
+    ...focusIndicatorStyle,
   },
   link: {
     textDecoration: 'none',
@@ -269,13 +266,7 @@ const TableHeadCell = ({ id, name, order, orderBy, onRequestSort }) => {
         active={orderBy === id}
         direction={orderBy === id ? order : 'asc'}
         onClick={createSortHandler(id)}
-        sx={{
-          '&.Mui-focusVisible': {
-            outline: '3px solid',
-            outlineColor: theme => theme.palette.primary.main,
-            outlineOffset: '3px',
-          },
-        }}
+        sx={focusIndicatorStyle}
       >
         {name}
       </TableSortLabel>

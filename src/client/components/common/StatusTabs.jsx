@@ -2,6 +2,8 @@ import React from 'react'
 import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
 import { Link } from 'react-router-dom'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
+
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const labelElement = count ? (
     <Badge
@@ -32,11 +34,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
           color: theme => theme.palette.primary.light,
           opacity: 1,
         },
-        '&.Mui-focusVisible': {
-          outline: '3px solid',
-          outlineColor: theme => theme.palette.primary.main,
-          outlineOffset: '2px',
-        },
+        ...focusIndicatorStyle,
       }}
       disableRipple
       {...props}
