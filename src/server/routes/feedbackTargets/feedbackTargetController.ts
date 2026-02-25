@@ -33,6 +33,8 @@ import { PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/config'
 const adRouter = Router()
 const noadRouter = Router()
 
+const isProgrammeCode = (code: string) => /^\d{3}-[MK]\d{3,4}$/.test(code)
+
 // TODO figure out if the two bellow functions could be united
 adRouter.get('/for-faculty/:code', async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
@@ -41,6 +43,7 @@ adRouter.get('/for-faculty/:code', async (req: AuthenticatedRequest, res: Respon
   if (!code) throw ApplicationError.BadRequest('Missing code')
 
   const organisationAccess = await user.organisationAccess
+
   if (!organisationAccess[code]?.read) throw ApplicationError.Forbidden()
 
   const facultyOrganisation = await Organisation.findOne({
@@ -56,10 +59,7 @@ adRouter.get('/for-faculty/:code', async (req: AuthenticatedRequest, res: Respon
 
   if (!facultyOrganisation) throw ApplicationError.NotFound('Organisation not found')
 
-  const childOrgCodes =
-    facultyOrganisation.childOrganisations
-      ?.filter(child => organisationAccess[child.code]?.read)
-      .map(child => child.code) || []
+  const childOrgCodes = facultyOrganisation.childOrganisations?.map(child => child.code).filter(isProgrammeCode) || []
 
   const allOrganisationCodes = [code, ...childOrgCodes]
 
@@ -69,6 +69,7 @@ adRouter.get('/for-faculty/:code', async (req: AuthenticatedRequest, res: Respon
       startDate: startDate as string,
       endDate: endDate as string,
       user,
+      skipAccessCheck: orgCode !== code,
     })
   )
 
