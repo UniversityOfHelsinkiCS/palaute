@@ -59,7 +59,11 @@ jobs:
           password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
 
       - name: Start the application
-        run: docker compose -f docker-compose.ci.yml up -d
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: docker compose -f docker-compose.ci.yml up -d
 
       - name: Run cypress tests with retry
         uses: nick-fields/retry@v3
