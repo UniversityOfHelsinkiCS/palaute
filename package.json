@@ -61,7 +61,7 @@
     "chartjs-plugin-datalabels": "2.2.0",
     "classnames": "2.5.1",
     "compression": "1.8.1",
-    "config": "3.3.12",
+    "config": "4.4.1",
     "date-fns": "2.30.0",
     "date-fns-timezone": "0.1.4",
     "dotenv": "16.6.1",
