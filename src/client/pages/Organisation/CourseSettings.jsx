@@ -32,6 +32,7 @@ import CourseUnitTagSelector from './CourseUnitTagSelector'
 import { getLanguageValue } from '../../util/languageUtils'
 import queryClient from '../../util/queryClient'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
+import { switchFocusIndicatorStyle } from '../../util/accessibility'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, language = 'en') =>
   (courseUnits ?? []).map(({ id, courseCode, name, tags }) => ({
@@ -95,7 +96,7 @@ const CourseUnitItem = ({
           edge="start"
           checked={enabledCourse}
           onChange={onChangeDisabledCourses}
-          tabIndex={-1}
+          sx={switchFocusIndicatorStyle}
           disableRipple
           slotProps={{ input: { 'aria-labelledby': labelId } }}
           color="primary"
@@ -109,7 +110,7 @@ const CourseUnitItem = ({
             edge="start"
             checked={studentListVisible}
             onChange={onChangeStudentList}
-            tabIndex={-1}
+            sx={switchFocusIndicatorStyle}
             disableRipple
             slotProps={{ input: { 'aria-labelledby': labelId } }}
             color="primary"

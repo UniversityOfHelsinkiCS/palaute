@@ -2,7 +2,9 @@ import React from 'react'
 import { useField } from 'formik'
 import { Switch, FormControlLabel } from '@mui/material'
 
-const FormikSwitch = ({ name, label, ...props }) => {
+import { switchFocusIndicatorStyle, formControlLabelFocusIndicatorStyle } from '../../util/accessibility'
+
+const FormikSwitch = ({ name, label, sx, ...props }) => {
   const [field, , helpers] = useField(name)
 
   return (
@@ -16,10 +18,13 @@ const FormikSwitch = ({ name, label, ...props }) => {
           onBlur={() => helpers.setTouched(true)}
           name={name}
           color="primary"
+          sx={{ ...sx, ...switchFocusIndicatorStyle }}
+          disableRipple
           {...props}
         />
       }
       label={label}
+      sx={formControlLabelFocusIndicatorStyle}
     />
   )
 }

@@ -2,6 +2,8 @@ import React, { useId, useState } from 'react'
 import { Button, Menu, Box, MenuList } from '@mui/material'
 import { Download } from '@mui/icons-material'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
+
 const styles = {
   container: {
     '@media print': {
@@ -53,6 +55,8 @@ const ExportButton = ({ label, disabled = false, children }: ExportButtonProps) 
         variant="outlined"
         startIcon={<Download />}
         disabled={disabled}
+        sx={focusIndicatorStyle()}
+        disableRipple
       >
         {label}
       </Button>

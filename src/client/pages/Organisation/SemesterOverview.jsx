@@ -40,6 +40,7 @@ import { getYearRange } from '../../util/yearUtils'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
 import { organisationFeedbackTargetsQueryFn } from './responsiblesUtils'
+import { switchFocusIndicatorStyle, formControlLabelFocusIndicatorStyle } from '../../util/accessibility'
 
 const SelectionContext = React.createContext({})
 
@@ -715,12 +716,18 @@ const SemesterOverview = ({ organisation }) => {
       />
       <Box display="flex" columnGap="0.5rem">
         <FormControlLabel
-          control={<Switch checked={sidebarEditMode} onChange={toggleEditMode} />}
+          control={
+            <Switch checked={sidebarEditMode} onChange={toggleEditMode} sx={switchFocusIndicatorStyle} disableRipple />
+          }
           label={t('organisationSettings:editMode')}
+          sx={formControlLabelFocusIndicatorStyle}
         />
         <FormControlLabel
-          control={<Switch checked={showCurName} onChange={toggleShowCurName} />}
+          control={
+            <Switch checked={showCurName} onChange={toggleShowCurName} sx={switchFocusIndicatorStyle} disableRipple />
+          }
           label={t('organisationSettings:showCurName')}
+          sx={formControlLabelFocusIndicatorStyle}
         />
         <NorButton
           color="secondary"

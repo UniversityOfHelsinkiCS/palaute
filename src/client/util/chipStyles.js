@@ -1,5 +1,7 @@
 import { css, keyframes } from '@mui/material'
 
+import { focusIndicatorStyle } from './accessibility'
+
 const common = {
   '&:hover': {
     borderRadius: '3px',
@@ -10,6 +12,7 @@ const common = {
       duration: '0.2s',
     }),
   cursor: 'pointer',
+  ...focusIndicatorStyle(),
 }
 
 const pulse = keyframes`
