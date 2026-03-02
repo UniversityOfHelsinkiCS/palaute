@@ -3,6 +3,8 @@ import { useLocation, matchPath, Link } from 'react-router-dom'
 
 import { Tab, Tooltip, Box, Paper } from '@mui/material'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
+
 const stripSearch = path => path.split('?')[0]
 
 export const FeedbackTargetTab = ({ icon, label, to, disabled, disabledTooltip, ...props }) => {
@@ -27,6 +29,7 @@ export const FeedbackTargetTab = ({ icon, label, to, disabled, disabledTooltip, 
         px: '0.2rem',
         borderColor: active ? 'primary.main' : 'transparent',
         flexShrink: 0,
+        mt: '0.2rem',
       }}
     >
       <Tab
@@ -43,8 +46,10 @@ export const FeedbackTargetTab = ({ icon, label, to, disabled, disabledTooltip, 
           '&:hover': {
             backgroundColor: theme.palette.action.hover,
           },
+          ...focusIndicatorStyle(),
         })}
         tabIndex="0"
+        disableRipple
       />
     </Box>
   )
