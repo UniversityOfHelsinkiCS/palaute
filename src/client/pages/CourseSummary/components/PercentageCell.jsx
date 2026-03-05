@@ -2,6 +2,8 @@ import React from 'react'
 import { Link } from 'react-router'
 import { Box, Chip, Tooltip } from '@mui/material'
 
+import { focusIndicatorStyle } from '../../../util/accessibility'
+
 const styles = {
   cell: {
     display: 'flex',
@@ -33,6 +35,7 @@ const PercentageCell = ({ label, tooltip, percent, sx, linkTo, ...rest }) => {
           variant={percent ? 'filled' : 'outlined'}
           sx={{
             background: theme => `${theme.palette.info.light}${hex}`,
+            ...focusIndicatorStyle(),
           }}
         />
       </Box>

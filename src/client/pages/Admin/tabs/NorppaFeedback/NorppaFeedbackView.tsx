@@ -10,6 +10,8 @@ import apiClient from '../../../../util/apiClient'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
 
+import { formControlLabelFocusIndicatorStyle, focusIndicatorStyle } from '../../../../util/accessibility'
+
 const NorppaFeedbackView = () => {
   const { isLoading, feedbacks, refetch } = useNorppaFeedbacks()
   const { enqueueSnackbar } = useSnackbar()
@@ -46,6 +48,7 @@ const NorppaFeedbackView = () => {
             />
           }
           label="Show only unsolved"
+          sx={formControlLabelFocusIndicatorStyle}
         />
       </Box>
       {sortedFeedbacks.map(({ id, createdAt, data, responseWanted, solved, user }) => {
@@ -80,7 +83,12 @@ const NorppaFeedbackView = () => {
                   {solved && responseWanted && (
                     <Box display="flex" width="140px">
                       <Alert>Solved!</Alert>
-                      <IconButton size="small" onClick={() => handleMarkAsSolved(id, false)}>
+                      <IconButton
+                        size="small"
+                        onClick={() => handleMarkAsSolved(id, false)}
+                        sx={focusIndicatorStyle()}
+                        disableRipple
+                      >
                         <Undo />
                       </IconButton>
                     </Box>
@@ -91,7 +99,13 @@ const NorppaFeedbackView = () => {
                     </Box>
                   )}
                   {solved && !responseWanted && (
-                    <IconButton color="primary" onClick={() => handleMarkAsSolved(id, false)} size="large">
+                    <IconButton
+                      color="primary"
+                      onClick={() => handleMarkAsSolved(id, false)}
+                      size="large"
+                      sx={focusIndicatorStyle()}
+                      disableRipple
+                    >
                       <AddAlertOutlined />
                     </IconButton>
                   )}

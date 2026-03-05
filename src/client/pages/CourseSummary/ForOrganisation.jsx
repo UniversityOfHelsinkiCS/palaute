@@ -22,7 +22,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
 
   return (
     <SummaryScrollContainer>
-      <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
+      <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem" pl="0.5rem">
         <GenerateReport organisationId={initialOrganisation.id} />
         <Box sx={{ mt: 1 }} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', minHeight: '70px' }}>

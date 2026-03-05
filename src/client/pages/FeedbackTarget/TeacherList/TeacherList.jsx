@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import TeacherChip from '../../../components/common/TeacherChip'
 import { deleteResponsibleTeacher } from './api'
+import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const TeacherList = ({ teachers, title, open, ...rest }) => {
   const { t } = useTranslation()
@@ -54,6 +55,7 @@ const TeacherList = ({ teachers, title, open, ...rest }) => {
           },
           '&.Mui-expanded': { minHeight: 'unset' },
           '& .MuiAccordionSummary-content.Mui-expanded': { margin: 0 },
+          ...focusIndicatorStyle(),
         }}
       >
         <Typography sx={{ m: 0, p: 0, mr: '1rem' }}>

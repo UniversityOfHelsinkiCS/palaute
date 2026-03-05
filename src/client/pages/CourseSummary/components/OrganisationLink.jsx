@@ -4,6 +4,8 @@ import { Box, IconButton, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
+import { focusIndicatorStyle } from '../../../util/accessibility'
+
 export const OrganisationLink = ({ code, access }) => {
   const { t } = useTranslation()
 
@@ -29,9 +31,10 @@ export const OrganisationLink = ({ code, access }) => {
               color: theme => theme.palette.primary.light,
               background: 'transparent',
             },
+            ...focusIndicatorStyle(),
           }}
           color="primary"
-          disableFocusRipple
+          disableRipple
         >
           {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
         </IconButton>

@@ -38,7 +38,7 @@ export const NorButton = forwardRef<HTMLButtonElement, NorButtonProps>(
         disabled={disabled}
         startIcon={icon}
         disableRipple
-        sx={{ ...sx, ...focusIndicatorStyle() }}
+        sx={{ ...(sx ?? {}), ...focusIndicatorStyle() }}
         {...props}
       >
         {children}

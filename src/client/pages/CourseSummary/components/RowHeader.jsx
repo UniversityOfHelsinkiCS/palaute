@@ -3,6 +3,8 @@ import { Link as RouterLink } from 'react-router-dom'
 import { Box, ButtonBase } from '@mui/material'
 import { ChevronRight } from '@mui/icons-material'
 
+import { focusIndicatorStyle } from '../../../util/accessibility'
+
 const styles = {
   accordionButton: {
     width: '22rem',
@@ -10,6 +12,7 @@ const styles = {
     minHeight: '48px',
     // maxHeight: '74px',
     paddingRight: '2.5rem',
+    marginX: '0.5rem',
     display: 'flex',
     justifyContent: 'space-between',
     borderRadius: '10px',
@@ -22,6 +25,7 @@ const styles = {
       background: theme => theme.palette.action.selected,
     },
     transition: 'background-color 0.15s ease-out',
+    ...focusIndicatorStyle(),
   },
   unclickableLabel: {
     width: '22rem',

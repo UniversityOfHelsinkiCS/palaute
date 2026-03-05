@@ -82,7 +82,7 @@ export const RouterTab = ({
       disabled={disabled}
       {...props}
       sx={theme => ({
-        padding: '0.5rem 1rem',
+        padding: '8px 16px',
         transition: theme.transitions.create('background-color'),
         color: active ? 'primary.main' : 'text.secondary',
         opacity: 1,
@@ -91,10 +91,13 @@ export const RouterTab = ({
           opacity: 1,
         },
         '&.Mui-focusVisible': {
-          color: theme => theme.palette.primary.dark,
+          padding: '8px 13px',
+          border: '3px solid',
+          borderColor: theme => theme.palette.primary.main,
+          outlineOffset: '3px',
         },
       })}
-      tabIndex="0"
+      disableRipple
     />
   )
 

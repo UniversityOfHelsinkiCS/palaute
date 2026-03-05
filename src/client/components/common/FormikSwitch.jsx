@@ -18,7 +18,7 @@ const FormikSwitch = ({ name, label, sx, ...props }) => {
           onBlur={() => helpers.setTouched(true)}
           name={name}
           color="primary"
-          sx={{ ...sx, ...switchFocusIndicatorStyle }}
+          sx={{ ...(sx ?? {}), ...switchFocusIndicatorStyle }}
           disableRipple
           {...props}
         />

@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Button, Link as MuiLink, Box } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
 import { visuallyHidden } from '@mui/utils'
+import { focusIndicatorStyle } from '../../util/accessibility'
 
 const LinkButton = ({ title, to, external = false, ...rest }) => {
   const { t } = useTranslation()
@@ -24,7 +25,8 @@ const LinkButton = ({ title, to, external = false, ...rest }) => {
       {...rest}
       size="small"
       {...buttonProps}
-      sx={{ textDecoration: 'underline', '&:hover': { textDecoration: 'underline' } }}
+      sx={{ textDecoration: 'underline', '&:hover': { textDecoration: 'underline' }, ...focusIndicatorStyle() }}
+      disableRipple
     >
       {title}
       {external && (

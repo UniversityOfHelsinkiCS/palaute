@@ -9,6 +9,7 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { LANGUAGES } from '../../util/common'
 import { NorButton } from '../common/NorButton'
+import { focusIndicatorStyle } from '../../util/accessibility'
 
 import LikertEditor from './LikertEditor'
 import LikertPreview from './LikertPreview'
@@ -117,7 +118,7 @@ const EditActions = ({
 
       <Tooltip title={t('questionEditor:removeQuestion')}>
         <div>
-          <IconButton onClick={handleRemove} size="large">
+          <IconButton onClick={handleRemove} size="large" sx={focusIndicatorStyle()} disableRipple>
             <DeleteIcon />
           </IconButton>
         </div>

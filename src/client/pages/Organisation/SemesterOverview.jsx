@@ -448,7 +448,7 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
               onChange={v => onChange({ ...value, startDate: v.start, endDate: v.end })}
               setOption={handleSetOption}
             />
-            <Box ml="auto">{open ? <ArrowDropDown /> : <Menu />}</Box>
+            <Box sx={{ ml: 'auto' }}>{open ? <ArrowDropDown /> : <Menu />}</Box>
           </Box>
         </AccordionSummary>
         <AccordionDetails sx={styles.filtersContent}>
@@ -476,6 +476,7 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
                 />
               }
               label={t('organisationSettings:includeWithoutTeachers')}
+              sx={formControlLabelFocusIndicatorStyle}
             />
             <MultiSelect
               value={value.tags}
@@ -498,6 +499,7 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
                 />
               }
               label={t('organisationSettings:noTags')}
+              sx={formControlLabelFocusIndicatorStyle}
             />
           </Box>
         </AccordionDetails>

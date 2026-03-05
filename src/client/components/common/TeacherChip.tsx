@@ -1,6 +1,7 @@
 import { Chip, Tooltip } from '@mui/material'
 import React, { CSSProperties } from 'react'
 import type { User } from '@common/types/user'
+import { focusIndicatorStyle } from '../../util/accessibility'
 
 interface TeacherChipProps {
   user: User
@@ -27,7 +28,7 @@ const TeacherChip = ({ user, onDelete, tooltip, outlined, style, tooltipPlacemen
       component="a"
       href={user.email ? `mailto:${user.email}` : undefined}
       size="small"
-      sx={{ margin: '1px', ...style, fontWeight: 'normal' }}
+      sx={{ margin: '1px', ...style, fontWeight: 'normal', ...focusIndicatorStyle() }}
     />
   </Tooltip>
 )

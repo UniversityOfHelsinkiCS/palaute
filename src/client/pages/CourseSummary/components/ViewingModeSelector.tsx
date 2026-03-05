@@ -4,6 +4,8 @@ import { ToggleButton, ToggleButtonGroup, Tooltip } from '@mui/material'
 import { Reorder, Segment } from '@mui/icons-material'
 import { useSummaryContext } from '../context'
 
+import { focusIndicatorStyle } from '../../../util/accessibility'
+
 interface DateRangeType {
   start: Date
   end: Date
@@ -43,14 +45,14 @@ const ViewingModeSelector = () => {
       onChange={handleChange}
       color="primary"
       size="small"
-      sx={{ height: '40px' }}
+      sx={{ height: '40px', marginLeft: '0.5rem' }}
     >
-      <ToggleButton value="flat">
+      <ToggleButton value="flat" sx={focusIndicatorStyle()} disableRipple>
         <Tooltip title={t('courseSummary:flatView')}>
           <Reorder fontSize="medium" />
         </Tooltip>
       </ToggleButton>
-      <ToggleButton value="tree">
+      <ToggleButton value="tree" sx={focusIndicatorStyle()} disableRipple>
         <Tooltip title={t('courseSummary:treeView')}>
           <Segment fontSize="medium" />
         </Tooltip>

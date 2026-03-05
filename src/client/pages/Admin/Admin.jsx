@@ -21,6 +21,15 @@ import EnableCourses from './tabs/EnableCourses/EnableCourses'
 import CrashDebug from './CrashDebug'
 import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/OrganisationSurveyInspector'
 
+const tabStyle = {
+  '&.Mui-focusVisible': {
+    padding: '8px 13px',
+    border: '3px solid',
+    borderColor: theme => theme.palette.primary.main,
+    outlineOffset: '3px',
+  },
+}
+
 const ConfigTestValues = () => {
   const { t } = useTranslation()
 
@@ -55,16 +64,34 @@ const AdminView = () => {
       </Box>
       <Box>
         <RouterTabs indicatorColor="primary" textColor="primary" variant="scrollable" scrollButtons="auto">
-          <Tab label="Users" component={Link} to="/admin/users" />
-          <Tab label="Enable courses" component={Link} to="/admin/enable" />
-          <Tab label="Norppa feedback" component={Link} to="/admin/feedback" />
-          <Tab label="Norppa statistics" component={Link} to="/admin/statistics" />
-          <Tab label="Search feedback targets" component={Link} to="/admin/feedback-targets" />
-          <Tab label="Search organisation surveys" component={Link} to="/admin/organisation-surveys" />
-          <Tab label="Palautevastaavat" component={Link} to="/admin/feedback-correspondents" />
-          <Tab label="Banners" component={Link} to="/admin/banners" />
-          <Tab label="Updater" component={Link} to="/admin/updater" />
-          <Tab label="Misc" component={Link} to="/admin/misc" />
+          <Tab label="Users" component={Link} to="/admin/users" sx={tabStyle} disableRipple />
+          <Tab label="Enable courses" component={Link} to="/admin/enable" sx={tabStyle} disableRipple />
+          <Tab label="Norppa feedback" component={Link} to="/admin/feedback" sx={tabStyle} disableRipple />
+          <Tab label="Norppa statistics" component={Link} to="/admin/statistics" sx={tabStyle} disableRipple />
+          <Tab
+            label="Search feedback targets"
+            component={Link}
+            to="/admin/feedback-targets"
+            sx={tabStyle}
+            disableRipple
+          />
+          <Tab
+            label="Search organisation surveys"
+            component={Link}
+            to="/admin/organisation-surveys"
+            sx={tabStyle}
+            disableRipple
+          />
+          <Tab
+            label="Palautevastaavat"
+            component={Link}
+            to="/admin/feedback-correspondents"
+            sx={tabStyle}
+            disableRipple
+          />
+          <Tab label="Banners" component={Link} to="/admin/banners" sx={tabStyle} disableRipple />
+          <Tab label="Updater" component={Link} to="/admin/updater" sx={tabStyle} disableRipple />
+          <Tab label="Misc" component={Link} to="/admin/misc" sx={tabStyle} disableRipple />
         </RouterTabs>
       </Box>
       <Routes>

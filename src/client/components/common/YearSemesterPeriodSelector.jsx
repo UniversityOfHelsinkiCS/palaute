@@ -5,6 +5,7 @@ import { usePeriods } from '../../util/periodUtils'
 import { STUDY_YEAR_START_MONTH } from '../../util/common'
 import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
 import { useSemesters } from '../../util/semesterUtils'
+import { focusIndicatorStyle } from '../../util/accessibility'
 
 const styles = {
   filters: {
@@ -184,10 +185,10 @@ export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption,
       <Box sx={styles.filters}>
         {allowAll && (
           <ToggleButtonGroup id="all-filter-selector" value={option} onChange={handleOptionChange} color="primary">
-            <ToggleButton value="all" size="small">
+            <ToggleButton value="all" size="small" sx={focusIndicatorStyle()} disableRipple>
               {t('courseSummary:all')}
             </ToggleButton>
-            <ToggleButton value="filter" size="small">
+            <ToggleButton value="filter" size="small" sx={focusIndicatorStyle()} disableRipple>
               {t('courseSummary:filter')}
             </ToggleButton>
           </ToggleButtonGroup>

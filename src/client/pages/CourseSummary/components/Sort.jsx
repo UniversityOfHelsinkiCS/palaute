@@ -4,6 +4,8 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
 import { useSummaryContext } from '../context'
 
+import { focusIndicatorStyle } from '../../../util/accessibility'
+
 const AngledHeading = ({ label, isActive }) => (
   <Typography
     color={isActive ? 'text.primary' : 'text.secondary'}
@@ -55,9 +57,11 @@ const Sort = ({ field, label, width }) => {
                 display: 'flex',
                 flexDirection: 'column',
                 p: '1rem',
+                ...focusIndicatorStyle(),
               }}
               onClick={() => setSortBy([field, isNextDesc ? 'desc' : 'asc'])}
               color="primary"
+              disableRipple
             >
               <ArrowDropUp color={isActive && isDesc ? 'primary' : 'disabled'} sx={{ m: '-0.5rem' }} />
               <ArrowDropDown color={isActive && isAsc ? 'primary' : 'disabled'} sx={{ m: '-0.5rem' }} />
