@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react'
-import { Menu, MenuItem, Box, Tooltip } from '@mui/material'
+import { Menu, MenuItem, Box } from '@mui/material'
 import { FieldArray, Form, Formik, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { Add } from '@mui/icons-material'
@@ -10,21 +10,6 @@ import { NorButton } from '../common/NorButton'
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 import QuestionEditorActions from './QuestionEditorActions'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
-
-const TypeItem = ({ dataCy, onClick, label, disabled, disabledText }) =>
-  disabled && disabledText ? (
-    <Tooltip title={disabledText}>
-      <div>
-        <MenuItem onClick={onClick} disabled={disabled}>
-          {label}
-        </MenuItem>
-      </div>
-    </Tooltip>
-  ) : (
-    <MenuItem data-cy={dataCy} onClick={onClick} disabled={disabled}>
-      {label}
-    </MenuItem>
-  )
 
 const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()
@@ -37,26 +22,24 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
 
   return (
     <Menu data-cy="question-editor-type-menu" anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
-      <TypeItem
-        dataCy="question-editor-type-menu-select-likert"
-        onClick={() => handleChooseType('LIKERT')}
-        label={t('questionEditor:likertQuestion')}
-      />
-      <TypeItem
-        dataCy="question-editor-type-menu-select-open-question"
-        onClick={() => handleChooseType('OPEN')}
-        label={t('questionEditor:openQuestion')}
-      />
-      <TypeItem
-        dataCy="question-editor-type-menu-select-single-choice"
+      <MenuItem data-cy="question-editor-type-menu-select-likert" onClick={() => handleChooseType('LIKERT')}>
+        {t('questionEditor:likertQuestion')}
+      </MenuItem>
+      <MenuItem data-cy="question-editor-type-menu-select-open-question" onClick={() => handleChooseType('OPEN')}>
+        {t('questionEditor:openQuestion')}
+      </MenuItem>
+      <MenuItem
+        data-cy="question-editor-type-menu-select-single-choice"
         onClick={() => handleChooseType('SINGLE_CHOICE')}
-        label={t('questionEditor:singleChoiceQuestion')}
-      />
-      <TypeItem
-        dataCy="question-editor-type-menu-select-multiple-choice"
+      >
+        {t('questionEditor:singleChoiceQuestion')}
+      </MenuItem>
+      <MenuItem
+        data-cy="question-editor-type-menu-select-multiple-choice"
         onClick={() => handleChooseType('MULTIPLE_CHOICE')}
-        label={t('questionEditor:multipleChoiceQuestion')}
-      />
+      >
+        {t('questionEditor:multipleChoiceQuestion')}
+      </MenuItem>
     </Menu>
   )
 }
