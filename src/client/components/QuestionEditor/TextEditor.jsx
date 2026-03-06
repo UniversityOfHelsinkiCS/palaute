@@ -1,12 +1,12 @@
-import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
-import React from 'react'
-
+import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
+
+import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
 
 import FormikTextField from '../common/FormikTextField'
 import AlertLink from '../common/AlertLink'
 
-const LanguageTextEditor = ({ name, language }) => {
+const LanguageTextEditor = ({ name, language, inputRef }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -29,25 +29,37 @@ const LanguageTextEditor = ({ name, language }) => {
         label={t('questionEditor:content')}
         fullWidth
         multiline
+        inputRef={inputRef}
       />
     </>
   )
 }
 
-const TextEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
-  <Grid spacing={4} container>
-    {languages.map(language => (
-      <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-        <Box mb={2}>
-          <Typography variant="h6" component="h2">
-            {language.toUpperCase()}
-          </Typography>
-        </Box>
+const TextEditor = forwardRef((props, ref) => {
+  const { name, languages = ['fi', 'sv', 'en'] } = props
+  const firstInputRef = useRef(null)
 
-        <LanguageTextEditor name={name} language={language} />
-      </Grid>
-    ))}
-  </Grid>
-)
+  useImperativeHandle(ref, () => ({
+    focusFirst: () => {
+      firstInputRef.current?.focus?.()
+    },
+  }))
+
+  return (
+    <Grid spacing={4} container>
+      {languages.map((language, idx) => (
+        <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
+          <Box mb={2}>
+            <Typography variant="h6" component="h2">
+              {language.toUpperCase()}
+            </Typography>
+          </Box>
+
+          <LanguageTextEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+        </Grid>
+      ))}
+    </Grid>
+  )
+})
 
 export default TextEditor

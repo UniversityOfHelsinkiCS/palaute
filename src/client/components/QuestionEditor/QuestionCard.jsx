@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 
@@ -179,6 +179,16 @@ const QuestionCard = ({
     onPublicityToggle(isPublic)
   }
 
+  const editorRef = useRef(null)
+
+  useEffect(() => {
+    if (isEditing) {
+      const id = requestAnimationFrame(() => editorRef.current?.focusFirst?.())
+      return () => cancelAnimationFrame(id)
+    }
+    return undefined
+  }, [isEditing])
+
   return (
     <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
@@ -208,7 +218,7 @@ const QuestionCard = ({
         {isEditing ? (
           <>
             <Box mb={2}>
-              <EditorComponent name={name} languages={LANGUAGES} />
+              <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} />
             </Box>
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>

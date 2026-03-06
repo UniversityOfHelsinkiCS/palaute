@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 
 import { Box, Grid2 as Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
@@ -14,7 +14,7 @@ const styles = {
   }),
 }
 
-const InfoEditor = ({ name, language }) => {
+const InfoEditor = ({ name, language, inputRef }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -26,6 +26,7 @@ const InfoEditor = ({ name, language }) => {
           name={`${name}.data.label.${language}`}
           label={t('questionEditor:label')}
           fullWidth
+          inputRef={inputRef}
         />
       </Box>
 
@@ -42,14 +43,22 @@ const InfoEditor = ({ name, language }) => {
   )
 }
 
-const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
+const ChoiceEditor = forwardRef((props, ref) => {
+  const { name, languages = ['fi', 'sv', 'en'] } = props
   const { i18n } = useTranslation()
+
+  const firstInputRef = useRef(null)
+  useImperativeHandle(ref, () => ({
+    focusFirst: () => {
+      firstInputRef.current?.focus?.()
+    },
+  }))
 
   return (
     <>
       <Box sx={styles.container}>
         <Grid spacing={4} container>
-          {languages.map(language => (
+          {languages.map((language, idx) => (
             <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
               <Box mb={2}>
                 <Typography variant="h6" component="h2">
@@ -57,7 +66,7 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
                 </Typography>
               </Box>
 
-              <InfoEditor name={name} language={language} />
+              <InfoEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
             </Grid>
           ))}
         </Grid>
@@ -84,6 +93,6 @@ const ChoiceEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
       <OptionEditor name={`${name}.data.options`} languages={languages} />
     </>
   )
-}
+})
 
 export default ChoiceEditor

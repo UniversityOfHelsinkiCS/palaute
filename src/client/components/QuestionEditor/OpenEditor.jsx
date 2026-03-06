@@ -1,11 +1,11 @@
-import React from 'react'
+import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { Alert, Box, Grid2 as Grid, Typography } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 
 import AlertLink from '../common/AlertLink'
 import FormikTextField from '../common/FormikTextField'
 
-const LanguageOpenEditor = ({ name, language }) => {
+const LanguageOpenEditor = ({ name, language, inputRef }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -30,6 +30,7 @@ const LanguageOpenEditor = ({ name, language }) => {
           label={t('questionEditor:label')}
           fullWidth
           multiline
+          inputRef={inputRef}
         />
       </Box>
 
@@ -45,20 +46,31 @@ const LanguageOpenEditor = ({ name, language }) => {
   )
 }
 
-const OpenEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => (
-  <Grid spacing={4} container>
-    {languages.map(language => (
-      <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-        <Box mb={2}>
-          <Typography variant="h6" component="h2">
-            {language.toUpperCase()}
-          </Typography>
-        </Box>
+const OpenEditor = forwardRef((props, ref) => {
+  const { name, languages = ['fi', 'sv', 'en'] } = props
+  const firstInputRef = useRef(null)
 
-        <LanguageOpenEditor name={name} language={language} />
-      </Grid>
-    ))}
-  </Grid>
-)
+  useImperativeHandle(ref, () => ({
+    focusFirst: () => {
+      firstInputRef.current?.focus?.()
+    },
+  }))
+
+  return (
+    <Grid spacing={4} container>
+      {languages.map((language, idx) => (
+        <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
+          <Box mb={2}>
+            <Typography variant="h6" component="h2">
+              {language.toUpperCase()}
+            </Typography>
+          </Box>
+
+          <LanguageOpenEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+        </Grid>
+      ))}
+    </Grid>
+  )
+})
 
 export default OpenEditor
