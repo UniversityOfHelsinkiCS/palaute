@@ -31,6 +31,7 @@ import { LoadingProgress } from '../common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { useOrganisationSurveysForUser } from '../../pages/Organisation/useOrganisationsSurveysForUser'
 import { sortOrganisations, getSurveysWithQuestions } from './utils'
+import { ORGANISATION_SURVEYS_ENABLED } from '../../util/common'
 
 const styles = {
   listItem: {
@@ -139,8 +140,9 @@ const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
 
   const handleValueChange = (event, newValue) => setValue(newValue)
 
-  const { organisationsWithSurveys = [], isLoading: organisationsIsLoading } =
-    useOrganisationSurveysForUser(userCreated)
+  const { organisationsWithSurveys = [], isLoading: organisationsIsLoading } = useOrganisationSurveysForUser(
+    open && userCreated && ORGANISATION_SURVEYS_ENABLED
+  )
   const sortedOrganisationsWithSurveys = sortOrganisations(organisationsWithSurveys, feedbackTarget, i18n.language)
 
   const { feedbackTargets, isLoading: feedbackTargetsIsLoading } = useCourseUnitFeedbackTargets(value?.courseCode, {
