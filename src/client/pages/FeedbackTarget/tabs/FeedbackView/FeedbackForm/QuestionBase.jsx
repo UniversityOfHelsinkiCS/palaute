@@ -23,8 +23,7 @@ const styles = {
 const QuestionBase = ({ children, label, description, required, labelProps = {} }) => (
   <Box sx={styles.questionContainer}>
     <Typography variant="h6" sx={styles.label} {...labelProps}>
-      {label}
-      {required && ' *'}
+      {`${label}${required ? ' *' : ''}`}
     </Typography>
     {description && <Typography sx={styles.description}>{description}</Typography>}
     {children}

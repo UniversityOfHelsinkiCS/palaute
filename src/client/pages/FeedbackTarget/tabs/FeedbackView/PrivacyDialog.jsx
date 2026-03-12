@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Link } from '@mui/material'
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 import { NorButton } from '../../../../components/common/NorButton'
+import LinkButton from '../../../../components/common/LinkButton'
 
 const PrivacyDialog = ({ open, onClose }) => {
   const { t } = useTranslation()
@@ -20,9 +21,12 @@ const PrivacyDialog = ({ open, onClose }) => {
         <DialogContentText id="feedback-privacy-dialog-description">
           {t('feedbackView:feedbackInfoContent')}
           <br />
-          <Link href={t('links:dataProtection')} underline="hover">
-            {t('feedbackView:dataProtectionNotice')}
-          </Link>
+          <LinkButton
+            title={t('feedbackView:dataProtectionNotice')}
+            to={t('links:dataProtection')}
+            external
+            sx={{ mt: '0.5rem' }}
+          />
         </DialogContentText>
       </DialogContent>
       <DialogActions>

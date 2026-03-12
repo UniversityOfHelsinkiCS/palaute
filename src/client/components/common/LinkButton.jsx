@@ -6,7 +6,7 @@ import { OpenInNew } from '@mui/icons-material'
 import { visuallyHidden } from '@mui/utils'
 import { focusIndicatorStyle } from '../../util/accessibility'
 
-const LinkButton = ({ title, to, external = false, ...rest }) => {
+const LinkButton = ({ title, to, external = false, sx = {}, ...rest }) => {
   const { t } = useTranslation()
   const buttonProps = {
     ...(external
@@ -25,7 +25,7 @@ const LinkButton = ({ title, to, external = false, ...rest }) => {
       {...rest}
       size="small"
       {...buttonProps}
-      sx={{ textDecoration: 'underline', '&:hover': { textDecoration: 'underline' }, ...focusIndicatorStyle() }}
+      sx={{ ...sx, textDecoration: 'underline', '&:hover': { textDecoration: 'underline' }, ...focusIndicatorStyle() }}
       disableRipple
     >
       {title}

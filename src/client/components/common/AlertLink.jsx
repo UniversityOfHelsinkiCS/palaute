@@ -5,6 +5,7 @@ const styles = {
   alertLink: {
     fontWeight: theme => theme.typography.fontWeightMedium,
     textDecoration: 'underline',
+    marginRight: '2px',
   },
 }
 
