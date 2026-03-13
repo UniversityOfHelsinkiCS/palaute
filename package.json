@@ -95,7 +95,7 @@
     "react-to-print": "3.2.0",
     "redis": "4.7.1",
     "resize-observer-polyfill": "1.5.1",
-    "sequelize": "6.37.7",
+    "sequelize": "6.37.8",
     "umzug": "3.8.2",
     "unfuck-spa-shibboleth-session": "5.0.0",
     "unfuck-utf8-headers-middleware": "1.0.1",
