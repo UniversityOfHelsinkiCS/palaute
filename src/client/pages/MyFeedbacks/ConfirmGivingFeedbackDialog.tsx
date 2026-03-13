@@ -33,6 +33,7 @@ const ConfirmGivingFeedbackDialog = ({ onClose, open = false }: ConfirmGivingFee
           component={Link}
           sx={{ margin: '0 10px 10px 0' }}
           data-cy="confirm-giving-feedback-dialog-cancel"
+          aria-label={t('userFeedbacks:cancelButtonAriaLabel')}
         >
           {t('common:cancel')}
         </NorButton>

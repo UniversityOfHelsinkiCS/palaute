@@ -140,8 +140,9 @@
     "noFeedbackGiven": "Your decision to not give feedback has been noted",
     "noFeedbackGivenChip": "I did not give feedback",
     "attention": "Attention!",
-    "smallCourseWarning": "Less than {{count}} students have enrolled in this course. By continuing, you acknowledge that although the teacher will not see the respondents' personal information, it may still be possible to associate responses with specific individuals.",
-    "continue": "Continue to the feedback"
+    "smallCourseWarning": "Fewer than {{count}} students have enrolled in this course. By continuing, you acknowledge that although the teacher will not see the respondents' personal information, it may still be possible to associate responses with specific individuals.",
+    "continue": "Continue to the feedback",
+    "cancelButtonAriaLabel": "Cancel and return to My feedback page"
   },
   "feedbackView": {
     "submitButton": "Give feedback",
