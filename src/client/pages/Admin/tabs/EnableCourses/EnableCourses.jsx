@@ -15,7 +15,7 @@ import { useSnackbar } from 'notistack'
 
 import apiClient from '../../../../util/apiClient'
 import useInactiveCourseRealisations from '../../../../hooks/useInactiveCourseRealisations'
-import { switchFocusIndicatorStyle, formControlLabelFocusIndicatorStyle } from '../../../../util/accessibility'
+import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
 
 const Enable = ({ cur, active, setActive }) => {
   const { enqueueSnackbar } = useSnackbar()
@@ -47,7 +47,6 @@ const Enable = ({ cur, active, setActive }) => {
           control={<Switch checked={active} onClick={handleSetActive} sx={switchFocusIndicatorStyle} disableRipple />}
           label={active ? 'Enabled' : 'Disabled'}
           labelPlacement="start"
-          sx={formControlLabelFocusIndicatorStyle}
         />
       </FormGroup>
     </Box>

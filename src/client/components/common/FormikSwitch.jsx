@@ -2,7 +2,7 @@ import React from 'react'
 import { useField } from 'formik'
 import { Switch, FormControlLabel } from '@mui/material'
 
-import { switchFocusIndicatorStyle, formControlLabelFocusIndicatorStyle } from '../../util/accessibility'
+import { switchFocusIndicatorStyle } from '../../util/accessibility'
 
 const FormikSwitch = ({ name, label, sx, ...props }) => {
   const [field, , helpers] = useField(name)
@@ -24,7 +24,6 @@ const FormikSwitch = ({ name, label, sx, ...props }) => {
         />
       }
       label={label}
-      sx={formControlLabelFocusIndicatorStyle}
     />
   )
 }

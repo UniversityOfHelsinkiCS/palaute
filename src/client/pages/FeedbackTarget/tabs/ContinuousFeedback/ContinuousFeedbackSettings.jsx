@@ -6,7 +6,7 @@ import { useSnackbar } from 'notistack'
 
 import apiClient from '../../../../util/apiClient'
 import CardSection from '../../../../components/common/CardSection'
-import { switchFocusIndicatorStyle, formControlLabelFocusIndicatorStyle } from '../../../../util/accessibility'
+import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
 
 const updateContinuousFeedbackStatus = async ({ id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail }) => {
   const { data } = await apiClient.put(`/feedback-targets/${id}`, {
@@ -72,7 +72,6 @@ const ContinuousFeedbackSettings = ({ feedbackTarget, feedbackEnabled, setFeedba
             />
           }
           label={t('feedbackTargetView:activateContinuousFeedback')}
-          sx={formControlLabelFocusIndicatorStyle}
         />
         <FormControlLabel
           control={
@@ -86,7 +85,6 @@ const ContinuousFeedbackSettings = ({ feedbackTarget, feedbackEnabled, setFeedba
             />
           }
           label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
-          sx={formControlLabelFocusIndicatorStyle}
         />
       </FormGroup>
     </CardSection>

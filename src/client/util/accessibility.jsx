@@ -17,12 +17,3 @@ export const switchFocusIndicatorStyle = {
     outlineOffset: '3px',
   },
 }
-
-export const formControlLabelFocusIndicatorStyle = {
-  '&:focus-within': {
-    outline: '3px solid',
-    outlineColor: theme => theme.palette.primary.main,
-    outlineOffset: '3px',
-    borderRadius: 1,
-  },
-}

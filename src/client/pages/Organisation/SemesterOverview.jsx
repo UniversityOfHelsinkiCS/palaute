@@ -40,7 +40,7 @@ import { getYearRange } from '../../util/yearUtils'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
 import { organisationFeedbackTargetsQueryFn } from './responsiblesUtils'
-import { switchFocusIndicatorStyle, formControlLabelFocusIndicatorStyle } from '../../util/accessibility'
+import { switchFocusIndicatorStyle } from '../../util/accessibility'
 
 const SelectionContext = React.createContext({})
 
@@ -476,7 +476,6 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
                 />
               }
               label={t('organisationSettings:includeWithoutTeachers')}
-              sx={formControlLabelFocusIndicatorStyle}
             />
             <MultiSelect
               value={value.tags}
@@ -499,7 +498,6 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
                 />
               }
               label={t('organisationSettings:noTags')}
-              sx={formControlLabelFocusIndicatorStyle}
             />
           </Box>
         </AccordionDetails>
@@ -722,14 +720,12 @@ const SemesterOverview = ({ organisation }) => {
             <Switch checked={sidebarEditMode} onChange={toggleEditMode} sx={switchFocusIndicatorStyle} disableRipple />
           }
           label={t('organisationSettings:editMode')}
-          sx={formControlLabelFocusIndicatorStyle}
         />
         <FormControlLabel
           control={
             <Switch checked={showCurName} onChange={toggleShowCurName} sx={switchFocusIndicatorStyle} disableRipple />
           }
           label={t('organisationSettings:showCurName')}
-          sx={formControlLabelFocusIndicatorStyle}
         />
         <NorButton
           color="secondary"
