@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 
 import { useParams, useNavigate, Link } from 'react-router-dom'
 
-import { Typography, Box, Card, CardContent, Alert } from '@mui/material'
+import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
@@ -69,16 +69,7 @@ const FormContainer = ({
             </Card>
 
             {showSubmitButton && (
-              <Box mt={2}>
-                <NorButton
-                  data-cy="feedback-view-give-feedback"
-                  disabled={disabled || (fewEnrolled && !values.activateSubmit && !isEdit)}
-                  color="secondary"
-                  variant="contained"
-                  type="submit"
-                >
-                  {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
-                </NorButton>
+              <Stack spacing={2} sx={{ mt: 2, alignItems: 'flex-start' }}>
                 {fewEnrolled && !isEdit && (
                   <ConsentCheckbox
                     dataCy="feedback-view-consent-checkbox"
@@ -88,12 +79,20 @@ const FormContainer = ({
                     handleChange={setFieldValue}
                   />
                 )}
+                <NorButton
+                  data-cy="feedback-view-give-feedback"
+                  disabled={disabled || (fewEnrolled && !values.activateSubmit && !isEdit)}
+                  color="secondary"
+                  variant="contained"
+                  type="submit"
+                  sx={{ width: 'auto' }}
+                >
+                  {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
+                </NorButton>
                 {showCannotSubmitText && (
-                  <Box mt={1}>
-                    <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
-                  </Box>
+                  <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
                 )}
-              </Box>
+              </Stack>
             )}
           </Form>
         )

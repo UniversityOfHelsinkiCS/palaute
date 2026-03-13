@@ -150,7 +150,8 @@
     "feedbackInfoTitle": "Hur används mina svar och min information?",
     "feedbackInfoContent": "Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Svaren behandlas och visas alltid anonymt. Läraren kan inte koppla responser till enskilda studerande. \n Inloggningsinformation används till att visa rätta responser till studerande.",
     "continuousFeedbackInfo": "Du kan ge kontinuerlig respons medan kursen är igång. Responsen ges anonymt.",
-    "allowSubmitCheckbox": "Läraren kan se mina svar även om färre än {{count}} studenter är anmälda till denna kurs."
+    "allowSubmitCheckbox": "Läraren kan se mina svar även om färre än {{count}} studenter är anmälda till denna kurs.",
+    "allowSubmitCheckboxAria": "Samtycke krävs för att skicka in responsen."
   },
   "teacherView": {
     "mainHeading": "Mina enkäter",
