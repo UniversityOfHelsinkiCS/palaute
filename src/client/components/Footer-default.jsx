@@ -71,11 +71,9 @@ const Footer = ({ user }) => {
             <Link href={t('links:toska')} target="_blank" rel="noopener" underline="always">
               <img src={images.toska_color} loading="lazy" style={styles.logo} alt={t('footer:toska')} />
             </Link>
-            <Typography component="p" variant="subtitle1" fontSize={10}>
-              {t('footer:lastUpdate', { duration: uptime })}
-            </Typography>
-            <Typography variant="caption">{t('footer:server', { version: serverVersion })}</Typography>
-            <Typography variant="caption">{t('footer:client', { version: clientVersion })}</Typography>
+            <Typography fontSize={12}>{t('footer:lastUpdate', { duration: uptime })}</Typography>
+            <Typography fontSize={12}>{t('footer:server', { version: serverVersion })}</Typography>
+            <Typography fontSize={12}>{t('footer:client', { version: clientVersion })}</Typography>
           </Box>
         </Box>
       </Container>
