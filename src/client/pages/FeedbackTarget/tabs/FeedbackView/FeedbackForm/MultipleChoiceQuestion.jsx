@@ -34,7 +34,7 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
     <>
       <FormControl component="fieldset">
         <QuestionBase label={label} required={required} description={description} labelProps={{ component: 'legend' }}>
-          <FormGroup sx={{ paddingLeft: '0.75rem' }}>
+          <FormGroup role="group" aria-label={label} sx={{ paddingLeft: '0.75rem' }}>
             {options.map(option => (
               <FormControlLabel
                 value={option.id}
