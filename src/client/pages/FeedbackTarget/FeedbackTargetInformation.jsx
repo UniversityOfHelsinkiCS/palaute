@@ -56,7 +56,7 @@ const FeedbackTargetInformation = () => {
               component="h2"
               sx={{ mr: '1rem' }}
             >
-              {isOrganisationSurvey && courseUnitOrganisationCode ? (
+              {isOrganisationSurvey && courseUnitOrganisationCode && !isStudent ? (
                 <Link href={`/organisations/${courseUnitOrganisationCode}/organisation-surveys`} underline="always">
                   {secondaryCourseName}
                 </Link>
