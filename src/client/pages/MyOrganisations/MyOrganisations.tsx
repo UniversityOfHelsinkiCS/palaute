@@ -5,6 +5,7 @@ import { Box, Typography, Card, CardActionArea, Chip } from '@mui/material'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
 import type { OrganisationWithAccess } from '../../../common/types/organisation'
 
@@ -55,6 +56,7 @@ const MyOrganisations = () => {
 
   return (
     <Box>
+      <Title>{t(titleKey)}</Title>
       <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
         {t(titleKey)}
       </Typography>
@@ -62,31 +64,37 @@ const MyOrganisations = () => {
       {sortedOrganisations.length === 0 ? (
         <Typography color="textSecondary">{t('myOrganisationsPage:noOrganisations')}</Typography>
       ) : (
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-          {sortedOrganisations.map(({ organisation, access }) => (
-            <Card key={organisation.code} variant="outlined">
-              <CardActionArea
-                component={Link}
-                to={`/organisations/${organisation.code}`}
-                sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
-              >
-                <Box>
-                  <Typography variant="body1" fontWeight="medium">
-                    {getLanguageValue(organisation.name, i18n.language)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {organisation.code}
-                  </Typography>
-                </Box>
-                <Chip
-                  label={getAccessLabel(access, t)}
-                  color={getAccessColor(access)}
-                  size="small"
-                  variant="outlined"
-                />
-              </CardActionArea>
-            </Card>
-          ))}
+        <Box
+          component="ul"
+          role="list"
+          sx={{ display: 'flex', flexDirection: 'column', gap: 1, listStyle: 'none', p: 0, m: 0 }}
+        >
+          {sortedOrganisations.map(({ organisation, access }) => {
+            const orgName = getLanguageValue(organisation.name, i18n.language)
+            const accessLabel = getAccessLabel(access, t)
+            return (
+              <Box component="li" key={organisation.code}>
+                <Card variant="outlined">
+                  <CardActionArea
+                    component={Link}
+                    to={`/organisations/${organisation.code}`}
+                    sx={{ p: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+                    aria-label={`${orgName} (${organisation.code}) — ${accessLabel}`}
+                  >
+                    <Box>
+                      <Typography variant="body1" fontWeight="medium">
+                        {orgName}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {organisation.code}
+                      </Typography>
+                    </Box>
+                    <Chip label={accessLabel} color={getAccessColor(access)} size="small" variant="outlined" />
+                  </CardActionArea>
+                </Card>
+              </Box>
+            )
+          })}
         </Box>
       )}
     </Box>
