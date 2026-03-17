@@ -355,7 +355,17 @@
     "nameFallback": "Valikko",
     "feedback": "Anna palautetta Norpan kehittäjille",
     "userInformation": "Omat tietoni",
-    "badgeLabel": "Sinulla on uusia palautteita annettavaksi"
+    "badgeLabel": "Sinulla on uusia palautteita annettavaksi",
+    "myOrganisations": "Organisaationi",
+    "myProgrammes": "Koulutusohjelmani"
+  },
+  "myOrganisationsPage": {
+    "title": "Organisaationi",
+    "titleProgrammes": "Koulutusohjelmani",
+    "noOrganisations": "Sinulla ei ole pääsyä yhteenkään organisaatioon.",
+    "admin": "Ylläpitäjä",
+    "write": "Kirjoitus",
+    "read": "Luku"
   },
   "userInformation": {
     "iamGroups": "IAM-ryhmät",

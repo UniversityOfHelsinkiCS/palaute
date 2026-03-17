@@ -13,6 +13,7 @@ import FeedbackTarget from './FeedbackTarget'
 import MyFeedbacks from './MyFeedbacks'
 import MyTeaching from './MyTeaching/MyTeaching'
 import NorppaFeedback from './NorppaFeedback'
+import MyOrganisations from './MyOrganisations/MyOrganisations'
 import Organisation from './Organisation'
 import Search from './Search/Search'
 
@@ -49,6 +50,7 @@ const Router = () => (
         <Route path="/feedbacks" element={<MyFeedbacks />} />
         <Route path="/courses" element={<MyTeaching />} />
         <Route path="/targets/:id/*" element={<FeedbackTarget />} />
+        <Route path="/my-organisations" element={<MyOrganisations />} />
         <Route path="/organisations/:code/*" element={<Organisation />} />
         <Route path="/course-summary/*" element={<Summary />} />
         {PUBLIC_COURSE_BROWSER_ENABLED && <Route path="/search" element={<Search />} />}

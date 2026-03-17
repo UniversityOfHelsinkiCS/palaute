@@ -337,7 +337,17 @@
     "courseSummary": "Kurssammandrag",
     "nameFallback": "Menu",
     "feedback": "Ge respons till Norppa utvecklarna",
-    "userInformation": "Mina uppgifter"
+    "userInformation": "Mina uppgifter",
+    "myOrganisations": "Mina organisationer",
+    "myProgrammes": "Mina utbildningsprogram"
+  },
+  "myOrganisationsPage": {
+    "title": "Mina organisationer",
+    "titleProgrammes": "Mina utbildningsprogram",
+    "noOrganisations": "Du har inte tillgång till några organisationer.",
+    "admin": "Admin",
+    "write": "Skriv",
+    "read": "Läs"
   },
   "userInformation": {
     "iamGroups": "IAM-grupper",

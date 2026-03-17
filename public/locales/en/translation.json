@@ -361,7 +361,17 @@
     "nameFallback": "Menu",
     "feedback": "Give feedback to Norppa developers",
     "userInformation": "My information",
-    "badgeLabel": "You have new feedbacks to give"
+    "badgeLabel": "You have new feedbacks to give",
+    "myOrganisations": "My organisations",
+    "myProgrammes": "My study programmes"
+  },
+  "myOrganisationsPage": {
+    "title": "My organisations",
+    "titleProgrammes": "My study programmes",
+    "noOrganisations": "You do not have access to any organisations.",
+    "admin": "Admin",
+    "write": "Write",
+    "read": "Read"
   },
   "userInformation": {
     "iamGroups": "IAM-groups",

@@ -159,6 +159,8 @@ const NavBar = ({ guest = false }) => {
     feedbackTargets?.waiting?.length || feedbackTargets?.given?.length || feedbackTargets?.ended?.length
   )
   const isAdminUser = authorizedUser?.isAdmin ?? false
+  const isImpersonating = Boolean(localStorage.getItem('adminLoggedInAs'))
+  const isAdminOrImpersonator = isAdminUser || isImpersonating
 
   const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({
     enabled: isAdminUser,
@@ -170,6 +172,11 @@ const NavBar = ({ guest = false }) => {
   const preferences = authorizedUser?.preferences ?? {}
   const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
   const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
+  const userOrganisations = authorizedUser?.organisations ?? []
+  const hasOrganisationAccess = userOrganisations.length > 0
+  const allOrganisationsAreProgrammes =
+    hasOrganisationAccess &&
+    userOrganisations.every(({ organisation }) => /^\d{3}-[MK]\d{3,4}$/.test(organisation.code))
 
   const handleCloseMenu = () => {
     setMenuOpen(false)
@@ -235,6 +242,11 @@ const NavBar = ({ guest = false }) => {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },
+    hasOrganisationAccess &&
+      isAdminOrImpersonator && {
+        label: t(allOrganisationsAreProgrammes ? 'navBar:myProgrammes' : 'navBar:myOrganisations'),
+        to: '/my-organisations',
+      },
     (myCoursesIsAccessible || courseSummaryIsAccessible) && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
