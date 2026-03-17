@@ -178,6 +178,11 @@ const NavBar = ({ guest = false }) => {
     hasOrganisationAccess &&
     userOrganisations.every(({ organisation }) => /^\d{3}-[MK]\d{3,4}$/.test(organisation.code))
 
+  const organisationsNavLabel = () => {
+    if (!allOrganisationsAreProgrammes) return 'navBar:myOrganisations'
+    return 'navBar:myProgrammes'
+  }
+
   const handleCloseMenu = () => {
     setMenuOpen(false)
   }
@@ -244,7 +249,7 @@ const NavBar = ({ guest = false }) => {
     },
     hasOrganisationAccess &&
       isAdminOrImpersonator && {
-        label: t(allOrganisationsAreProgrammes ? 'navBar:myProgrammes' : 'navBar:myOrganisations'),
+        label: t(organisationsNavLabel()),
         to: '/my-organisations',
       },
     (myCoursesIsAccessible || courseSummaryIsAccessible) && {

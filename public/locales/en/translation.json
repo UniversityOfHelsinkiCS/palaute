@@ -362,12 +362,12 @@
     "feedback": "Give feedback to Norppa developers",
     "userInformation": "My information",
     "badgeLabel": "You have new feedbacks to give",
-    "myOrganisations": "My organisations",
-    "myProgrammes": "My study programmes"
+    "myOrganisations": "Organisation",
+    "myProgrammes": "Study programme"
   },
   "myOrganisationsPage": {
-    "title": "My organisations",
-    "titleProgrammes": "My study programmes",
+    "title": "Organisation",
+    "titleProgrammes": "Study programme",
     "noOrganisations": "You do not have access to any organisations.",
     "admin": "Admin",
     "write": "Write",

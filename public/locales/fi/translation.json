@@ -356,12 +356,12 @@
     "feedback": "Anna palautetta Norpan kehittäjille",
     "userInformation": "Omat tietoni",
     "badgeLabel": "Sinulla on uusia palautteita annettavaksi",
-    "myOrganisations": "Organisaationi",
-    "myProgrammes": "Koulutusohjelmani"
+    "myOrganisations": "Organisaatio",
+    "myProgrammes": "Koulutusohjelma"
   },
   "myOrganisationsPage": {
-    "title": "Organisaationi",
-    "titleProgrammes": "Koulutusohjelmani",
+    "title": "Organisaatio",
+    "titleProgrammes": "Koulutusohjelma",
     "noOrganisations": "Sinulla ei ole pääsyä yhteenkään organisaatioon.",
     "admin": "Ylläpitäjä",
     "write": "Kirjoitus",

@@ -338,12 +338,12 @@
     "nameFallback": "Menu",
     "feedback": "Ge respons till Norppa utvecklarna",
     "userInformation": "Mina uppgifter",
-    "myOrganisations": "Mina organisationer",
-    "myProgrammes": "Mina utbildningsprogram"
+    "myOrganisations": "Organisation",
+    "myProgrammes": "Utbildningsprogram"
   },
   "myOrganisationsPage": {
-    "title": "Mina organisationer",
-    "titleProgrammes": "Mina utbildningsprogram",
+    "title": "Organisation",
+    "titleProgrammes": "Utbildningsprogram",
     "noOrganisations": "Du har inte tillgång till några organisationer.",
     "admin": "Admin",
     "write": "Skriv",
