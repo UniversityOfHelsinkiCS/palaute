@@ -143,11 +143,11 @@
     "submitButton": "Lähetä palaute",
     "editButton": "Muokkaa palautetta",
     "successAlert": "Palaute on annettu. Kiitos palautteestasi!",
-    "feedbackInfo": "Tämä palaute annetaan anonyymisti. Tähdellä (*) merkityt kentät ovat pakollisia.",
+    "feedbackInfo": "Annettu palaute näkyy opettajalle nimettömänä. Tähdellä (*) merkityt kentät ovat pakollisia.",
     "feedbackInfoLink": "Lue lisää, miten vastauksiasi ja tietojasi käytetään.",
     "closedInfo": "Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}} - {{closesAt}}",
     "feedbackInfoTitle": "Miten vastauksiani ja tietojani käytetään?",
-    "feedbackInfoContent": "Vastauksia kurssipalautteeseen käytetään kurssien sisällön ja opetuksen kehittämiseen. Vastauksia kurssipalautteen kysymyksiin saatetaan näyttää muille kurssin opiskelijoille. Vastauksia käsitellään ja ne näytetään aina anonyymisti, opettaja ei voi yhdistää palautteita yksittäisiin opiskelijoihin. \n Kirjautumistietoja käytetään siihen, että opiskelijalle näytetään oikeat palautteet.",
+    "feedbackInfoContent": "Vastauksia kurssipalautteeseen käytetään kurssien sisällön ja opetuksen kehittämiseen. Vastauksia kurssipalautteen kysymyksiin saatetaan näyttää muille kurssin opiskelijoille. Opettaja käsittelee vastaukset nimettöminä eikä voi yhdistää palautteita yksittäisiin opiskelijoihin.\nKirjautumistietoja käytetään siihen, että opiskelijalle näytetään oikeat palautekyselyt.",
     "dataProtectionNotice": "Tietosuojaseloste",
     "dontKnowOption": "eos",
     "editSurvey": "Muokkaa kyselyä",
@@ -155,7 +155,7 @@
     "cannotSubmitText": "Et voi lähettää palautetta, sillä et ole ilmoittautunut kurssille tai ilmoittautumisesi ei ole vielä päivittynyt järjestelmäämme. Ilmoittautumiset päivittyvät 24 tunnin välein.",
     "feedbackClosedError": "Palautteenanto on sulkeutunut",
     "endedInfo": "Palautteenanto on sulkeutunut. <2>Katso palautteita</2>",
-    "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta kun kurssi on käynnissä. Tämä palaute annetaan anonyymisti.",
+    "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta, kun kurssi on käynnissä. Nimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.",
     "allowSubmitCheckbox": "Vastaukseni saa näkyä opettajalle, vaikka kurssille on ilmoittautunut alle {{count}} opiskelijaa.",
     "allowSubmitCheckboxAria": "Suostumus tarvitaan, jotta palautteen voi lähettää."
   },
@@ -286,7 +286,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu.",
-    "notEnoughStudentsInfo": "Palautteen anonyymiuden suojaamiseksi tuloksia ei näytetä, kun ilmoittautuneita opiskelijoita on alle {{count}}. Opettaja voi nähdä palautteen, jos opiskelija on antanut siihen suostumuksensa.",
+    "notEnoughStudentsInfo": "Tuloksia ei näytetä, kun ilmoittautuneita opiskelijoita on alle {{count}}. Opettaja voi nähdä palautteen, jos opiskelija on antanut siihen suostumuksensa.",
     "smallCourseInfo": "Huomio: Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Palaute on kerätty vain opiskelijoilta, jotka ovat antaneet siihen suostumuksensa.",
     "onlyForEnrolledInfo": "Kyselyn tuloksia ei näytetä, sillä kurssin opettaja on asettanut palautteen näkyväksi vain kurssin osallistujille",
     "teacherAccessInfo": "Sinulla on opettajan käyttöoikeudet kurssille, joten näet vastaukset vain julkiseksi asetettuihin kysymyksiin. Jos tarvitset laajemman näkyvyyden pyydä vastuuopettajan roolia Sisussa.",
@@ -340,7 +340,7 @@
     "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys \"{{ name }}\". Voit poistaa sen alta kysymyksen muokkausvalikosta, jos haluat käyttää automaattista ryhmittelyä Sisun ryhmiin.",
     "chooseGroup": "Valitse tarkasteltava ryhmä",
     "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
-    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Palautteen anonymiteetin suojelemiseksi yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
+    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
     "groupingQuestionAddSuccess": "Ryhmittelykysymys luotu olemassa olevien Sisun ryhmien pohjalta. Voit muokata kysymystä halusi mukaan.",
     "addGroupingQuestion": "Lisää ryhmittelykysymys"
   },
@@ -634,7 +634,7 @@
     "continuousFeedbackGiven": "Annettu jatkuva palaute",
     "noContinuousFeedbackGiven": "Jatkuvaa palautetta ei ole vielä annettu",
     "continuousFeedbackInactive": "Jatkuva palaute ei ole käytössä",
-    "continuousFeedbackStudentInfo": "Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Antamasi palaute on anonyymiä, joten nimesi ei näy kurssin järjestäjille.",
+    "continuousFeedbackStudentInfo": "Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Nimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.",
     "respondContinuousFeedback": "Vastaa",
     "closeRespondContinuousFeedback": "Sulje",
     "continuousFeedbackResponse": "Vastaus",
@@ -667,8 +667,8 @@
     "description": "Norppaa kehitetään saadun käyttäjäpalautteen perusteella. Tällä lomakkeella voit halutessasi lähettää vapaamuotoista palautetta kehittäjille",
     "feedbackLengthError": "Palautteen vähimmäispituus on yksi merkki",
     "successAlert": "Palaute lähetetty onnistuneesti!",
-    "anonymous": "Lähetä anonyymisti",
-    "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia kun et käytä anonyymivaihtoehtoa."
+    "anonymous": "Lähetä nimettömänä",
+    "anonymousInfo": "Pystymme parhaiten korjaamaan käyttäjäkohtaisia ongelmia, kun annat palautteen nimelläsi."
   },
   "search": {
     "title": "Hae ohjelman opetusta",
@@ -681,7 +681,7 @@
     "reminderOnFeedbackToStudents": {
       "subject": "Anna palautetta kurssille {{courseName}}",
       "customSubject": "Vastaa kyselyyn {{courseName}}",
-      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen. Palautejakso päättyy {{closesAt}}. Kiitos!",
+      "text": "Hyvä opiskelija!\n\n Vastaathan kurssin <a href={{- url}}>{{courseName}}</a> palautteeseen.\nNimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.\nPalautejakso päättyy {{closesAt}}.\nKiitos!",
       "customText": "Hyvä vastaanottaja!\n\n Vastaathan kyselyyn <a href={{- url}}>{{courseName}}</a>. Vastausaika päättyy {{closesAt}}. Kiitos!",
       "linkToSurvey": "{{reminder}}\n\nLinkki kyselyyn: <a href={{- url}}>{{courseName}}</a>"
     },
@@ -692,7 +692,7 @@
     "surveyOpeningEmailToStudents": {
       "subject": "Kurssin {{courseName}} kurssipalaute on avautunut",
       "subjectMultiple": "Kurssipalaute on avautunut",
-      "text": "Hyvä opiskelija!<br/>\n Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
+      "text": "Hyvä opiskelija!<br/>\n Seuraavien kurssien kurssipalautelomakkeet ovat nyt auki:<br/>\n{{- courseNamesAndUrls}}\nKäythän antamassa kurssipalautetta, jotta voimme kehittää opetusta ja yliopiston toimintaa.\nNimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.\nVastattuasi näet palautekoosteen ja voit muokata vastauksia kyselyn ollessa auki."
     },
     "continuousFeedbackDigest": {
       "subject": "Uutta jatkuvaa palautetta opettamallesi kurssille {{courseName}}",
@@ -719,7 +719,7 @@
       "greetingWithWelcome": "tervetuloa käyttämään Helsingin yliopiston Norppa-kurssipalautejärjestelmää!",
       "text": "{{greeting}} <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon sisällä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Yliopisto- ja ohjelmatason kysymysten lisäksi kyselyllä on seuraavat lisäkysymykset:",
-      "smallCourseWarning": "Huomio! Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa, mikä voi vaarantaa palautteen anonyymiyden. Palaute kerätään vain opiskelijoilta, jotka antavat siihen suostumuksensa."
+      "smallCourseWarning": "Huomio! Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Palaute kerätään vain opiskelijoilta, jotka antavat siihen suostumuksensa."
     },
     "instructionsAndSupport": "Ota yhteyttä tukeen."
   },

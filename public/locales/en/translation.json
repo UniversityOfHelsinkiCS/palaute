@@ -148,11 +148,11 @@
     "submitButton": "Give feedback",
     "editButton": "Edit feedback",
     "successAlert": "Feedback has been given. Thank you for your feedback!",
-    "feedbackInfo": "This feedback is anonymous. Fields marked with an asterisk (*) are required.",
+    "feedbackInfo": "Your name will not be shown to the teacher with your feedback. Fields marked with an asterisk (*) are required.",
     "feedbackInfoLink": "Read more, how your information and answers are being used.",
     "closedInfo": "This feedback is currently closed. Feedback can be given between {{opensAt}} and {{closesAt}}",
     "feedbackInfoTitle": "How are my answers used?",
-    "feedbackInfoContent": "The answers to the feedback are used for the improvement of courses and teaching. Your answers for the feedback may be shown to other students. The answers are always processed and shown anonymously, the teacher cannot see which student has given a certain feedback.\n The user information is used to show correct feedback surveys by using enrolment information.",
+    "feedbackInfoContent": "The answers to the feedback are used for the improvement of courses and teaching. Your answers for the feedback may be shown to other students. The teacher will handle the feedback without names and cannot link the feedback to individual students.\n The login information is used to show each student the correct feedback surveys.",
     "dataProtectionNotice": "Data protection notice",
     "dontKnowOption": "N/A",
     "editSurvey": "Edit survey",
@@ -160,7 +160,7 @@
     "cannotSubmitText": "You cannot submit because you are not enrolled in this course or your enrollment has not updated to our system yet. Enrollments update every 24 hours.",
     "feedbackClosedError": "Feedback is closed",
     "endedInfo": "The feedback period has ended. <2>Take a look at the feedback</2>",
-    "continuousFeedbackInfo": "You can give continuous feedback while the course is ongoing. This feedback is anonymous.",
+    "continuousFeedbackInfo": "You can give continuous feedback while the course is ongoing. Your name will not be shown to the course staff with your feedback.",
     "allowSubmitCheckbox": "The teacher can see my answers even though there are less than {{count}} students enrolled in this course.",
     "allowSubmitCheckboxAria": "Consent is required for submitting the feedback."
   },
@@ -292,7 +292,7 @@
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet.",
-    "notEnoughStudentsInfo": "To protect the anonymity of feedback, survey results are not shown when there are fewer than {{count}} enrolled students. The teacher can see the feedback if the student has given their consent.",
+    "notEnoughStudentsInfo": "Survey results are not shown when there are fewer than {{count}} enrolled students. The teacher can see the feedback if the student has given their consent.",
     "smallCourseInfo": "Note: This course has fewer than {{count}} enrolled students. Feedback has been collected only from students who have given their consent to it.",
     "onlyForEnrolledInfo": "Survey results are not shown because the teacher has set feedback visible only for enrolled students",
     "teacherAccessInfo": "You have teacher access to the course, so you can only see the answers to questions that are set to public. If you need more visibility, request the role of responsible teacher in Sisu.",
@@ -337,7 +337,7 @@
     "groupingQuestionDefaultLabel": "Choose the group(s) you attended to",
     "groupingInfoTextTitle": "Read how grouping works",
     "onlyOneGroup": "Only one group from SISU is available, so automatic grouping cannot be used.",
-    "groupingInfoText": "Grouping allows you to see and compare answers of single SISU groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question and it is always the first question in the form. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. This is to protect anonymity of students' answers. If you create your own grouping question, try not to ask too specific things or add options that might get less than 5 answers.",
+    "groupingInfoText": "Grouping allows you to see and compare answers of single SISU groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question and it is always the first question in the form. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. If you create your own grouping question, try not to ask too specific things or add options that might get less than 5 answers.",
     "groupInformation": "Group information from Sisu",
     "teachersOfGroup": "Teachers of this group",
     "groupName": "Group name",
@@ -346,7 +346,7 @@
     "hasGroupingQuestion": "The survey has a grouping question '{{ name }}'. If you want to use automatic grouping based on SISU groups, you can delete it from below from the question's edit menu.",
     "chooseGroup": "Choose the group to show",
     "groupsNotAvailableInfoTitle": "Groups are not available",
-    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, to protect the students' anonymity the feedbacks of any single group cannot be shown separately.",
+    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, the feedbacks of any single group cannot be shown separately.",
     "groupingQuestionAddSuccess": "Grouping question added with existing groups as options. You may edit it as you wish.",
     "addGroupingQuestion": "Add grouping question"
   },
@@ -640,7 +640,7 @@
     "continuousFeedbackGiven": "Continuous feedback given",
     "noContinuousFeedbackGiven": "No continuous feedback has been given yet",
     "continuousFeedbackInactive": "Continuous feedback is not active",
-    "continuousFeedbackStudentInfo": "Here you can see your continuous feedback and responses. Your feedback is anonymous, so your name is not visible to the course organisers.",
+    "continuousFeedbackStudentInfo": "Here you can see your continuous feedback and responses. Your name is not shown to the course staff with your feedback.",
     "respondContinuousFeedback": "Respond",
     "closeRespondContinuousFeedback": "Close",
     "continuousFeedbackResponse": "Response",
@@ -673,8 +673,8 @@
     "description": "Norppa is being developed based on the user feedback recieved. With this form you can submit free-form feedback to the developers.",
     "feedbackLengthError": "The minimum length of the feedback is one symbol",
     "successAlert": "Feedback has been sent succesfully",
-    "anonymousInfo": "It is easier for us to fix user-specific problems when you don't use the anonymous-option.",
-    "anonymous": "Send anonymously"
+    "anonymousInfo": "It is easier for us to fix user-specific problems when you give the feedback with your name.",
+    "anonymous": "Send without my name"
   },
   "search": {
     "title": "Search program's courses",
@@ -687,7 +687,7 @@
     "reminderOnFeedbackToStudents": {
       "subject": "Please give feedback on the course {{courseName}}",
       "customSubject": "Please answer the survey {{courseName}}",
-      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>. The feedback period ends on {{closesAt}}. Thank you!",
+      "text": "Dear student!\n\n Please give feedback for the course <a href={{- url}}>{{courseName}}</a>.\nYour name will not be shown to the course staff with your feedback.\nThe feedback period ends on {{closesAt}}.\nThank you!",
       "customText": "Dear recipient!\n\n Please answer the survey <a href={{- url}}>{{courseName}}</a>. The answering period ends on {{closesAt}}. Thank you!",
       "linkToSurvey": "{{reminder}}\n\nLink to the survey: <a href={{- url}}>{{courseName}}</a>"
     },
@@ -698,7 +698,7 @@
     "surveyOpeningEmailToStudents": {
       "subject": "Course feedback for course {{courseName}} has opened",
       "subjectMultiple": "Course feedback has opened",
-      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease provide feedback on the course so that we can improve teaching and University operations.\nOnce you have completed the form, you will see a summary of your feedback. You will be able to edit your feedback as long\nas the form remains open."
+      "text": "Dear student, <br/>\nCourse feedback for the following courses are now open: <br/>\n{{- courseNamesAndUrls}}\nPlease, provide feedback on the course so that we can improve teaching and University operations.\nYour name will not be shown to the course staff with your feedback.\nOnce you have completed the form, you will see a summary of your feedback.\nYou will be able to edit your feedback as long as the form remains open."
     },
     "continuousFeedbackDigest": {
       "subject": "New continuous feedback on your course {{courseName}}",
@@ -724,7 +724,7 @@
       "greetingWithWelcome": "welcome to the University of Helsinki Norppa course feedback system!",
       "text": "{{greeting}} <br/>\nThe course feedback form for the following courses will open within a week: <br/>\n{{- courseNamesAndUrls}}\nPlease add your own questions, if any, before the above date. You can edit the questions and feedback dates by following the link. Students will receive an email notification when the feedback opens. Thank you! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "In addition to the university and programme level questions, the following questions have been added to the survey:",
-      "smallCourseWarning": "Attention! This course has fewer than {{count}} enrolled students, which might compromise the anonymity of the feedback. Feedback will be collected only from students who give their consent to it."
+      "smallCourseWarning": "Attention! This course has fewer than {{count}} enrolled students. Feedback will be collected only from students who give their consent to it."
     },
     "instructionsAndSupport": "Contact support."
   },

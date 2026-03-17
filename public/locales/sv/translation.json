@@ -136,7 +136,7 @@
   "feedbackView": {
     "submitButton": "Ge respons",
     "successAlert": "Responsen är given",
-    "feedbackInfo": "Denna respons är anonym. Fälten märkta med en asterisk (*) krävs.",
+    "feedbackInfo": "Denna respons visas för läraren utan ditt namn. Fälten märkta med en asterisk (*) krävs.",
     "feedbackInfoLink": "Läs mera om hur informationen och svar används.",
     "closedInfo": "Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}",
     "dataProtectionNotice": "Dataskyddsbeskrivning",
@@ -148,8 +148,8 @@
     "endedInfo": "Responsen är stängd. <2>Se på responserna</2>",
     "editButton": "Redigera respons",
     "feedbackInfoTitle": "Hur används mina svar och min information?",
-    "feedbackInfoContent": "Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Svaren behandlas och visas alltid anonymt. Läraren kan inte koppla responser till enskilda studerande. \n Inloggningsinformation används till att visa rätta responser till studerande.",
-    "continuousFeedbackInfo": "Du kan ge kontinuerlig respons medan kursen är igång. Responsen ges anonymt.",
+    "feedbackInfoContent": "Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Läraren behandlar svaren utan namn och kan inte koppla responser till enskilda studerande.\nInloggningsuppgifterna används för att visa varje studerande rätta enkäter.",
+    "continuousFeedbackInfo": "Du kan ge kontinuerlig respons medan kursen är igång. Ditt namn visas inte för kursens personal i anslutning till din respons.",
     "allowSubmitCheckbox": "Läraren kan se mina svar även om färre än {{count}} studenter är anmälda till denna kurs.",
     "allowSubmitCheckboxAria": "Samtycke krävs för att skicka in responsen."
   },
@@ -324,7 +324,7 @@
     "hasGroupingQuestion": "Enkäten har en grupperingsfråga \"{{ namn }}\". Du kan ta bort den från redigeringsmenyn under frågan om du vill använda automatisk gruppering i Sisu-grupper.",
     "chooseGroup": "Välj grupp att visas",
     "groupsNotAvailableInfoTitle": "Gruppklassificering är inte tillgängligt",
-    "groupsNotAvailableInfoContent": "Minst en grupp har 1-4 återkopplingar. För att bibehålla anonymitet kan feedback från enskilda grupper inte visas.",
+    "groupsNotAvailableInfoContent": "Minst en grupp har 1-4 återkopplingar. Därför kan feedback från enskilda grupper inte visas.",
     "addGroupingQuestion": "Lägg till grupperingsfråga"
   },
   "navBar": {
@@ -608,7 +608,7 @@
     "continuousFeedbackGiven": "Given kontinuerlig respons",
     "noContinuousFeedbackGiven": "Ingen kontinuerlig respons har ännu getts",
     "continuousFeedbackInactive": "Fortlöpande feedback är inte aktiverad",
-    "continuousFeedbackStudentInfo": "Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Den respons du givit är anonym, så ditt namn är inte synligt för kursordnare.",
+    "continuousFeedbackStudentInfo": "Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Ditt namn visas inte för kursens personal i anslutning till din respons.",
     "respondContinuousFeedback": "Svara",
     "closeRespondContinuousFeedback": "Stäng",
     "continuousFeedbackResponse": "Svar",
@@ -643,8 +643,8 @@
     "description": "Norppa utvecklas utifrån mottagen användarrespons. Med det här formuläret kan du ge fritt formulerad respons till utvecklarna.",
     "feedbackLengthError": "Minimilängden på responsen är ett tecken",
     "successAlert": "Responsen har skickats!",
-    "anonymous": "Lähetä anonyymisti Skicka anonymt",
-    "anonymousInfo": "Vi kan bäst åtgärda användarspecifika problem när du inte använder det anonyma alternativet."
+    "anonymous": "Skicka utan namn",
+    "anonymousInfo": "Vi kan bäst åtgärda användarspecifika problem när du lämnar responsen med ditt namn."
   },
   "search": {
     "title": "Sök programmets kurser",
@@ -657,7 +657,7 @@
     "reminderOnFeedbackToStudents": {
       "subject": "Ge gärna respons på kursen {{courseName}}",
       "customSubject": "Vänligen besvara enkäten {{courseName}}",
-      "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>. Responsperioden tar slut {{closesAt}}. Tack!",
+      "text": "Bästa studerande!\n\n Ge gärna respons på kursen <a href={{- url}}>{{courseName}}</a>.\nDitt namn visas inte för kursens personal i anslutning till din respons.\nResponsperioden tar slut {{closesAt}}.\nTack!",
       "customText": "Bästa mottagare!\n\n Vänligen besvara enkäten <a href={{- url}}>{{courseName}}</a>. Svarstiden avslutas {{closesAt}}. Tack!",
       "linkToSurvey": "{{reminder}}\n\nLänk till enkäten: <a href={{- url}}>{{courseName}}</a>"
     },
@@ -668,7 +668,7 @@
     "surveyOpeningEmailToStudents": {
       "subject": "Kursresponsen för kursen {{courseName}} har öppnats",
       "subjectMultiple": "Kursresponsen har öppnats",
-      "text": "Bästa studerande! <br/>\nKursresponsblanketten för följande kurser är nu öppna: <br/>\n{{- courseNamesAndUrls}}\nGe gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.\nEfter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen."
+      "text": "Bästa studerande! <br/>\nKursresponsblanketten för följande kurser är nu öppna: <br/>\n{{- courseNamesAndUrls}}\nGe gärna kursrespons, så att vi kan utveckla undervisningen och universitetets verksamhet.\nDitt namn visas inte för kursens personal i anslutning till din respons.\nEfter att du gett din respons kan du se ett sammandrag och du kan ändra dina svar så länge kursresponsen är öppen."
     },
     "continuousFeedbackDigest": {
       "subject": "Ny fortlöpande feedback för kursen du undervisar {{courseName}}",
@@ -691,7 +691,7 @@
       "greetingWithWelcome": "välkommen till Helsingfors universitets Norppa-kursresponssystem!",
       "text": "{{greeting}} <br/>\nKursresponsblanketten för följande kurser öppnas inom en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Utöver universitets- och programnivåns frågor har följande frågor lagts till i enkäten:",
-      "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter, vilket kan äventyra anonymiteten i återkopplingen. Återkoppling samlas in endast från studenter som ger sitt samtycke till det."
+      "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter. Återkoppling samlas in endast från studenter som ger sitt samtycke till det."
     },
     "instructionsAndSupport": "Kontakta stödet."
   }

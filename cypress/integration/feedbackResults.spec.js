@@ -32,7 +32,9 @@ describe('Feedback results', () => {
     cy.loginAs(student)
     cy.get('[data-cy="navbar-link-My feedback"]').click()
     cy.get('[data-cy=feedback-item-give-feedback]').click()
-    cy.contains('This feedback is anonymous. Fields marked with an asterisk (*) are required')
+    cy.contains(
+      'Your name will not be shown to the teacher with your feedback. Fields marked with an asterisk (*) are required.'
+    )
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })

@@ -70,7 +70,7 @@ describe('When course has only one enrolled student', () => {
 
       it('Student should not see feedback results', () => {
         cy.contains(
-          'To protect the anonymity of feedback, survey results are not shown when there are fewer than 5 enrolled students. ' +
+          'Survey results are not shown when there are fewer than 5 enrolled students. ' +
             'The teacher can see the feedback if the student has given their consent.'
         )
         cy.contains('Multiple choice questions').should('not.exist')

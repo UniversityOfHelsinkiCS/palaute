@@ -20,7 +20,9 @@ describe('User feedbacks view', () => {
 
     // Give feedback
     cy.get('[data-cy=feedback-item-give-feedback]').click()
-    cy.contains('This feedback is anonymous. Fields marked with an asterisk (*) are required')
+    cy.contains(
+      'Your name will not be shown to the teacher with your feedback. Fields marked with an asterisk (*) are required.'
+    )
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })
