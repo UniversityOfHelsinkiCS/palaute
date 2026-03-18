@@ -237,6 +237,10 @@ const NavBar = ({ guest = false }) => {
       label: t('navBar:myCourses'),
       to: '/courses',
     },
+    courseSummaryIsAccessible && {
+      label: t('navBar:courseSummary'),
+      to: '/course-summary',
+    },
     isStudent && {
       label: t('navBar:myFeedbacks'),
       to: '/feedbacks',
@@ -247,10 +251,6 @@ const NavBar = ({ guest = false }) => {
         label: t('navBar:browseCourses'),
         to: '/search',
       },
-    courseSummaryIsAccessible && {
-      label: t('navBar:courseSummary'),
-      to: '/course-summary',
-    },
     (myCoursesIsAccessible || courseSummaryIsAccessible) && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
