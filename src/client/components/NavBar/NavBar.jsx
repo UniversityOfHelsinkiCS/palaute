@@ -229,6 +229,10 @@ const NavBar = ({ guest = false }) => {
   )
 
   const links = [
+    hasOrganisationAccess && {
+      label: t(organisationsNavLabel()),
+      to: '/my-organisations',
+    },
     myCoursesIsAccessible && {
       label: t('navBar:myCourses'),
       to: '/courses',
@@ -247,11 +251,6 @@ const NavBar = ({ guest = false }) => {
       label: t('navBar:courseSummary'),
       to: '/course-summary',
     },
-    hasOrganisationAccess &&
-      isAdminOrImpersonator && {
-        label: t(organisationsNavLabel()),
-        to: '/my-organisations',
-      },
     (myCoursesIsAccessible || courseSummaryIsAccessible) && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
