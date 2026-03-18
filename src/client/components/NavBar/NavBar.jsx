@@ -159,8 +159,6 @@ const NavBar = ({ guest = false }) => {
     feedbackTargets?.waiting?.length || feedbackTargets?.given?.length || feedbackTargets?.ended?.length
   )
   const isAdminUser = authorizedUser?.isAdmin ?? false
-  const isImpersonating = Boolean(localStorage.getItem('adminLoggedInAs'))
-  const isAdminOrImpersonator = isAdminUser || isImpersonating
 
   const { norppaFeedbackCount, isLoading } = useNorppaFeedbackCount({
     enabled: isAdminUser,
