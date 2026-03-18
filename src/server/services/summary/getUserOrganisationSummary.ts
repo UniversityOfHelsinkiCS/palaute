@@ -11,7 +11,7 @@ interface GetUserOrganisationSummariesParams {
   user: User
   viewingMode?: 'flat' | 'tree'
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 export const getUserOrganisationSummaries = async ({

@@ -56,7 +56,7 @@ interface GetCourseUnitSummariesParams {
   endDate: string
   tagId?: string
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getCourseUnitSummaries = async ({
@@ -127,7 +127,7 @@ interface GetCourseRealisationSummariesParams {
   endDate: string
   tagId?: string
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getCourseRealisationSummaries = async ({
@@ -193,7 +193,7 @@ interface GetOrganisationSummaryParams {
   startDate: string
   endDate: string
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getOrganisationSummary = async ({
@@ -235,7 +235,7 @@ interface GetChildOrganisationsParams {
   organisationIds: string[]
   universityWideAccess: boolean
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getChildOrganisations = async ({
@@ -291,7 +291,7 @@ interface GetOrganisationSummaryWithChildOrganisationsParams {
   universityWideAccess: boolean
   accessibleOrganisationIds: string[]
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getOrganisationSummaryWithChildOrganisations = async ({
@@ -362,7 +362,7 @@ interface GetOrganisationSummaryWithCourseUnitsParams {
   endDate: string
   tagId?: string
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getOrganisationSummaryWithCourseUnits = async ({
@@ -422,7 +422,7 @@ interface GetOrganisationSummaryWithTagsParams {
   startDate: string
   endDate: string
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 const getOrganisationSummaryWithTags = async ({

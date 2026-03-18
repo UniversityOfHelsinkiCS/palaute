@@ -26,8 +26,8 @@ interface SummaryContextType {
   setViewingMode: Dispatch<SetStateAction<'tree' | 'flat'>>
   extraOrgId: string
   setExtraOrgId: Dispatch<SetStateAction<string>>
-  extraOrgMode: 'include' | 'exclude'
-  setExtraOrgMode: Dispatch<SetStateAction<'include' | 'exclude'>>
+  extraOrgMode: 'include' | 'exclude' | 'only'
+  setExtraOrgMode: Dispatch<SetStateAction<'include' | 'exclude' | 'only'>>
 }
 
 const ViewingModeSelector = () => {

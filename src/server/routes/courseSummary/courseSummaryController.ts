@@ -69,7 +69,7 @@ const OrganisationsQuerySchema = DatesQuerySchema.extend({
   include: z.enum(['childOrganisations', 'courseUnits', 'tags']).optional(),
   tagId: z.string().optional(),
   extraOrgId: z.string().optional(),
-  extraOrgMode: z.enum(['include', 'exclude']).optional(),
+  extraOrgMode: z.enum(['include', 'exclude', 'only']).optional(),
 })
 
 /**
@@ -215,7 +215,7 @@ const getCourseUnitGroup = async (req: AuthenticatedRequest, res: Response) => {
 
 const CoursesQuerySchema = DatesQuerySchema.extend({
   extraOrgId: z.string().optional(),
-  extraOrgMode: z.enum(['include', 'exclude']).optional(),
+  extraOrgMode: z.enum(['include', 'exclude', 'only']).optional(),
 })
 
 const getCoursesV2 = async (req: AuthenticatedRequest, res: Response) => {
@@ -243,7 +243,7 @@ const getCoursesV2 = async (req: AuthenticatedRequest, res: Response) => {
 const UserOrganisationsQuerySchema = DatesQuerySchema.extend({
   viewingMode: z.enum(['tree', 'flat']).optional(),
   extraOrgId: z.string().optional(),
-  extraOrgMode: z.enum(['include', 'exclude']).optional(),
+  extraOrgMode: z.enum(['include', 'exclude', 'only']).optional(),
 })
 
 const getUserOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) => {

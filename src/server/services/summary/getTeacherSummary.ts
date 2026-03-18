@@ -37,7 +37,7 @@ interface GetTeacherSummaryParams {
   endDate: string
   user: User
   extraOrgId?: string
-  extraOrgMode?: 'include' | 'exclude'
+  extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
 export const getTeacherSummary = async ({
