@@ -1,5 +1,4 @@
 import { Op, QueryTypes } from 'sequelize'
-import _ from 'lodash'
 
 import { OrganisationAccess } from '@common/types/organisation'
 import { User, Organisation } from '../../models'
@@ -15,9 +14,16 @@ const getAccessFromIAMs = async (user: User) => {
 
   const iamAccess = await getUserIamAccess(user)
 
-  if (!_.isObject(iamAccess)) return access
-  Object.keys(iamAccess).forEach(code => {
-    access[normalizeOrganisationCode(code)] = iamAccess[code] as OrganisationAccess
+  if (!iamAccess || typeof iamAccess !== 'object') return access
+
+  Object.entries(iamAccess as Record<string, unknown>).forEach(([code, val]) => {
+    if (typeof val === 'object' && val !== null) {
+      const accessFromIams = val as OrganisationAccess
+      const strippedAccess = accessFromIams.admin // Organisation write access changed to read access. Now, org admin = write.
+        ? accessFromIams
+        : (({ write, ...rest }) => rest)(accessFromIams)
+      access[normalizeOrganisationCode(code)] = strippedAccess
+    }
   })
 
   return access
