@@ -11,6 +11,7 @@ import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 
 import AlertLink from '../../components/common/AlertLink'
+import ErrorSummary from '../FeedbackTarget/tabs/FeedbackView/ErrorSummary'
 
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
@@ -40,11 +41,56 @@ const FormContainer = ({
 
   return (
     <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} validateOnChange={false}>
-      {({ isSubmitting }) => {
+      {({ isSubmitting, errors, submitCount, setFieldTouched }) => {
         const disabled = isSubmitting || disabledProp
+
+        const handleFocusField = fieldName => {
+          const questionId = fieldName.split('.')[1]
+          const question = questions.find(q => q.id.toString() === questionId)
+          const element = document.getElementById(`question-${questionId}`)
+
+          if (element) {
+            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
+
+            let focusableElement = null
+
+            if (
+              question?.type === 'MULTIPLE_CHOICE' ||
+              question?.type === 'SINGLE_CHOICE' ||
+              question?.type === 'LIKERT'
+            ) {
+              focusableElement = element.querySelector('input[type="checkbox"], input[type="radio"]')
+            } else if (question?.type === 'OPEN') {
+              focusableElement = element.querySelector('textarea')
+            }
+
+            if (focusableElement) {
+              focusableElement.focus()
+            } else {
+              const fallbackElement = element.querySelector('input, textarea, button')
+              if (fallbackElement) {
+                fallbackElement.focus()
+              } else {
+                element.focus()
+              }
+            }
+
+            setFieldTouched(fieldName, true, false)
+          }
+        }
+
+        const hasErrors = submitCount > 0 && errors.answers && Object.keys(errors.answers).length > 0
 
         return (
           <Form>
+            {hasErrors && (
+              <ErrorSummary
+                errors={errors}
+                questions={questions}
+                onFocusField={handleFocusField}
+                submitCount={submitCount}
+              />
+            )}
             <Card>
               <CardContent>
                 <Box mb={2}>

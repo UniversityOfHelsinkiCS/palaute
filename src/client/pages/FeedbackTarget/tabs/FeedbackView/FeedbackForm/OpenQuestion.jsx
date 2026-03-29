@@ -20,6 +20,7 @@ const OpenQuestion = ({ question, name, disabled }) => {
       required={required}
       description={description}
       labelProps={{ component: 'label', htmlFor: labelId }}
+      id={`question-${question.id}`}
     >
       <FormikTextField name={name} id={labelId} disabled={disabled} fullWidth multiline />
     </QuestionBase>

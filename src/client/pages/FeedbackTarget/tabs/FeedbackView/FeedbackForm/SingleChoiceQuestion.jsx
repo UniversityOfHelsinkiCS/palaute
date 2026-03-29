@@ -25,7 +25,13 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
   return (
     <>
       <FormControl component="fieldset">
-        <QuestionBase label={label} required={required} description={description} labelProps={{ component: 'legend' }}>
+        <QuestionBase
+          label={label}
+          required={required}
+          description={description}
+          labelProps={{ component: 'legend' }}
+          id={`question-${question.id}`}
+        >
           <RadioGroup
             aria-label={label}
             value={value}

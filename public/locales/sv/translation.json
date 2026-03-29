@@ -151,7 +151,8 @@
     "feedbackInfoContent": "Svaren används till att utveckla undervisningen och kursernas innehåll. Svar till kursresponsens frågor kan visas till andra studerande i kursen. Läraren behandlar svaren utan namn och kan inte koppla responser till enskilda studerande.\nInloggningsuppgifterna används för att visa varje studerande rätta enkäter.",
     "continuousFeedbackInfo": "Du kan ge kontinuerlig respons medan kursen är igång. Ditt namn visas inte för kursens personal i anslutning till din respons.",
     "allowSubmitCheckbox": "Läraren kan se mina svar även om färre än {{count}} studenter är anmälda till denna kurs.",
-    "allowSubmitCheckboxAria": "Samtycke krävs för att skicka in responsen."
+    "allowSubmitCheckboxAria": "Samtycke krävs för att skicka in responsen.",
+    "errorSummaryTitle": "Det uppstod problem med din inlämning"
   },
   "teacherView": {
     "mainHeading": "Mina enkäter",

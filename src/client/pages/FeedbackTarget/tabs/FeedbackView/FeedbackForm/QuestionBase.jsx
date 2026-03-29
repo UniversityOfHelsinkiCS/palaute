@@ -20,8 +20,8 @@ const styles = {
   }),
 }
 
-const QuestionBase = ({ children, label, description, required, labelProps = {} }) => (
-  <Box sx={styles.questionContainer}>
+const QuestionBase = ({ children, label, description, required, labelProps = {}, id }) => (
+  <Box sx={styles.questionContainer} id={id}>
     <Typography variant="h6" sx={styles.label} {...labelProps}>
       {`${label}${required ? ' *' : ''}`}
     </Typography>

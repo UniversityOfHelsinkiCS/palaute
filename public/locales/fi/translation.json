@@ -157,7 +157,8 @@
     "endedInfo": "Palautteenanto on sulkeutunut. <2>Katso palautteita</2>",
     "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta, kun kurssi on käynnissä. Nimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.",
     "allowSubmitCheckbox": "Vastaukseni saa näkyä opettajalle, vaikka kurssille on ilmoittautunut alle {{count}} opiskelijaa.",
-    "allowSubmitCheckboxAria": "Suostumus tarvitaan, jotta palautteen voi lähettää."
+    "allowSubmitCheckboxAria": "Suostumus tarvitaan, jotta palautteen voi lähettää.",
+    "errorSummaryTitle": "Vastauksissasi oli puutteita"
   },
   "teacherView": {
     "mainHeading": "Kyselyni",
