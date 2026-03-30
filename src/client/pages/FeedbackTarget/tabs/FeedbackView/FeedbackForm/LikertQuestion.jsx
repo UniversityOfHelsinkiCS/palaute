@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
-import { getDontKnowOption } from './utils'
+import { getDontKnowOption, useDelayedTouched } from './utils'
 
 const styles = {
   optionLabel: {
@@ -27,6 +27,8 @@ const LikertQuestion = ({ question, name, disabled }) => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
+  const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched)
+
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
   const description = getLanguageValue(question.data?.description, language) ?? ''
@@ -41,9 +43,16 @@ const LikertQuestion = ({ question, name, disabled }) => {
     return getDontKnowOption(question.data.label, language)
   }
 
+  const errorId = `${name.replace(/\./g, '-')}-error`
+
   return (
     <>
-      <FormControl component="fieldset">
+      <FormControl
+        component="fieldset"
+        aria-describedby={showError ? errorId : undefined}
+        onBlur={handleGroupBlur}
+        onFocus={handleGroupFocus}
+      >
         <QuestionBase
           label={label}
           required={required}
@@ -57,7 +66,6 @@ const LikertQuestion = ({ question, name, disabled }) => {
             onChange={event => {
               helpers.setValue(event.target.value)
             }}
-            onBlur={() => helpers.setTouched(true)}
             row
           >
             {options.map(option => (
@@ -74,7 +82,11 @@ const LikertQuestion = ({ question, name, disabled }) => {
           </RadioGroup>
         </QuestionBase>
       </FormControl>
-      {showError && <FormHelperText error>{t(meta.error)}</FormHelperText>}
+      {showError && (
+        <FormHelperText error id={errorId} role="alert">
+          {t(meta.error)}
+        </FormHelperText>
+      )}
     </>
   )
 }

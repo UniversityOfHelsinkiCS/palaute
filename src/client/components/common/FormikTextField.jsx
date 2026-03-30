@@ -25,6 +25,9 @@ const FormikTextField = ({ name, helperText, onBlur, ...props }) => {
       onBlur={handleBlur}
       error={showError}
       helperText={showError ? t(meta.error) : helperText}
+      FormHelperTextProps={{
+        role: showError ? 'alert' : undefined,
+      }}
       {...props}
     />
   )

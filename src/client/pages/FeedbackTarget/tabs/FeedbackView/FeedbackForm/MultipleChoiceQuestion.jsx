@@ -7,11 +7,14 @@ import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
+import { useDelayedTouched } from './utils'
 
 const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
   const { i18n, t } = useTranslation()
   const { language } = i18n
+
+  const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched)
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
@@ -30,9 +33,16 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
     helpers.setValue(newValue)
   }
 
+  const errorId = `${name.replace(/\./g, '-')}-error`
+
   return (
     <>
-      <FormControl component="fieldset">
+      <FormControl
+        component="fieldset"
+        aria-describedby={showError ? errorId : undefined}
+        onBlur={handleGroupBlur}
+        onFocus={handleGroupFocus}
+      >
         <QuestionBase
           label={label}
           required={required}
@@ -48,7 +58,6 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
                   <Checkbox
                     checked={value.includes(option.id)}
                     onChange={handleChange}
-                    onBlur={() => helpers.setTouched(true)}
                     color="primary"
                     name={option.id}
                     disabled={disabled}
@@ -61,7 +70,11 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
           </FormGroup>
         </QuestionBase>
       </FormControl>
-      {showError && <FormHelperText error>{t(meta.error)}</FormHelperText>}
+      {showError && (
+        <FormHelperText error id={errorId} role="alert">
+          {t(meta.error)}
+        </FormHelperText>
+      )}
     </>
   )
 }

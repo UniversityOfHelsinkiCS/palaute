@@ -1,3 +1,5 @@
+import { useRef } from 'react'
+
 const dontKnow = { en: 'N/A', sv: 'N/A', fi: 'eos' }
 
 export const getDontKnowOption = (values, preferred) => {
@@ -15,4 +17,31 @@ export const getDontKnowOption = (values, preferred) => {
   }
 
   return null
+}
+
+// Custom hook for delayed validation to prevent premature error display during keyboard navigation
+export const useDelayedTouched = setTouched => {
+  const touchedTimeoutRef = useRef(null)
+
+  const handleGroupBlur = () => {
+    if (touchedTimeoutRef.current) {
+      clearTimeout(touchedTimeoutRef.current)
+    }
+
+    touchedTimeoutRef.current = setTimeout(() => {
+      setTouched(true)
+    }, 100)
+  }
+
+  const handleGroupFocus = () => {
+    if (touchedTimeoutRef.current) {
+      clearTimeout(touchedTimeoutRef.current)
+      touchedTimeoutRef.current = null
+    }
+  }
+
+  return {
+    handleGroupBlur,
+    handleGroupFocus,
+  }
 }

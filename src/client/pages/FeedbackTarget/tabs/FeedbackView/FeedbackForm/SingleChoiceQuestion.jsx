@@ -7,11 +7,14 @@ import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
+import { useDelayedTouched } from './utils'
 
 const SingleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
   const { t, i18n } = useTranslation()
   const { language } = i18n
+
+  const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched)
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 
@@ -22,9 +25,16 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
   const { required } = question
   const showError = meta.error && meta.touched
 
+  const errorId = `${name.replace(/\./g, '-')}-error`
+
   return (
     <>
-      <FormControl component="fieldset">
+      <FormControl
+        component="fieldset"
+        aria-describedby={showError ? errorId : undefined}
+        onBlur={handleGroupBlur}
+        onFocus={handleGroupFocus}
+      >
         <QuestionBase
           label={label}
           required={required}
@@ -38,7 +48,6 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
             onChange={event => {
               helpers.setValue(event.target.value)
             }}
-            onBlur={() => helpers.setTouched(true)}
             sx={{ paddingLeft: '0.8rem' }}
           >
             {options.map(option => (
@@ -53,7 +62,11 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
           </RadioGroup>
         </QuestionBase>
       </FormControl>
-      {showError && <FormHelperText error>{t(meta.error)}</FormHelperText>}
+      {showError && (
+        <FormHelperText error id={errorId} role="alert">
+          {t(meta.error)}
+        </FormHelperText>
+      )}
     </>
   )
 }
