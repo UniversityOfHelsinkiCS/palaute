@@ -28,6 +28,11 @@ const FormikDatePicker = ({ name, ...props }) => {
           margin: 'normal',
           helperText: t(meta.error),
           error: showError,
+          slotProps: {
+            formHelperText: {
+              role: showError ? 'alert' : undefined,
+            },
+          },
           inputProps: {
             'data-cy': `formik-date-picker-field-${name}-input`,
           },

@@ -18,6 +18,9 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const formikProps = useFormikContext()
   const [potentialUsers, setPotentialUsers] = useState([])
 
+  const hasError = formikProps.touched[name] && formikProps.errors[name]
+  const errorText = formikProps.errors[name]
+
   const handleChange = debounce(async ({ target }) => {
     const query = target.value
     if (query.length < 5) return
@@ -47,6 +50,7 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         fullWidth
         value={formikProps.values.teachers}
         onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
+        onBlur={formikProps.handleBlur}
         options={potentialUsers}
         getOptionDisabled={option => formikProps.values.teachers.some(v => v.id === option.id)}
         onInputChange={handleChange}
@@ -66,8 +70,13 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
                 ...params.inputProps,
                 'data-cy': 'formik-responsible-teacher-input-field',
               },
+              formHelperText: {
+                role: hasError ? 'alert' : undefined,
+              },
             }}
             label={t('organisationSurveys:responsibleTeachers')}
+            error={Boolean(hasError)}
+            helperText={hasError ? errorText : ''}
           />
         )}
         renderOption={(props, option) => (
@@ -128,7 +137,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
   const [inputValue, setInputValue] = React.useState('')
 
-  const hasError = formikProps.touched[name] && formikProps.errors[name]
+  const hasError = formikProps.errors[name]
   const errorText = formikProps.errors[name]?.text
   const errorData = formikProps.errors[name]?.data
 
@@ -202,6 +211,11 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
             {...params}
             error={Boolean(hasError)}
             helperText={hasError ? errorText : ''}
+            slotProps={{
+              formHelperText: {
+                role: hasError ? 'alert' : undefined,
+              },
+            }}
           />
         )}
         {...props}
@@ -226,7 +240,7 @@ const OrganisationSurveyForm = ({ organisationCode, editView }) => {
 
       <Grid size={12}>
         <ResponsibleTeachersSelector
-          name="teacherIds"
+          name="teachers"
           title={
             editView
               ? t('organisationSurveys:editResponsibleTeacherTitle')
