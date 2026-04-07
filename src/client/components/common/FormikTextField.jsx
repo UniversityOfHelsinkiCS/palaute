@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import TextField from './TextField'
 
-const FormikTextField = ({ name, helperText, onBlur, ...props }) => {
+const FormikTextField = ({ name, helperText, onBlur, showErrorInHelperText = true, ...props }) => {
   const [field, meta, helpers] = useField(name)
   const { t } = useTranslation()
 
@@ -24,10 +24,10 @@ const FormikTextField = ({ name, helperText, onBlur, ...props }) => {
       onChange={event => helpers.setValue(event.target.value)}
       onBlur={handleBlur}
       error={showError}
-      helperText={showError ? t(meta.error) : helperText}
+      helperText={showErrorInHelperText && showError ? t(meta.error) : helperText}
       slotProps={{
         formHelperText: {
-          role: showError ? 'alert' : undefined,
+          role: showErrorInHelperText && showError ? 'alert' : undefined,
         },
       }}
       {...props}

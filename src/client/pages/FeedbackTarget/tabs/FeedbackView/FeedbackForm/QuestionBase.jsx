@@ -20,14 +20,22 @@ const styles = {
   }),
 }
 
-const QuestionBase = ({ children, label, description, required, labelProps = {}, id }) => (
-  <Box sx={styles.questionContainer} id={id}>
-    <Typography variant="h6" sx={styles.label} {...labelProps}>
-      {`${label}${required ? ' *' : ''}`}
-    </Typography>
-    {description && <Typography sx={styles.description}>{description}</Typography>}
-    {children}
-  </Box>
-)
+const QuestionBase = ({ children, label, description, required, labelProps = {}, id }) => {
+  const descriptionId = description ? `${id}-description` : undefined
+
+  return (
+    <Box sx={styles.questionContainer} id={id}>
+      <Typography variant="h6" sx={styles.label} {...labelProps}>
+        {`${label}${required ? ' *' : ''}`}
+      </Typography>
+      {description && (
+        <Typography id={descriptionId} sx={styles.description}>
+          {description}
+        </Typography>
+      )}
+      {children}
+    </Box>
+  )
+}
 
 export default QuestionBase

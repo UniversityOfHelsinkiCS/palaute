@@ -26,48 +26,49 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
   const showError = meta.error && meta.touched
 
   const errorId = `${name.replace(/\./g, '-')}-error`
+  const descriptionId = description ? `question-${question.id}-description` : undefined
 
   return (
-    <>
-      <FormControl
-        component="fieldset"
-        aria-describedby={showError ? errorId : undefined}
-        onBlur={handleGroupBlur}
-        onFocus={handleGroupFocus}
+    <FormControl
+      component="fieldset"
+      aria-describedby={[showError ? errorId : undefined, description ? descriptionId : undefined]
+        .filter(Boolean)
+        .join(' ')}
+      onBlur={handleGroupBlur}
+      onFocus={handleGroupFocus}
+    >
+      <QuestionBase
+        label={label}
+        required={required}
+        description={description}
+        labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
+        id={`question-${question.id}`}
       >
-        <QuestionBase
-          label={label}
-          required={required}
-          description={description}
-          labelProps={{ component: 'legend' }}
-          id={`question-${question.id}`}
+        <RadioGroup
+          aria-labelledby={`question-${question.id}-legend`}
+          value={value}
+          onChange={event => {
+            helpers.setValue(event.target.value)
+          }}
+          sx={{ paddingLeft: '0.8rem' }}
         >
-          <RadioGroup
-            aria-label={label}
-            value={value}
-            onChange={event => {
-              helpers.setValue(event.target.value)
-            }}
-            sx={{ paddingLeft: '0.8rem' }}
-          >
-            {options.map(option => (
-              <FormControlLabel
-                value={option.id}
-                control={<Radio color="primary" />}
-                label={getLanguageValue(option.label, language)}
-                key={option.id}
-                disabled={disabled}
-              />
-            ))}
-          </RadioGroup>
-        </QuestionBase>
-      </FormControl>
-      {showError && (
-        <FormHelperText error id={errorId} role="alert">
-          {t(meta.error)}
-        </FormHelperText>
-      )}
-    </>
+          {options.map(option => (
+            <FormControlLabel
+              value={option.id}
+              control={<Radio color="primary" />}
+              label={getLanguageValue(option.label, language)}
+              key={option.id}
+              disabled={disabled}
+            />
+          ))}
+        </RadioGroup>
+        {showError && (
+          <FormHelperText error id={errorId} role="alert" sx={{ ml: 2 }}>
+            {t(meta.error)}
+          </FormHelperText>
+        )}
+      </QuestionBase>
+    </FormControl>
   )
 }
 

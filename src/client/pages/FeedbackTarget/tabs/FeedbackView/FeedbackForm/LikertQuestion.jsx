@@ -44,50 +44,51 @@ const LikertQuestion = ({ question, name, disabled }) => {
   }
 
   const errorId = `${name.replace(/\./g, '-')}-error`
+  const descriptionId = description ? `question-${question.id}-description` : undefined
 
   return (
-    <>
-      <FormControl
-        component="fieldset"
-        aria-describedby={showError ? errorId : undefined}
-        onBlur={handleGroupBlur}
-        onFocus={handleGroupFocus}
+    <FormControl
+      component="fieldset"
+      aria-describedby={[showError ? errorId : undefined, description ? descriptionId : undefined]
+        .filter(Boolean)
+        .join(' ')}
+      onBlur={handleGroupBlur}
+      onFocus={handleGroupFocus}
+    >
+      <QuestionBase
+        label={label}
+        required={required}
+        description={description}
+        labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
+        id={`question-${question.id}`}
       >
-        <QuestionBase
-          label={label}
-          required={required}
-          description={description}
-          labelProps={{ component: 'legend' }}
-          id={`question-${question.id}`}
+        <RadioGroup
+          aria-labelledby={`question-${question.id}-legend`}
+          value={value}
+          onChange={event => {
+            helpers.setValue(event.target.value)
+          }}
+          row
         >
-          <RadioGroup
-            aria-label={label}
-            value={value}
-            onChange={event => {
-              helpers.setValue(event.target.value)
-            }}
-            row
-          >
-            {options.map(option => (
-              <FormControlLabel
-                labelPlacement="top"
-                value={option.toString()}
-                control={<Radio color="primary" />}
-                label={parseOption(option)}
-                key={option}
-                sx={option !== 0 ? styles.optionLabel : styles.dontKnowLabel}
-                disabled={disabled}
-              />
-            ))}
-          </RadioGroup>
-        </QuestionBase>
-      </FormControl>
-      {showError && (
-        <FormHelperText error id={errorId} role="alert">
-          {t(meta.error)}
-        </FormHelperText>
-      )}
-    </>
+          {options.map(option => (
+            <FormControlLabel
+              labelPlacement="top"
+              value={option.toString()}
+              control={<Radio color="primary" />}
+              label={parseOption(option)}
+              key={option}
+              sx={option !== 0 ? styles.optionLabel : styles.dontKnowLabel}
+              disabled={disabled}
+            />
+          ))}
+        </RadioGroup>
+        {showError && (
+          <FormHelperText error id={errorId} role="alert" sx={{ ml: 2 }}>
+            {t(meta.error)}
+          </FormHelperText>
+        )}
+      </QuestionBase>
+    </FormControl>
   )
 }
 

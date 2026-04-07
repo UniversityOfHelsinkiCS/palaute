@@ -34,48 +34,49 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   }
 
   const errorId = `${name.replace(/\./g, '-')}-error`
+  const descriptionId = description ? `question-${question.id}-description` : undefined
 
   return (
-    <>
-      <FormControl
-        component="fieldset"
-        aria-describedby={showError ? errorId : undefined}
-        onBlur={handleGroupBlur}
-        onFocus={handleGroupFocus}
+    <FormControl
+      component="fieldset"
+      aria-describedby={[showError ? errorId : undefined, description ? descriptionId : undefined]
+        .filter(Boolean)
+        .join(' ')}
+      onBlur={handleGroupBlur}
+      onFocus={handleGroupFocus}
+    >
+      <QuestionBase
+        label={label}
+        required={required}
+        description={description}
+        labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
+        id={`question-${question.id}`}
       >
-        <QuestionBase
-          label={label}
-          required={required}
-          description={description}
-          labelProps={{ component: 'legend' }}
-          id={`question-${question.id}`}
-        >
-          <FormGroup role="group" aria-label={label} sx={{ paddingLeft: '0.75rem' }}>
-            {options.map(option => (
-              <FormControlLabel
-                value={option.id}
-                control={
-                  <Checkbox
-                    checked={value.includes(option.id)}
-                    onChange={handleChange}
-                    color="primary"
-                    name={option.id}
-                    disabled={disabled}
-                  />
-                }
-                label={getLanguageValue(option.label, language)}
-                key={option.id}
-              />
-            ))}
-          </FormGroup>
-        </QuestionBase>
-      </FormControl>
-      {showError && (
-        <FormHelperText error id={errorId} role="alert">
-          {t(meta.error)}
-        </FormHelperText>
-      )}
-    </>
+        <FormGroup role="group" aria-labelledby={`question-${question.id}-legend`} sx={{ paddingLeft: '0.75rem' }}>
+          {options.map(option => (
+            <FormControlLabel
+              value={option.id}
+              control={
+                <Checkbox
+                  checked={value.includes(option.id)}
+                  onChange={handleChange}
+                  color="primary"
+                  name={option.id}
+                  disabled={disabled}
+                />
+              }
+              label={getLanguageValue(option.label, language)}
+              key={option.id}
+            />
+          ))}
+        </FormGroup>
+        {showError && (
+          <FormHelperText error id={errorId} role="alert" sx={{ ml: 2 }}>
+            {t(meta.error)}
+          </FormHelperText>
+        )}
+      </QuestionBase>
+    </FormControl>
   )
 }
 

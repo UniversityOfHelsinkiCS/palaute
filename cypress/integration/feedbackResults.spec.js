@@ -40,7 +40,7 @@ describe('Feedback results', () => {
     })
     cy.getUniversityQuestions().then(questions => {
       const openQuestion = questions.find(q => q.type === 'OPEN')
-      cy.get(`textarea[id=${openQuestion.id}-label]`).type('Other comments and such')
+      cy.get(`textarea[id=${openQuestion.id}-input]`).type('Other comments and such')
     })
     cy.get('[data-cy=feedback-view-give-feedback]').click()
     cy.contains('Feedback has been given. Thank you for your feedback!')
