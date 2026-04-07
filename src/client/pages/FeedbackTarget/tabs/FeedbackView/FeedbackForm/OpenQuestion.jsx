@@ -34,6 +34,7 @@ const OpenQuestion = ({ question, name, disabled }) => {
         disabled={disabled}
         fullWidth
         multiline
+        required={required}
         showErrorInHelperText={false}
         slotProps={{
           input: {
