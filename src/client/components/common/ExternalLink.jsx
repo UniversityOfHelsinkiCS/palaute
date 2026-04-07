@@ -15,7 +15,7 @@ const ExternalLink = ({ children, ...props }) => {
   const { t } = useTranslation()
 
   return (
-    <Link target="_blank" rel="noopener" {...props} underline="always">
+    <Link target="_blank" rel="noopener noreferrer" {...props} underline="always">
       {children}
       <ExternalLinkIcon sx={styles.icon} aria-hidden="true" />
       <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>

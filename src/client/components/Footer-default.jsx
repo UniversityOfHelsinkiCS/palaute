@@ -68,7 +68,7 @@ const Footer = ({ user }) => {
             )}
           </div>
           <Box display="flex" flexDirection="column" alignItems="center" rowGap="1rem">
-            <Link href={t('links:toska')} target="_blank" rel="noopener" underline="always">
+            <Link href={t('links:toska')} target="_blank" rel="noopener noreferrer" underline="always">
               <img src={images.toska_color} loading="lazy" style={styles.logo} alt={t('footer:toska')} />
             </Link>
             <Typography fontSize={12}>{t('footer:lastUpdate', { duration: uptime })}</Typography>

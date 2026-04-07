@@ -38,7 +38,7 @@ const GuestFooter = () => {
             </Typography>
           </div>
 
-          <Link href={t('links:toska')} target="_blank" rel="noopener" underline="hover">
+          <Link href={t('links:toska')} target="_blank" rel="noopener noreferrer" underline="hover">
             <img src={images.toska_color} style={styles.logo} alt={t('footer:toska')} />
           </Link>
         </Box>

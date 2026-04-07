@@ -68,7 +68,7 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
       <CustomWidthTooltip title={<QuestionList questions={questionNames} />} placement="right-start">
         <ListItemText
           primary={
-            <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener" underline="hover">
+            <Link href={`/targets/${feedbackTarget.id}`} target="_blank" rel="noopener noreferrer" underline="hover">
               {`${getLanguageValue(courseRealisation?.name, i18n.language)} (${t(
                 'editFeedbackTarget:copyFromCourseQuestionCount',
                 {

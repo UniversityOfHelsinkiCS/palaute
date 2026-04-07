@@ -9,8 +9,12 @@ const styles = {
   },
 }
 
-const AlertLink = ({ sx, ...props }) => (
-  <Link color="inherit" sx={[sx, styles.alertLink]} {...props} underline="hover" />
-)
+const AlertLink = ({ sx, rel, target, ...props }) => {
+  const finalRel = target === '_blank' ? [rel, 'noopener noreferrer'].filter(Boolean).join(' ') : rel
+
+  return (
+    <Link color="inherit" sx={[sx, styles.alertLink]} target={target} rel={finalRel} {...props} underline="hover" />
+  )
+}
 
 export default AlertLink
