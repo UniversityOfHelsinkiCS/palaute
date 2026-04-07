@@ -20,6 +20,11 @@ const OpenQuestion = ({ question, name, disabled }) => {
   const showError = meta.error && meta.touched
   const errorId = `${name.replace(/\./g, '-')}-error`
 
+  const ariaDescribedBy = [
+    showError ? errorId : undefined,
+    description ? `question-${question.id}-description` : undefined,
+  ].filter(Boolean)
+
   return (
     <QuestionBase
       label={label}
@@ -38,12 +43,7 @@ const OpenQuestion = ({ question, name, disabled }) => {
         showErrorInHelperText={false}
         slotProps={{
           input: {
-            'aria-describedby': [
-              showError ? errorId : undefined,
-              description ? `question-${question.id}-description` : undefined,
-            ]
-              .filter(Boolean)
-              .join(' '),
+            'aria-describedby': ariaDescribedBy.length > 0 ? ariaDescribedBy.join(' ') : undefined,
           },
         }}
       />

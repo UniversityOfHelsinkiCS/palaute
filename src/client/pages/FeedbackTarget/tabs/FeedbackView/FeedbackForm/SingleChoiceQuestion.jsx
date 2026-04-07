@@ -28,12 +28,12 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
   const errorId = `${name.replace(/\./g, '-')}-error`
   const descriptionId = description ? `question-${question.id}-description` : undefined
 
+  const ariaDescribedBy = [showError ? errorId : undefined, description ? descriptionId : undefined].filter(Boolean)
+
   return (
     <FormControl
       component="fieldset"
-      aria-describedby={[showError ? errorId : undefined, description ? descriptionId : undefined]
-        .filter(Boolean)
-        .join(' ')}
+      aria-describedby={ariaDescribedBy.length > 0 ? ariaDescribedBy.join(' ') : undefined}
       onBlur={handleGroupBlur}
       onFocus={handleGroupFocus}
     >
