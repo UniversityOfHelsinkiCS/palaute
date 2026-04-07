@@ -107,7 +107,7 @@ const OpenQuestions = forwardRef(({ codesWithIds, dateRange }, ref) => {
               style={styles.courseTitle}
               component={RouterLink}
             >
-              {`${course.code} - ${course.name[language]}`}
+              {`${course.code}–${course.name[language]}`}
             </Link>
           </Typography>
           {course.realisations.map(realisation => (

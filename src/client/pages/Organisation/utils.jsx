@@ -45,7 +45,7 @@ export const formateDates = realisation => {
   const startDate = format(parseISO(realisation.startDate), 'dd.MM.yyyy')
   const endDate = format(parseISO(realisation.endDate), 'dd.MM.yyyy')
 
-  return `${startDate} - ${endDate}`
+  return `${startDate}–${endDate}`
 }
 
 export const getStudentListVisibility = ({ studentListVisible, studentListVisibleByCourse }) => {

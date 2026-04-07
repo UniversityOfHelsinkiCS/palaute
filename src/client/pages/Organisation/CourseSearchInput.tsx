@@ -57,7 +57,7 @@ const CourseSearchInput = ({ organisationCode }: { organisationCode: string }) =
     const studentCountText = `, ${t('organisationSurveys:studentCount', {
       count: course?.studentCount || 0,
     })}`
-    return `${courseName || ''} (${startDate} - ${endDate}${studentCountText})`
+    return `${courseName || ''} (${startDate}–${endDate}${studentCountText})`
   }
 
   const handleDateRangeChange = (nextDateRange: DateRange) => {

@@ -10,14 +10,14 @@ export const getCoursePeriod = courseRealisation => {
   const startDate = format(parseISO(courseRealisation.startDate), 'dd.MM.yyyy')
   const endDate = format(parseISO(courseRealisation.endDate), 'dd.MM.yyyy')
 
-  return `${startDate} - ${endDate}`
+  return `${startDate}–${endDate}`
 }
 
 export const getFeedbackPeriod = feedbackTarget => {
   const opensAt = format(parseISO(feedbackTarget.opensAt), 'dd.MM.yyyy')
   const closesAt = format(parseISO(feedbackTarget.closesAt), 'dd.MM.yyyy')
 
-  return `${opensAt} - ${closesAt}`
+  return `${opensAt}–${closesAt}`
 }
 
 export const saveValues = async (values, feedbackTarget) => {

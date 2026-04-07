@@ -66,7 +66,7 @@ const CourseAccordion = ({ cur }) => {
         <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{cur.name?.fi}</Typography>
         <Box m={2} />
         <Typography variant="body2">
-          {new Date(cur.startDate).toLocaleDateString()} - {new Date(cur.endDate).toLocaleDateString()}
+          {new Date(cur.startDate).toLocaleDateString()}–{new Date(cur.endDate).toLocaleDateString()}
         </Typography>
         <Box m={2} />
         <Enable cur={cur} active={active} setActive={setActive} />

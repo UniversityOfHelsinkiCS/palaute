@@ -57,7 +57,7 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { courseRealisation, surveys } = feedbackTarget
 
-  const periodInfo = `${formatDate(courseRealisation.startDate)} - ${formatDate(courseRealisation.endDate)}`
+  const periodInfo = `${formatDate(courseRealisation.startDate)}–${formatDate(courseRealisation.endDate)}`
 
   const questions = surveys?.teacherSurvey?.questions ?? []
 

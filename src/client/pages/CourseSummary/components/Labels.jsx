@@ -45,7 +45,7 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
   const formattedStartDate = lightFormat(new Date(startDate), 'd.M.yyyy')
   const formattedEndDate = lightFormat(new Date(endDate), 'd.M.yyyy')
 
-  const datePeriod = `${formattedStartDate} - ${formattedEndDate}`
+  const datePeriod = `${formattedStartDate}–${formattedEndDate}`
   const translatedName = getLanguageValue(name, language)
 
   const link = feedbackTarget ? (
