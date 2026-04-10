@@ -80,7 +80,12 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback 
 
       <Dialog data-cy="feedback-item-clear-feedback-dialog" open={open} onClose={handleClose}>
         <DialogTitle>{t('userFeedbacks:clearConfirmationQuestion')}</DialogTitle>
-        <NorButton data-cy="feedback-item-view-feedback-cancel" onClick={handleClose} color="primary" sx={{ m: 1 }}>
+        <NorButton
+          data-cy="feedback-item-view-feedback-cancel"
+          onClick={handleClose}
+          color="primary"
+          sx={{ m: 1, mt: 0 }}
+        >
           {t('userFeedbacks:no')}
         </NorButton>
         <NorButton
