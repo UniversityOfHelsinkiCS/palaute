@@ -2,6 +2,7 @@ import React from 'react'
 import { RadioGroup, FormControlLabel, Radio } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import { radioFocusIndicatorStyle } from '../../util/accessibility'
 import PreviewBase from './PreviewBase'
 
 const SingleChoicePreview = ({ question, language }) => {
@@ -16,9 +17,10 @@ const SingleChoicePreview = ({ question, language }) => {
         {options.map(option => (
           <FormControlLabel
             value={option.id}
-            control={<Radio color="primary" />}
+            control={<Radio color="primary" disableFocusRipple />}
             label={getLanguageValue(option.label, language)}
             key={option.id}
+            sx={{ pr: 1, ...radioFocusIndicatorStyle() }}
           />
         ))}
       </RadioGroup>

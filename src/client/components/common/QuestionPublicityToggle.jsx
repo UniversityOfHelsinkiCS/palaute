@@ -2,7 +2,15 @@ import React from 'react'
 import { Box, Chip, FormControl, FormControlLabel, FormLabel, Popover, Radio, RadioGroup, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Edit } from '@mui/icons-material'
+import { radioFocusIndicatorStyle } from '../../util/accessibility'
 import styles from '../../util/chipStyles'
+
+const radioButtonStyle = {
+  ml: 1,
+  my: 1,
+  pr: 1,
+  ...radioFocusIndicatorStyle(),
+}
 
 const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
   const { t } = useTranslation()
@@ -47,8 +55,18 @@ const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {
               value={checked}
               onChange={event => onChange(event.target.value)}
             >
-              <FormControlLabel value control={<Radio />} label={t('common:publicInfo')} />
-              <FormControlLabel value={false} control={<Radio />} label={t('common:notPublicInfo')} />
+              <FormControlLabel
+                value
+                control={<Radio disableFocusRipple />}
+                label={t('common:publicInfo')}
+                sx={radioButtonStyle}
+              />
+              <FormControlLabel
+                value={false}
+                control={<Radio disableFocusRipple />}
+                label={t('common:notPublicInfo')}
+                sx={radioButtonStyle}
+              />
             </RadioGroup>
           </FormControl>
         </Box>

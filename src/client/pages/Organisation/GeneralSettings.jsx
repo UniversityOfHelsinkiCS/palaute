@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
 import { getStudentListVisibility } from './utils'
+import { radioFocusIndicatorStyle } from '../../util/accessibility'
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
@@ -26,6 +27,12 @@ import CourseSettings from './CourseSettings'
 import useOrganisation from '../../hooks/useOrganisation'
 import Tags from './Tags'
 import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/common'
+
+const radioButtonStyle = {
+  ml: 1,
+  pr: 1,
+  ...radioFocusIndicatorStyle(),
+}
 
 const saveGeneralSettings = async ({ code, studentListVisible, studentListVisibleByCourse }) => {
   const { data } = await apiClient.put(`/organisations/${code}`, {
@@ -70,21 +77,24 @@ const StudentListSettings = ({ organisation }) => {
 
         <Box mt={2}>
           <FormControl>
-            <RadioGroup value={visibility} onChange={handleChange}>
+            <RadioGroup value={visibility} onChange={handleChange} disableRipple>
               <FormControlLabel
                 value="visible"
-                control={<Radio />}
+                control={<Radio disableFocusRipple />}
                 label={t('organisationSettings:studentListVisible')}
+                sx={radioButtonStyle}
               />
               <FormControlLabel
                 value="hidden"
-                control={<Radio />}
+                control={<Radio disableFocusRipple />}
                 label={t('organisationSettings:studentListHidden')}
+                sx={radioButtonStyle}
               />
               <FormControlLabel
                 value="byCourse"
-                control={<Radio />}
+                control={<Radio disableFocusRipple />}
                 label={t('organisationSettings:studentListByCourse')}
+                sx={radioButtonStyle}
               />
             </RadioGroup>
           </FormControl>

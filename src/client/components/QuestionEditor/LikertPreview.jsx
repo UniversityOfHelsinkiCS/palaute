@@ -3,6 +3,7 @@ import React from 'react'
 import { RadioGroup, FormControlLabel, Radio } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'
+import { radioFocusIndicatorStyle } from '../../util/accessibility'
 import PreviewBase from './PreviewBase'
 
 const styles = {
@@ -37,10 +38,13 @@ const LikertPreview = ({ question, language }) => {
           <FormControlLabel
             labelPlacement="top"
             value={option.toString()}
-            control={<Radio color="primary" />}
+            control={<Radio color="primary" disableFocusRipple />}
             label={parseOption(option)}
             key={option}
-            sx={option !== 0 ? styles.optionLabel : styles.dontKnowLabel}
+            sx={{
+              ...(option !== 0 ? styles.optionLabel : styles.dontKnowLabel),
+              ...radioFocusIndicatorStyle(),
+            }}
           />
         ))}
       </RadioGroup>

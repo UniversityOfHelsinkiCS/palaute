@@ -20,8 +20,7 @@ const MarkdownPreviewBase = ({ label, description, children, required = false })
   return (
     <>
       <Box sx={{ display: 'flex' }}>
-        <Markdown sx={styles.label}>{label || t('questionEditor:label')}</Markdown>
-        {required && ' *'}
+        <Markdown sx={styles.label}>{`${label || t('questionEditor:label')}${required ? ' *' : ''}`}</Markdown>
       </Box>
       {description && <Markdown sx={styles.description}>{description}</Markdown>}
       {children}

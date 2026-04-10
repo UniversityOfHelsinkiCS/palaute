@@ -207,7 +207,7 @@ const FeedbackTargetItem = ({ feedbackTarget }) => {
           <Typography style={{ flexShrink: 0, flexBasis: '30%' }}>{primaryCourseName}</Typography>
           <Box m={2} />
           <Typography variant="body2">
-            {opensAt.toLocaleDateString()} - {closesAt.toLocaleDateString()}
+            {opensAt.toLocaleDateString()}–{closesAt.toLocaleDateString()}
           </Typography>
         </Box>
       </AccordionSummary>
