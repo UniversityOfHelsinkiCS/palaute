@@ -14,6 +14,7 @@ import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Instructions from '../../../../components/common/Instructions'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { optionFocusIndicatorStyle } from '../../../../util/accessibility'
 
 const getInitialValues = feedbackTarget => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',
@@ -114,9 +115,11 @@ const EditFeedbackResponse = () => {
                         checked={sendEmail || isSent}
                         disabled={isSent}
                         onChange={({ target }) => setSendEmail(target.checked)}
+                        disableFocusRipple
                       />
                     }
                     label={isSent ? t('feedbackResponse:emailSent') : t('feedbackResponse:checkboxSendEmail')}
+                    sx={{ ml: 1, pr: 1, ...optionFocusIndicatorStyle() }}
                   />
                 </Box>
                 <Box my={2}>

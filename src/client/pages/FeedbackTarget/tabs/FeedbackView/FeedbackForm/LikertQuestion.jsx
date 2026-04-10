@@ -6,7 +6,7 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
-import { radioFocusIndicatorStyle } from '../../../../../util/accessibility'
+import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
 import QuestionBase from './QuestionBase'
 import { getDontKnowOption, useDelayedTouched } from './utils'
 
@@ -80,7 +80,7 @@ const LikertQuestion = ({ question, name, disabled }) => {
               key={option}
               sx={{
                 ...(option !== 0 ? styles.optionLabel : styles.dontKnowLabel),
-                ...radioFocusIndicatorStyle(),
+                ...optionFocusIndicatorStyle(),
               }}
               disabled={disabled}
             />

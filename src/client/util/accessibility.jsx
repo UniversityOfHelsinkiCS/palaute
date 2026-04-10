@@ -10,7 +10,7 @@ export const focusIndicatorStyle = ({ color } = {}) => {
   return focusIndicatorStyle
 }
 
-export const radioFocusIndicatorStyle = ({ color } = {}) => ({
+export const optionFocusIndicatorStyle = ({ color } = {}) => ({
   display: 'inline-flex',
   maxWidth: 'fit-content',
   alignItems: 'center',

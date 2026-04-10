@@ -3,7 +3,9 @@ import { useField } from 'formik'
 import { Checkbox, FormControlLabel, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 
-const FormikCheckbox = ({ name, label, ariaDescription, ...props }) => {
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
+
+const FormikCheckbox = ({ name, label, ariaDescription, sx = {}, ...props }) => {
   const [field, meta, helpers] = useField(name)
 
   const showError = meta.error && meta.touched
@@ -25,11 +27,13 @@ const FormikCheckbox = ({ name, label, ariaDescription, ...props }) => {
             onBlur={() => helpers.setTouched(true)}
             error={showError}
             color="primary"
+            disableFocusRipple
             slotProps={{ input: { 'aria-describedby': ariaDescription ? 'checkbox-description' : undefined } }}
             {...props}
           />
         }
         label={label}
+        sx={{ ...sx, pr: 1, ...optionFocusIndicatorStyle() }}
       />
     </>
   )

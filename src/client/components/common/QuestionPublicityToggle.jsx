@@ -2,14 +2,14 @@ import React from 'react'
 import { Box, Chip, FormControl, FormControlLabel, FormLabel, Popover, Radio, RadioGroup, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Edit } from '@mui/icons-material'
-import { radioFocusIndicatorStyle } from '../../util/accessibility'
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import styles from '../../util/chipStyles'
 
 const radioButtonStyle = {
   ml: 1,
   my: 1,
   pr: 1,
-  ...radioFocusIndicatorStyle(),
+  ...optionFocusIndicatorStyle(),
 }
 
 const QuestionPublicityToggle = ({ checked, disabled, onChange }) => {

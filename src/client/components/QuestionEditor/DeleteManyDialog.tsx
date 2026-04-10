@@ -9,6 +9,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { getQuestionId } from './utils'
 
 import { NorButton } from '../common/NorButton'
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
 type QuestionId = number | string // Just created questions have temporary id that is string while the question id is a number otherwise
 
@@ -36,7 +37,13 @@ const DeletableQuestion = ({ question, questionsToDelete, setQuestionsToDelete }
     setQuestionsToDelete(newSet)
   }
 
-  return <FormControlLabel label={question.label} control={<Checkbox checked={checked} onChange={handleChange} />} />
+  return (
+    <FormControlLabel
+      label={question.label}
+      control={<Checkbox checked={checked} onChange={handleChange} disableFocusRipple />}
+      sx={{ mt: 1, pr: 1, ...optionFocusIndicatorStyle() }}
+    />
+  )
 }
 
 type DeleteManyDialogProps = {

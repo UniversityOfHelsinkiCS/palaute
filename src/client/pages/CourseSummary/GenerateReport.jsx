@@ -6,6 +6,13 @@ import { useTranslation } from 'react-i18next'
 import { NorButton } from '../../components/common/NorButton'
 import { useSummaryContext } from './context'
 import apiClient from '../../util/apiClient'
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
+
+const checkBoxStyle = {
+  ml: 1,
+  pr: 1,
+  ...optionFocusIndicatorStyle(),
+}
 
 const GenerateReport = ({ organisationId }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
@@ -75,17 +82,33 @@ const GenerateReport = ({ organisationId }) => {
             <FormLabel id="include-checkbox-group-label">{t('generateReport:selectIncluded')}</FormLabel>
             <FormGroup>
               <FormControlLabel
-                control={<Checkbox checked={includeOrgs} />}
-                onChange={(_, checked) => setIncludeOrgs(checked)}
+                control={
+                  <Checkbox
+                    checked={includeOrgs}
+                    onChange={(_, checked) => setIncludeOrgs(checked)}
+                    disableFocusRipple
+                  />
+                }
                 label={t('generateReport:organisations')}
+                sx={{ my: 1, ...checkBoxStyle }}
               />
               <FormControlLabel
-                control={<Checkbox checked={includeCUs} onChange={(_, checked) => setIncludeCUs(checked)} />}
+                control={
+                  <Checkbox checked={includeCUs} onChange={(_, checked) => setIncludeCUs(checked)} disableFocusRipple />
+                }
                 label={t('generateReport:courseUnits')}
+                sx={{ mb: 1, ...checkBoxStyle }}
               />
               <FormControlLabel
-                control={<Checkbox checked={includeCURs} onChange={(_, checked) => setIncludeCURs(checked)} />}
+                control={
+                  <Checkbox
+                    checked={includeCURs}
+                    onChange={(_, checked) => setIncludeCURs(checked)}
+                    disableFocusRipple
+                  />
+                }
                 label={t('generateReport:courseRealisations')}
+                sx={checkBoxStyle}
               />
             </FormGroup>
             <NorButton

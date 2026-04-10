@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
 import { getStudentListVisibility } from './utils'
-import { radioFocusIndicatorStyle } from '../../util/accessibility'
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
@@ -31,7 +31,7 @@ import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/common'
 const radioButtonStyle = {
   ml: 1,
   pr: 1,
-  ...radioFocusIndicatorStyle(),
+  ...optionFocusIndicatorStyle(),
 }
 
 const saveGeneralSettings = async ({ code, studentListVisible, studentListVisibleByCourse }) => {

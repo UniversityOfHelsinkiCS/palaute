@@ -2,7 +2,7 @@ import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { useField } from 'formik'
 import React from 'react'
 
-import { radioFocusIndicatorStyle } from '../../util/accessibility'
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
 const FormikRadioButtons = ({ name, options, valueMapper = v => v, disabled, ...props }) => {
   const [field, , helpers] = useField(name)
@@ -24,7 +24,7 @@ const FormikRadioButtons = ({ name, options, valueMapper = v => v, disabled, ...
           value={value}
           control={<Radio disabled={disabled} disableFocusRipple />}
           label={label}
-          sx={{ pr: 1, ...radioFocusIndicatorStyle() }}
+          sx={{ pr: 1, ...optionFocusIndicatorStyle() }}
         />
       ))}
     </RadioGroup>

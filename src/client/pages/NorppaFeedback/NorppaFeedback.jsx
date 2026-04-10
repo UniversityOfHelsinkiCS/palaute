@@ -100,6 +100,7 @@ const NorppaFeedback = () => {
                 setFieldValue('responseWanted', values.responseWanted && !target.checked)
                 setFieldValue('anonymous', target.checked)
               }}
+              sx={{ ml: 1 }}
             />
             <FormikCheckBox
               name="responseWanted"

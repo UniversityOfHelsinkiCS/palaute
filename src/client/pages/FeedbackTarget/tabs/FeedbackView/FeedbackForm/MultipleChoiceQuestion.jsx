@@ -8,6 +8,7 @@ import { useTranslation } from 'react-i18next'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 import { useDelayedTouched } from './utils'
+import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
 
 const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
@@ -63,10 +64,12 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
                   color="primary"
                   name={option.id}
                   disabled={disabled}
+                  disableFocusRipple
                 />
               }
               label={getLanguageValue(option.label, language)}
               key={option.id}
+              sx={{ pr: 1, ...optionFocusIndicatorStyle() }}
             />
           ))}
         </FormGroup>

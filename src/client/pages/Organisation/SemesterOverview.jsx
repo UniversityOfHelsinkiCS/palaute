@@ -40,7 +40,7 @@ import { getYearRange } from '../../util/yearUtils'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
 import { organisationFeedbackTargetsQueryFn } from './responsiblesUtils'
-import { switchFocusIndicatorStyle } from '../../util/accessibility'
+import { optionFocusIndicatorStyle, switchFocusIndicatorStyle } from '../../util/accessibility'
 
 const SelectionContext = React.createContext({})
 
@@ -473,9 +473,11 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
                       includeWithoutTeachers: e.target.checked,
                     })
                   }
+                  disableFocusRipple
                 />
               }
               label={t('organisationSettings:includeWithoutTeachers')}
+              sx={{ ml: 1, pr: 1, ...optionFocusIndicatorStyle() }}
             />
             <MultiSelect
               value={value.tags}
@@ -495,9 +497,11 @@ const Filters = React.memo(({ onChange, value, organisation, searchParams, setSe
                       noTags: e.target.checked,
                     })
                   }
+                  disableFocusRipple
                 />
               }
               label={t('organisationSettings:noTags')}
+              sx={{ pr: 1, ...optionFocusIndicatorStyle() }}
             />
           </Box>
         </AccordionDetails>

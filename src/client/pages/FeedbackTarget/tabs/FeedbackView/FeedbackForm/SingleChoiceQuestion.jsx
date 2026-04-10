@@ -6,7 +6,7 @@ import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
-import { radioFocusIndicatorStyle } from '../../../../../util/accessibility'
+import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
 import QuestionBase from './QuestionBase'
 import { useDelayedTouched } from './utils'
 
@@ -60,7 +60,7 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
               label={getLanguageValue(option.label, language)}
               key={option.id}
               disabled={disabled}
-              sx={{ pr: 1, ...radioFocusIndicatorStyle() }}
+              sx={{ pr: 1, ...optionFocusIndicatorStyle() }}
             />
           ))}
         </RadioGroup>
