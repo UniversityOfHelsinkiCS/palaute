@@ -152,7 +152,11 @@
     "continuousFeedbackInfo": "Du kan ge kontinuerlig respons medan kursen är igång. Ditt namn visas inte för kursens personal i anslutning till din respons.",
     "allowSubmitCheckbox": "Läraren kan se mina svar även om färre än {{count}} studenter är anmälda till denna kurs.",
     "allowSubmitCheckboxAria": "Samtycke krävs för att skicka in responsen.",
-    "errorSummaryTitle": "Det uppstod problem med din inlämning"
+    "errorSummaryTitle": "Det uppstod problem med din inlämning",
+    "dataTableCaption": "Fördelningen av svaren",
+    "option": "Alternativ",
+    "count": "Antal",
+    "percentage": "Procent"
   },
   "teacherView": {
     "mainHeading": "Mina enkäter",
@@ -309,7 +313,15 @@
     "confirmDeleteFeedback": "Du är på väg att PERMANENT radera en students svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svaret? Skriv \"radera\" för att bekräfta.",
     "deleteSuccess": "Svar \"{{content}}\" raderat. ({{count}})",
     "hideSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har dolts. ({{count}}) st.",
-    "showSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har synligjorts. ({{count}}) st."
+    "showSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har synligjorts. ({{count}}) st.",
+    "feedbackSummary": "Total responses: {{count}} out of {{total}} students ({{percentage}} %)",
+    "feedbackTimelineInfo": "Feedback collection opened on {{openDate}} and closes on {{closeDate}}. The chart above shows the cumulative number of responses received over time.",
+    "chartDescription": "For the visual chart, use Alt + T to toggle back.",
+    "showChart": "Show chart view",
+    "showTable": "Show data table",
+    "chart": "Chart",
+    "table": "Table",
+    "keyboardHint": "(Alt + T)"
   },
   "groups": {
     "groupingSettings": "Gruppering",

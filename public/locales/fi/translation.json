@@ -158,7 +158,11 @@
     "continuousFeedbackInfo": "Voit antaa jatkuvaa palautetta, kun kurssi on käynnissä. Nimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.",
     "allowSubmitCheckbox": "Vastaukseni saa näkyä opettajalle, vaikka kurssille on ilmoittautunut alle {{count}} opiskelijaa.",
     "allowSubmitCheckboxAria": "Suostumus tarvitaan, jotta palautteen voi lähettää.",
-    "errorSummaryTitle": "Vastauksissasi oli puutteita"
+    "errorSummaryTitle": "Vastauksissasi oli puutteita",
+    "dataTableCaption": "Vastausten jakauma",
+    "option": "Vaihtoehto",
+    "count": "Määrä",
+    "percentage": "Osuus"
   },
   "teacherView": {
     "mainHeading": "Kyselyni",
@@ -324,7 +328,15 @@
     "unpublishingInfo": "Tämän kysymyksen vastaukset näkyvät kurssin opiskelijoille.",
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
-    "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})"
+    "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})",
+    "feedbackSummary": "Total responses: {{count}} out of {{total}} students ({{percentage}} %)",
+    "feedbackTimelineInfo": "Feedback collection opened on {{openDate}} and closes on {{closeDate}}. The chart above shows the cumulative number of responses received over time.",
+    "chartDescription": "For the visual chart, use Alt + T to toggle back.",
+    "showChart": "Show chart view",
+    "showTable": "Show data table",
+    "chart": "Chart",
+    "table": "Table",
+    "keyboardHint": "(Alt + T)"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",

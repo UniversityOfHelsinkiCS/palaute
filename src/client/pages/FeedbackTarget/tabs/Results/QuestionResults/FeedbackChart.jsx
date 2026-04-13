@@ -4,7 +4,7 @@ import React from 'react'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../../../util/languageUtils'
 
@@ -243,6 +243,9 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
   const { t, i18n } = useTranslation()
   const chartRef = React.useRef()
   const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
+  const [showAccessibleSummary, setShowAccessibleSummary] = React.useState(false)
+  const chartContainerId = React.useId()
+  const summaryId = React.useId()
 
   React.useEffect(
     () =>
@@ -261,17 +264,92 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
     [chartRef, feedbacks]
   )
 
+  React.useEffect(() => {
+    const handleKeyDown = event => {
+      // Alt + T to toggle summary view
+      if (event.altKey && event.key === 't') {
+        event.preventDefault()
+        setShowAccessibleSummary(prev => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
+  const feedbackCount = feedbacks.length
+  const responsePercentage = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(1) : 0
+
   return (
     <Box
       data-cy="feedback-target-results-feedback-chart"
-      height="20rem"
-      width="100%"
       my="1rem"
-      display="flex"
-      justifyContent="center"
+      role="region"
+      aria-labelledby={`${chartContainerId}-title`}
+      aria-describedby={showAccessibleSummary ? summaryId : undefined}
     >
-      <Box minWidth="80%">
-        <Line {...config} ref={chartRef} />
+      <Box id={`${chartContainerId}-title`} sx={{ display: 'none' }}>
+        {t('courseSummary:feedbackCount')}
+      </Box>
+
+      {/* Keyboard navigation info */}
+      <Typography variant="body2">Press Alt + T to toggle accessible data summary</Typography>
+
+      {/* Chart view */}
+      <Box display={showAccessibleSummary ? 'none' : 'flex'} justifyContent="center" width="100%" height="20rem">
+        <Box minWidth="80%">
+          <Line
+            {...config}
+            ref={chartRef}
+            options={{
+              ...config.options,
+              plugins: {
+                ...config.options?.plugins,
+                title: {
+                  ...config.options?.plugins?.title,
+                  text: t('courseSummary:feedbackCount'),
+                },
+              },
+            }}
+          />
+        </Box>
+      </Box>
+
+      {/* Accessible summary view */}
+      <Box
+        id={summaryId}
+        display={showAccessibleSummary ? 'block' : 'none'}
+        sx={{
+          p: 2,
+          backgroundColor: 'background.paper',
+          border: '1px solid',
+          borderColor: 'divider',
+          borderRadius: 1,
+        }}
+      >
+        <h3>{t('courseSummary:feedbackCount')}</h3>
+        <p>
+          {t('feedbackTargetResults:feedbackSummary', {
+            defaultValue: `Total responses: {{count}} out of {{total}} students ({{percentage}}%)`,
+            count: feedbackCount,
+            total: studentCount,
+            percentage: responsePercentage,
+          })}
+        </p>
+        {feedbacks.length > 0 && (
+          <p>
+            {t('feedbackTargetResults:feedbackTimelineInfo', {
+              defaultValue: `Feedback collection opened on {{openDate}} and closes on {{closeDate}}. The chart above shows the cumulative number of responses received over time.`,
+              openDate: new Date(opensAt).toLocaleDateString(localeForLanguage(i18n.language)?.code),
+              closeDate: new Date(closesAt).toLocaleDateString(localeForLanguage(i18n.language)?.code),
+            })}
+          </p>
+        )}
+        <p>
+          {t('feedbackTargetResults:chartDescription', {
+            defaultValue: 'For the visual chart, use Alt + T to toggle back.',
+          })}
+        </p>
       </Box>
     </Box>
   )

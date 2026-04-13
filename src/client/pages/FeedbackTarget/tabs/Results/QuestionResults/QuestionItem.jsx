@@ -108,7 +108,7 @@ const QuestionItem = ({
                 onChange={() => handlePublicityToggle(isPublic)}
               />
             )}
-            <Typography component="h3" variant="body1">
+            <Typography id={`${question.id}-title`} component="h3" variant="body1">
               {label}
             </Typography>
             <Typography variant="body2">{description}</Typography>
