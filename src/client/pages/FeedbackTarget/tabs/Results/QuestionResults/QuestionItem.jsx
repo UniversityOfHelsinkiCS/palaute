@@ -43,6 +43,8 @@ const QuestionItem = ({
   feedbackCount,
   disabled,
   feedbackTargetId,
+  showTable,
+  setShowTable,
 }) => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -82,7 +84,9 @@ const QuestionItem = ({
   }
 
   const Component = componentByType[question.type]
-  const content = Component ? <Component question={question} feedbackCount={feedbackCount} /> : null
+  const content = Component ? (
+    <Component question={question} feedbackCount={feedbackCount} showTable={showTable} setShowTable={setShowTable} />
+  ) : null
 
   const isPublic = publicQuestionIds.includes(question.id)
   const actualAnswers = sumBy(question.feedbacks, f => (f.data ? 1 : 0))
@@ -98,7 +102,14 @@ const QuestionItem = ({
         ...boxPrintStyle,
       }}
     >
-      <Box display="flex" flexDirection="column" height="100%">
+      <Box
+        role="region"
+        aria-labelledby={`question-${question.id}-label`}
+        aria-describedby={description ? `question-${question.id}-description` : undefined}
+        display="flex"
+        flexDirection="column"
+        height="100%"
+      >
         <Box display="flex">
           <Box flexGrow={0} mr="auto" display="flex" flexDirection="column" rowGap="0.5rem" alignItems="start">
             {isResponsibleTeacher && (
@@ -108,10 +119,14 @@ const QuestionItem = ({
                 onChange={() => handlePublicityToggle(isPublic)}
               />
             )}
-            <Typography id={`${question.id}-title`} component="h3" variant="body1">
+            <Typography id={`question-${question.id}-label`} component="h3" variant="body1">
               {label}
             </Typography>
-            <Typography variant="body2">{description}</Typography>
+            {description && (
+              <Typography id={`question-${question.id}-description`} variant="body2">
+                {description}
+              </Typography>
+            )}
             <Typography variant="caption" color="textSecondary">
               {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
             </Typography>

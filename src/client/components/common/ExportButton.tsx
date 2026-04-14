@@ -1,8 +1,7 @@
 import React, { useId, useState } from 'react'
-import { Button, Menu, Box, MenuList } from '@mui/material'
+import { Menu, Box, MenuList } from '@mui/material'
 import { Download } from '@mui/icons-material'
-
-import { focusIndicatorStyle } from '../../util/accessibility'
+import { NorButton } from './NorButton'
 
 const styles = {
   container: {
@@ -45,21 +44,18 @@ const ExportButton = ({ label, disabled = false, children }: ExportButtonProps) 
 
   return (
     <Box sx={styles.container}>
-      <Button
+      <NorButton
         id="export-button"
         aria-controls={open ? menuId : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
         onClick={handleClick}
-        color="primary"
-        variant="outlined"
-        startIcon={<Download />}
+        color="secondary"
+        icon={<Download />}
         disabled={disabled}
-        sx={focusIndicatorStyle()}
-        disableRipple
       >
         {label}
-      </Button>
+      </NorButton>
       <Menu
         id={menuId}
         aria-labelledby="export-button"

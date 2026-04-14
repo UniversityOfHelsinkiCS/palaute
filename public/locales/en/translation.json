@@ -336,13 +336,13 @@
     "confirmDeleteFeedback": "You are about to PERMANTENTLY delete a student's answer using admin rights. Are you sure you want to delete this answer? Type \"delete\" to confirm.",
     "deleteSuccess": "Answer \"{{content}}\" deleted. ({{count}})",
     "feedbackSummary": "Total responses: {{count}} out of {{total}} students ({{percentage}} %)",
-    "feedbackTimelineInfo": "Feedback collection opened on {{openDate}} and closes on {{closeDate}}. The chart above shows the cumulative number of responses received over time.",
-    "chartDescription": "For the visual chart, use Alt + T to toggle back.",
+    "feedbackTimelineInfo": "Feedback open: {{openDate}}–{{closeDate}}",
+    "chartDescription": "Use Alt + T to see the chart. The chart shows the cumulative number of responses received over time.",
     "showChart": "Show chart view",
     "showTable": "Show data table",
-    "chart": "Chart",
-    "table": "Table",
-    "keyboardHint": "(Alt + T)"
+    "chartView": "Show chart view (Alt + T)",
+    "tableView": "Show table view (Alt + T)",
+    "keyboardHint": "Change between chart and table using this button or Alt + T"
   },
   "groups": {
     "groupingSettings": "Grouping",

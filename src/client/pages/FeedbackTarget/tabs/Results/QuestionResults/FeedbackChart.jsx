@@ -4,7 +4,7 @@ import React from 'react'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
-import { Box, Typography } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../../../util/languageUtils'
 
@@ -239,11 +239,10 @@ const buildChartConfig = (
   return config
 }
 
-const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt }) => {
+const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt, showTable }) => {
   const { t, i18n } = useTranslation()
   const chartRef = React.useRef()
   const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
-  const [showAccessibleSummary, setShowAccessibleSummary] = React.useState(false)
   const chartContainerId = React.useId()
   const summaryId = React.useId()
 
@@ -264,19 +263,6 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
     [chartRef, feedbacks]
   )
 
-  React.useEffect(() => {
-    const handleKeyDown = event => {
-      // Alt + T to toggle summary view
-      if (event.altKey && event.key === 't') {
-        event.preventDefault()
-        setShowAccessibleSummary(prev => !prev)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
-
   const feedbackCount = feedbacks.length
   const responsePercentage = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(1) : 0
 
@@ -286,17 +272,14 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
       my="1rem"
       role="region"
       aria-labelledby={`${chartContainerId}-title`}
-      aria-describedby={showAccessibleSummary ? summaryId : undefined}
+      aria-describedby={showTable ? summaryId : undefined}
     >
       <Box id={`${chartContainerId}-title`} sx={{ display: 'none' }}>
         {t('courseSummary:feedbackCount')}
       </Box>
 
-      {/* Keyboard navigation info */}
-      <Typography variant="body2">Press Alt + T to toggle accessible data summary</Typography>
-
       {/* Chart view */}
-      <Box display={showAccessibleSummary ? 'none' : 'flex'} justifyContent="center" width="100%" height="20rem">
+      <Box display={showTable ? 'none' : 'flex'} justifyContent="center" width="100%" height="20rem">
         <Box minWidth="80%">
           <Line
             {...config}
@@ -318,7 +301,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
       {/* Accessible summary view */}
       <Box
         id={summaryId}
-        display={showAccessibleSummary ? 'block' : 'none'}
+        display={showTable ? 'block' : 'none'}
         sx={{
           p: 2,
           backgroundColor: 'background.paper',

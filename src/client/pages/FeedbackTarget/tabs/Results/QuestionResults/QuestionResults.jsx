@@ -74,6 +74,8 @@ const QuestionResults = React.memo(
     isOpen,
     feedbackCount,
     feedbackTargetId,
+    showTable,
+    setShowTable,
   }) => {
     const { t } = useTranslation()
 
@@ -144,6 +146,8 @@ const QuestionResults = React.memo(
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
                   feedbackTargetId={feedbackTargetId}
+                  showTable={showTable}
+                  setShowTable={setShowTable}
                 />
               </Box>
             ))}

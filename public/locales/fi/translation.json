@@ -329,14 +329,14 @@
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
     "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})",
-    "feedbackSummary": "Total responses: {{count}} out of {{total}} students ({{percentage}} %)",
-    "feedbackTimelineInfo": "Feedback collection opened on {{openDate}} and closes on {{closeDate}}. The chart above shows the cumulative number of responses received over time.",
-    "chartDescription": "For the visual chart, use Alt + T to toggle back.",
-    "showChart": "Show chart view",
-    "showTable": "Show data table",
-    "chart": "Chart",
-    "table": "Table",
-    "keyboardHint": "(Alt + T)"
+    "feedbackSummary": "Vastausten kokonaismäärä: {{count}}/{{total}} opiskelijaa ({{percentage}} %)",
+    "feedbackTimelineInfo": "Palautteen aukioloaika: {{openDate}}–{{closeDate}}.",
+    "chartDescription": "Paina näppäinyhdistelmää Alt + T tarkastellaksesi kaaviota. Kaavio näyttää kertyneen vastausten määrän ajan kuluessa.",
+    "showChart": "Näytä kaavio",
+    "showTable": "Näytä taulukko",
+    "chartView": "Näytä kaavionäkymä (Alt + T)",
+    "tableView": "Näytä taulukkonäkymä (Alt + T)",
+    "keyboardHint": "Vaihda kaavion ja taulukon välillä painamalla tästä tai näppäinyhdistelmällä Alt + T"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",

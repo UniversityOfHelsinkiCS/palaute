@@ -1,6 +1,8 @@
-import React, { useRef } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, Alert, Paper } from '@mui/material'
+import TableRowsIcon from '@mui/icons-material/TableRows'
+import BarChartIcon from '@mui/icons-material/BarChart'
 import { useInView } from 'react-intersection-observer'
 
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
@@ -8,6 +10,7 @@ import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedb
 import QuestionResults from './QuestionResults'
 import FeedbackResponse from './FeedbackResponse'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
+import { NorButton } from '../../../../components/common/NorButton'
 
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import FeedbackChart from './QuestionResults/FeedbackChart'
@@ -135,6 +138,7 @@ const Results = () => {
   const isMobile = useIsMobile()
   const exportRef = useRef(null)
   const [groupId, setGroupId] = React.useState('ALL')
+  const [showTable, setShowTable] = useState(false)
 
   useChartConfig()
 
@@ -170,6 +174,19 @@ const Results = () => {
 
   const showFeedback = enoughFeedbacks && (enoughStudents || (feedbacks.length > 0 && isResponsibleTeacher))
 
+  useEffect(() => {
+    const handleKeyDown = event => {
+      // Alt + T to toggle between chart and table
+      if (event.altKey && event.key === 't') {
+        event.preventDefault()
+        setShowTable(prev => !prev)
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [])
+
   return (
     <Box id="feedback-target-tab-content">
       {filtersVisible && (
@@ -195,6 +212,16 @@ const Results = () => {
 
         {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
+        <NorButton
+          id="chart-table-toggle-button"
+          onClick={() => setShowTable(prev => !prev)}
+          fullWidth
+          icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
+          sx={{ mb: 4, py: 1 }}
+        >
+          {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
+        </NorButton>
+
         {!isMobile && showFeedback && (
           <FeedbackChart
             feedbacks={feedbacks}
@@ -203,6 +230,7 @@ const Results = () => {
             closesAt={closesAt}
             feedbackReminderLastSentAt={feedbackReminderLastSentAt}
             t={t}
+            showTable={showTable}
           />
         )}
 
@@ -218,6 +246,8 @@ const Results = () => {
             isOpen={isOpen}
             feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
+            showTable={showTable}
+            setShowTable={setShowTable}
           />
         ) : (
           <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />

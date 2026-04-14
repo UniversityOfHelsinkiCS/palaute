@@ -7,7 +7,7 @@ import { getMultipleChoiceChartConfig } from './utils'
 import ResultsContent from './ResultsContent'
 import AccessibleChartTable from './AccessibleChartTable'
 
-const MultipleChoiceResults = ({ question, feedbackCount }) => {
+const MultipleChoiceResults = ({ question, feedbackCount, showTable, setShowTable }) => {
   const { t, i18n } = useTranslation()
   const config = getMultipleChoiceChartConfig(question, i18n.language, t, feedbackCount)
 
@@ -16,11 +16,10 @@ const MultipleChoiceResults = ({ question, feedbackCount }) => {
       labels={config.data.labels}
       data={config.data.datasets[0].data}
       totalFeedbacks={feedbackCount}
-      ariaDescription="Table showing the distribution of responses for the multiple choice question"
     />
   )
 
-  return <ResultsContent chart={<Bar {...config} />} table={table} chartLabel="Multiple Choice Responses" />
+  return <ResultsContent chart={<Bar {...config} />} table={table} showTable={showTable} setShowTable={setShowTable} />
 }
 
 export default MultipleChoiceResults
