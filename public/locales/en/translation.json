@@ -338,11 +338,8 @@
     "feedbackSummary": "Total responses: {{count}} out of {{total}} students ({{percentage}} %)",
     "feedbackTimelineInfo": "Feedback open: {{openDate}}–{{closeDate}}",
     "chartDescription": "Use Alt + T to see the chart. The chart shows the cumulative number of responses received over time.",
-    "showChart": "Show chart view",
-    "showTable": "Show data table",
     "chartView": "Show chart view (Alt + T)",
-    "tableView": "Show table view (Alt + T)",
-    "keyboardHint": "Change between chart and table using this button or Alt + T"
+    "tableView": "Show table view (Alt + T)"
   },
   "groups": {
     "groupingSettings": "Grouping",

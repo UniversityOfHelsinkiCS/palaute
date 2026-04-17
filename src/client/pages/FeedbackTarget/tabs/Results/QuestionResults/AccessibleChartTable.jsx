@@ -1,20 +1,9 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 const AccessibleChartTable = ({ labels, data, totalFeedbacks, caption }) => {
   const { t } = useTranslation()
-  const rowRefs = useRef([])
-
-  const handleRowKeyDown = (event, index) => {
-    if (event.key === 'ArrowUp' && index > 0) {
-      event.preventDefault()
-      rowRefs.current[index - 1]?.focus()
-    } else if (event.key === 'ArrowDown' && index < labels.length - 1) {
-      event.preventDefault()
-      rowRefs.current[index + 1]?.focus()
-    }
-  }
 
   return (
     <TableContainer sx={{ my: 2 }}>
@@ -50,22 +39,7 @@ const AccessibleChartTable = ({ labels, data, totalFeedbacks, caption }) => {
             const percentage = totalFeedbacks > 0 ? ((count / totalFeedbacks) * 100).toFixed(1) : 0
             const displayLabel = Array.isArray(label) ? label.join(' ') : label
             return (
-              <TableRow
-                key={index}
-                ref={el => {
-                  rowRefs.current[index] = el
-                }}
-                hover
-                tabIndex={0}
-                onKeyDown={event => handleRowKeyDown(event, index)}
-                sx={{
-                  '&:focus-visible': {
-                    outline: '3px solid',
-                    outlineColor: 'primary.main',
-                    outlineOffset: '-3px',
-                  },
-                }}
-              >
+              <TableRow key={index} hover>
                 <TableCell component="th" scope="row">
                   {displayLabel}
                 </TableCell>

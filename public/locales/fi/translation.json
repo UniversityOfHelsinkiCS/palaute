@@ -332,11 +332,8 @@
     "feedbackSummary": "Vastausten kokonaismäärä: {{count}}/{{total}} opiskelijaa ({{percentage}} %)",
     "feedbackTimelineInfo": "Palautteen aukioloaika: {{openDate}}–{{closeDate}}.",
     "chartDescription": "Paina näppäinyhdistelmää Alt + T tarkastellaksesi kaaviota. Kaavio näyttää kertyneen vastausten määrän ajan kuluessa.",
-    "showChart": "Näytä kaavio",
-    "showTable": "Näytä taulukko",
     "chartView": "Näytä kaavionäkymä (Alt + T)",
-    "tableView": "Näytä taulukkonäkymä (Alt + T)",
-    "keyboardHint": "Vaihda kaavion ja taulukon välillä painamalla tästä tai näppäinyhdistelmällä Alt + T"
+    "tableView": "Näytä taulukkonäkymä (Alt + T)"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",
