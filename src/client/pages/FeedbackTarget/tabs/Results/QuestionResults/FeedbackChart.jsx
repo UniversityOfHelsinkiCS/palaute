@@ -1,15 +1,16 @@
-import { addHours, startOfDay, subDays } from 'date-fns'
-import { groupBy, sortBy } from 'lodash-es'
 import React from 'react'
+import { addHours, startOfDay, subDays, parseISO, differenceInCalendarDays } from 'date-fns'
+import { groupBy, sortBy } from 'lodash-es'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
 import { Line } from 'react-chartjs-2'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../../../util/languageUtils'
+import { buildDailySeries, DailyCumulativeTable, MonthlyExpandableTables } from './FeedbackCountTable'
 
 const getGradient = (ctx, chartArea) => {
-  if (!ctx) return 'hsl(300deg 49% 56%)'
+  if (!ctx || !chartArea) return 'hsl(300deg 49% 56%)'
   const g = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top)
   g.addColorStop(0.0, 'hsl(261deg 63% 61%)')
   g.addColorStop(0.06, 'hsl(300deg 49% 56%)')
@@ -56,8 +57,6 @@ const buildChartConfig = (
   t,
   language
 ) => {
-  const gradient = getGradient(chart?.ctx, chart?.chartArea)
-
   const initialData = sortBy(
     Object.entries(groupBy(feedbacks, f => addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime())).map(
       ([date, feedbacks]) => ({
@@ -226,12 +225,24 @@ const buildChartConfig = (
       },
       elements: {
         line: {
-          borderColor: gradient,
+          borderColor: context => {
+            const { chart } = context
+            const canvasCtx = chart.ctx
+            const { chartArea } = chart
+            if (!chartArea) return 'hsl(300deg 49% 56%)' // fallback until first layout
+            return getGradient(canvasCtx, chartArea)
+          },
           borderWidth: 4,
         },
         point: {
           radius: 6,
-          borderColor: gradient,
+          borderColor: context => {
+            const { chart } = context
+            const canvasCtx = chart.ctx
+            const { chartArea } = chart
+            if (!chartArea) return 'hsl(300deg 49% 56%)'
+            return getGradient(canvasCtx, chartArea)
+          },
         },
       },
     },
@@ -243,8 +254,6 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
   const { t, i18n } = useTranslation()
   const chartRef = React.useRef()
   const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
-  const chartContainerId = React.useId()
-  const summaryId = React.useId()
 
   React.useEffect(
     () =>
@@ -260,79 +269,66 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
           i18n.language
         )
       ),
-    [chartRef, feedbacks]
+    [chartRef, feedbacks, i18n.language]
   )
-
-  const feedbackCount = feedbacks.length
-  const responsePercentage = studentCount > 0 ? ((feedbackCount / studentCount) * 100).toFixed(1) : 0
 
   return (
     <Box
       data-cy="feedback-target-results-feedback-chart"
-      my="1rem"
+      sx={{ my: 1 }}
       role="region"
-      aria-labelledby={`${chartContainerId}-title`}
-      aria-describedby={showTable ? summaryId : undefined}
+      aria-label={t('courseSummary:feedbackCount')}
     >
-      <Box id={`${chartContainerId}-title`} sx={{ display: 'none' }}>
-        {t('courseSummary:feedbackCount')}
-      </Box>
-
-      {/* Chart view */}
-      <Box display={showTable ? 'none' : 'flex'} justifyContent="center" width="100%" height="20rem">
+      <Box sx={{ display: showTable ? 'none' : 'flex', justifyContent: 'center', width: '100%', height: '20rem' }}>
         <Box minWidth="80%">
-          <Line
-            {...config}
-            ref={chartRef}
-            options={{
-              ...config.options,
-              plugins: {
-                ...config.options?.plugins,
-                title: {
-                  ...config.options?.plugins?.title,
-                  text: t('courseSummary:feedbackCount'),
-                },
-              },
-            }}
-          />
+          <Line {...config} ref={chartRef} />
         </Box>
       </Box>
-
-      {/* Accessible summary view */}
       <Box
-        id={summaryId}
-        display={showTable ? 'block' : 'none'}
         sx={{
-          p: 2,
+          display: showTable ? 'block' : 'none',
+          px: 4,
+          py: 2,
           backgroundColor: 'background.paper',
           border: '1px solid',
           borderColor: 'divider',
           borderRadius: 1,
         }}
       >
-        <h3>{t('courseSummary:feedbackCount')}</h3>
-        <p>
-          {t('feedbackTargetResults:feedbackSummary', {
-            defaultValue: `Total responses: {{count}} out of {{total}} students ({{percentage}}%)`,
-            count: feedbackCount,
-            total: studentCount,
-            percentage: responsePercentage,
-          })}
-        </p>
-        {feedbacks.length > 0 && (
-          <p>
-            {t('feedbackTargetResults:feedbackTimelineInfo', {
-              defaultValue: `Feedback collection opened on {{openDate}} and closes on {{closeDate}}. The chart above shows the cumulative number of responses received over time.`,
-              openDate: new Date(opensAt).toLocaleDateString(localeForLanguage(i18n.language)?.code),
-              closeDate: new Date(closesAt).toLocaleDateString(localeForLanguage(i18n.language)?.code),
-            })}
-          </p>
-        )}
-        <p>
-          {t('feedbackTargetResults:chartDescription', {
-            defaultValue: 'For the visual chart, use Alt + T to toggle back.',
-          })}
-        </p>
+        <Typography component="h2" variant="h6" sx={{ mt: 3 }}>
+          {t('courseSummary:feedbackCount')}
+        </Typography>
+        <Box sx={{ display: 'flex', flexDirection: 'column', py: 2 }}>
+          <Typography component="strong" sx={{ fontWeight: 'bold' }}>
+            {t('feedbackTargetResults:totalCount')}: {feedbacks.length}
+          </Typography>
+          <Typography component="strong" sx={{ fontWeight: 'bold' }}>
+            {t('feedbackTargetResults:responseRate')}: {((feedbacks.length / studentCount) * 100).toFixed(1)} %
+          </Typography>
+        </Box>
+        {showTable &&
+          (() => {
+            const localeCode = localeForLanguage(i18n.language)?.code
+            const dailyRows = buildDailySeries(opensAt, closesAt, feedbacks, studentCount, localeCode)
+
+            const effectiveStart = dailyRows[0]?.date
+            const effectiveEnd = dailyRows[dailyRows.length - 1]?.date
+
+            const open = startOfDay(typeof opensAt === 'string' ? parseISO(opensAt) : new Date(opensAt))
+            const close = startOfDay(typeof closesAt === 'string' ? parseISO(closesAt) : new Date(closesAt))
+
+            const start = effectiveStart ?? open
+            const end = effectiveEnd ?? close
+
+            const totalDays = Math.max(0, differenceInCalendarDays(end, start)) + 1
+            const isShort = totalDays <= 30
+
+            return isShort ? (
+              <DailyCumulativeTable rows={dailyRows} studentCount={studentCount} />
+            ) : (
+              <MonthlyExpandableTables rows={dailyRows} studentCount={studentCount} language={i18n.language} />
+            )
+          })()}
       </Box>
     </Box>
   )

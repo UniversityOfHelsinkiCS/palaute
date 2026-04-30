@@ -329,11 +329,16 @@
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
     "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})",
-    "feedbackSummary": "Vastausten kokonaismäärä: {{count}}/{{total}} opiskelijaa ({{percentage}} %)",
-    "feedbackTimelineInfo": "Palautteen aukioloaika: {{openDate}}–{{closeDate}}.",
-    "chartDescription": "Paina näppäinyhdistelmää Alt + T tarkastellaksesi kaaviota. Kaavio näyttää kertyneen vastausten määrän ajan kuluessa.",
-    "chartView": "Näytä kaavionäkymä (Alt + T)",
-    "tableView": "Näytä taulukkonäkymä (Alt + T)"
+    "chartView": "Näytä kaavionäkymä",
+    "tableView": "Näytä taulukkonäkymä",
+    "feedbacks": "palautetta",
+    "totalCount": "Palautteita yhteensä",
+    "responseRate": "Vastausprosentti",
+    "dailyBreakdown": "Palautteiden määrä päiväkohtaisesti",
+    "date": "Päivämäärä",
+    "dailyCount": "Palautteiden määrä",
+    "cumulative": "Palautteiden kertymä",
+    "percentage": "Kertynyt vastausprosentti"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",
