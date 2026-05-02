@@ -7,7 +7,7 @@ import { Line } from 'react-chartjs-2'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../../../util/languageUtils'
-import { buildDailySeries, DailyCumulativeTable, MonthlyExpandableTables } from './FeedbackCountTable'
+import { buildDailySeries, DailyFeedbackCountTable, MonthlySummaries } from './FeedbackCountTable'
 
 const getGradient = (ctx, chartArea) => {
   if (!ctx || !chartArea) return 'hsl(300deg 49% 56%)'
@@ -298,7 +298,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
         <Typography component="h2" variant="h6" sx={{ mt: 3 }}>
           {t('courseSummary:feedbackCount')}
         </Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', py: 2 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', py: 2, mb: 1 }}>
           <Typography component="strong" sx={{ fontWeight: 'bold' }}>
             {t('feedbackTargetResults:totalCount')}: {feedbacks.length}
           </Typography>
@@ -324,9 +324,9 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
             const isShort = totalDays <= 30
 
             return isShort ? (
-              <DailyCumulativeTable rows={dailyRows} studentCount={studentCount} />
+              <DailyFeedbackCountTable rows={dailyRows} studentCount={studentCount} />
             ) : (
-              <MonthlyExpandableTables rows={dailyRows} studentCount={studentCount} language={i18n.language} />
+              <MonthlySummaries rows={dailyRows} studentCount={studentCount} language={i18n.language} />
             )
           })()}
       </Box>

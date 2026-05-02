@@ -1,18 +1,23 @@
 import React from 'react'
 import { addHours, startOfDay, differenceInCalendarDays, parseISO } from 'date-fns'
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from '@mui/material'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
+  Box,
+} from '@mui/material'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import { useTranslation } from 'react-i18next'
 import { localeForLanguage } from '../../../../../util/languageUtils'
 import { capitalizeString } from './utils'
 import { focusIndicatorStyle } from '../../../../../util/accessibility'
-
-const summaryStyle = {
-  cursor: 'pointer',
-  p: 1,
-  borderRadius: 1,
-  width: 'fit-content',
-  ...focusIndicatorStyle(),
-}
 
 const groupFeedbacksByDay = (feedbacks: Array<{ createdAt: string }>) => {
   const byDayObj: Record<number, number> = {}
@@ -97,7 +102,7 @@ const groupByMonth = (rows: DailyRow[]) => {
   return groups
 }
 
-export const DailyCumulativeTable = ({ rows, studentCount }: { rows: DailyRow[]; studentCount: number }) => {
+export const DailyFeedbackCountTable = ({ rows, studentCount }: { rows: DailyRow[]; studentCount: number }) => {
   const { t } = useTranslation()
 
   return (
@@ -152,7 +157,7 @@ export const DailyCumulativeTable = ({ rows, studentCount }: { rows: DailyRow[];
   )
 }
 
-export const MonthlyExpandableTables = ({
+export const MonthlySummaries = ({
   rows,
   studentCount,
   language,
@@ -167,7 +172,7 @@ export const MonthlyExpandableTables = ({
   const monthKeys = Object.keys(byMonth).sort((a, b) => (a < b ? -1 : 1))
 
   return (
-    <div>
+    <Box>
       {monthKeys.map(key => {
         const [y, m] = key.split('-').map(Number)
         const monthRows = byMonth[key] ?? []
@@ -176,19 +181,23 @@ export const MonthlyExpandableTables = ({
           year: 'numeric',
           month: 'long',
         })
+        const summaryId = `summary-${key}`
         const detailsId = `details-${key}`
 
         return (
-          <div key={key}>
-            <details id={detailsId}>
-              <Typography
-                component="summary"
-                variant="subtitle1"
-                sx={summaryStyle}
-                aria-controls={`${detailsId}-table`}
-              >
+          <Accordion key={key} slotProps={{ heading: { component: 'h3' } }} sx={{ mb: 1, borderRadius: 1 }}>
+            <AccordionSummary
+              id={summaryId}
+              aria-controls={detailsId}
+              expandIcon={<ArrowDropDownIcon />}
+              sx={{ ...focusIndicatorStyle() }}
+              disableRipple
+            >
+              <Typography>
                 {`${capitalizeString(monthLabel)}: ${monthTotal} ${t('feedbackTargetResults:feedbacks')}`}
               </Typography>
+            </AccordionSummary>
+            <AccordionDetails id={detailsId}>
               <TableContainer sx={{ mb: 3 }}>
                 <Table
                   id={`${detailsId}-table`}
@@ -240,10 +249,10 @@ export const MonthlyExpandableTables = ({
                   </TableBody>
                 </Table>
               </TableContainer>
-            </details>
-          </div>
+            </AccordionDetails>
+          </Accordion>
         )
       })}
-    </div>
+    </Box>
   )
 }
