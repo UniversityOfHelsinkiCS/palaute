@@ -323,7 +323,8 @@
     "date": "Datum",
     "dailyCount": "Antal svar",
     "cumulative": "Kumulativt antal svar",
-    "percentage": "Kumulativ svarsfrekvens"
+    "percentage": "Kumulativ svarsfrekvens",
+    "keyboardShortcut": "Växla mellan diagram- och tabellvy med den här knappen eller kortkommandot Alt + T."
   },
   "groups": {
     "groupingSettings": "Gruppering",

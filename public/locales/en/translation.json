@@ -344,7 +344,8 @@
     "date": "Date",
     "dailyCount": "Number of feedbacks",
     "cumulative": "Cumulative number of feedbacks",
-    "percentage": "Cumulative response rate"
+    "percentage": "Cumulative response rate",
+    "keyboardShortcut": "You can switch between chart and table view by pressing this button or using the keyboard shortcut Alt + T."
   },
   "groups": {
     "groupingSettings": "Grouping",

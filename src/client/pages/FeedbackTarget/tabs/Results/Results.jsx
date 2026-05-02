@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Alert, Paper } from '@mui/material'
+import { Box, Alert, Paper, Tooltip } from '@mui/material'
 import TableRowsIcon from '@mui/icons-material/TableRows'
 import BarChartIcon from '@mui/icons-material/BarChart'
 import { useInView } from 'react-intersection-observer'
@@ -212,15 +212,17 @@ const Results = () => {
 
         {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
-        <NorButton
-          id="chart-table-toggle-button"
-          onClick={() => setShowTable(prev => !prev)}
-          fullWidth
-          icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
-          sx={{ mb: 4, py: 1 }}
-        >
-          {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
-        </NorButton>
+        <Tooltip title={t('feedbackTargetResults:keyboardShortcut')} placement="top">
+          <NorButton
+            id="chart-table-toggle-button"
+            onClick={() => setShowTable(prev => !prev)}
+            fullWidth
+            icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
+            sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
+          >
+            {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
+          </NorButton>
+        </Tooltip>
 
         {!isMobile && showFeedback && (
           <FeedbackChart

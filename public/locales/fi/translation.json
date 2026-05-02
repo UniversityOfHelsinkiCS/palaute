@@ -338,7 +338,8 @@
     "date": "Päivämäärä",
     "dailyCount": "Palautteiden määrä",
     "cumulative": "Palautteiden kertymä",
-    "percentage": "Kertynyt vastausprosentti"
+    "percentage": "Kertynyt vastausprosentti",
+    "keyboardShortcut": "Voit vaihtaa kaavio- ja taulukkonäkymän välillä painamalla tästä tai näppäinyhdistelmällä Alt + T."
   },
   "groups": {
     "groupingSettings": "Ryhmittely",
