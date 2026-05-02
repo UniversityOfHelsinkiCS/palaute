@@ -14,7 +14,6 @@ const summaryStyle = {
   ...focusIndicatorStyle(),
 }
 
-// Build per-day counts using noon buckets, returned as sorted array [{ x: middayTs, count }]
 const groupFeedbacksByDay = (feedbacks: Array<{ createdAt: string }>) => {
   const byDayObj: Record<number, number> = {}
   for (let i = 0; i < feedbacks.length; i++) {
@@ -28,7 +27,6 @@ const groupFeedbacksByDay = (feedbacks: Array<{ createdAt: string }>) => {
   return entries
 }
 
-// Build contiguous daily rows; range is expanded to include pre-open and post-close feedbacks
 export const buildDailySeries = (
   opensAt: string | number | Date,
   closesAt: string | number | Date,
@@ -178,7 +176,6 @@ export const MonthlyExpandableTables = ({
           year: 'numeric',
           month: 'long',
         })
-        const captionId = `caption-${key}`
         const detailsId = `details-${key}`
 
         return (
@@ -188,7 +185,6 @@ export const MonthlyExpandableTables = ({
                 component="summary"
                 variant="subtitle1"
                 sx={summaryStyle}
-                aria-describedby={captionId}
                 aria-controls={`${detailsId}-table`}
               >
                 {`${capitalizeString(monthLabel)}: ${monthTotal} ${t('feedbackTargetResults:feedbacks')}`}
@@ -197,13 +193,11 @@ export const MonthlyExpandableTables = ({
                 <Table
                   id={`${detailsId}-table`}
                   size="small"
-                  aria-describedby={captionId}
                   sx={{
                     '& thead': { backgroundColor: 'action.hover' },
                   }}
                 >
                   <caption
-                    id={captionId}
                     style={{
                       captionSide: 'top',
                       textAlign: 'left',
@@ -217,16 +211,16 @@ export const MonthlyExpandableTables = ({
                   <TableHead>
                     <TableRow>
                       <TableCell component="th" scope="col" sx={{ fontWeight: 'bold' }}>
-                        {t('feedbackTargetResults:date', { defaultValue: 'Date' })}
+                        {t('feedbackTargetResults:date')}
                       </TableCell>
                       <TableCell component="th" scope="col" align="right" sx={{ fontWeight: 'bold' }}>
-                        {t('feedbackTargetResults:dailyCount', { defaultValue: 'Daily responses' })}
+                        {t('feedbackTargetResults:dailyCount')}
                       </TableCell>
                       <TableCell component="th" scope="col" align="right" sx={{ fontWeight: 'bold' }}>
-                        {t('feedbackTargetResults:cumulative', { defaultValue: 'Cumulative responses' })}
+                        {t('feedbackTargetResults:cumulative')}
                       </TableCell>
                       <TableCell component="th" scope="col" align="right" sx={{ fontWeight: 'bold' }}>
-                        {t('feedbackTargetResults:percentage', { defaultValue: 'Cumulative %' })}
+                        {t('feedbackTargetResults:percentage')}
                       </TableCell>
                     </TableRow>
                   </TableHead>
