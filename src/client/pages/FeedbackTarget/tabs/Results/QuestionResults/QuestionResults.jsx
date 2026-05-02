@@ -133,7 +133,7 @@ const QuestionResults = React.memo(
                     width: '100%',
                   },
                   '@media print': {
-                    width: '33%',
+                    width: showTable ? '50%' : '33%',
                     pageBreakInside: 'avoid',
                     display: 'inline-block',
                   },
