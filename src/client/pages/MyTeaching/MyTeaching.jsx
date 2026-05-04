@@ -68,25 +68,49 @@ const RenderCourseUnitGroup = ({ groupTitle, courseUnits, status }) => {
   )
 }
 
-const FilterRow = ({ dateRange, setDateRange }) => {
+const FilterRow = ({ dateRange, setDateRange, showAllYears, setShowAllYears }) => {
   const [params, setParams] = useURLSearchParams()
   const { academicYears, selectedYear } = useAcademicYears(dateRange?.start ?? new Date())
 
   useEffect(() => {
+    if (showAllYears) {
+      if (params.get('startDate') || params.get('endDate')) {
+        params.delete('startDate')
+        params.delete('endDate')
+        params.set('year', 'all')
+        setParams(params)
+      }
+      return
+    }
+
     if (!params.get('startDate') || !params.get('endDate')) {
       params.set('startDate', format(new Date(selectedYear.start), 'yyyy-MM-dd'))
       params.set('endDate', format(new Date(selectedYear.end), 'yyyy-MM-dd'))
+      params.delete('year')
       setParams(params)
       setDateRange({ start: selectedYear.start, end: selectedYear.end })
     }
-  }, [params, setParams])
+  }, [params, selectedYear, setDateRange, setParams, showAllYears])
 
-  const handleYearChange = ({ start, end }) => {
-    setDateRange({ start, end })
-    params.set('startDate', format(new Date(start), 'yyyy-MM-dd'))
-    params.set('endDate', format(new Date(end), 'yyyy-MM-dd'))
+  const handleYearChange = year => {
+    if (year === 'all') {
+      setShowAllYears(true)
+      params.set('year', 'all')
+      params.delete('startDate')
+      params.delete('endDate')
+      setParams(params)
+      return
+    }
+
+    setShowAllYears(false)
+    setDateRange({ start: year.start, end: year.end })
+    params.set('startDate', format(new Date(year.start), 'yyyy-MM-dd'))
+    params.set('endDate', format(new Date(year.end), 'yyyy-MM-dd'))
+    params.delete('year')
     setParams(params)
   }
+
+  const selectedValue = showAllYears ? 'all' : selectedYear
 
   return (
     <Box
@@ -99,7 +123,7 @@ const FilterRow = ({ dateRange, setDateRange }) => {
         alignItems: 'center',
       }}
     >
-      <YearSelector value={selectedYear} onChange={handleYearChange} years={academicYears} />
+      <YearSelector value={selectedValue} onChange={handleYearChange} years={academicYears} allowAll />
     </Box>
   )
 }
@@ -111,6 +135,7 @@ const MyTeaching = () => {
   const ongoingAcademicYearRange = getYearRange(new Date())
 
   const [params] = useURLSearchParams()
+  const [showAllYears, setShowAllYears] = React.useState(() => params.get('year') === 'all')
   const [dateRange, setDateRange] = React.useState(() => {
     const paramsStart = params.get('startDate')
     const paramsEnd = params.get('endDate')
@@ -128,15 +153,14 @@ const MyTeaching = () => {
     ignoreQueryPrefix: true,
   })
 
+  const useYearFilter = status === 'ended' && !showAllYears
+
   const queryParams = {
     status,
-    ...(status === 'ended' && { startDate, endDate }),
+    ...(useYearFilter && { startDate, endDate }),
   }
 
-  const tabCountsQueryParams = {
-    startDate,
-    endDate,
-  }
+  const tabCountsQueryParams = showAllYears ? {} : { startDate, endDate }
 
   const { tabCounts } = useMyTeachingTabCounts(tabCountsQueryParams)
   const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
@@ -196,11 +220,18 @@ const MyTeaching = () => {
 
       {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
         <Alert data-cy="my-teaching-no-courses" severity="info">
-          {status === 'ended' ? t('teacherView:noFilteredCourses') : t('teacherView:noCourses')}
+          {status === 'ended' && !showAllYears ? t('teacherView:noFilteredCourses') : t('teacherView:noCourses')}
         </Alert>
       )}
 
-      {status === 'ended' && <FilterRow dateRange={dateRange} setDateRange={setDateRange} />}
+      {status === 'ended' && (
+        <FilterRow
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          showAllYears={showAllYears}
+          setShowAllYears={setShowAllYears}
+        />
+      )}
 
       {orgSurveyCourseUnits?.length > 0 && (
         <RenderCourseUnitGroup

@@ -57,15 +57,27 @@ const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayNa
   )
 }
 
-export const YearSelector = ({ value, onChange, years }) => (
-  <FilterSelector
-    selectorTarget="year"
-    value={value}
-    onChange={onChange}
-    options={years}
-    getDisplayName={getYearDisplayName}
-  />
-)
+export const YearSelector = ({ value, onChange, years, allowAll = false }) => {
+  const { t } = useTranslation()
+
+  const options = allowAll ? ['all', ...years] : years
+
+  const getDisplayName = option => {
+    if (option === 'all') return t('courseSummary:all')
+
+    return getYearDisplayName(option)
+  }
+
+  return (
+    <FilterSelector
+      selectorTarget="year"
+      value={value}
+      onChange={onChange}
+      options={options}
+      getDisplayName={getDisplayName}
+    />
+  )
+}
 
 const SemesterSelector = ({ value, onChange, semesters }) => {
   const { t } = useTranslation()
