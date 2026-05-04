@@ -70,7 +70,7 @@
     "i18next": "24.2.3",
     "i18next-browser-languagedetector": "8.2.0",
     "i18next-fs-backend": "2.6.1",
-    "i18next-http-backend": "3.0.2",
+    "i18next-http-backend": "3.0.5",
     "immer": "10.2.0",
     "intersection-observer": "0.12.2",
     "jsonwebtoken": "9.0.3",
