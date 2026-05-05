@@ -210,7 +210,7 @@ const buildSummariesForPeriod = async ({
   for (const fbt of feedbackTargets) {
     // Ignore those that have no students
     // eslint-disable-next-line no-continue
-    if (!fbt.userFeedbackTargets.length) continue
+    if (!fbt.userFeedbackTargets?.length) continue
 
     const result: Record<string, { mean: number; distribution: Record<string, number> }> = {}
 
@@ -256,8 +256,8 @@ const buildSummariesForPeriod = async ({
       result[questionId].mean = totalCount > 0 ? sum / totalCount : 0
     }
 
-    const curOrgIds = fbt.courseRealisation.courseRealisationsOrganisations.map(curo => curo.organisationId)
-    const cuOrgIds = fbt.courseUnit.courseUnitsOrganisations.map(cuo => cuo.organisationId)
+    const curOrgIds = fbt.courseRealisation?.courseRealisationsOrganisations?.map(curo => curo.organisationId)
+    const cuOrgIds = fbt.courseUnit?.courseUnitsOrganisations?.map(cuo => cuo.organisationId)
 
     feedbackTargetsSummaries.push({
       entityId: fbt.id.toString(),
@@ -266,19 +266,19 @@ const buildSummariesForPeriod = async ({
       feedbackTargetId: fbt.id,
       data: {
         result,
-        studentCount: fbt.userFeedbackTargets.length,
+        studentCount: fbt.userFeedbackTargets?.length,
         hiddenCount: fbt.hiddenCount,
-        feedbackCount: fbt.userFeedbackTargets.filter(ufbt => ufbt.feedback).length,
+        feedbackCount: fbt.userFeedbackTargets?.filter(ufbt => ufbt.feedback).length,
         feedbackResponsePercentage: fbt.feedbackResponse?.length ? 1 : 0,
       },
-      courseRealisationId: fbt.courseRealisation.id,
-      courseUnitId: fbt.courseUnit.id,
-      courseUnitGroupId: fbt.courseUnit.groupId,
+      courseRealisationId: fbt.courseRealisation?.id,
+      courseUnitId: fbt.courseUnit?.id,
+      courseUnitGroupId: fbt.courseUnit?.groupId,
       curOrgIds,
       cuOrgIds,
-      curTags: fbt.courseRealisation.tags,
-      cuTags: fbt.courseUnit.tags,
-      extraOrgIds: getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]),
+      curTags: fbt.courseRealisation?.tags,
+      cuTags: fbt.courseUnit?.tags,
+      extraOrgIds: curOrgIds && cuOrgIds ? getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]) : undefined,
     })
   } // FBTs are now done and we could write FBTs summaries to db. But we leave db operations to the end.
 
@@ -344,7 +344,7 @@ const buildSummariesForPeriod = async ({
 
   // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
   const tagSummaries = _.uniqBy(
-    basicFeedbackTargetSummaries.flatMap(fbtsum => [...fbtsum.curTags, ...fbtsum.cuTags]),
+    basicFeedbackTargetSummaries.flatMap(fbtsum => [...(fbtsum.curTags ?? []), ...(fbtsum.cuTags ?? [])]),
     'id'
   )
     .map(tag => ({
@@ -352,7 +352,7 @@ const buildSummariesForPeriod = async ({
       entityType: 'tag',
       feedbackTargets: _.uniqBy(
         basicFeedbackTargetSummaries.filter(
-          fbtsum => fbtsum.curTags.some(t => t.id === tag.id) || fbtsum.cuTags.some(t => t.id === tag.id)
+          fbtsum => fbtsum.curTags?.some(t => t.id === tag.id) || fbtsum.cuTags?.some(t => t.id === tag.id)
         ),
         'feedbackTargetId'
       ),
@@ -369,7 +369,9 @@ const buildSummariesForPeriod = async ({
   }
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
-  const orgIds = _.uniq(basicFeedbackTargetSummaries.flatMap(fbtsum => [...fbtsum.cuOrgIds, ...fbtsum.curOrgIds]))
+  const orgIds = _.uniq(
+    basicFeedbackTargetSummaries.flatMap(fbtsum => [...(fbtsum.cuOrgIds ?? []), ...(fbtsum.curOrgIds ?? [])])
+  )
   const orgs = await Organisation.findAll({ attributes: ['id', 'parentId'], where: { id: orgIds } })
   const orgSummaries = orgs.map(org => ({
     entityId: org.id,
@@ -378,7 +380,7 @@ const buildSummariesForPeriod = async ({
     parent: null as any,
     feedbackTargets: _.uniqBy(
       basicFeedbackTargetSummaries.filter(
-        fbtsum => fbtsum.curOrgIds.includes(org.id) || fbtsum.cuOrgIds.includes(org.id)
+        fbtsum => fbtsum.curOrgIds?.includes(org.id) || fbtsum.cuOrgIds?.includes(org.id)
       ),
       'feedbackTargetId'
     ),
