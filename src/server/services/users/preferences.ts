@@ -72,7 +72,7 @@ const getPreferredSummaryView = async (user: User) => {
     return 'my-organisations'
   }
 
-  return 'my-organisations'
+  return 'my-courses'
 }
 
 /**
@@ -109,7 +109,10 @@ export const getUserPreferences = async (user: User) => {
   const userIsTeacherOnSomeCourse = await user.isTeacher()
 
   const hasSummaryAccess =
-    (user.isEmployee && teachedFbts.length > 0) || user.isAdmin || !_.isEmpty(user?.organisationAccess)
+    (user.isEmployee && teachedFbts.length > 0) ||
+    userIsTeacherOnSomeCourse ||
+    user.isAdmin ||
+    !_.isEmpty(user?.organisationAccess)
   const hasCourseAccess = (user.isEmployee && teachedFbts.length > 0) || userIsTeacherOnSomeCourse || user.isAdmin
   const preferredTab = getPreferredTab(user, teachedFbts, hasSummaryAccess)
   const summaryView = hasSummaryAccess ? await getPreferredSummaryView(user) : null
