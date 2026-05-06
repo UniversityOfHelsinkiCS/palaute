@@ -25,6 +25,13 @@ const getGradient = (ctx, chartArea) => {
   return g
 }
 
+const getElementColor = context => {
+  if (!context?.chart?.ctx || !context?.chart?.chartArea) {
+    return 'hsl(300deg 49% 56%)'
+  }
+  return getGradient(context.chart.ctx, context.chart.chartArea)
+}
+
 const annotationLineColor = '#5f8faf'
 const labelBackgroundColor = '#0f0f0fa0'
 const labelTextColor = '#5f8fbf'
@@ -47,16 +54,7 @@ const getLineAnnotation = (label, x) => ({
   value: x,
 })
 
-const buildChartConfig = (
-  chart,
-  feedbacks,
-  studentCount,
-  opensAt,
-  closesAt,
-  feedbackReminderLastSentAt,
-  t,
-  language
-) => {
+const buildChartConfig = (feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt, t, language) => {
   const initialData = sortBy(
     Object.entries(groupBy(feedbacks, f => addHours(startOfDay(Date.parse(f.createdAt)), 12).getTime())).map(
       ([date, feedbacks]) => ({
@@ -225,24 +223,12 @@ const buildChartConfig = (
       },
       elements: {
         line: {
-          borderColor: context => {
-            const { chart } = context
-            const canvasCtx = chart.ctx
-            const { chartArea } = chart
-            if (!chartArea) return 'hsl(300deg 49% 56%)' // fallback until first layout
-            return getGradient(canvasCtx, chartArea)
-          },
+          borderColor: getElementColor,
           borderWidth: 4,
         },
         point: {
           radius: 6,
-          borderColor: context => {
-            const { chart } = context
-            const canvasCtx = chart.ctx
-            const { chartArea } = chart
-            if (!chartArea) return 'hsl(300deg 49% 56%)'
-            return getGradient(canvasCtx, chartArea)
-          },
+          borderColor: getElementColor,
         },
       },
     },
@@ -252,24 +238,14 @@ const buildChartConfig = (
 
 const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt, showTable }) => {
   const { t, i18n } = useTranslation()
-  const chartRef = React.useRef()
   const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
 
   React.useEffect(
     () =>
       setConfig(
-        buildChartConfig(
-          chartRef.current,
-          feedbacks,
-          studentCount,
-          opensAt,
-          closesAt,
-          feedbackReminderLastSentAt,
-          t,
-          i18n.language
-        )
+        buildChartConfig(feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt, t, i18n.language)
       ),
-    [chartRef, feedbacks, i18n.language]
+    [feedbacks, i18n.language]
   )
 
   return (
@@ -282,7 +258,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
     >
       <Box sx={{ display: showTable ? 'none' : 'flex', justifyContent: 'center', width: '100%', height: '20rem' }}>
         <Box minWidth="80%">
-          <Line {...config} ref={chartRef} />
+          <Line {...config} />
         </Box>
       </Box>
       <Box
