@@ -151,19 +151,11 @@ const ContinuousFeedback = () => {
 
   const isSmallCourse = studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT
 
-  const { continuousFeedbackEnabled } = feedbackTarget
-
-  const [feedbackEnabled, setFeedbackEnabled] = useState(continuousFeedbackEnabled)
+  const feedbackEnabled = feedbackTarget.continuousFeedbackEnabled
 
   return (
     <Box id="feedback-target-tab-content">
-      {showSettings && (
-        <ContinuousFeedbackSettings
-          feedbackTarget={feedbackTarget}
-          feedbackEnabled={feedbackEnabled}
-          setFeedbackEnabled={setFeedbackEnabled}
-        />
-      )}
+      {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
 
       <Box my="1rem">
         <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
