@@ -187,7 +187,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     const globallyPublicQuestionIds = surveys.universitySurvey.publicQuestionIds
     const programmePublicQuestionIds = surveys.programmeSurveys.flatMap((s: any) => s.publicQuestionIds)
 
-    const questionIds = this.questions
+    const questionIds = (this.questions ?? [])
       .filter(({ id }) => !globallyPublicQuestionIds?.includes(id) && !programmePublicQuestionIds?.includes(id))
       .map(({ id }) => id)
 
@@ -233,7 +233,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
 
     if (!courseUnit) return false
 
-    const { organisations } = courseUnit
+    const organisations = courseUnit.organisations ?? []
 
     return organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
   }
@@ -276,7 +276,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
           as: 'courseRealisation',
           where: {
             startDate: {
-              [Op.lt]: (await courseRealisation).startDate,
+              [Op.lt]: (await courseRealisation)?.startDate,
             },
           },
         },
@@ -295,7 +295,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     const currentTeacherIds = (await currentTeachers).map(({ userId }) => userId)
 
     const previousTargetsWithSameTeacher = allPreviousFeedbackTargets.filter(fbt =>
-      fbt.userFeedbackTargets.some(ufbt => currentTeacherIds.includes(ufbt.userId))
+      fbt.userFeedbackTargets?.some(ufbt => currentTeacherIds.includes(ufbt.userId))
     )
 
     if (previousTargetsWithSameTeacher.length < 1) {
