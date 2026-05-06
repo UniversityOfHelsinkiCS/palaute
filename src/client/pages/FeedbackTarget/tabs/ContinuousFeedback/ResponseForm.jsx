@@ -61,6 +61,7 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
               minRows={4}
               multiline
               sx={{ mb: '0.5rem' }}
+              data-cy="continuousFeedbackResponseInput"
             />
             <NorButton
               type="submit"

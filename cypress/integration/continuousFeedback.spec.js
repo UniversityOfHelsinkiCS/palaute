@@ -57,7 +57,7 @@ describe('Continuous feedback', () => {
     cy.contains('Giving continuous feedback')
 
     cy.get('[data-cy=respondContinuousFeedback]').click()
-    cy.get('textarea').first().type('Responding to continuous feedback')
+    cy.get('[data-cy=continuousFeedbackResponseInput]').first().type('Responding to continuous feedback')
     cy.get('[data-cy=sendContinuousFeedbackResponse]').click()
 
     cy.contains('Response sent succesfully')
