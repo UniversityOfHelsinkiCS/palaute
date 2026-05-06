@@ -212,17 +212,19 @@ const Results = () => {
 
         {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
-        <Tooltip title={t('feedbackTargetResults:keyboardShortcut')} placement="top">
-          <NorButton
-            id="chart-table-toggle-button"
-            onClick={() => setShowTable(prev => !prev)}
-            fullWidth
-            icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
-            sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
-          >
-            {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
-          </NorButton>
-        </Tooltip>
+        {showFeedback && (
+          <Tooltip title={t('feedbackTargetResults:keyboardShortcut')} placement="top">
+            <NorButton
+              id="chart-table-toggle-button"
+              onClick={() => setShowTable(prev => !prev)}
+              fullWidth
+              icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
+              sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
+            >
+              {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
+            </NorButton>
+          </Tooltip>
+        )}
 
         {!isMobile && showFeedback && (
           <FeedbackChart

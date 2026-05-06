@@ -95,17 +95,19 @@ const FeedbackTargetResultsView = () => {
         </Box>
       )}
 
-      <Tooltip title={t('feedbackTargetResults:keyboardShortcut')} placement="top">
-        <NorButton
-          id="chart-table-toggle-button"
-          onClick={() => setShowTable(prev => !prev)}
-          fullWidth
-          icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
-          sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
-        >
-          {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
-        </NorButton>
-      </Tooltip>
+      {feedbacks.length > 0 && (
+        <Tooltip title={t('feedbackTargetResults:keyboardShortcut')} placement="top">
+          <NorButton
+            id="chart-table-toggle-button"
+            onClick={() => setShowTable(prev => !prev)}
+            fullWidth
+            icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
+            sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
+          >
+            {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
+          </NorButton>
+        </Tooltip>
+      )}
 
       {!isMobileChrome && (
         <Box>
