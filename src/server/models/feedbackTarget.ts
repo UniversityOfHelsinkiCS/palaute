@@ -56,6 +56,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare feedbackDatesEditedByTeacher: CreationOptional<boolean>
   declare settingsReadByTeacher: CreationOptional<boolean>
   declare continuousFeedbackEnabled: CreationOptional<boolean>
+  declare continuousFeedbackPreamble: CreationOptional<string | null>
   declare sendContinuousFeedbackDigestEmail: CreationOptional<boolean>
   declare tokenEnrolmentEnabled: CreationOptional<boolean>
   declare userCreated: CreationOptional<boolean>
@@ -429,6 +430,9 @@ FeedbackTarget.init(
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,
+    },
+    continuousFeedbackPreamble: {
+      type: TEXT,
     },
     sendContinuousFeedbackDigestEmail: {
       type: BOOLEAN,
