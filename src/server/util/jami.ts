@@ -1,5 +1,6 @@
 import axios from 'axios'
 import * as Sentry from '@sentry/node'
+import _ from 'lodash'
 
 import { OrganisationAccess } from '@common/types/organisation'
 import { User } from 'models'
@@ -18,7 +19,7 @@ export const getUserIamAccess = async (
   user: User,
   attempt = 1
 ): Promise<Record<string, OrganisationAccess | boolean>> => {
-  if (user.iamGroups.length === 0) {
+  if (user.iamGroups?.length === 0) {
     return {}
   }
 
@@ -69,6 +70,36 @@ export const getUserIams = async (userId: string) => {
 
     return []
   }
+}
+
+export const getUsersIamsById = async (userIds: string[]): Promise<Map<string, string[]>> => {
+  if (userIds.length === 0) {
+    return new Map()
+  }
+
+  // Jami gets angry if body size is too big so we batch
+  const userIdBatches = _.chunk(userIds, 300)
+  const results = await Promise.allSettled(
+    userIdBatches.map(batch => jamiClient.post('/access-and-special-groups', { userIds: batch }))
+  )
+
+  const usersIamsById = new Map<string, string[]>()
+
+  results.forEach(result => {
+    if (result.status === 'rejected') {
+      logger.error('[Jami] error: ', result.reason)
+      Sentry.captureException(result.reason)
+      return
+    }
+
+    const data = result.value.data ?? []
+
+    data.forEach((u: any) => {
+      usersIamsById.set(u.id, u.iamGroups)
+    })
+  })
+
+  return usersIamsById
 }
 
 const testJami = async () => {

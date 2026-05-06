@@ -6,7 +6,7 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { User } from '../../models'
 import { AuthenticatedRequest } from '../../types'
 import { userCache } from '../../services/users/cache'
-import { getUserIams } from '../../util/jami'
+import { getUserIams, getUsersIamsById } from '../../util/jami'
 import { getLastRestart } from '../../util/lastRestart'
 import { getUserPreferences, updateFeedbackCorrespondent } from '../../services/users'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
@@ -94,9 +94,6 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
         lastName: {
           [Op.iLike]: `%${userQuery}%`,
         },
-        email: {
-          [Op.ne]: null,
-        },
       },
     }
   }
@@ -106,18 +103,20 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
     where: {
       ...where,
     },
-    limit: 10,
+    order: [
+      ['firstName', 'ASC'],
+      ['lastName', 'ASC'],
+    ],
   })
 
-  // Filter to 'hy-employees'
-  const employees = []
+  const userIds = persons.map(p => p.id)
+  const usersIamsById = await getUsersIamsById(userIds)
 
-  for (const person of persons) {
-    const iamGroups = await getUserIams(person.id)
-    if (iamGroups.includes('hy-employees')) {
-      employees.push(person)
-    }
-  }
+  // Filter to 'hy-employees'
+  const employees = persons.filter(p => {
+    const iams = usersIamsById.get(p.id) ?? []
+    return iams.includes('hy-employees')
+  })
 
   res.send({
     params,
@@ -133,6 +132,8 @@ router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
 
   const user = await User.findByPk(id)
   const iamGroups = await getUserIams(id)
+
+  // TODO: should this early return if user is null?
 
   user.iamGroups = iamGroups
   const access = _.sortBy(await getUserOrganisationAccess(user), oa => oa.organisation.code)
