@@ -1,5 +1,5 @@
-import React from 'react'
-import { Box, Switch, FormGroup, FormControlLabel, Alert } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { Box, Switch, FormGroup, FormControlLabel, Alert, TextField } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -8,11 +8,18 @@ import apiClient from '../../../../util/apiClient'
 import queryClient from '../../../../util/queryClient'
 import CardSection from '../../../../components/common/CardSection'
 import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
+import { NorButton } from '../../../../components/common/NorButton'
 
-const updateContinuousFeedbackStatus = async ({ id, continuousFeedbackEnabled, sendContinuousFeedbackDigestEmail }) => {
+const updateContinuousFeedbackStatus = async ({
+  id,
+  continuousFeedbackEnabled,
+  sendContinuousFeedbackDigestEmail,
+  continuousFeedbackPreamble,
+}) => {
   const { data } = await apiClient.put(`/feedback-targets/${id}`, {
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
+    continuousFeedbackPreamble,
   })
 
   return data
@@ -22,6 +29,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
   const { id, sendContinuousFeedbackDigestEmail } = feedbackTarget
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
+  const [preamble, setPreamble] = useState(feedbackTarget.continuousFeedbackPreamble ?? '')
 
   const mutation = useMutation({
     mutationFn: updateContinuousFeedbackStatus,
@@ -46,6 +54,10 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
           updates.sendContinuousFeedbackDigestEmail = variables.sendContinuousFeedbackDigestEmail
         }
 
+        if (typeof variables.continuousFeedbackPreamble === 'string' || variables.continuousFeedbackPreamble === null) {
+          updates.continuousFeedbackPreamble = variables.continuousFeedbackPreamble
+        }
+
         return { ...current, ...updates }
       })
 
@@ -58,13 +70,14 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         queryClient.setQueryData(queryKey, context.previousFeedbackTarget)
       }
     },
-    onSuccess: () => {
-      queryClient.refetchQueries(['feedbackTarget', String(id)])
-    },
   })
 
   const feedbackEnabled = Boolean(feedbackTarget.continuousFeedbackEnabled)
   const sendDigestEmail = Boolean(sendContinuousFeedbackDigestEmail)
+
+  useEffect(() => {
+    setPreamble(feedbackTarget.continuousFeedbackPreamble ?? '')
+  }, [feedbackTarget.continuousFeedbackPreamble])
 
   const handleFeedbackEnabledChange = async () => {
     const nextEnabled = !feedbackEnabled
@@ -91,6 +104,30 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
+
+  const handlePreambleChange = event => {
+    setPreamble(event.target.value)
+  }
+
+  const handlePreambleSave = async () => {
+    if (!feedbackEnabled) return
+
+    const currentPreamble = feedbackTarget.continuousFeedbackPreamble ?? ''
+    if (preamble === currentPreamble) return
+
+    try {
+      await mutation.mutateAsync({
+        id,
+        continuousFeedbackPreamble: preamble,
+      })
+      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
+    } catch (error) {
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    }
+  }
+
+  const isPreambleDirty = preamble !== (feedbackTarget.continuousFeedbackPreamble ?? '')
+  const isSaving = mutation.isPending ?? mutation.isLoading ?? false
 
   return (
     <CardSection title={t('feedbackTargetView:continuousFeedbackTab')}>
@@ -124,6 +161,29 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
           }
           label={t('feedbackTargetView:activateContinuousFeedbackDigest')}
         />
+        <Box mt={2}>
+          <TextField
+            label={t('feedbackTargetView:continuousFeedbackPreambleLabel')}
+            helperText={t('feedbackTargetView:continuousFeedbackPreambleHelp')}
+            value={preamble}
+            onChange={handlePreambleChange}
+            fullWidth
+            minRows={3}
+            multiline
+            disabled={!feedbackEnabled}
+            data-cy="continuousFeedbackPreamble"
+          />
+          <Box mt={-2} display="flex" justifyContent="flex-end">
+            <NorButton
+              color="primary"
+              onClick={handlePreambleSave}
+              disabled={!feedbackEnabled || !isPreambleDirty || isSaving}
+              data-cy="saveContinuousFeedbackPreamble"
+            >
+              {t('common:save')}
+            </NorButton>
+          </Box>
+        </Box>
       </FormGroup>
     </CardSection>
   )

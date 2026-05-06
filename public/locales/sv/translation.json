@@ -629,6 +629,8 @@
     "surveyQuestionsTab": "Frågor",
     "results": "Resultaten",
     "continuousFeedbackInfo": "Fortlöpande feedback möjliggör att ge feedback i fritt textformat. Fortlöpande feedback används under kursens gång, innan själva kursåterkopplingen öppnar den dag kursen tarslut.",
+    "continuousFeedbackPreambleLabel": "Inledning för kontinuerlig respons",
+    "continuousFeedbackPreambleHelp": "Visas för studenterna i formuläret för kontinuerlig respons.",
     "activateContinuousFeedback": "Aktivera kontinuerlig respons för kursen",
     "activateContinuousFeedbackDigest": "Skicka ett dagligt sammandrag via e-post om ny kontinuerlig respons",
     "continuousFeedbackGiven": "Given kontinuerlig respons",

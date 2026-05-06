@@ -20,6 +20,7 @@ const parseUpdates = (body: any) => {
     feedbackVisibility,
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
+    continuousFeedbackPreamble,
     settingsReadByTeacher,
     tokenEnrolmentEnabled,
   } = body
@@ -35,6 +36,7 @@ const parseUpdates = (body: any) => {
       feedbackVisibility,
       continuousFeedbackEnabled,
       sendContinuousFeedbackDigestEmail,
+      continuousFeedbackPreamble,
       settingsReadByTeacher,
       tokenEnrolmentEnabled,
     },
@@ -149,7 +151,7 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
     updates.feedbackDatesEditedByTeacher = true
 
     // If organisation survey update course realisation activity period as well
-    if (feedbackTarget.courseRealisation.userCreated) {
+    if (feedbackTarget.courseRealisation?.userCreated) {
       const activityPeriod = {
         startDate: updates.opensAt,
         endDate: updates.closesAt,
