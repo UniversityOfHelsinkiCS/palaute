@@ -1,6 +1,6 @@
 import React from 'react'
 import { useNavigate, useParams } from 'react-router'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Alert } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -10,13 +10,13 @@ import { saveContinuousFeedback } from './utils'
 import { NorButton } from '../../../../components/common/NorButton'
 import { ConsentCheckbox } from './ConsentCheckbox'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const styles = {
   description: {
     width: '80%',
-    marginTop: 2,
-    marginBottom: 3,
-    color: '#606060',
+    marginTop: 2.5,
+    marginBottom: 2,
   },
   button: {
     width: 'fit-content',
@@ -31,8 +31,10 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
+  const { feedbackTarget } = useFeedbackTargetContext()
 
   const { id } = useParams()
+  const preamble = feedbackTarget?.continuousFeedbackPreamble?.trim()
 
   const handleSubmit = async values => {
     try {
@@ -59,9 +61,18 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
       <Typography variant="h4" component="h4">
         {t('userFeedbacks:giveContinuousFeedback')}
       </Typography>
-      <Typography variant="body1" component="p" sx={styles.description}>
-        {t('feedbackView:continuousFeedbackInfo')}
-      </Typography>
+      <Box my={2} data-cy="continuousFeedbackPreambleDisplay">
+        <Alert severity="info">
+          <Typography variant="body2" component="p" sx={{ whiteSpace: 'pre-line' }}>
+            {t('feedbackView:continuousFeedbackInfo')}
+          </Typography>
+        </Alert>
+      </Box>
+      {preamble && (
+        <Typography variant="body1" component="p" sx={styles.description}>
+          {preamble}
+        </Typography>
+      )}
       <Formik initialValues={{ feedback: '', activateSubmit: false }} onSubmit={handleSubmit}>
         {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
