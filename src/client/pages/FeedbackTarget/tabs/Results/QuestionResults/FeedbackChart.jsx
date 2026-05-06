@@ -276,8 +276,9 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
     <Box
       data-cy="feedback-target-results-feedback-chart"
       sx={{ my: 1 }}
-      role="region"
-      aria-label={t('courseSummary:feedbackCount')}
+      component="section"
+      aria-labelledby={showTable ? 'feedback-count-table-view-label' : undefined}
+      aria-label={showTable ? undefined : t('courseSummary:feedbackCount')}
     >
       <Box sx={{ display: showTable ? 'none' : 'flex', justifyContent: 'center', width: '100%', height: '20rem' }}>
         <Box minWidth="80%">
@@ -295,7 +296,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
           borderRadius: 1,
         }}
       >
-        <Typography component="h2" variant="h6" sx={{ mt: 3 }}>
+        <Typography id="feedback-count-table-view-label" component="h2" variant="h6" sx={{ mt: 3 }}>
           {t('courseSummary:feedbackCount')}
         </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', py: 2, mb: 1 }}>

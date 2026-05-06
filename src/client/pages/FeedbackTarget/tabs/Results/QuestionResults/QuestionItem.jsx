@@ -103,7 +103,7 @@ const QuestionItem = ({
       }}
     >
       <Box
-        role="region"
+        component="section"
         aria-labelledby={`question-${question.id}-label`}
         aria-describedby={description ? `question-${question.id}-description` : undefined}
         display="flex"
