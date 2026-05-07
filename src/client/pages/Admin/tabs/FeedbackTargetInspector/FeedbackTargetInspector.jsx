@@ -23,13 +23,19 @@ const FeedbackTargetInspector = () => {
     language: 'fi',
   })
 
-  const runQuery = debounce(async params => {
-    const { data } = await apiClient.get('/admin/feedback-targets', { params })
-    const { feedbackTargets, count } = data
+  const runQuery = React.useMemo(
+    () =>
+      debounce(async params => {
+        const { data } = await apiClient.get('/admin/feedback-targets', { params })
+        const { feedbackTargets, count } = data
 
-    setPotentialFeedbackTargets(parseDates(feedbackTargets))
-    setCount(count)
-  }, 600)
+        setPotentialFeedbackTargets(parseDates(feedbackTargets))
+        setCount(count)
+      }, 600),
+    [setPotentialFeedbackTargets, setCount]
+  )
+
+  React.useEffect(() => () => runQuery.cancel(), [runQuery])
 
   const handleChange = values => {
     const newQuery = { ...query, ...values }

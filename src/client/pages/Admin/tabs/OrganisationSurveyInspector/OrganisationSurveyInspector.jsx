@@ -25,13 +25,19 @@ const OrganisationSurveyInspector = () => {
     language: 'fi',
   })
 
-  const runQuery = debounce(async params => {
-    const { data } = await apiClient.get('/admin/organisation-surveys', { params })
-    const { feedbackTargets, count } = data
+  const runQuery = React.useMemo(
+    () =>
+      debounce(async params => {
+        const { data } = await apiClient.get('/admin/organisation-surveys', { params })
+        const { feedbackTargets, count } = data
 
-    setPotentialOrganisationSurveys(parseDates(feedbackTargets))
-    setCount(count)
-  }, 600)
+        setPotentialOrganisationSurveys(parseDates(feedbackTargets))
+        setCount(count)
+      }, 600),
+    [setPotentialOrganisationSurveys, setCount]
+  )
+
+  React.useEffect(() => () => runQuery.cancel(), [runQuery])
 
   const handleChange = values => {
     const newQuery = { ...query, ...values }
