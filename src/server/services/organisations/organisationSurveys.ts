@@ -483,7 +483,11 @@ export const getSurveysForOrganisationForCopy = async (organisationId: string) =
 
   for (const target of organisationSurveys) {
     const teacherSurvey = teacherSurveyByTargetId.get(target.id) ?? null
-    const surveys = {
+    const surveys: {
+      programmeSurveys: Survey[]
+      teacherSurvey: Survey | null
+      universitySurvey: { questionIds: number[]; questions: Question[] }
+    } = {
       programmeSurveys: [],
       teacherSurvey,
       universitySurvey: { questionIds: [], questions: [] },
