@@ -88,7 +88,7 @@ export const initializeOrganisationCourseUnit = async (organisation: Organisatio
 
 export const createOrganisationFeedbackTarget = async (organisation: Organisation, feedbackTargetData: any) => {
   const { name } = feedbackTargetData
-  const { startDate, endDate } = formatActivityPeriod(feedbackTargetData)
+  const { startDate, endDate } = formatActivityPeriod(feedbackTargetData) ?? {}
 
   const organisationCourseUnit = await getOrganisationCourseUnit(organisation.id)
 
@@ -296,11 +296,11 @@ export const getSurveyById = async (feedbackTargetId: number) => {
   })
   const courseStudentNumbers = new Set(courseStudents.map(student => student.studentNumber))
 
-  const students = organisationSurvey.userFeedbackTargets.filter(({ accessStatus }) => accessStatus === 'STUDENT')
-  organisationSurvey.dataValues.userFeedbackTargets = organisationSurvey.userFeedbackTargets.filter(
+  const students = organisationSurvey.userFeedbackTargets?.filter(({ accessStatus }) => accessStatus === 'STUDENT')
+  organisationSurvey.dataValues.userFeedbackTargets = organisationSurvey.userFeedbackTargets?.filter(
     ({ accessStatus }) => accessStatus === 'RESPONSIBLE_TEACHER'
   )
-  const independentStudents = students.filter(({ user }) => !courseStudentNumbers.has(user.studentNumber))
+  const independentStudents = students?.filter(({ user }) => user && !courseStudentNumbers.has(user.studentNumber))
 
   const coursesWithStudentCounts = await Promise.all(
     courses.map(async course => {
@@ -502,10 +502,12 @@ export const getSurveysForTeacher = async (organisationCode: string, userId: str
     attributes: ['id'],
   })
 
+  if (!organisation) throw new Error('Organisation not found')
+
   const organisationSurveys = await getSurveysForOrganisation(organisation.id)
 
   const userSurveys = organisationSurveys.filter(({ userFeedbackTargets }) =>
-    userFeedbackTargets.some(({ userId: id, accessStatus }) => id === userId && accessStatus === 'RESPONSIBLE_TEACHER')
+    userFeedbackTargets?.some(({ userId: id, accessStatus }) => id === userId && accessStatus === 'RESPONSIBLE_TEACHER')
   )
 
   return userSurveys
@@ -575,20 +577,20 @@ export const updateOrganisationSurvey = async (
 
   const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
 
-  const { startDate, endDate } = formatActivityPeriod(updates)
+  const { startDate, endDate } = formatActivityPeriod(updates) ?? {}
 
-  await feedbackTarget.update({
+  await feedbackTarget?.update({
     name,
-    opensAt: startDate,
-    closesAt: endDate,
+    ...(startDate && { opensAt: startDate }),
+    ...(endDate && { closesAt: endDate }),
   })
 
-  const courseRealisation = await CourseRealisation.findByPk(feedbackTarget.courseRealisationId)
+  const courseRealisation = feedbackTarget ? await CourseRealisation.findByPk(feedbackTarget.courseRealisationId) : null
 
-  await courseRealisation.update({
+  await courseRealisation?.update({
     name,
-    startDate,
-    endDate,
+    ...(startDate && { startDate }),
+    ...(endDate && { endDate }),
   })
 
   if (teacherIds) {
@@ -626,7 +628,8 @@ export const deleteOrganisationSurvey = async (feedbackTargetId: number) => {
   try {
     logger.info(`Deleting organisation survey ${feedbackTargetId}`)
 
-    const { courseRealisationId } = await FeedbackTarget.findByPk(feedbackTargetId)
+    const feedbackTarget = await FeedbackTarget.findByPk(feedbackTargetId)
+    const courseRealisationId = feedbackTarget?.courseRealisationId
 
     const ufbt = await UserFeedbackTarget.destroy({
       where: {
