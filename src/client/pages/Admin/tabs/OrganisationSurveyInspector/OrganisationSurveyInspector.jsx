@@ -39,9 +39,23 @@ const OrganisationSurveyInspector = () => {
 
   React.useEffect(() => () => runQuery.cancel(), [runQuery])
 
+  const hasMinQuery = nextQuery => {
+    const idLength = nextQuery.id?.trim().length ?? 0
+    const orgCodeLength = nextQuery.orgCode?.trim().length ?? 0
+    const nameLength = nextQuery.name?.trim().length ?? 0
+
+    return idLength > 0 || orgCodeLength > 1 || nameLength > 2
+  }
+
   const handleChange = values => {
     const newQuery = { ...query, ...values }
     setQuery(newQuery)
+    if (!hasMinQuery(newQuery)) {
+      runQuery.cancel()
+      setPotentialOrganisationSurveys([])
+      setCount(0)
+      return
+    }
     runQuery(newQuery)
   }
 

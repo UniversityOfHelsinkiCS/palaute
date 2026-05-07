@@ -37,9 +37,24 @@ const FeedbackTargetInspector = () => {
 
   React.useEffect(() => () => runQuery.cancel(), [runQuery])
 
+  const hasMinQuery = nextQuery => {
+    const idLength = nextQuery.id?.trim().length ?? 0
+    const codeLength = nextQuery.code?.trim().length ?? 0
+    const nameLength = nextQuery.name?.trim().length ?? 0
+    const curNameLength = nextQuery.curName?.trim().length ?? 0
+
+    return idLength > 0 || codeLength > 1 || nameLength > 2 || curNameLength > 2
+  }
+
   const handleChange = values => {
     const newQuery = { ...query, ...values }
     setQuery(newQuery)
+    if (!hasMinQuery(newQuery)) {
+      runQuery.cancel()
+      setPotentialFeedbackTargets([])
+      setCount(0)
+      return
+    }
     runQuery(newQuery)
   }
 
