@@ -21,6 +21,7 @@ i18n
     defaultNS: TRANSLATION_NAMESPACE,
     fallbackNS: 'translation',
     load: 'languageOnly',
+    preload: LANGUAGES,
     backend: {
       loadPath: `${basePath}/locales/{{lng}}/{{ns}}.json`,
     },
