@@ -21,6 +21,8 @@ const ForCourseUnitGroup = () => {
     allTime: option === 'all',
   })
 
+  console.log('courseUnitGroup', courseUnitGroup)
+
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
@@ -30,7 +32,7 @@ const ForCourseUnitGroup = () => {
         ) : courseUnitGroup ? (
           <CourseUnitGroupSummaryRow courseUnitGroup={courseUnitGroup} questions={questions} />
         ) : (
-          <Alert severity="info">{t('courseSummary:noCourseRealisations')}</Alert>
+          <Alert severity="info">{t('courseSummary:noCourseRealisations', { courseCode: code })}</Alert>
         )}
       </Box>
     </SummaryScrollContainer>
