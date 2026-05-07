@@ -95,6 +95,9 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
           [Op.iLike]: `%${userQuery}%`,
         },
       },
+      email: {
+        [Op.ne]: null,
+      },
     }
   }
 
