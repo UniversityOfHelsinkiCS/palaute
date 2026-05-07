@@ -132,10 +132,11 @@ const findUser = async (req: AuthenticatedRequest, res: Response) => {
 
 const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
   const {
-    query: { id, code, name, language },
+    query: { id, code, name, curName, language },
   } = req
   const params: Record<string, unknown> = {}
-  const nameLength = (name.length ?? 0) as number
+  const nameLength = (name?.length ?? 0) as number
+  const curNameLength = (curName?.length ?? 0) as number
 
   const include: IncludeOptions[] = [
     {
@@ -180,11 +181,17 @@ const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
   if (code) {
     include[0].where = { courseCode: { [Op.iLike]: `${code}%` } }
   }
+
+  // Search by CU name
   if (nameLength > 2) {
     include[0].where = {
-      [Op.or]: {
-        [`name.${language}`]: { [Op.iLike]: `${name}%` },
-      },
+      [`name.${language}`]: { [Op.iLike]: `${name}%` },
+    }
+  }
+  // Search by CUR name
+  if (curNameLength > 2) {
+    include[1].where = {
+      [`name.${language}`]: { [Op.iLike]: `${curName}%` },
     }
   }
 

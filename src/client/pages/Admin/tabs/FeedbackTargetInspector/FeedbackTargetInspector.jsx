@@ -19,6 +19,7 @@ const FeedbackTargetInspector = () => {
     id: '',
     code: '',
     name: '',
+    curName: '',
     language: 'fi',
   })
 
@@ -38,17 +39,35 @@ const FeedbackTargetInspector = () => {
 
   return (
     <Box mt={4}>
-      <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 'auto' }}>
-        <TextSearchField label="ID" value={query.id} onChange={e => handleChange({ ...query, id: e.target.value })} />
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mx: 'auto' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <TextSearchField label="ID" value={query.id} onChange={e => handleChange({ ...query, id: e.target.value })} />
 
-        <TextSearchField
-          label="Course Code"
-          value={query.code}
-          onFocus={() => setQuery({ ...query, id: '' })}
-          onChange={e => handleChange({ ...query, code: e.target.value })}
-        />
+          <TextSearchField
+            label="Course Code"
+            value={query.code}
+            onFocus={() => setQuery({ ...query, id: '' })}
+            onChange={e => handleChange({ ...query, code: e.target.value })}
+          />
+        </Box>
 
-        <LocalesSearchField label="CU Name" query={query} setQuery={setQuery} handleChange={handleChange} />
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mx: 1, gap: 2 }}>
+          <LocalesSearchField
+            label="CU Name"
+            query={query}
+            setQuery={setQuery}
+            handleChange={handleChange}
+            queryKey="name"
+          />
+
+          <LocalesSearchField
+            label="CUR Name"
+            query={query}
+            setQuery={setQuery}
+            handleChange={handleChange}
+            queryKey="curName"
+          />
+        </Box>
       </Box>
 
       <InspectorResults feedbackTargets={potentialFeedbackTargets} count={count} />
