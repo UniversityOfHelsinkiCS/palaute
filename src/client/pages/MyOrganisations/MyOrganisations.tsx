@@ -24,6 +24,8 @@ const getAccessColor = (access: OrganisationWithAccess['access']): 'error' | 'wa
   return 'info'
 }
 
+const showAccessChip = (access: OrganisationWithAccess['access']) => access.admin || access.write
+
 const MyOrganisations = () => {
   const { t, i18n } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
@@ -89,7 +91,9 @@ const MyOrganisations = () => {
                         {organisation.code}
                       </Typography>
                     </Box>
-                    <Chip label={accessLabel} color={getAccessColor(access)} size="small" variant="outlined" />
+                    {showAccessChip(access) && (
+                      <Chip label={accessLabel} color={getAccessColor(access)} size="small" variant="outlined" />
+                    )}
                   </CardActionArea>
                 </Card>
               </Box>
