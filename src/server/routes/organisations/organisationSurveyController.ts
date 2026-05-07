@@ -8,6 +8,7 @@ import {
   getStudentIds,
   getSurveyById,
   getSurveysForOrganisation,
+  getSurveysForOrganisationForCopy,
   getSurveysForTeacher,
   updateOrganisationSurvey,
   deleteOrganisationSurvey,
@@ -183,12 +184,12 @@ const removeOrganisationSurvey = async (req: AuthenticatedRequest, res: Response
 
 const getOrganisationSurveysForUser = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
-  const organisationAccess = await getUserOrganisationAccess(user)
+  const organisationAccess = await getUserOrganisationAccess(user, { includeUsers: false })
   const organisationSurveys = await Promise.all(
     organisationAccess
       .filter(organisationAccess => organisationAccess.access.admin)
       .map(async organisationAccess => {
-        const surveys = await getSurveysForOrganisation(organisationAccess.organisation.id)
+        const surveys = await getSurveysForOrganisationForCopy(organisationAccess.organisation.id)
         return { organisation: organisationAccess.organisation, surveys }
       })
   )

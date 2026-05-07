@@ -19,6 +19,7 @@ import {
   UserFeedbackTarget,
   Organisation,
   Survey,
+  Question,
   User,
   OrganisationSurveyCourse,
   Summary,
@@ -405,6 +406,88 @@ export const getSurveysForOrganisation = async (organisationId: string) => {
 
   for (const target of organisationSurveys) {
     const surveys = await getFeedbackTargetSurveys(target)
+    target.populateSurveys(surveys)
+  }
+
+  return organisationSurveys
+}
+
+// Light-weight query just for getting a list of survey questions to copy into other surveys, getSurveysForOrganisation is very heavy
+export const getSurveysForOrganisationForCopy = async (organisationId: string) => {
+  const organisationSurveys = await FeedbackTarget.findAll({
+    attributes: ['id', 'courseUnitId', 'courseRealisationId', 'userCreated'],
+    include: [
+      {
+        model: CourseUnit,
+        as: 'courseUnit',
+        where: {
+          userCreated: true,
+        },
+        required: true,
+        attributes: ['id'],
+        include: [
+          {
+            model: CourseUnitsOrganisation,
+            as: 'courseUnitsOrganisations',
+            where: {
+              organisationId,
+            },
+            required: true,
+            attributes: [],
+          },
+        ],
+      },
+      {
+        model: CourseRealisation,
+        as: 'courseRealisation',
+        required: true,
+        attributes: ['id', 'name', 'startDate', 'endDate'],
+      },
+    ],
+    order: [['courseRealisation', 'endDate', 'DESC']],
+  })
+
+  if (organisationSurveys.length === 0) return organisationSurveys
+
+  const feedbackTargetIds = organisationSurveys.map(({ id }) => id)
+  const teacherSurveys = await Survey.findAll({
+    where: {
+      feedbackTargetId: {
+        [Op.in]: feedbackTargetIds,
+      },
+    },
+  })
+
+  const questionIds = Array.from(new Set(teacherSurveys.flatMap(survey => survey.questionIds ?? [])))
+  const questions =
+    questionIds.length > 0
+      ? await Question.findAll({
+          where: {
+            id: {
+              [Op.in]: questionIds,
+            },
+          },
+        })
+      : []
+
+  const questionById = new Map(questions.map(question => [question.id, question]))
+  const teacherSurveyByTargetId = new Map<number, Survey>()
+
+  for (const survey of teacherSurveys) {
+    const orderedQuestions = (survey.questionIds ?? [])
+      .map(id => questionById.get(id))
+      .filter((question): question is Question => Boolean(question))
+    survey.set('questions', orderedQuestions)
+    teacherSurveyByTargetId.set(survey.feedbackTargetId, survey)
+  }
+
+  for (const target of organisationSurveys) {
+    const teacherSurvey = teacherSurveyByTargetId.get(target.id) ?? null
+    const surveys = {
+      programmeSurveys: [],
+      teacherSurvey,
+      universitySurvey: { questionIds: [], questions: [] },
+    }
     target.populateSurveys(surveys)
   }
 

@@ -71,25 +71,36 @@ export const populateUserAccess = async (user: User) => {
 }
 
 export const getUserOrganisationAccess = async (
-  user: User
+  user: User,
+  options: { includeUsers?: boolean } = {}
 ): Promise<{ access: OrganisationAccess; organisation: Organisation }[]> => {
   await populateUserAccess(user)
+  const { includeUsers = true } = options
   let { accessibleOrganisations } = user
 
   if (!accessibleOrganisations) {
-    accessibleOrganisations = await Organisation.findAll({
+    const query: {
+      attributes: string[]
+      where: { code: { [Op.in]: string[] } }
+      include?: { model: typeof User; as: string; attributes: string[] }
+    } = {
       attributes: ['id', 'name', 'code', 'parentId'],
       where: {
         code: {
           [Op.in]: Object.keys(user.organisationAccess),
         },
       },
-      include: {
+    }
+
+    if (includeUsers) {
+      query.include = {
         model: User,
         as: 'users',
         attributes: ['id', 'firstName', 'lastName', 'email'],
-      },
-    })
+      }
+    }
+
+    accessibleOrganisations = await Organisation.findAll(query)
   }
 
   return accessibleOrganisations.map(org => ({
