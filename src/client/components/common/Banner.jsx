@@ -28,13 +28,22 @@ const styles = {
     justifySelf: 'end',
     minWidth: 50,
   }),
+  content: {
+    display: 'flex',
+    alignItems: 'center',
+    '& p': {
+      margin: 0,
+    },
+  },
 }
 
 const Banner = ({ banner, language, onClose = () => {}, disabled }) => (
   <Box width="100vw">
     <Paper sx={styles.container(banner.data?.color ?? '#fff')} elevation={0}>
       <Grid container direction="row" justifyContent="space-between" alignItems="center">
-        <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
+        <Box sx={styles.content}>
+          <Markdown>{getLanguageValue(banner.data?.text, language)}</Markdown>
+        </Box>
 
         <NorButton
           color="empty"
