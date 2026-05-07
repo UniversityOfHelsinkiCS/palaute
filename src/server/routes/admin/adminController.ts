@@ -212,7 +212,7 @@ const findOrganisationSurveys = async (req: AuthenticatedRequest, res: Response)
     query: { id, orgCode, name, language },
   } = req
   const params: Record<string, unknown> = {}
-  const nameLength = (name.length ?? 0) as number
+  const nameLength = (name?.length ?? 0) as number
 
   const include: IncludeOptions[] = [
     {
