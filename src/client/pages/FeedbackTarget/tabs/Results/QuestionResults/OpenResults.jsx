@@ -4,7 +4,6 @@ import { Box, CircularProgress } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useInView } from 'react-intersection-observer'
 
-import ResultsContent from './ResultsContent'
 import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
 import { OpenFeedback } from '../../../../../components/OpenFeedback/OpenFeedback'
 import Markdown from '../../../../../components/common/Markdown'
@@ -72,29 +71,27 @@ const OpenResults = ({ question }) => {
   const { render, ref } = useRenderVisible({ initial: renderInitially })
 
   return (
-    <ResultsContent>
-      <Box display="flex" justifyContent="center">
-        <Box sx={[styles.list]} ref={ref}>
-          {!render && (
-            <Box display="flex" alignSelf="stretch" justifyContent="center">
-              <CircularProgress />
-            </Box>
-          )}
-          {render &&
-            feedbacks.map((f, index) => (
-              <OpenFeedback
-                key={index}
-                content={<Markdown disallowImages>{f.data}</Markdown>}
-                hidden={f.hidden}
-                canHide={canHide}
-                canDelete={canDelete}
-                deleteAnswer={() => deleteAnswer(f)}
-                toggleVisibility={() => toggleVisibility(f, feedbackTarget.id)}
-              />
-            ))}
-        </Box>
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+      <Box sx={[styles.list]} ref={ref}>
+        {!render && (
+          <Box sx={{ display: 'flex', alignSelf: 'stretch', justifyContent: 'center' }}>
+            <CircularProgress />
+          </Box>
+        )}
+        {render &&
+          feedbacks.map((f, index) => (
+            <OpenFeedback
+              key={index}
+              content={<Markdown disallowImages>{f.data}</Markdown>}
+              hidden={f.hidden}
+              canHide={canHide}
+              canDelete={canDelete}
+              deleteAnswer={() => deleteAnswer(f)}
+              toggleVisibility={() => toggleVisibility(f, feedbackTarget.id)}
+            />
+          ))}
       </Box>
-    </ResultsContent>
+    </Box>
   )
 }
 

@@ -339,7 +339,9 @@
     "dailyCount": "Palautteiden määrä",
     "cumulative": "Palautteiden kertymä",
     "percentage": "Kertynyt vastausprosentti",
-    "keyboardShortcut": "Voit vaihtaa kaavio- ja taulukkonäkymän välillä painamalla tästä tai näppäinyhdistelmällä Alt + T."
+    "keyboardShortcut": "Voit vaihtaa näkymää myös näppäinyhdistelmällä Alt + T.",
+    "chartAriaLabel": "Pylväskaavio vastausten jakaumasta. Vaihda taulukkonäkymään painamalla \"Näytä taulukkonäkymä\" -painiketta tai näppäinyhdistelmällä Alt + T.",
+    "feedbackCountChartAriaLabel": "Viivakaavio palautteiden kertymästä ajan kuluessa. Vaihda taulukkonäkymään painamalla \"Näytä taulukkonäkymä\" -painiketta tai näppäinyhdistelmällä Alt + T."
   },
   "groups": {
     "groupingSettings": "Ryhmittely",

@@ -75,7 +75,6 @@ const QuestionResults = React.memo(
     feedbackCount,
     feedbackTargetId,
     showTable,
-    setShowTable,
   }) => {
     const { t } = useTranslation()
 
@@ -147,7 +146,6 @@ const QuestionResults = React.memo(
                   feedbackCount={feedbackCount}
                   feedbackTargetId={feedbackTargetId}
                   showTable={showTable}
-                  setShowTable={setShowTable}
                 />
               </Box>
             ))}

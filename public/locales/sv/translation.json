@@ -324,7 +324,9 @@
     "dailyCount": "Antal svar",
     "cumulative": "Kumulativt antal svar",
     "percentage": "Kumulativ svarsfrekvens",
-    "keyboardShortcut": "Växla mellan diagram- och tabellvy med den här knappen eller kortkommandot Alt + T."
+    "keyboardShortcut": "Du kan även byta vy med kortkommandot Alt + T.",
+    "chartAriaLabel": "Stapeldiagram som visar svarens fördelning. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T.",
+    "feedbackCountChartAriaLabel": "Linjediagram som visar det kumulativa antalet svar över tid. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T."
   },
   "groups": {
     "groupingSettings": "Gruppering",

@@ -1,20 +1,18 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Box } from '@mui/material'
-import ChartAccessibilityWrapper from './ChartAccessibilityWrapper'
 
-const ResultsContent = ({ chart, table, showTable, setShowTable, children }) => {
-  if (table) {
-    return (
-      <Box display="flex" flexDirection="column">
-        <ChartAccessibilityWrapper chart={chart} table={table} showTable={showTable} setShowTable={setShowTable} />
-        {children}
-      </Box>
-    )
-  }
+const ResultsContent = ({ chart, table, showTable, children }) => {
+  const { t } = useTranslation()
 
   return (
-    <Box display="flex" flexDirection="column">
-      {chart}
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      {!showTable && (
+        <Box role="img" aria-label={t('feedbackTargetResults:chartAriaLabel')}>
+          {chart}
+        </Box>
+      )}
+      {showTable && <Box>{table}</Box>}
       {children}
     </Box>
   )

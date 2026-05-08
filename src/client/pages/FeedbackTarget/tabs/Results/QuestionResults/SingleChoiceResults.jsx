@@ -7,7 +7,7 @@ import { getSingleChoiceChartConfig } from './utils'
 import ResultsContent from './ResultsContent'
 import AccessibleChartTable from './AccessibleChartTable'
 
-const SingleChoiceResults = ({ question, feedbackCount, showTable, setShowTable }) => {
+const SingleChoiceResults = ({ question, feedbackCount, showTable }) => {
   const { t, i18n } = useTranslation()
   const config = getSingleChoiceChartConfig(question, i18n.language, t, feedbackCount)
 
@@ -19,7 +19,7 @@ const SingleChoiceResults = ({ question, feedbackCount, showTable, setShowTable 
     />
   )
 
-  return <ResultsContent chart={<Bar {...config} />} table={table} showTable={showTable} setShowTable={setShowTable} />
+  return <ResultsContent chart={<Bar {...config} />} table={table} showTable={showTable} />
 }
 
 export default SingleChoiceResults

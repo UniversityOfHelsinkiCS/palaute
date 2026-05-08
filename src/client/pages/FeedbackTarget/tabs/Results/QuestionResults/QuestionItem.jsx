@@ -44,7 +44,6 @@ const QuestionItem = ({
   disabled,
   feedbackTargetId,
   showTable,
-  setShowTable,
 }) => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -85,7 +84,7 @@ const QuestionItem = ({
 
   const Component = componentByType[question.type]
   const content = Component ? (
-    <Component question={question} feedbackCount={feedbackCount} showTable={showTable} setShowTable={setShowTable} />
+    <Component question={question} feedbackCount={feedbackCount} showTable={showTable} />
   ) : null
 
   const isPublic = publicQuestionIds.includes(question.id)

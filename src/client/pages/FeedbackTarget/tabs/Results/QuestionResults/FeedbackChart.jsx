@@ -257,7 +257,7 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
       aria-label={showTable ? undefined : t('courseSummary:feedbackCount')}
     >
       <Box sx={{ display: showTable ? 'none' : 'flex', justifyContent: 'center', width: '100%', height: '20rem' }}>
-        <Box minWidth="80%">
+        <Box role="img" aria-label={t('feedbackTargetResults:feedbackCountChartAriaLabel')} minWidth="80%">
           <Line {...config} />
         </Box>
       </Box>

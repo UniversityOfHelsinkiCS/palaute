@@ -220,6 +220,7 @@ const Results = () => {
               fullWidth
               icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
               sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
+              aria-label={`${showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}. ${t('feedbackTargetResults:keyboardShortcut')}`}
             >
               {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
             </NorButton>
@@ -251,7 +252,6 @@ const Results = () => {
             feedbackCount={groupFeedbackCount}
             feedbackTargetId={id}
             showTable={showTable}
-            setShowTable={setShowTable}
           />
         ) : (
           <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />

@@ -7,7 +7,7 @@ import { getMultipleChoiceChartConfig } from './utils'
 import ResultsContent from './ResultsContent'
 import AccessibleChartTable from './AccessibleChartTable'
 
-const MultipleChoiceResults = ({ question, feedbackCount, showTable, setShowTable }) => {
+const MultipleChoiceResults = ({ question, feedbackCount, showTable }) => {
   const { t, i18n } = useTranslation()
   const config = getMultipleChoiceChartConfig(question, i18n.language, t, feedbackCount)
 
@@ -19,7 +19,7 @@ const MultipleChoiceResults = ({ question, feedbackCount, showTable, setShowTabl
     />
   )
 
-  return <ResultsContent chart={<Bar {...config} />} table={table} showTable={showTable} setShowTable={setShowTable} />
+  return <ResultsContent chart={<Bar {...config} />} table={table} showTable={showTable} />
 }
 
 export default MultipleChoiceResults
