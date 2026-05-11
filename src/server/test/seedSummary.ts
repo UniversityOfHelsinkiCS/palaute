@@ -35,7 +35,7 @@ const getTestData = async () => {
   const universitySurvey = await getUniversitySurvey()
   const TEST_FEEDBACKS = TEST_STUDENTS.map(({ id }) => ({
     userId: id,
-    data: universitySurvey.questions.map(({ id: questionId }) => ({ questionId, data: '5' })),
+    data: universitySurvey.questions?.map(({ id: questionId }) => ({ questionId, data: '5' })),
   }))
 
   return {

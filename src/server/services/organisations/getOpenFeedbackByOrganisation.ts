@@ -47,7 +47,9 @@ const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRe
 
   const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
 
-  const questions = [...universitySurvey.questions, ...programmeQuestions].filter(q => q.type === 'OPEN')
+  const questions = [...(universitySurvey.questions ?? []), ...(programmeQuestions ?? [])].filter(
+    q => q.type === 'OPEN'
+  )
 
   const courseCodes = await sequelize.query<CourseUnitWithExtra>(
     `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O 

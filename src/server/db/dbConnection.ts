@@ -12,6 +12,9 @@ const umzug = new Umzug({
   migrations: {
     glob: 'src/server/migrations/*.js',
     resolve: ({ name, path, context }) => {
+      if (!path) {
+        throw new Error(`Missing migration path for ${name}`)
+      }
       // Adjust the migration from the new signature to the v2 signature, making easier to upgrade to v3
       // eslint-disable-next-line
       const migration = require(path)

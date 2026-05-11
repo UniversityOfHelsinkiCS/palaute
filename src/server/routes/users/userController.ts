@@ -136,7 +136,9 @@ router.get('/users/:id', async (req: AuthenticatedRequest, res: Response) => {
   const user = await User.findByPk(id)
   const iamGroups = await getUserIams(id)
 
-  // TODO: should this early return if user is null?
+  if (!user) {
+    throw ApplicationError.NotFound('User not found')
+  }
 
   user.iamGroups = iamGroups
   const access = _.sortBy(await getUserOrganisationAccess(user), oa => oa.organisation.code)

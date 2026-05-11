@@ -15,8 +15,8 @@ export const getSummaryQuestions = async (organisationCode: string) => {
     })(),
   ])
 
-  const questions = universityQuestions.concat(programmeQuestions)
-  const summaryQuestions = questions.filter(q => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
+  const questions = [...(universityQuestions ?? []), ...(programmeQuestions ?? [])]
+  const summaryQuestions = questions?.filter(q => q.type === 'LIKERT' || q.id === WORKLOAD_QUESTION_ID)
 
-  return summaryQuestions.map(question => question.toJSON())
+  return summaryQuestions?.map(question => question.toJSON())
 }

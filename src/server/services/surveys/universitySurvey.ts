@@ -19,7 +19,7 @@ export const getUniversitySurvey = async () => {
   await universitySurvey.populateQuestions()
 
   const numericQuestionIds = universitySurvey.questions
-    .filter(({ type }) => type === 'LIKERT' || type === 'SINGLE_CHOICE')
+    ?.filter(({ type }) => type === 'LIKERT' || type === 'SINGLE_CHOICE')
     .map(({ id }) => id)
 
   universitySurvey.set('publicQuestionIds', numericQuestionIds)
