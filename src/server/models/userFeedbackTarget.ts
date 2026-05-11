@@ -23,7 +23,7 @@ class UserFeedbackTarget extends Model<
 > {
   public id!: CreationOptional<number>
   public accessStatus!: AccessStatus
-  public feedbackId!: number
+  public feedbackId: number | null
   public groupIds: string[] | null
   public userId!: string
   public feedbackTargetId!: number
