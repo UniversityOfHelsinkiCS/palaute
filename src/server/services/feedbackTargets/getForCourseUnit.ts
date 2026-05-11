@@ -53,13 +53,7 @@ const getForCourseUnit = async ({
   }
 
   const feedbackTargets = await FeedbackTarget.findAll({
-    where: {
-      [Op.and]: [
-        feedbackType && {
-          feedbackType,
-        },
-      ].filter(Boolean),
-    },
+    where: feedbackType ? { feedbackType } : undefined,
     order: [[{ model: CourseRealisation, as: 'courseRealisation' }, 'startDate', 'DESC']],
     include: [
       {
@@ -117,7 +111,7 @@ const getForCourseUnit = async ({
       'userCreated',
     ]),
     studentCount: (target as any).students.length,
-    feedbackResponseGiven: target.feedbackResponse?.length > 3,
+    feedbackResponseGiven: (target.feedbackResponse?.length ?? 0) > 3,
     feedbackResponseSent: target.feedbackResponseEmailSent,
   }))
 

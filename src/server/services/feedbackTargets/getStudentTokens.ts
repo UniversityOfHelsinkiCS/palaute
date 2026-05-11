@@ -30,10 +30,11 @@ const getStudentTokens = async ({ feedbackTargetId, user }: GetStudentTokensPara
   })
 
   const users = userFeedbackTargets.map(({ user: student }) => ({
-    firstName: student.firstName,
-    lastName: student.lastName,
-    studentNumber: student.studentNumber,
-    token: jwt.sign({ username: student.username }, JWT_KEY),
+    firstName: student?.firstName,
+    lastName: student?.lastName,
+    studentNumber: student?.studentNumber,
+    // TODO: should we throw if no JWT_KEY? investigate
+    token: jwt.sign({ username: student?.username }, JWT_KEY),
   }))
 
   return users

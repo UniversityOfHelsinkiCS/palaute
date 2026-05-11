@@ -62,7 +62,7 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
       { transaction }
     )
     for (const feedback of feedbacksToUpdate) {
-      await feedback.save()
+      await feedback?.save()
     }
   })
 
@@ -120,7 +120,7 @@ const adminDeleteFeedback = async ({
   if (feedbacksToUpdate.length === 0) throw ApplicationError.BadRequest('Matching feedback not found')
 
   for (const feedback of feedbacksToUpdate) {
-    await feedback.save()
+    await feedback?.save()
   }
   feedbackTargetCache.invalidate(feedbackTarget.id)
 

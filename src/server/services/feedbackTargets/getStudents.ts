@@ -58,7 +58,7 @@ const getStudentsWithFeedbackStatus = async (feedbackTargetId: number) => {
   })
 
   const students = studentFeedbackTargets.map(target => ({
-    ...target.user.dataValues,
+    ...target.user?.dataValues,
     feedbackGiven: Boolean(target.feedback),
   }))
 

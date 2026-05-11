@@ -122,10 +122,10 @@ const getPublicByOrganisation = async ({ organisationCodes, startDate, endDate }
     feedbackTargetsThroughCourseUnitsOrganisations
   )
 
-  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation.dataValues.id)
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation?.dataValues.id)
   const fbtsWithStartDate = feedbackTargetsWithUniqueCurs.map(fbt => {
     const fbtJson = fbt.toJSON() as InferAttributes<FeedbackTarget> & { startDate?: Date }
-    fbtJson.startDate = fbt.courseRealisation.startDate
+    fbtJson.startDate = fbt.courseRealisation?.startDate
     return fbtJson
   })
 
@@ -289,20 +289,20 @@ const getByOrganisation = async ({
     feedbackTargetsThroughCourseUnitsOrganisations
   )
 
-  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation.dataValues.id)
+  const feedbackTargetsWithUniqueCurs = _.uniqBy(feedbackTargets, fbt => fbt.courseRealisation?.dataValues.id)
 
   const feedbackTargetsWithStudentCounts = feedbackTargetsWithUniqueCurs
     .map(fbt => {
       const fbtJson = fbt.toJSON() as InferAttributes<FeedbackTarget, { omit: 'tags' }> & { tags?: any[] }
 
       fbtJson.tags = _.uniqBy(
-        fbt.courseRealisation.tags
+        (fbt.courseRealisation?.tags ?? [])
           .map(t => ({ ...t.toJSON(), from: 'courseRealisation' }))
-          .concat(fbt.courseUnit.tags.map((t: any) => ({ ...t.toJSON(), from: 'courseUnit' }))),
+          .concat(fbt.courseUnit?.tags?.map(t => ({ ...t.toJSON(), from: 'courseUnit' })) ?? []),
         'id'
       )
-      delete fbtJson.courseRealisation.tags
-      delete fbtJson.courseUnit.tags
+      delete fbtJson.courseRealisation?.tags
+      delete fbtJson.courseUnit?.tags
 
       return fbtJson
     })

@@ -15,7 +15,7 @@ const feedbackTargetToJSON = (feedbackTarget: FeedbackTarget) => {
   return {
     ...publicTarget,
     accessStatus: 'STUDENT',
-    feedback: (feedbackTarget.userFeedbackTargets[0] as any)?.feedback ?? null,
+    feedback: (feedbackTarget.userFeedbackTargets?.[0] as any)?.feedback ?? null,
   }
 }
 
@@ -54,7 +54,7 @@ const getFeedbackTargetsForStudent = async (userId: string) => {
   const filteredFeedbackTargets = feedbackTargets.filter(
     ({ courseUnit }) =>
       courseUnit &&
-      !courseUnit.organisations.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
+      !courseUnit.organisations?.some(({ disabledCourseCodes }) => disabledCourseCodes.includes(courseUnit.courseCode))
   )
 
   return filteredFeedbackTargets.map(feedbackTargetToJSON)
@@ -77,7 +77,7 @@ const getForStudent = async ({ user }: GetForStudentParams) => {
         fbt.opensAt.getTime() < now &&
         fbt.closesAt.getTime() > now &&
         !fbt.feedback &&
-        !fbt.userFeedbackTargets[0].notGivingFeedback
+        !fbt.userFeedbackTargets?.[0].notGivingFeedback
     ),
     given: feedbackTargets.filter((fbt: any) => fbt.feedback || fbt.userFeedbackTargets[0].notGivingFeedback),
     ended: feedbackTargets.filter((fbt: any) => Date.parse(fbt.closesAt) < now),

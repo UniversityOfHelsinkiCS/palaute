@@ -13,7 +13,7 @@ const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets: UserFeedbackTa
     studentFeedbackTargets
       .filter(ufbt => ufbt.feedback)
       .flatMap(ufbt => {
-        const answers = ufbt.feedback.data?.find(answer => answer.questionId === groupingQuestionId)?.data ?? []
+        const answers = ufbt.feedback?.data?.find(answer => answer.questionId === groupingQuestionId)?.data ?? []
         return answers
       })
   )
@@ -136,7 +136,7 @@ const getFeedbacks = async (id: number, user: User, groupId?: string) => {
 
   const { publicQuestionIds, surveys, questions } = additionalData
   const { feedbackVisibility, userFeedbackTargets } = feedbackTarget
-  const userFeedbackTarget = userFeedbackTargets[0]
+  const userFeedbackTarget = userFeedbackTargets?.[0] ?? null
 
   const access = await getAccess({
     userFeedbackTarget,
@@ -192,9 +192,10 @@ const getFeedbacks = async (id: number, user: User, groupId?: string) => {
 
   const allFeedbacks = studentFeedbackTargetsOfGroup
     .filter(ufbt => ufbt.feedback)
-    .map(ufbt => ufbt.feedback.toPublicObject())
+    .map(ufbt => ufbt.feedback?.toPublicObject())
 
-  const questionIds = questions.filter(({ type }) => type !== 'TEXT').map(({ id: qId }) => qId)
+  const questionIds = questions?.filter(({ type }) => type !== 'TEXT').map(({ id: qId }) => qId)
+  // TODO: fix allFeedbacks type to match what shuffleFeedbacks expects
   const shuffledFeedbacks = shuffleFeedbacks(allFeedbacks, questionIds)
 
   if (access.canSeeAllFeedbacks()) {

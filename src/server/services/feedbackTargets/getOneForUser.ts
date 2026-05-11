@@ -19,20 +19,20 @@ import { User as UserType } from '../../models/user'
 
 const populateGroupInformation = (feedbackTarget: FeedbackTarget) => {
   for (const group of feedbackTarget.groups ?? []) {
-    const teachers = feedbackTarget.userFeedbackTargets.filter(
+    const teachers = feedbackTarget.userFeedbackTargets?.filter(
       ufbt => ufbt.groupIds?.includes(group.id) && ufbt.hasTeacherAccess()
     )
     group.set(
       'teachers',
       _.orderBy(
-        teachers.map(ufbt => ufbt.user),
+        teachers?.map(ufbt => ufbt.user),
         'lastName'
       )
     )
-    const students = feedbackTarget.userFeedbackTargets.filter(
+    const students = feedbackTarget.userFeedbackTargets?.filter(
       ufbt => ufbt.groupIds?.includes(group.id) && ufbt.hasStudentAccess()
     )
-    group.set('studentCount', students.length)
+    group.set('studentCount', students?.length ?? 0)
   }
 }
 
@@ -122,7 +122,7 @@ const getFromDb = async (id: number | string) => {
   fbt.set(
     'administrativePersons',
     _.orderBy(
-      fbt.userFeedbackTargets.filter(ufbt => ufbt.isAdministrativePerson).map(ufbt => ufbt.user),
+      fbt.userFeedbackTargets?.filter(ufbt => ufbt.isAdministrativePerson).map(ufbt => ufbt.user),
       'lastName'
     )
   )
@@ -130,7 +130,7 @@ const getFromDb = async (id: number | string) => {
     'responsibleTeachers',
     _.orderBy(
       fbt.userFeedbackTargets
-        .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
+        ?.filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
         .map(ufbt => ufbt.user),
       'lastName'
     )
@@ -138,7 +138,7 @@ const getFromDb = async (id: number | string) => {
   fbt.set(
     'teachers',
     _.orderBy(
-      fbt.userFeedbackTargets.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(ufbt => ufbt.user),
+      fbt.userFeedbackTargets?.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(ufbt => ufbt.user),
       'lastName'
     )
   )
@@ -147,7 +147,7 @@ const getFromDb = async (id: number | string) => {
 
   const surveys = await getFeedbackTargetSurveys(fbt)
   fbt.populateSurveys(surveys)
-  const studentListVisible = await fbt.courseUnit.isStudentListVisible()
+  const studentListVisible = await fbt.courseUnit?.isStudentListVisible()
   const publicQuestionIds = fbt.getPublicQuestionIds(surveys)
   const publicityConfigurableQuestionIds = fbt.getPublicityConfigurableQuestionIds(surveys)
   const feedbackCanBeGiven = await fbt.feedbackCanBeGiven()

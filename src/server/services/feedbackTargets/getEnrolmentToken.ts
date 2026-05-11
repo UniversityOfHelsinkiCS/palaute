@@ -25,6 +25,8 @@ const getEnrolmentToken = async ({ feedbackTargetId, user }: GetEnrolmentTokenPa
   if (!feedbackTarget.userCreated)
     throw ApplicationError.Forbidden('Only userCreated feedbackTargets can have enrolment tokens')
 
+  if (!JWT_KEY) throw new Error('JWT_KEY is required to generate enrolment tokens')
+
   return jwt.sign({ feedbackTargetId }, JWT_KEY)
 }
 
