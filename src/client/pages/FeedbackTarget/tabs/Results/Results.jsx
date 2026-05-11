@@ -14,7 +14,6 @@ import { NorButton } from '../../../../components/common/NorButton'
 
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import FeedbackChart from './QuestionResults/FeedbackChart'
-import useIsMobile from '../../../../hooks/useIsMobile'
 import useChartConfig from './QuestionResults/useChartConfig'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import GroupSelector from './GroupSelector'
@@ -135,7 +134,6 @@ const Results = () => {
   const id = useFeedbackTargetId()
 
   const { t } = useTranslation()
-  const isMobile = useIsMobile()
   const exportRef = useRef(null)
   const [groupId, setGroupId] = React.useState('ALL')
   const [showTable, setShowTable] = useState(false)
@@ -227,7 +225,7 @@ const Results = () => {
           </Tooltip>
         )}
 
-        {!isMobile && showFeedback && (
+        {showFeedback && (
           <FeedbackChart
             feedbacks={feedbacks}
             studentCount={groupStudentCount}

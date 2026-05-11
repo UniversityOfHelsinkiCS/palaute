@@ -15,7 +15,6 @@ import { NorButton } from '../../components/common/NorButton'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import FeedbackChart from '../FeedbackTarget/tabs/Results/QuestionResults/FeedbackChart'
-import useIsMobile from '../../hooks/useIsMobile'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -35,8 +34,6 @@ const FeedbackTargetResultsView = () => {
   const { t } = useTranslation()
   const { id } = useParams()
   const [showTable, setShowTable] = useState(false)
-
-  const isMobileChrome = useIsMobile() && navigator.userAgent?.toLowerCase()?.indexOf('chrome') !== -1
 
   const { feedbackTarget, isLoading: feedbackTargetIsLoading } = useFeedbackTarget(id)
 
@@ -110,7 +107,7 @@ const FeedbackTargetResultsView = () => {
         </Tooltip>
       )}
 
-      {!isMobileChrome && (
+      {feedbacks.length > 0 && (
         <Box>
           <FeedbackChart
             feedbacks={feedbacks}
