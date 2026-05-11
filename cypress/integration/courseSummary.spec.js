@@ -65,7 +65,7 @@ describe('Course summary', () => {
         expect(organisationSheet).to.have.lengthOf(1)
         const organisation = organisationSheet[0]
         expect(organisation).to.have.property('Organisation code', 'TEST_SUMMARY_ORG')
-        expect(organisation).to.have.property('Testikysymys 1', 5)
+        expect(organisation).to.have.property('Test question 1', 5)
         expect(organisation).to.have.property('Feedback count', 2)
       })
     })
