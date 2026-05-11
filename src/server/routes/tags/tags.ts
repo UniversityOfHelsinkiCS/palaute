@@ -76,14 +76,14 @@ const updateCourseRealisationTags = async (req: AuthenticatedRequest, res: Respo
     throw ApplicationError.NotFound()
   }
 
-  const organisation = courseRealisations[0].organisations[0] // there can be only one, becoz code in the where param
-  const availableTagIds = organisation.tags.map((t: any) => t.id)
+  const organisation = courseRealisations[0].organisations?.[0] // there can be only one, becoz code in the where param
+  const availableTagIds = organisation?.tags?.map((t: any) => t.id)
   const tagIds = parseTagIds(req.body)
-  if (tagIds.some(id => !availableTagIds.includes(id))) {
+  if (tagIds.some(id => !availableTagIds?.includes(id))) {
     throw ApplicationError.BadRequest('Some of the given tags are not allowed for this cur')
   }
 
-  const newTags = organisation.tags.filter((tag: any) => tagIds.includes(tag.id))
+  const newTags = organisation?.tags?.filter((tag: any) => tagIds.includes(tag.id))
 
   await sequelize.transaction(async (transaction: Transaction) => {
     for (const courseRealisation of courseRealisations) {
@@ -96,13 +96,15 @@ const updateCourseRealisationTags = async (req: AuthenticatedRequest, res: Respo
         transaction,
       })
 
-      await CourseRealisationsTag.bulkCreate(
-        newTags.map((t: any) => ({
-          tagId: t.id,
-          courseRealisationId: courseRealisation.id,
-        })),
-        { transaction }
-      )
+      if (newTags?.length) {
+        await CourseRealisationsTag.bulkCreate(
+          newTags.map((t: any) => ({
+            tagId: t.id,
+            courseRealisationId: courseRealisation.id,
+          })),
+          { transaction }
+        )
+      }
     }
   })
 
@@ -132,15 +134,15 @@ const updateCourseUnitTags = async (req: AuthenticatedRequest, res: Response) =>
     throw ApplicationError.NotFound()
   }
 
-  const organisation = courseUnits[0].organisations[0] // there can be only one, becoz code in the where param
-  const availableTagIds = organisation.tags.map((t: any) => t.id)
+  const organisation = courseUnits[0]?.organisations?.[0] // there can be only one, becoz code in the where param
+  const availableTagIds = organisation?.tags?.map((t: any) => t.id)
 
   const tagIds = parseTagIds(req.body)
-  if (tagIds.some(id => !availableTagIds.includes(id))) {
+  if (tagIds.some(id => !availableTagIds?.includes(id))) {
     throw ApplicationError.BadRequest('Some of the given tags are not allowed for this cur')
   }
 
-  const newTags = organisation.tags.filter((tag: any) => tagIds.includes(tag.id))
+  const newTags = organisation?.tags?.filter((tag: any) => tagIds.includes(tag.id))
 
   await sequelize.transaction(async (transaction: Transaction) => {
     // delete its old tag associations and create new ones. NOTE that we only delete old tags of THIS organisation
@@ -152,13 +154,15 @@ const updateCourseUnitTags = async (req: AuthenticatedRequest, res: Response) =>
       transaction,
     })
 
-    await CourseUnitsTag.bulkCreate(
-      newTags.map((t: any) => ({
-        tagId: t.id,
-        courseCode,
-      })),
-      { transaction }
-    )
+    if (newTags?.length) {
+      await CourseUnitsTag.bulkCreate(
+        newTags.map((t: any) => ({
+          tagId: t.id,
+          courseCode,
+        })),
+        { transaction }
+      )
+    }
   })
 
   res.send(newTags)
