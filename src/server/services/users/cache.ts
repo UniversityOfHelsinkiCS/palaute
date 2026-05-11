@@ -14,8 +14,8 @@ export const userCache = {
     return User.build(JSON.parse(userJson))
   },
   set: (uid: string, user: any) => redis.set(getKey(uid), JSON.stringify(user), { EX: USER_CACHE_TTL }),
-  invalidate: (uid: string) => {
-    if (redis.delete(getKey(uid))) {
+  invalidate: async (uid: string) => {
+    if (await redis.delete(getKey(uid))) {
       logger.info(`[CACHE] invalidate user ${uid}`)
     }
   },
