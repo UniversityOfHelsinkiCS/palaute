@@ -18,8 +18,8 @@ const cache = {
   },
   set: (feedbackTargetId: number | string, feedbackTarget: any) =>
     redis.set(getKey(feedbackTargetId), JSON.stringify(feedbackTarget), { EX: FEEDBACK_TARGET_CACHE_TTL }),
-  invalidate: (feedbackTargetId: number | string) => {
-    if (redis.delete(getKey(feedbackTargetId))) {
+  invalidate: async (feedbackTargetId: number | string) => {
+    if (await redis.delete(getKey(feedbackTargetId))) {
       logger.info(`[CACHE] invalidate fbt ${feedbackTargetId}`)
     }
   },
