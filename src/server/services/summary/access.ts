@@ -5,10 +5,9 @@ import { getUserOrganisationAccess } from '../organisationAccess/organisationAcc
 
 export const getSummaryAccessibleOrganisationIds = async (user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)
-  const accessibleOrganisationIds = organisationAccess.flatMap(access => [
-    access.organisation.id,
-    access.organisation.parentId,
-  ])
+  const accessibleOrganisationIds = organisationAccess
+    .flatMap(access => [access.organisation.id, access.organisation.parentId])
+    .filter((id): id is string => Boolean(id))
 
   return accessibleOrganisationIds
 }

@@ -26,9 +26,9 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   // --- Acual DB columns ---
   // ------------------------
   declare id: string
-  declare name: LocalizedString
-  declare code: string
-  declare parentId: string
+  declare name: LocalizedString | null
+  declare code: string | null
+  declare parentId: string | null
   declare studentListVisible: CreationOptional<boolean>
   declare studentListVisibleByCourse: CreationOptional<boolean>
   declare disabledCourseCodes: CreationOptional<string[]>

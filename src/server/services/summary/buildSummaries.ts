@@ -417,12 +417,20 @@ const buildSummariesForPeriod = async ({
       break // Done! Only root organisations left and they got no parents.
     }
 
+    const parentIds = orgsMissingParentOrgs
+      .map(org => org.parentId)
+      .filter((parentId): parentId is string => Boolean(parentId))
+
+    if (parentIds.length === 0) {
+      break
+    }
+
     // Find the missing parents...
     const newParentOrgs = await Organisation.findAll({
       attributes: ['id', 'parentId'],
       where: {
         id: {
-          [Op.in]: orgsMissingParentOrgs.map(o => o.parentId),
+          [Op.in]: parentIds,
         },
       },
       transaction,

@@ -1,7 +1,14 @@
 import _ from 'lodash'
 import { InferAttributes, Op } from 'sequelize'
 import { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation, User } from '../../models'
+import { SummaryData } from '../../models/summary'
 import { sumSummaries, getScopedSummary } from './utils'
+
+type SummaryDataWithOptionalHiddenCount = Omit<SummaryData, 'hiddenCount'> & { hiddenCount?: number }
+
+const deleteHiddenCount = (summaryData?: SummaryData) => {
+  delete (summaryData as SummaryDataWithOptionalHiddenCount).hiddenCount
+}
 
 const filterHiddenCount = async ({
   user,
@@ -19,11 +26,11 @@ const filterHiddenCount = async ({
         }
       }
       if (!hasAccess) {
-        org.summary.data.hiddenCount = undefined
-        org.courseUnits.forEach(courseUnit => {
-          courseUnit.summary.data.hiddenCount = undefined
-          courseUnit.courseRealisations.forEach(courseRealisation => {
-            courseRealisation.summary.data.hiddenCount = undefined
+        deleteHiddenCount(org.summary?.data)
+        org.courseUnits?.forEach(courseUnit => {
+          deleteHiddenCount(courseUnit.summary?.data)
+          courseUnit.courseRealisations?.forEach(courseRealisation => {
+            deleteHiddenCount(courseRealisation.summary?.data)
           })
         })
       }
@@ -122,9 +129,9 @@ export const getTeacherSummary = async ({
         delete cu.dataValues.groupSummaries
 
         const courseRealisations = courseUnits.flatMap(cu =>
-          cu.feedbackTargets.map(fbt => {
+          cu.feedbackTargets?.map(fbt => {
             const { courseRealisation: cur } = fbt
-            return cur.toJSON()
+            return cur?.toJSON()
           })
         )
 

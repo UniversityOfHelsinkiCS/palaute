@@ -72,9 +72,9 @@ const sumSummaryDatas = (summaryDatas: SummaryData[]) => {
   return data
 }
 
-const sumSummaries = (summaries: Summary[]) => {
+const sumSummaries = (summaries?: Summary[]) => {
   if (!summaries?.length) {
-    return null
+    return undefined
   }
 
   // De-duplicate input by entityId + startDate + endDate + extraOrgIds
@@ -126,7 +126,7 @@ const sumSummaries = (summaries: Summary[]) => {
   })
 
   // If filteredSummaries is empty or has invalid dates, handle gracefully
-  if (!filteredSummaries.length) return null
+  if (!filteredSummaries.length) return undefined
 
   // Sum up summary data
   const data = sumSummaryDatas(filteredSummaries.map(s => s.data))
@@ -256,25 +256,25 @@ const getOrganisationCodeById = async (organisationId: string) => {
     },
   })
 
-  return organisationCode.code
+  return organisationCode?.code
 }
 
 const mapCourseIdsToCourseCodes = (
   teacherOrganisations: InferAttributes<Organisation>[],
   courseRealisations: CourseRealisation[]
 ) => {
-  const curIdToCourseCodeMapping: Record<string, string> = {}
+  const curIdToCourseCodeMapping: Record<string, string | null> = {}
   const teacherOrgCUs = teacherOrganisations.flatMap(org => org.courseUnits)
 
   teacherOrgCUs.forEach(cu => {
-    cu.courseRealisations.forEach((cur: CourseRealisation) => {
+    cu?.courseRealisations?.forEach((cur: CourseRealisation) => {
       curIdToCourseCodeMapping[cur.id] = cu.courseCode
     })
   })
 
   courseRealisations.forEach(cur => {
-    cur.feedbackTargets.forEach(fbt => {
-      curIdToCourseCodeMapping[cur.id] = fbt.courseUnit.courseCode
+    cur?.feedbackTargets?.forEach(fbt => {
+      curIdToCourseCodeMapping[cur.id] = fbt.courseUnit?.courseCode ?? null
     })
   })
 
@@ -283,8 +283,8 @@ const mapCourseIdsToCourseCodes = (
 
 const getOrganisationCourseRealisationIds = (organisations: Organisation[], courseUnits: CourseUnit[]) =>
   organisations
-    .flatMap(org => org.courseRealisationsOrganisations.map(curo => curo.courseRealisationId))
-    .concat(courseUnits.flatMap(cu => cu.feedbackTargets.map(fbt => fbt.courseRealisationId)))
+    .flatMap(org => org.courseRealisationsOrganisations?.map(curo => curo.courseRealisationId))
+    .concat(courseUnits.flatMap(cu => cu.feedbackTargets?.map(fbt => fbt.courseRealisationId)))
 
 export {
   sumSummaryDatas,

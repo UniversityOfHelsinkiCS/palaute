@@ -63,20 +63,20 @@ export const getCourseRealisationSummaries = async ({
     : allCuSummaries.filter(cur => accessibleCourseRealisationIds.includes(cur.id))
 
   const results = courseRealisations.map(cur => {
-    const allTeachers = cur.feedbackTargets[0].userFeedbackTargets
+    const allTeachers = cur.feedbackTargets?.[0]?.userFeedbackTargets
 
     const teachers = _.sortBy(
-      allTeachers.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(teacher => teacher.user),
+      allTeachers?.filter(ufbt => ufbt.accessStatus === 'TEACHER').map(teacher => teacher.user),
       'lastName'
     )
     const responsibleTeachers = _.sortBy(
       allTeachers
-        .filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
+        ?.filter(ufbt => ufbt.accessStatus === 'RESPONSIBLE_TEACHER' && !ufbt.isAdministrativePerson)
         .map(teacher => teacher.user),
       'lastName'
     )
     const administrativePersons = _.sortBy(
-      allTeachers.filter(ufbt => ufbt.isAdministrativePerson).map(teacher => teacher.user),
+      allTeachers?.filter(ufbt => ufbt.isAdministrativePerson).map(teacher => teacher.user),
       'lastName'
     )
 

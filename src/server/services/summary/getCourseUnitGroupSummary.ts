@@ -7,6 +7,7 @@ import {
   CourseUnitsOrganisation,
   UserFeedbackTarget,
   User,
+  Summary,
 } from '../../models'
 import { sumSummaries, getScopedSummary } from './utils'
 import { getAccessibleCourseRealisationIds } from './access'
@@ -16,8 +17,8 @@ import { getUserOrganisationAccess } from '../organisationAccess/organisationAcc
 interface GetCourseUnitGroupSummaryParams {
   user: User
   courseCode: string
-  startDate?: string
-  endDate?: string
+  startDate: string
+  endDate: string
   allTime?: boolean
 }
 
@@ -99,17 +100,19 @@ export const getCourseUnitGroupSummaries = async ({
   }
 
   const feedbackTargets = courseUnits.flatMap(cu => cu.feedbackTargets)
-  const cuOrgIds = courseUnits.flatMap(cu => cu.courseUnitsOrganisations.map(cuo => cuo.organisationId))
+  const cuOrgIds = courseUnits.flatMap(cu => cu.courseUnitsOrganisations?.map(cuo => cuo.organisationId))
   const curOrgIds = courseUnits.flatMap(cu =>
-    cu.feedbackTargets.flatMap(
-      fbt => fbt.courseRealisation.courseRealisationsOrganisations?.map(curo => curo.organisationId) ?? []
+    cu.feedbackTargets?.flatMap(
+      fbt => fbt.courseRealisation?.courseRealisationsOrganisations?.map(curo => curo.organisationId) ?? []
     )
   )
   const allOrgIds = cuOrgIds.concat(curOrgIds)
 
   const hasOrgAccess = Object.values(orgAccess).some(o => allOrgIds.includes(o.organisation.id))
   if (!user.isAdmin && !hasOrgAccess) {
-    const hasCurAccess = feedbackTargets.some(fbt => accessibleCurIds.includes(fbt.courseRealisation.id))
+    const hasCurAccess = feedbackTargets.some(
+      fbt => fbt?.courseRealisation?.id && accessibleCurIds.includes(fbt.courseRealisation.id)
+    )
     if (!hasCurAccess) {
       throw ApplicationError.Forbidden('No access')
     }
@@ -118,8 +121,8 @@ export const getCourseUnitGroupSummaries = async ({
   const courseUnitGroup = {
     courseCode: courseUnits[0].courseCode,
     name: courseUnits[0].name,
-    summary: sumSummaries(courseUnits.flatMap(cu => cu.groupSummaries)),
-    feedbackTargets: _.orderBy(feedbackTargets, fbt => fbt.courseRealisation.startDate, 'desc'),
+    summary: sumSummaries(courseUnits.flatMap(cu => cu.groupSummaries).filter((s): s is Summary => Boolean(s))),
+    feedbackTargets: _.orderBy(feedbackTargets, fbt => fbt?.courseRealisation?.startDate, 'desc'),
   }
 
   return courseUnitGroup

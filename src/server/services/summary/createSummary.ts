@@ -9,6 +9,10 @@ export const createSummaryForFeedbackTarget = async (
   extraOrgIds: string[] = []
 ): Promise<Summary> => {
   const activityPeriod = formatActivityPeriod({ startDate, endDate })
+  if (!activityPeriod) {
+    throw new Error('Invalid activity period')
+  }
+
   const summary = await Summary.create({
     entityId: String(feedbackTargetId),
     entityType: 'feedbackTarget',

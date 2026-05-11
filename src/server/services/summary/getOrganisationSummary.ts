@@ -11,6 +11,7 @@ import {
   CourseUnitsTag,
   CourseRealisationsTag,
 } from '../../models'
+import { SummaryData } from '../../models/summary'
 import { sumSummaryDatas, sumSummaries, getScopedSummary } from './utils'
 import { ApplicationError } from '../../util/ApplicationError'
 import { getSummaryAccessibleOrganisationIds } from './access'
@@ -319,17 +320,19 @@ const getOrganisationSummaryWithChildOrganisations = async ({
     return null
   }
 
-  let { childOrganisations } = rootOrganisation
+  let childOrganisations = rootOrganisation.childOrganisations ?? []
 
   // Skip some (configured) child organisations and get their children instead. Add them to the root organisations children.
   for (const organisationToSkip of childOrganisations.filter(org => SUMMARY_SKIP_ORG_IDS.includes(org.id))) {
-    const { childOrganisations: newChildOrganisations } = await getChildOrganisations({
+    const newRootOrganisation = await getChildOrganisations({
       organisationId: organisationToSkip.id,
       startDate,
       endDate,
       organisationIds: accessibleOrganisationIds,
       universityWideAccess,
     })
+
+    const newChildOrganisations = newRootOrganisation?.childOrganisations ?? []
 
     for (const org of newChildOrganisations) {
       childOrganisations.push(org)
@@ -386,19 +389,26 @@ const getOrganisationSummaryWithCourseUnits = async ({
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
   const partialCourseRealisations = courseRealisations.filter(
-    cur => !courseUnits.some(cu => cu.groupId === cur.feedbackTargets[0].courseUnit.groupId)
+    cur => !courseUnits.some(cu => cu.groupId === cur.feedbackTargets?.[0].courseUnit?.groupId)
   )
 
   // Group course realisations by associated course unit group id
   const groupedPartialCourseUnits = _.groupBy(
     partialCourseRealisations,
-    cur => cur.feedbackTargets[0].courseUnit.groupId
+    cur => cur.feedbackTargets?.[0].courseUnit?.groupId
   )
   // Now aggregate course units
-  const partialCourseUnits = Object.entries(groupedPartialCourseUnits).map(
-    ([courseUnitGroupId, courseRealisations]) => {
-      const summaryData = sumSummaryDatas(courseRealisations.map(cur => cur.summary.data))
-      const { courseUnit } = groupedPartialCourseUnits[courseUnitGroupId][0].feedbackTargets[0]
+  const partialCourseUnits = Object.entries(groupedPartialCourseUnits)
+    .map(([, courseRealisations]) => {
+      const courseUnit = courseRealisations[0]?.feedbackTargets?.[0]?.courseUnit
+
+      if (!courseUnit) {
+        return null
+      }
+
+      const summaryData = sumSummaryDatas(
+        courseRealisations.map(cur => cur.summary?.data).filter((s): s is SummaryData => Boolean(s))
+      )
 
       return {
         id: courseUnit.id,
@@ -409,8 +419,8 @@ const getOrganisationSummaryWithCourseUnits = async ({
         },
         partial: true,
       }
-    }
-  )
+    })
+    .filter(Boolean)
 
   organisation.courseUnits = partialCourseUnits.concat(courseUnits as any[]) as any[]
 

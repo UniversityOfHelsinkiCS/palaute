@@ -157,18 +157,18 @@ const getDefaultHeaders = (questions: InferAttributes<Question>[], t: TFunction,
 const commonPartOfAoa = (
   language: LanguageId,
   questions: InferAttributes<Question>[],
-  target: { summary?: Summary; name: LocalizedString }
+  target: { summary?: Summary; name: LocalizedString | null }
 ) => {
-  const targetName = getLanguageValue(target.name, language)
+  const targetName = target.name ? (getLanguageValue(target.name, language) ?? '') : ''
   const summaryData = target.summary?.data
 
   const questionResults = questions.map(q => summaryData?.result[q.id]?.mean ?? 0)
   return [
     targetName,
     ...questionResults,
-    summaryData.studentCount,
-    summaryData.feedbackCount,
-    summaryData.feedbackResponsePercentage * 100,
+    summaryData?.studentCount,
+    summaryData?.feedbackCount,
+    (summaryData?.feedbackResponsePercentage ?? 0) * 100,
   ]
 }
 
@@ -182,7 +182,8 @@ const getUniqueHeaders = (t: TFunction, sheetName: string) => {
 
 const getJSON = <T extends Organisation | CourseUnit>(targets: T[], targetType: string): InferAttributes<T>[] => {
   const targetJSON = targets.map(target => {
-    target.summary = sumSummaries(targetType === 'org' ? target.summaries : target.groupSummaries)
+    const summaries = (targetType === 'org' ? target.summaries : target.groupSummaries) ?? []
+    target.summary = sumSummaries(summaries)
     if (targetType === 'org') {
       delete target.dataValues.summaries
     } else {
@@ -220,11 +221,18 @@ export const exportXLSX = async ({
     throw ApplicationError.Forbidden('User does not have access to the organisation')
   }
 
-  const t = i18n.getFixedT(user.language)
+  const userLanguage = user.language ?? 'en'
+
+  const t = i18n.getFixedT(userLanguage)
 
   const organisationCode = organisationId ? await getOrganisationCodeById(organisationId) : undefined
+
+  if (!organisationCode) {
+    throw new Error('Organisation code not found for the given organisation ID')
+  }
+
   const questions = await getSummaryQuestions(organisationCode)
-  const defaultHeaders = getDefaultHeaders(questions, t, user.language)
+  const defaultHeaders = getDefaultHeaders(questions, t, userLanguage)
 
   const workbook = XLSX.utils.book_new()
   const addSheetToWorkbook = (dataAoa: any[][], sheetName: string) => {
@@ -245,20 +253,23 @@ export const exportXLSX = async ({
   const organisationIds = organisationId ? [organisationId] : accessibleOrganisationIds
   const organisations = await getOrganisations(scopedSummary, organisationIds)
 
-  const courseUnitIds = organisations.flatMap(org => org.courseUnitsOrganisations.map(cuo => cuo.courseUnitId))
+  const courseUnitIds = organisations
+    .flatMap(org => org.courseUnitsOrganisations?.map(cuo => cuo.courseUnitId) ?? [])
+    .filter((courseUnitId): courseUnitId is string => Boolean(courseUnitId))
   const courseUnits = await getCourseUnits(scopedSummary, courseUnitIds)
 
   const getAllTargets = <T extends Organisation | CourseUnit | CourseRealisation>(
     organisationTargets: InferAttributes<T>[],
     targetType: string
   ) => {
+    // TODO: see if we can do something about the casting as any here
     let teacherOrganisationsTargets: InferAttributes<T>[] = teacherOrganisations as any
 
     if (targetType === 'cu') {
       teacherOrganisationsTargets = teacherOrganisations.flatMap(org => org.courseUnits) as any
     } else if (targetType === 'cur') {
       teacherOrganisationsTargets = teacherOrganisations.flatMap(org =>
-        org.courseUnits.flatMap(cu => cu.courseRealisations)
+        org.courseUnits?.flatMap(cu => cu.courseRealisations)
       ) as any
     }
 
@@ -273,7 +284,7 @@ export const exportXLSX = async ({
   if (includeOrgs) {
     const allOrganisations = getAllTargets(getJSON(organisations, 'org'), 'org')
 
-    const organisationsAoa = allOrganisations.map(org => [org.code, ...commonPartOfAoa(user.language, questions, org)])
+    const organisationsAoa = allOrganisations.map(org => [org.code, ...commonPartOfAoa(userLanguage, questions, org)])
 
     addSheetToWorkbook(organisationsAoa, 'organisations')
   }
@@ -284,14 +295,16 @@ export const exportXLSX = async ({
     const courseUnitsAoa = allCourseUnits.map(cu => [
       cu.groupId,
       cu.courseCode,
-      ...commonPartOfAoa(user.language, questions, cu),
+      ...commonPartOfAoa(userLanguage, questions, cu),
     ])
 
     addSheetToWorkbook(courseUnitsAoa, 'course-units')
   }
 
   if (includeCURs) {
-    const organisationCourseRealisationIds = getOrganisationCourseRealisationIds(organisations, courseUnits)
+    const organisationCourseRealisationIds = getOrganisationCourseRealisationIds(organisations, courseUnits).filter(
+      (id): id is string => Boolean(id)
+    )
 
     const courseRealisations = await getCourseRealisations(scopedSummary, organisationCourseRealisationIds)
 
@@ -306,7 +319,7 @@ export const exportXLSX = async ({
 
     const courseRealisationsAoa = accessibleCourseRealisations.map(cur => {
       const courseCode = curIdToCourseCode[cur.id] || ''
-      const [curName, ...rest] = commonPartOfAoa(user.language, questions, cur)
+      const [curName, ...rest] = commonPartOfAoa(userLanguage, questions, cur)
 
       return [cur.id, courseCode, curName, cur.startDate, cur.endDate, ...rest]
     })
