@@ -47,18 +47,18 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
   declare publicQuestionIds: CreationOptional<number[]>
-  declare feedbackResponse: string
+  declare feedbackResponse: string | null
   declare feedbackResponseEmailSent: boolean
   declare feedbackOpeningReminderEmailSent: boolean
   declare feedbackResponseReminderEmailSent: boolean
   declare feedbackReminderLastSentAt: CreationOptional<Date | null>
-  declare feedbackVisibility: CreationOptional<string>
+  declare feedbackVisibility: CreationOptional<string | null>
   declare feedbackDatesEditedByTeacher: CreationOptional<boolean>
   declare settingsReadByTeacher: CreationOptional<boolean>
   declare continuousFeedbackEnabled: CreationOptional<boolean>
   declare continuousFeedbackPreamble: CreationOptional<string | null>
   declare sendContinuousFeedbackDigestEmail: CreationOptional<boolean>
-  declare tokenEnrolmentEnabled: CreationOptional<boolean>
+  declare tokenEnrolmentEnabled: CreationOptional<boolean | null>
   declare userCreated: CreationOptional<boolean>
 
   // --- Virtual fields. ---------
@@ -78,6 +78,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare userFeedbackTargets?: UserFeedbackTarget[]
   declare summary?: Summary
   declare groups?: Group[]
+  declare courseRealisationName?: LocalizedString
 
   // --- Association methods -----------------------------
   // --- only the ones that are used are declared here ---
@@ -115,7 +116,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   feedbackResponseGiven() {
     // Some queries populate this field directly
     if ('feedbackResponseGiven' in this.dataValues && this.dataValues.feedbackResponseGiven) return true
-    return this.feedbackResponse?.length > 3 || false
+    return (this.feedbackResponse?.length ?? 0) > 3 || false
   }
 
   async getStudentsForFeedbackTarget() {
