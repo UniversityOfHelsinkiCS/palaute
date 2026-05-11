@@ -21,8 +21,6 @@ const ForCourseUnitGroup = () => {
     allTime: option === 'all',
   })
 
-  console.log('courseUnitGroup', courseUnitGroup)
-
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
