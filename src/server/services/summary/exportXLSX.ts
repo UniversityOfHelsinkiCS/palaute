@@ -227,10 +227,6 @@ export const exportXLSX = async ({
 
   const organisationCode = organisationId ? await getOrganisationCodeById(organisationId) : undefined
 
-  if (!organisationCode) {
-    throw new Error('Organisation code not found for the given organisation ID')
-  }
-
   const questions = await getSummaryQuestions(organisationCode)
   const defaultHeaders = getDefaultHeaders(questions, t, userLanguage)
 
