@@ -85,6 +85,10 @@ const updateOrganisation = async (req: AuthenticatedRequest, res: Response) => {
     throw ApplicationError.Forbidden('Course codes can only be updated by organisation admins')
   }
 
+  if (!organisation) {
+    throw ApplicationError.NotFound('Organisation not found')
+  }
+
   if (updates.disabledCourseCodes) {
     updates.disabledCourseCodes = await getUpdatedCourseCodes(updates.disabledCourseCodes, organisation)
   }
@@ -126,10 +130,10 @@ const getOrganisationByCode = async (req: AuthenticatedRequest, res: Response) =
     ],
   })
 
-  const tags = _.orderBy(await theOrganisation.getTags(), tag => tag.name?.fi)
+  const tags = _.orderBy(await theOrganisation?.getTags(), tag => tag.name?.fi)
 
   const publicOrganisation = {
-    ...organisation.toJSON(),
+    ...organisation?.toJSON(),
     tags,
     users: theOrganisation?.users ?? [],
     access: {
@@ -150,7 +154,7 @@ const getOrganisationLogs = async (req: AuthenticatedRequest, res: Response) => 
     throw ApplicationError.Forbidden()
   }
 
-  const { organisationLogs } = await Organisation.findOne({
+  const organisation = await Organisation.findOne({
     where: {
       code,
     },
@@ -168,6 +172,12 @@ const getOrganisationLogs = async (req: AuthenticatedRequest, res: Response) => 
       ],
     },
   })
+
+  if (!organisation) {
+    throw ApplicationError.NotFound('Organisation not found')
+  }
+
+  const { organisationLogs } = organisation
 
   res.send(organisationLogs)
 }
@@ -281,7 +291,7 @@ router.get(
 
       return {
         ...plainCU,
-        feedbackTargets: plainCU.feedbackTargets.map(fbt => ({
+        feedbackTargets: plainCU.feedbackTargets?.map(fbt => ({
           ...fbt,
           summary: {
             data: {
