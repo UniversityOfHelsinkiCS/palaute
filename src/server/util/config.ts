@@ -71,7 +71,7 @@ export const LANGUAGES = config.get<LanguageId[]>('LANGUAGES')
 export const GELF_TRANSPORT_ENABLED = config.get('GELF_TRANSPORT_ENABLED') ?? false
 export const SENTRY_DSN = config.get<string>('BACKEND_SENTRY_DSN')
 export const UI_CONFIG_NAME = config.get('UI_CONFIG_NAME')
-export const NO_USER_USERNAME = config.get('NO_USER_USERNAME')
+export const NO_USER_USERNAME = config.get<string>('NO_USER_USERNAME')
 export const UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS =
   config.get<string[]>('UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS') ?? []
 export const FEEDBACK_CORRESPONDENT_SPECIAL_GROUP = config.get<string>('FEEDBACK_CORRESPONDENT_SPECIAL_GROUP')

@@ -34,6 +34,8 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
             organisationId: org.id,
           },
           defaults: {
+            userId: user.id,
+            organisationId: org.id,
             userCreated: false,
           },
         })

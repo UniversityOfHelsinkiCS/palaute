@@ -1,16 +1,25 @@
-import { STRING, INTEGER, DATE, Model, BOOLEAN, InferAttributes, InferCreationAttributes } from 'sequelize'
+import {
+  STRING,
+  INTEGER,
+  DATE,
+  Model,
+  BOOLEAN,
+  InferAttributes,
+  InferCreationAttributes,
+  CreationOptional,
+} from 'sequelize'
 import { sequelize } from '../db/dbConnection'
 
 class OrganisationFeedbackCorrespondent extends Model<
   InferAttributes<OrganisationFeedbackCorrespondent>,
   InferCreationAttributes<OrganisationFeedbackCorrespondent>
 > {
-  declare id: number
+  declare id: CreationOptional<number>
   declare userId: string
   declare organisationId: string
-  declare userCreated: boolean
-  declare createdAt: Date
-  declare updatedAt: Date
+  declare userCreated: CreationOptional<boolean>
+  declare createdAt: CreationOptional<Date>
+  declare updatedAt: CreationOptional<Date>
 }
 
 OrganisationFeedbackCorrespondent.init(

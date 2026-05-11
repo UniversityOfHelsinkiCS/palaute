@@ -84,13 +84,15 @@ const getPreferredSummaryView = async (user: User) => {
 const getPreferredTab = (user: User, fbts: FeedbackTarget[], hasSummaryAccess: boolean) => {
   const now = new Date()
 
-  const currentlyRunningAndUpcoming = _.sumBy(fbts, fbt =>
-    fbt.courseRealisation.startDate > now ||
-    (fbt.courseRealisation.startDate <= now && fbt.courseRealisation.endDate >= now)
-      ? 1
-      : 0
-  )
-  const hasCurrentlyRunningOrUpcoming = currentlyRunningAndUpcoming > 0
+  const hasCurrentlyRunningOrUpcoming = fbts.some(({ courseRealisation }) => {
+    if (!courseRealisation) {
+      return false
+    }
+
+    const { startDate, endDate } = courseRealisation
+
+    return startDate > now || (startDate <= now && endDate >= now)
+  })
 
   if (hasCurrentlyRunningOrUpcoming) {
     return 'courses'
