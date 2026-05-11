@@ -305,6 +305,7 @@
     "emailSent": "Påminnelse skickad",
     "setHidden": "Göm",
     "setVisible": "Visa",
+    "deletePermanently": "Radera permanent",
     "hiddenInfo": "Den här responsen är gömd. Den är synlig endast för ansvariga lärare eller utbildningsprogrammets administratörer.",
     "unpublishingInfo": "Denna fråga kommer att vara synlig för kursens studenter.",
     "publishingInfo": "Svaren på denna fråga är inte synliga för kursens studeranden. Om du vill kan du göra dem offentliga genom att klicka på knappen till vänster \"Inte offentlig\".",

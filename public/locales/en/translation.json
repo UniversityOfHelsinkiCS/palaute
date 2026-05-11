@@ -326,6 +326,7 @@
     "emailSent": "Reminder email sent",
     "setHidden": "Hide this answer",
     "setVisible": "Unhide",
+    "deletePermanently": "Delete permanently",
     "hiddenInfo": "This answer is hidden and is visible only to responsible teachers and programme administrators",
     "hideSuccess": "Ok. Answers to this question with the content \"{{content}}...\" ({{count}}) have been hidden.",
     "showSuccess": "Ok. Answers to this question with the content  \"{{content}}...\" ({{count}}) have been made visible.",

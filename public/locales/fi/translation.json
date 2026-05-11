@@ -320,6 +320,7 @@
     "emailSent": "Muistutusviesti lähetetty",
     "setHidden": "Piilota näkyvistä",
     "setVisible": "Poista piilotus",
+    "deletePermanently": "Poista pysyvästi",
     "hiddenInfo": "Tämä vastaus on piilotettu, ja se näkyy vain vastuuopettajille tai koulutusohjelman hallintohenkilöille",
     "hideSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" on nyt piilotettu. ({{count}} kpl)",
     "showSuccess": "Ok. Kysymyksen vastaukset sisällöllä \"{{content}}...\" ovat nyt näkyviä. ({{count}} kpl)",
