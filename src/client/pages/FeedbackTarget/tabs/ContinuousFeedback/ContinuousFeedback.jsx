@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useParams, Link } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
+import { keyframes } from '@emotion/react'
 import { Box, Typography, Alert, IconButton } from '@mui/material'
 import { DeleteForever } from '@mui/icons-material'
 import { format } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { NorButton } from '../../../../components/common/NorButton'
 import ResponseForm from './ResponseForm'
+import ContinuousFeedbackForm from './ContinuousFeedbackForm'
 import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { feedbackTargetIsOngoing } from './utils'
@@ -17,6 +19,11 @@ import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenF
 import CardSection from '../../../../components/common/CardSection'
 import useDeleteContinuousFeedback from './useDeleteContinuousFeedback'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+
+const slideDown = keyframes`
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+`
 
 const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const { t } = useTranslation()
@@ -51,7 +58,7 @@ const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }
   const [showResponse, setShowResponse] = useState(false)
 
   return (
-    <Box mb="2rem">
+    <Box mb="2rem" sx={{ animation: `${slideDown} 0.2s ease-out` }}>
       <OpenFeedbackContainer>
         <Box width="100%">
           <Markdown>{data}</Markdown>
@@ -135,7 +142,6 @@ const SmallCourseInfo = ({ t }) => (
 )
 
 const ContinuousFeedback = () => {
-  const { id } = useParams()
   const { t } = useTranslation()
 
   const { feedbackTarget, isTeacher, isResponsibleTeacher, isAdmin, isOrganisationAdmin, isStudent } =
@@ -144,43 +150,44 @@ const ContinuousFeedback = () => {
   const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
 
   const showSettings = isResponsibleTeacher || isAdmin || isOrganisationAdmin
+  const showFeedbackList = !!(isTeacher || continuousFeedbacks?.length)
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
 
   const studentCount = feedbackTarget.summary?.data?.studentCount ?? 0
-
   const isSmallCourse = studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT
 
-  const feedbackEnabled = feedbackTarget.continuousFeedbackEnabled
+  const isFeedbackEnabled = feedbackTarget.continuousFeedbackEnabled
 
   return (
     <Box id="feedback-target-tab-content">
       {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
 
       <Box my="1rem">
-        <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
-          {isStudent && (
-            <Box mb={2}>
-              <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
-            </Box>
-          )}
+        {isStudent && isOngoing && isFeedbackEnabled && (
+          <CardSection title={t('userFeedbacks:giveContinuousFeedback')} sx={{ mb: 2 }}>
+            <ContinuousFeedbackForm fewEnrolled={isSmallCourse} />
+          </CardSection>
+        )}
+        {showFeedbackList && (
+          <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
+            {(isTeacher || isResponsibleTeacher) && (
+              <Box mb={2}>
+                <TeacherInfo enabled={isFeedbackEnabled} hasFeedback={continuousFeedbacks?.length > 0} />
+              </Box>
+            )}
 
-          {(isTeacher || isResponsibleTeacher) && (
-            <Box mb={2}>
-              <TeacherInfo enabled={feedbackEnabled} hasFeedback={continuousFeedbacks?.length > 0} />
-            </Box>
-          )}
+            {(isResponsibleTeacher || isAdmin) && isSmallCourse && <SmallCourseInfo t={t} />}
 
-          {(isResponsibleTeacher || isAdmin) && isSmallCourse && <SmallCourseInfo t={t} />}
+            {isStudent && (
+              <Box sx={{ mb: 4 }}>
+                <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
+              </Box>
+            )}
 
-          <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />
-
-          {isStudent && isOngoing && (
-            <NorButton color="primary" component={Link} to={`/targets/${id}/feedback`}>
-              {t('userFeedbacks:giveContinuousFeedback')}
-            </NorButton>
-          )}
-        </CardSection>
+            {showFeedbackList && <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />}
+          </CardSection>
+        )}
       </Box>
     </Box>
   )

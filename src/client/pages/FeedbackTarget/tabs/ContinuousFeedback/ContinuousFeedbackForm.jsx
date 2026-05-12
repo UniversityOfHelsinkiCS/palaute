@@ -1,5 +1,5 @@
 import React from 'react'
-import { useNavigate, useParams } from 'react-router'
+import { useParams } from 'react-router'
 import { Box, Typography, Alert } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
@@ -8,9 +8,10 @@ import { useSnackbar } from 'notistack'
 import FormikTextField from '../../../../components/common/FormikTextField'
 import { saveContinuousFeedback } from './utils'
 import { NorButton } from '../../../../components/common/NorButton'
-import { ConsentCheckbox } from './ConsentCheckbox'
+import { ConsentCheckbox } from '../FeedbackView/ConsentCheckbox'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import queryClient from '../../../../util/queryClient'
 
 const styles = {
   description: {
@@ -27,26 +28,19 @@ const styles = {
   },
 }
 
-const ContinuousFeedback = ({ fewEnrolled }) => {
+const ContinuousFeedbackForm = ({ fewEnrolled }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const navigate = useNavigate()
   const { feedbackTarget } = useFeedbackTargetContext()
 
   const { id } = useParams()
   const preamble = feedbackTarget?.continuousFeedbackPreamble?.trim()
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values, { resetForm }) => {
     try {
-      if (!values.feedback.length) {
-        enqueueSnackbar(t('norppaFeedback:feedbackLengthError'), {
-          variant: 'error',
-        })
-      }
       await saveContinuousFeedback(values, id)
-
-      navigate(`/targets/${id}/continuous-feedback`)
-
+      resetForm()
+      queryClient.invalidateQueries(['feedbackTargetContinuousFeedbacks'])
       enqueueSnackbar(t('norppaFeedback:successAlert'), {
         variant: 'success',
         autoHideDuration: 6000,
@@ -58,10 +52,7 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
 
   return (
     <Box mb={2}>
-      <Typography variant="h4" component="h4">
-        {t('userFeedbacks:giveContinuousFeedback')}
-      </Typography>
-      <Box my={2} data-cy="continuousFeedbackPreambleDisplay">
+      <Box sx={{ mb: 2 }} data-cy="continuousFeedbackPreambleDisplay">
         <Alert severity="info">
           <Typography variant="body2" component="p" sx={{ whiteSpace: 'pre-line' }}>
             {t('feedbackView:continuousFeedbackInfo')}
@@ -103,4 +94,4 @@ const ContinuousFeedback = ({ fewEnrolled }) => {
   )
 }
 
-export default ContinuousFeedback
+export default ContinuousFeedbackForm

@@ -167,16 +167,6 @@ export const useSaveValues = () => {
   return mutation
 }
 
-export const saveContinuousFeedback = async (values, feedbackTargetId) => {
-  const { feedback } = values
-
-  const { data } = await apiClient.post(`/continuous-feedback/${feedbackTargetId}`, {
-    feedback,
-  })
-
-  return data
-}
-
 export const formatDate = date => lightFormat(date, 'd.M.yyyy')
 
 export const checkIsFeedbackOpen = date => new Date() > parseISO(date)

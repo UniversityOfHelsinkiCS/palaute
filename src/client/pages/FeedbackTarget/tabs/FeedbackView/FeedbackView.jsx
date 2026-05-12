@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 /** @jsxImportSource @emotion/react */
 
-import { useParams, useNavigate, Link } from 'react-router-dom'
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 
 import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
 import { useTranslation, Trans } from 'react-i18next'
@@ -9,7 +9,6 @@ import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import { NorButton } from '../../../../components/common/NorButton'
 
-import ContinuousFeedback from './ContinuousFeedback'
 import FeedbackForm from './FeedbackForm'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
@@ -25,7 +24,6 @@ import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import ConfirmGivingFeedbackDialog from '../../../MyFeedbacks/ConfirmGivingFeedbackDialog'
-import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { ConsentCheckbox } from './ConsentCheckbox'
 
 const FormContainer = ({
@@ -158,21 +156,9 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
   const [smallCourseDialogOpen, setSmallCourseDialogOpen] = useState(true)
 
-  const {
-    feedbackTarget,
-    isStudent,
-    isResponsibleTeacher,
-    isOrganisationAdmin,
-    isTeacher,
-    isLoading: feedbackTargetContextIsLoading,
-  } = useFeedbackTargetContext()
-  const hookIsEnabled = isStudent
-  const { continuousFeedbacks, isLoading: continuousFeedbackIsLoading } = useFeedbackTargetContinuousFeedbacks(
-    feedbackTarget.id,
-    hookIsEnabled
-  )
+  const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher, isLoading } =
+    useFeedbackTargetContext()
   const studentCount = feedbackTarget.summary?.data?.studentCount
-  const isLoading = feedbackTargetContextIsLoading || continuousFeedbackIsLoading
 
   if (isLoading) {
     return <LoadingProgress />
@@ -185,9 +171,12 @@ const FeedbackView = () => {
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isOngoing = !isOpen && !isEnded
-  const showContinuousFeedback = isStudent && isOngoing && continuousFeedbackEnabled
-  const continuousFeedbacksGiven = continuousFeedbacks?.length > 0
-  const showClosedAlert = isOngoing && !showContinuousFeedback
+
+  if (isStudent && isOngoing && continuousFeedbackEnabled) {
+    return <Navigate to={`/targets/${id}/continuous-feedback`} replace />
+  }
+
+  const showClosedAlert = isOngoing
   const showForm = isOrganisationAdmin || isTeacher || isOpen || isEnded
   const formIsDisabled = !isOpen || isTeacher || isOutsider || isOrganisationAdmin
   const showToolbar = (isOrganisationAdmin || isTeacher) && !isOpen && !isEnded
@@ -274,13 +263,9 @@ const FeedbackView = () => {
     <Box id="feedback-target-tab-content">
       <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
-      {isStudent &&
-        studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT &&
-        !(showContinuousFeedback && continuousFeedbacksGiven) && (
-          <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
-        )}
-
-      {showContinuousFeedback && <ContinuousFeedback fewEnrolled={studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT} />}
+      {isStudent && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && (
+        <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
+      )}
 
       {showClosedAlert && closedAlert}
 

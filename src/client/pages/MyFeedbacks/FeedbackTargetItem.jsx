@@ -294,6 +294,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { studentCount } = summary.data
 
   const editPath = `/targets/${id}/feedback`
+  const continuousPath = `/targets/${id}/continuous-feedback`
   const viewPath = `/targets/${id}/results`
 
   const feedbackGiven = Boolean(feedback)
@@ -353,7 +354,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
 
       <Box m={-0.5} mt={1}>
         {isEnded && <FeedbackEndedActions viewPath={viewPath} />}
-        {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackActions viewPath={editPath} />}
+        {notStarted && continuousFeedbackEnabled && <ContinuousFeedbackActions viewPath={continuousPath} />}
         {isOpen && (feedbackGiven || notGivingFeedback) && (
           <FeedbackGivenActions
             editPath={editPath}

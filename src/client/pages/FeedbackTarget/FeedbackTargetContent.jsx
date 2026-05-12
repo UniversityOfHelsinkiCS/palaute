@@ -85,12 +85,13 @@ const FeedbackTargetContent = () => {
   const fbtMatch = useMatch('/targets/:feedbackTargetId/*')
   const interimMatch = useMatch('/targets/:feedbackTargetId/interim-feedback/:interimFeedbackId/*')
   const pathnameBase = interimMatch?.pathnameBase || fbtMatch?.pathnameBase // This has to be done because of recursivity of interim feedbacks
-  const defaultPath = `${pathnameBase}/feedback`
 
   const feedbackGiven = !!feedback
 
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
+  const isOngoing = !isOpen && !isEnded
+  const defaultPath = `${pathnameBase}/feedback`
   const isOld = feedbackTargetIsOld(feedbackTarget)
   const isOpenOrClosed = feedbackTargetIsOpenOrClosed(feedbackTarget)
 
@@ -111,6 +112,7 @@ const FeedbackTargetContent = () => {
     (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING && feedbackGiven)
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
+  const hideSurveyTab = isStudent && isOngoing && continuousFeedbackEnabled
   const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
   const showStudentsWithFeedbackTab =
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
@@ -154,21 +156,22 @@ const FeedbackTargetContent = () => {
         }}
       >
         <FeedbackTargetTabsContainer>
-          {feedbackGiven && isOpen ? (
-            <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
-              label={t('feedbackTargetView:editFeedbackTab')}
-              to={`${pathnameBase}/feedback`}
-              icon={<EditOutlined />}
-            />
-          ) : (
-            <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
-              label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
-              to={`${pathnameBase}/feedback`}
-              icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
-            />
-          )}
+          {!hideSurveyTab &&
+            (feedbackGiven && isOpen ? (
+              <FeedbackTargetTab
+                data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
+                label={t('feedbackTargetView:editFeedbackTab')}
+                to={`${pathnameBase}/feedback`}
+                icon={<EditOutlined />}
+              />
+            ) : (
+              <FeedbackTargetTab
+                data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
+                label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
+                to={`${pathnameBase}/feedback`}
+                icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
+              />
+            ))}
           {showSettingsTab && (
             <FeedbackTargetTab
               data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
