@@ -33,11 +33,13 @@ describe('Continuous feedback', () => {
     cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
 
+    // giveContinuousFeedback now navigates directly to the continuous-feedback tab
     cy.get('textarea').first().type('Giving continuous feedback')
 
     cy.contains('Send feedback').click()
 
     cy.contains('Feedback has been sent succesfully')
+    // list updates in place after submission
     cy.contains('Giving continuous feedback')
 
     // Teacher replies to continuous feedback
@@ -69,8 +71,8 @@ describe('Continuous feedback', () => {
 
     cy.get('[data-cy=my-feedbacks-continuous-tab]').click()
     cy.get('[data-cy=giveContinuousFeedback]').click()
-    cy.get('[data-cy=feedback-target-continuous-feedback-tab]').click()
 
+    // already on continuous-feedback tab, response is visible in the list
     cy.contains('Responding to continuous feedback')
   })
 })
