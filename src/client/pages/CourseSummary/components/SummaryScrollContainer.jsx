@@ -5,7 +5,7 @@ const SummaryScrollContainer = ({ children }) => (
   <Box
     sx={{
       overflowY: 'auto',
-      overflowX: 'scroll',
+      overflowX: 'auto',
 
       pt: '2rem',
     }}
