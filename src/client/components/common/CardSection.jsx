@@ -1,8 +1,8 @@
 import React from 'react'
 import { Box, Card, CardContent, Typography } from '@mui/material'
 
-const CardSection = ({ title, children }) => (
-  <Card>
+const CardSection = ({ title, children, sx }) => (
+  <Card sx={sx}>
     <CardContent>
       <Box mb={4}>
         <Typography component="h2" variant="h6">
