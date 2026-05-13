@@ -20,7 +20,7 @@ const University = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      <SummaryRowFilters filterType="university" />
+      <SummaryRowFilters />
       <OrganisationSummaryRow
         organisationId={UNIVERSITY_ROOT_ID}
         organisation={universityOrganisation}

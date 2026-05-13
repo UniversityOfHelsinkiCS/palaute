@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query'
 import { format, isValid } from 'date-fns'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
 import apiClient from '../../util/apiClient'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { getYearRange } from '../../util/yearUtils'
 
 const getSummarySortFunction = sortField => {
@@ -19,15 +18,6 @@ const getSummarySortFunction = sortField => {
   }
 }
 
-const useInitialViewingMode = () => {
-  const { authorizedUser } = useAuthorizedUser()
-  const organisationAccess = authorizedUser?.organisationAccess ?? {}
-  const organisationAccessCount = Object.keys(organisationAccess).length
-
-  if (organisationAccessCount > 2) return 'flat'
-  return 'tree'
-}
-
 const summaryContext = React.createContext({
   showSummariesWithNoFeedback: false,
   setShowSummariesWithNoFeedback: () => {},
@@ -39,8 +29,6 @@ const summaryContext = React.createContext({
   setSortBy: () => {},
   sortFunction: getSummarySortFunction('code'),
   questions: [],
-  viewingMode: 'tree',
-  setViewingMode: () => {},
   extraOrgId: '',
   setExtraOrgId: () => {},
   extraOrgMode: 'include',
@@ -144,19 +132,6 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
 
   const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])
 
-  // Viewing mode
-  const initialViewingMode = useInitialViewingMode()
-  const [viewingMode, setViewingMode] = React.useState(() => {
-    const viewingMode = params.get('viewingMode')
-    return viewingMode || initialViewingMode
-  })
-
-  const updateViewingModeQS = React.useCallback(viewingMode => {
-    setViewingMode(viewingMode)
-    params.set('viewingMode', viewingMode)
-    setParams(params)
-  })
-
   // Separate organisation id
   const [extraOrgId, setExtraOrgId] = React.useState(() => {
     const extraOrgId = params.get('extraOrgId')
@@ -193,24 +168,12 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       setSortBy: updateSortByQS,
       sortFunction,
       questions,
-      viewingMode,
-      setViewingMode: updateViewingModeQS,
       extraOrgId,
       setExtraOrgId: updateExtraOrgIdQS,
       extraOrgMode,
       setExtraOrgMode: updateExtraOrgModeQS,
     }),
-    [
-      showSummariesWithNoFeedback,
-      dateRange,
-      option,
-      sortBy[0],
-      sortBy[1],
-      questions,
-      viewingMode,
-      extraOrgId,
-      extraOrgMode,
-    ]
+    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions, extraOrgId, extraOrgMode]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>
