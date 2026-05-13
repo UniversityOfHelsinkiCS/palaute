@@ -1,19 +1,16 @@
 import React from 'react'
-import { intersection } from 'lodash-es'
 import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 import { Box, Typography } from '@mui/material'
-import { BarChartOutlined, School, LocationCity } from '@mui/icons-material'
+import { BarChartOutlined, School } from '@mui/icons-material'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
 import MyOrganisations from './MyOrganisations'
-import University from './University'
 import { updateSummaries } from './api'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
 import MyCourses from './MyCourses'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
-import { UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS } from '../../util/common'
 import GenerateReport from './GenerateReport'
 import { SummaryContextProvider } from './context'
 import ForCourseUnitGroup from './ForCourseUnitGroup'
@@ -36,9 +33,6 @@ const SummaryInContext = () => {
   }
 
   const hasAccessToMyOrganisations = Object.keys(user?.organisationAccess ?? {}).length > 0
-  const hasAccessToUniversityLevel =
-    user?.isAdmin ||
-    intersection(UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS, Object.keys(user?.specialGroup ?? {})).length > 0
 
   return (
     <>
@@ -82,15 +76,6 @@ const SummaryInContext = () => {
             data-cy="my-organisations"
           />
         )}
-
-        {hasAccessToUniversityLevel && (
-          <RouterTab
-            label={t('common:university')}
-            icon={<LocationCity />}
-            to={`/course-summary/university${search}`}
-            data-cy="university"
-          />
-        )}
       </RouterTabs>
       <SummaryScrollContainer>
         <Routes>
@@ -108,15 +93,6 @@ const SummaryInContext = () => {
             element={
               <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
                 <MyOrganisations />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/university"
-            element={
-              <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToUniversityLevel}>
-                <University />
               </ProtectedRoute>
             }
           />
