@@ -95,10 +95,10 @@ export const useTeacherSummaries = () => {
  * Fetches all organisation rows for user based on their org access
  */
 export const useOrganisationSummaries = () => {
-  const { dateRange, viewingMode, extraOrgId, extraOrgMode } = useSummaryContext()
+  const { dateRange, extraOrgId, extraOrgMode } = useSummaryContext()
   const { start: startDate, end: endDate } = dateRange
 
-  const queryKey = ['summaries-v2-organisations', startDate, endDate, viewingMode]
+  const queryKey = ['summaries-v2-organisations', startDate, endDate]
   if (extraOrgId && extraOrgMode) queryKey.push({ extraOrgId, extraOrgMode })
 
   const queryFn = async () => {
@@ -106,7 +106,6 @@ export const useOrganisationSummaries = () => {
       params: {
         startDate,
         endDate,
-        viewingMode,
         extraOrgId,
         extraOrgMode,
       },

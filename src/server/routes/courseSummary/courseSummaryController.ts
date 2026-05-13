@@ -241,7 +241,6 @@ const getCoursesV2 = async (req: AuthenticatedRequest, res: Response) => {
 }
 
 const UserOrganisationsQuerySchema = DatesQuerySchema.extend({
-  viewingMode: z.enum(['tree', 'flat']).optional(),
   extraOrgId: z.string().optional(),
   extraOrgMode: z.enum(['include', 'exclude', 'only']).optional(),
 })
@@ -250,7 +249,6 @@ const getUserOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) 
   const {
     startDate: startDateString,
     endDate: endDateString,
-    viewingMode,
     extraOrgId,
     extraOrgMode,
   } = UserOrganisationsQuerySchema.parse(req.query)
@@ -262,7 +260,6 @@ const getUserOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) 
     user,
     startDate,
     endDate,
-    viewingMode,
     extraOrgId,
     extraOrgMode,
   })
