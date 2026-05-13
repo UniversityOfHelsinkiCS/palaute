@@ -15,7 +15,12 @@ const LikertResults = ({ question, feedbackCount, showTable }) => {
   const tableLabels = ['5', '4', '3', '2', '1', dontKnowOption].map(l => [l])
 
   const table = (
-    <AccessibleChartTable labels={tableLabels} data={config.data.datasets[0].data} totalFeedbacks={feedbackCount} />
+    <AccessibleChartTable
+      labels={tableLabels}
+      data={config.data.datasets[0].data}
+      totalFeedbacks={feedbackCount}
+      question={question}
+    />
   )
 
   return <ResultsContent chart={<Bar {...config} />} table={table} showTable={showTable} />

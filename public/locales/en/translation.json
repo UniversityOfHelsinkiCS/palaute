@@ -348,7 +348,11 @@
     "percentage": "Cumulative response rate",
     "keyboardShortcut": "You can also switch views using the keyboard shortcut Alt + T.",
     "chartAriaLabel": "Bar chart showing the distribution of the answers. Switch to table view by clicking the \"Show table view\" button or using the keyboard shortcut Alt + T.",
-    "feedbackCountChartAriaLabel": "Line chart showing the cumulative number of feedbacks over time. Switch to table view by clicking the \"Show table view\" button or using the keyboard shortcut Alt + T."
+    "feedbackCountChartAriaLabel": "Line chart showing the cumulative number of feedbacks over time. Switch to table view by clicking the \"Show table view\" button or using the keyboard shortcut Alt + T.",
+    "likertQuestionAriaDescription": "Question \"{{ question }}\" is a likert scale question, where 1 means \"completely disagree\" and 5 means \"completely agree\". The N/A option means \"cannot answer\".",
+    "multipleChoiceQuestionAriaDescription": "Question \"{{ question }}\" is a multiple choice question, where the respondent can choose more than one option.",
+    "singleChoiceQuestionAriaDescription": "Question \"{{ question }}\" is a single choice question, where the respondent can choose only one option.",
+    "questionAriaDescription": "Question: {{question}}"
   },
   "groups": {
     "groupingSettings": "Grouping",

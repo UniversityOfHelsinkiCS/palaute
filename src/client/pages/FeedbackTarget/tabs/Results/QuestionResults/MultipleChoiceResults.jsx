@@ -16,6 +16,7 @@ const MultipleChoiceResults = ({ question, feedbackCount, showTable }) => {
       labels={config.data.labels}
       data={config.data.datasets[0].data}
       totalFeedbacks={feedbackCount}
+      question={question}
     />
   )
 

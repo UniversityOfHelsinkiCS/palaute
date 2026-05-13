@@ -342,7 +342,11 @@
     "percentage": "Kertynyt vastausprosentti",
     "keyboardShortcut": "Voit vaihtaa näkymää myös näppäinyhdistelmällä Alt + T.",
     "chartAriaLabel": "Pylväskaavio vastausten jakaumasta. Vaihda taulukkonäkymään painamalla \"Näytä taulukkonäkymä\" -painiketta tai näppäinyhdistelmällä Alt + T.",
-    "feedbackCountChartAriaLabel": "Viivakaavio palautteiden kertymästä ajan kuluessa. Vaihda taulukkonäkymään painamalla \"Näytä taulukkonäkymä\" -painiketta tai näppäinyhdistelmällä Alt + T."
+    "feedbackCountChartAriaLabel": "Viivakaavio palautteiden kertymästä ajan kuluessa. Vaihda taulukkonäkymään painamalla \"Näytä taulukkonäkymä\" -painiketta tai näppäinyhdistelmällä Alt + T.",
+    "likertQuestionAriaDescription": "Kysymys \"{{ question }}\" on likert-asteikkokysymys, jossa 1 tarkoittaa \"täysin eri mieltä\" ja 5 tarkoittaa \"täysin samaa mieltä\". Vaihtoehto eos tarkoittaa \"en osaa sanoa\".",
+    "multipleChoiceQuestionAriaDescription": "Kysymys \"{{ question }}\" on monivalintakysymys, jossa vastaaja on voinut valita useamman kuin yhden vaihtoehdon.",
+    "singleChoiceQuestionAriaDescription": "Kysymys \"{{ question }}\" on monivalintakysymys, jossa vastaaja on voinut valita vain yhden vaihtoehdon.",
+    "questionAriaDescription": "Kysymys: {{question}}"
   },
   "groups": {
     "groupingSettings": "Ryhmittely",

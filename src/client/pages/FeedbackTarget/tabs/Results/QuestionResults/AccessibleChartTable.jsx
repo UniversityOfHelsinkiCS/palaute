@@ -1,9 +1,18 @@
 import React from 'react'
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { getLanguageValue } from '../../../../../util/languageUtils'
 
-const AccessibleChartTable = ({ labels, data, totalFeedbacks, caption }) => {
-  const { t } = useTranslation()
+const ariaKeyByType = {
+  LIKERT: 'feedbackTargetResults:likertQuestionAriaDescription',
+  MULTIPLE_CHOICE: 'feedbackTargetResults:multipleChoiceQuestionAriaDescription',
+  SINGLE_CHOICE: 'feedbackTargetResults:singleChoiceQuestionAriaDescription',
+}
+
+const AccessibleChartTable = ({ labels, data, totalFeedbacks, question }) => {
+  const { t, i18n } = useTranslation()
+
+  const questionLabel = getLanguageValue(question?.data?.label, i18n.language)
 
   return (
     <TableContainer sx={{ my: 2 }}>
@@ -14,11 +23,14 @@ const AccessibleChartTable = ({ labels, data, totalFeedbacks, caption }) => {
             backgroundColor: 'action.hover',
           },
         }}
+        aria-description={t(ariaKeyByType[question?.type] ?? 'feedbackTargetResults:questionAriaDescription', {
+          question: questionLabel,
+        })}
       >
         <caption
           style={{ captionSide: 'top', textAlign: 'left', fontSize: '1rem', fontWeight: 'bold', padding: '0.5rem 0' }}
         >
-          {caption || t('feedbackView:dataTableCaption')}
+          {t('feedbackView:dataTableCaption')}
         </caption>
         <TableHead>
           <TableRow>

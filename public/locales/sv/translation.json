@@ -140,7 +140,7 @@
     "feedbackInfoLink": "Läs mera om hur informationen och svar används.",
     "closedInfo": "Denna respons är för tillfället stängd. Responsen kan ges mellan {{opensAt}} och {{closesAt}}",
     "dataProtectionNotice": "Dataskyddsbeskrivning",
-    "dontKnowOption": "Ingen uppgift",
+    "dontKnowOption": "N/A",
     "editSurvey": "Redigera enkäten",
     "translationLanguage": "Förhandsgranskningsspråk för enkäten",
     "cannotSubmitText": "Du kan inte ge respons för att du har inte anmält dig eller så har din anmälning ännu inte uppdaterats i vårt system. Anmälningar uppdateras var 24:e timme.",
@@ -264,7 +264,7 @@
     "here": "här",
     "multipleChoiceQuestions": "Flervalsfrågor",
     "openQuestions": "Öppna frågor",
-    "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, n/a = ingen uppgift",
+    "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, N/A = kan inte svara",
     "publicQuestionConfirmation": "Jag har kontrollerat att svaren på denna fråga inte innehåller personuppgifter eller annan känslig information som inte får publiceras."
   },
   "feedbackSummary": {
@@ -327,7 +327,11 @@
     "percentage": "Kumulativ svarsfrekvens",
     "keyboardShortcut": "Du kan även byta vy med kortkommandot Alt + T.",
     "chartAriaLabel": "Stapeldiagram som visar svarens fördelning. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T.",
-    "feedbackCountChartAriaLabel": "Linjediagram som visar det kumulativa antalet svar över tid. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T."
+    "feedbackCountChartAriaLabel": "Linjediagram som visar det kumulativa antalet svar över tid. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T.",
+    "likertQuestionAriaDescription": "Fråga \"{{ question }}\" är en likertskalfråga, där 1 betyder \"helt av annan åsikt\" och 5 betyder \"helt av samma åsikt\". Alternativet N/A betyder \"kan inte svara\".",
+    "multipleChoiceQuestionAriaDescription": "Fråga \"{{ question }}\" är en flervalsfråga, där respondenten kan välja mer än ett alternativ.",
+    "singleChoiceQuestionAriaDescription": "Fråga \"{{ question }}\" är en enkelvalsfråga, där respondenten kan välja endast ett alternativ.",
+    "questionAriaDescription": "Fråga: {{question}}"
   },
   "groups": {
     "groupingSettings": "Gruppering",
