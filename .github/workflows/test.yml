@@ -8,6 +8,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+      - name: Verify safe-chain
+        run: npm safe-chain-verify
       - name: Build project for linting
         run: npm ci
       - name: Run eslint and ts checks
@@ -18,6 +22,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+      - name: Verify safe-chain
+        run: npm safe-chain-verify
       - name: Build project for translations
         run: npm ci
       - name: Analyse translations
@@ -47,6 +55,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v6
+
+      - name: Install safe-chain
+        run: curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+      - name: Verify safe-chain
+        run: npm safe-chain-verify
 
       - name: npm ci
         run: npm ci --no-audit --no-fund
