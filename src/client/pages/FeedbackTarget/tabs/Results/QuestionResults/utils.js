@@ -1,4 +1,4 @@
-import { countBy, flatMap } from 'lodash-es'
+import { countBy, flatMap, sumBy } from 'lodash-es'
 import { useTheme } from '@mui/material'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
@@ -151,4 +151,12 @@ export const getSingleChoiceChartConfig = (question, language, t, numberOfFeedba
 export const capitalizeString = text => {
   const capitalized = text.charAt(0).toUpperCase() + text.slice(1)
   return capitalized
+}
+
+export const getAcualAnswerCount = question => {
+  if (!question || !question.feedbacks) {
+    return 0
+  }
+
+  return sumBy(question.feedbacks, f => (f.data ? 1 : 0))
 }

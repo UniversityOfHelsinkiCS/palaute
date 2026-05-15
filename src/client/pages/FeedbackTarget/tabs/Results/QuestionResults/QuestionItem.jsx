@@ -1,6 +1,6 @@
 import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
-import { sumBy, uniq } from 'lodash-es'
+import { uniq } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
@@ -13,6 +13,7 @@ import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
 import SingleChoiceResults from './SingleChoiceResults'
 import { boxPrintStyle } from '../../../../../util/printStyle'
+import { getAcualAnswerCount } from './utils'
 
 const componentByType = {
   LIKERT: LikertResults,
@@ -88,7 +89,7 @@ const QuestionItem = ({
   ) : null
 
   const isPublic = publicQuestionIds.includes(question.id)
-  const actualAnswers = sumBy(question.feedbacks, f => (f.data ? 1 : 0))
+  const acualAnswerCount = getAcualAnswerCount(question)
 
   const label = getLanguageValue(question?.data?.label, i18n.language)
   const description = getLanguageValue(question?.data?.description, i18n.language)
@@ -127,7 +128,7 @@ const QuestionItem = ({
               </Typography>
             )}
             <Typography variant="caption" color="textSecondary">
-              {t('questionResults:answerCount', { answers: actualAnswers, feedbacks: feedbackCount })}
+              {t('questionResults:answerCount', { answers: acualAnswerCount, feedbacks: feedbackCount })}
             </Typography>
           </Box>
           {(question.type === 'LIKERT' || question.secondaryType === 'WORKLOAD') && (

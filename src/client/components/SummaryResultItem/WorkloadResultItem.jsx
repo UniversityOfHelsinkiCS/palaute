@@ -41,7 +41,7 @@ const getTooltipData = (distribution, question) => {
   }))
 }
 
-const WorkloadResultItem = ({ mean, distribution, previous, question, ...props }) => {
+const WorkloadResultItem = ({ mean, distribution, question, ...props }) => {
   const { t, i18n } = useTranslation()
 
   const hasValue = !isEmpty(distribution)
