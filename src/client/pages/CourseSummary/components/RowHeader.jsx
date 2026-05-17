@@ -7,19 +7,22 @@ import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const styles = {
   accordionButton: {
-    width: '22rem',
-    flexShrink: 0,
+    width: '23rem',
+    flexShrink: 1,
+    minWidth: 0,
     minHeight: '48px',
-    // maxHeight: '74px',
-    paddingRight: '2.5rem',
     marginRight: '0.5rem',
     display: 'flex',
-    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: '0.25rem',
     borderRadius: '10px',
     textAlign: 'left',
     textTransform: 'none',
     '&:hover': {
       background: theme => theme.palette.action.hover,
+      '& .row-header-arrow': {
+        color: theme => theme.palette.text.primary,
+      },
     },
     '&:active': {
       background: theme => theme.palette.action.selected,
@@ -29,34 +32,22 @@ const styles = {
   },
   unclickableLabel: {
     width: '22rem',
-    flexShrink: 0,
+    flexShrink: 1,
+    minWidth: 0,
     minHeight: '48px',
-    // maxHeight: '74px',
-    paddingRight: '2.5rem',
+    paddingInline: '0.5rem',
     display: 'flex',
-    justifyContent: 'space-between',
+    alignItems: 'center',
     borderRadius: '10px',
-    textAlign: 'left',
-    textTransform: 'none',
   },
   link: {
     color: theme => theme.palette.primary.main,
   },
-  arrowContainer: {
-    position: 'absolute',
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'row-reverse',
-    alignItems: 'center',
-    paddingRight: '0.7rem',
-    '&:hover': {
-      color: theme => theme.palette.text.primary,
-    },
-    color: theme => theme.palette.info.main,
-  },
   arrow: {
-    transition: 'transform 0.2s ease-out',
+    marginRight: '0.5rem',
+    flexShrink: 0,
+    color: theme => theme.palette.info.main,
+    transition: 'transform 0.2s ease-out, color 0.15s ease-out',
   },
   arrowOpen: {
     transform: 'rotate(90deg)',
@@ -68,10 +59,8 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
   <>
     {openable ? (
       <ButtonBase onClick={handleOpenRow} sx={styles.accordionButton} variant="contained" disableRipple>
-        {label}
-        <Box sx={styles.arrowContainer}>
-          <ChevronRight sx={{ ...styles.arrow, ...(isOpen ? styles.arrowOpen : {}) }} />
-        </Box>
+        <Box sx={{ flexGrow: 1, minWidth: 0 }}>{label}</Box>
+        <ChevronRight className="row-header-arrow" sx={{ ...styles.arrow, ...(isOpen ? styles.arrowOpen : {}) }} />
       </ButtonBase>
     ) : (
       // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -83,7 +72,7 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
             sx={{ ...styles.accordionButton, ...styles.link }}
             variant="contained"
           >
-            {label}
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>{label}</Box>
           </ButtonBase>
         ) : (
           <Box sx={styles.unclickableLabel}>{label}</Box>

@@ -47,7 +47,7 @@ const TeacherOrganisationRow = ({ organisation, questions }) => {
       </Box>
       {isOpen && (
         <Box
-          sx={{ pl: '2rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
+          sx={{ pl: '1.5rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
           display="flex"
           flexDirection="column"
           alignItems="stretch"

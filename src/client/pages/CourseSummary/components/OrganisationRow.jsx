@@ -192,8 +192,10 @@ const OrganisationSummaryRow = ({
   return (
     <Box ref={ref} display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        {showPinButton && isAdmin && <PinButton organisation={initialOrganisation} />}
-        <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
+        <Box display="flex" alignItems="center" sx={{ width: '23.5rem', flexShrink: 0 }}>
+          {showPinButton && isAdmin && <PinButton organisation={initialOrganisation} />}
+          <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
+        </Box>
         {inView && (
           <OrganisationResultsLoader
             questions={questions}
@@ -204,7 +206,7 @@ const OrganisationSummaryRow = ({
       </Box>
       {(isTransitioning || isOpen) && (
         <Box
-          sx={{ pl: '2rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
+          sx={{ pl: '1.5rem', borderLeft: `solid 3px ${indentLineColor}`, pb: '0.5rem' }}
           display="flex"
           flexDirection="column"
           alignItems="stretch"
