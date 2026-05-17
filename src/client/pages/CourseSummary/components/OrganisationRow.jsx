@@ -134,6 +134,7 @@ const PinButton = ({ organisation }) => {
 
   const handleClick = e => {
     e.stopPropagation()
+    if (isMutating) return
     if (isPinned) {
       unpinMutation.mutate(organisation.id)
     } else {
@@ -143,7 +144,7 @@ const PinButton = ({ organisation }) => {
 
   return (
     <Tooltip title={t(isPinned ? 'courseSummary:unpinOrganisation' : 'courseSummary:pinOrganisation')}>
-      <span>
+      <span style={{ display: 'flex', alignItems: 'center' }}>
         <IconButton onClick={handleClick} size="small" disabled={isMutating} sx={{ color: 'text.secondary' }}>
           {isPinned ? <PushPin fontSize="small" /> : <PushPinOutlined fontSize="small" />}
         </IconButton>

@@ -12,7 +12,7 @@ const styles = {
     minHeight: '48px',
     // maxHeight: '74px',
     paddingRight: '2.5rem',
-    marginX: '0.5rem',
+    marginRight: '0.5rem',
     display: 'flex',
     justifyContent: 'space-between',
     borderRadius: '10px',
