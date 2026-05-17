@@ -535,7 +535,10 @@
     "onlyOpenUni": "Visa endast öppna uni-kurser",
     "feedbackResponsePercentage": "Kurser där återkoppling ges",
     "filter": "Filtrera",
-    "notSelected": "Inte valt"
+    "notSelected": "Inte valt",
+    "pinOrganisation": "Fäst organisation",
+    "unpinOrganisation": "Ta bort fästning",
+    "pinnedOrganisations": "Fästa"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",

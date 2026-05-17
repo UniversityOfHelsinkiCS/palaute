@@ -15,6 +15,7 @@ import { OrganisationLog } from './organisationLog'
 import { FeedbackTargetLog } from './feedbackTargetLog'
 import { ContinuousFeedback } from './continuousFeedback'
 import { OrganisationFeedbackCorrespondent } from './organisationFeedbackCorrespondent'
+import { UserOrganisationPin } from './userOrganisationPin'
 import { Tag } from './tag'
 import { CourseRealisationsTag } from './courseRealisationsTag'
 import { Banner } from './banner'
@@ -195,6 +196,21 @@ User.belongsToMany(Organisation, {
 Organisation.hasMany(OrganisationFeedbackCorrespondent)
 OrganisationFeedbackCorrespondent.belongsTo(Organisation)
 
+User.belongsToMany(Organisation, {
+  through: UserOrganisationPin,
+  as: 'pinnedOrganisations',
+  foreignKey: 'user_id',
+})
+Organisation.belongsToMany(User, {
+  through: UserOrganisationPin,
+  as: 'pinnedByUsers',
+  foreignKey: 'organisation_id',
+})
+User.hasMany(UserOrganisationPin)
+UserOrganisationPin.belongsTo(User)
+Organisation.hasMany(UserOrganisationPin)
+UserOrganisationPin.belongsTo(Organisation)
+
 Organisation.hasMany(Tag, { as: 'tags' })
 Tag.belongsTo(Organisation, { as: 'organisation' })
 
@@ -273,6 +289,7 @@ export {
   FeedbackTargetLog,
   ContinuousFeedback,
   OrganisationFeedbackCorrespondent,
+  UserOrganisationPin,
   CourseRealisationsTag,
   InactiveCourseRealisation,
   Banner,

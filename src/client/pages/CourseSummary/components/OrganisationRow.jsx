@@ -1,5 +1,7 @@
-import { Box } from '@mui/material'
+import { Box, IconButton, Tooltip } from '@mui/material'
+import { PushPin, PushPinOutlined } from '@mui/icons-material'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 import { orderBy } from 'lodash-es'
 import RowHeader from './RowHeader'
@@ -7,7 +9,7 @@ import { TAGS_ENABLED } from '../../../util/common'
 import useRandomColor from '../../../hooks/useRandomColor'
 import { useSummaryContext } from '../context'
 import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
-import { useSummaries } from '../api'
+import { useSummaries, usePinnedOrganisations, usePinOrganisationMutation, useUnpinOrganisationMutation } from '../api'
 import { useOrderedAndFilteredOrganisations } from '../utils'
 import { OrganisationLabel, TagLabel } from './Labels'
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
@@ -121,12 +123,42 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   )
 }
 
+const PinButton = ({ organisation }) => {
+  const { t } = useTranslation()
+  const { pinnedOrganisations } = usePinnedOrganisations()
+  const pinMutation = usePinOrganisationMutation()
+  const unpinMutation = useUnpinOrganisationMutation()
+
+  const isPinned = pinnedOrganisations.some(o => o.id === organisation.id)
+  const isMutating = pinMutation.isPending || unpinMutation.isPending
+
+  const handleClick = e => {
+    e.stopPropagation()
+    if (isPinned) {
+      unpinMutation.mutate(organisation.id)
+    } else {
+      pinMutation.mutate(organisation)
+    }
+  }
+
+  return (
+    <Tooltip title={t(isPinned ? 'courseSummary:unpinOrganisation' : 'courseSummary:pinOrganisation')}>
+      <span>
+        <IconButton onClick={handleClick} size="small" disabled={isMutating} sx={{ color: 'text.secondary' }}>
+          {isPinned ? <PushPin fontSize="small" /> : <PushPinOutlined fontSize="small" />}
+        </IconButton>
+      </span>
+    </Tooltip>
+  )
+}
+
 const OrganisationSummaryRow = ({
   alwaysOpen = false,
   organisation: initialOrganisation,
   organisationId,
   startDate,
   endDate,
+  showPinButton = true,
 }) => {
   const { questions } = useSummaryContext()
   const { ref, inView } = useInView({
@@ -156,6 +188,7 @@ const OrganisationSummaryRow = ({
   return (
     <Box ref={ref} display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
+        {showPinButton && <PinButton organisation={initialOrganisation} />}
         <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
         {inView && (
           <OrganisationResultsLoader

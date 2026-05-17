@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import apiClient from '../../util/apiClient'
 import { useSummaryContext } from './context'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
@@ -160,6 +160,68 @@ export const useCourseUnitGroupSummaries = ({ courseCode, startDate, endDate, al
   })
 
   return { courseUnitGroup: data, ...rest }
+}
+
+const PINNED_ORGANISATIONS_KEY = ['pinned-organisations']
+
+export const usePinnedOrganisations = () => {
+  const { data, ...rest } = useQuery({
+    queryKey: PINNED_ORGANISATIONS_KEY,
+    queryFn: async () => {
+      const { data } = await apiClient.get('users/me/pinned-organisations')
+      return data
+    },
+    staleTime: TWELVE_HOURS,
+    retry: false,
+    refetchOnWindowFocus: false,
+  })
+
+  return { pinnedOrganisations: data ?? [], ...rest }
+}
+
+export const usePinOrganisationMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: ({ id }) => apiClient.post('users/me/pinned-organisations', { organisationId: id }),
+    onMutate: async pinnedOrg => {
+      await queryClient.cancelQueries({ queryKey: PINNED_ORGANISATIONS_KEY })
+      const previous = queryClient.getQueryData(PINNED_ORGANISATIONS_KEY) ?? []
+      if (!previous.some(p => p.id === pinnedOrg.id)) {
+        queryClient.setQueryData(PINNED_ORGANISATIONS_KEY, [...previous, pinnedOrg])
+      }
+      return { previous }
+    },
+    onError: (_err, _pinnedOrg, context) => {
+      if (context?.previous) queryClient.setQueryData(PINNED_ORGANISATIONS_KEY, context.previous)
+    },
+    onSettled: (_data, error) => {
+      if (error) queryClient.invalidateQueries({ queryKey: PINNED_ORGANISATIONS_KEY })
+    },
+  })
+}
+
+export const useUnpinOrganisationMutation = () => {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: organisationId => apiClient.delete(`users/me/pinned-organisations/${organisationId}`),
+    onMutate: async organisationId => {
+      await queryClient.cancelQueries({ queryKey: PINNED_ORGANISATIONS_KEY })
+      const previous = queryClient.getQueryData(PINNED_ORGANISATIONS_KEY) ?? []
+      queryClient.setQueryData(
+        PINNED_ORGANISATIONS_KEY,
+        previous.filter(p => p.id !== organisationId)
+      )
+      return { previous }
+    },
+    onError: (_err, _organisationId, context) => {
+      if (context?.previous) queryClient.setQueryData(PINNED_ORGANISATIONS_KEY, context.previous)
+    },
+    onSettled: (_data, error) => {
+      if (error) queryClient.invalidateQueries({ queryKey: PINNED_ORGANISATIONS_KEY })
+    },
+  })
 }
 
 export const updateSummaries = async ({ forceAll }) => {

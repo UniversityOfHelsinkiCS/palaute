@@ -555,7 +555,10 @@
     "excludeOpenUni": "Exclude open uni courses",
     "onlyOpenUni": "Show only open uni courses",
     "filter": "Filter",
-    "notSelected": "Not selected"
+    "notSelected": "Not selected",
+    "pinOrganisation": "Pin organisation",
+    "unpinOrganisation": "Unpin organisation",
+    "pinnedOrganisations": "Pinned"
   },
   "generateReport": {
     "selectIncluded": "Select content",

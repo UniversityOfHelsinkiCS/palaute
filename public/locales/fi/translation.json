@@ -550,7 +550,10 @@
     "excludeOpenUni": "Näytä ilman Avoin yo -kursseja",
     "onlyOpenUni": "Näytä vain Avoin yo -kursseilla",
     "filter": "Rajaa",
-    "notSelected": "Ei valittu"
+    "notSelected": "Ei valittu",
+    "pinOrganisation": "Kiinnitä organisaatio",
+    "unpinOrganisation": "Poista kiinnitys",
+    "pinnedOrganisations": "Kiinnitetyt"
   },
   "generateReport": {
     "selectIncluded": "Valitse sisältö",
