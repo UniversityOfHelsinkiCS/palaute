@@ -103,7 +103,9 @@ const QuestionResults = React.memo(
             },
           }}
         >
-          <Typography variant="body2">{t('questionResults:multipleChoiceScale')}</Typography>
+          <Typography id="likert-explanation" variant="body2">
+            {t('questionResults:multipleChoiceScale')}
+          </Typography>
           <Box
             sx={{
               display: 'flex',

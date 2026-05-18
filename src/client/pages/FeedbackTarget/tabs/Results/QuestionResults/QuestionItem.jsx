@@ -94,6 +94,13 @@ const QuestionItem = ({
   const label = getLanguageValue(question?.data?.label, i18n.language)
   const description = getLanguageValue(question?.data?.description, i18n.language)
 
+  let descriptionId
+  if (description) {
+    descriptionId = `question-${question.id}-description`
+  } else if (question.type === 'LIKERT') {
+    descriptionId = 'likert-explanation'
+  }
+
   return (
     <Card
       sx={{
@@ -105,7 +112,7 @@ const QuestionItem = ({
       <Box
         component="section"
         aria-labelledby={`question-${question.id}-label`}
-        aria-describedby={description ? `question-${question.id}-description` : undefined}
+        aria-describedby={descriptionId}
         display="flex"
         flexDirection="column"
         height="100%"
