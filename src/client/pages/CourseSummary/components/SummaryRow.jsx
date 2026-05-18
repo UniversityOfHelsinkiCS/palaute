@@ -188,7 +188,10 @@ export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions,
   const childCourseUnits = initialCourseUnits ?? organisation?.courseUnits
 
   const orderedCourseUnits = React.useMemo(
-    () => (childCourseUnits?.length > 0 ? orderBy(childCourseUnits, cu => sortFunction(cu.summary), sortBy[1]) : []),
+    () =>
+      childCourseUnits?.length > 0
+        ? orderBy(childCourseUnits, [cu => sortFunction(cu.summary), cu => cu.code], [sortBy[1], 'asc'])
+        : [],
     [organisation, sortBy[0], sortBy[1]]
   )
 

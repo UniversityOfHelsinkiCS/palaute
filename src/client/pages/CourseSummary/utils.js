@@ -10,8 +10,8 @@ export const useOrderedAndFilteredOrganisations = organisations => {
         ? []
         : orderBy(
             showSummariesWithNoFeedback ? organisations : organisations.filter(org => !!org.summary),
-            org => sortFunction(org.summary),
-            sortBy[1]
+            [org => sortFunction(org.summary), org => org?.code],
+            [sortBy[1], 'asc']
           ),
     [showSummariesWithNoFeedback, organisations, sortBy[0], sortBy[1]]
   )
