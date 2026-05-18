@@ -14,7 +14,6 @@ import { useOrderedAndFilteredOrganisations } from '../utils'
 import { OrganisationLabel, TagLabel } from './Labels'
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { OrganisationLink } from './OrganisationLink'
-import useAuthorizedUser from '../../../hooks/useAuthorizedUser'
 
 const ChildOrganisationsList = ({ organisationId, initialChildOrganisations }) => {
   const { organisation, isLoading } = useSummaries({
@@ -166,8 +165,6 @@ const OrganisationSummaryRow = ({
   const { ref, inView } = useInView({
     triggerOnce: true,
   })
-  const { authorizedUser } = useAuthorizedUser()
-  const isAdmin = authorizedUser?.isAdmin ?? false
   const [isTransitioning, startTransition] = React.useTransition()
   const actuallyAlwaysOpen = alwaysOpen || initialOrganisation.initiallyExpanded
   const [storedIsOpen, setIsOpen] = React.useState(false)
@@ -193,7 +190,7 @@ const OrganisationSummaryRow = ({
     <Box ref={ref} display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
         <Box display="flex" alignItems="center" sx={{ width: '23.5rem', flexShrink: 0 }}>
-          {showPinButton && isAdmin && <PinButton organisation={initialOrganisation} />}
+          {showPinButton && <PinButton organisation={initialOrganisation} />}
           <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
         </Box>
         {inView && (
