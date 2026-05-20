@@ -326,7 +326,12 @@ const NavBar = ({ guest = false }) => {
   )
 
   return (
-    <Box component="header" role="banner" id="header">
+    <Box
+      component="header"
+      role="banner"
+      id="header"
+      sx={{ position: 'sticky', top: 0, zIndex: theme => theme.zIndex.appBar }}
+    >
       <div
         id="page-start"
         aria-hidden="true"
