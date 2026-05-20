@@ -163,6 +163,33 @@ const defaultTheme = (mode: PaletteMode | undefined) => ({
         },
       },
     },
+    MuiFormControlLabel: {
+      styleOverrides: {
+        label: {
+          '&.Mui-disabled': {
+            color: '#00000099',
+          },
+        },
+      },
+    },
+    MuiFormLabel: {
+      styleOverrides: {
+        root: {
+          '&.Mui-disabled': {
+            color: '#00000099',
+          },
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        root: {
+          '&.Mui-disabled': {
+            color: '#00000099',
+          },
+        },
+      },
+    },
   },
 })
 
