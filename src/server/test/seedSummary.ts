@@ -32,7 +32,7 @@ const getTestData = async () => {
       username: 'student-2',
     },
   ]
-  const universitySurvey = await getUniversitySurvey()
+  const universitySurvey = await getUniversitySurvey(new Date())
   const TEST_FEEDBACKS = TEST_STUDENTS.map(({ id }) => ({
     userId: id,
     data: universitySurvey.questions?.map(({ id: questionId }) => ({ questionId, data: '5' })),

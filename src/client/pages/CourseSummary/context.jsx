@@ -40,15 +40,18 @@ const summaryContext = React.createContext({
  * @param {*} organisationCode
  * @returns
  */
-const useSummaryQuestions = organisationCode => {
-  const apiUrl = organisationCode ? `/surveys/organisation/${organisationCode}` : '/surveys/university'
+const useSummaryQuestions = (organisationCode, startDate) => {
+  const at = startDate ? format(startDate, 'yyyy-MM-dd') : null
+  const apiUrl = organisationCode
+    ? `/surveys/organisation/${organisationCode}`
+    : `/surveys/university${at ? `?at=${at}` : ''}`
   const queryFn = async () => {
     const { data } = await apiClient.get(apiUrl)
     return data
   }
 
   const { data } = useQuery({
-    queryKey: ['survey', organisationCode],
+    queryKey: ['survey', organisationCode, at],
     queryFn,
     retry: false,
     refetchOnWindowFocus: false,
@@ -66,8 +69,6 @@ const useSummaryQuestions = organisationCode => {
  * @returns
  */
 export const SummaryContextProvider = ({ children, organisationCode }) => {
-  const questions = useSummaryQuestions(organisationCode)
-
   const [params, setParams] = useURLSearchParams()
 
   // Whether to show summaries with no feedback
@@ -92,6 +93,8 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
 
     return isValid(start) && isValid(end) ? { start, end } : getYearRange(new Date())
   })
+
+  const questions = useSummaryQuestions(organisationCode, dateRange.start)
 
   const updateDateRangeQS = React.useCallback(dateRange => {
     setDateRange(dateRange)

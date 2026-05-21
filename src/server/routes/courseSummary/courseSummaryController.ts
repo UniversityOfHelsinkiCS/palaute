@@ -166,7 +166,9 @@ const getByCourseUnit = async (req: AuthenticatedRequest, res: Response) => {
   const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
     user.dataValues.isAdmin || (await getOrganisationAccessByCourseUnitId(user, courseUnits[0].id))?.read,
     getAccessibleCourseRealisationIds(user),
-    getSummaryQuestions(acualCode),
+    // TODO: shouldn't just use new Date() here, should return multiple sets of questions (one for each university survey period)
+    // and render separately in frontend
+    getSummaryQuestions(acualCode, new Date()),
   ])
 
   const courseRealisations = await getCourseRealisationSummaries({

@@ -42,7 +42,8 @@ interface CourseWithRealisations {
 }
 
 const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRealisations[]> => {
-  const universitySurvey = await getUniversitySurvey()
+  // TODO: get all university surveys instead of just currently active one
+  const universitySurvey = await getUniversitySurvey(new Date())
   const programmeSurvey = await getProgrammeSurvey(code)
 
   const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
@@ -52,7 +53,7 @@ const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRe
   )
 
   const courseCodes = await sequelize.query<CourseUnitWithExtra>(
-    `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O 
+    `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O
     WHERE C.id = CO.course_unit_id AND CO.organisation_id = O.id AND O.code = :code`,
     {
       replacements: { code },

@@ -1,10 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 
-const useUniversitySurvey = (options = {}) => {
-  const queryKey = ['universitySurvey']
+const useUniversitySurvey = (at, options = {}) => {
+  const queryKey = ['universitySurvey', at ?? null]
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/surveys/university`)
+    const { data } = await apiClient.get(`/surveys/university${at ? `?at=${at}` : ''}`)
     return data
   }
 

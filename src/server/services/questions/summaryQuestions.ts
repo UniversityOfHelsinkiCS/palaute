@@ -1,10 +1,10 @@
 import { WORKLOAD_QUESTION_ID } from '../../util/config'
 import { getUniversitySurvey, getProgrammeSurvey } from '../surveys'
 
-export const getSummaryQuestions = async (organisationCode: string) => {
+export const getSummaryQuestions = async (organisationCode: string, referenceDate: Date) => {
   const [universityQuestions, programmeQuestions] = await Promise.all([
     (async () => {
-      const universitySurvey = await getUniversitySurvey()
+      const universitySurvey = await getUniversitySurvey(referenceDate)
       return universitySurvey.questions
     })(),
     (async () => {

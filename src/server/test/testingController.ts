@@ -13,9 +13,15 @@ import { inProduction } from '../util/config'
 import { getUniversitySurvey } from '../services/surveys'
 import { AuthenticatedRequest } from '../types'
 import { seedFeedbacks } from './seedFeedbacks'
+import { initVersionedSummary } from './seedVersionedSummary'
 
 const initSummary = async (req: AuthenticatedRequest, res: Response) => {
   await initTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
+  res.sendStatus(200)
+}
+
+const initVersionedSummaryHandler = async (req: AuthenticatedRequest, res: Response) => {
+  await initVersionedSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })
   res.sendStatus(200)
 }
 
@@ -74,7 +80,7 @@ const getTestFbtId = async (req: AuthenticatedRequest, res: Response) => {
 }
 
 const getUniversityQuestions = async (req: AuthenticatedRequest, res: Response) => {
-  const srv = await getUniversitySurvey()
+  const srv = await getUniversitySurvey(new Date())
   res.send(srv.questions)
 }
 
@@ -92,6 +98,7 @@ router.use(Router.json())
 router.use(morgan('dev'))
 
 router.post('/init-summary', initSummary)
+router.post('/init-versioned-summary', initVersionedSummaryHandler)
 router.post('/seed-users', seedTestUsers2)
 router.post('/seed-feedback-targets', seedFeedbackTargets)
 router.post('/seed-feedbacks', seedFeedbacksHandler)

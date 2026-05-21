@@ -23,6 +23,7 @@ class Survey extends Model<InferAttributes<Survey>, InferCreationAttributes<Surv
   declare feedbackTargetId: number
   declare type: 'feedbackTarget' | 'courseUnit' | 'programme' | 'university'
   declare typeId: string
+  declare validFrom: CreationOptional<Date | null>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -75,6 +76,10 @@ Survey.init(
     },
     typeId: {
       type: STRING,
+    },
+    validFrom: {
+      type: DATE,
+      allowNull: true,
     },
     createdAt: {
       type: DATE,
