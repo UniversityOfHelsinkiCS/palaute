@@ -345,8 +345,7 @@
     "noGroupingQuestion": "Enkäten har inte en grupperingsfråga.",
     "hasGroupingQuestion": "Enkäten har en grupperingsfråga \"{{ namn }}\". Du kan ta bort den från redigeringsmenyn under frågan om du vill använda automatisk gruppering i Sisu-grupper.",
     "chooseGroup": "Välj grupp att visas",
-    "groupsNotAvailableInfoTitle": "Gruppklassificering är inte tillgängligt",
-    "groupsNotAvailableInfoContent": "Minst en grupp har 1-4 återkopplingar. Därför kan feedback från enskilda grupper inte visas.",
+    "groupsNotAvailableInfo": "Gruppklassificering är inte tillgängligt. Återkoppling från enskilda grupper kan inte visas eftersom minst en grupp har 1-4 återkopplingar.",
     "addGroupingQuestion": "Lägg till grupperingsfråga"
   },
   "navBar": {

@@ -367,8 +367,7 @@
     "automaticGrouping": "Students' answers are automatically grouped based on their confirmed study sub group from SISU.",
     "hasGroupingQuestion": "The survey has a grouping question '{{ name }}'. If you want to use automatic grouping based on SISU groups, you can delete it from below from the question's edit menu.",
     "chooseGroup": "Choose the group to show",
-    "groupsNotAvailableInfoTitle": "Groups are not available",
-    "groupsNotAvailableInfoContent": "Some group(s) have between 1 and 4 feedbacks. Because of this, the feedbacks of any single group cannot be shown separately.",
+    "groupsNotAvailableInfo": "Groups are not available. The feedbacks of any single group cannot be shown separately because some group(s) have between 1 and 4 feedbacks.",
     "groupingQuestionAddSuccess": "Grouping question added with existing groups as options. You may edit it as you wish.",
     "addGroupingQuestion": "Add grouping question"
   },

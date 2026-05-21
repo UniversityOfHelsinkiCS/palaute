@@ -361,8 +361,7 @@
     "automaticGrouping": "Opiskelijoiden vastaukset ryhmitellään automaattisesti ryhmiin, joihin he ovat ilmoittautuneet.",
     "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys \"{{ name }}\". Voit poistaa sen alta kysymyksen muokkausvalikosta, jos haluat käyttää automaattista ryhmittelyä Sisun ryhmiin.",
     "chooseGroup": "Valitse tarkasteltava ryhmä",
-    "groupsNotAvailableInfoTitle": "Ryhmäluokittelu ei ole saatavilla",
-    "groupsNotAvailableInfoContent": "Ainakin yhdessä ryhmässä on 1-4 palautetta. Yksittäisten ryhmien palautetta ei tällöin voida näyttää.",
+    "groupsNotAvailableInfo": "Ryhmäluokittelu ei ole saatavilla. Yksittäisten ryhmien palautetta ei voida näyttää, koska ainakin yhdessä ryhmässä on 1-4 palautetta.",
     "groupingQuestionAddSuccess": "Ryhmittelykysymys luotu olemassa olevien Sisun ryhmien pohjalta. Voit muokata kysymystä halusi mukaan.",
     "addGroupingQuestion": "Lisää ryhmittelykysymys"
   },

@@ -1,9 +1,8 @@
 import React from 'react'
-import { Box, ToggleButton, ToggleButtonGroup, Typography } from '@mui/material'
+import { Box, ToggleButton, ToggleButtonGroup, Typography, Alert } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import type { User } from '@common/types/user'
 import { getLanguageValue } from '../../../../util/languageUtils'
-import InfoBox from '../../../../components/common/InfoBox'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
 import { sortGroups } from './utils'
@@ -90,8 +89,10 @@ const GroupSelector: React.FC<GroupSelectorProps> = ({
 
   if (!groupsAvailable)
     return (
-      <Box>
-        <InfoBox label={t('groups:groupsNotAvailableInfoTitle')} content={t('groups:groupsNotAvailableInfoContent')} />
+      <Box sx={{ mr: 1, '@media print': { display: 'none' } }}>
+        <Alert severity="info" role="status" sx={{ py: 0.3 }}>
+          {t('groups:groupsNotAvailableInfo')}
+        </Alert>
       </Box>
     )
 
