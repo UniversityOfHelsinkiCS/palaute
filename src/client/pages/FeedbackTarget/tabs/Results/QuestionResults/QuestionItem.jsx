@@ -5,13 +5,13 @@ import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
 import { getLanguageValue } from '../../../../../util/languageUtils'
-import InfoBox from '../../../../../components/common/InfoBox'
 import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
 import AverageResult from './AverageResult'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
 import SingleChoiceResults from './SingleChoiceResults'
+import Instructions from '../../../../../components/common/Instructions'
 import { boxPrintStyle } from '../../../../../util/printStyle'
 import { getAcualAnswerCount } from './utils'
 
@@ -34,7 +34,15 @@ const VisibilityInfoBox = ({ isPublic }) => {
     </>
   )
 
-  return <InfoBox label={t('feedbackTargetResults:hidingFeatureInfoTitle')} content={content} />
+  return (
+    <Instructions
+      title={t('feedbackTargetResults:hidingFeatureInfoTitle')}
+      sx={{ mt: 0, ml: 1, maxWidth: '70%', '@media print': { display: 'none' } }}
+      collapseProps={{ enter: false, exit: false }}
+    >
+      {content}
+    </Instructions>
+  )
 }
 
 const QuestionItem = ({
