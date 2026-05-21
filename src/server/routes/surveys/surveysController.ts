@@ -1,4 +1,6 @@
 import { Response, Router } from 'express'
+import z from 'zod/v4'
+import { sequelize } from '../../db/dbConnection'
 import { ApplicationError } from '../../util/ApplicationError'
 import { Survey, Question, Organisation, User } from '../../models'
 import { createOrganisationSurveyLog } from '../../services/auditLog'
@@ -75,16 +77,46 @@ const update = async (req: AuthenticatedRequest, res: Response) => {
   res.send(updatedSurvey)
 }
 
-const getUniversitySurvey = async (req: AuthenticatedRequest, res: Response) => {
-  const survey = await _getUniversitySurvey()
+const GetUniversitySurveyQuerySchema = z.object({
+  at: z.iso.date().or(z.iso.datetime({ offset: true })),
+})
 
+const getUniversitySurvey = async (req: AuthenticatedRequest, res: Response) => {
+  const { at: parsedAt } = GetUniversitySurveyQuerySchema.parse(req.query)
+  const at = new Date(parsedAt)
+  const survey = await _getUniversitySurvey(at)
   res.send(survey)
+}
+
+const getUniversitySurveyVersions = async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user.isAdmin) throw ApplicationError.Forbidden('Only admins can list university survey versions')
+
+  const surveys = await Survey.findAll({
+    where: { type: 'university' },
+    order: [sequelize.literal('"valid_from" DESC NULLS LAST')],
+  })
+
+  const now = new Date()
+  const currentIndex = surveys.findIndex(s => !s.validFrom || s.validFrom <= now)
+  const activeAndFuture = currentIndex === -1 ? surveys : surveys.slice(0, currentIndex + 1)
+
+  await Promise.all(
+    activeAndFuture.map(async s => {
+      await s.populateQuestions()
+      const numericQuestionIds = s.questions
+        ?.filter(({ type }) => type === 'LIKERT' || type === 'SINGLE_CHOICE')
+        .map(({ id }) => id)
+      s.set('publicQuestionIds', numericQuestionIds)
+    })
+  )
+
+  res.send(activeAndFuture)
 }
 
 const getFullOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode } = req.params
 
-  const universitySurvey = await _getUniversitySurvey()
+  const universitySurvey = await _getUniversitySurvey(new Date())
   const [survey] = await Survey.findAll({
     where: {
       type: 'programme',
@@ -121,7 +153,7 @@ const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Respo
     },
   })
 
-  const universitySurvey = await _getUniversitySurvey()
+  const universitySurvey = await _getUniversitySurvey(new Date())
 
   const organisation = await Organisation.findOne({
     where: {
@@ -139,6 +171,7 @@ const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Respo
 export const router = Router()
 
 router.put('/:id', update)
+router.get('/university/versions', getUniversitySurveyVersions)
 router.get('/university', getUniversitySurvey)
 router.get('/organisation/:organisationCode', getFullOrganisationSurvey)
 router.get('/programme/:surveyCode', getProgrammeSurveyForEditor)

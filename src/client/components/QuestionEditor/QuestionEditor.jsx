@@ -184,6 +184,7 @@ const QuestionEditor = ({
   copyFromCourseDialog,
   groupingQuestionSettings,
   userCreated,
+  curStartDate,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
     {({ handleSubmit }) => (
@@ -199,6 +200,7 @@ const QuestionEditor = ({
               onSubmit={handleSubmit}
               copyUniversityQuestionsButton={userCreated}
               deletableQuestionIds={teacherQuestionIds}
+              curStartDate={curStartDate}
             />
           )
         }

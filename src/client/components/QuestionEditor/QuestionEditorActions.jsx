@@ -17,6 +17,7 @@ const QuestionEditorActions = ({
   copyUniversityQuestionsButton = false,
   deletableQuestionIds = [],
   disabled = false,
+  curStartDate,
 }) => {
   const { t } = useTranslation()
   const [, meta, helpers] = useField('questions')
@@ -27,7 +28,7 @@ const QuestionEditorActions = ({
     deleteMany: false,
   })
   const { enqueueSnackbar } = useSnackbar()
-  const { survey, isLoading: surveyIsLoading } = useUniversitySurvey()
+  const { survey, isLoading: surveyIsLoading } = useUniversitySurvey(curStartDate)
 
   const openDialog = key => setDialogs(previousValues => ({ ...previousValues, [key]: true }))
 

@@ -36,7 +36,8 @@ const TeacherSurvey = ({ feedbackTarget }) => {
     await updateSurvey(values)
   }
 
-  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds, userCreated } = feedbackTarget
+  const { surveys, publicQuestionIds, publicityConfigurableQuestionIds, userCreated, courseRealisation } =
+    feedbackTarget
 
   const programmeQuestions = surveys.programmeSurveys.flatMap(survey => survey.questions)
 
@@ -64,6 +65,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       copyFromCourseDialog
       groupingQuestionSettings
       userCreated={userCreated}
+      curStartDate={courseRealisation?.startDate}
     />
   )
 }

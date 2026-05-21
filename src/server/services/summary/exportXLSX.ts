@@ -227,7 +227,8 @@ export const exportXLSX = async ({
 
   const organisationCode = organisationId ? await getOrganisationCodeById(organisationId) : undefined
 
-  const questions = await getSummaryQuestions(organisationCode)
+  // TODO: make sure this works as intended
+  const questions = await getSummaryQuestions(organisationCode, new Date(startDate))
   const defaultHeaders = getDefaultHeaders(questions, t, userLanguage)
 
   const workbook = XLSX.utils.book_new()
