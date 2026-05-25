@@ -19,6 +19,7 @@ import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenF
 import CardSection from '../../../../components/common/CardSection'
 import useDeleteContinuousFeedback from './useDeleteContinuousFeedback'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+import { focusIndicatorStyle } from '../../../../util/accessibility'
 
 const slideDown = keyframes`
   from { opacity: 0; transform: translateY(-10px); }
@@ -31,13 +32,13 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   const [showEdit, setShowEdit] = useState(false)
 
   return (
-    <Box ml="2rem">
+    <Box sx={{ ml: '2rem' }}>
       <OpenFeedbackContainer sx={{ mb: '1rem' }}>
         <Box width="100%">
           <Typography variant="body2">{t('feedbackTargetView:continuousFeedbackResponse')}</Typography>
           <Markdown>{response}</Markdown>
           {isTeacher && (
-            <Box display="flex" justifyContent="flex-end" mt={-2}>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: -2 }}>
               <NorButton color="secondary" onClick={() => setShowEdit(!showEdit)}>
                 {showEdit ? t('common:close') : t('common:edit')}
               </NorButton>
@@ -58,11 +59,11 @@ const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }
   const [showResponse, setShowResponse] = useState(false)
 
   return (
-    <Box mb="2rem" sx={{ animation: `${slideDown} 0.2s ease-out` }}>
+    <Box sx={{ mb: '2rem', animation: `${slideDown} 0.2s ease-out` }}>
       <OpenFeedbackContainer>
-        <Box width="100%">
+        <Box sx={{ width: '100%' }}>
           <Markdown>{data}</Markdown>
-          <Box display="flex">
+          <Box sx={{ display: 'flex' }}>
             <Typography variant="body2" sx={{ mr: 'auto' }}>
               {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
             </Typography>
@@ -74,7 +75,13 @@ const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }
               </NorButton>
             )}
             {canDelete && (
-              <IconButton onClick={() => deleteAnswer(id)} size="small" disableRipple>
+              <IconButton
+                aria-label={t('feedbackTargetResults:deletePermanently')}
+                onClick={() => deleteAnswer(id)}
+                size="small"
+                sx={{ ml: 1, ...focusIndicatorStyle() }}
+                disableRipple
+              >
                 <DeleteForever sx={{ fontSize: '12px' }} />
               </IconButton>
             )}
@@ -92,7 +99,7 @@ const TeacherInfo = ({ enabled, hasFeedback }) => {
 
   if (!enabled)
     return (
-      <Alert mb={1} severity="warning">
+      <Alert severity="warning" sx={{ mb: 1 }}>
         {t('feedbackTargetView:continuousFeedbackInactive')}
       </Alert>
     )
@@ -163,7 +170,7 @@ const ContinuousFeedback = () => {
     <Box id="feedback-target-tab-content">
       {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
 
-      <Box my="1rem">
+      <Box sx={{ my: '1rem' }}>
         {isStudent && isOngoing && isFeedbackEnabled && (
           <CardSection title={t('userFeedbacks:giveContinuousFeedback')} sx={{ mb: 2 }}>
             <ContinuousFeedbackForm fewEnrolled={isSmallCourse} />
@@ -172,7 +179,7 @@ const ContinuousFeedback = () => {
         {showFeedbackList && (
           <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
             {(isTeacher || isResponsibleTeacher) && (
-              <Box mb={2}>
+              <Box sx={{ mb: 2 }}>
                 <TeacherInfo enabled={isFeedbackEnabled} hasFeedback={continuousFeedbacks?.length > 0} />
               </Box>
             )}
