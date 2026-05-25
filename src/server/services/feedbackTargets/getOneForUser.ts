@@ -46,8 +46,6 @@ const populateGroupInformation = (feedbackTarget: FeedbackTarget) => {
  * - surveys
  * - responsibleTeachers
  * - studentListVisible
- * @param {number} id
- * @returns {Promise<object>}
  */
 const getFromDb = async (id: number | string) => {
   const fbt = await FeedbackTarget.findByPk(id, {
@@ -59,6 +57,7 @@ const getFromDb = async (id: number | string) => {
       'feedbackType',
       'publicQuestionIds',
       'userCreated',
+      'opensAt',
     ],
     include: [
       {

@@ -1,21 +1,20 @@
 import { getProgrammeSurveysByCourseUnit } from './programmeSurvey'
 import { getOrCreateTeacherSurvey } from './teacherSurvey'
 import { getUniversitySurvey } from './universitySurvey'
-import { CourseRealisation, FeedbackTarget } from '../../models'
+import { FeedbackTarget } from '../../models'
 
 export const getFeedbackTargetSurveys = async (feedbackTarget: FeedbackTarget) => {
-  const curStartDate =
-    feedbackTarget.courseRealisation?.startDate ??
-    (await CourseRealisation.findByPk(feedbackTarget.courseRealisationId, { attributes: ['startDate'] }))?.startDate
+  const opensAt =
+    feedbackTarget?.opensAt ?? (await FeedbackTarget.findByPk(feedbackTarget.id, { attributes: ['opensAt'] }))?.opensAt
 
-  if (!curStartDate) {
-    throw new Error(`CourseRealisation.startDate not found for FeedbackTarget ${feedbackTarget.id}`)
+  if (!opensAt) {
+    throw new Error(`FeedbackTarget.opensAt not found for FeedbackTarget ${feedbackTarget.id}`)
   }
 
   const [programmeSurveys, teacherSurvey, universitySurvey] = await Promise.all([
     getProgrammeSurveysByCourseUnit(feedbackTarget.courseUnitId),
     getOrCreateTeacherSurvey(feedbackTarget),
-    getUniversitySurvey(curStartDate),
+    getUniversitySurvey(opensAt),
   ])
 
   if (feedbackTarget.userCreated) {
