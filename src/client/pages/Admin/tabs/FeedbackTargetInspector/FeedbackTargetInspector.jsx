@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Box } from '@mui/material'
+import { Box, Checkbox, FormControlLabel } from '@mui/material'
 import { debounce } from 'lodash-es'
 
 import apiClient from '../../../../util/apiClient'
@@ -21,6 +21,8 @@ const FeedbackTargetInspector = () => {
     name: '',
     curName: '',
     language: 'fi',
+    fbtStatus: '',
+    curStatus: '',
   })
 
   const runQuery = React.useMemo(
@@ -42,8 +44,9 @@ const FeedbackTargetInspector = () => {
     const codeLength = nextQuery.code?.trim().length ?? 0
     const nameLength = nextQuery.name?.trim().length ?? 0
     const curNameLength = nextQuery.curName?.trim().length ?? 0
+    const hasStatusFilter = !!nextQuery.fbtStatus || !!nextQuery.curStatus
 
-    return idLength > 0 || codeLength > 1 || nameLength > 2 || curNameLength > 2
+    return idLength > 0 || codeLength > 1 || nameLength > 2 || curNameLength > 2 || hasStatusFilter
   }
 
   const handleChange = values => {
@@ -87,6 +90,27 @@ const FeedbackTargetInspector = () => {
             setQuery={setQuery}
             handleChange={handleChange}
             queryKey="curName"
+          />
+        </Box>
+
+        <Box sx={{ display: 'flex', gap: 4, mx: 1 }}>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={query.fbtStatus === 'open'}
+                onChange={e => handleChange({ fbtStatus: e.target.checked ? 'open' : '' })}
+              />
+            }
+            label="Feedback open now"
+          />
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={query.curStatus === 'ongoing'}
+                onChange={e => handleChange({ curStatus: e.target.checked ? 'ongoing' : '' })}
+              />
+            }
+            label="CUR in progress now"
           />
         </Box>
       </Box>

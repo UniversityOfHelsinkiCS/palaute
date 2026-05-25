@@ -132,11 +132,12 @@ const findUser = async (req: AuthenticatedRequest, res: Response) => {
 
 const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
   const {
-    query: { id, code, name, curName, language },
+    query: { id, code, name, curName, language, fbtStatus, curStatus },
   } = req
   const params: Record<string, unknown> = {}
   const nameLength = (name?.length ?? 0) as number
   const curNameLength = (curName?.length ?? 0) as number
+  const now = new Date()
 
   const include: IncludeOptions[] = [
     {
@@ -195,10 +196,25 @@ const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
     }
   }
 
+  if (curStatus === 'ongoing') {
+    include[1].where = {
+      ...include[1].where,
+      startDate: { [Op.lte]: now },
+      endDate: { [Op.gte]: now },
+    }
+  }
+
+  const fbtWhere: WhereOptions = {}
+  if (fbtStatus === 'open') {
+    fbtWhere.opensAt = { [Op.lte]: now }
+    fbtWhere.closesAt = { [Op.gte]: now }
+  }
+
   const { count, rows: result } = await FeedbackTarget.findAndCountAll({
+    where: fbtWhere,
     include,
     order: [['closesAt', 'DESC']],
-    limit: 10,
+    limit: 100,
   })
   res.send({
     params,
@@ -539,10 +555,10 @@ const deleteBanner = async (req: AuthenticatedRequest, res: Response) => {
 const getFeedbackCorrespondents = async (req: AuthenticatedRequest, res: Response) => {
   const users = await sequelize.query(
     `
-    SELECT 
-      u.id, 
-      u.email, 
-      u.secondary_email as "secondaryEmail", 
+    SELECT
+      u.id,
+      u.email,
+      u.secondary_email as "secondaryEmail",
       u.student_number as "studentNumber",
       u.degree_study_right as "degreeStudyRight",
       u.last_logged_in as "lastLoggedIn",
