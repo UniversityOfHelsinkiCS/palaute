@@ -38,44 +38,49 @@ const styles = {
   },
 }
 
-const SorterRow = ({ filterComponent, additionalFilters }) => {
+export const SorterRow = ({ filterComponent, additionalFilters, questions: questionsProp, hideColumns = false }) => {
   const { t, i18n } = useTranslation()
-  const { questions } = useSummaryContext()
+  const { questions: contextQuestions } = useSummaryContext()
+  const questions = questionsProp ?? contextQuestions
 
   return (
     <>
-      <Box display="flex" alignItems="center" gap="1rem">
-        {additionalFilters}
-        {filterComponent}
-      </Box>
-      <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <RowHeader />
-        {questions.map(q => (
+      {(filterComponent || additionalFilters) && (
+        <Box display="flex" alignItems="center" gap="1rem">
+          {additionalFilters}
+          {filterComponent}
+        </Box>
+      )}
+      {!hideColumns && (
+        <Box display="flex" alignItems="stretch" gap="0.2rem">
+          <RowHeader />
+          {questions.map(q => (
+            <Sort
+              key={q.id}
+              field={q.id}
+              label={getLanguageValue(q.data.label, i18n.language)}
+              width={styles.resultCell.minWidth}
+            />
+          ))}
+          <Sort field="feedbackCount" label={t('courseSummary:feedbackCount')} width={styles.countCell.width} />
           <Sort
-            key={q.id}
-            field={q.id}
-            label={getLanguageValue(q.data.label, i18n.language)}
-            width={styles.resultCell.minWidth}
+            field="feedbackPercentage"
+            label={t('courseSummary:feedbackPercentage')}
+            width={styles.percentCell.width}
           />
-        ))}
-        <Sort field="feedbackCount" label={t('courseSummary:feedbackCount')} width={styles.countCell.width} />
-        <Sort
-          field="feedbackPercentage"
-          label={t('courseSummary:feedbackPercentage')}
-          width={styles.percentCell.width}
-        />
-        <Sort
-          field="feedbackResponsePercentage"
-          label={t('courseSummary:feedbackResponsePercentage')}
-          width={styles.percentCell.width}
-        />
-        <Sort field="feedbackCountCensored" label={t('courseSummary:censoredCount')} width={styles.countCell.width} />
-      </Box>
+          <Sort
+            field="feedbackResponsePercentage"
+            label={t('courseSummary:feedbackResponsePercentage')}
+            width={styles.percentCell.width}
+          />
+          <Sort field="feedbackCountCensored" label={t('courseSummary:censoredCount')} width={styles.countCell.width} />
+        </Box>
+      )}
     </>
   )
 }
 
-const SorterRowWithFilters = ({ allTime = false, filterComponents }) => {
+const SorterRowWithFilters = ({ allTime = false, filterComponents, hideColumns = false }) => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
 
   const handleChangeTimeRange = nextDateRange => {
@@ -92,7 +97,7 @@ const SorterRowWithFilters = ({ allTime = false, filterComponents }) => {
     />
   )
 
-  return <SorterRow filterComponent={filterComponent} additionalFilters={filterComponents} />
+  return <SorterRow filterComponent={filterComponent} additionalFilters={filterComponents} hideColumns={hideColumns} />
 }
 
 export default SorterRowWithFilters
