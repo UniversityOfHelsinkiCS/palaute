@@ -2,7 +2,8 @@ import React from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography, Tooltip, Skeleton } from '@mui/material'
+import { Box, Typography, Tooltip, Skeleton, IconButton } from '@mui/material'
+import { InfoOutlined } from '@mui/icons-material'
 import { format, isValid } from 'date-fns'
 import { useSummaries } from '../api'
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -14,6 +15,24 @@ import RowHeader from './RowHeader'
 import CensoredCount from './CensoredCount'
 import FeedbackResponseIndicator from './FeedbackResponseIndicator'
 import { getSafeCourseCode } from '../../../util/courseIdentifiers'
+import { WORKLOAD_QUESTION_ID } from '../../../util/common'
+
+const hasFeedbackButNoCurrentQuestionData = (summary, questions) => {
+  if (!summary?.data?.feedbackCount) return false
+  const likertQuestions = questions.filter(q => q.id !== WORKLOAD_QUESTION_ID)
+  return likertQuestions.length > 0 && likertQuestions.every(q => summary.data.result?.[q.id] === undefined)
+}
+
+const PreviousSurveyDataInfo = () => {
+  const { t } = useTranslation()
+  return (
+    <Tooltip title={t('courseSummary:previousSurveyDataInfo')} disableInteractive>
+      <IconButton size="small" sx={{ flexShrink: 0, ml: '0.25rem', color: 'info.main' }}>
+        <InfoOutlined fontSize="medium" />
+      </IconButton>
+    </Tooltip>
+  )
+}
 
 const styles = {
   resultCell: {
@@ -117,12 +136,17 @@ export const CourseUnitSummaryRow = ({ courseUnit, questions, startDate, endDate
   if (courseUnit.separateOrganisation)
     labelExtras.push(getLanguageValue(courseUnit.separateOrganisation.name, i18n.language))
 
+  const isIncompleteSurveyData = hasFeedbackButNoCurrentQuestionData(courseUnit.summary, questions)
+
   const label = (
-    <CourseUnitLabel
-      name={getLanguageValue(courseUnit.name, i18n.language)}
-      code={courseUnit.courseCode}
-      extras={labelExtras}
-    />
+    <Box display="flex" alignItems="center" minWidth={0}>
+      <CourseUnitLabel
+        name={getLanguageValue(courseUnit.name, i18n.language)}
+        code={courseUnit.courseCode}
+        extras={labelExtras}
+      />
+      {isIncompleteSurveyData && <PreviousSurveyDataInfo />}
+    </Box>
   )
 
   const safeCourseCode = getSafeCourseCode({ courseCode: courseUnit?.courseCode })
@@ -164,9 +188,20 @@ export const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
     <FeedbackResponseIndicator status={responseStatus} currentFeedbackTargetId={feedbackTarget.id} />
   )
 
+  const isIncompleteSurveyData = hasFeedbackButNoCurrentQuestionData(summary, questions)
+
+  const label = (
+    <Box sx={{ display: 'flex', alignItems: 'center', minWidth: 0, width: '100%' }}>
+      <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+        <FeedbackTargetLabel feedbackTarget={feedbackTarget} language={i18n.language} />
+      </Box>
+      {isIncompleteSurveyData && <PreviousSurveyDataInfo />}
+    </Box>
+  )
+
   return (
     <Box display="flex" alignItems="stretch" gap="0.2rem">
-      <RowHeader label={<FeedbackTargetLabel feedbackTarget={feedbackTarget} language={i18n.language} />} />
+      <RowHeader label={label} />
       <SummaryResultElements
         summary={summary}
         questions={questions}
