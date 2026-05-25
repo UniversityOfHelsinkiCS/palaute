@@ -7,20 +7,22 @@ import { useSummaryContext } from '../context'
 import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const AngledHeading = ({ label, isActive }) => (
-  <Typography
-    color={isActive ? 'text.primary' : 'text.secondary'}
-    sx={{
-      position: 'absolute',
-      transform: 'translate(0.7rem, 0rem) translate(-50%, -50%) rotate(-40deg) translate(50%, 50%)',
-      whiteSpace: 'nowrap',
-      textOverflow: 'ellipsis',
-      fontSize: '0.7rem',
-      maxWidth: '14rem',
-      overflow: 'hidden',
-    }}
-  >
-    {label}
-  </Typography>
+  <Tooltip title={label} placement="bottom">
+    <Typography
+      color={isActive ? 'text.primary' : 'text.secondary'}
+      sx={{
+        position: 'absolute',
+        transform: 'translate(0.7rem, 0rem) translate(-50%, -50%) rotate(-40deg) translate(50%, 50%)',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        fontSize: '0.7rem',
+        maxWidth: '14rem',
+        overflow: 'hidden',
+      }}
+    >
+      {label}
+    </Typography>
+  </Tooltip>
 )
 
 const Sort = ({ field, label, width }) => {
