@@ -34,3 +34,13 @@ export const getUniversitySurvey = async (referenceDate: Date) => {
 
   return universitySurvey
 }
+
+export const getAllUniversitySurveys = async () => {
+  const surveys = await Survey.findAll({
+    where: { type: 'university' },
+    order: [sequelize.literal('"valid_from" DESC NULLS LAST')],
+  })
+
+  await Promise.all(surveys.map(s => s.populateQuestions()))
+  return surveys
+}
