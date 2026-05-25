@@ -7,7 +7,7 @@ import { useCourseUnitGroupSummaries } from './api'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import SorterRowWithFilters from './components/SorterRow'
 import { useSummaryContext } from './context'
-import CourseUnitGroupSummaryRow from './components/CourseUnitGroupRow'
+import CourseUnitGroupSummaryRow, { MultiSurveyGroups } from './components/CourseUnitGroupRow'
 
 const ForCourseUnitGroup = () => {
   const { t } = useTranslation()
@@ -21,14 +21,20 @@ const ForCourseUnitGroup = () => {
     allTime: option === 'all',
   })
 
+  const hasMultipleSurveys = option === 'all' && courseUnitGroup?.surveyGroups?.length > 1
+
   return (
     <SummaryScrollContainer>
-      <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-        <SorterRowWithFilters allTime />
+      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.3rem' }}>
+        <SorterRowWithFilters allTime hideColumns={hasMultipleSurveys} />
         {isLoading ? (
           <LinearProgress />
         ) : courseUnitGroup ? (
-          <CourseUnitGroupSummaryRow courseUnitGroup={courseUnitGroup} questions={questions} />
+          hasMultipleSurveys ? (
+            <MultiSurveyGroups courseUnitGroup={courseUnitGroup} />
+          ) : (
+            <CourseUnitGroupSummaryRow courseUnitGroup={courseUnitGroup} questions={questions} />
+          )
         ) : (
           <Alert severity="info">{t('courseSummary:noCourseRealisations', { courseCode: code })}</Alert>
         )}

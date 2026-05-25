@@ -13,6 +13,8 @@ import { sumSummaries, getScopedSummary } from './utils'
 import { getAccessibleCourseRealisationIds } from './access'
 import { ApplicationError } from '../../util/ApplicationError'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
+import { getAllUniversitySurveys } from '../surveys'
+import { Survey } from '../../models/survey'
 
 interface GetCourseUnitGroupSummaryParams {
   user: User
@@ -54,7 +56,7 @@ export const getCourseUnitGroupSummaries = async ({
       {
         model: FeedbackTarget,
         as: 'feedbackTargets',
-        attributes: ['id', 'feedbackResponse', 'feedbackResponseEmailSent', 'closesAt'],
+        attributes: ['id', 'feedbackResponse', 'feedbackResponseEmailSent', 'closesAt', 'opensAt'],
         separate: true,
         where: {
           userCreated: false,
@@ -118,11 +120,49 @@ export const getCourseUnitGroupSummaries = async ({
     }
   }
 
+  const orderedFeedbackTargets = _.orderBy(feedbackTargets, fbt => fbt?.courseRealisation?.startDate, 'desc')
+
+  type SurveyGroup = { survey: Survey; feedbackTargets: typeof orderedFeedbackTargets }
+  let surveyGroups: SurveyGroup[] | null = null
+
+  if (allTime) {
+    const allSurveys = await getAllUniversitySurveys()
+    const surveysAsc = [...allSurveys].sort((a, b) => {
+      if (a.validFrom === null) return -1
+      if (b.validFrom === null) return 1
+      return a.validFrom.getTime() - b.validFrom.getTime()
+    })
+
+    const getEffectiveSurvey = (fbt: (typeof orderedFeedbackTargets)[0]) => {
+      if (!fbt.opensAt) return surveysAsc[0]
+      const opensAt = new Date(fbt.opensAt)
+      let result = surveysAsc[0]
+      for (const survey of surveysAsc) {
+        if (survey.validFrom === null || survey.validFrom.getTime() <= opensAt.getTime()) {
+          result = survey
+        }
+      }
+      return result
+    }
+
+    const groupsMap = new Map<number, SurveyGroup>()
+    for (const fbt of orderedFeedbackTargets) {
+      const survey = getEffectiveSurvey(fbt)
+      if (!survey) continue
+      if (!groupsMap.has(survey.id)) groupsMap.set(survey.id, { survey, feedbackTargets: [] })
+      groupsMap.get(survey.id)!.feedbackTargets.push(fbt)
+    }
+
+    // Return groups in validFrom DESC NULLS LAST order (newest first), matching allSurveys order.
+    surveyGroups = allSurveys.filter(s => groupsMap.has(s.id)).map(s => groupsMap.get(s.id)!)
+  }
+
   const courseUnitGroup = {
     courseCode: courseUnits[0].courseCode,
     name: courseUnits[0].name,
     summary: sumSummaries(courseUnits.flatMap(cu => cu.groupSummaries).filter((s): s is Summary => Boolean(s))),
-    feedbackTargets: _.orderBy(feedbackTargets, fbt => fbt?.courseRealisation?.startDate, 'desc'),
+    feedbackTargets: surveyGroups === null ? orderedFeedbackTargets : [],
+    surveyGroups,
   }
 
   return courseUnitGroup
