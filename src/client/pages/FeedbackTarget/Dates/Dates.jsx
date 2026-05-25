@@ -7,6 +7,7 @@ import { getDateRangeString } from '../../../util/getDateRangeString'
 import useFeedbackTargetContinuousFeedbacks from '../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import PercentageCell from '../../CourseSummary/components/PercentageCell'
 import EditFeedbackTargetDates from './EditFeedbackTarget'
+import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) => {
   const { t } = useTranslation()
@@ -59,7 +60,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
                 label={continuousFeedbacks.length}
                 variant={continuousFeedbacks.length ? 'filled' : 'outlined'}
                 color={continuousFeedbacks.length ? 'primary' : 'lightGray'}
-                sx={{ paddingLeft: '6px', paddingRight: '6px' }}
+                sx={{ paddingLeft: '6px', paddingRight: '6px', ...focusIndicatorStyle() }}
               />
             </Box>
           )}
