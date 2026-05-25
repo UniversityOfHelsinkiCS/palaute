@@ -1,7 +1,7 @@
 import { QueryTypes } from 'sequelize'
 import { LocalizedString } from '@common/types/common'
 import { CourseUnit, Feedback, Question } from '../../models'
-import { getUniversitySurvey, getProgrammeSurvey } from '../surveys'
+import { getAllUniversitySurveys, getProgrammeSurvey } from '../surveys'
 import { sequelize } from '../../db/dbConnection'
 
 interface FeedbackData {
@@ -42,15 +42,14 @@ interface CourseWithRealisations {
 }
 
 const getOpenFeedbackByOrganisation = async (code: string): Promise<CourseWithRealisations[]> => {
-  // TODO: get all university surveys instead of just currently active one
-  const universitySurvey = await getUniversitySurvey(new Date())
-  const programmeSurvey = await getProgrammeSurvey(code)
+  const [universitySurveys, programmeSurvey] = await Promise.all([getAllUniversitySurveys(), getProgrammeSurvey(code)])
 
-  const programmeQuestions = programmeSurvey ? programmeSurvey.questions : []
+  const programmeQuestions = programmeSurvey?.questions ?? []
+  const universityQuestions = [
+    ...new Map(universitySurveys.flatMap(s => s.questions ?? []).map(q => [q.id, q])).values(),
+  ]
 
-  const questions = [...(universitySurvey.questions ?? []), ...(programmeQuestions ?? [])].filter(
-    q => q.type === 'OPEN'
-  )
+  const questions = [...universityQuestions, ...programmeQuestions].filter(q => q.type === 'OPEN')
 
   const courseCodes = await sequelize.query<CourseUnitWithExtra>(
     `SELECT DISTINCT ON (C.course_code) C.course_code, C.name FROM course_units C, course_units_organisations CO, organisations O
