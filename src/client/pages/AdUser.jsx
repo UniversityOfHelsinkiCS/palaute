@@ -34,9 +34,9 @@ const AdUser = () => {
   if (isLoading) return null
 
   return (
-    <Box display="flex" flexDirection="column" minHeight="100vh">
+    <Box display="flex" flexDirection="column" minHeight="100vh" sx={{ overflowX: 'clip' }}>
       <NavBar />
-      <Box component="main" role="main" id="main-content" sx={{ overflowX: 'hidden' }}>
+      <Box component="main" role="main" id="main-content">
         <Router />
       </Box>
       <DevTools />
