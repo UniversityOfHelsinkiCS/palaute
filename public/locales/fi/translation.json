@@ -551,7 +551,8 @@
     "notSelected": "Ei valittu",
     "pinOrganisation": "Kiinnitä organisaatio",
     "unpinOrganisation": "Poista kiinnitys",
-    "pinnedOrganisations": "Kiinnitetyt"
+    "pinnedOrganisations": "Kiinnitetyt",
+    "previousSurveyDataInfo": "Tämän opintojakson palautteet ovat peräisin eri ajanjakson yliopistotasoisesta kyselystä, eikä yhteenvetoa voida näyttää valitulle ajanjaksolle"
   },
   "generateReport": {
     "selectIncluded": "Valitse sisältö",

@@ -556,7 +556,8 @@
     "notSelected": "Not selected",
     "pinOrganisation": "Pin organisation",
     "unpinOrganisation": "Unpin organisation",
-    "pinnedOrganisations": "Pinned"
+    "pinnedOrganisations": "Pinned",
+    "previousSurveyDataInfo": "The feedback for this course is from a university survey of a different period and a summary cannot be shown for the selected time period"
   },
   "generateReport": {
     "selectIncluded": "Select content",

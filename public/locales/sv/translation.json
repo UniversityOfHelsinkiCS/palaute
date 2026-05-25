@@ -536,7 +536,8 @@
     "notSelected": "Inte valt",
     "pinOrganisation": "Fäst organisation",
     "unpinOrganisation": "Ta bort fästning",
-    "pinnedOrganisations": "Fästa"
+    "pinnedOrganisations": "Fästa",
+    "previousSurveyDataInfo": "Responsen för denna kurs härstammar från en universitetsenkät från en annan period och en sammanfattning kan inte visas för den valda tidsperioden"
   },
   "footer": {
     "contactSupport": "Kontakta stödet",
