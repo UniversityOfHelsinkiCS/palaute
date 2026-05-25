@@ -27,18 +27,18 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
     <Stack direction="column" spacing={2}>
       <Box component="dl" data-cy={`${dataCyPrefix}feedback-target-feedback-dates`}>
         {!userCreated && (
-          <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mb: 2 }}>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: '1rem', rowGap: '0.3rem', mb: 2 }}>
             <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
             <Typography component="dd">{coursePeriod}</Typography>
           </Box>
         )}
-        <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" alignItems="center">
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: '1rem', rowGap: '0.3rem', alignItems: 'center' }}>
           <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
           <Typography component="dd">{feedbackPeriod}</Typography>
           {isTeacher && isCourseFeedback && <EditFeedbackTargetDates />}
         </Box>
         {isStudent && continuousFeedbackEnabled && (
-          <Box display="flex" flexWrap="wrap" columnGap="1rem" rowGap="0.3rem" sx={{ mt: 2 }}>
+          <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', columnGap: '1rem', rowGap: '0.3rem' }}>
             <Typography component="dt">{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
             <Typography component="dd">{coursePeriod}</Typography>
           </Box>
@@ -49,9 +49,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
           {continuousFeedbackEnabled && continuousFeedbacks && (
             <Box
               data-cy={`${dataCyPrefix}feedback-target-feedback-count`}
-              display="flex"
-              gap="1rem"
-              alignItems="center"
+              sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}
             >
               <Typography>{t('feedbackTargetView:continuousFeedbackGiven')}:</Typography>
               <Chip
@@ -65,13 +63,17 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
               />
             </Box>
           )}
-          <Box data-cy={`${dataCyPrefix}feedback-target-feedback-count`} display="flex" gap="1rem" alignItems="center">
+          <Box
+            data-cy={`${dataCyPrefix}feedback-target-feedback-count`}
+            sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}
+          >
             <Typography>{t('feedbackTargetView:respondents')}:</Typography>
             <PercentageCell
               data-cy={`${dataCyPrefix}feedback-target-feedback-count-percentage`}
               label={`${feedbackCount}/${studentCount}`}
               percent={(feedbackCount / studentCount) * 100}
               tooltip={t('common:feedbacksGivenRatio')}
+              ariaLabel={`${t('courseSummary:feedbackCount')} / ${t('courseSummary:studentCount')}: ${feedbackCount} / ${studentCount}. ${t('feedbackTargetView:showAnswers')}`}
               linkTo={`/targets/${id}/results`}
             />
           </Box>

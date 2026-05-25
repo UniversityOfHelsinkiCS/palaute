@@ -686,7 +686,8 @@
     "notFound": "Tätä kurssipalautetta ei löydy! Jos kirjoitit osoitteen manuaalisesti, tarkista että se on oikein.",
     "interimFeedbackTab": "Välipalautteet",
     "respondents": "Vastanneet",
-    "skipToSelectedTab": "Siirry valitulle välilehdelle:"
+    "skipToSelectedTab": "Siirry valitulle välilehdelle:",
+    "showAnswers": "Näytä vastaukset."
   },
   "noadUser": {
     "noUser": "Jotain meni pieleen, et ole tällä hetkellä kirjatunut. Kokeile sähköpostin linkkiä uudestaan tai ota yhteys kurssin opettajaan",

@@ -480,7 +480,7 @@
     "noResults": "Inga responser",
     "feedbackResponse": "Svar på responsen för den senaste kursen given",
     "feedbackCount": "Antal svar",
-    "studentCount": "Studerande",
+    "studentCount": "Antal studerande",
     "censoredCount": "Gömda responser",
     "feedbackPercentage": "Svarsfrekvens",
     "clickForDetails": "Klicka för att se detaljer",
@@ -662,7 +662,8 @@
     "editFeedbackResponseTab": "Redigera återkopplingsfeedback",
     "interimFeedbackTab": "Mellanrespons",
     "respondents": "Respondenter",
-    "skipToSelectedTab": "Gå till vald flik:"
+    "skipToSelectedTab": "Gå till vald flik:",
+    "showAnswers": "Visa responser."
   },
   "noadUser": {
     "noUser": "Något gick fel. Du är inte inloggad just nu. Pröva att trycka på e-postens länk igen eller ta kontakt med kursens lärare",

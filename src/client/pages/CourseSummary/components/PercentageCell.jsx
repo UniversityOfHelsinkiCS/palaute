@@ -17,7 +17,7 @@ const styles = {
  * @param {{ string, number }} { label, percent }
  * @returns
  */
-const PercentageCell = ({ label, tooltip, percent, sx, linkTo, ...rest }) => {
+const PercentageCell = ({ label, tooltip, ariaLabel, percent, sx, linkTo, ...rest }) => {
   let hex = Number(percent * 2.55).toString(16)
   const indexOfDot = hex.indexOf('.')
   hex = indexOfDot === -1 ? hex : hex.substring(0, indexOfDot)
@@ -25,7 +25,7 @@ const PercentageCell = ({ label, tooltip, percent, sx, linkTo, ...rest }) => {
 
   return (
     <Tooltip title={tooltip} disableInteractive>
-      <Box sx={{ ...styles.cell, ...(sx ?? {}) }}>
+      <Box sx={{ ...styles.cell, ...(sx ?? {}) }} aria-label={undefined}>
         <Chip
           {...rest}
           clickable={linkTo}
@@ -37,6 +37,7 @@ const PercentageCell = ({ label, tooltip, percent, sx, linkTo, ...rest }) => {
             background: theme => `${theme.palette.info.light}${hex}`,
             ...focusIndicatorStyle(),
           }}
+          aria-label={ariaLabel}
         />
       </Box>
     </Tooltip>

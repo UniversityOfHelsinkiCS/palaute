@@ -692,7 +692,8 @@
     "notFound": "Cannot find this course feedback! If you entered the URL manually, make sure it is correct",
     "interimFeedbackTab": "Interim feedbacks",
     "respondents": "Respondents",
-    "skipToSelectedTab": "Skip to selected tab:"
+    "skipToSelectedTab": "Skip to selected tab:",
+    "showAnswers": "Show answers."
   },
   "noadUser": {
     "noUser": "Something went wrong, you are currently not logged in. Try going through the email link again or contact the course teacher",
