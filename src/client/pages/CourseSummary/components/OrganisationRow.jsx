@@ -130,7 +130,7 @@ const PinButton = ({ organisation }) => {
   const unpinMutation = useUnpinOrganisationMutation()
   const [tooltipOpen, setTooltipOpen] = React.useState(false)
 
-  const isPinned = pinnedOrganisations.some(o => o.id === organisation.id)
+  const isPinned = pinnedOrganisations.some(o => o?.id === organisation?.id)
   const isMutating = pinMutation.isPending || unpinMutation.isPending
 
   const handleClick = e => {
@@ -139,7 +139,7 @@ const PinButton = ({ organisation }) => {
     // workaround for MUI bug where tooltip stays open if element position shifts
     setTooltipOpen(false)
     if (isPinned) {
-      unpinMutation.mutate(organisation.id)
+      unpinMutation.mutate(organisation?.id)
     } else {
       pinMutation.mutate(organisation)
     }
