@@ -138,6 +138,7 @@ const sumSummaries = (summaries?: Summary[]) => {
   const startDate = datefns.min(validStartDates)
   const endDate = datefns.max(validEndDates)
 
+  // TODO: fix this, causes bugs by overriding values from the first summary
   const summary = filteredSummaries[0]
   summary.data = data
   summary.startDate = datefns.formatISO(startDate)
