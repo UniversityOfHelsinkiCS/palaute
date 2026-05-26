@@ -1,8 +1,10 @@
 import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Box } from '@mui/material'
 import apiClient from '../../util/apiClient'
 
+import { NorButton } from '../common/NorButton'
 import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
 
@@ -17,7 +19,7 @@ const saveSurveyValues = async (values, surveyId) => {
   return data
 }
 
-const UniversitySurvey = ({ universitySurvey }) => {
+const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
 
@@ -49,13 +51,22 @@ const UniversitySurvey = ({ universitySurvey }) => {
   })
 
   return (
-    <QuestionEditor
-      initialValues={initialValues}
-      handleSubmit={handleSubmit}
-      handlePublicityToggle={onPublicityToggle}
-      publicQuestionIds={publicQuestionIds}
-      publicityConfigurableQuestionIds={allQuestionIds}
-    />
+    <>
+      <QuestionEditor
+        initialValues={initialValues}
+        handleSubmit={handleSubmit}
+        handlePublicityToggle={onPublicityToggle}
+        publicQuestionIds={publicQuestionIds}
+        publicityConfigurableQuestionIds={allQuestionIds}
+      />
+      {onCreateVersionClick && (
+        <Box display="flex" justifyContent="flex-end" mt={2}>
+          <NorButton color="error" onClick={onCreateVersionClick}>
+            Create new version
+          </NorButton>
+        </Box>
+      )}
+    </>
   )
 }
 
