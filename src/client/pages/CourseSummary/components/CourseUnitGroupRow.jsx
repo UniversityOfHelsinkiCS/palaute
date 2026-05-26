@@ -1,28 +1,45 @@
 import React from 'react'
 import { blueGrey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'
-import { Box } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { CourseUnitLabel } from './Labels'
 import RowHeader from './RowHeader'
 import { FeedbackTargetSummaryRow, SummaryResultElements } from './SummaryRow'
 import { SorterRow } from './SorterRow'
+import { useSummaryContext } from '../context'
 
 const questionFilter = q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD'
 
-const CourseUnitGroupAggregateRow = ({ courseUnitGroup, questions }) => {
+const CourseUnitGroupAggregateRow = ({ courseUnitGroup, summary, questions, timeframe }) => {
   const { i18n } = useTranslation()
 
   const label = (
-    <CourseUnitLabel name={getLanguageValue(courseUnitGroup.name, i18n.language)} code={courseUnitGroup.courseCode} />
+    <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+      <CourseUnitLabel name={getLanguageValue(courseUnitGroup.name, i18n.language)} code={courseUnitGroup.courseCode} />
+      {timeframe && (
+        <Typography variant="caption" color="text.secondary" sx={{ pl: '0.5rem' }}>
+          {timeframe}
+        </Typography>
+      )}
+    </Box>
   )
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'stretch', gap: '0.2rem' }}>
       <RowHeader label={label} />
-      <SummaryResultElements summary={courseUnitGroup.summary} questions={questions} />
+      <SummaryResultElements summary={summary} questions={questions} />
     </Box>
   )
+}
+
+const sectionSx = {
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'stretch',
+  gap: '0.4rem',
+  pt: '0.5rem',
+  transition: 'padding-top 0.2s ease-out',
 }
 
 const fbtListSx = {
@@ -35,60 +52,44 @@ const fbtListSx = {
   borderLeft: `solid 3px ${blueGrey[100]}`,
 }
 
-export const MultiSurveyGroups = ({ courseUnitGroup }) => {
-  const { surveyGroups: rawGroups } = courseUnitGroup
+const SurveyGroupSection = ({ courseUnitGroup, group, showHeader, validUntil }) => {
+  const { questions: contextQuestions } = useSummaryContext()
+  const questions = showHeader ? (group.survey?.questions ?? []).filter(questionFilter) : contextQuestions
 
-  const surveyGroups = rawGroups.map(({ survey, feedbackTargets }) => ({
-    survey,
-    feedbackTargets,
-    questions: (survey.questions ?? []).filter(questionFilter),
-  }))
+  let timeframe = null
+  if (showHeader) {
+    const validFromYear = group.survey?.validFrom ? new Date(group.survey.validFrom).getFullYear() : null
+    const validUntilYear = validUntil ? new Date(validUntil).getFullYear() : null
+
+    let startYear = validFromYear
+    if (!startYear) {
+      const realisationYears = group.feedbackTargets
+        .map(fbt => fbt.courseRealisation?.startDate)
+        .filter(Boolean)
+        .map(d => new Date(d).getFullYear())
+      startYear = realisationYears.length ? Math.min(...realisationYears) : null
+    }
+
+    if (startYear && !validUntilYear) timeframe = `${startYear}–`
+    else if (startYear && validUntilYear) timeframe = `${startYear}–${validUntilYear}`
+  }
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '1rem' }}>
-      {surveyGroups.map(({ survey, feedbackTargets: groupFbts, questions: surveyQuestions }) => (
-        <Box
-          key={survey.id}
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'stretch',
-            gap: '0.4rem',
-            pt: '0.5rem',
-            transition: 'padding-top 0.2s ease-out',
-          }}
-        >
-          <SorterRow questions={surveyQuestions} />
-          <CourseUnitGroupAggregateRow courseUnitGroup={courseUnitGroup} questions={surveyQuestions} />
-          <Box sx={fbtListSx}>
-            {groupFbts.map(fbt => (
-              <FeedbackTargetSummaryRow key={fbt.id} feedbackTarget={fbt} questions={surveyQuestions} />
-            ))}
-          </Box>
-        </Box>
-      ))}
+    <Box sx={sectionSx}>
+      {showHeader && <SorterRow questions={questions} />}
+      <CourseUnitGroupAggregateRow
+        courseUnitGroup={courseUnitGroup}
+        summary={group.summary}
+        questions={questions}
+        timeframe={timeframe}
+      />
+      <Box sx={fbtListSx}>
+        {group.feedbackTargets.map(fbt => (
+          <FeedbackTargetSummaryRow key={fbt.id} feedbackTarget={fbt} questions={questions} />
+        ))}
+      </Box>
     </Box>
   )
 }
 
-const CourseUnitGroupSummaryRow = ({ courseUnitGroup, questions }) => (
-  <Box
-    sx={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'stretch',
-      gap: '0.4rem',
-      pt: '0.5rem',
-      transition: 'padding-top 0.2s ease-out',
-    }}
-  >
-    <CourseUnitGroupAggregateRow courseUnitGroup={courseUnitGroup} questions={questions} />
-    <Box sx={fbtListSx}>
-      {courseUnitGroup.feedbackTargets.map(fbt => (
-        <FeedbackTargetSummaryRow key={fbt.id} feedbackTarget={fbt} questions={questions} />
-      ))}
-    </Box>
-  </Box>
-)
-
-export default CourseUnitGroupSummaryRow
+export default SurveyGroupSection
