@@ -135,8 +135,8 @@ const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
     query: { id, code, name, curName, language, fbtStatus, curStatus },
   } = req
   const params: Record<string, unknown> = {}
-  const nameLength = (name?.length ?? 0) as number
-  const curNameLength = (curName?.length ?? 0) as number
+  const nameLength = Number(name?.length ?? 0)
+  const curNameLength = Number(curName?.length ?? 0)
   const now = new Date()
 
   const include: IncludeOptions[] = [
