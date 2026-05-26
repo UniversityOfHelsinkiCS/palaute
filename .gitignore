@@ -11,6 +11,7 @@ stats.json
 backups
 scripts/my_username
 .vscode
+.zed
 *.mp4
 cypress/screenshots
 cypress/videos
