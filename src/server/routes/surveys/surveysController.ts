@@ -4,7 +4,10 @@ import { sequelize } from '../../db/dbConnection'
 import { ApplicationError } from '../../util/ApplicationError'
 import { Survey, Question, Organisation, User } from '../../models'
 import { createOrganisationSurveyLog } from '../../services/auditLog'
-import { getUniversitySurvey as _getUniversitySurvey } from '../../services/surveys'
+import {
+  getUniversitySurvey as _getUniversitySurvey,
+  createUniversitySurvey as _createUniversitySurvey,
+} from '../../services/surveys'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import { AuthenticatedRequest } from '../../types'
 
@@ -86,6 +89,23 @@ const getUniversitySurvey = async (req: AuthenticatedRequest, res: Response) => 
   const at = new Date(parsedAt)
   const survey = await _getUniversitySurvey(at)
   res.send(survey)
+}
+
+const CreateUniversitySurveyBodySchema = z.object({
+  validFrom: z.iso.date().or(z.iso.datetime({ offset: true })),
+})
+
+const createUniversitySurvey = async (req: AuthenticatedRequest, res: Response) => {
+  if (!req.user.isAdmin) throw ApplicationError.Forbidden('Only admins can create university survey versions')
+
+  const { validFrom: validFromStr } = CreateUniversitySurveyBodySchema.parse(req.body)
+  const validFrom = new Date(validFromStr)
+  validFrom.setUTCHours(0, 0, 0, 0)
+
+  if (validFrom <= new Date()) throw ApplicationError.BadRequest('validFrom must be in the future')
+
+  const survey = await _createUniversitySurvey(validFrom)
+  res.status(201).send(survey)
 }
 
 const getUniversitySurveyVersions = async (req: AuthenticatedRequest, res: Response) => {
@@ -171,6 +191,7 @@ const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Respo
 export const router = Router()
 
 router.put('/:id', update)
+router.post('/university', createUniversitySurvey)
 router.get('/university/versions', getUniversitySurveyVersions)
 router.get('/university', getUniversitySurvey)
 router.get('/organisation/:organisationCode', getFullOrganisationSurvey)
