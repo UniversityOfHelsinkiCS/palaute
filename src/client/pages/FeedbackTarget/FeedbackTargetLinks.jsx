@@ -7,7 +7,6 @@ import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
-import useCourseRealisationSummaries from '../../hooks/useCourseRealisationSummaries'
 
 import LinkButton from '../../components/common/LinkButton'
 import { NorButton } from '../../components/common/NorButton'
@@ -23,9 +22,6 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
 
   const { feedbackTarget, organisation, isTeacher, isStudent } = useFeedbackTargetContext()
 
-  const { courseRealisationSummaries } = useCourseRealisationSummaries(feedbackTarget?.courseUnit?.courseCode, {
-    enabled: isTeacher,
-  })
   const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(
     feedbackTarget.id,
     isInterimFeedback
@@ -47,7 +43,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
     : `${t('links:courseUnitPageStudent', { courseUnitId: feedbackTarget.courseUnit?.id })}`
   const realisationPageUrl = `${t('links:courseRealisationPage', { sisuId: courseRealisation.id })}`
   const courseSummaryPath = getCourseUnitSummaryPath(feedbackTarget)
-  const showCourseSummaryLink = courseRealisationSummaries?.courseRealisations?.length > 0 && !userCreated
+  const showCourseSummaryLink = isTeacher && !userCreated
 
   const handleCopyLink = () => {
     const link = `https://${window.location.host}/targets/${feedbackTarget.id}/feedback`
@@ -77,7 +73,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
             title={getLanguageValue(organisation.name, i18n.language)}
           />
         )}
-        {isTeacher && showCourseSummaryLink && (
+        {showCourseSummaryLink && (
           <LinkButton
             data-cy={`${dataCyPrefix}feedback-target-course-summary-link`}
             to={courseSummaryPath}

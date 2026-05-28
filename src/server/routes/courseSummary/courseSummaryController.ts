@@ -1,13 +1,8 @@
 import z from 'zod/v4'
 import { Response, Router } from 'express'
 import { format } from 'date-fns'
-import { QueryTypes } from 'sequelize'
-
-import { CourseUnit, Organisation, User } from '../../models'
 
 import { ApplicationError } from '../../util/ApplicationError'
-import { sequelize } from '../../db/dbConnection'
-import { getSummaryQuestions } from '../../services/questions'
 import {
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
@@ -15,36 +10,11 @@ import {
   getTeacherSummary,
   getUserOrganisationSummaries,
   getOrganisationSummaryWithTags,
-  getCourseRealisationSummaries,
   getCourseUnitGroupSummaries,
   exportXLSX,
 } from '../../services/summary'
 import { startOfStudyYear, endOfStudyYear } from '../../util/common'
-import { getOrganisationAccessByCourseUnitId } from '../../services/organisationAccess/organisationAccess'
 import { AuthenticatedRequest } from '../../types'
-
-const getAccessibleCourseRealisationIds = async (user: User) => {
-  const rows = await sequelize.query<{ id: string }>(
-    `
-    SELECT DISTINCT ON (course_realisations.id) course_realisations.id
-    FROM user_feedback_targets
-    INNER JOIN feedback_targets ON user_feedback_targets.feedback_target_id = feedback_targets.id
-    INNER JOIN course_realisations ON feedback_targets.course_realisation_id = course_realisations.id
-    WHERE user_feedback_targets.user_id = :userId
-    AND is_teacher(user_feedback_targets.access_status)
-    AND feedback_targets.feedback_type = 'courseRealisation'
-    AND course_realisations.start_date > NOW() - interval '24 months';
-  `,
-    {
-      replacements: {
-        userId: user.id,
-      },
-      type: QueryTypes.SELECT,
-    }
-  )
-
-  return rows.map(row => row.id)
-}
 
 /**
  * Parse dates from query parameters. If both dates are not valid, default to current study year
@@ -137,51 +107,6 @@ const getOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) => {
   }
 
   res.send({ organisation })
-}
-
-const getByCourseUnit = async (req: AuthenticatedRequest, res: Response) => {
-  const { user } = req
-  const { code } = req.params
-
-  // There are course codes that include slash character (/), which is problematic in requests.
-  // To avoid problems, course codes are encoded before attaching to request and must be decoded here before querying database.
-  const acualCode = decodeURIComponent(code)
-
-  const courseUnits = await CourseUnit.findAll({
-    where: { courseCode: acualCode },
-    include: [
-      {
-        model: Organisation,
-        attributes: ['id'],
-        as: 'organisations',
-      },
-    ],
-    order: [['updated_at', 'DESC']],
-  })
-
-  if (!courseUnits?.length) {
-    throw ApplicationError.NotFound(`Course unit with code ${acualCode} not found`)
-  }
-
-  const [organisationAccess, accessibleCourseRealisationIds, questions] = await Promise.all([
-    user.dataValues.isAdmin || (await getOrganisationAccessByCourseUnitId(user, courseUnits[0].id))?.read,
-    getAccessibleCourseRealisationIds(user),
-    // TODO: shouldn't just use new Date() here, should return multiple sets of questions (one for each university survey period)
-    // and render separately in frontend
-    getSummaryQuestions(acualCode, new Date()),
-  ])
-
-  const courseRealisations = await getCourseRealisationSummaries({
-    accessibleCourseRealisationIds,
-    organisationAccess,
-    courseCode: acualCode,
-  })
-
-  res.send({
-    questions,
-    courseRealisations,
-    courseUnit: courseUnits[0],
-  })
 }
 
 const CourseUnitGroupQuerySchema = DatesQuerySchema.extend({
@@ -312,6 +237,5 @@ export const router = Router()
 router.get('/organisations-v2', getOrganisationsV2)
 router.get('/user-courses-v2', getCoursesV2)
 router.get('/user-organisations-v2', getUserOrganisationsV2)
-router.get('/course-units/:code', getByCourseUnit)
 router.get('/course-unit-group', getCourseUnitGroup)
 router.get('/export-xlsx', getXLSX)
