@@ -42,9 +42,10 @@ const summaryContext = React.createContext({
  */
 const useSummaryQuestions = (organisationCode, startDate) => {
   const at = startDate ? format(startDate, 'yyyy-MM-dd') : null
+  const queryString = at ? `?at=${at}` : ''
   const apiUrl = organisationCode
-    ? `/surveys/organisation/${organisationCode}`
-    : `/surveys/university${at ? `?at=${at}` : ''}`
+    ? `/surveys/organisation/${organisationCode}${queryString}`
+    : `/surveys/university${queryString}`
   const queryFn = async () => {
     const { data } = await apiClient.get(apiUrl)
     return data

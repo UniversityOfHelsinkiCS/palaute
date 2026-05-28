@@ -80,6 +80,13 @@ const update = async (req: AuthenticatedRequest, res: Response) => {
   res.send(updatedSurvey)
 }
 
+const AtQuerySchema = z.object({
+  at: z.iso
+    .date()
+    .or(z.iso.datetime({ offset: true }))
+    .optional(),
+})
+
 const GetUniversitySurveyQuerySchema = z.object({
   at: z.iso.date().or(z.iso.datetime({ offset: true })),
 })
@@ -135,8 +142,10 @@ const getUniversitySurveyVersions = async (req: AuthenticatedRequest, res: Respo
 
 const getFullOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { organisationCode } = req.params
+  const { at: parsedAt } = AtQuerySchema.parse(req.query)
+  const at = parsedAt ? new Date(parsedAt) : new Date()
 
-  const universitySurvey = await _getUniversitySurvey(new Date())
+  const universitySurvey = await _getUniversitySurvey(at)
   const [survey] = await Survey.findAll({
     where: {
       type: 'programme',
