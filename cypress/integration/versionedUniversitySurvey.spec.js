@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-const { summaryUser } = require('../fixtures/headers')
+const { summaryUser, student } = require('../fixtures/headers')
 
 describe('Versioned university survey questions in summary view', () => {
   beforeEach(() => {
@@ -49,6 +49,24 @@ describe('Versioned university survey questions in summary view', () => {
 
     cy.contains('Uusi testikysymys 1', { timeout: 10000 })
     cy.contains('Testikysymys 1').should('not.exist')
+  })
+
+  describe('Feedback form uses the survey version active at FBT opensAt', () => {
+    it('FBT opened before cutover shows old survey questions', () => {
+      cy.createFeedbackTarget({ opensAt: '2025-03-01', closesAt: '2099-12-31' })
+      cy.loginAs(student)
+      cy.get('@feedbackTarget').then(([fbt]) => cy.visit(`/targets/${fbt.id}`))
+      cy.contains('Testikysymys 1', { timeout: 10000 })
+      cy.contains('Uusi testikysymys 1').should('not.exist')
+    })
+
+    it('FBT opened after cutover shows new survey questions', () => {
+      cy.createFeedbackTarget({ opensAt: '2025-09-01', closesAt: '2099-12-31' })
+      cy.loginAs(student)
+      cy.get('@feedbackTarget').then(([fbt]) => cy.visit(`/targets/${fbt.id}`))
+      cy.contains('Uusi testikysymys 1', { timeout: 10000 })
+      cy.contains('Testikysymys 1').should('not.exist')
+    })
   })
 
   it('course-unit-group all-time view: shows both survey groups with correct questions and timeframes', () => {
