@@ -50,4 +50,21 @@ describe('Versioned university survey questions in summary view', () => {
     cy.contains('Uusi testikysymys 1', { timeout: 10000 })
     cy.contains('Testikysymys 1').should('not.exist')
   })
+
+  it('course-unit-group all-time view: shows both survey groups with correct questions and timeframes', () => {
+    cy.visit('/course-summary/course-unit/VERSIONED_TEST_COURSE')
+
+    // Switch to all-time mode (the "Kaikki" / "All" toggle)
+    cy.get('#all-filter-selector button', { timeout: 10000 }).first().click()
+
+    // Both question sets must be visible simultaneously (one per survey group section)
+    cy.contains('Testikysymys 1', { timeout: 10000 })
+    cy.contains('Uusi testikysymys 1')
+
+    // New group (validFrom 2025-08-01, no validUntil) shows open-ended timeframe
+    cy.contains('2025–')
+
+    // Old group (realisation starts 2024, validUntil = new group's validFrom year 2025)
+    cy.contains('2024–2025')
+  })
 })
