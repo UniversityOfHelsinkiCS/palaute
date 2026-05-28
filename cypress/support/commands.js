@@ -156,24 +156,27 @@ Cypress.Commands.add('createInterimFeedback', (parentId, body) => {
   })
 })
 
-Cypress.Commands.add('createFeedbackTarget', ({ enrolledStudent = student, extraStudents = 0 } = {}) => {
-  cy.request({
-    method: 'POST',
-    url: 'test/seed-feedback-targets',
-    body: {
-      teacher,
-      student: enrolledStudent,
-      opensAt: addDays(new Date(), 1),
-      closesAt: addDays(new Date(), 2),
-      extraStudents,
-    },
-    headers: admin,
-  })
-    .then(response => {
-      cy.wrap(response.body).as('feedbackTarget')
+Cypress.Commands.add(
+  'createFeedbackTarget',
+  ({ enrolledStudent = student, extraStudents = 0, opensAt, closesAt } = {}) => {
+    cy.request({
+      method: 'POST',
+      url: 'test/seed-feedback-targets',
+      body: {
+        teacher,
+        student: enrolledStudent,
+        opensAt: opensAt ?? addDays(new Date(), 1),
+        closesAt: closesAt ?? addDays(new Date(), 2),
+        extraStudents,
+      },
+      headers: admin,
     })
-    .then(() => cy.buildSummaries())
-})
+      .then(response => {
+        cy.wrap(response.body).as('feedbackTarget')
+      })
+      .then(() => cy.buildSummaries())
+  }
+)
 
 Cypress.Commands.add('getTestFbtId', () =>
   cy
