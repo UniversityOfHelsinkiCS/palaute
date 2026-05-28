@@ -4,10 +4,11 @@ import { getOrganisationData } from '../../util/jami'
 import { redis } from '../../util/redisClient'
 
 export const getOrganisationsList = async (): Promise<{ name: LocalizedString; code: string }[]> => {
-  const cachedListJson = await redis.get('organisationsList')
-  if (cachedListJson) {
-    return JSON.parse(cachedListJson)
-  }
+  // NOTE: cache temporarily disabled for testing
+  // const cachedListJson = await redis.get('organisationsList')
+  // if (cachedListJson) {
+  //   return JSON.parse(cachedListJson)
+  // }
 
   const organisationData = await getOrganisationData()
 
