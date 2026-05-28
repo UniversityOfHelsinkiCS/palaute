@@ -222,7 +222,7 @@
     "upperLevelQuestionsInfo": "Enkäten har redan {{count}} frågor på universitets- och programsnivå, men du kan lägga till frågor. Du kan trycka på knappen \"Visa enkätens förhandsvisning\" för att se hur enkäten ser ut med alla frågorna",
     "showPreview": "Visa enkätens förhandsvisning",
     "showPreviewConfirmation": "Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.",
-    "translationLanguage": "Språkversion",
+    "translationLanguage": "Förhandsgranskningsspråk för enkäten",
     "warningAboutOpeningCourse": "OBS! Öppningsdatumet kan inte redigeras efter att responsen har öppnats, och slutdatumet kan inte redigeras efter att responsperioden har slutat. Responsen måste vara öppen åtminstone en dag. Om du får problem, kontakta supporten: <mailTo>{{supportEmail}}</mailTo>.",
     "opensAtIsNow": "Enkäten är inställd att öppnas genast! När enkäten öppnas kan den inte längre redigeras.",
     "checkbox": "Jag förstår",

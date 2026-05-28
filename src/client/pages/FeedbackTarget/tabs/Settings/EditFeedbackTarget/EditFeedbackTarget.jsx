@@ -1,9 +1,10 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Divider, Box, Alert } from '@mui/material'
+import { Divider, Box, Alert, imageListClasses } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import Toolbar from './Toolbar'
+import { QuestionLanguageProvider } from '../../../../../util/questionLanguageContext'
 
 import { getUpperLevelQuestions, getOrganisationNames, feedbackTargetIsOpenOrClosed } from './utils'
 import { TeacherSurvey } from '../../../../../components/QuestionEditor'
@@ -29,7 +30,7 @@ const EditFeedbackTarget = () => {
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
-  const { feedbackTarget, isAdmin } = useFeedbackTargetContext()
+  const { feedbackTarget, isAdmin, previewLanguage, setPreviewLanguage } = useFeedbackTargetContext()
 
   if (!feedbackTarget || (feedbackTargetIsOpenOrClosed(feedbackTarget) && !isAdmin)) {
     return null
@@ -44,36 +45,36 @@ const EditFeedbackTarget = () => {
     : `/targets/${id}/feedback`
 
   return (
-    <CardSection title={t('feedbackView:editSurvey')}>
-      {upperLevelQuestions.length > 0 && (
-        <Box mb={2}>
-          <Alert severity="info">
-            {organisationNames.primaryOrganisation
-              ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
-                  count: upperLevelQuestions.length,
-                  primaryOrganisation: organisationNames.primaryOrganisation,
-                })
-              : t('editFeedbackTarget:upperLevelQuestionsInfoMany', {
-                  count: upperLevelQuestions.length,
-                  organisations: organisationNames.allOrganisations,
-                })}
-          </Alert>
-        </Box>
-      )}
+    <QuestionLanguageProvider value={previewLanguage}>
+      <CardSection title={t('feedbackView:editSurvey')}>
+        {upperLevelQuestions.length > 0 && (
+          <Box mb={2}>
+            <Alert severity="info">
+              {organisationNames.primaryOrganisation
+                ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
+                    count: upperLevelQuestions.length,
+                    primaryOrganisation: organisationNames.primaryOrganisation,
+                  })
+                : t('editFeedbackTarget:upperLevelQuestionsInfoMany', {
+                    count: upperLevelQuestions.length,
+                    organisations: organisationNames.allOrganisations,
+                  })}
+            </Alert>
+          </Box>
+        )}
 
-      <TeacherSurvey feedbackTarget={feedbackTarget} />
+        <TeacherSurvey feedbackTarget={feedbackTarget} />
 
-      <Divider sx={styles.toolbarDivider} />
+        <Divider sx={styles.toolbarDivider} />
 
-      <Toolbar
-        onSave={() => {}}
-        previewLink={previewLink}
-        language={language}
-        onLanguageChange={newLanguage => {
-          i18n.changeLanguage(newLanguage)
-        }}
-      />
-    </CardSection>
+        <Toolbar
+          onSave={() => {}}
+          previewLink={previewLink}
+          language={previewLanguage}
+          onLanguageChange={setPreviewLanguage}
+        />
+      </CardSection>
+    </QuestionLanguageProvider>
   )
 }
 

@@ -1,9 +1,13 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 const FeedbackTargetContext = React.createContext()
 
 export const FeedbackTargetContextProvider = ({ id, isAdmin, organisation, feedbackTarget, children }) => {
-  const context = React.useMemo(() => {
+  const { i18n } = useTranslation()
+  const [previewLanguage, setPreviewLanguage] = React.useState(i18n.language)
+
+  const accessContext = React.useMemo(() => {
     const orgAccess = organisation?.access
     const accessStatus = feedbackTarget?.accessStatus
 
@@ -25,6 +29,11 @@ export const FeedbackTargetContextProvider = ({ id, isAdmin, organisation, feedb
     }
   }, [id, feedbackTarget, organisation])
 
+  const context = React.useMemo(
+    () => ({ ...accessContext, previewLanguage, setPreviewLanguage }),
+    [accessContext, previewLanguage]
+  )
+
   return <FeedbackTargetContext.Provider value={context}>{children}</FeedbackTargetContext.Provider>
 }
 
@@ -39,6 +48,8 @@ export const useFeedbackTargetContext = () => {
     isOrganisationReader,
     organisation,
     feedbackTarget,
+    previewLanguage,
+    setPreviewLanguage,
   } = React.useContext(FeedbackTargetContext)
 
   return {
@@ -50,5 +61,7 @@ export const useFeedbackTargetContext = () => {
     isOrganisationReader,
     organisation,
     feedbackTarget,
+    previewLanguage,
+    setPreviewLanguage,
   }
 }

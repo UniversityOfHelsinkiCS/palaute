@@ -145,8 +145,7 @@ const QuestionCard = ({
   showRequiredToggle = true,
   elevation = 2,
 }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+  const { t } = useTranslation()
   const [field, , helpers] = useField(name)
   const { value: question } = field
 

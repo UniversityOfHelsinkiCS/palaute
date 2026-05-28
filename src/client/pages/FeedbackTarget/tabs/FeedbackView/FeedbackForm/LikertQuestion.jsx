@@ -9,6 +9,7 @@ import { getLanguageValue } from '../../../../../util/languageUtils'
 import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
 import QuestionBase from './QuestionBase'
 import { getDontKnowOption, useDelayedTouched } from './utils'
+import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 
 const styles = {
   optionLabel: {
@@ -25,8 +26,8 @@ const options = [1, 2, 3, 4, 5, 0]
 
 const LikertQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { i18n, t } = useTranslation()
-  const { language } = i18n
+  const { t } = useTranslation()
+  const language = useQuestionLanguage()
 
   const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched)
 

@@ -10,6 +10,7 @@ import { useSnackbar } from 'notistack'
 import { NorButton } from '../../../../components/common/NorButton'
 
 import FeedbackForm from './FeedbackForm'
+import { QuestionLanguageProvider } from '../../../../util/questionLanguageContext'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import PrivacyDialog from './PrivacyDialog'
@@ -147,7 +148,7 @@ const FormContainer = ({
 
 const FeedbackView = () => {
   const navigate = useNavigate()
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { id, interimFeedbackId } = useParams()
   const { authorizedUser } = useAuthorizedUser()
@@ -156,15 +157,21 @@ const FeedbackView = () => {
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
   const [smallCourseDialogOpen, setSmallCourseDialogOpen] = useState(true)
 
-  const { feedbackTarget, isStudent, isResponsibleTeacher, isOrganisationAdmin, isTeacher, isLoading } =
-    useFeedbackTargetContext()
+  const {
+    feedbackTarget,
+    isStudent,
+    isResponsibleTeacher,
+    isOrganisationAdmin,
+    isTeacher,
+    isLoading,
+    previewLanguage,
+    setPreviewLanguage,
+  } = useFeedbackTargetContext()
   const studentCount = feedbackTarget.summary?.data?.studentCount
 
   if (isLoading) {
     return <LoadingProgress />
   }
-
-  const { language } = i18n
   const { accessStatus, opensAt, closesAt, feedback, continuousFeedbackEnabled } = feedbackTarget
 
   const isOutsider = accessStatus.includes('NONE')
@@ -255,48 +262,50 @@ const FeedbackView = () => {
     setPrivacyDialogOpen(true)
   }
 
-  const handleLanguageChange = language => {
-    i18n.changeLanguage(language)
+  const handleLanguageChange = lang => {
+    setPreviewLanguage(lang)
   }
 
   return (
-    <Box id="feedback-target-tab-content">
-      <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
+    <QuestionLanguageProvider value={previewLanguage}>
+      <Box id="feedback-target-tab-content">
+        <PrivacyDialog open={privacyDialogOpen} onClose={handleClosePrivacyDialog} />
 
-      {isStudent && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && (
-        <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
-      )}
+        {isStudent && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && (
+          <ConfirmGivingFeedbackDialog open={smallCourseDialogOpen} onClose={() => setSmallCourseDialogOpen(false)} />
+        )}
 
-      {showClosedAlert && closedAlert}
+        {showClosedAlert && closedAlert}
 
-      {isEnded && endedAlert}
+        {isEnded && endedAlert}
 
-      {showForm && (
-        <FormContainer
-          initialValues={initialValues}
-          validate={validate}
-          onSubmit={handleSubmit}
-          disabled={formIsDisabled && !authorizedUser?.isAdmin}
-          showSubmitButton={!isTeacher || authorizedUser?.isAdmin}
-          questions={questions}
-          showCannotSubmitText={isOutsider}
-          onOpenPrivacyDialog={handleOpenPrivacyDialog}
-          isEdit={Boolean(feedback)}
-          fewEnrolled={studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT}
-        />
-      )}
-
-      {showToolbar && (
-        <Box mt={2}>
-          <Toolbar
-            showEdit={isResponsibleTeacher}
-            editLink={editLink}
-            language={language}
-            onLanguageChange={handleLanguageChange}
+        {showForm && (
+          <FormContainer
+            initialValues={initialValues}
+            validate={validate}
+            onSubmit={handleSubmit}
+            disabled={formIsDisabled && !authorizedUser?.isAdmin}
+            showSubmitButton={!isTeacher || authorizedUser?.isAdmin}
+            questions={questions}
+            showCannotSubmitText={isOutsider}
+            onOpenPrivacyDialog={handleOpenPrivacyDialog}
+            isEdit={Boolean(feedback)}
+            fewEnrolled={studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT}
           />
-        </Box>
-      )}
-    </Box>
+        )}
+
+        {showToolbar && (
+          <Box mt={2}>
+            <Toolbar
+              showEdit={isResponsibleTeacher}
+              editLink={editLink}
+              language={previewLanguage}
+              onLanguageChange={handleLanguageChange}
+            />
+          </Box>
+        )}
+      </Box>
+    </QuestionLanguageProvider>
   )
 }
 

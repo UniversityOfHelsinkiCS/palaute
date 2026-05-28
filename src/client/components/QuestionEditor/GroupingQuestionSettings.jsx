@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next'
 import { Add, ExpandMore } from '@mui/icons-material'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
+import { useQuestionLanguage } from '../../util/questionLanguageContext'
 import TeacherChip from '../common/TeacherChip'
 import Instructions from '../common/Instructions'
 import { createQuestion } from './utils'
@@ -22,7 +23,8 @@ import QuestionCard from './QuestionCard'
 import { NorButton } from '../common/NorButton'
 
 const GroupInformation = ({ groups }) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const language = useQuestionLanguage()
 
   return (
     <Box>
@@ -40,7 +42,7 @@ const GroupInformation = ({ groups }) => {
             <TableBody>
               {groups.map(group => (
                 <TableRow key={group.id}>
-                  <TableCell>{getLanguageValue(group.name, i18n.language)}</TableCell>
+                  <TableCell>{getLanguageValue(group.name, language)}</TableCell>
                   <TableCell>{group.studentCount}</TableCell>
                   <TableCell>
                     {group.teachers?.map(teacher => (
@@ -79,7 +81,8 @@ const GroupingQuestionSettings = ({
   onStartEditing,
   onStopEditing,
 }) => {
-  const { t, i18n } = useTranslation()
+  const { t } = useTranslation()
+  const language = useQuestionLanguage()
   const { feedbackTarget } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
 
@@ -106,7 +109,7 @@ const GroupingQuestionSettings = ({
               <Box mb="1rem">
                 {groupingQuestion ? (
                   t('groups:hasGroupingQuestion', {
-                    name: getLanguageValue(groupingQuestion.data.label, i18n.language),
+                    name: getLanguageValue(groupingQuestion.data.label, language),
                   })
                 ) : (
                   <Box>
@@ -127,7 +130,7 @@ const GroupingQuestionSettings = ({
               onRemove={onRemove}
               moveUpDisabled
               moveDownDisabled
-              language={i18n.language}
+              language={language}
               isEditing={isEditing}
               onStopEditing={onStopEditing}
               onStartEditing={onStartEditing}

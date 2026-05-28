@@ -9,11 +9,12 @@ import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
 import { useDelayedTouched } from './utils'
 import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
+import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 
 const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
-  const { i18n, t } = useTranslation()
-  const { language } = i18n
+  const { t } = useTranslation()
+  const language = useQuestionLanguage()
 
   const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched)
 

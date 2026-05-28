@@ -8,6 +8,7 @@ import QuestionCard from './QuestionCard'
 import { NorButton } from '../common/NorButton'
 
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
+import { useQuestionLanguage } from '../../util/questionLanguageContext'
 import QuestionEditorActions from './QuestionEditorActions'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
 
@@ -47,6 +48,7 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
 const QuestionEditorForm = ({ saveChanges, editable, handlePublicityToggle, actions, groupingQuestionSettings }) => {
   const addButtonRef = useRef()
   const { t, i18n } = useTranslation()
+  const questionLanguage = useQuestionLanguage()
   const [questionsField] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -110,7 +112,7 @@ const QuestionEditorForm = ({ saveChanges, editable, handlePublicityToggle, acti
                   }}
                   moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
                   moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
-                  language={i18n.language}
+                  language={questionLanguage}
                   isEditing={editingQuestionId === getQuestionId(question)}
                   onStopEditing={() => handleStopEditing()}
                   onStartEditing={() => setEditingQuestionId(getQuestionId(question))}

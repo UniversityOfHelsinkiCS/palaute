@@ -6,11 +6,12 @@ import { FormHelperText } from '@mui/material'
 import FormikTextField from '../../../../../components/common/FormikTextField'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import QuestionBase from './QuestionBase'
+import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 
 const OpenQuestion = ({ question, name, disabled }) => {
   const [, meta] = useField(name)
-  const { i18n, t } = useTranslation()
-  const { language } = i18n
+  const { t } = useTranslation()
+  const language = useQuestionLanguage()
   const label = getLanguageValue(question.data?.label, language) ?? ''
   const { required } = question
   const inputId = `${question.id}-input`
