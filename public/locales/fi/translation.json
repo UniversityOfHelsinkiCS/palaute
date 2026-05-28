@@ -310,6 +310,7 @@
     "sendReminderButton": "Lähetä muistutus",
     "reminderDisabled": "Olet jo lähettänyt muistutusviestin viimeisen {{cooldown}} tunnin aikana",
     "reminderLastSent": "Muistutus viimeksi lähetetty",
+    "reminderCooldownInfo": "Muistutusviestejä voi lähettää enintään kerran {{cooldown}} tunnissa.",
     "cancelReminder": "Peruuta",
     "modalTitle": "Lähetä muistutus palautteesta sähköpostilla",
     "writeAMessage": "Kirjoita viesti opiskelijoille",

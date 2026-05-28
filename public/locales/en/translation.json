@@ -316,6 +316,7 @@
     "sendReminderButton": "Send reminder",
     "reminderDisabled": "You have already sent a reminder email less than {{cooldown}} hours ago",
     "reminderLastSent": "Reminder last sent",
+    "reminderCooldownInfo": "Reminder emails can be sent at most once every {{cooldown}} hours.",
     "cancelReminder": "Cancel",
     "modalTitle": "Send a reminder about feedback via email",
     "writeAMessage": "Write a message to students",

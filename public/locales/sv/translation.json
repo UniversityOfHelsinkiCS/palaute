@@ -295,6 +295,7 @@
     "sendReminderButton": "Skicka påminnelse",
     "reminderDisabled": "Du har redan skickat en påminnelse under de senaste {{cooldown}} timmarna",
     "reminderLastSent": "Påminnelse senast skickad",
+    "reminderCooldownInfo": "Påminnelsemeddelanden kan skickas högst en gång varje {{cooldown}} timmar.",
     "cancelReminder": "Avbryt",
     "modalTitle": "Skicka en påminnelse om respons via e-post",
     "writeAMessage": "Skriv ett meddelande till studerande",

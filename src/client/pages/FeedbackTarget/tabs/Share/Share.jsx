@@ -42,7 +42,7 @@ const Share = () => {
 
   const lastSentAt = Date.parse(feedbackTarget.feedbackReminderLastSentAt)
   const modalDisabled = differenceInHours(Date.now(), lastSentAt) < FEEDBACK_REMINDER_COOLDOWN
-  const formattedLastSentAt = lastSentAt ? format(lastSentAt, 'dd.MM hh.mm') : undefined
+  const formattedLastSentAt = lastSentAt ? format(lastSentAt, 'dd.MM. HH.mm') : undefined
 
   const feedbackLink = `https://${window.location.host}/targets/${id}/feedback`
   const resultsLink = `https://${window.location.host}/targets/${id}/results`
@@ -67,10 +67,16 @@ const Share = () => {
           >
             {t('feedbackTargetResults:sendReminder')}
           </TooltipButton>
-          <Box mr={2} />
-          <Typography variant="subtitle1" color="textSecondary">
-            {formattedLastSentAt && `${t('feedbackTargetResults:reminderLastSent')} ${formattedLastSentAt}`}
-          </Typography>
+          {formattedLastSentAt && (
+            <Typography component="p" variant="subtitle1" color="textSecondary" sx={{ ml: 2 }}>
+              {`${t('feedbackTargetResults:reminderLastSent')} ${formattedLastSentAt}. ${t(
+                'feedbackTargetResults:reminderCooldownInfo',
+                {
+                  cooldown: FEEDBACK_REMINDER_COOLDOWN,
+                }
+              )}`}
+            </Typography>
+          )}
         </Box>
       )}
       {feedbackTarget.userCreated &&
