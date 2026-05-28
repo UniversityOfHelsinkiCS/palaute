@@ -50,6 +50,7 @@ jobs:
             teacherview.spec.js,
             universitySurvey.spec.js,
             userfeedbacks.spec.js,
+            versionedUniversitySurvey.spec.js,
           ]
     runs-on: ubuntu-latest
 
