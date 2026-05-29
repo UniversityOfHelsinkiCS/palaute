@@ -192,11 +192,9 @@
     "organisationSurveys": "Organisaatiokyselyt",
     "courseSurveys": "Kurssikyselyt",
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
-    "expandMoreLabel": "Näytä piilotetut kyselyt",
     "survey": "Kysely",
     "surveys": "Kyselyä",
-    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä",
-    "academicYearSelectLabel": "Valittu lukuvuosi"
+    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä"
   },
   "questionEditor": {
     "addQuestion": "Lisää kysymys",

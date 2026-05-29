@@ -2,8 +2,6 @@ import React from 'react'
 import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
 import { Link } from 'react-router-dom'
 
-import { focusIndicatorStyle } from '../../util/accessibility'
-
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const labelElement = count ? (
     <Badge
@@ -30,11 +28,16 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
       component={Link}
       to={{ search: `?status=${status}` }}
       sx={{
+        p: '21px',
         '&:hover': {
           color: theme => theme.palette.primary.light,
           opacity: 1,
         },
-        ...focusIndicatorStyle(),
+        '&.Mui-focusVisible': {
+          border: '3px solid',
+          borderColor: theme => theme.palette.primary.main,
+          p: '18px',
+        },
       }}
       disableRipple
       {...props}
@@ -61,24 +64,25 @@ export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
       textColor="primary"
       variant="scrollable"
       scrollButtons="auto"
+      allowScrollButtonsMobile
       value={value}
       sx={{
         my: 3,
-        p: 1,
-        '& .MuiTabs-scroller': { overflow: 'visible' },
         '& .MuiTabs-indicator': {
           display: 'flex',
           justifyContent: 'center',
           backgroundColor: 'transparent',
         },
         '& .MuiTabs-indicatorSpan': {
-          maxWidth: 80,
+          my: '-3px',
           width: '100%',
           backgroundColor: theme => theme.palette.primary.main,
         },
       }}
       {...props}
-      TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+      slotProps={{
+        indicator: { children: <span className="MuiTabs-indicatorSpan" /> },
+      }}
     >
       {children}
     </Tabs>

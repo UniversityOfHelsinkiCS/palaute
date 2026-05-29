@@ -197,11 +197,9 @@
     "organisationSurveys": "Organisation surveys",
     "courseSurveys": "Course surveys",
     "disabledCourseWarning": "Feedback is disabled for this course",
-    "expandMoreLabel": "Show hidden surveys",
     "survey": "Survey",
     "surveys": "Surveys",
-    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year",
-    "academicYearSelectLabel": "Selected academic year"
+    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year"
   },
   "questionEditor": {
     "addQuestion": "Add question",

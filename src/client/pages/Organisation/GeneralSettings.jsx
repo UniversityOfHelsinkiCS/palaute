@@ -77,7 +77,7 @@ const StudentListSettings = ({ organisation }) => {
 
         <Box mt={2}>
           <FormControl>
-            <RadioGroup value={visibility} onChange={handleChange} disableRipple>
+            <RadioGroup value={visibility} onChange={handleChange}>
               <FormControlLabel
                 value="visible"
                 control={<Radio disableFocusRipple />}

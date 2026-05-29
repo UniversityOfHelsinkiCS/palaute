@@ -178,7 +178,15 @@
     "upcomingCourses": "Kommande kurser",
     "endedCourses": "Avslutade kurser",
     "feedbackNotStarted": "Tiden för respons har ännu inte börjat",
-    "surveyOpen": "Tiden för att ge repons: {{opensAt}}-{{closesAt}}"
+    "surveyOpen": "Tiden för att ge repons: {{opensAt}}-{{closesAt}}",
+    "activeSurveys": "Aktiva",
+    "upcomingSurveys": "Kommande",
+    "endedSurveys": "Avslutade",
+    "endedBadgeLabel": "{{count}} saknade lärarsvar på återkopplingen från förra läsåret",
+    "organisationSurveys": "Organisationsenkäter",
+    "courseSurveys": "Kursenkäter",
+    "surveys": "enkäter",
+    "survey": "enkät"
   },
   "questionEditor": {
     "addQuestion": "Lägg till fråga",
