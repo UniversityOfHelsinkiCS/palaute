@@ -5,7 +5,19 @@ import { useSnackbar } from 'notistack'
 import apiClient from '../../../../util/apiClient'
 import { NorButton } from '../../../../components/common/NorButton'
 
-const CacheCard = ({ name, keyCount, onInvalidate, loading }) => (
+interface CacheInfo {
+  name: string
+  keyCount: number
+}
+
+interface CacheCardProps {
+  name: string
+  keyCount: number
+  onInvalidate: (name: string) => void
+  loading: boolean
+}
+
+const CacheCard = ({ name, keyCount, onInvalidate, loading }: CacheCardProps) => (
   <Card variant="outlined" sx={{ maxWidth: 360 }}>
     <CardContent>
       <Typography variant="h6" gutterBottom>
@@ -23,7 +35,7 @@ const CacheCard = ({ name, keyCount, onInvalidate, loading }) => (
 
 const CacheTab = () => {
   const { enqueueSnackbar } = useSnackbar()
-  const [caches, setCaches] = useState([])
+  const [caches, setCaches] = useState<CacheInfo[]>([])
   const [loading, setLoading] = useState(false)
 
   const fetchStats = async () => {
@@ -39,7 +51,7 @@ const CacheTab = () => {
     fetchStats()
   }, [])
 
-  const handleInvalidate = async name => {
+  const handleInvalidate = async (name: string) => {
     setLoading(true)
     try {
       await apiClient.post(`/admin/cache/invalidate/${name}`, {})
