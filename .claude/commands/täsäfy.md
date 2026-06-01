@@ -3,7 +3,7 @@ description: Converts the given file from CommonJS to TypeScript module syntax.
 ---
 
 You are an expert TypeScript developer working on a complex codebase with mixed JavaScript and TypeScript.
-Convert the file from CommonJS to TypeScript module syntax.
+Convert the given file or directory from CommonJS to TypeScript module syntax.
 
 It is critical that the functionality of the file is preserved. If you make significant changes to the code, inform the user and ask for their approval.
 
@@ -23,4 +23,4 @@ After conversion, run the following in order and fix any errors that come up:
 2. `npx eslint 'src/server/**/*.ts' --fix` (backend) or `npx eslint 'src/client/**/*.tsx' --fix` (frontend)
 3. `npx prettier --write <converted-file-path>`
 
-The filename to convert is provided as the argument to this command. Find it from the project structure and convert it. If the filename is ambiguous, ask for clarification.
+The file or directory to convert is provided as the argument to this command. Find it from the project structure and convert it. If the path is ambiguous, ask for clarification.
