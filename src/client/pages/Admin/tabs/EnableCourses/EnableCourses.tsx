@@ -13,11 +13,28 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
+import type { LocalizedString } from '@common/types/common'
 import apiClient from '../../../../util/apiClient'
 import useInactiveCourseRealisations from '../../../../hooks/useInactiveCourseRealisations'
 import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
 
-const Enable = ({ cur, active, setActive }) => {
+type InactiveCourseRealisation = {
+  id: string
+  name: LocalizedString
+  startDate: string
+  endDate: string
+  manuallyEnabled: boolean
+}
+
+const Enable = ({
+  cur,
+  active,
+  setActive,
+}: {
+  cur: InactiveCourseRealisation
+  active: boolean
+  setActive: (active: boolean) => void
+}) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const handleSetActive = async () => {
@@ -53,7 +70,7 @@ const Enable = ({ cur, active, setActive }) => {
   )
 }
 
-const CourseAccordion = ({ cur }) => {
+const CourseAccordion = ({ cur }: { cur: InactiveCourseRealisation }) => {
   const [active, setActive] = useState(cur.manuallyEnabled)
 
   return (
@@ -75,7 +92,9 @@ const CourseAccordion = ({ cur }) => {
   )
 }
 
-const CourseList = React.memo(({ courses }) => courses.map(cur => <CourseAccordion key={cur.id} cur={cur} />))
+const CourseList = React.memo(({ courses }: { courses: InactiveCourseRealisation[] }) =>
+  courses.map(cur => <CourseAccordion key={cur.id} cur={cur} />)
+)
 
 const EnableCourses = () => {
   const [search, setSearch] = useState('')
