@@ -20,6 +20,7 @@ import BannerView from './tabs/Banners/BannersView'
 import EnableCourses from './tabs/EnableCourses/EnableCourses'
 import CrashDebug from './CrashDebug'
 import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/OrganisationSurveyInspector'
+import CacheTab from './tabs/Cache/CacheTab'
 
 const tabStyle = {
   '&.Mui-focusVisible': {
@@ -91,6 +92,7 @@ const AdminView = () => {
           />
           <Tab label="Banners" component={Link} to="/admin/banners" sx={tabStyle} disableRipple />
           <Tab label="Updater" component={Link} to="/admin/updater" sx={tabStyle} disableRipple />
+          <Tab label="Cache" component={Link} to="/admin/cache" sx={tabStyle} disableRipple />
           <Tab label="Misc" component={Link} to="/admin/misc" sx={tabStyle} disableRipple />
         </RouterTabs>
       </Box>
@@ -104,6 +106,7 @@ const AdminView = () => {
         <Route path="/feedback-correspondents" element={<FeedbackCorrespondents />} />
         <Route path="/banners" element={<BannerView />} />
         <Route path="/updater" element={<UpdaterView />} />
+        <Route path="/cache" element={<CacheTab />} />
         <Route path="/misc" element={<MiscTab />} />
       </Routes>
     </>

@@ -7,6 +7,9 @@ import { format, subMonths } from 'date-fns'
 
 import { ApplicationError } from '../../util/ApplicationError'
 import updaterClient from '../../util/updaterClient'
+import feedbackTargetCache from '../../services/feedbackTargets/feedbackTargetCache'
+import { userCache } from '../../services/users/cache'
+import { redis } from '../../util/redisClient'
 
 import {
   FeedbackTarget,
@@ -629,6 +632,41 @@ const updateSummariesTable = async (req: AuthenticatedRequest, res: Response) =>
   res.send({ duration })
 }
 
+const getCacheStats = async (_req: AuthenticatedRequest, res: Response) => {
+  const [fbtKeys, userKeys, orgListKey] = await Promise.all([
+    redis.keys('feedbackTarget:*'),
+    redis.keys('user:*'),
+    redis.keys('organisationsList'),
+  ])
+
+  res.send([
+    { name: 'feedbackTarget', keyCount: fbtKeys.length },
+    { name: 'user', keyCount: userKeys.length },
+    { name: 'organisationsList', keyCount: orgListKey.length },
+  ])
+}
+
+const invalidateCache = async (req: AuthenticatedRequest, res: Response) => {
+  const { cacheName } = req.params
+
+  switch (cacheName) {
+    case 'feedbackTarget':
+      await feedbackTargetCache.invalidateAll()
+      break
+    case 'user':
+      await userCache.invalidateAll()
+      break
+    case 'organisationsList':
+      await redis.delete('organisationsList')
+      logger.info('[CACHE] invalidate organisationsList')
+      break
+    default:
+      throw ApplicationError.BadRequest(`Unknown cache: ${cacheName}`)
+  }
+
+  res.sendStatus(200)
+}
+
 const getBanners = async (req: AuthenticatedRequest, res: Response) => {
   const banners = await Banner.findAll({
     where: {
@@ -665,3 +703,5 @@ router.delete('/banners/:id', deleteBanner)
 router.get('/node-config-env', getNodeConfigEnv)
 router.post('/build-summaries', updateSummariesTable)
 router.get('/banners', getBanners)
+router.get('/cache-stats', getCacheStats)
+router.post('/cache/invalidate/:cacheName', invalidateCache)
