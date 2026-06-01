@@ -1,6 +1,6 @@
 import React from 'react'
 import { useParams } from 'react-router-dom'
-import { Divider, Box, Alert, imageListClasses } from '@mui/material'
+import { Divider, Box, Alert } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import Toolbar from './Toolbar'
