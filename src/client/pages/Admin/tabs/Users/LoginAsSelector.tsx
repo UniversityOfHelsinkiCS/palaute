@@ -8,12 +8,30 @@ import apiClient from '../../../../util/apiClient'
 import UserAccordion from '../../UserAccordion/UserAccordion'
 import { handleLoginAs } from '../../utils'
 
-const LoginAsSelector = () => {
-  const [potentialUsers, setPotentialUsers] = useState([])
-  const [focusIndex, setFocusIndex] = useState(0)
-  const [lastQuery, setLastQuery] = useState({})
+type AdminUser = {
+  id: string
+  firstName: string | null
+  lastName: string | null
+  email: string | null
+  secondaryEmail: string | null
+  username: string
+  studentNumber: string | null
+  degreeStudyRight: boolean | null
+  language: string | null
+  lastLoggedIn: string | null
+}
 
-  const handleChange = debounce(async ({ target }) => {
+type AdminUsersResponse = {
+  params: Record<string, string>
+  persons: AdminUser[]
+}
+
+const LoginAsSelector = () => {
+  const [potentialUsers, setPotentialUsers] = useState<AdminUser[]>([])
+  const [focusIndex, setFocusIndex] = useState(0)
+  const [lastQuery, setLastQuery] = useState<Record<string, string>>({})
+
+  const handleChange = debounce(async ({ target }: React.ChangeEvent<HTMLInputElement>) => {
     const query = target.value
     if (query.length < 5) return
 
@@ -21,7 +39,7 @@ const LoginAsSelector = () => {
       user: query,
     }
 
-    const { data } = await apiClient.get('/admin/users', { params })
+    const { data } = await apiClient.get<AdminUsersResponse>('/admin/users', { params })
     const { params: queried, persons } = data
 
     setLastQuery(queried)
@@ -29,7 +47,7 @@ const LoginAsSelector = () => {
     setFocusIndex(Math.min(focusIndex, persons.length > 0 ? persons.length - 1 : 0))
   }, 400)
 
-  const handleKeyPress = event => {
+  const handleKeyPress = (event: React.KeyboardEvent) => {
     if (event.key === 'Enter' && potentialUsers.length > 0) handleLoginAs(potentialUsers[focusIndex])()
     if (event.key === 'ArrowDown') {
       setFocusIndex(Math.min(focusIndex + 1, potentialUsers.length - 1))
@@ -61,7 +79,13 @@ const LoginAsSelector = () => {
       </div>
 
       {potentialUsers.map((user, index) => (
-        <UserAccordion key={user.id} user={user} handleLoginAs={handleLoginAs} isFocused={index === focusIndex} />
+        <UserAccordion
+          key={user.id}
+          user={user}
+          handleLoginAs={handleLoginAs}
+          isFocused={index === focusIndex}
+          decoration={undefined}
+        />
       ))}
     </Box>
   )
