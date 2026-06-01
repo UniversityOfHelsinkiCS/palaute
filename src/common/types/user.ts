@@ -1,3 +1,4 @@
+import type { LanguageId } from './common'
 import type { OrganisationWithAccess } from './organisation'
 
 export interface User {
@@ -5,6 +6,7 @@ export interface User {
   email: string | null
   firstName?: string
   lastName?: string
+  language?: LanguageId | null
 }
 
 export type LoggedInUser = User & {
