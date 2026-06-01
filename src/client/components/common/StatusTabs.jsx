@@ -22,11 +22,21 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
     label
   )
 
+  const handleKeyDown = e => {
+    if (e.key === ' ') {
+      e.preventDefault()
+      e.currentTarget.click()
+    }
+  }
+
   const tabElement = (
     <Tab
+      id={`tab-${status}`}
+      aria-controls={`tabpanel-${status}`}
       label={labelElement}
       component={Link}
       to={{ search: `?status=${status}` }}
+      onKeyDown={handleKeyDown}
       sx={{
         p: '21px',
         '&:hover': {
@@ -75,7 +85,7 @@ export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
         },
         '& .MuiTabs-indicatorSpan': {
           my: '-3px',
-          width: '100%',
+          width: '96%',
           backgroundColor: theme => theme.palette.primary.main,
         },
       }}

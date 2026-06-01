@@ -216,34 +216,40 @@ const MyTeaching = () => {
         />
       </StatusTabs>
 
-      {isLoading && isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
+      <Box role="tabpanel" id={`tabpanel-${status}`} aria-labelledby={`tab-${status}`}>
+        {isLoading && isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
 
-      {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
-        <Alert data-cy="my-teaching-no-courses" severity="info">
-          {status === 'ended' && !showAllYears ? t('teacherView:noFilteredCourses') : t('teacherView:noCourses')}
-        </Alert>
-      )}
+        {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
+          <Alert data-cy="my-teaching-no-courses" severity="info">
+            {status === 'ended' && !showAllYears ? t('teacherView:noFilteredCourses') : t('teacherView:noCourses')}
+          </Alert>
+        )}
 
-      {status === 'ended' && (
-        <FilterRow
-          dateRange={dateRange}
-          setDateRange={setDateRange}
-          showAllYears={showAllYears}
-          setShowAllYears={setShowAllYears}
-        />
-      )}
+        {status === 'ended' && (
+          <FilterRow
+            dateRange={dateRange}
+            setDateRange={setDateRange}
+            showAllYears={showAllYears}
+            setShowAllYears={setShowAllYears}
+          />
+        )}
 
-      {orgSurveyCourseUnits?.length > 0 && (
-        <RenderCourseUnitGroup
-          groupTitle={t('teacherView:organisationSurveys')}
-          courseUnits={orgSurveyCourseUnits}
-          status={status}
-        />
-      )}
+        {orgSurveyCourseUnits?.length > 0 && (
+          <RenderCourseUnitGroup
+            groupTitle={t('teacherView:organisationSurveys')}
+            courseUnits={orgSurveyCourseUnits}
+            status={status}
+          />
+        )}
 
-      {courseUnits?.length > 0 && (
-        <RenderCourseUnitGroup groupTitle={t('teacherView:courseSurveys')} courseUnits={courseUnits} status={status} />
-      )}
+        {courseUnits?.length > 0 && (
+          <RenderCourseUnitGroup
+            groupTitle={t('teacherView:courseSurveys')}
+            courseUnits={courseUnits}
+            status={status}
+          />
+        )}
+      </Box>
     </Box>
   )
 }

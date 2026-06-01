@@ -1,5 +1,5 @@
 import React, { useMemo, Fragment } from 'react'
-import { Typography, Alert } from '@mui/material'
+import { Typography, Alert, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 import qs from 'qs'
@@ -89,19 +89,21 @@ const MyFeedbacks = () => {
         <StatusTab data-cy="my-feedbacks-closed-tab" label={t('userFeedbacks:feedbackClosedTab')} status="ended" />
       </StatusTabs>
 
-      {isLoading && <LoadingProgress />}
+      <Box role="tabpanel" id={`tabpanel-${status}`} aria-labelledby={`tab-${status}`}>
+        {isLoading && <LoadingProgress />}
 
-      {showNoFeedbackAlert && sortedCourseRealisations.length === 0 && (
-        <Alert data-cy="my-feedbacks-no-feedbacks" severity="info">
-          {t('userFeedbacks:noFeedback')}
-        </Alert>
-      )}
+        {showNoFeedbackAlert && sortedCourseRealisations.length === 0 && (
+          <Alert data-cy="my-feedbacks-no-feedbacks" severity="info">
+            {t('userFeedbacks:noFeedback')}
+          </Alert>
+        )}
 
-      {sortedCourseRealisations.map(courseRealisation => (
-        <Fragment key={courseRealisation.id}>
-          <CourseRealisationItem courseRealisation={courseRealisation} />
-        </Fragment>
-      ))}
+        {sortedCourseRealisations.map(courseRealisation => (
+          <Fragment key={courseRealisation.id}>
+            <CourseRealisationItem courseRealisation={courseRealisation} />
+          </Fragment>
+        ))}
+      </Box>
     </>
   )
 }
