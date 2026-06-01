@@ -17,7 +17,7 @@ const useInteractiveMutation = (mutation, options = { success: undefined, error:
         enqueueSnackbar(options.success ?? t('common:saveSuccess'), { variant: 'success' })
       } catch (error) {
         enqueueSnackbar(
-          typeof options.error === 'function' ? options.error(error) : options.error ?? t('common:unknownError'),
+          typeof options.error === 'function' ? options.error(error) : (options.error ?? t('common:unknownError')),
           { variant: 'error' }
         )
       }
