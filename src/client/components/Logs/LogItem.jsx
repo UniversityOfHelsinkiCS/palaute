@@ -5,7 +5,7 @@ import { OpenFeedbackContainer } from '../OpenFeedback/OpenFeedback'
 
 export const LogItem = ({ log, parseLogMessage }) => (
   <OpenFeedbackContainer>
-    <Box display="flex" gap="1rem" alignItems="end">
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'end' }}>
       <Typography variant="body2" color="text.secondary">
         {format(new Date(log.createdAt), 'hh:mm dd.MM.yyyy')}
       </Typography>

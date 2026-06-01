@@ -4,7 +4,7 @@ import { writeFileXLSX, utils } from 'xlsx'
 import { parseISO, format } from 'date-fns'
 import { CSVLink } from 'react-csv'
 
-import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box } from '@mui/material'
+import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box, TableContainer } from '@mui/material'
 import { Download } from '@mui/icons-material'
 import { orderBy } from 'lodash-es'
 
@@ -197,60 +197,62 @@ const StudentTable = ({ students, feedbackTarget }) => {
         </Box>
       }
     >
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableHeadCell
-              id="firstName"
-              name={t('common:firstName')}
-              order={order}
-              orderBy={orderByKey}
-              onRequestSort={handleRequestSort}
-            />
-            <TableHeadCell
-              id="lastName"
-              name={t('common:lastName')}
-              order={order}
-              orderBy={orderByKey}
-              onRequestSort={handleRequestSort}
-            />
-            <TableHeadCell
-              id="studentNumber"
-              name={t('common:studentNumber')}
-              order={order}
-              orderBy={orderByKey}
-              onRequestSort={handleRequestSort}
-            />
-            <TableHeadCell
-              id="email"
-              name={t('common:email')}
-              order={order}
-              orderBy={orderByKey}
-              onRequestSort={handleRequestSort}
-            />
-            <TableHeadCell
-              id="feedbackGiven"
-              name={t('common:feedback')}
-              order={order}
-              orderBy={orderByKey}
-              onRequestSort={handleRequestSort}
-            />
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {sortTable(students, order, orderByKey).map(
-            ({ id, firstName, lastName, studentNumber, email, feedbackGiven }) => (
-              <TableRow key={id}>
-                <TableCell>{firstName}</TableCell>
-                <TableCell>{lastName}</TableCell>
-                <TableCell>{studentNumber}</TableCell>
-                <TableCell>{email}</TableCell>
-                <TableCell>{getFeedbackText(feedbackStatusAvailable, feedbackGiven, t)}</TableCell>
-              </TableRow>
-            )
-          )}
-        </TableBody>
-      </Table>
+      <TableContainer>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableHeadCell
+                id="firstName"
+                name={t('common:firstName')}
+                order={order}
+                orderBy={orderByKey}
+                onRequestSort={handleRequestSort}
+              />
+              <TableHeadCell
+                id="lastName"
+                name={t('common:lastName')}
+                order={order}
+                orderBy={orderByKey}
+                onRequestSort={handleRequestSort}
+              />
+              <TableHeadCell
+                id="studentNumber"
+                name={t('common:studentNumber')}
+                order={order}
+                orderBy={orderByKey}
+                onRequestSort={handleRequestSort}
+              />
+              <TableHeadCell
+                id="email"
+                name={t('common:email')}
+                order={order}
+                orderBy={orderByKey}
+                onRequestSort={handleRequestSort}
+              />
+              <TableHeadCell
+                id="feedbackGiven"
+                name={t('common:feedback')}
+                order={order}
+                orderBy={orderByKey}
+                onRequestSort={handleRequestSort}
+              />
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {sortTable(students, order, orderByKey).map(
+              ({ id, firstName, lastName, studentNumber, email, feedbackGiven }) => (
+                <TableRow key={id}>
+                  <TableCell>{firstName}</TableCell>
+                  <TableCell>{lastName}</TableCell>
+                  <TableCell>{studentNumber}</TableCell>
+                  <TableCell>{email}</TableCell>
+                  <TableCell>{getFeedbackText(feedbackStatusAvailable, feedbackGiven, t)}</TableCell>
+                </TableRow>
+              )
+            )}
+          </TableBody>
+        </Table>
+      </TableContainer>
     </CardSection>
   )
 }

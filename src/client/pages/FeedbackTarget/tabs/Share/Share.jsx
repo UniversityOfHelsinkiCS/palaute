@@ -53,10 +53,10 @@ const Share = () => {
   }
 
   return (
-    <Box id="feedback-target-tab-content" my={3}>
+    <Box id="feedback-target-tab-content" sx={{ my: 3 }}>
       <ReminderEmailModal open={open} onClose={closeModal} feedbackTarget={feedbackTarget} />
       {isOpen && (
-        <Box mb={2} display="flex" alignItems="center">
+        <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
           <TooltipButton
             variant="contained"
             color="primary"
@@ -68,7 +68,7 @@ const Share = () => {
             {t('feedbackTargetResults:sendReminder')}
           </TooltipButton>
           {formattedLastSentAt && (
-            <Typography component="p" variant="subtitle1" color="textSecondary" sx={{ ml: 2 }}>
+            <Typography component="p" variant="subtitle1" color="textSecondary">
               {`${t('feedbackTargetResults:reminderLastSent')} ${formattedLastSentAt}. ${t(
                 'feedbackTargetResults:reminderCooldownInfo',
                 {
@@ -82,11 +82,11 @@ const Share = () => {
       {feedbackTarget.userCreated &&
         feedbackTarget.tokenEnrolmentEnabled && ( // @feat Gradu survey
           <Paper>
-            <Box p={2}>
+            <Box sx={{ p: 2 }}>
               <Chip label="TOKEN ENROLMENT" variant="outlined" />
-              <Box display="flex" alignItems="center" mt={1} ml={2}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2 }}>
                 <div>TOKEN ENROLMENT</div>
-                <Box mr={2} />
+                <Box sx={{ mr: 2 }} />
               </Box>
             </Box>
           </Paper>
@@ -94,43 +94,46 @@ const Share = () => {
       {isEnded && (
         <>
           <Paper>
-            <Box p={2}>
+            <Box sx={{ p: 2 }}>
               <Chip label={t('feedbackTargetView:studentResultsLinkTitle')} variant="outlined" />
-              <Box display="flex" alignItems="center" mt={1} ml={2}>
-                <Box fontStyle="italic">
-                  <Typography>{resultsLink}</Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2, flexWrap: 'wrap', gap: 1 }}>
+                <Box sx={{ fontStyle: 'italic', minWidth: 0, mr: 2 }}>
+                  <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{resultsLink}</Typography>
                 </Box>
-                <Box mr={2} />
                 <StudentLinkCopyButton
                   onClick={() => handleCopyLink(resultsLink)}
                   label={t('common:copyToClipBoard')}
+                  sx={{ flexShrink: 0 }}
                 />
-                <Box mr={2} />
               </Box>
             </Box>
           </Paper>
-          <Box mt={4} />
+          <Box sx={{ mt: 4 }} />
         </>
       )}
       <Paper>
-        <Box p={2}>
+        <Box sx={{ p: 2 }}>
           <Chip label={t('feedbackTargetView:studentLinkTitle')} variant="outlined" />
-          <Box display="flex" alignItems="center" mt={1} ml={2}>
-            <Box fontStyle="italic">
-              <Typography>{feedbackLink}</Typography>
+          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2, flexWrap: 'wrap', gap: 1 }}>
+            <Box sx={{ fontStyle: 'italic', minWidth: 0, mr: 2 }}>
+              <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{feedbackLink}</Typography>
             </Box>
-            <Box mr={2} />
-            <StudentLinkCopyButton onClick={() => handleCopyLink(feedbackLink)} label={t('common:copyToClipBoard')} />
-            <Box mr={2} />
+            <StudentLinkCopyButton
+              onClick={() => handleCopyLink(feedbackLink)}
+              label={t('common:copyToClipBoard')}
+              sx={{ flexShrink: 0 }}
+            />
           </Box>
         </Box>
       </Paper>
-      <Box mt={4} />
+      <Box sx={{ mt: 4 }} />
       <Paper>
-        <Box p={2}>
+        <Box sx={{ p: 2 }}>
           <Chip label={t('feedbackTargetView:studentLinkQRTitle')} variant="outlined" />
-          <Box p={4}>
-            <QRCode value={feedbackLink} />
+          <Box sx={{ p: 4, display: 'flex', overflow: 'auto' }}>
+            <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
+              <QRCode value={feedbackLink} />
+            </Box>
           </Box>
           <Alert severity="info">{t('feedbackTargetView:qrCodeHelpText')}</Alert>
         </Box>

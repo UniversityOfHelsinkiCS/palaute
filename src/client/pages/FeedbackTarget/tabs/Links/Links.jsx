@@ -18,14 +18,19 @@ const Links = () => {
   const sortedUsers = users.sort((a, b) => a.lastName?.localeCompare(b.lastName) ?? 0)
 
   return (
-    <Box id="feedback-target-tab-content">
+    <Box id="feedback-target-tab-content" sx={{ display: 'flex', flexWrap: 'wrap' }}>
       <Typography variant="h6">Students and their respective feedback links</Typography>
       {sortedUsers.map(user => (
         <Box key={user.studentNumber} style={{ marginTop: 5 }}>
           <Typography variant="body1" component="p">
             {user.firstName} {user.lastName}
           </Typography>
-          <Typography variant="body2" component="p" data-cy={`noad-token-${user.studentNumber}`}>
+          <Typography
+            variant="body2"
+            component="p"
+            data-cy={`noad-token-${user.studentNumber}`}
+            sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
+          >
             http://{window.location.host}/noad/token/{user.token}
           </Typography>
         </Box>
