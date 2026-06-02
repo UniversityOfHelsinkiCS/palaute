@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-
+import type { InactiveCourseRealisation } from '@common/types/admin'
 import apiClient from '../util/apiClient'
 
 const useInactiveCourseRealisations = () => {
   const queryKey = 'inactiveCourseRealisations'
   const queryFn = async () => {
-    const { data } = await apiClient.get('admin/inactive-course-realisations')
+    const { data } = await apiClient.get<InactiveCourseRealisation[]>('admin/inactive-course-realisations')
     return data
   }
 

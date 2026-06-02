@@ -13,18 +13,10 @@ import {
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
 
-import type { LocalizedString } from '@common/types/common'
+import type { InactiveCourseRealisation } from '@common/types/admin'
 import apiClient from '../../../../util/apiClient'
 import useInactiveCourseRealisations from '../../../../hooks/useInactiveCourseRealisations'
 import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
-
-type InactiveCourseRealisation = {
-  id: string
-  name: LocalizedString
-  startDate: string
-  endDate: string
-  manuallyEnabled: boolean
-}
 
 const Enable = ({
   cur,

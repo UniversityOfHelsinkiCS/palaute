@@ -1,11 +1,18 @@
 import { useState } from 'react'
 import { useQuery } from '@tanstack/react-query'
-
+import type { EmailsToBeSent } from '@common/types/admin'
 import apiClient from '../util/apiClient'
 
-const queryFn = async () => {
-  const { data } = await apiClient.get(`/admin/emails`)
+const emptyEmails: EmailsToBeSent = {
+  emails: [],
+  studentEmails: 0,
+  teacherEmails: 0,
+  teacherEmailCounts: [],
+  studentEmailCounts: [],
+}
 
+const queryFn = async () => {
+  const { data } = await apiClient.get<EmailsToBeSent>('/admin/emails')
   return data
 }
 
@@ -23,14 +30,7 @@ const useEmailsToBeSent = () => {
     enabled,
   })
 
-  return [
-    emails || {
-      emails: [],
-      teacherEmailCounts: [],
-      studentEmailCounts: [],
-    },
-    getTheEmails,
-  ]
+  return [emails ?? emptyEmails, getTheEmails] as const
 }
 
 export default useEmailsToBeSent

@@ -1,5 +1,5 @@
 import type { LanguageId } from './common'
-import type { OrganisationWithAccess } from './organisation'
+import type { OrganisationAccess, OrganisationWithAccess } from './organisation'
 import type { BannerRecord } from './banner'
 
 export interface User {
@@ -19,6 +19,7 @@ export type LoggedInUser = User & {
   organisations: OrganisationWithAccess[]
   preferences: UserPreferences
   serverVersion?: string
+  organisationAccess?: Record<string, OrganisationAccess>
 }
 
 export type UserPreferences = {
