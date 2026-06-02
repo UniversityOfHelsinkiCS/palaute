@@ -12,3 +12,6 @@ export type BannerRecord = {
   startDate: string
   endDate: string
 }
+
+// GET /admin/banners
+export type GetBannersResponse = BannerRecord[]

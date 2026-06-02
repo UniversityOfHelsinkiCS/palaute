@@ -13,24 +13,16 @@ export interface Organisation {
   parentId: string | null
 }
 
-// Nested shape — used in LoginResponse.organisations
+// Nested shape — used in LoggedInUser.organisations (GET /login)
 export type OrganisationWithAccess = {
   access: OrganisationAccess
   organisation: Organisation
 }
 
-// Flat shape — returned by GET /organisations (spreads organisation fields + access)
-export type UserOrganisation = Organisation & {
-  access: OrganisationAccess
-  studentListVisible?: boolean
-  studentListVisibleByCourse?: boolean
-  disabledCourseCodes?: string[]
-}
-
 export type Tag = {
   id: number
   name: LocalizedString
-  hash: string
+  hash: number
 }
 
 export type OrganisationMember = {
@@ -40,8 +32,18 @@ export type OrganisationMember = {
   email: string | null
 }
 
-// Detailed shape — returned by GET /organisations/:code
-export type UserOrganisationDetail = Organisation & {
+// GET /organisations
+export type GetOrganisationsResponse = Array<
+  Organisation & {
+    access: OrganisationAccess
+    studentListVisible?: boolean
+    studentListVisibleByCourse?: boolean
+    disabledCourseCodes?: string[]
+  }
+>
+
+// GET /organisations/:code
+export type GetOrganisationResponse = Organisation & {
   access: OrganisationAccess
   tags: Tag[]
   users: OrganisationMember[]
@@ -51,8 +53,11 @@ export type UserOrganisationDetail = Organisation & {
   publicQuestionIds?: number[]
 }
 
-export type OrganisationLog = {
+type OrganisationLogEntry = {
   data: Record<string, unknown>
   createdAt: string
-  user: OrganisationMember
+  user?: OrganisationMember
 }
+
+// GET /organisations/:code/logs
+export type GetOrganisationLogsResponse = OrganisationLogEntry[]

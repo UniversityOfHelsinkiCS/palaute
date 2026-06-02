@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import type { CourseUnit } from '@common/types/courseUnit'
+import type { GetCourseUnitsByOrganisationResponse } from '@common/types/courseUnit'
 import apiClient from '../util/apiClient'
 
 const useOrganisationCourseUnits = (code: string | undefined, options = {}) => {
   const queryKey = ['organisationCourseUnits', code]
   const queryFn = async () => {
-    const { data } = await apiClient.get<CourseUnit[]>(`/course-units/for-organisation/${code}`)
+    const { data } = await apiClient.get<GetCourseUnitsByOrganisationResponse>(`/course-units/for-organisation/${code}`)
     return data
   }
 

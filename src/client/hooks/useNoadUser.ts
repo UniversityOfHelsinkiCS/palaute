@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import type { User } from '@common/types/user'
+import type { GetNoadUserResponse } from '@common/types/user'
 import apiClient from '../util/apiClient'
 
 const useNoadUser = (options = {}) => {
   const queryKey = 'noadUser'
   const queryFn = async () => {
-    const { data } = await apiClient.get<User>('/user')
+    const { data } = await apiClient.get<GetNoadUserResponse>('/user')
     return data
   }
 

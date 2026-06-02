@@ -1,4 +1,9 @@
 import { Response, Router } from 'express'
+import type {
+  GetUniversitySurveyResponse,
+  GetUniversitySurveyVersionsResponse,
+  GetProgrammeSurveyResponse,
+} from '@common/types/survey'
 import z from 'zod/v4'
 import { sequelize } from '../../db/dbConnection'
 import { ApplicationError } from '../../util/ApplicationError'
@@ -91,11 +96,14 @@ const GetUniversitySurveyQuerySchema = z.object({
   at: z.iso.date().or(z.iso.datetime({ offset: true })),
 })
 
-const getUniversitySurvey = async (req: AuthenticatedRequest, res: Response) => {
+const getUniversitySurvey = async (req: AuthenticatedRequest, res: Response<GetUniversitySurveyResponse>) => {
   const { at: parsedAt } = GetUniversitySurveyQuerySchema.parse(req.query)
   const at = new Date(parsedAt)
   const survey = await _getUniversitySurvey(at)
-  res.send(survey)
+  res.send({
+    ...survey.toJSON(),
+    questions: survey.questions?.map(q => q.toPublicObject()),
+  })
 }
 
 const CreateUniversitySurveyBodySchema = z.object({
@@ -115,7 +123,10 @@ const createUniversitySurvey = async (req: AuthenticatedRequest, res: Response) 
   res.status(201).send(survey)
 }
 
-const getUniversitySurveyVersions = async (req: AuthenticatedRequest, res: Response) => {
+const getUniversitySurveyVersions = async (
+  req: AuthenticatedRequest,
+  res: Response<GetUniversitySurveyVersionsResponse>
+) => {
   if (!req.user.isAdmin) throw ApplicationError.Forbidden('Only admins can list university survey versions')
 
   const surveys = await Survey.findAll({
@@ -137,7 +148,12 @@ const getUniversitySurveyVersions = async (req: AuthenticatedRequest, res: Respo
     })
   )
 
-  res.send(activeAndFuture)
+  res.send(
+    activeAndFuture.map(s => ({
+      ...s.toJSON(),
+      questions: s.questions?.map(q => q.toPublicObject()),
+    }))
+  )
 }
 
 const getFullOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
@@ -167,7 +183,7 @@ const getFullOrganisationSurvey = async (req: AuthenticatedRequest, res: Respons
   res.send(response)
 }
 
-const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Response) => {
+const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Response<GetProgrammeSurveyResponse>) => {
   const { surveyCode } = req.params
 
   const [survey] = await Survey.findOrCreate({
@@ -192,7 +208,12 @@ const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Respo
 
   await survey.populateQuestions()
 
-  const response = { ...survey.toJSON(), universitySurvey, organisation }
+  const response = {
+    ...survey.toJSON(),
+    questions: survey.questions?.map(q => q.toPublicObject()),
+    universitySurvey,
+    organisation,
+  }
 
   res.send(response)
 }

@@ -1,4 +1,5 @@
 import { Router, type Response } from 'express'
+import type { GetNorppaFeedbackCountResponse } from '@common/types/admin'
 import type { AuthenticatedRequest } from 'types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { NorppaFeedback, User } from '../../models'
@@ -69,7 +70,7 @@ const markAsSolved = async (req: AuthenticatedRequest, res: Response) => {
   res.sendStatus(200)
 }
 
-const getNorppaFeedbackCount = async (req: AuthenticatedRequest, res: Response) => {
+const getNorppaFeedbackCount = async (req: AuthenticatedRequest, res: Response<GetNorppaFeedbackCountResponse>) => {
   const feedbacks = await NorppaFeedback.count({
     where: {
       solved: false,

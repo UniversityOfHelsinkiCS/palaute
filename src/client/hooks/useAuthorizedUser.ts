@@ -1,11 +1,11 @@
-import type { LoggedInUser } from '@common/types/user'
+import type { GetLoginResponse } from '@common/types/user'
 import { useQuery } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 
 const useAuthorizedUser = (options = {}) => {
   const queryKey = 'authorizedUser'
   const queryFn = async () => {
-    const { data } = await apiClient.get<LoggedInUser>('/login')
+    const { data } = await apiClient.get<GetLoginResponse>('/login')
     return data
   }
 

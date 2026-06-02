@@ -8,6 +8,9 @@ export type InactiveCourseRealisation = {
   manuallyEnabled: boolean
 }
 
+// GET /admin/inactive-course-realisations
+export type GetInactiveCourseRealisationsResponse = InactiveCourseRealisation[]
+
 export type UpdaterStatus = {
   startedAt: string
   finishedAt: string | null
@@ -15,7 +18,11 @@ export type UpdaterStatus = {
   jobType: string
 }
 
-export type EmailsToBeSent = {
+// GET /admin/updater-status
+export type GetUpdaterStatusesResponse = UpdaterStatus[]
+
+// GET /admin/emails
+export type GetEmailsToBeSentResponse = {
   emails: unknown[]
   studentEmails: number
   teacherEmails: number
@@ -23,6 +30,7 @@ export type EmailsToBeSent = {
   studentEmailCounts: unknown[]
 }
 
-export type NorppaFeedbackCount = {
+// GET /norppa-feedback/count
+export type GetNorppaFeedbackCountResponse = {
   count: number
 }

@@ -1,6 +1,11 @@
 import _ from 'lodash'
 import { Response, Router } from 'express'
 import { Op } from 'sequelize'
+import type {
+  GetOrganisationsResponse,
+  GetOrganisationResponse,
+  GetOrganisationLogsResponse,
+} from '@common/types/organisation'
 import { AuthenticatedRequest } from '../../types'
 import { formatActivityPeriod } from '../../util/common'
 import { getOrganisationsList } from '../../services/organisations/getOrganisationsList'
@@ -30,7 +35,7 @@ const getUpdatedCourseCodes = async (updatedCourseCodes: string[], organisation:
   return _.uniq(updatedCourseCodes.filter(c => organisationCourseCodes.includes(c)))
 }
 
-const getOrganisations = async (req: AuthenticatedRequest, res: Response) => {
+const getOrganisations = async (req: AuthenticatedRequest, res: Response<GetOrganisationsResponse>) => {
   const { user } = req
 
   if (!user.isAdmin && !user.isEmployee) {
@@ -109,7 +114,7 @@ const updateOrganisation = async (req: AuthenticatedRequest, res: Response) => {
   res.send(updatedOrganisation)
 }
 
-const getOrganisationByCode = async (req: AuthenticatedRequest, res: Response) => {
+const getOrganisationByCode = async (req: AuthenticatedRequest, res: Response<GetOrganisationResponse>) => {
   const { user } = req
   const { code } = req.params
 
@@ -146,7 +151,7 @@ const getOrganisationByCode = async (req: AuthenticatedRequest, res: Response) =
   res.send(publicOrganisation)
 }
 
-const getOrganisationLogs = async (req: AuthenticatedRequest, res: Response) => {
+const getOrganisationLogs = async (req: AuthenticatedRequest, res: Response<GetOrganisationLogsResponse>) => {
   const { user } = req
   const { code } = req.params
 
@@ -179,7 +184,20 @@ const getOrganisationLogs = async (req: AuthenticatedRequest, res: Response) => 
 
   const { organisationLogs } = organisation
 
-  res.send(organisationLogs)
+  res.send(
+    (organisationLogs ?? []).map(log => ({
+      data: log.data,
+      createdAt: log.createdAt.toISOString(),
+      user: log.user
+        ? {
+            id: log.user.id,
+            firstName: log.user.firstName ?? null,
+            lastName: log.user.lastName ?? null,
+            email: log.user.email ?? null,
+          }
+        : undefined,
+    }))
+  )
 }
 
 const getOpenQuestionsByOrganisation = async (req: AuthenticatedRequest, res: Response) => {

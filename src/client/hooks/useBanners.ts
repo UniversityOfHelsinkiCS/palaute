@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import type { BannerRecord } from '@common/types/banner'
+import type { GetBannersResponse } from '@common/types/banner'
 import apiClient from '../util/apiClient'
 
 const useBanners = () => {
   const queryKey = 'banners'
   const queryFn = async () => {
-    const { data } = await apiClient.get<BannerRecord[]>('admin/banners')
+    const { data } = await apiClient.get<GetBannersResponse>('admin/banners')
     return data
   }
 

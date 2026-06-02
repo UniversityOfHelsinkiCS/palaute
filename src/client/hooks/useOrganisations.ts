@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import type { UserOrganisation } from '@common/types/organisation'
+import type { GetOrganisationsResponse } from '@common/types/organisation'
 import apiClient from '../util/apiClient'
 
 const defaultCacheTime = 900000
@@ -7,7 +7,7 @@ const defaultCacheTime = 900000
 const useOrganisations = (options = {}) => {
   const queryKey = ['organisations']
   const queryFn = async () => {
-    const { data } = await apiClient.get<UserOrganisation[]>('/organisations')
+    const { data } = await apiClient.get<GetOrganisationsResponse>('/organisations')
     return data
   }
 

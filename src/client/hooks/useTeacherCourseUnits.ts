@@ -1,7 +1,7 @@
 import { sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 import { useQuery } from '@tanstack/react-query'
-import type { CourseUnit } from '@common/types/courseUnit'
+import type { GetCourseUnitsResponsibleResponse } from '@common/types/courseUnit'
 import apiClient from '../util/apiClient'
 import { getLanguageValue } from '../util/languageUtils'
 
@@ -13,7 +13,7 @@ const useTeacherCourseUnits = (options = {}) => {
   const queryKey = 'teacherCourseUnits'
 
   const queryFn = async () => {
-    const { data } = await apiClient.get<CourseUnit[]>('/course-units/responsible')
+    const { data } = await apiClient.get<GetCourseUnitsResponsibleResponse>('/course-units/responsible')
     return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
   }
 

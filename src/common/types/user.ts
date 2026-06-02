@@ -10,9 +10,11 @@ export interface User {
   language?: LanguageId | null
 }
 
-// Wire type for GET /login — mirrors what userController sends over JSON.
-// Dates serialise to ISO strings, so lastRestart is string, not Date.
-export type LoggedInUser = User & {
+// GET /user (noad)
+export type GetNoadUserResponse = User
+
+// GET /login
+export type GetLoginResponse = User & {
   iamGroups: string[]
   lastRestart: string
   banners: BannerRecord[]

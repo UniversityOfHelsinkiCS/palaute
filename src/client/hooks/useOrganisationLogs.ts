@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import type { OrganisationLog } from '@common/types/organisation'
+import type { GetOrganisationLogsResponse } from '@common/types/organisation'
 import apiClient from '../util/apiClient'
 
 const defaultCacheTime = 900000
@@ -7,7 +7,7 @@ const defaultCacheTime = 900000
 const useOrganisationLogs = (code: string | undefined, options = {}) => {
   const queryKey = ['organisationsLogs', code]
   const queryFn = async () => {
-    const { data } = await apiClient.get<OrganisationLog[]>(`/organisations/${code}/logs`)
+    const { data } = await apiClient.get<GetOrganisationLogsResponse>(`/organisations/${code}/logs`)
     return data
   }
 

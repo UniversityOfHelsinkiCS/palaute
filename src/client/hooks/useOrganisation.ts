@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import type { UserOrganisationDetail } from '@common/types/organisation'
+import type { GetOrganisationResponse } from '@common/types/organisation'
 import apiClient from '../util/apiClient'
 
 const useOrganisation = (code: string | undefined, options = {}) => {
   const queryKey = ['organisation', code]
   const queryFn = async () => {
-    const { data } = await apiClient.get<UserOrganisationDetail>(`/organisations/${code}`)
+    const { data } = await apiClient.get<GetOrganisationResponse>(`/organisations/${code}`)
     return data
   }
 

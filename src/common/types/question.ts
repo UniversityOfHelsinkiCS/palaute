@@ -21,6 +21,16 @@ export type QuestionOption = {
   label: LocalizedString
 }
 
+// Non-discriminated base — used where the Sequelize model (type: QuestionType) must be assignable
+export type QuestionBase = {
+  id: number
+  type: QuestionType
+  secondaryType: QuestionSecondaryType
+  required: boolean
+  data: QuestionData
+}
+
+// Discriminated union — use in client code for narrowing by type
 export type Question = {
   id: number
   secondaryType: QuestionSecondaryType

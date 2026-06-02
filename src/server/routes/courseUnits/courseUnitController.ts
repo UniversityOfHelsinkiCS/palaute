@@ -1,4 +1,5 @@
 import { Response, Router } from 'express'
+import type { GetCourseUnitsByOrganisationResponse } from '@common/types/courseUnit'
 import { Op, QueryTypes } from 'sequelize'
 import _ from 'lodash'
 
@@ -199,7 +200,10 @@ const getCourseUnitsForTeacher = async (req: AuthenticatedRequest, res: Response
   res.send(courseUnits)
 }
 
-const getCourseUnitsByOrganisation = async (req: AuthenticatedRequest, res: Response) => {
+const getCourseUnitsByOrganisation = async (
+  req: AuthenticatedRequest,
+  res: Response<GetCourseUnitsByOrganisationResponse>
+) => {
   const { code } = req.params
 
   const courseUnits = await CourseUnit.findAll({

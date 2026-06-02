@@ -1,4 +1,10 @@
 import Router, { Response } from 'express'
+import type {
+  GetInactiveCourseRealisationsResponse,
+  GetUpdaterStatusesResponse,
+  GetEmailsToBeSentResponse,
+} from '@common/types/admin'
+import type { GetBannersResponse } from '@common/types/banner'
 
 import { IncludeOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
 import { LocalizedString } from '@common/types/common'
@@ -56,14 +62,21 @@ const runUpdaterForEnrolmentsOfCourse = async (req: AuthenticatedRequest, res: R
   res.send({})
 }
 
-const getUpdaterStatuses = async (req: AuthenticatedRequest, res: Response) => {
+const getUpdaterStatuses = async (req: AuthenticatedRequest, res: Response<GetUpdaterStatusesResponse>) => {
   const { jobType } = req.query
   const statuses = await UpdaterStatus.findAll({
     where: jobType !== 'ALL' ? { jobType: jobType as string } : {},
     order: [['startedAt', 'desc']],
     limit: 50,
   })
-  res.send(statuses)
+  res.send(
+    statuses.map(s => ({
+      startedAt: s.startedAt.toISOString(),
+      finishedAt: s.finishedAt?.toISOString() ?? null,
+      status: s.status,
+      jobType: s.jobType,
+    }))
+  )
 }
 
 const runPate = async (req: AuthenticatedRequest, res: Response) => {
@@ -425,7 +438,7 @@ const getFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
   res.send(feedbackTargetsWithCount)
 }
 
-const findEmailsForToday = async (req: AuthenticatedRequest, res: Response) => {
+const findEmailsForToday = async (req: AuthenticatedRequest, res: Response<GetEmailsToBeSentResponse>) => {
   const { students, teachers, teacherEmailCounts, studentEmailCounts } = await mailer.returnEmailsToBeSentToday()
 
   const emails = teachers.concat(students)
@@ -584,7 +597,10 @@ const getFeedbackCorrespondents = async (req: AuthenticatedRequest, res: Respons
   res.send(users)
 }
 
-const getInactiveCourseRealisations = async (req: AuthenticatedRequest, res: Response) => {
+const getInactiveCourseRealisations = async (
+  req: AuthenticatedRequest,
+  res: Response<GetInactiveCourseRealisationsResponse>
+) => {
   const inactiveCourseRealisations = await InactiveCourseRealisation.findAll({
     where: {
       endDate: {
@@ -593,7 +609,15 @@ const getInactiveCourseRealisations = async (req: AuthenticatedRequest, res: Res
     },
   })
 
-  res.send(inactiveCourseRealisations)
+  res.send(
+    inactiveCourseRealisations.map(cur => ({
+      id: cur.id,
+      name: cur.name,
+      startDate: cur.startDate.toISOString(),
+      endDate: cur.endDate.toISOString(),
+      manuallyEnabled: cur.manuallyEnabled,
+    }))
+  )
 }
 
 const updateInactiveCourseRealisation = async (req: AuthenticatedRequest, res: Response) => {
@@ -667,7 +691,7 @@ const invalidateCache = async (req: AuthenticatedRequest, res: Response) => {
   res.sendStatus(200)
 }
 
-const getBanners = async (req: AuthenticatedRequest, res: Response) => {
+const getBanners = async (req: AuthenticatedRequest, res: Response<GetBannersResponse>) => {
   const banners = await Banner.findAll({
     where: {
       endDate: {
@@ -676,7 +700,7 @@ const getBanners = async (req: AuthenticatedRequest, res: Response) => {
     },
   })
 
-  res.send(banners)
+  res.send(banners.map(b => b.toPublicObject()))
 }
 
 export const router = Router()

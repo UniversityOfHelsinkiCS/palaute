@@ -1,11 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
-import type { Survey } from '@common/types/survey'
+import type { GetUniversitySurveyResponse } from '@common/types/survey'
 import apiClient from '../util/apiClient'
 
 const useUniversitySurvey = (at?: string, options = {}) => {
   const queryKey = ['universitySurvey', at ?? null]
   const queryFn = async () => {
-    const { data } = await apiClient.get<Survey>(`/surveys/university${at ? `?at=${at}` : ''}`)
+    const { data } = await apiClient.get<GetUniversitySurveyResponse>(`/surveys/university${at ? `?at=${at}` : ''}`)
     return data
   }
 

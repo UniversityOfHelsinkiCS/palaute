@@ -1,4 +1,4 @@
-import type { NorppaFeedbackCount } from '@common/types/admin'
+import type { GetNorppaFeedbackCountResponse } from '@common/types/admin'
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
@@ -6,7 +6,7 @@ const useNorppaFeedbackCount = (options = {}) => {
   const queryKey = 'norppaFeedbackCount'
 
   const queryFn = async () => {
-    const { data } = await apiClient.get<NorppaFeedbackCount>('/norppa-feedback/count')
+    const { data } = await apiClient.get<GetNorppaFeedbackCountResponse>('/norppa-feedback/count')
     return data
   }
 

@@ -8,7 +8,7 @@ import {
   CreationOptional,
   INTEGER,
 } from 'sequelize'
-import type { QuestionData, QuestionSecondaryType, QuestionType } from '@common/types/question'
+import type { Question as QuestionDTO, QuestionData, QuestionSecondaryType, QuestionType } from '@common/types/question'
 import { sequelize } from '../db/dbConnection'
 import { WORKLOAD_QUESTION_ID } from '../util/config'
 
@@ -21,6 +21,13 @@ class Question extends Model<InferAttributes<Question>, InferCreationAttributes<
   declare secondaryType: QuestionSecondaryType
   declare required: boolean
   declare data: QuestionData
+
+  toPublicObject(): QuestionDTO {
+    const { id, type, secondaryType, required, data } = this
+    // type is QuestionType (union) at compile time but always a specific literal at runtime —
+    // the DB ENUM enforces the discriminant, TypeScript cannot verify it statically
+    return { id, type, secondaryType, required, data } as QuestionDTO
+  }
 }
 
 Question.init(

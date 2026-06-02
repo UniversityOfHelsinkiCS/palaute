@@ -1,5 +1,6 @@
 import { Response } from 'express'
 import { Includeable } from 'sequelize'
+import type { GetNoadUserResponse } from '@common/types/user'
 import { AuthenticatedRequest } from '../../types'
 import { UserFeedbackTarget, FeedbackTarget, CourseUnit, Feedback, CourseRealisation, Organisation } from '../../models'
 
@@ -48,7 +49,7 @@ export const getCourses = async (req: AuthenticatedRequest, res: Response) => {
   res.send(filteredCourses)
 }
 
-export const getNoadUser = (req: AuthenticatedRequest, res: Response) => {
+export const getNoadUser = (req: AuthenticatedRequest, res: Response<GetNoadUserResponse>) => {
   const { user } = req
   res.send(user)
 }

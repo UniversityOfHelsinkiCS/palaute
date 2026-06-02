@@ -5,3 +5,12 @@ export interface Survey {
   questionIds: number[]
   questions?: Question[]
 }
+
+// GET /surveys/university
+export type GetUniversitySurveyResponse = Survey
+
+// GET /surveys/university/versions
+export type GetUniversitySurveyVersionsResponse = Survey[]
+
+// GET /surveys/programme/:code
+export type GetProgrammeSurveyResponse = Survey

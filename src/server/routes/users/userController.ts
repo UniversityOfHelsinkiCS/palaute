@@ -2,7 +2,7 @@ import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import _ from 'lodash'
 import { Response, Router } from 'express'
 
-import type { LoggedInUser } from '@common/types/user'
+import type { GetLoginResponse } from '@common/types/user'
 import { ApplicationError } from '../../util/ApplicationError'
 import { User } from '../../models'
 import { AuthenticatedRequest } from '../../types'
@@ -15,7 +15,7 @@ import { getBannersForUser } from '../../services/banners/getForUser'
 
 const router = Router()
 
-router.get('/login', async (req: AuthenticatedRequest, res: Response<LoggedInUser>) => {
+router.get('/login', async (req: AuthenticatedRequest, res: Response<GetLoginResponse>) => {
   const { user, loginAs } = req
   const iamGroups = req.noad ? [] : (req.user.iamGroups ?? [])
 
