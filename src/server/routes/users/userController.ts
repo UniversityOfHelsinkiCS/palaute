@@ -2,6 +2,7 @@ import { InferAttributes, Op, WhereOptions } from 'sequelize'
 import _ from 'lodash'
 import { Response, Router } from 'express'
 
+import type { LoggedInUser } from '@common/types/user'
 import { ApplicationError } from '../../util/ApplicationError'
 import { User } from '../../models'
 import { AuthenticatedRequest } from '../../types'
@@ -14,7 +15,7 @@ import { getBannersForUser } from '../../services/banners/getForUser'
 
 const router = Router()
 
-router.get('/login', async (req: AuthenticatedRequest, res: Response) => {
+router.get('/login', async (req: AuthenticatedRequest, res: Response<LoggedInUser>) => {
   const { user, loginAs } = req
   const iamGroups = req.noad ? [] : (req.user.iamGroups ?? [])
 
@@ -38,8 +39,8 @@ router.get('/login', async (req: AuthenticatedRequest, res: Response) => {
     ...user.toJSON(),
     serverVersion: process.env.VERSION || 'unknown',
     iamGroups,
-    lastRestart,
-    banners,
+    lastRestart: lastRestart.toISOString(),
+    banners: banners.map(b => b.toPublicObject()),
     organisations,
     preferences,
   })

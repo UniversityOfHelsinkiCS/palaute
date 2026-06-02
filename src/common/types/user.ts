@@ -1,5 +1,6 @@
 import type { LanguageId } from './common'
 import type { OrganisationWithAccess } from './organisation'
+import type { BannerRecord } from './banner'
 
 export interface User {
   id: string
@@ -9,10 +10,12 @@ export interface User {
   language?: LanguageId | null
 }
 
+// Wire type for GET /login — mirrors what userController sends over JSON.
+// Dates serialise to ISO strings, so lastRestart is string, not Date.
 export type LoggedInUser = User & {
   iamGroups: string[]
-  lastRestart: Date
-  banners: any[]
+  lastRestart: string
+  banners: BannerRecord[]
   organisations: OrganisationWithAccess[]
   preferences: UserPreferences
   serverVersion?: string
