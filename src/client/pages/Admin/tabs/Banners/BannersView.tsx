@@ -4,6 +4,7 @@ import { addDays } from 'date-fns'
 import { Formik } from 'formik'
 import React from 'react'
 import type { LanguageId } from '@common/types/common'
+import type { BannerRecord } from '@common/types/banner'
 import Banner from '../../../../components/common/Banner'
 import FormikDatePicker from '../../../../components/common/FormikDatePicker'
 import FormikSelect from '../../../../components/common/FormikSelect'
@@ -14,20 +15,6 @@ import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import useBanners from '../../../../hooks/useBanners'
 import apiClient from '../../../../util/apiClient'
 import queryClient from '../../../../util/queryClient'
-
-interface BannerData {
-  text: { fi: string; sv: string; en: string }
-  color: string
-}
-
-interface BannerRecord {
-  id: number
-  data: BannerData
-  accessGroup: 'STUDENT' | 'TEACHER' | 'ORG' | 'ADMIN'
-  startDate: string | Date
-  endDate: string | Date
-  color?: string
-}
 
 type PaletteHue = 'white' | 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error'
 type Lightness = 'light' | 'main' | 'dark'
@@ -218,7 +205,7 @@ const BannerForm = ({ onSubmit, selected, open, setOpen }: BannerFormProps) => (
 
 const BannerView = () => {
   const { authorizedUser } = useAuthorizedUser()
-  const { banners } = useBanners() as { banners: BannerRecord[] | undefined }
+  const { banners } = useBanners()
   const [selected, setSelected] = React.useState<BannerRecord | null>(null)
   const [open, setOpen] = React.useState(false)
   const theme = useTheme()
@@ -259,7 +246,7 @@ const BannerView = () => {
             <Box padding={2}>
               <Banner banner={banner} language={authorizedUser?.language} disabled />
               <Box display="flex" columnGap={2}>
-                <div>Color: {banner.color}</div>
+                <div>Color: {banner.data.color}</div>
                 <div>Start date: {String(banner.startDate)}</div>
                 <div>End date: {String(banner.endDate)}</div>
                 <div>Access group: {banner.accessGroup}</div>
