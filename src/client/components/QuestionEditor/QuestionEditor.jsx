@@ -188,7 +188,7 @@ const QuestionEditor = ({
   userCreated,
   curStartDate,
 }) => (
-  <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false}>
+  <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false} enableReinitialize>
     {({ handleSubmit }) => (
       <QuestionEditorForm
         saveChanges={handleSubmit}

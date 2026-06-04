@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import { startOfDay, endOfDay } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
+import { logger } from '../../util/logger'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { ApplicationError } from '../../util/ApplicationError'
 import { Survey, Question, FeedbackTarget } from '../../models'
@@ -109,8 +110,13 @@ const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId
   if (!survey) throw ApplicationError.NotFound('Survey not found')
   const oldIds = survey.questionIds
   survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(questions)
-  // assuming there is only 1 new. Find whether its going to be public, and update publicQuestionIds
   const newIds = _.difference(survey.questionIds, oldIds)
+
+  if (newIds.length > 1) {
+    logger.error(
+      `[updateSurvey] expected at most 1 new question, got ${newIds.length} (feedbackTargetId=${feedbackTarget.id})`
+    )
+  }
 
   // remove the deleted question id
   const removedIds = _.difference(oldIds, survey.questionIds)
