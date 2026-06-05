@@ -17,12 +17,27 @@ import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
 import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
-const StudentLinkCopyButton = ({ onClick, label }) => (
-  <Box>
-    <NorButton icon={<FileCopyOutlined />} color="secondary" onClick={onClick}>
-      {label}
-    </NorButton>
-  </Box>
+const ShareItem = ({ chipLabel, buttonLabel, linkText, copyLink }) => (
+  <Paper sx={{ my: 4 }}>
+    <Box sx={{ p: 2 }}>
+      <Chip label={chipLabel} variant="outlined" />
+      <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2, flexWrap: 'wrap', gap: 1 }}>
+        <Box sx={{ fontStyle: 'italic', minWidth: 0, mr: 2 }}>
+          <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{linkText}</Typography>
+        </Box>
+        <Box>
+          <NorButton
+            icon={<FileCopyOutlined />}
+            color="secondary"
+            onClick={() => copyLink(linkText)}
+            aria-label={`${buttonLabel}: ${chipLabel}`}
+          >
+            {buttonLabel}
+          </NorButton>
+        </Box>
+      </Box>
+    </Box>
+  </Paper>
 )
 
 const Share = () => {
@@ -79,55 +94,21 @@ const Share = () => {
           )}
         </Box>
       )}
-      {feedbackTarget.userCreated &&
-        feedbackTarget.tokenEnrolmentEnabled && ( // @feat Gradu survey
-          <Paper>
-            <Box sx={{ p: 2 }}>
-              <Chip label="TOKEN ENROLMENT" variant="outlined" />
-              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2 }}>
-                <div>TOKEN ENROLMENT</div>
-                <Box sx={{ mr: 2 }} />
-              </Box>
-            </Box>
-          </Paper>
-        )}
       {isEnded && (
-        <>
-          <Paper>
-            <Box sx={{ p: 2 }}>
-              <Chip label={t('feedbackTargetView:studentResultsLinkTitle')} variant="outlined" />
-              <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2, flexWrap: 'wrap', gap: 1 }}>
-                <Box sx={{ fontStyle: 'italic', minWidth: 0, mr: 2 }}>
-                  <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{resultsLink}</Typography>
-                </Box>
-                <StudentLinkCopyButton
-                  onClick={() => handleCopyLink(resultsLink)}
-                  label={t('common:copyToClipBoard')}
-                  sx={{ flexShrink: 0 }}
-                />
-              </Box>
-            </Box>
-          </Paper>
-          <Box sx={{ mt: 4 }} />
-        </>
+        <ShareItem
+          chipLabel={t('feedbackTargetView:studentResultsLinkTitle')}
+          buttonLabel={t('common:copyToClipBoard')}
+          linkText={resultsLink}
+          copyLink={handleCopyLink}
+        />
       )}
-      <Paper>
-        <Box sx={{ p: 2 }}>
-          <Chip label={t('feedbackTargetView:studentLinkTitle')} variant="outlined" />
-          <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2, flexWrap: 'wrap', gap: 1 }}>
-            <Box sx={{ fontStyle: 'italic', minWidth: 0, mr: 2 }}>
-              <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{feedbackLink}</Typography>
-            </Box>
-            <StudentLinkCopyButton
-              onClick={() => handleCopyLink(feedbackLink)}
-              label={t('common:copyToClipBoard')}
-              sx={{ flexShrink: 0 }}
-            />
-          </Box>
-        </Box>
-      </Paper>
-      <Box sx={{ mt: 4 }} />
-      <Paper>
+      <ShareItem
+        chipLabel={t('feedbackTargetView:studentLinkTitle')}
+        buttonLabel={t('common:copyToClipBoard')}
+        linkText={feedbackLink}
+        copyLink={handleCopyLink}
+      />
+      <Paper sx={{ my: 4 }}>
         <Box sx={{ p: 2 }}>
           <Chip label={t('feedbackTargetView:studentLinkQRTitle')} variant="outlined" />
           <Box sx={{ p: 4, display: 'flex', overflow: 'auto' }}>
