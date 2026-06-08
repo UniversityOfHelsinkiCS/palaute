@@ -50,12 +50,16 @@ const ContinuousFeedbackForm = ({ fewEnrolled }) => {
     }
   }
 
+  const smallCourseInfo = fewEnrolled
+    ? `\n\n${t('userFeedbacks:attention')} ${t('userFeedbacks:smallCourseWarning', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}`
+    : ''
+
   return (
     <Box mb={2}>
       <Box sx={{ mb: 2 }} data-cy="continuousFeedbackPreambleDisplay">
         <Alert severity="info">
           <Typography variant="body2" component="p" sx={{ whiteSpace: 'pre-line' }}>
-            {t('feedbackView:continuousFeedbackInfo')}
+            {`${t('feedbackView:continuousFeedbackInfo')}${smallCourseInfo}`}
           </Typography>
         </Alert>
       </Box>
@@ -68,15 +72,7 @@ const ContinuousFeedbackForm = ({ fewEnrolled }) => {
         {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
             <FormikTextField name="feedback" label={t('norppaFeedback:feedback')} fullWidth minRows={4} multiline />
-            <Box sx={{ mt: '1rem' }}>
-              <NorButton
-                type="submit"
-                color="primary"
-                disabled={!values.feedback.length || isSubmitting || (fewEnrolled && !values.activateSubmit)}
-                sx={styles.button}
-              >
-                {t('norppaFeedback:submit')}
-              </NorButton>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: '1rem' }}>
               {fewEnrolled && (
                 <ConsentCheckbox
                   dataCy="continuous-feedback-consent-checkbox"
@@ -86,6 +82,14 @@ const ContinuousFeedbackForm = ({ fewEnrolled }) => {
                   handleChange={setFieldValue}
                 />
               )}
+              <NorButton
+                type="submit"
+                color="primary"
+                disabled={!values.feedback.length || isSubmitting || (fewEnrolled && !values.activateSubmit)}
+                sx={styles.button}
+              >
+                {t('norppaFeedback:submit')}
+              </NorButton>
             </Box>
           </Form>
         )}

@@ -21,6 +21,7 @@ export const ConsentCheckbox = ({ label, dataCy, handleChange }: ConsentCheckbox
         handleChange('activateSubmit', target.checked)
       }}
       ariaDescription={t('feedbackView:allowSubmitCheckboxAria')}
+      sx={{ ml: 0 }}
     />
   )
 }
