@@ -173,7 +173,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
             disabled={!feedbackEnabled}
             data-cy="continuousFeedbackPreamble"
           />
-          <Box mt={-2} display="flex" justifyContent="flex-end">
+          <Box display="flex" justifyContent="flex-end">
             <NorButton
               color="primary"
               onClick={handlePreambleSave}
