@@ -190,6 +190,15 @@ const defaultTheme = (mode: PaletteMode | undefined) => ({
         },
       },
     },
+    MuiFormHelperText: {
+      styleOverrides: {
+        root: {
+          '&.Mui-disabled': {
+            color: '#00000099',
+          },
+        },
+      },
+    },
   },
 })
 
