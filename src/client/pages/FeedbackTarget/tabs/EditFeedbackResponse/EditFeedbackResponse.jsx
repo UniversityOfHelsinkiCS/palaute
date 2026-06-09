@@ -99,14 +99,7 @@ const EditFeedbackResponse = () => {
                   multiline
                   disabled={feedbackResponseFormDisabled}
                 />
-                <Box my={2} display="flex">
-                  <ResponseEmailButton
-                    sendEmail={!isSent && sendEmail}
-                    disabled={
-                      (!edited && !sendEmail) || (!edited && isSent) || isSubmitting || !values.feedbackResponse
-                    }
-                    onSubmit={() => handleSubmit(values)}
-                  />
+                <Box sx={{ my: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
                   <FormControlLabel
                     control={
                       <Checkbox
@@ -119,7 +112,14 @@ const EditFeedbackResponse = () => {
                       />
                     }
                     label={isSent ? t('feedbackResponse:emailSent') : t('feedbackResponse:checkboxSendEmail')}
-                    sx={{ ml: 1, pr: 1, ...optionFocusIndicatorStyle() }}
+                    sx={{ ml: 0, pr: 1, ...optionFocusIndicatorStyle() }}
+                  />
+                  <ResponseEmailButton
+                    sendEmail={!isSent && sendEmail}
+                    disabled={
+                      (!edited && !sendEmail) || (!edited && isSent) || isSubmitting || !values.feedbackResponse
+                    }
+                    onSubmit={() => handleSubmit(values)}
                   />
                 </Box>
                 <Box my={2}>
