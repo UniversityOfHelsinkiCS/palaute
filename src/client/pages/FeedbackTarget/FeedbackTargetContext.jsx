@@ -7,6 +7,10 @@ export const FeedbackTargetContextProvider = ({ id, isAdmin, organisation, feedb
   const { i18n } = useTranslation()
   const [previewLanguage, setPreviewLanguage] = React.useState(i18n.language)
 
+  React.useEffect(() => {
+    setPreviewLanguage(i18n.language)
+  }, [i18n.language])
+
   const accessContext = React.useMemo(() => {
     const orgAccess = organisation?.access
     const accessStatus = feedbackTarget?.accessStatus
