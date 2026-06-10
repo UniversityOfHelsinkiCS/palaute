@@ -8,7 +8,14 @@ const styles = {
   },
 }
 
-const GutterTypography = ({ sx, ...props }) => <Typography sx={[sx, styles.gutterBottom]} {...props} fontWeight={400} />
+const getAcualProps = props => {
+  const { node, ...rest } = props
+  return rest
+}
+
+const GutterTypography = ({ sx, ...props }) => (
+  <Typography sx={[sx, styles.gutterBottom]} {...getAcualProps(props)} fontWeight={400} />
+)
 
 const H1 = props => <GutterTypography variant="h4" component="h1" {...props} />
 
@@ -29,8 +36,13 @@ const defaultComponents = {
   h4: H4,
 }
 
-const Markdown = ({ disallowImages = false, ...props }) => (
-  <ReactMarkdown components={{ ...defaultComponents }} urlTransform={disallowImages ? () => '' : null} {...props} />
+const Markdown = ({ disallowImages = false, id, ...props }) => (
+  <ReactMarkdown
+    components={{ ...defaultComponents }}
+    urlTransform={disallowImages ? () => '' : null}
+    id={id}
+    {...props}
+  />
 )
 
 export default Markdown

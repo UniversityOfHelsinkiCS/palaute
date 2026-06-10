@@ -34,7 +34,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
   return (
     <Box display="flex">
       <Box flexGrow={1}>
-        <Grid spacing={4} container>
+        <Grid rowSpacing={1} columnSpacing={4} container>
           {languages.map(language => {
             const languageT = i18n.getFixedT(language)
 

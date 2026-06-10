@@ -3,6 +3,7 @@ import { Box, Grid2 as Grid, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../common/FormikTextField'
+import LinkButton from '../common/LinkButton'
 
 const LanguageLikertEditor = ({ name, language, inputRef }) => {
   const { i18n } = useTranslation()
@@ -32,6 +33,7 @@ const LanguageLikertEditor = ({ name, language, inputRef }) => {
 }
 
 const LikertEditor = forwardRef((props, ref) => {
+  const { t } = useTranslation()
   const { name, languages = ['fi', 'sv', 'en'] } = props
   const firstInputRef = useRef(null)
 
@@ -42,7 +44,7 @@ const LikertEditor = forwardRef((props, ref) => {
   }))
 
   return (
-    <Grid spacing={4} container>
+    <Grid rowSpacing={1} columnSpacing={4} container>
       {languages.map((language, idx) => (
         <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
           <Box mb={2}>
@@ -54,6 +56,7 @@ const LikertEditor = forwardRef((props, ref) => {
           <LanguageLikertEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
         </Grid>
       ))}
+      <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external />
     </Grid>
   )
 })

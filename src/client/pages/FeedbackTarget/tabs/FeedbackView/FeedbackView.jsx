@@ -103,7 +103,7 @@ const FormContainer = ({
                 <Box mb={2}>
                   <Alert severity="info">
                     {t('feedbackView:feedbackInfo')}{' '}
-                    <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog}>
+                    <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
                       {t('feedbackView:feedbackInfoLink')}
                     </AlertLink>
                   </Alert>

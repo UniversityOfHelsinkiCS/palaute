@@ -3,7 +3,7 @@ import { Formik, Form, useField } from 'formik'
 
 import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
 
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
@@ -71,15 +71,12 @@ const EditFeedbackResponse = () => {
             <Typography variant="body2">{t('feedbackResponse:writingInstruction')}</Typography>
           </Box>
         </Instructions>
-        <Box mb={2}>
+        <Box sx={{ mb: 2 }}>
           <Alert severity="info">
-            <Trans i18nKey="feedbackResponse:responseInfo">
-              This field supports{' '}
-              <AlertLink href={t('links:markdownHelp')} target="_blank">
-                Markdown
-              </AlertLink>{' '}
-              syntax
-            </Trans>
+            {t('feedbackResponse:responseInfo')}{' '}
+            <AlertLink href={t('links:markdownHelp')} target="_blank">
+              {t('feedbackResponse:markdownLink')}
+            </AlertLink>
           </Alert>
         </Box>
         <Formik initialValues={initialValues} validateOnChange={false} onSubmit={handleSubmit}>

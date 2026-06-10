@@ -1,9 +1,9 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
-import { Alert, Box, Grid2 as Grid, Typography } from '@mui/material'
-import { useTranslation, Trans } from 'react-i18next'
+import { Box, Grid2 as Grid, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
 
-import AlertLink from '../common/AlertLink'
 import FormikTextField from '../common/FormikTextField'
+import LinkButton from '../common/LinkButton'
 
 const LanguageOpenEditor = ({ name, language, inputRef }) => {
   const { i18n } = useTranslation()
@@ -11,19 +11,7 @@ const LanguageOpenEditor = ({ name, language, inputRef }) => {
 
   return (
     <>
-      <Box mb={3}>
-        <Alert severity="info">
-          <Trans i18nKey="questionEditor:markDownSupport">
-            These fields supports{' '}
-            <AlertLink href={t('links:markdownHelp')} target="_blank">
-              Markdown
-            </AlertLink>{' '}
-            syntax
-          </Trans>
-        </Alert>
-      </Box>
-
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <FormikTextField
           id={`open-question-${language}-${name}`}
           name={`${name}.data.label.${language}`}
@@ -47,6 +35,7 @@ const LanguageOpenEditor = ({ name, language, inputRef }) => {
 }
 
 const OpenEditor = forwardRef((props, ref) => {
+  const { t } = useTranslation()
   const { name, languages = ['fi', 'sv', 'en'] } = props
   const firstInputRef = useRef(null)
 
@@ -69,6 +58,7 @@ const OpenEditor = forwardRef((props, ref) => {
           <LanguageOpenEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
         </Grid>
       ))}
+      <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external />
     </Grid>
   )
 })

@@ -1,5 +1,5 @@
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
-import { useTranslation, Trans } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 
 import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
 
@@ -11,31 +11,19 @@ const LanguageTextEditor = ({ name, language, inputRef }) => {
   const t = i18n.getFixedT(language)
 
   return (
-    <>
-      <Box mb={3}>
-        <Alert severity="info">
-          <Trans i18nKey="feedbackResponse:responseInfo">
-            This field supports{' '}
-            <AlertLink href={t('links:markdownHelp')} target="_blank">
-              Markdown
-            </AlertLink>{' '}
-            syntax
-          </Trans>
-        </Alert>
-      </Box>
-      <FormikTextField
-        id={`textual-context-text-${language}-${name}`}
-        name={`${name}.data.content.${language}`}
-        label={t('questionEditor:content')}
-        fullWidth
-        multiline
-        inputRef={inputRef}
-      />
-    </>
+    <FormikTextField
+      id={`textual-context-text-${language}-${name}`}
+      name={`${name}.data.content.${language}`}
+      label={t('questionEditor:content')}
+      fullWidth
+      multiline
+      inputRef={inputRef}
+    />
   )
 }
 
 const TextEditor = forwardRef((props, ref) => {
+  const { t } = useTranslation()
   const { name, languages = ['fi', 'sv', 'en'] } = props
   const firstInputRef = useRef(null)
 
@@ -58,6 +46,12 @@ const TextEditor = forwardRef((props, ref) => {
           <LanguageTextEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
         </Grid>
       ))}
+      <Alert severity="info" sx={{ width: '100%' }}>
+        {t('questionEditor:markdownSupport')}{' '}
+        <AlertLink href={t('links:markdownHelp')} target="_blank">
+          {t('feedbackResponse:markdownLink')}
+        </AlertLink>
+      </Alert>
     </Grid>
   )
 })

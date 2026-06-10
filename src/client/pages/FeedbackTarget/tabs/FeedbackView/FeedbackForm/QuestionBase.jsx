@@ -1,6 +1,7 @@
 import React from 'react'
 
 import { Box, Typography } from '@mui/material'
+import Markdown from '../../../../../components/common/Markdown'
 
 const styles = {
   label: {
@@ -29,9 +30,9 @@ const QuestionBase = ({ children, label, description, required, labelProps = {},
         {`${label}${required ? ' *' : ''}`}
       </Typography>
       {description && (
-        <Typography id={descriptionId} sx={styles.description}>
-          {description}
-        </Typography>
+        <Box id={descriptionId} sx={styles.description}>
+          <Markdown>{description}</Markdown>
+        </Box>
       )}
       {children}
     </Box>
