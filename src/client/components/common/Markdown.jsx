@@ -36,13 +36,8 @@ const defaultComponents = {
   h4: H4,
 }
 
-const Markdown = ({ disallowImages = false, id, ...props }) => (
-  <ReactMarkdown
-    components={{ ...defaultComponents }}
-    urlTransform={disallowImages ? () => '' : null}
-    id={id}
-    {...props}
-  />
+const Markdown = ({ disallowImages = false, ...props }) => (
+  <ReactMarkdown components={{ ...defaultComponents }} urlTransform={disallowImages ? () => '' : null} {...props} />
 )
 
 export default Markdown
