@@ -9,7 +9,7 @@ ENV VERSION=development
 ENV VITE_VERSION=development
 
 # Setup
-RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+COPY ./.npmrc .
 COPY package* ./
 RUN npm config set cache /tmp --global
 RUN npm ci

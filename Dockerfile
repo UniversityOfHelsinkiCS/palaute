@@ -27,7 +27,7 @@ ARG STAGING
 ENV REACT_APP_STAGING=$STAGING
 
 # Setup
-RUN curl -fsSL https://github.com/AikidoSec/safe-chain/releases/latest/download/install-safe-chain.sh | sh -s -- --ci
+COPY ./.npmrc .
 COPY package* ./
 RUN npm ci -f --omit-dev --ignore-scripts
 COPY . .
