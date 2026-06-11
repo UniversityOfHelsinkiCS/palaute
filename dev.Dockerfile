@@ -9,7 +9,7 @@ ENV VERSION=development
 ENV VITE_VERSION=development
 
 # Setup
-COPY ./.npmrc .
+COPY .npmrc ./
 COPY package* ./
 RUN npm config set cache /tmp --global
 RUN npm ci

@@ -27,7 +27,7 @@ ARG STAGING
 ENV REACT_APP_STAGING=$STAGING
 
 # Setup
-COPY ./.npmrc .
+COPY .npmrc ./
 COPY package* ./
 RUN npm ci -f --omit-dev --ignore-scripts
 COPY . .
