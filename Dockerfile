@@ -30,6 +30,7 @@ ENV REACT_APP_STAGING=$STAGING
 COPY .npmrc ./
 COPY package* ./
 RUN npm ci -f --omit-dev --ignore-scripts
+RUN npx cypress install
 COPY . .
 
 RUN npm run build

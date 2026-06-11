@@ -13,6 +13,7 @@ COPY .npmrc ./
 COPY package* ./
 RUN npm config set cache /tmp --global
 RUN npm ci
+RUN npx cypress install
 
 EXPOSE $EXPOSE_PORT
 
