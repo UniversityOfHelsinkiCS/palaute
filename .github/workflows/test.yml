@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.3
       - name: Build project for linting
         run: npm ci
       - name: Run eslint and ts checks
@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.3
       - name: Build project for translations
         run: npm ci
       - name: Analyse translations
@@ -47,7 +47,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v6.0.3
 
       - name: npm ci
         run: npm ci --no-audit --no-fund
@@ -56,28 +56,28 @@ jobs:
         run: npx cypress install
 
       - name: Login to toska docker registry
-        uses: docker/login-action@v3
+        uses: docker/login-action@v3.7.0
         with:
           registry: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi
           username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
           password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
 
       - name: Start the application
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v3.0.2
         with:
           timeout_minutes: 5
           max_attempts: 3
           command: docker compose -f docker-compose.ci.yml up -d
 
       - name: Run cypress tests with retry
-        uses: nick-fields/retry@v3
+        uses: nick-fields/retry@v3.0.2
         with:
           timeout_minutes: 6
           max_attempts: 2
           command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}"
 
       - name: Upload video
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v6.0.0
         if: failure()
         with:
           path: /home/runner/work/palaute/palaute/cypress/videos/*
