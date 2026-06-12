@@ -27,11 +27,8 @@ ARG STAGING
 ENV REACT_APP_STAGING=$STAGING
 
 # Setup
-COPY .npmrc ./
 COPY package* ./
 RUN npm ci -f --omit-dev --ignore-scripts
-RUN npm install cypress
-RUN npx cypress install
 COPY . .
 
 RUN npm run build

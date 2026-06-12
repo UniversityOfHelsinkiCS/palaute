@@ -9,11 +9,9 @@ ENV VERSION=development
 ENV VITE_VERSION=development
 
 # Setup
-COPY .npmrc ./
 COPY package* ./
 RUN npm config set cache /tmp --global
 RUN npm ci
-RUN npx cypress install
 
 EXPOSE $EXPOSE_PORT
 
