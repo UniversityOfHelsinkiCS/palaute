@@ -23,74 +23,65 @@ jobs:
       - name: Analyse translations
         run: npm run translations -- --lang fi,en
 
-  cypress-run:
-    runs-on: ubuntu-24.04
+  cypress:
+    strategy:
+      fail-fast: false
+      matrix:
+        spec:
+          [
+            common.spec.js,
+            continuousFeedback.spec.js,
+            courseSummary.spec.js,
+            emailStatsView.spec.js,
+            feedbackResults.spec.js,
+            interimFeedback.spec.js,
+            noad.spec.ts,
+            organisationSurvey.spec.js,
+            programme.spec.js,
+            search.spec.ts,
+            teacherview.spec.js,
+            universitySurvey.spec.js,
+            userfeedbacks.spec.js,
+            versionedUniversitySurvey.spec.js,
+          ]
+    runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v6
-      # Install npm dependencies, cache them correctly
-      # and run all Cypress tests
-      - name: Cypress run
-        uses: cypress-io/github-action@v7
+      - uses: actions/checkout@v6
+
+      - name: npm ci
+        run: npm ci --no-audit --no-fund
+
+      - name: Install cypress
+        run: npx cypress install
+
+      - name: Login to toska docker registry
+        uses: docker/login-action@v3
         with:
-          build: npm run build
-          start: npm start
-  # cypress:
-  #   strategy:
-  #     fail-fast: false
-  #     matrix:
-  #       spec:
-  #         [
-  #           common.spec.js,
-  #           continuousFeedback.spec.js,
-  #           courseSummary.spec.js,
-  #           emailStatsView.spec.js,
-  #           feedbackResults.spec.js,
-  #           interimFeedback.spec.js,
-  #           noad.spec.ts,
-  #           organisationSurvey.spec.js,
-  #           programme.spec.js,
-  #           search.spec.ts,
-  #           teacherview.spec.js,
-  #           universitySurvey.spec.js,
-  #           userfeedbacks.spec.js,
-  #           versionedUniversitySurvey.spec.js,
-  #         ]
-  #   runs-on: ubuntu-latest
+          registry: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi
+          username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
+          password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
 
-  #   steps:
-  #     - uses: actions/checkout@v6
+      - name: Start the application
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 5
+          max_attempts: 3
+          command: docker compose -f docker-compose.ci.yml up -d
 
-  #     - name: npm ci
-  #       run: npm ci --no-audit --no-fund
+      - name: Run cypress tests with retry
+        uses: nick-fields/retry@v3
+        with:
+          timeout_minutes: 6
+          max_attempts: 2
+          command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}"
 
-  #     - name: Login to toska docker registry
-  #       uses: docker/login-action@v3
-  #       with:
-  #         registry: registry-toska.ext.ocp-prod-0.k8s.it.helsinki.fi
-  #         username: ${{ secrets.TOSKAREGISTRY_USERNAME }}
-  #         password: ${{ secrets.TOSKAREGISTRY_PASSWORD }}
+      - name: Upload video
+        uses: actions/upload-artifact@v6
+        if: failure()
+        with:
+          path: /home/runner/work/palaute/palaute/cypress/videos/*
 
-  #     - name: Start the application
-  #       uses: nick-fields/retry@v3
-  #       with:
-  #         timeout_minutes: 5
-  #         max_attempts: 3
-  #         command: docker compose -f docker-compose.ci.yml up -d
-
-  #     - name: Run cypress tests with retry
-  #       uses: nick-fields/retry@v3
-  #       with:
-  #         timeout_minutes: 6
-  #         max_attempts: 2
-  #         command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}"
-
-  #     - name: Upload video
-  #       uses: actions/upload-artifact@v6
-  #       if: failure()
-  #       with:
-  #         path: /home/runner/work/palaute/palaute/cypress/videos/*
-
-  #     - name: Check logs
-  #       run: docker compose -f docker-compose.ci.yml logs
-  #       if: failure()
+      - name: Check logs
+        run: docker compose -f docker-compose.ci.yml logs
+        if: failure()
