@@ -75,7 +75,8 @@
     "feedbacksGivenRatio": "Givna återkopplingar / Antal anmälda studenter",
     "additional": "Ytterligare",
     "opensInNewTab": ", öppnas i en ny flik",
-    "skipToContent": "Gå till innehållet"
+    "skipToContent": "Gå till innehållet",
+    "contactEmailDescription": "Kontakt: {{email}}. E-postprogram öppnas i ett nytt fönster."
   },
   "validationErrors": {
     "required": "Fältet krävs",
