@@ -67,6 +67,10 @@ const styles = {
   },
 }
 
+const generateTabId = id => `feedback-target-tab-${id}`
+
+const generateTabpanelId = tabId => tabId.replace('-tab-', '-tabpanel-')
+
 const FeedbackTargetContent = () => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget, isStudent, isTeacher, isAdmin, isOrganisationAdmin, isResponsibleTeacher } =
@@ -147,202 +151,255 @@ const FeedbackTargetContent = () => {
         })}`}
       </Link>
       <FeedbackTargetInformation />
-      <Box
-        mb="2rem"
-        sx={{
-          '@media print': {
-            display: 'none',
-          },
-        }}
-      >
-        <FeedbackTargetTabsContainer>
-          {!hideSurveyTab &&
-            (feedbackGiven && isOpen ? (
-              <FeedbackTargetTab
-                data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
-                label={t('feedbackTargetView:editFeedbackTab')}
-                to={`${pathnameBase}/feedback`}
-                icon={<EditOutlined />}
-              />
-            ) : (
-              <FeedbackTargetTab
-                data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
-                label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
-                to={`${pathnameBase}/feedback`}
-                icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
-              />
-            ))}
-          {showSettingsTab && (
+
+      <FeedbackTargetTabsContainer>
+        {!hideSurveyTab &&
+          (feedbackGiven && isOpen ? (
             <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
-              label={t('feedbackTargetView:surveyQuestionsTab')}
-              to={`${pathnameBase}/edit`}
-              disabled={!isAdmin && isOpenOrClosed}
-              disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
+              data-cy={`${dataCyPrefix}feedback-target-edit-feedback-tab`}
+              label={t('feedbackTargetView:editFeedbackTab')}
+              to={`${pathnameBase}/feedback`}
               icon={<EditOutlined />}
+              id={generateTabId('feedback')}
             />
-          )}
-          {showEditFeedbackResponseTab && (
+          ) : (
             <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-feedback-response-tab`}
-              label={
-                !feedbackResponseEmailSent
-                  ? t('feedbackTargetView:giveFeedbackResponseTab')
-                  : t('feedbackTargetView:editFeedbackResponseTab')
-              }
-              to={`${pathnameBase}/edit-feedback-response`}
-              icon={<EditOutlined />}
+              data-cy={`${dataCyPrefix}feedback-target-give-feedback-tab`}
+              label={isStudent ? t('feedbackTargetView:surveyTab') : t('common:preview')}
+              to={`${pathnameBase}/feedback`}
+              icon={isStudent ? <LiveHelpOutlined /> : <VisibilityOutlined />}
+              id={generateTabId('feedback')}
             />
-          )}
-          {showLinksTab && (
-            <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
-              label={t('feedbackTargetView:shareTab')}
-              to={`${pathnameBase}/share`}
-              icon={<ShareOutlined />}
-            />
-          )}
-          {showContinuousFeedbackTab && (
-            <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
-              label={t('feedbackTargetView:continuousFeedbackTab')}
-              to={`${pathnameBase}/continuous-feedback`}
-              icon={<ReviewsOutlined />}
-            />
-          )}
-          {showInterimFeedbackTab && (
-            <FeedbackTargetTab
-              data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
-              label={t('feedbackTargetView:interimFeedbackTab')}
-              to={`${pathnameBase}/interim-feedback`}
-              icon={<ForumOutlined />}
-            />
-          )}
-          {showResultsSection && (
-            <>
-              <FeedbackTargetTab
-                data-cy={`${dataCyPrefix}feedback-target-results-tab`}
-                label={t('feedbackTargetView:feedbacksTab')}
-                to={`${pathnameBase}/results`}
-                icon={<PollOutlined />}
-              />
-              {showStudentsWithFeedbackTab && (
-                <FeedbackTargetTab
-                  data-cy={`${dataCyPrefix}feedback-target-students-with-feedback-tab`}
-                  label={t('feedbackTargetView:studentsWithFeedbackTab')}
-                  to={`${pathnameBase}/students-with-feedback`}
-                  icon={<PeopleOutlined />}
-                />
-              )}
-            </>
-          )}
-          {isAdmin && (
-            <>
-              <FeedbackTargetTab
-                data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
-                label="Togen"
-                to={`${pathnameBase}/togen`}
-                icon={<ListOutlined />}
-              />
-              <FeedbackTargetTab
-                data-cy={`${dataCyPrefix}feedback-target-logs-tab`}
-                label="Logs"
-                to={`${pathnameBase}/logs`}
-                icon={<ListOutlined />}
-              />
-            </>
-          )}
-        </FeedbackTargetTabsContainer>
-      </Box>
+          ))}
+        {showSettingsTab && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-settings-tab`}
+            label={t('feedbackTargetView:surveyQuestionsTab')}
+            to={`${pathnameBase}/edit`}
+            disabled={!isAdmin && isOpenOrClosed}
+            disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
+            icon={<EditOutlined />}
+            id={generateTabId('edit')}
+          />
+        )}
+        {showEditFeedbackResponseTab && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-feedback-response-tab`}
+            label={
+              !feedbackResponseEmailSent
+                ? t('feedbackTargetView:giveFeedbackResponseTab')
+                : t('feedbackTargetView:editFeedbackResponseTab')
+            }
+            to={`${pathnameBase}/edit-feedback-response`}
+            icon={<EditOutlined />}
+            id={generateTabId('edit-feedback-response')}
+          />
+        )}
+        {showLinksTab && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-share-feedback-tab`}
+            label={t('feedbackTargetView:shareTab')}
+            to={`${pathnameBase}/share`}
+            icon={<ShareOutlined />}
+            id={generateTabId('share')}
+          />
+        )}
+        {showContinuousFeedbackTab && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-continuous-feedback-tab`}
+            label={t('feedbackTargetView:continuousFeedbackTab')}
+            to={`${pathnameBase}/continuous-feedback`}
+            icon={<ReviewsOutlined />}
+            id={generateTabId('continuous-feedback')}
+          />
+        )}
+        {showInterimFeedbackTab && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-interim-feedback-tab`}
+            label={t('feedbackTargetView:interimFeedbackTab')}
+            to={`${pathnameBase}/interim-feedback`}
+            icon={<ForumOutlined />}
+            id={generateTabId('interim-feedback')}
+          />
+        )}
+        {showResultsSection && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-results-tab`}
+            label={t('feedbackTargetView:feedbacksTab')}
+            to={`${pathnameBase}/results`}
+            icon={<PollOutlined />}
+            id={generateTabId('results')}
+          />
+        )}
+        {showResultsSection && showStudentsWithFeedbackTab && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-students-with-feedback-tab`}
+            label={t('feedbackTargetView:studentsWithFeedbackTab')}
+            to={`${pathnameBase}/students-with-feedback`}
+            icon={<PeopleOutlined />}
+            id={generateTabId('students-with-feedback')}
+          />
+        )}
+        {isAdmin && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-togen-tab`}
+            label="Togen"
+            to={`${pathnameBase}/togen`}
+            icon={<ListOutlined />}
+            id={generateTabId('togen')}
+          />
+        )}
+        {isAdmin && (
+          <FeedbackTargetTab
+            data-cy={`${dataCyPrefix}feedback-target-logs-tab`}
+            label="Logs"
+            to={`${pathnameBase}/logs`}
+            icon={<ListOutlined />}
+            id={generateTabId('logs')}
+          />
+        )}
+      </FeedbackTargetTabsContainer>
 
       <Routes>
         <Route
           path="/edit"
           element={
-            <ProtectedRoute hasAccess={showSettingsTab} redirectPath={defaultPath}>
-              <Settings />
-            </ProtectedRoute>
+            <Box role="tabpanel" id={generateTabpanelId(generateTabId('edit'))} aria-labelledby={generateTabId('edit')}>
+              <ProtectedRoute hasAccess={showSettingsTab} redirectPath={defaultPath}>
+                <Settings />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/results"
           element={
-            <ProtectedRoute hasAccess={showResultsSection} redirectPath={defaultPath}>
-              <Results />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('results'))}
+              aria-labelledby={generateTabId('results')}
+            >
+              <ProtectedRoute hasAccess={showResultsSection} redirectPath={defaultPath}>
+                <Results />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/feedback"
           element={
-            <ProtectedRoute hasAccess>
-              <FeedbackView />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('feedback'))}
+              aria-labelledby={generateTabId('feedback')}
+            >
+              <ProtectedRoute hasAccess>
+                <FeedbackView />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/continuous-feedback"
           element={
-            <ProtectedRoute hasAccess={showContinuousFeedbackTab} redirectPath={defaultPath}>
-              <ContinuousFeedback />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('continuous-feedback'))}
+              aria-labelledby={generateTabId('continuous-feedback')}
+            >
+              <ProtectedRoute hasAccess={showContinuousFeedbackTab} redirectPath={defaultPath}>
+                <ContinuousFeedback />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/interim-feedback/*"
           element={
-            <ProtectedRoute hasAccess={showInterimFeedbackTab} redirectPath={defaultPath}>
-              <InterimFeedback />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('interim-feedback'))}
+              aria-labelledby={generateTabId('interim-feedback')}
+            >
+              <ProtectedRoute hasAccess={showInterimFeedbackTab} redirectPath={defaultPath}>
+                <InterimFeedback />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/students-with-feedback"
           element={
-            <ProtectedRoute hasAccess={showStudentsWithFeedbackTab} redirectPath={defaultPath}>
-              <StudentsWithFeedback />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('students-with-feedback'))}
+              aria-labelledby={generateTabId('students-with-feedback')}
+            >
+              <ProtectedRoute hasAccess={showStudentsWithFeedbackTab} redirectPath={defaultPath}>
+                <StudentsWithFeedback />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/share"
           element={
-            <ProtectedRoute hasAccess={showLinksTab} redirectPath={defaultPath}>
-              <Share />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('share'))}
+              aria-labelledby={generateTabId('share')}
+            >
+              <ProtectedRoute hasAccess={showLinksTab} redirectPath={defaultPath}>
+                <Share />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/togen"
           element={
-            <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
-              <Links />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('togen'))}
+              aria-labelledby={generateTabId('togen')}
+            >
+              <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
+                <Links />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/edit-feedback-response"
           element={
-            <ProtectedRoute hasAccess={showEditFeedbackResponseTab} redirectPath={defaultPath}>
-              <EditFeedbackResponse />
-            </ProtectedRoute>
+            <Box
+              role="tabpanel"
+              id={generateTabpanelId(generateTabId('edit-feedback-response'))}
+              aria-labelledby={generateTabId('edit-feedback-response')}
+            >
+              <ProtectedRoute hasAccess={showEditFeedbackResponseTab} redirectPath={defaultPath}>
+                <EditFeedbackResponse />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
         <Route
           path="/logs"
           element={
-            <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
-              <Logs />
-            </ProtectedRoute>
+            <Box role="tabpanel" id={generateTabpanelId(generateTabId('logs'))} aria-labelledby={generateTabId('logs')}>
+              <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
+                <Logs />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
