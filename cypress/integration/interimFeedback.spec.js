@@ -153,7 +153,9 @@ describe('Responsible Teachers', () => {
 
     // Assert that the tabs are rendered correctly
     cy.get('[data-cy="interim-feedback-target-give-feedback-tab"]').should('exist').click()
-    cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
+    cy.get(
+      '[aria-label="Questions tab disabled: Survey can no longer be edited after the feedback has opened."]'
+    ).should('exist')
     cy.get('[data-cy="interim-feedback-target-share-feedback-tab"]').should('exist').click()
     cy.get('[data-cy="interim-feedback-target-results-tab"]').should('exist').click()
     cy.get('[data-cy="interim-feedback-target-students-with-feedback-tab"]').should('exist').click()
@@ -250,7 +252,9 @@ describe('Responsible Teachers', () => {
     })
 
     // Assert that the edit tab is disabled
-    cy.get('[aria-label="Survey can no longer be edited after the feedback has opened"]').should('exist')
+    cy.get(
+      '[aria-label="Questions tab disabled: Survey can no longer be edited after the feedback has opened."]'
+    ).should('exist')
     cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('have.attr', 'aria-disabled', 'true')
   })
 
