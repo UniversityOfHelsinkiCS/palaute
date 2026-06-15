@@ -1,5 +1,6 @@
 import React from 'react'
 import { Box, ToggleButton, ToggleButtonGroup, Typography, Alert } from '@mui/material'
+import { Theme } from '@mui/material/styles'
 import { useTranslation } from 'react-i18next'
 import type { User } from '@common/types/user'
 import { getLanguageValue } from '../../../../util/languageUtils'
@@ -29,6 +30,18 @@ interface GroupSelectorProps {
   studentCount: number
 }
 
+const groupButtonStyle = (theme: Theme) => ({
+  p: '3px',
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  '&.Mui-focusVisible': {
+    border: '3px solid',
+    borderColor: theme.palette.primary.main,
+    p: '0px',
+  },
+})
+
 const GroupButton: React.FC<GroupButtonProps> = ({ option, onClick, value, ...props }) => {
   const { t } = useTranslation()
 
@@ -36,43 +49,40 @@ const GroupButton: React.FC<GroupButtonProps> = ({ option, onClick, value, ...pr
 
   const hasTooltipContent = option.studentCount || option.teachers
 
-  const buttonChildren =
-    option.id !== 'ALL' && hasTooltipContent ? (
-      <PaperTooltip
-        title={
-          <Box p="0.3rem">
-            {option.studentCount && (
-              <Typography variant="body2">
-                {t('common:studentCount')}:{' '}
-                <Typography component="span" color="textSecondary">
-                  {option.studentCount}
-                </Typography>
+  return option.id !== 'ALL' && hasTooltipContent ? (
+    <PaperTooltip
+      title={
+        <Box p="0.3rem">
+          {option.studentCount && (
+            <Typography variant="body2">
+              {t('common:studentCount')}:{' '}
+              <Typography component="span" color="textSecondary">
+                {option.studentCount}
               </Typography>
-            )}
-            {option.teachers && (
-              <>
-                <Typography variant="body2" sx={{ mt: '0.3rem', mb: '0.2rem' }}>
-                  {t('groups:teachersOfGroup')}
-                </Typography>
-                {option.teachers.map(teacher => (
-                  <div key={teacher.id}>
-                    <TeacherChip user={teacher} tooltipPlacement="right" />
-                  </div>
-                ))}
-              </>
-            )}
-          </Box>
-        }
-      >
+            </Typography>
+          )}
+          {option.teachers && option.teachers.length > 0 && (
+            <>
+              <Typography variant="body2" sx={{ mt: '0.3rem', mb: '0.2rem' }}>
+                {t('groups:teachersOfGroup')}:
+              </Typography>
+              {option.teachers.map(teacher => (
+                <div key={teacher.id}>
+                  <TeacherChip user={teacher} tooltipPlacement="right" />
+                </div>
+              ))}
+            </>
+          )}
+        </Box>
+      }
+    >
+      <ToggleButton onClick={onClick} sx={groupButtonStyle} value={value} disableRipple {...props}>
         {buttonLabel}
-      </PaperTooltip>
-    ) : (
-      <div>{buttonLabel}</div>
-    )
-
-  return (
-    <ToggleButton onClick={onClick} sx={{ p: 0 }} value={value} {...props}>
-      {buttonChildren}
+      </ToggleButton>
+    </PaperTooltip>
+  ) : (
+    <ToggleButton onClick={onClick} sx={groupButtonStyle} value={value} disableRipple {...props}>
+      {buttonLabel}
     </ToggleButton>
   )
 }
