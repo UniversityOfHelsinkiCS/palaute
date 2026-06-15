@@ -251,11 +251,15 @@ describe('Responsible Teachers', () => {
       cy.get(`[data-cy="interim-feedback-show-feedback-${interimFeedback.id}"]`).click()
     })
 
-    // Assert that the edit tab is disabled
+    // Assert that the edit tab is "disabled". It's not truly disabled because then the tooltip would not be accessible on with keyboard.
     cy.get(
       '[aria-label="Questions tab disabled: Survey can no longer be edited after the feedback has opened."]'
     ).should('exist')
-    cy.get('[data-cy="interim-feedback-target-settings-tab"]').should('have.attr', 'aria-disabled', 'true')
+
+    cy.get('[id="feedback-target-tabpanel-feedback"]').should('exist')
+    cy.get('[data-cy="interim-feedback-target-settings-tab"]').click()
+    cy.get('[id="feedback-target-tabpanel-feedback"]').should('exist')
+    cy.get('[id="feedback-target-tabpanel-edit"]').should('not.exist')
   })
 
   it('can create questions for interim feedbacks', () => {
