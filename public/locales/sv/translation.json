@@ -156,7 +156,8 @@
     "dataTableCaption": "Fördelningen av svaren",
     "option": "Alternativ",
     "count": "Antal",
-    "percentage": "Procent"
+    "percentage": "Procent",
+    "required": "Obligatorisk"
   },
   "teacherView": {
     "mainHeading": "Mina enkäter",

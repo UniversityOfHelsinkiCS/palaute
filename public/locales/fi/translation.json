@@ -162,7 +162,8 @@
     "dataTableCaption": "Vastausten jakauma",
     "option": "Vaihtoehto",
     "count": "Määrä",
-    "percentage": "Osuus"
+    "percentage": "Osuus",
+    "required": "Pakollinen"
   },
   "teacherView": {
     "mainHeading": "Kyselyni",

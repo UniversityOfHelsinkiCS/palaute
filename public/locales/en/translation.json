@@ -167,7 +167,8 @@
     "dataTableCaption": "The distribution of the responses",
     "option": "Option",
     "count": "Count",
-    "percentage": "Percentage"
+    "percentage": "Percentage",
+    "required": "Required"
   },
   "teacherView": {
     "mainHeading": "My surveys",
