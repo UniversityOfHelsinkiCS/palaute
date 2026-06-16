@@ -1,5 +1,5 @@
 import React, { useId, useState } from 'react'
-import { Menu, Box, MenuList } from '@mui/material'
+import { Menu, Box } from '@mui/material'
 import { Download } from '@mui/icons-material'
 import { NorButton } from './NorButton'
 
@@ -11,6 +11,7 @@ const styles = {
   },
   menu: {
     '& .MuiPaper-root': {
+      p: 1,
       minWidth: 180,
       color: 'rgb(55, 65, 81)',
       boxShadow:
@@ -73,7 +74,7 @@ const ExportButton = ({ label, disabled = false, children }: ExportButtonProps) 
         }}
         sx={styles.menu}
       >
-        <MenuList dense>{children}</MenuList>
+        {children}
       </Menu>
     </Box>
   )

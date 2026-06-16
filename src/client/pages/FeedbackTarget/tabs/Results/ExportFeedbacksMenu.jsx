@@ -9,6 +9,7 @@ import ExportButton from '../../../../components/common/ExportButton'
 import { getCourseStartDate } from './utils'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
+import { focusIndicatorStyle } from '../../../../util/accessibility'
 
 const getHeaders = (questions, feedbacks, language) => {
   const orderOfIds = feedbacks[0].data.map(f => f.questionId)
@@ -102,37 +103,33 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
   return { workbook, filename: `${filename}.xlsx` }
 }
 
-const ExportXLSXLink = ({ feedbackTarget, feedbacks }) => {
-  const { i18n, t } = useTranslation()
+const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
+  const { t, i18n } = useTranslation()
   const { language } = i18n
+  const hasFeedbacks = feedbacks?.length > 0
 
   const { workbook, filename } = React.useMemo(
     () => createXLSX({ feedbackTarget, feedbacks, language }),
     [feedbacks, feedbackTarget, language]
   )
 
-  return <MenuItem onClick={() => writeFileXLSX(workbook, filename)}>{t('common:exportXLSX')}</MenuItem>
-}
-
-const ExportPdfLink = ({ componentRef }) => {
-  const { t } = useTranslation()
-
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
     pageStyle: '',
   })
 
-  return <MenuItem onClick={handlePrint}>{t('common:exportPdf')}</MenuItem>
-}
-
-const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
-  const { t } = useTranslation()
-  const hasFeedbacks = feedbacks?.length > 0
-
   return (
     <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export')}>
-      {hasFeedbacks && <ExportXLSXLink feedbackTarget={feedbackTarget} feedbacks={feedbacks} />}
-      {hasFeedbacks && <ExportPdfLink componentRef={componentRef} />}
+      {hasFeedbacks && (
+        <MenuItem onClick={() => writeFileXLSX(workbook, filename)} sx={focusIndicatorStyle()}>
+          {t('common:exportXLSX')}
+        </MenuItem>
+      )}
+      {hasFeedbacks && (
+        <MenuItem onClick={handlePrint} sx={focusIndicatorStyle()}>
+          {t('common:exportPdf')}
+        </MenuItem>
+      )}
     </ExportButton>
   )
 }
