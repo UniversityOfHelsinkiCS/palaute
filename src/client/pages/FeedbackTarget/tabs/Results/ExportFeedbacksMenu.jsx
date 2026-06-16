@@ -108,10 +108,13 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   const { language } = i18n
   const hasFeedbacks = feedbacks?.length > 0
 
-  const { workbook, filename } = React.useMemo(
-    () => createXLSX({ feedbackTarget, feedbacks, language }),
-    [feedbacks, feedbackTarget, language]
+  const memo = React.useMemo(
+    () => (hasFeedbacks ? createXLSX({ feedbackTarget, feedbacks, language }) : null),
+    [feedbacks, feedbackTarget, language, hasFeedbacks]
   )
+
+  const workbook = memo?.workbook
+  const filename = memo?.filename
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -120,7 +123,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
 
   return (
     <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export')}>
-      {hasFeedbacks && (
+      {hasFeedbacks && workbook && filename && (
         <MenuItem onClick={() => writeFileXLSX(workbook, filename)} sx={focusIndicatorStyle()}>
           {t('common:exportXLSX')}
         </MenuItem>
