@@ -129,6 +129,7 @@ const QuestionItem = ({
           <Box flexGrow={0} mr="auto" display="flex" flexDirection="column" rowGap="0.5rem" alignItems="start">
             {isResponsibleTeacher && (
               <QuestionPublicityToggle
+                questionId={question.id}
                 checked={isPublic}
                 disabled={disabled}
                 onChange={() => handlePublicityToggle(isPublic)}

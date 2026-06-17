@@ -25,10 +25,12 @@ const radioButtonStyle = {
 }
 
 const QuestionPublicityToggle = ({
+  questionId,
   checked,
   disabled,
   onChange,
 }: {
+  questionId: string | number
   checked: boolean
   disabled: boolean
   onChange: (value: boolean) => void
@@ -43,8 +45,8 @@ const QuestionPublicityToggle = ({
   }`
 
   const isOpen = Boolean(anchorEl)
-  const popoverId = 'question-publicity-settings'
-  const labelId = 'question-publicity-settings-label'
+  const popoverId = `question-${questionId}-publicity-settings`
+  const labelId = `question-${questionId}-publicity-settings-label`
 
   const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)

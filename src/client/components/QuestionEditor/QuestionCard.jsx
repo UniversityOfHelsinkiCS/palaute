@@ -200,6 +200,7 @@ const QuestionCard = ({
           <Grid size={4} display="flex" justifyContent="center">
             {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
               <QuestionPublicityToggle
+                questionId={question.id}
                 checked={question.public}
                 disabled={!question.publicityConfigurable}
                 onChange={() => handlePublicityToggle(!question.public)}
