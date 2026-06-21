@@ -1,8 +1,6 @@
 name: Feature branches & pull requests
 
 on:
-  pull_request:
-    types: [opened]
   push:
     branches-ignore:
       - master
