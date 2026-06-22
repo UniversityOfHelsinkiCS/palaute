@@ -1,6 +1,11 @@
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { countBy, round } from 'lodash-es'
-import SummaryResultItem from '../../../../../components/SummaryResultItem'
+import { Box, Typography } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
+import { getColor } from '../../../../../util/resultColors'
+import { getArrow } from '../../../../../components/SummaryResultItem/WorkloadResultItem'
+import { getLanguageValue } from '../../../../../util/languageUtils'
 
 const styles = {
   resultItem: {
@@ -11,6 +16,16 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: '0.4rem',
+    textAlign: 'center',
+    position: 'relative',
+    color: 'black',
+  },
+  content: {
+    display: 'inline-flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    whiteSpace: 'nowrap',
+    lineHeight: 2,
   },
 }
 
@@ -74,18 +89,50 @@ const getMean = (question, distribution) => {
   }
 }
 
+const getBackgroundColor = (mean, questionSecondaryType) => {
+  const meanValue = questionSecondaryType === 'WORKLOAD' ? 5.0 - Math.abs((mean - 3) * 2.0) : mean
+  return getColor(meanValue)
+}
+
+const getMeanOption = (mean, question) => {
+  if (!question?.data?.options?.length) return null
+
+  let index = Math.round(mean) - 1
+  index = Math.max(0, Math.min(index, question.data.options.length - 1))
+
+  return question.data.options[index]
+}
+
 const AverageResult = ({ question }) => {
+  const { t, i18n } = useTranslation()
   const distribution = getDistribution(question.feedbacks)
+  const isWorkloadQuestion = question.secondaryType === 'WORKLOAD'
+
   const mean = getMean(question, distribution)
+  const fixedMean = mean?.toFixed(2) || 0
+
+  const meanText = isWorkloadQuestion
+    ? getLanguageValue(getMeanOption(mean, question)?.label, i18n.language)
+    : fixedMean
+  const screenReaderText = `${t('feedbackSummary:average')}: ${fixedMean > 0 ? meanText : t('courseSummary:noResults')}`
 
   return (
-    <SummaryResultItem
-      mean={mean}
-      distribution={distribution}
-      question={question}
-      component="div"
-      sx={styles.resultItem}
-    />
+    <>
+      <Box
+        sx={{ backgroundColor: getBackgroundColor(mean, question.secondaryType), ...styles.resultItem }}
+        aria-hidden="true"
+      >
+        {isWorkloadQuestion && (fixedMean > 0 ? getArrow(mean) : '–')}
+        {!isWorkloadQuestion && (
+          <Box sx={styles.content}>
+            <Typography fontWeight="500">{fixedMean > 0 ? fixedMean : '–'}</Typography>
+          </Box>
+        )}
+      </Box>
+      <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>
+        {screenReaderText}
+      </Box>
+    </>
   )
 }
 

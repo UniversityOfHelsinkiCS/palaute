@@ -13,7 +13,7 @@ const normalizeMean = mean => {
   return diff / 2
 }
 
-const getArrow = mean => {
+export const getArrow = mean => {
   const normalizedMean = normalizeMean(mean)
 
   const angle = normalizedMean * 90
