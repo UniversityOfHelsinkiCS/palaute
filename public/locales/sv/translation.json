@@ -551,6 +551,14 @@
     "pinnedOrganisations": "Fästa",
     "previousSurveyDataInfo": "Responsen för denna kurs härstammar från en universitetsenkät från en annan period och en sammanfattning kan inte visas för den valda tidsperioden"
   },
+  "generateReport": {
+    "selectIncluded": "Välj innehåll att exportera",
+    "organisations": "Organisationer",
+    "courseUnits": "Studieavsnitt",
+    "courseRealisations": "Kursinstanser",
+    "atLeastOneRequired": "Välj minst ett alternativ",
+    "exporting": "Exporterar..."
+  },
   "footer": {
     "contactSupport": "Kontakta stödet",
     "wikiLink": "Användarinstruktioner",

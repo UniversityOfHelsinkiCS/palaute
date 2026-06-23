@@ -557,13 +557,12 @@
     "previousSurveyDataInfo": "Tämän opintojakson palautteet ovat peräisin eri ajanjakson yliopistotasoisesta kyselystä, eikä yhteenvetoa voida näyttää valitulle ajanjaksolle"
   },
   "generateReport": {
-    "selectIncluded": "Valitse sisältö",
+    "selectIncluded": "Valitse ladattava sisältö",
     "organisations": "Organisaatiot",
     "courseUnits": "Opintojaksot",
     "courseRealisations": "Kurssitoteutukset",
-    "selectTimeRange": "Valitse aikaväli",
-    "selectedTime": "Nykyinen",
-    "allTime": "Koko historia"
+    "atLeastOneRequired": "Valitse vähintään yksi vaihtoehto",
+    "exporting": "Ladataan..."
   },
   "footer": {
     "contactSupport": "Ota yhteyttä tukeen",

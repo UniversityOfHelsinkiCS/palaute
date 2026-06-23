@@ -562,13 +562,12 @@
     "previousSurveyDataInfo": "The feedback for this course is from a university survey of a different period and a summary cannot be shown for the selected time period"
   },
   "generateReport": {
-    "selectIncluded": "Select content",
+    "selectIncluded": "Select content to download",
     "organisations": "Organisations",
     "courseUnits": "Course units",
     "courseRealisations": "Course realisations",
-    "selectTimeRange": "Select timespan",
-    "selectedTime": "Currently selected",
-    "allTime": "All time"
+    "atLeastOneRequired": "Select at least one option",
+    "exporting": "Exporting..."
   },
   "footer": {
     "contactSupport": "Contact support",

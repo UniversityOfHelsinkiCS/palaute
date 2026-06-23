@@ -1,12 +1,23 @@
 import React from 'react'
-import { Checkbox, CircularProgress, FormControl, FormControlLabel, FormGroup, FormLabel, Popover } from '@mui/material'
-import { Download } from '@mui/icons-material'
+import {
+  Checkbox,
+  CircularProgress,
+  FormControl,
+  FormControlLabel,
+  FormGroup,
+  FormLabel,
+  Popover,
+  Box,
+  Typography,
+  IconButton,
+} from '@mui/material'
+import { Download, Close } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { NorButton } from '../../components/common/NorButton'
 import { useSummaryContext } from './context'
 import apiClient from '../../util/apiClient'
-import { optionFocusIndicatorStyle } from '../../util/accessibility'
+import { optionFocusIndicatorStyle, focusIndicatorStyle } from '../../util/accessibility'
 
 const checkBoxStyle = {
   ml: 1,
@@ -16,6 +27,7 @@ const checkBoxStyle = {
 
 const GenerateReport = ({ organisationId }) => {
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const closeButtonRef = React.useRef(null)
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
   const { dateRange } = useSummaryContext()
@@ -24,8 +36,23 @@ const GenerateReport = ({ organisationId }) => {
   const [includeCUs, setIncludeCUs] = React.useState(false)
   const [includeCURs, setIncludeCURs] = React.useState(false)
   const isValid = includeOrgs || includeCUs || includeCURs
+  const open = Boolean(anchorEl)
+
+  const popoverId = open ? 'export-xlsx-popover' : undefined
+  const labelId = 'select-content-label'
+  const errorId = 'select-content-error'
 
   const [isLoading, setIsLoading] = React.useState(false)
+
+  React.useEffect(() => {
+    if (open) {
+      setTimeout(() => closeButtonRef.current?.focus(), 0)
+    }
+  }, [open])
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
 
   const handleSubmit = async ev => {
     ev.preventDefault()
@@ -54,6 +81,7 @@ const GenerateReport = ({ organisationId }) => {
       tempLink.click()
 
       URL.revokeObjectURL(url)
+      closeButtonRef.current?.focus()
     } catch (e) {
       // eslint-disable-next-line no-console
       console.error(e)
@@ -64,67 +92,102 @@ const GenerateReport = ({ organisationId }) => {
   }
 
   return (
-    <div>
-      <NorButton color="secondary" onClick={ev => setAnchorEl(ev.currentTarget)} icon={<Download />}>
+    <Box>
+      <NorButton
+        color="secondary"
+        onClick={ev => setAnchorEl(ev.currentTarget)}
+        icon={<Download />}
+        aria-haspopup="dialog"
+        aria-expanded={open}
+        aria-controls={popoverId}
+      >
         {t('common:exportXLSX')}
       </NorButton>
       <Popover
+        id={popoverId}
+        role="dialog"
+        aria-labelledby={labelId}
         anchorEl={anchorEl}
-        open={Boolean(anchorEl)}
-        onClose={() => setAnchorEl(null)}
+        open={open}
+        onClose={handleClose}
         anchorOrigin={{
           vertical: 'bottom',
           horizontal: 'left',
         }}
       >
-        <form onSubmit={handleSubmit}>
-          <FormControl sx={{ p: '1rem' }}>
-            <FormLabel id="include-checkbox-group-label">{t('generateReport:selectIncluded')}</FormLabel>
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={includeOrgs}
-                    onChange={(_, checked) => setIncludeOrgs(checked)}
-                    disableFocusRipple
-                  />
-                }
-                label={t('generateReport:organisations')}
-                sx={{ my: 1, ...checkBoxStyle }}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox checked={includeCUs} onChange={(_, checked) => setIncludeCUs(checked)} disableFocusRipple />
-                }
-                label={t('generateReport:courseUnits')}
-                sx={{ mb: 1, ...checkBoxStyle }}
-              />
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={includeCURs}
-                    onChange={(_, checked) => setIncludeCURs(checked)}
-                    disableFocusRipple
-                  />
-                }
-                label={t('generateReport:courseRealisations')}
-                sx={checkBoxStyle}
-              />
-            </FormGroup>
-            <NorButton
-              data-cy="export-xlsx-submit"
-              color="primary"
-              type="submit"
-              disabled={!isValid || isLoading}
-              sx={{ mt: '1rem' }}
-              icon={isLoading ? <CircularProgress sx={{ color: 'primary.main' }} size={16} /> : <Download />}
+        <Box sx={{ p: '1rem' }}>
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'top', mb: 1.5 }}>
+            <IconButton
+              ref={closeButtonRef}
+              size="small"
+              onClick={handleClose}
+              aria-label={t('common:close')}
+              sx={{ ml: 1, ...focusIndicatorStyle() }}
+              disableFocusRipple
             >
-              {t('common:exportXLSX')}
-            </NorButton>
-          </FormControl>
-        </form>
+              <Close fontSize="small" />
+            </IconButton>
+          </Box>
+          <form onSubmit={handleSubmit}>
+            <FormControl component="fieldset" aria-describedby={!isValid ? errorId : undefined}>
+              <FormLabel component="legend" id={labelId} sx={{ color: 'primary.main' }}>
+                {t('generateReport:selectIncluded')}
+              </FormLabel>
+              <FormGroup aria-labelledby={labelId}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={includeOrgs}
+                      onChange={(_, checked) => setIncludeOrgs(checked)}
+                      disableFocusRipple
+                    />
+                  }
+                  label={t('generateReport:organisations')}
+                  sx={{ my: 1, ...checkBoxStyle }}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={includeCUs}
+                      onChange={(_, checked) => setIncludeCUs(checked)}
+                      disableFocusRipple
+                    />
+                  }
+                  label={t('generateReport:courseUnits')}
+                  sx={{ mb: 1, ...checkBoxStyle }}
+                />
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={includeCURs}
+                      onChange={(_, checked) => setIncludeCURs(checked)}
+                      disableFocusRipple
+                    />
+                  }
+                  label={t('generateReport:courseRealisations')}
+                  sx={checkBoxStyle}
+                />
+              </FormGroup>
+              {!isValid && (
+                <Typography id={errorId} variant="body2" role="alert" sx={{ mt: 1, color: 'error.main' }}>
+                  {t('generateReport:atLeastOneRequired')}
+                </Typography>
+              )}
+              <NorButton
+                data-cy="export-xlsx-submit"
+                color="primary"
+                type="submit"
+                disabled={!isValid || isLoading}
+                sx={{ mt: '1rem' }}
+                icon={isLoading ? <CircularProgress sx={{ color: 'primary.main' }} size={16} /> : <Download />}
+              >
+                {isLoading ? t('generateReport:exporting') : t('common:exportXLSX')}
+              </NorButton>
+            </FormControl>
+          </form>
+        </Box>
       </Popover>
-    </div>
+    </Box>
   )
 }
 
