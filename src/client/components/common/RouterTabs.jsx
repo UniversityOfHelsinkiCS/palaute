@@ -47,6 +47,7 @@ export const RouterTab = ({
   badgeContent,
   badgeColor = 'primary',
   badgeVisible = true,
+  tabId,
   ...props
 }) => {
   const { pathname } = useLocation()
@@ -76,6 +77,8 @@ export const RouterTab = ({
 
   const tab = (
     <Tab
+      id={`tab-${tabId}`}
+      aria-controls={`tabpanel-${tabId}`}
       label={content}
       component={Link}
       to={to}

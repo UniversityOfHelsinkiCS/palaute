@@ -84,18 +84,21 @@ const Organisation = () => {
               label={t('organisationSettings:settingsTab')}
               icon={<SettingsOutlined />}
               to={`${pathnameBase}/settings`}
+              tabId="settings"
             />
           )}
           <RouterTab
             label={t('organisationSettings:summaryTab')}
             to={`${pathnameBase}/summary`}
             icon={<PollOutlined />}
+            tabId="summary"
           />
           {hasAdminAccess && (
             <RouterTab
               label={t('organisationSettings:openQuestionsTab')}
               to={`${pathnameBase}/open`}
               icon={<CommentOutlined />}
+              tabId="open"
             />
           )}
           {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
@@ -103,6 +106,7 @@ const Organisation = () => {
               label={t('organisationSettings:courseRealisationsTab')}
               to={`${pathnameBase}/upcoming`}
               icon={<CalendarTodayOutlined />}
+              tabId="upcoming"
             />
           )}
           {hasWriteAccess && (
@@ -110,6 +114,7 @@ const Organisation = () => {
               label={t(isFaculty ? 'organisationSettings:surveyFacultyTab' : 'organisationSettings:surveyTab')}
               icon={<LiveHelpOutlined />}
               to={`${pathnameBase}/survey`}
+              tabId="survey"
             />
           )}
           {ORGANISATION_SURVEYS_ENABLED && hasWriteAccess && (
@@ -121,6 +126,7 @@ const Organisation = () => {
               )}
               icon={<DynamicFormOutlined />}
               to={`${pathnameBase}/organisation-surveys`}
+              tabId="organisation-surveys"
             />
           )}
           {SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS && (
@@ -128,40 +134,61 @@ const Organisation = () => {
               label={t('organisationSettings:responsiblesTab')}
               to={`${pathnameBase}/responsibles`}
               icon={<PeopleOutlined />}
+              tabId="responsibles"
             />
           )}
-          {isAdmin && <RouterTab label="Organisation Logs" to={`${pathnameBase}/logs`} />}
+          {isAdmin && <RouterTab label="Organisation Logs" to={`${pathnameBase}/logs`} tabId="logs" />}
         </RouterTabs>
       </Box>
       <Routes>
         <Route
           path="/settings"
           element={
-            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
-              <GeneralSettings />
-            </ProtectedRoute>
+            <Box role="tabpanel" id="tabpanel-settings" aria-labelledby="tab-settings">
+              <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
+                <GeneralSettings />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
-        <Route path="/summary" element={<ForOrganisation organisation={organisation} />} />
+        <Route
+          path="/summary"
+          element={
+            <Box role="tabpanel" id="tabpanel-summary" aria-labelledby="tab-summary">
+              <ForOrganisation organisation={organisation} />
+            </Box>
+          }
+        />
 
         <Route
           path="/open"
           element={
-            <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
-              <ProgrammeOpenQuestions />
-            </ProtectedRoute>
+            <Box role="tabpanel" id="tabpanel-open" aria-labelledby="tab-open">
+              <ProtectedRoute hasAccess={hasAdminAccess} redirectPath={defaultPath}>
+                <ProgrammeOpenQuestions />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
-        <Route path="/upcoming" element={<SemesterOverview organisation={organisation} />} />
+        <Route
+          path="/upcoming"
+          element={
+            <Box role="tabpanel" id="tabpanel-upcoming" aria-labelledby="tab-upcoming">
+              <SemesterOverview organisation={organisation} />
+            </Box>
+          }
+        />
 
         <Route
           path="/survey"
           element={
-            <ProtectedRoute hasAccess={hasWriteAccess} redirectPath={defaultPath}>
-              <EditSurvey />
-            </ProtectedRoute>
+            <Box role="tabpanel" id="tabpanel-survey" aria-labelledby="tab-survey">
+              <ProtectedRoute hasAccess={hasWriteAccess} redirectPath={defaultPath}>
+                <EditSurvey />
+              </ProtectedRoute>
+            </Box>
           }
         />
 
@@ -169,22 +196,34 @@ const Organisation = () => {
           <Route
             path="/organisation-surveys"
             element={
-              <ProtectedRoute hasAccess={hasWriteAccess} redirectPath={defaultPath}>
-                <OrganisationSurveys />
-              </ProtectedRoute>
+              <Box role="tabpanel" id="tabpanel-organisation-surveys" aria-labelledby="tab-organisation-surveys">
+                <ProtectedRoute hasAccess={hasWriteAccess} redirectPath={defaultPath}>
+                  <OrganisationSurveys />
+                </ProtectedRoute>
+              </Box>
             }
           />
         )}
 
-        <Route path="/responsibles" element={<Responsibles organisation={organisation} />} />
+        <Route
+          path="/responsibles"
+          element={
+            <Box role="tabpanel" id="tabpanel-responsibles" aria-labelledby="tab-responsibles">
+              <Responsibles organisation={organisation} />
+            </Box>
+          }
+        />
+
         <Route path="/responsibles/xlsx" element={<ResponsiblesXlsx />} />
 
         <Route
           path="/logs"
           element={
-            <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
-              <OrganisationLogs />
-            </ProtectedRoute>
+            <Box role="tabpanel" id="tabpanel-logs" aria-labelledby="tab-logs">
+              <ProtectedRoute hasAccess={isAdmin} redirectPath={defaultPath}>
+                <OrganisationLogs />
+              </ProtectedRoute>
+            </Box>
           }
         />
 

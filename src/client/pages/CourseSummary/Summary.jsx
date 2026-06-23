@@ -65,6 +65,7 @@ const SummaryInContext = () => {
           label={t('courseSummary:myCourses')}
           icon={<School />}
           to={`/course-summary/my-courses${search}`}
+          tabId="my-courses"
           data-cy="my-courses"
         />
 
@@ -73,6 +74,7 @@ const SummaryInContext = () => {
             label={t('courseSummary:myOrganisations')}
             icon={<BarChartOutlined />}
             to={`/course-summary/my-organisations${search}`}
+            tabId="my-organisations"
             data-cy="my-organisations"
           />
         )}
@@ -82,18 +84,22 @@ const SummaryInContext = () => {
           <Route
             path="/my-courses"
             element={
-              <ProtectedRoute hasAccess>
-                <MyCourses />
-              </ProtectedRoute>
+              <Box role="tabpanel" id="tabpanel-my-courses" aria-labelledby="tab-my-courses">
+                <ProtectedRoute hasAccess>
+                  <MyCourses />
+                </ProtectedRoute>
+              </Box>
             }
           />
 
           <Route
             path="/my-organisations"
             element={
-              <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
-                <MyOrganisations />
-              </ProtectedRoute>
+              <Box role="tabpanel" id="tabpanel-my-organisations" aria-labelledby="tab-my-organisations">
+                <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
+                  <MyOrganisations />
+                </ProtectedRoute>
+              </Box>
             }
           />
 
