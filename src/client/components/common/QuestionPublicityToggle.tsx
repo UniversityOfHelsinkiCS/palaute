@@ -64,7 +64,7 @@ const QuestionPublicityToggle = ({
 
   return (
     <>
-      <Tooltip title={tooltipText}>
+      <Tooltip title={tooltipText} describeChild>
         <Chip
           component="button"
           type="button"
