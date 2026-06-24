@@ -3,6 +3,8 @@ import { useLocation, Link } from 'react-router-dom'
 
 import { Tab, Tooltip, Box, Paper, Tabs } from '@mui/material'
 
+import { handleTabKeyDown } from '../../components/common/utils'
+
 const stripSearch = path => path.split('?')[0]
 
 export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTooltip, id, ...props }) => {
@@ -15,13 +17,6 @@ export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTo
     label
   )
 
-  const handleKeyDown = e => {
-    if (e.key === ' ') {
-      e.preventDefault()
-      e.currentTarget.click()
-    }
-  }
-
   const tab = (
     <Tab
       id={id}
@@ -29,7 +24,7 @@ export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTo
       component={disabled ? 'button' : Link}
       to={disabled ? undefined : to}
       value={value}
-      onKeyDown={handleKeyDown}
+      onKeyDown={handleTabKeyDown}
       aria-controls={id ? id.replace('-tab-', '-tabpanel-') : undefined}
       sx={theme => ({
         borderRadius: '0.6rem',

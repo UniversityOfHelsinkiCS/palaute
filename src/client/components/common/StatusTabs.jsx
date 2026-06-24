@@ -1,6 +1,7 @@
 import React from 'react'
 import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { handleTabKeyDown } from './utils'
 
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
   const labelElement = count ? (
@@ -22,13 +23,6 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
     label
   )
 
-  const handleKeyDown = e => {
-    if (e.key === ' ') {
-      e.preventDefault()
-      e.currentTarget.click()
-    }
-  }
-
   const tabElement = (
     <Tab
       id={`tab-${status}`}
@@ -36,9 +30,11 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
       label={labelElement}
       component={Link}
       to={{ search: `?status=${status}` }}
-      onKeyDown={handleKeyDown}
+      onKeyDown={handleTabKeyDown}
       sx={{
-        p: '21px',
+        p: '15px',
+        pt: '21px',
+        pr: '21px',
         '&:hover': {
           color: theme => theme.palette.primary.light,
           opacity: 1,
@@ -46,7 +42,9 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
         '&.Mui-focusVisible': {
           border: '3px solid',
           borderColor: theme => theme.palette.primary.main,
-          p: '18px',
+          p: '12px',
+          pt: '18px',
+          pr: '18px',
         },
       }}
       disableRipple

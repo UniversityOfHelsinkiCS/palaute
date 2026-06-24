@@ -3,6 +3,7 @@ import { useLocation, matchPath, Link } from 'react-router-dom'
 import { Tabs, Box, Tooltip, Badge, Tab } from '@mui/material'
 
 import { get } from 'lodash-es'
+import { handleTabKeyDown } from './utils'
 
 const stripSearch = path => path.split('?')[0]
 
@@ -15,6 +16,9 @@ export const RouterTabs = ({ children, ...props }) => {
 
   return (
     <Tabs
+      variant="scrollable"
+      scrollButtons="auto"
+      allowScrollButtonsMobile
       value={activeIndex < 0 ? 0 : activeIndex}
       sx={{
         my: 3,
@@ -24,13 +28,15 @@ export const RouterTabs = ({ children, ...props }) => {
           backgroundColor: 'transparent',
         },
         '& .MuiTabs-indicatorSpan': {
-          maxWidth: 80,
-          width: '100%',
+          my: '-3px',
+          width: '98%',
           backgroundColor: theme => theme.palette.primary.main,
         },
       }}
       {...props}
-      TabIndicatorProps={{ children: <span className="MuiTabs-indicatorSpan" /> }}
+      slotProps={{
+        indicator: { children: <span className="MuiTabs-indicatorSpan" /> },
+      }}
     >
       {children}
     </Tabs>
@@ -83,9 +89,10 @@ export const RouterTab = ({
       component={Link}
       to={to}
       disabled={disabled}
+      onKeyDown={handleTabKeyDown}
       {...props}
       sx={theme => ({
-        padding: '8px 16px',
+        padding: '15px',
         transition: theme.transitions.create('background-color'),
         color: active ? 'primary.main' : 'text.secondary',
         opacity: 1,
@@ -94,7 +101,7 @@ export const RouterTab = ({
           opacity: 1,
         },
         '&.Mui-focusVisible': {
-          padding: '8px 13px',
+          padding: '12px',
           border: '3px solid',
           borderColor: theme => theme.palette.primary.main,
           outlineOffset: '3px',
