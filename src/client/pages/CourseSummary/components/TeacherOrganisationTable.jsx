@@ -9,7 +9,7 @@ import { useSummaryContext } from '../context'
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { OrganisationLink } from './OrganisationLink'
 import { getLanguageValue } from '../../../util/languageUtils'
-import { SummaryTableHeader, SummaryTableRow } from './SummaryRowAccessible'
+import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
 import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const styles = {
