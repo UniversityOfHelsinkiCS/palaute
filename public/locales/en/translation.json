@@ -511,7 +511,7 @@
     "feedbackPercentage": "Feedback percentage",
     "feedbackResponseGiven": "Counter feedback has been given",
     "feedbackResponseNotGiven": "Counter feedback has not been given",
-    "feedbackResponsePercentage": "Courses where feedback response given (%)",
+    "feedbackResponsePercentage": "Counter feedback percentage",
     "feedbackStillOpen": "Feedback for this course is still ongoing",
     "courseOngoing": "The course is still ongoing",
     "programmeSummary": "Programme summary",
@@ -559,7 +559,16 @@
     "pinOrganisation": "Pin organisation",
     "unpinOrganisation": "Unpin organisation",
     "pinnedOrganisations": "Pinned",
-    "previousSurveyDataInfo": "The feedback for this course is from a university survey of a different period and a summary cannot be shown for the selected time period"
+    "previousSurveyDataInfo": "The feedback for this course is from a university survey of a different period and a summary cannot be shown for the selected time period.",
+    "loading": "Summary is loading",
+    "hideCourseUnits": "Hide course units",
+    "showCourseUnits": "Show course units",
+    "hideSummary": "Hide summary",
+    "showSummary": "Show summary",
+    "summaryTarget": "Summary target",
+    "courseUnit": "Course unit",
+    "treeView": "Show tree view",
+    "tableView": "Show table view"
   },
   "generateReport": {
     "selectIncluded": "Select content to download",

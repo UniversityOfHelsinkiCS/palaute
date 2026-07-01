@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
@@ -27,6 +27,8 @@ const SummaryInContext = () => {
   const preferredView = user?.preferences?.summaryView ?? 'my-organisations'
   const defaultPath = `${pathnameBase}/${preferredView}`
 
+  const [tableView, setTableView] = useState(false)
+
   const handleUpdateData = async forceAll => {
     const duration = await updateSummaries({ forceAll })
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
@@ -36,22 +38,33 @@ const SummaryInContext = () => {
 
   return (
     <>
-      <Box mb="6rem" px={1}>
+      <Box sx={{ mb: 2 }}>
         <Title>{t('courseSummary:heading')}</Title>
-        <Box display="flex" gap="1rem" alignItems="end">
+        <Box
+          sx={{
+            display: 'flex',
+            rowGap: 2,
+            columnGap: 1,
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+          }}
+        >
           <Typography variant="h4" component="h1">
             {t('courseSummary:heading')}
           </Typography>
-          <GenerateReport />
+          <Box sx={{ display: 'flex', gap: 1 }}>
+            {user.isAdmin && (
+              <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
+                {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
+              </NorButton>
+            )}
+            <GenerateReport />
+          </Box>
         </Box>
         {user?.isAdmin && (
-          <Box sx={{ marginTop: 2 }}>
-            <NorButton
-              sx={{ marginRight: 2 }}
-              color="secondary"
-              onClick={() => handleUpdateData(false)}
-              data-cy="update-data"
-            >
+          <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', marginTop: 2 }}>
+            <NorButton color="secondary" onClick={() => handleUpdateData(false)} data-cy="update-data">
               Aja datanpäivitys (Nykyisille ajanjaksoille)
             </NorButton>
             <NorButton color="secondary" onClick={() => handleUpdateData(true)} data-cy="force-update-data">
@@ -86,7 +99,7 @@ const SummaryInContext = () => {
             element={
               <Box role="tabpanel" id="tabpanel-my-courses" aria-labelledby="tab-my-courses">
                 <ProtectedRoute hasAccess>
-                  <MyCourses />
+                  <MyCourses tableView={tableView} />
                 </ProtectedRoute>
               </Box>
             }

@@ -506,7 +506,7 @@
     "clickForDetails": "Katso lisätiedot",
     "feedbackResponseGiven": "Vastapalaute on annettu",
     "feedbackResponseNotGiven": "Vastapalautetta ei ole annettu",
-    "feedbackResponsePercentage": "Toteutuksia joissa vastapalaute annettu (%)",
+    "feedbackResponsePercentage": "Vastapalauteprosentti",
     "feedbackStillOpen": "Kurssin palautejakso on vielä käynnissä",
     "courseOngoing": "Kurssi on vielä käynnissä",
     "programmeSummary": "Koulutusohjelman yhteenveto",
@@ -554,7 +554,16 @@
     "pinOrganisation": "Kiinnitä organisaatio",
     "unpinOrganisation": "Poista kiinnitys",
     "pinnedOrganisations": "Kiinnitetyt",
-    "previousSurveyDataInfo": "Tämän opintojakson palautteet ovat peräisin eri ajanjakson yliopistotasoisesta kyselystä, eikä yhteenvetoa voida näyttää valitulle ajanjaksolle"
+    "previousSurveyDataInfo": "Tämän opintojakson palautteet ovat peräisin eri ajanjakson yliopistotasoisesta kyselystä, eikä yhteenvetoa voida näyttää valitulle ajanjaksolle.",
+    "loading": "Yhteenvetoa ladataan",
+    "hideCourseUnits": "Piilota opintojaksot",
+    "showCourseUnits": "Näytä opintojaksot",
+    "hideSummary": "Piilota yhteenveto",
+    "showSummary": "Näytä yhteenveto",
+    "summaryTarget": "Yhteenvedon kohde",
+    "courseUnit": "Opintojakso",
+    "treeView": "Näytä puunäkymä",
+    "tableView": "Näytä taulukkonäkymä"
   },
   "generateReport": {
     "selectIncluded": "Valitse ladattava sisältö",

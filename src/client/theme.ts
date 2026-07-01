@@ -199,6 +199,36 @@ const defaultTheme = (mode: PaletteMode | undefined) => ({
         },
       },
     },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          '&:hover .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#3770b3',
+            borderWidth: '3px',
+          },
+          '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+            borderColor: '#3770b3',
+            borderWidth: '3px',
+          },
+        },
+      },
+    },
+    MuiCircularProgress: {
+      styleOverrides: {
+        root: {
+          '@media (prefers-reduced-motion: reduce)': {
+            animation: 'none',
+          },
+        },
+        circle: {
+          '@media (prefers-reduced-motion: reduce)': {
+            animation: 'none',
+            strokeDasharray: '80px, 200px',
+            strokeDashoffset: 0,
+          },
+        },
+      },
+    },
   },
 })
 

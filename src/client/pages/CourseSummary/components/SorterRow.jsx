@@ -8,6 +8,13 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import RowHeader from './RowHeader'
 
 const styles = {
+  filterContainer: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    alignItems: 'center',
+    columnGap: '1rem',
+    rowGap: '0.5rem',
+  },
   resultCell: {
     whiteSpace: 'nowrap',
     textAlign: 'center',
@@ -46,13 +53,13 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
   return (
     <>
       {(filterComponent || additionalFilters) && (
-        <Box display="flex" alignItems="center" gap="1rem">
+        <Box sx={styles.filterContainer}>
           {additionalFilters}
           {filterComponent}
         </Box>
       )}
       {!hideColumns && (
-        <Box display="flex" alignItems="stretch" gap="0.2rem">
+        <Box sx={{ display: 'flex', alignItems: 'stretch', gap: '0.2rem' }}>
           <RowHeader />
           {questions.map(q => (
             <Sort

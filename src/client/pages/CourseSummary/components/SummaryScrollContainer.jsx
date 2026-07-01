@@ -6,8 +6,6 @@ const SummaryScrollContainer = ({ children }) => (
     sx={{
       overflowY: 'auto',
       overflowX: 'auto',
-
-      pt: '2rem',
     }}
   >
     {children}

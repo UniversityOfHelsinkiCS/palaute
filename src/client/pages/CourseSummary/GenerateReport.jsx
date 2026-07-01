@@ -97,6 +97,7 @@ const GenerateReport = ({ organisationId }) => {
         color="secondary"
         onClick={ev => setAnchorEl(ev.currentTarget)}
         icon={<Download />}
+        sx={{ p: 1 }}
         aria-haspopup="dialog"
         aria-expanded={open}
         aria-controls={popoverId}

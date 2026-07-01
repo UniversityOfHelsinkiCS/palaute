@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'
 
-export const OrganisationLink = ({ code, access }) => {
+export const OrganisationLink = ({ code, access, tableView = false }) => {
   const { t } = useTranslation()
 
   if (!access || Object.keys(access).length === 0) return null
@@ -27,13 +27,13 @@ export const OrganisationLink = ({ code, access }) => {
           to={`/organisations/${code}/${write ? 'settings' : 'summary'}`}
           size="large"
           sx={{
+            color: tableView ? 'white' : 'primary.main',
             '&:hover': {
-              color: theme => theme.palette.primary.light,
-              background: 'transparent',
+              color: tableView ? 'white' : 'primary.light',
+              backgroundColor: tableView ? 'primary.dark' : 'transparent',
             },
-            ...focusIndicatorStyle(),
+            ...focusIndicatorStyle({ color: tableView ? 'white' : 'primary.main' }),
           }}
-          color="primary"
           disableRipple
         >
           {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}

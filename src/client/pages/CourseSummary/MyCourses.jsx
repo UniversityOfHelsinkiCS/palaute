@@ -5,9 +5,11 @@ import { useSummaryContext } from './context'
 import { useTeacherSummaries } from './api'
 import TeacherOrganisationRow from './components/TeacherOrganisationRow'
 import SummaryRowFilters from './components/SummaryRowFilters'
+import TeacherOrganisationTable from './components/TeacherOrganisationTable'
 
-const MyCourses = () => {
+const MyCourses = ({ tableView = false }) => {
   const { t } = useTranslation()
+
   const { questions } = useSummaryContext()
   const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries()
 
@@ -15,12 +17,16 @@ const MyCourses = () => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      <SummaryRowFilters filterType="my-courses" />
+      <SummaryRowFilters hideColumns={tableView} />
       {show &&
         organisations.length > 0 &&
-        organisations.map(organisation => (
-          <TeacherOrganisationRow key={organisation.id} questions={questions} organisation={organisation} />
-        ))}
+        organisations.map(organisation =>
+          tableView ? (
+            <TeacherOrganisationTable key={organisation.id} questions={questions} organisation={organisation} />
+          ) : (
+            <TeacherOrganisationRow key={organisation.id} questions={questions} organisation={organisation} />
+          )
+        )}
       {show && organisations.length === 0 && (
         <Box my="1rem" mx="2rem">
           <Alert severity="info">{t('courseSummary:noCourses')}</Alert>

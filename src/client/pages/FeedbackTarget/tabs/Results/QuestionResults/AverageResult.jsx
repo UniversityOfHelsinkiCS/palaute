@@ -94,7 +94,7 @@ const getBackgroundColor = (mean, questionSecondaryType) => {
   return getColor(meanValue)
 }
 
-const getMeanOption = (mean, question) => {
+export const getMeanOption = (mean, question) => {
   if (!question?.data?.options?.length) return null
 
   let index = Math.round(mean) - 1
