@@ -7,8 +7,9 @@ import SummaryScrollContainer from './components/SummaryScrollContainer'
 import SorterRowWithFilters from './components/SorterRow'
 import { useSummaryContext } from './context'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
+import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
 
-const ForCourseUnitGroup = () => {
+const ForCourseUnitGroup = ({ tableView = false }) => {
   const { t } = useTranslation()
   const { code } = useParams()
 
@@ -26,9 +27,21 @@ const ForCourseUnitGroup = () => {
   return (
     <SummaryScrollContainer>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.3rem' }}>
-        <SorterRowWithFilters allTime hideColumns={multipleGroups} />
-        {isLoading && <LinearProgress />}
+        <SorterRowWithFilters allTime hideColumns={multipleGroups || tableView} />
+        {tableView &&
+          courseUnitGroup &&
+          surveyGroups.map((group, index) => (
+            <CourseUnitGroupSummaryTable
+              key={group.survey?.id ?? 'single'}
+              courseUnitGroup={courseUnitGroup}
+              group={group}
+              showTimePeriod={multipleGroups}
+              validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
+            />
+          ))}
+        {isLoading && !tableView && <LinearProgress />}
         {!isLoading &&
+          !tableView &&
           (courseUnitGroup ? (
             surveyGroups.map((group, index) => (
               <SurveyGroupSection

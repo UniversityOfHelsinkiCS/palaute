@@ -10,7 +10,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import TeacherChip from '../../../components/common/TeacherChip'
 import { getDateRangeString } from '../../../util/getDateRangeString'
 
-const TeacherChips = ({ teachers, responsibleTeachers, administrativePersons }) => {
+export const TeacherChips = ({ teachers, responsibleTeachers, administrativePersons }) => {
   const { t } = useTranslation()
   const responsibleTeacher = t('courseSummary:responsibleTeacher')
   const teacher = t('courseSummary:teacher')

@@ -116,7 +116,7 @@ const SummaryInContext = () => {
             }
           />
 
-          <Route path="/course-unit/:code" element={<ForCourseUnitGroup />} />
+          <Route path="/course-unit/:code" element={<ForCourseUnitGroup tableView={tableView} />} />
 
           <Route path="*" element={<Navigate to={defaultPath} />} />
         </Routes>

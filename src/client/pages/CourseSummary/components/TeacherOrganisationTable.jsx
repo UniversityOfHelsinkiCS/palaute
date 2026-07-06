@@ -66,7 +66,7 @@ const styles = {
 const TeacherOrganisationTable = ({ organisation, questions }) => {
   const { sortBy, sortFunction, showSeparateOrganisationCourses } = useSummaryContext()
   const { t, i18n } = useTranslation()
-  const [depth, setDepth] = React.useState('programme')
+  const [depth, setDepth] = React.useState('cu') // 'hide', 'programme', 'cu'
 
   const isFetching = useIsFetching({
     queryKey: ['summaries-v2', organisation?.id],
@@ -94,7 +94,7 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <Button
             type="button"
-            onClick={() => (depth === 'hide' ? setDepth('programme') : setDepth('hide'))}
+            onClick={() => (depth === 'hide' ? setDepth('cu') : setDepth('hide'))}
             startIcon={depth === 'hide' ? <ExpandMoreIcon /> : <ExpandLessIcon />}
             sx={styles.expandButton}
             aria-label={
@@ -108,16 +108,18 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
           </Button>
           {linkComponent}
         </Box>
-        <Button
-          variant="outlined"
-          onClick={() => (depth === 'cu' ? setDepth('programme') : setDepth('cu'))}
-          sx={styles.cuButton}
-          disableRipple
-        >
-          {depth === 'cu' ? t('courseSummary:hideCourseUnits') : t('courseSummary:showCourseUnits')}
-        </Button>
+        {depth !== 'hide' && (
+          <Button
+            variant="outlined"
+            onClick={() => (depth === 'cu' ? setDepth('programme') : setDepth('cu'))}
+            sx={styles.cuButton}
+            disableRipple
+          >
+            {depth === 'cu' ? t('courseSummary:hideCourseUnits') : t('courseSummary:showCourseUnits')}
+          </Button>
+        )}
       </Box>
-      {Boolean(isFetching) && (
+      {depth !== 'hide' && Boolean(isFetching) && (
         <Box sx={styles.loadingContainer}>
           <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden />
           <Typography>{t('courseSummary:loading')}</Typography>
@@ -125,7 +127,7 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
       )}
       {depth !== 'hide' && !isFetching && (
         <Box sx={{ p: 1, border: '1px solid gray' }}>
-          <TableContainer sx={{ maxHeight: Math.floor(window.innerHeight * 0.75) }}>
+          <TableContainer sx={{ maxHeight: Math.floor(window.innerHeight * 0.8), overflow: 'auto' }}>
             <Table stickyHeader>
               <caption style={styles.caption}>
                 {`${t('organisationSettings:summaryTab')}: ${organisationTitle}`}

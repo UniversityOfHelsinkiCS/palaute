@@ -546,7 +546,7 @@
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
-    "noCourseRealisations": "No course realisations with feedback available for this course unit",
+    "noCourseRealisations": "Course unit {{ courseCode }} has no realisations in the selected time period.",
     "coursePage": "Course page",
     "myOrganisations": "Organisation",
     "myCourses": "My courses",
@@ -568,7 +568,14 @@
     "summaryTarget": "Summary target",
     "courseUnit": "Course unit",
     "treeView": "Show tree view",
-    "tableView": "Show table view"
+    "tableView": "Show table view",
+    "timePeriod": "Time period",
+    "courseStaff": "Course staff",
+    "hideCurs": "Hide course realisations",
+    "showCurs": "Show course realisations",
+    "openCuSummary": "Open course unit summary",
+    "openFeedbackPage": "Open feedback page",
+    "courseStaffInfo": "Not available in course unit level. Course staff is listed for each course realisation."
   },
   "generateReport": {
     "selectIncluded": "Select content to download",

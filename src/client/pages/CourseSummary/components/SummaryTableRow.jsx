@@ -1,16 +1,14 @@
 import React from 'react'
 import { useSearchParams, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, Link as MuiLink } from '@mui/material'
+import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { format, isValid } from 'date-fns'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { getSafeCourseCode } from '../../../util/courseIdentifiers'
 import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultItem'
 import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
-
-// TODO: How to handle cases where questions are from different university level surveys?
-// What kind of cases? Info box or separate tables?
+import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const styles = {
   cell: {
@@ -25,6 +23,25 @@ const styles = {
   headerCell: {
     verticalAlign: 'bottom',
     borderBottom: '0.4rem solid #5F93CE',
+    p: 1,
+    backgroundColor: 'white',
+  },
+  linkButton: {
+    color: 'primary.main',
+    textDecoration: 'underline',
+    p: 0.5,
+    borderRadius: 1,
+    '&:hover': {
+      color: 'primary.dark',
+    },
+    ...focusIndicatorStyle(),
+  },
+  tooltipArea: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '2.5rem',
+    height: '2.5rem',
   },
 }
 
@@ -64,22 +81,42 @@ const getBackgroundColor = ({ value, factor }) => {
   return backgroundColors[5]
 }
 
+const SummaryTableHeaderCell = ({ children, sx = {}, ...props }) => (
+  <TableCell sx={{ ...styles.headerCell, ...sx }} {...props}>
+    {children}
+  </TableCell>
+)
+
+const SummaryTableCell = ({ children, sx = {}, ...props }) => (
+  <TableCell sx={{ backgroundColor: 'white', verticalAlign: 'center', ...sx }} {...props}>
+    {children}
+  </TableCell>
+)
+
+const SummaryTableCellContent = ({ width, backgroundColor, children, ...props }) => (
+  <Box sx={{ width, backgroundColor, ...styles.cell }} {...props}>
+    {children}
+  </Box>
+)
+
 export const SummaryTableHeader = ({ questions }) => {
   const { t, i18n } = useTranslation()
 
   return (
     <TableHead>
       <TableRow>
-        <TableCell sx={styles.headerCell}>{t('courseSummary:summaryTarget')}</TableCell>
+        <SummaryTableHeaderCell sx={{ position: 'sticky', left: 0, zIndex: 3 }}>
+          {t('courseSummary:summaryTarget')}
+        </SummaryTableHeaderCell>
         {questions.map(q => (
-          <TableCell key={q.id} sx={styles.headerCell}>
+          <SummaryTableHeaderCell key={q.id} align="left">
             {getLanguageValue(q.data.label, i18n.language)}
-          </TableCell>
+          </SummaryTableHeaderCell>
         ))}
-        <TableCell sx={styles.headerCell}>{t('courseSummary:feedbackCount')}</TableCell>
-        <TableCell sx={styles.headerCell}>{t('courseSummary:feedbackPercentage')}</TableCell>
-        <TableCell sx={styles.headerCell}>{t('courseSummary:feedbackResponsePercentage')}</TableCell>
-        <TableCell sx={styles.headerCell}>{t('courseSummary:censoredCount')}</TableCell>
+        <SummaryTableHeaderCell>{`${t('courseSummary:feedbackCount')} / ${t('courseSummary:studentCount')}`}</SummaryTableHeaderCell>
+        <SummaryTableHeaderCell>{t('courseSummary:feedbackPercentage')}</SummaryTableHeaderCell>
+        <SummaryTableHeaderCell>{t('courseSummary:feedbackResponsePercentage')}</SummaryTableHeaderCell>
+        <SummaryTableHeaderCell>{t('courseSummary:censoredCount')}</SummaryTableHeaderCell>
       </TableRow>
     </TableHead>
   )
@@ -88,8 +125,9 @@ export const SummaryTableHeader = ({ questions }) => {
 export const SummaryTableRow = ({ target, targetCode, questions, summary, depth = 1 }) => {
   const { t, i18n } = useTranslation()
   const data = summary?.data
-  const percent = data ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : '-'
-  const feedbackResponsePercentage = data ? (summary.data.feedbackResponsePercentage * 100).toFixed() : '-'
+  const percent = data ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : null
+  const feedbackResponsePercentage = data ? (summary.data.feedbackResponsePercentage * 100).toFixed() : null
+  const hiddenCount = data?.hiddenCount || 0
 
   const targetUrl = getCourseUnitSummaryUrl({ courseCode: targetCode })
 
@@ -102,15 +140,17 @@ export const SummaryTableRow = ({ target, targetCode, questions, summary, depth 
         },
       }}
     >
-      <TableCell component="th" scope="row">
+      <SummaryTableCell component="th" scope="row" sx={{ position: 'sticky', left: 0, zIndex: 2 }}>
         {targetCode && targetUrl ? (
-          <MuiLink component={Link} to={targetUrl}>
-            {target}
-          </MuiLink>
+          <Tooltip title={t('courseSummary:openCuSummary')} placement="bottom" arrow describeChild>
+            <ButtonBase component={Link} to={targetUrl} sx={styles.linkButton}>
+              <Typography variant="body2">{target}</Typography>
+            </ButtonBase>
+          </Tooltip>
         ) : (
           <Typography>{target}</Typography>
         )}
-      </TableCell>
+      </SummaryTableCell>
       {questions.map(q => {
         const isWorkloadQuestion = q?.secondaryType === 'WORKLOAD'
         const mean = data?.result?.[q.id]?.mean?.toFixed(2) || 0
@@ -123,71 +163,61 @@ export const SummaryTableRow = ({ target, targetCode, questions, summary, depth 
           normalizedMean > 0 ? `${t('feedbackSummary:average')}: ${meanText}` : t('courseSummary:noResults')
 
         return (
-          <TableCell key={q.id}>
-            <Box
-              sx={{
-                backgroundColor: mean ? getBackgroundColor({ value: normalizedMean, factor: 0.8 }) : 'transparent',
-                width: '3.5rem',
-                ...styles.cell,
-              }}
+          <SummaryTableCell key={q.id} align="right">
+            <SummaryTableCellContent
+              width="3.5rem"
+              backgroundColor={mean ? getBackgroundColor({ value: normalizedMean, factor: 0.8 }) : 'transparent'}
               aria-hidden
             >
               {isWorkloadQuestion &&
-                (mean > 0 ? <Tooltip title={screenReaderText}>{getArrow(mean)}</Tooltip> : <Typography>–</Typography>)}
+                (mean > 0 ? (
+                  <Tooltip title={screenReaderText}>
+                    <Box sx={styles.tooltipArea}>{getArrow(mean)}</Box>
+                  </Tooltip>
+                ) : (
+                  <Typography>–</Typography>
+                ))}
               {!isWorkloadQuestion && <Typography>{mean > 0 ? mean : '–'}</Typography>}
-            </Box>
+            </SummaryTableCellContent>
             <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>
               {screenReaderText}
             </Box>
-          </TableCell>
+          </SummaryTableCell>
         )
       })}
-      <TableCell>
-        <Box
-          sx={{
-            backgroundColor: percent ? getBackgroundColor({ value: percent, factor: 10 }) : 'transparent',
-            width: '8rem',
-            ...styles.cell,
-          }}
+      <SummaryTableCell>
+        <SummaryTableCellContent
+          width="8rem"
+          backgroundColor={percent ? getBackgroundColor({ value: percent, factor: 10 }) : 'transparent'}
         >
           <Typography>{data ? `${data.feedbackCount} / ${data.studentCount}` : '–'}</Typography>
-        </Box>
-      </TableCell>
-      <TableCell>
-        <Box
-          sx={{
-            backgroundColor: percent ? getBackgroundColor({ value: percent, factor: 10 }) : 'transparent',
-            width: '5rem',
-            ...styles.cell,
-          }}
+        </SummaryTableCellContent>
+      </SummaryTableCell>
+      <SummaryTableCell>
+        <SummaryTableCellContent
+          width="5rem"
+          backgroundColor={percent !== null ? getBackgroundColor({ value: percent, factor: 10 }) : 'transparent'}
         >
-          <Typography>{`${percent} %`}</Typography>
-        </Box>
-      </TableCell>
-      <TableCell>
-        <Box
-          sx={{
-            backgroundColor: feedbackResponsePercentage
+          <Typography>{percent !== null ? `${percent} %` : '–'}</Typography>
+        </SummaryTableCellContent>
+      </SummaryTableCell>
+      <SummaryTableCell>
+        <SummaryTableCellContent
+          width="5rem"
+          backgroundColor={
+            feedbackResponsePercentage !== null
               ? getBackgroundColor({ value: feedbackResponsePercentage, factor: 20 })
-              : 'transparent',
-            width: '5rem',
-            ...styles.cell,
-          }}
+              : 'transparent'
+          }
         >
-          <Typography>{`${feedbackResponsePercentage} %`}</Typography>
-        </Box>
-      </TableCell>
-      <TableCell>
-        <Box
-          sx={{
-            backgroundColor: data?.hiddenCount ? '#d355b3' : '#a8def0',
-            width: '3.5rem',
-            ...styles.cell,
-          }}
-        >
-          <Typography>{data?.hiddenCount || '0'}</Typography>
-        </Box>
-      </TableCell>
+          <Typography>{feedbackResponsePercentage !== null ? `${feedbackResponsePercentage} %` : '–'}</Typography>
+        </SummaryTableCellContent>
+      </SummaryTableCell>
+      <SummaryTableCell>
+        <SummaryTableCellContent width="3.5rem" backgroundColor={hiddenCount > 0 ? '#e8a6d7' : '#a8def0'}>
+          <Typography>{hiddenCount}</Typography>
+        </SummaryTableCellContent>
+      </SummaryTableCell>
     </TableRow>
   )
 }

@@ -196,7 +196,12 @@ export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption,
     <div onClick={event => event.stopPropagation()}>
       <Box sx={styles.filters}>
         {allowAll && (
-          <ToggleButtonGroup id="all-filter-selector" value={option} onChange={handleOptionChange} color="primary">
+          <ToggleButtonGroup
+            id="all-filter-selector"
+            value={option}
+            onChange={handleOptionChange}
+            sx={{ color: 'primary', ml: 0.5 }}
+          >
             <ToggleButton value="all" size="small" sx={focusIndicatorStyle()} disableRipple>
               {t('courseSummary:all')}
             </ToggleButton>
