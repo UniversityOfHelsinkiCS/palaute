@@ -18,7 +18,6 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
     throw ApplicationError.BadRequest('Invalid value for hidden')
   }
 
-  // check access
   const { feedbackTarget, access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
@@ -36,37 +35,47 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
     },
   })
 
-  const feedbacksToUpdate = allFeedbacks
-    .map(feedback => {
-      if (!Array.isArray(feedback.data)) return { updated: false }
+  const feedbacksWithCounts = allFeedbacks.map(feedback => {
+    if (!Array.isArray(feedback.data)) {
+      return { feedback, matchedCount: 0, changedCount: 0 }
+    }
 
-      let updated = false
-      feedback.data = feedback.data.map(answer => {
-        if (answer.data === feedbackContent && answer.questionId === questionId) {
-          updated = true
+    let matchedCount = 0
+    let changedCount = 0
+
+    feedback.data = feedback.data.map(answer => {
+      if (answer.data === feedbackContent && answer.questionId === questionId) {
+        matchedCount += 1
+
+        const isCurrentlyHidden = Boolean(answer.hidden)
+        if (isCurrentlyHidden !== hidden) {
+          changedCount += 1
           return { ...answer, hidden }
         }
-        return answer
-      })
-
-      return { updated, feedback }
+      }
+      return answer
     })
-    .filter(({ updated }) => updated)
-    .map(({ feedback }) => feedback)
 
-  if (feedbacksToUpdate.length === 0) throw ApplicationError.BadRequest('Matching feedback not found')
-
-  await sequelize.transaction(async transaction => {
-    await feedbackTarget.increment(
-      { hiddenCount: hidden ? feedbacksToUpdate.length : -feedbacksToUpdate.length },
-      { transaction }
-    )
-    for (const feedback of feedbacksToUpdate) {
-      await feedback?.save()
-    }
+    return { feedback, matchedCount, changedCount }
   })
 
-  return feedbacksToUpdate.length
+  const matchingCount = feedbacksWithCounts.reduce((sum, item) => sum + item.matchedCount, 0)
+  const totalChanged = feedbacksWithCounts.reduce((sum, item) => sum + item.changedCount, 0)
+  const feedbacksToSave = feedbacksWithCounts.filter(item => item.changedCount > 0).map(item => item.feedback)
+
+  if (matchingCount === 0) throw ApplicationError.BadRequest('Matching feedback not found')
+
+  if (totalChanged > 0) {
+    await sequelize.transaction(async transaction => {
+      await feedbackTarget.increment({ hiddenCount: hidden ? totalChanged : -totalChanged }, { transaction })
+
+      for (const feedback of feedbacksToSave) {
+        await feedback.save({ transaction })
+      }
+    })
+  }
+
+  return totalChanged
 }
 
 interface AdminDeleteFeedbackParams {

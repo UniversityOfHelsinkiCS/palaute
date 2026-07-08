@@ -22,14 +22,16 @@ const useUpdateOpenFeedbackVisibility = () => {
     onSuccess: (response, { feedbackContent }) => {
       const { hidden, count } = response.data
 
-      enqueueSnackbar(
-        hidden
-          ? t('feedbackTargetResults:hideSuccess', { count, content: feedbackContent.slice(0, 20) })
-          : t('feedbackTargetResults:showSuccess', { count, content: feedbackContent.slice(0, 20) }),
-        { variant: 'info' }
-      )
+      if (count > 0) {
+        enqueueSnackbar(
+          hidden
+            ? t('feedbackTargetResults:hideSuccess', { count, content: feedbackContent.slice(0, 20) })
+            : t('feedbackTargetResults:showSuccess', { count, content: feedbackContent.slice(0, 20) }),
+          { variant: 'info' }
+        )
 
-      queryClient.invalidateQueries(['feedbackTargetFeedbacks', String(feedbackTarget.id)])
+        queryClient.invalidateQueries(['feedbackTargetFeedbacks', String(feedbackTarget.id)])
+      }
     },
   })
 
