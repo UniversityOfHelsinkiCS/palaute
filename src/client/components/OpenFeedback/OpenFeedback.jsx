@@ -21,7 +21,7 @@ const styles = {
     ...boxPrintStyle,
   },
   hiddenListItem: theme => ({
-    color: theme.palette.error.light,
+    color: theme.palette.error.main,
     '@media print': { display: 'none' },
   }),
   noPrint: {
