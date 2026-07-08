@@ -8,6 +8,7 @@ import {
   updateSummaryAfterFeedbackCreated,
   updateSummaryAfterFeedbackDestroyed,
 } from '../../services/summary/updateSummaryOnFeedback'
+import { refreshFeedbackTargetHiddenCount } from '../../services/feedbackTargets/hideFeedback'
 import { logger } from '../../util/logger'
 import { AuthenticatedRequest } from '../../types'
 
@@ -131,6 +132,7 @@ const destroy = async (req: AuthenticatedRequest, res: Response) => {
 
   if (!feedbackTarget) throw ApplicationError.NotFound()
   await feedback.destroy()
+  await refreshFeedbackTargetHiddenCount(userFeedbackTarget.feedbackTargetId)
 
   // Update summary. Fail silently if fails
   try {

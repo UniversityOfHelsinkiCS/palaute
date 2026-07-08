@@ -1,9 +1,41 @@
+import type { Transaction } from 'sequelize'
 import feedbackTargetCache from './feedbackTargetCache'
 import { sequelize } from '../../db/dbConnection'
-import { Feedback, UserFeedbackTarget } from '../../models'
+import { Feedback, UserFeedbackTarget, FeedbackTarget } from '../../models'
+import { FeedbackData } from '../../models/feedback'
 import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'
+
+const countHiddenAnswers = (data: FeedbackData) =>
+  Array.isArray(data) ? data.filter(answer => answer.hidden === true).length : 0
+
+const computeHiddenCountForFeedbackTarget = async (feedbackTargetId: number) => {
+  const feedbacks = await Feedback.findAll({
+    include: {
+      model: UserFeedbackTarget,
+      as: 'userFeedbackTarget',
+      where: { feedbackTargetId },
+    },
+  })
+
+  return feedbacks.reduce((sum, feedback) => sum + countHiddenAnswers(feedback?.data), 0)
+}
+
+export const refreshFeedbackTargetHiddenCount = async (feedbackTargetId: number, transaction?: Transaction) => {
+  const hiddenCount = await computeHiddenCountForFeedbackTarget(feedbackTargetId)
+
+  await FeedbackTarget.update(
+    { hiddenCount },
+    {
+      where: { id: feedbackTargetId },
+      transaction,
+    }
+  )
+
+  feedbackTargetCache.invalidate(feedbackTargetId)
+  return hiddenCount
+}
 
 interface HideFeedbackParams {
   feedbackTargetId: number
@@ -91,7 +123,6 @@ const adminDeleteFeedback = async ({
   user,
   feedbackContent,
 }: AdminDeleteFeedbackParams) => {
-  // check access
   const { feedbackTarget, access } = await getFeedbackTargetContext({
     feedbackTargetId,
     user,
@@ -131,6 +162,9 @@ const adminDeleteFeedback = async ({
   for (const feedback of feedbacksToUpdate) {
     await feedback?.save()
   }
+
+  await refreshFeedbackTargetHiddenCount(feedbackTarget.id)
+
   feedbackTargetCache.invalidate(feedbackTarget.id)
 
   return feedbacksToUpdate.length
