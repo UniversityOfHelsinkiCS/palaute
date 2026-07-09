@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import CheckIcon from '@mui/icons-material/Check'
 import ClearIcon from '@mui/icons-material/Clear'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { visuallyHidden } from '@mui/utils'
 import { lightFormat } from 'date-fns'
 import { useSummaryContext } from '../context'
@@ -185,7 +186,7 @@ const getBackgroundColor = ({ value, factor }) => {
   return backgroundColors[5]
 }
 
-const FeedbackResponseIndicator = ({ percentage, isCourseUnitGroup, t }) => {
+const FeedbackResponseIndicator = ({ percentage, isCourseUnitGroup, isOpen, t }) => {
   if (percentage === null) return <Typography>–</Typography>
 
   if (isCourseUnitGroup)
@@ -202,13 +203,21 @@ const FeedbackResponseIndicator = ({ percentage, isCourseUnitGroup, t }) => {
       </>
     )
 
-  const text = percentage > 0 ? t('teacherView:feedbackResponseGiven') : t('teacherView:feedbackResponseMissing')
+  let text = t('teacherView:feedbackResponseMissing')
+  let icon = <ClearIcon sx={{ color: 'black' }} />
+  if (percentage > 0) {
+    text = t('teacherView:feedbackResponseGiven')
+    icon = <CheckIcon sx={{ color: 'black' }} />
+  } else if (isOpen) {
+    text = t('courseSummary:feedbackStillOpen')
+    icon = <AccessTimeIcon sx={{ color: 'black' }} />
+  }
 
   return (
     <>
       <Tooltip title={text}>
         <Box sx={styles.tooltipArea} aria-hidden aria-label={undefined}>
-          {percentage > 0 ? <CheckIcon sx={{ color: 'black' }} /> : <ClearIcon sx={{ color: 'black' }} />}
+          {icon}
         </Box>
       </Tooltip>
       <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>
@@ -272,6 +281,7 @@ const CourseUnitGroupSummaryTableRow = ({ target, surveyGroup, questions, timePe
   const percent = data ? ((data.feedbackCount / data.studentCount) * 100).toFixed() : null
   const feedbackResponsePercentage = data ? (data.feedbackResponsePercentage * 100).toFixed() : null
   const hiddenCount = data?.hiddenCount || 0
+  const targetOpen = !isCourseUnitGroup && Date.parse(target?.closesAt) > Date.now()
 
   const staff = isCourseUnitGroup ? getStaff() : getStaff(target)
   const { teachers, responsibleTeachers, administrativePersons } = staff
@@ -372,13 +382,14 @@ const CourseUnitGroupSummaryTableRow = ({ target, surveyGroup, questions, timePe
           width="4.5rem"
           backgroundColor={
             feedbackResponsePercentage !== null
-              ? getBackgroundColor({ value: feedbackResponsePercentage, factor: 20 })
+              ? getBackgroundColor({ value: targetOpen ? 50 : feedbackResponsePercentage, factor: 20 })
               : 'transparent'
           }
         >
           <FeedbackResponseIndicator
             percentage={feedbackResponsePercentage}
             isCourseUnitGroup={isCourseUnitGroup}
+            isOpen={targetOpen}
             t={t}
           />
         </SummaryTableCellContent>
