@@ -395,7 +395,7 @@ const CourseUnitGroupSummaryTableRow = ({ target, surveyGroup, questions, timePe
 const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, validUntil, isLoading }) => {
   const { t, i18n } = useTranslation()
   const { questions: contextQuestions } = useSummaryContext()
-  const questions = showTimePeriod ? (group.survey?.questions ?? []).filter(questionFilter) : contextQuestions
+  const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
 
   const [depth, setDepth] = React.useState('cur') // 'hide', 'cu', 'cur'
 

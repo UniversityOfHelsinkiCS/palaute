@@ -54,7 +54,7 @@ const fbtListSx = {
 
 const SurveyGroupSection = ({ courseUnitGroup, group, showHeader, validUntil }) => {
   const { questions: contextQuestions } = useSummaryContext()
-  const questions = showHeader ? (group.survey?.questions ?? []).filter(questionFilter) : contextQuestions
+  const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
 
   let timeframe = null
   if (showHeader) {
