@@ -225,7 +225,7 @@ const SummaryTableHeaderCell = ({ children, sx = {}, ...props }) => (
 )
 
 const SummaryTableCell = ({ children, sx = {}, ...props }) => (
-  <TableCell sx={{ backgroundColor: 'white', verticalAlign: 'center', ...sx }} {...props}>
+  <TableCell sx={{ backgroundColor: 'white', verticalAlign: 'top', ...sx }} {...props}>
     {children}
   </TableCell>
 )
