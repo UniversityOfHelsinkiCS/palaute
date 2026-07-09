@@ -4,16 +4,24 @@ import { Alert, Box, LinearProgress } from '@mui/material'
 import { useParams } from 'react-router'
 import { useCourseUnitGroupSummaries } from './api'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
-import SorterRowWithFilters from './components/SorterRow'
+import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { useSummaryContext } from './context'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
 import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
+
+const filterContainerSx = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  columnGap: '1rem',
+  rowGap: '0.5rem',
+}
 
 const ForCourseUnitGroup = ({ tableView = false }) => {
   const { t } = useTranslation()
   const { code } = useParams()
 
-  const { dateRange, option } = useSummaryContext()
+  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
     courseCode: code,
     startDate: dateRange.start,
@@ -27,7 +35,15 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
   return (
     <SummaryScrollContainer>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.3rem' }}>
-        <SorterRowWithFilters allTime hideColumns={multipleGroups || tableView} />
+        <Box sx={filterContainerSx}>
+          <YearSemesterPeriodSelector
+            value={dateRange}
+            onChange={setDateRange}
+            option={option}
+            setOption={setOption}
+            allowAll
+          />
+        </Box>
         {tableView &&
           courseUnitGroup &&
           surveyGroups.map((group, index) => (
@@ -48,7 +64,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
                 key={group.survey?.id ?? 'single'}
                 courseUnitGroup={courseUnitGroup}
                 group={group}
-                showHeader={multipleGroups}
+                showTimePeriod={multipleGroups}
                 validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
               />
             ))

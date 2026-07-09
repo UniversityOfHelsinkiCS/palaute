@@ -52,12 +52,12 @@ const fbtListSx = {
   borderLeft: `solid 3px ${blueGrey[100]}`,
 }
 
-const SurveyGroupSection = ({ courseUnitGroup, group, showHeader, validUntil }) => {
+const SurveyGroupSection = ({ courseUnitGroup, group, showTimePeriod, validUntil }) => {
   const { questions: contextQuestions } = useSummaryContext()
   const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
 
   let timeframe = null
-  if (showHeader) {
+  if (showTimePeriod) {
     const validFromYear = group.survey?.validFrom ? new Date(group.survey.validFrom).getFullYear() : null
     const validUntilYear = validUntil ? new Date(validUntil).getFullYear() : null
 
@@ -76,7 +76,7 @@ const SurveyGroupSection = ({ courseUnitGroup, group, showHeader, validUntil }) 
 
   return (
     <Box sx={sectionSx}>
-      {showHeader && <SorterRow questions={questions} />}
+      <SorterRow questions={questions} />
       <CourseUnitGroupAggregateRow
         courseUnitGroup={courseUnitGroup}
         summary={group.summary}
