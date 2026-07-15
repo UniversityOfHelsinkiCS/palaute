@@ -6,6 +6,14 @@ services:
       context: ./
       dockerfile: dev.Dockerfile
     image: palaute_dev
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '0.50'
+    #       memory: 2000M
+    #     reservations:
+    #       cpus: '0.025'
+    #       memory: 200M
     volumes:
       - ./:/usr/src/app
     environment:

@@ -1,4 +1,4 @@
-import { Op, QueryTypes } from 'sequelize'
+import { Op, QueryTypes, literal } from 'sequelize'
 import _ from 'lodash'
 import { differenceInYears, formatISO, subDays } from 'date-fns'
 import {
@@ -46,7 +46,7 @@ const getRelevantQuestionIds = async () => {
     FROM surveys s
     INNER JOIN questions q ON q.id = ANY (s.question_ids)
     WHERE (s.type = 'university' OR s.type = 'programme')
-    AND q.type = 'LIKERT' OR q.id = :workloadQuestionId;
+    AND (q.type = 'LIKERT' OR q.id = :workloadQuestionId);
   `,
     { type: QueryTypes.SELECT, replacements: { workloadQuestionId: WORKLOAD_QUESTION_ID } }
   )
@@ -81,38 +81,28 @@ const getExtraOrgVariants = (entity: any, extraOrgId: string) =>
       feedbackTargets: fbtSums,
     }))
 
-interface BuildSummariesForPeriodParams {
+interface GetFeedbackTargetsParams {
   startDate: Date
   endDate: Date
-  rootOrganisations: string[]
-  relevantQuestionIds: Set<number>
   transaction: any
-  separateOrgId: string
 }
 
-const buildSummariesForPeriod = async ({
-  startDate,
-  endDate,
-  rootOrganisations,
-  relevantQuestionIds,
-  transaction,
-  separateOrgId,
-}: BuildSummariesForPeriodParams) => {
-  const buildTime = new Date()
-  // ---------------- Phase 1: ------------------
-  // Build summary entities from feedbacks for courses during this time period
-  // We do this for the following entities, from "bottom up":
-  // 1. course realisations (built from feedback data)
-  // 2. course units (built from CURs)
-  // 3. course unit groups (--||--)
-  // 4. tags (--||--)
-  // 5. organisations
-  //
-  // This should be quite extensible should we want to add more different entities in the future.
-  // Since the initial version, I've already added cu groups and tags.
-
-  // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
+const getFeedbackTargets = async ({ startDate, endDate, transaction }: GetFeedbackTargetsParams) => {
   const feedbackTargets = await FeedbackTarget.findAll({
+    attributes: [
+      'id',
+      'userCreated',
+      'opensAt',
+      'hiddenCount',
+      'courseRealisationId',
+      'courseUnitId',
+      [
+        literal(`
+          COALESCE(char_length("FeedbackTarget"."feedback_response"), 0) > 0
+        `),
+        'hasFeedbackResponse',
+      ],
+    ],
     include: [
       {
         model: CourseRealisation,
@@ -121,42 +111,15 @@ const buildSummariesForPeriod = async ({
         required: true,
         // separate: true,  // Tested, did not improve performance
         where: {
-          [Op.or]: [
-            // Any overlap with the period
-            {
-              // Case: CUR starts during the period
-              startDate: {
-                [Op.between]: [startDate, endDate],
-              },
-            },
-            {
-              // Case: CUR ends during the period
-              endDate: {
-                [Op.between]: [startDate, endDate],
-              },
-            },
-            {
-              // Case: CUR starts before and ends after the period
-              [Op.and]: [
-                {
-                  startDate: {
-                    [Op.lte]: startDate,
-                  },
-                },
-                {
-                  endDate: {
-                    [Op.gte]: endDate,
-                  },
-                },
-              ],
-            },
-          ],
+          // Any overlap with the period
+          startDate: { [Op.lte]: endDate },
+          endDate: { [Op.gte]: startDate },
         },
         include: [
           {
             model: CourseRealisationsOrganisation,
             as: 'courseRealisationsOrganisations',
-            // attributes: ['organisationId'], // Weird Sequelize thing #1, see below for more...
+            attributes: ['organisationId'],
           },
           {
             model: Tag,
@@ -205,8 +168,45 @@ const buildSummariesForPeriod = async ({
     transaction,
   })
 
+  return feedbackTargets
+}
+
+interface BuildSummariesForPeriodParams {
+  startDate: Date
+  endDate: Date
+  rootOrganisations: string[]
+  relevantQuestionIds: Set<number>
+  transaction: any
+  separateOrgId: string
+}
+
+const buildSummariesForPeriod = async ({
+  startDate,
+  endDate,
+  rootOrganisations,
+  relevantQuestionIds,
+  transaction,
+  separateOrgId,
+}: BuildSummariesForPeriodParams) => {
+  const buildTime = new Date()
+  // ---------------- Phase 1: ------------------
+  // Build summary entities from feedbacks for courses during this time period
+  // We do this for the following entities, from "bottom up":
+  // 1. course realisations (built from feedback data)
+  // 2. course units (built from CURs)
+  // 3. course unit groups (--||--)
+  // 4. tags (--||--)
+  // 5. organisations
+  //
+  // This should be quite extensible should we want to add more different entities in the future.
+  // Since the initial version, I've already added cu groups and tags.
+
+  // Get all the feedback data and associated entities for this period. Then the rest is done JS side.
+  const feedbackTargets = await getFeedbackTargets({ startDate, endDate, transaction })
+
   // Start summing the stuff for feedback targets
-  const feedbackTargetsSummaries = []
+  let feedbackTargetSummaries: any[] = []
+  const userCreatedFeedbackTargetSummaries = [] // UserCreated feedback targets only have fbt level summaries. Separate array prevents having to filter these out on the next summary level.
 
   for (const fbt of feedbackTargets) {
     // Ignore those that have no students
@@ -260,7 +260,7 @@ const buildSummariesForPeriod = async ({
     const curOrgIds = fbt.courseRealisation?.courseRealisationsOrganisations?.map(curo => curo.organisationId)
     const cuOrgIds = fbt.courseUnit?.courseUnitsOrganisations?.map(cuo => cuo.organisationId)
 
-    feedbackTargetsSummaries.push({
+    const fbtSummaryObject = {
       entityId: fbt.id.toString(),
       entityType: 'feedbackTarget',
       userCreated: fbt.userCreated,
@@ -271,28 +271,55 @@ const buildSummariesForPeriod = async ({
         studentCount: fbt.userFeedbackTargets?.length,
         hiddenCount: fbt.hiddenCount,
         feedbackCount: fbt.userFeedbackTargets?.filter(ufbt => ufbt.feedback).length,
-        feedbackResponsePercentage: fbt.feedbackResponse?.length ? 1 : 0,
+        feedbackResponsePercentage: (fbt as any).getDataValue('hasFeedbackResponse') ? 1 : 0,
       },
       courseRealisationId: fbt.courseRealisation?.id,
       courseUnitId: fbt.courseUnit?.id,
       courseUnitGroupId: fbt.courseUnit?.groupId,
       curOrgIds,
       cuOrgIds,
-      curTags: fbt.courseRealisation?.tags,
-      cuTags: fbt.courseUnit?.tags,
+      curTagIds: fbt.courseRealisation?.tags?.map(tag => tag.id) ?? [],
+      cuTagIds: fbt.courseUnit?.tags?.map(tag => tag.id) ?? [],
       extraOrgIds: curOrgIds && cuOrgIds ? getCurExtraOrgIds(curOrgIds, cuOrgIds, [separateOrgId]) : undefined,
-    })
+    }
+
+    if (!fbt.userCreated) {
+      feedbackTargetSummaries.push(fbtSummaryObject)
+    } else {
+      userCreatedFeedbackTargetSummaries.push(fbtSummaryObject)
+    }
   } // FBTs are now done and we could write FBTs summaries to db. But we leave db operations to the end.
 
-  const basicFeedbackTargetSummaries = feedbackTargetsSummaries.filter(fbt => !fbt.userCreated)
-  // When calculating aggregate values, exclude FBTs that have not been opened yet
-  const aggregatableFeedbackTargetSummaries = basicFeedbackTargetSummaries.filter(
-    fbt => !fbt.opensAt || fbt.opensAt <= buildTime
-  )
+  type SummaryCreateParams = {
+    entityId: string
+    entityType: string
+    feedbackTargetId: number
+    data: any
+    extraOrgIds: string[]
+  }
+  const relevantFields = ['entityId', 'entityType', 'feedbackTargetId', 'data', 'extraOrgIds']
+
+  const insertSummaries = async (summaries: any[]) => {
+    const rows = summaries
+      .filter(summary => summary.data && summary.data.studentCount > 0)
+      .map(summary => _.pick(summary, relevantFields) as SummaryCreateParams)
+      .map(summary => ({
+        ...summary,
+        startDate: formatISO(startDate),
+        endDate: formatISO(endDate),
+      }))
+
+    for (const chunk of _.chunk(rows, 1000)) {
+      await Summary.bulkCreate(chunk, { transaction })
+    }
+  }
+
+  await insertSummaries(feedbackTargetSummaries)
+  await insertSummaries(userCreatedFeedbackTargetSummaries)
 
   // Make the initial CUR summaries.
-  const courseRealisationSummaries = Object.entries(
-    _.groupBy(basicFeedbackTargetSummaries, fbtsum => fbtsum.courseRealisationId)
+  let courseRealisationSummaries = Object.entries(
+    _.groupBy(feedbackTargetSummaries, fbtsum => fbtsum.courseRealisationId)
   )
     .map(([curId, feedbackTargets]) => ({
       entityId: curId,
@@ -310,10 +337,55 @@ const buildSummariesForPeriod = async ({
     cur.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
+  await insertSummaries(courseRealisationSummaries)
+  courseRealisationSummaries = []
+
+  // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
+  const tagToFeedbackTargets = new Map<string, any[]>()
+
+  for (const fbtsum of feedbackTargetSummaries) {
+    const tagIds = new Set<string>()
+
+    for (const tagId of fbtsum.curTagIds) {
+      tagIds.add(prefixTagId(tagId))
+    }
+
+    for (const tagId of fbtsum.cuTagIds) {
+      tagIds.add(prefixTagId(tagId))
+    }
+
+    for (const tagId of tagIds) {
+      const arr = tagToFeedbackTargets.get(tagId) ?? []
+      arr.push(fbtsum)
+      tagToFeedbackTargets.set(tagId, arr)
+    }
+  }
+
+  let tagSummaries = Array.from(tagToFeedbackTargets.entries())
+    .map(([tagId, feedbackTargets]) => ({
+      entityId: tagId,
+      entityType: 'tag',
+      feedbackTargets: _.uniqBy(feedbackTargets, 'feedbackTargetId'),
+    }))
+    .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
+
+  // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
+  for (const tag of tagSummaries) {
+    const { feedbackTargets } = tag
+    delete tag.feedbackTargets // Now not needed anymore
+
+    tag.data = sumSummaryDatas(feedbackTargets.map((fbtsum: any) => fbtsum.data))
+    tag.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
+  }
+
+  await insertSummaries(tagSummaries)
+  tagSummaries = []
+
+  // When calculating aggregate values, exclude FBTs that have not been opened yet
+  feedbackTargetSummaries = feedbackTargetSummaries.filter(fbt => !fbt.opensAt || fbt.opensAt <= buildTime)
+
   // Make the initial CU summaries.
-  const courseUnitSummaries = Object.entries(
-    _.groupBy(aggregatableFeedbackTargetSummaries, fbtsum => fbtsum.courseUnitId)
-  )
+  let courseUnitSummaries = Object.entries(_.groupBy(feedbackTargetSummaries, fbtsum => fbtsum.courseUnitId))
     .map(([cuId, feedbackTargets]) => ({
       entityId: cuId,
       entityType: 'courseUnit',
@@ -330,10 +402,11 @@ const buildSummariesForPeriod = async ({
     cu.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
+  await insertSummaries(courseUnitSummaries)
+  courseUnitSummaries = []
+
   // Very cool. Now make the initial CU group summaries, just like we did for CUs, but using groupId instead of id.
-  const courseUnitGroupSummaries = Object.entries(
-    _.groupBy(aggregatableFeedbackTargetSummaries, fbtsum => fbtsum.courseUnitGroupId)
-  )
+  let courseUnitGroupSummaries = Object.entries(_.groupBy(feedbackTargetSummaries, fbtsum => fbtsum.courseUnitGroupId))
     .map(([cuGroupId, feedbackTargets]) => ({
       entityId: cuGroupId,
       entityType: 'courseUnitGroup',
@@ -350,35 +423,12 @@ const buildSummariesForPeriod = async ({
     cuGroup.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
   }
 
-  // Make the initial tag summaries. Tags have course realisations directly, and through course unit association.
-  const tagSummaries = _.uniqBy(
-    basicFeedbackTargetSummaries.flatMap(fbtsum => [...(fbtsum.curTags ?? []), ...(fbtsum.cuTags ?? [])]),
-    'id'
-  )
-    .map(tag => ({
-      entityId: prefixTagId(tag.id),
-      entityType: 'tag',
-      feedbackTargets: _.uniqBy(
-        basicFeedbackTargetSummaries.filter(
-          fbtsum => fbtsum.curTags?.some(t => t.id === tag.id) || fbtsum.cuTags?.some(t => t.id === tag.id)
-        ),
-        'feedbackTargetId'
-      ),
-    }))
-    .flatMap(tag => getExtraOrgVariants(tag, separateOrgId))
-
-  // Sum them up from CURs. Then we're done with tags and could write tag summaries to db.
-  for (const tag of tagSummaries) {
-    const { feedbackTargets } = tag
-    delete tag.feedbackTargets // Now not needed anymore
-
-    tag.data = sumSummaryDatas(feedbackTargets.map((fbtsum: any) => fbtsum.data))
-    tag.extraOrgIds = _.uniq(feedbackTargets.flatMap((fbtsum: any) => fbtsum.extraOrgIds))
-  }
+  await insertSummaries(courseUnitGroupSummaries)
+  courseUnitGroupSummaries = []
 
   // Make the initial org summaries. These are the orgs that are responsible for some courses.
   const orgIds = _.uniq(
-    aggregatableFeedbackTargetSummaries.flatMap(fbtsum => [...(fbtsum.cuOrgIds ?? []), ...(fbtsum.curOrgIds ?? [])])
+    feedbackTargetSummaries.flatMap(fbtsum => [...(fbtsum.cuOrgIds ?? []), ...(fbtsum.curOrgIds ?? [])])
   )
   const orgs = await Organisation.findAll({ attributes: ['id', 'parentId'], where: { id: orgIds } })
   const orgSummaries = orgs.map(org => ({
@@ -387,12 +437,12 @@ const buildSummariesForPeriod = async ({
     parentId: org.parentId,
     parent: null as any,
     feedbackTargets: _.uniqBy(
-      aggregatableFeedbackTargetSummaries.filter(
-        fbtsum => fbtsum.curOrgIds?.includes(org.id) || fbtsum.cuOrgIds?.includes(org.id)
-      ),
+      feedbackTargetSummaries.filter(fbtsum => fbtsum.curOrgIds?.includes(org.id) || fbtsum.cuOrgIds?.includes(org.id)),
       'feedbackTargetId'
     ),
   }))
+
+  feedbackTargetSummaries = [] // Not needed anymore
 
   // ---------------- Phase 2 (organisations): ------------------
   // Now we're done with the base layer, FBTs, CURs, CUs and their direct responsible organisations,
@@ -470,7 +520,7 @@ const buildSummariesForPeriod = async ({
     }
   }
 
-  const orgSummariesWithVariants = orgSummaries.flatMap(org => getExtraOrgVariants(org, separateOrgId))
+  let orgSummariesWithVariants = orgSummaries.flatMap(org => getExtraOrgVariants(org, separateOrgId))
 
   // Now we can actually calculate the org summaries from each org's CURs
   for (const org of orgSummariesWithVariants) {
@@ -480,26 +530,8 @@ const buildSummariesForPeriod = async ({
     delete org.parent
   }
 
-  type SummaryCreateParams = {
-    entityId: string
-    entityType: string
-    feedbackTargetId: number
-    data: any
-    extraOrgIds: string[]
-  }
-  const relevantFields = ['entityId', 'entityType', 'feedbackTargetId', 'data', 'extraOrgIds']
-  const allSummaries = feedbackTargetsSummaries
-    .concat(courseRealisationSummaries)
-    .concat(courseUnitSummaries)
-    .concat(courseUnitGroupSummaries)
-    .concat(tagSummaries)
-    .concat(orgSummariesWithVariants)
-    .filter(summary => summary.data && summary.data.studentCount > 0)
-    .map(summary => _.pick(summary, relevantFields) as SummaryCreateParams)
-    .map(summary => ({ ...summary, startDate: formatISO(startDate), endDate: formatISO(endDate) }))
-
-  // Write all summaries to db.
-  await Summary.bulkCreate(allSummaries, { transaction })
+  await insertSummaries(orgSummariesWithVariants)
+  orgSummariesWithVariants = []
 }
 
 const summariesHaveToBeFullyRebuilt = async () => {
@@ -524,6 +556,7 @@ const summariesHaveToBeFullyRebuilt = async () => {
  * Summary rows will be created for each time period.
  *
  * Possible time periods are:
+ * All study periods starting from some defined year.
  * All semesters starting from some defined year.
  * All academic years starting from some defined year.
  *
@@ -531,9 +564,10 @@ const summariesHaveToBeFullyRebuilt = async () => {
  * depending on from how many periods they have data from.
  *
  * For example, if organisation has CURs from between 2021S and 2023S, there will be
- * Semesters 2021S, 2022K, 2022S, 2023K, 2023S, and...
+ * Periods I2021, II2021, III2022, IV2022, Summer2022, I2023, II2023,
+ * Semesters 2021S, 2022K, 2022S, 2023K, 2023S
  * Academic years 2021, 2022, 2023.
- * (in total 8)
+ * (in total 15)
  *
  * These represent all the different possible time period "views" the user can select in a summary view to see.
  *
