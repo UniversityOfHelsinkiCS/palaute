@@ -1,7 +1,7 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 
-const Title = ({ children }) => (
+const Title = ({ children }: { children: string }) => (
   <Helmet>
     <title>{children}</title>
   </Helmet>

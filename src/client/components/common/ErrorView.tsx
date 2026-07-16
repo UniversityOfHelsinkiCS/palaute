@@ -1,4 +1,5 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { useParams } from 'react-router'
 import { useTranslation } from 'react-i18next'
@@ -8,12 +9,19 @@ import { KeyboardReturnOutlined } from '@mui/icons-material'
 
 import ErrorDetails from './ErrorDetails'
 
+interface ErrorViewProps {
+  children?: ReactNode
+  message?: string
+  response?: { status: number }
+  returnTo?: string
+}
+
 /**
  * Display this with an appropriate message
  * when a component cannot be shown
  * because of a request error
  */
-const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }) => {
+const ErrorView = ({ children, message, response, returnTo = '/feedbacks' }: ErrorViewProps) => {
   const { t } = useTranslation()
   const { id } = useParams()
 

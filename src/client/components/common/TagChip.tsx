@@ -1,9 +1,17 @@
 import React from 'react'
 import { Chip, Tooltip } from '@mui/material'
+import type { Tag } from '@common/types/organisation'
 import { getLanguageValue } from '../../util/languageUtils'
 import { generate } from '../../util/randomColor'
 
-export const TagChip = ({ tag, language = 'fi', compact = false, prefix = '' }) => {
+interface TagChipProps {
+  tag: Tag
+  language?: string
+  compact?: boolean
+  prefix?: string
+}
+
+export const TagChip = ({ tag, language = 'fi', compact = false, prefix = '' }: TagChipProps) => {
   const color = generate(tag.hash)
 
   const style = {

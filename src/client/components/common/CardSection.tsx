@@ -1,7 +1,15 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 import { Box, Card, CardContent, Typography } from '@mui/material'
+import type { SxProps, Theme } from '@mui/material'
 
-const CardSection = ({ title, children, sx }) => (
+interface CardSectionProps {
+  title: string
+  children: ReactNode
+  sx?: SxProps<Theme>
+}
+
+const CardSection = ({ title, children, sx }: CardSectionProps) => (
   <Card sx={sx}>
     <CardContent>
       <Box mb={4}>

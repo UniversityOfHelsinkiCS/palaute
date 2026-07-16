@@ -1,17 +1,18 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, Box } from '@mui/material'
+import type { LinkProps, Theme } from '@mui/material'
 import ExternalLinkIcon from '@mui/icons-material/OpenInNew'
 import { visuallyHidden } from '@mui/utils'
 
 const styles = {
   icon: {
-    marginLeft: theme => theme.spacing(0.5),
+    marginLeft: (theme: Theme) => theme.spacing(0.5),
     fontSize: '1em',
   },
 }
 
-const ExternalLink = ({ children, ...props }) => {
+const ExternalLink = ({ children, ...props }: LinkProps) => {
   const { t } = useTranslation()
 
   return (

@@ -1,8 +1,21 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 import { useField } from 'formik'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
+import type { SelectProps } from '@mui/material'
 
-const FormikSelect = ({ name, label, options, ...props }) => {
+interface FormikSelectOption {
+  value: string | number
+  label: ReactNode
+}
+
+interface FormikSelectProps extends Omit<SelectProps, 'name' | 'value' | 'onChange' | 'options'> {
+  name: string
+  label: ReactNode
+  options: FormikSelectOption[]
+}
+
+const FormikSelect = ({ name, label, options, ...props }: FormikSelectProps) => {
   const [field, , helpers] = useField(name)
 
   return (
@@ -20,9 +33,9 @@ const FormikSelect = ({ name, label, options, ...props }) => {
         name={name}
         {...props}
       >
-        {options.map(({ value, label }, idx) => (
+        {options.map(({ value, label: optionLabel }, idx) => (
           <MenuItem key={idx} value={value}>
-            {label}
+            {optionLabel}
           </MenuItem>
         ))}
       </Select>

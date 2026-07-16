@@ -2,7 +2,12 @@ import React from 'react'
 
 import { Box, CircularProgress, Alert } from '@mui/material'
 
-export const LoadingProgress = ({ isError = false, message = '' }) => (
+interface LoadingProgressProps {
+  isError?: boolean
+  message?: string
+}
+
+export const LoadingProgress = ({ isError = false, message = '' }: LoadingProgressProps) => (
   <Box display="flex" justifyContent="center" my={4}>
     <Box display="flex" flexDirection="column" alignItems="center">
       <CircularProgress />

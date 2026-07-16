@@ -8,7 +8,8 @@ import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../components/common/FormikTextField'
 import FormikCheckBox from '../../components/common/FormikCheckbox'
-import { saveValues, NorppaFeedbackFormValues } from './utils'
+import { saveValues } from './utils'
+import type { NorppaFeedbackFormValues } from './utils'
 import Title from '../../components/common/Title'
 import { NorButton } from '../../components/common/NorButton'
 

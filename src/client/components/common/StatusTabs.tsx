@@ -1,9 +1,19 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
+import type { TabsProps, TabProps } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { handleTabKeyDown } from './utils'
 
-export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }) => {
+interface StatusTabProps extends Omit<TabProps, 'label'> {
+  status: string
+  count?: number
+  countLabel?: ReactNode
+  badgeColor?: 'primary' | 'secondary' | 'default' | 'error' | 'info' | 'success' | 'warning'
+  label: ReactNode
+}
+
+export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }: StatusTabProps) => {
   const labelElement = count ? (
     <Badge
       data-cy="status-tab-badge"
@@ -63,7 +73,13 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
   return tabElement
 }
 
-export const StatusTabs = ({ status, tabOrder, children, ...props }) => {
+interface StatusTabsProps extends TabsProps {
+  status: string
+  tabOrder: string[]
+  children: ReactNode
+}
+
+export const StatusTabs = ({ status, tabOrder, children, ...props }: StatusTabsProps) => {
   const index = tabOrder.indexOf(status)
   const value = index < 0 ? 0 : index
 

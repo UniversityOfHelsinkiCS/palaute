@@ -1,6 +1,8 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
+import type { SelectChangeEvent } from '@mui/material'
 
 import { useTranslation } from 'react-i18next'
 
@@ -15,12 +17,18 @@ const style = {
   },
 }
 
-const LanguageSelect = ({ value, onChange, label }) => {
+interface LanguageSelectProps {
+  value: string
+  onChange: (value: string) => void
+  label: ReactNode
+}
+
+const LanguageSelect = ({ value, onChange, label }: LanguageSelectProps) => {
   const { t } = useTranslation()
   const id = useId()
   const labelId = `languageSelect-${id}`
 
-  const handleChange = event => {
+  const handleChange = (event: SelectChangeEvent) => {
     onChange(event.target.value)
   }
 
