@@ -1,16 +1,28 @@
 import React from 'react'
 import { useField } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { TextFieldProps } from '@mui/material'
 
 import TextField from './TextField'
 
-const FormikTextField = ({ name, helperText, onBlur, showErrorInHelperText = true, ...props }) => {
+interface FormikTextFieldProps extends Omit<TextFieldProps, 'name' | 'value' | 'error'> {
+  name: string
+  showErrorInHelperText?: boolean
+}
+
+const FormikTextField = ({
+  name,
+  helperText,
+  onBlur,
+  showErrorInHelperText = true,
+  ...props
+}: FormikTextFieldProps) => {
   const [field, meta, helpers] = useField(name)
   const { t } = useTranslation()
 
-  const showError = meta.error && meta.touched
+  const showError = Boolean(meta.error) && meta.touched
 
-  const handleBlur = e => {
+  const handleBlur: TextFieldProps['onBlur'] = e => {
     helpers.setTouched(true)
 
     if (typeof onBlur === 'function') {
@@ -24,7 +36,7 @@ const FormikTextField = ({ name, helperText, onBlur, showErrorInHelperText = tru
       onChange={event => helpers.setValue(event.target.value)}
       onBlur={handleBlur}
       error={showError}
-      helperText={showErrorInHelperText && showError ? t(meta.error) : helperText}
+      helperText={showErrorInHelperText && showError && meta.error ? t(meta.error) : helperText}
       slotProps={{
         formHelperText: {
           role: showErrorInHelperText && showError ? 'alert' : undefined,

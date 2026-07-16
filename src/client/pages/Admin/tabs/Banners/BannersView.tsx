@@ -151,32 +151,11 @@ const BannerForm = ({ onSubmit, selected, open, setOpen }: BannerFormProps) => (
             <DialogTitle>Create new banner</DialogTitle>
             <DialogContent>
               <Box my={2}>
-                <FormikTextField
-                  name="textFi"
-                  label="Markdown content (FI)"
-                  multiline
-                  fullWidth
-                  helperText={undefined}
-                  onBlur={undefined}
-                />
+                <FormikTextField name="textFi" label="Markdown content (FI)" multiline fullWidth />
               </Box>
-              <FormikTextField
-                name="textSv"
-                label="Markdown content (SV)"
-                multiline
-                fullWidth
-                helperText={undefined}
-                onBlur={undefined}
-              />
+              <FormikTextField name="textSv" label="Markdown content (SV)" multiline fullWidth />
               <Box m={2} />
-              <FormikTextField
-                name="textEn"
-                label="Markdown content (EN)"
-                multiline
-                fullWidth
-                helperText={undefined}
-                onBlur={undefined}
-              />
+              <FormikTextField name="textEn" label="Markdown content (EN)" multiline fullWidth />
               <Box my={3}>
                 <Divider />
               </Box>

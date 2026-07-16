@@ -8,7 +8,7 @@ import { useSnackbar } from 'notistack'
 
 import FormikTextField from '../../components/common/FormikTextField'
 import FormikCheckBox from '../../components/common/FormikCheckbox'
-import { saveValues } from './utils'
+import { saveValues, NorppaFeedbackFormValues } from './utils'
 import Title from '../../components/common/Title'
 import { NorButton } from '../../components/common/NorButton'
 
@@ -33,7 +33,7 @@ const NorppaFeedback = () => {
   const { enqueueSnackbar } = useSnackbar()
   const navigate = useNavigate()
 
-  const handleSubmit = async values => {
+  const handleSubmit = async (values: NorppaFeedbackFormValues) => {
     try {
       if (!values.feedback.length) {
         enqueueSnackbar(t('norppaFeedback:feedbackLengthError'), {
@@ -53,7 +53,7 @@ const NorppaFeedback = () => {
     }
   }
 
-  const confirmSubmit = event => {
+  const confirmSubmit = (event: React.MouseEvent) => {
     if (!window.confirm(t('norppaFeedback:confirm'))) event.preventDefault()
   }
   return (
@@ -65,7 +65,7 @@ const NorppaFeedback = () => {
       <Typography variant="body1" component="p" sx={styles.description}>
         {t('norppaFeedback:description')}
       </Typography>
-      <Formik
+      <Formik<NorppaFeedbackFormValues>
         initialValues={{
           feedback: '',
           anonymous: false,
@@ -74,7 +74,7 @@ const NorppaFeedback = () => {
         onSubmit={handleSubmit}
       >
         {({ values, isSubmitting, setFieldValue }) => (
-          <Form sx={styles.container}>
+          <Form>
             <FormikTextField
               name="feedback"
               label={t('norppaFeedback:feedback')}
@@ -95,7 +95,7 @@ const NorppaFeedback = () => {
             <FormikCheckBox
               name="anonymous"
               label={t('norppaFeedback:anonymous')}
-              onChange={({ target }) => {
+              onChange={({ target }: React.ChangeEvent<HTMLInputElement>) => {
                 // if anon is true, set responseWanted to false
                 setFieldValue('responseWanted', values.responseWanted && !target.checked)
                 setFieldValue('anonymous', target.checked)

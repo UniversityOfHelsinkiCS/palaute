@@ -1,14 +1,18 @@
 import React from 'react'
 import { useField } from 'formik'
-import { Checkbox, FormControlLabel, Box } from '@mui/material'
+import { Checkbox, CheckboxProps, FormControlLabel, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
-const FormikCheckbox = ({ name, label, ariaDescription, sx = {}, ...props }) => {
-  const [field, meta, helpers] = useField(name)
+interface FormikCheckboxProps extends Omit<CheckboxProps, 'name' | 'checked'> {
+  name: string
+  label: React.ReactNode
+  ariaDescription?: string
+}
 
-  const showError = meta.error && meta.touched
+const FormikCheckbox = ({ name, label, ariaDescription, sx = {}, ...props }: FormikCheckboxProps) => {
+  const [field, , helpers] = useField(name)
 
   return (
     <>
@@ -25,7 +29,6 @@ const FormikCheckbox = ({ name, label, ariaDescription, sx = {}, ...props }) => 
               helpers.setValue(event.target.checked)
             }}
             onBlur={() => helpers.setTouched(true)}
-            error={showError}
             color="primary"
             disableFocusRipple
             slotProps={{ input: { 'aria-describedby': ariaDescription ? 'checkbox-description' : undefined } }}
