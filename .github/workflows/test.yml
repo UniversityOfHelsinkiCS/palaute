@@ -43,6 +43,7 @@ jobs:
             universitySurvey.spec.js,
             userfeedbacks.spec.js,
             versionedUniversitySurvey.spec.js,
+            accessibility.spec.js
           ]
     runs-on: ubuntu-latest
 
