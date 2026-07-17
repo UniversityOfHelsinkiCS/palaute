@@ -4,7 +4,7 @@
     "lib": ["es5", "dom"],
     "sourceMap": true,
     "allowJs": true,
-    "types": ["cypress", "node"]
+    "types": ["cypress", "node", "cypress-axe"]
   },
   "include": ["**/*.ts", "**/*.js"]
 }

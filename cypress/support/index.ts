@@ -15,6 +15,8 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'cypress-axe'
 import './commands'
 
 import { testUsers } from '../fixtures/headers'
