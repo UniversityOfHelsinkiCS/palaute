@@ -18,6 +18,11 @@ module.exports = defineConfig({
       on('task', {
         checkFolder,
         readXLSX,
+        log(message) {
+          // eslint-disable-next-line no-console
+          console.log(message)
+          return null
+        },
       })
     },
   },
