@@ -17,7 +17,14 @@ const AlertLink = ({ sx, rel, target, children, ...props }: LinkProps) => {
   const finalRel = target === '_blank' ? [rel, 'noopener noreferrer'].filter(Boolean).join(' ') : rel
 
   return (
-    <Link color="inherit" sx={mergeSx(styles.alertLink)} target={target} rel={finalRel} {...props} underline="hover">
+    <Link
+      color="inherit"
+      sx={mergeSx(styles.alertLink, sx)}
+      target={target}
+      rel={finalRel}
+      {...props}
+      underline="hover"
+    >
       {children}
       {target === '_blank' && (
         <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>

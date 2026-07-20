@@ -1,18 +1,23 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 import { useLocation, matchPath, Link } from 'react-router-dom'
 import { Tabs, Box, Tooltip, Badge, Tab } from '@mui/material'
+import type { TabsProps, TabProps } from '@mui/material'
 
-import { get } from 'lodash-es'
 import { handleTabKeyDown } from './utils'
 
-const stripSearch = path => path.split('?')[0]
+const stripSearch = (path: string) => path.split('?')[0]
 
-export const RouterTabs = ({ children, ...props }) => {
+interface RouterTabsProps extends TabsProps {
+  children: ReactNode
+}
+
+export const RouterTabs = ({ children, ...props }: RouterTabsProps) => {
   const { pathname } = useLocation()
 
   const activeIndex = React.Children.toArray(children)
-    .filter(c => React.isValidElement(c))
-    .findIndex(c => !!matchPath({ path: stripSearch(get(c, 'props.to')) }, pathname))
+    .filter((c): c is React.ReactElement<{ to?: string }> => React.isValidElement(c))
+    .findIndex(c => !!matchPath({ path: stripSearch(c.props.to ?? '') }, pathname))
 
   return (
     <Tabs
@@ -43,6 +48,18 @@ export const RouterTabs = ({ children, ...props }) => {
   )
 }
 
+interface RouterTabProps extends Omit<TabProps, 'label'> {
+  label: ReactNode
+  to: string
+  disabled?: boolean
+  disabledTooltip?: ReactNode
+  badge?: boolean
+  badgeContent?: ReactNode
+  badgeColor?: 'primary' | 'secondary' | 'default' | 'error' | 'info' | 'success' | 'warning'
+  badgeVisible?: boolean
+  tabId?: string
+}
+
 export const RouterTab = ({
   icon,
   label,
@@ -55,7 +72,7 @@ export const RouterTab = ({
   badgeVisible = true,
   tabId,
   ...props
-}) => {
+}: RouterTabProps) => {
   const { pathname } = useLocation()
   const active = !!matchPath({ path: stripSearch(to) }, pathname)
 
@@ -97,13 +114,13 @@ export const RouterTab = ({
         color: active ? 'primary.main' : 'text.secondary',
         opacity: 1,
         '&:hover': {
-          color: theme => theme.palette.primary.light,
+          color: theme.palette.primary.light,
           opacity: 1,
         },
         '&.Mui-focusVisible': {
           padding: '12px',
           border: '3px solid',
-          borderColor: theme => theme.palette.primary.main,
+          borderColor: theme.palette.primary.main,
           outlineOffset: '3px',
         },
       })}

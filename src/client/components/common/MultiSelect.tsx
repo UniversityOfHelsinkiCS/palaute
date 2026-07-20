@@ -3,24 +3,49 @@ import { Box, Checkbox, Chip, FormControl, IconButton, InputLabel, ListItemText,
 import { Close } from '@mui/icons-material'
 import { generate } from '../../util/randomColor'
 
-/**
- * options must be an array of objects with id and label
- *
- *
- */
-const MultiSelect = ({ value, onChange, options, label, colors, disabled }) => {
-  const selectedOptions = value.map(v => options.find(o => o.id === v))
+interface MultiSelectOption {
+  id: number
+  label: string
+  hash?: number
+}
+
+interface MultiSelectProps {
+  value: number[]
+  onChange: (value: number[]) => void
+  options: MultiSelectOption[]
+  label: string
+  colors?: boolean
+  disabled?: boolean
+}
+
+const Option = ({ option, colors }: { option: MultiSelectOption; colors?: boolean }) => (
+  <Chip label={option.label} sx={colors ? { background: generate(option.hash ?? option.id) } : undefined} />
+)
+
+const RenderValue = ({ selected, colors }: { selected: MultiSelectOption[]; colors?: boolean }) => (
+  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.3 }}>
+    {selected.map(value => (
+      <Option key={value.id} option={value} colors={colors} />
+    ))}
+  </Box>
+)
+
+const MultiSelect = ({ value, onChange, options, label, colors, disabled }: MultiSelectProps) => {
+  const selectedOptions = value.map(v => options.find(o => o.id === v)).filter((o): o is MultiSelectOption => !!o)
   return (
     <FormControl fullWidth>
       <InputLabel>{label}</InputLabel>
-      <Select
+      <Select<number[]>
         multiple
         disabled={disabled}
         onClick={event => event.stopPropagation()}
         value={value}
-        onChange={event => onChange(event.target.value)}
+        onChange={event => {
+          const { value: newValue } = event.target
+          onChange(typeof newValue === 'string' ? newValue.split(',').map(Number) : newValue)
+        }}
         label={label}
-        renderValue={() => <RenderValue selected={selectedOptions} onChange={onChange} colors={colors} />}
+        renderValue={() => <RenderValue selected={selectedOptions} colors={colors} />}
         sx={{ zIndex: 0 }}
         // eslint-disable-next-line react/no-unstable-nested-components
         IconComponent={() => <div />}
@@ -50,17 +75,5 @@ const MultiSelect = ({ value, onChange, options, label, colors, disabled }) => {
     </FormControl>
   )
 }
-
-const RenderValue = ({ selected, colors }) => (
-  <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.3 }}>
-    {selected.map(value => (
-      <Option key={value.id} option={value} colors={colors} />
-    ))}
-  </Box>
-)
-
-const Option = ({ option, colors }) => (
-  <Chip label={option.label} sx={colors ? { background: generate(option.hash ?? option.id) } : undefined} />
-)
 
 export default MultiSelect

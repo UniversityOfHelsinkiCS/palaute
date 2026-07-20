@@ -1,10 +1,18 @@
 import React from 'react'
+import type { ReactNode } from 'react'
 import { useField } from 'formik'
 import { Switch, FormControlLabel } from '@mui/material'
+import type { SwitchProps } from '@mui/material'
 
 import { switchFocusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 
-const FormikSwitch = ({ name, label, sx, ...props }) => {
+interface FormikSwitchProps extends Omit<SwitchProps, 'name' | 'checked' | 'onChange'> {
+  name: string
+  label: ReactNode
+}
+
+const FormikSwitch = ({ name, label, sx, ...props }: FormikSwitchProps) => {
   const [field, , helpers] = useField(name)
 
   return (
@@ -18,7 +26,7 @@ const FormikSwitch = ({ name, label, sx, ...props }) => {
           onBlur={() => helpers.setTouched(true)}
           name={name}
           color="primary"
-          sx={{ ...(sx ?? {}), ...switchFocusIndicatorStyle }}
+          sx={mergeSx(sx, switchFocusIndicatorStyle)}
           disableRipple
           {...props}
         />

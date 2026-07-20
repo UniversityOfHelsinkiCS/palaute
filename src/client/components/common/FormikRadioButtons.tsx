@@ -1,10 +1,24 @@
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import type { RadioGroupProps } from '@mui/material'
 import { useField } from 'formik'
 import React from 'react'
+import type { ReactNode } from 'react'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
-const FormikRadioButtons = ({ name, options, valueMapper = v => v, disabled, ...props }) => {
+interface FormikRadioOption<T> {
+  value: T
+  label: ReactNode
+}
+
+interface FormikRadioButtonsProps<T> extends Omit<RadioGroupProps, 'name' | 'value' | 'onChange' | 'onBlur'> {
+  name: string
+  options: FormikRadioOption<T>[]
+  valueMapper: (value: string) => T
+  disabled?: boolean
+}
+
+const FormikRadioButtons = <T,>({ name, options, valueMapper, disabled, ...props }: FormikRadioButtonsProps<T>) => {
   const [field, , helpers] = useField(name)
 
   return (

@@ -1,11 +1,23 @@
 import React, { useState, useEffect } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import type { Period } from '../../../common/studyPeriods'
 import { usePeriods } from '../../util/periodUtils'
 import { STUDY_YEAR_START_MONTH } from '../../util/common'
 import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
 import { useSemesters } from '../../util/semesterUtils'
 import { focusIndicatorStyle } from '../../util/accessibility'
+
+interface DateRange {
+  start: Date
+  end: Date
+}
+
+type Season = 'spring' | 'fall' | 'both'
+
+interface Semester extends DateRange {
+  season: Season
+}
 
 const styles = {
   filters: {
@@ -21,7 +33,18 @@ const styles = {
   },
 }
 
-const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayName }) => {
+interface FilterSelectorProps<T> {
+  selectorTarget: string
+  value: T
+  onChange: (option: T) => void
+  options: T[]
+  getDisplayName: (option: T) => string
+}
+
+// The options are full Date-range/Semester/Period objects, but MUI's Select/MenuItem `value` has
+// to be a string. `getDisplayName` is already required to produce a name unique per option (it's
+// also used as the React `key` below), so it doubles as that string identity.
+const FilterSelector = <T,>({ selectorTarget, value, onChange, options, getDisplayName }: FilterSelectorProps<T>) => {
   const { t } = useTranslation()
 
   return (
@@ -31,8 +54,11 @@ const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayNa
         id={`${selectorTarget}-selector`}
         labelId={`${selectorTarget}-selector-label`}
         label={t(`courseSummary:${selectorTarget}`)}
-        value={value}
-        onChange={event => onChange(event.target.value)}
+        value={getDisplayName(value)}
+        onChange={event => {
+          const selected = options.find(option => getDisplayName(option) === event.target.value)
+          if (selected) onChange(selected)
+        }}
       >
         {options.map(option => {
           const displayName = getDisplayName(option)
@@ -40,7 +66,7 @@ const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayNa
           return (
             <MenuItem
               data-cy={`${selectorTarget}-selector-item-${displayName}`}
-              value={option}
+              value={displayName}
               key={displayName}
               onClick={() => {
                 if (option === value) {
@@ -57,12 +83,19 @@ const FilterSelector = ({ selectorTarget, value, onChange, options, getDisplayNa
   )
 }
 
-export const YearSelector = ({ value, onChange, years, allowAll = false }) => {
+interface YearSelectorProps {
+  value: DateRange | 'all'
+  onChange: (range: DateRange | 'all') => void
+  years: DateRange[]
+  allowAll?: boolean
+}
+
+export const YearSelector = ({ value, onChange, years, allowAll = false }: YearSelectorProps) => {
   const { t } = useTranslation()
 
-  const options = allowAll ? ['all', ...years] : years
+  const options: (DateRange | 'all')[] = allowAll ? ['all', ...years] : years
 
-  const getDisplayName = option => {
+  const getDisplayName = (option: DateRange | 'all') => {
     if (option === 'all') return t('courseSummary:all')
 
     return getYearDisplayName(option)
@@ -79,10 +112,18 @@ export const YearSelector = ({ value, onChange, years, allowAll = false }) => {
   )
 }
 
-const SemesterSelector = ({ value, onChange, semesters }) => {
+const SemesterSelector = ({
+  value,
+  onChange,
+  semesters,
+}: {
+  value: Semester
+  onChange: (semester: Semester) => void
+  semesters: Semester[]
+}) => {
   const { t } = useTranslation()
 
-  const getSemesterDisplayName = semester => {
+  const getSemesterDisplayName = (semester: Semester) => {
     if (semester.season === 'both') return t('courseSummary:notSelected')
 
     const displayName = `${semester.start.getFullYear()} ${
@@ -103,10 +144,18 @@ const SemesterSelector = ({ value, onChange, semesters }) => {
   )
 }
 
-const PeriodSelector = ({ value, onChange, periods }) => {
+const PeriodSelector = ({
+  value,
+  onChange,
+  periods,
+}: {
+  value: Period
+  onChange: (period: Period) => void
+  periods: Period[]
+}) => {
   const { t } = useTranslation()
 
-  const getPeriodDisplayName = period => {
+  const getPeriodDisplayName = (period: Period) => {
     if (period.name === 'not selected') return t('courseSummary:notSelected')
 
     const displayName = `${period.start.getFullYear()} ${
@@ -127,19 +176,23 @@ const PeriodSelector = ({ value, onChange, periods }) => {
   )
 }
 
-/**
- *
- * @param {{
- * 	value: { start: Date, end: Date },
- * 	onChange: ({ start: Date, end: Date }) => void,
- *  option: string,
- *  setOption: (string) => void,
- *  allowAll: boolean
- *  futureYears: number
- * }} params§
- * @returns
- */
-export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption, allowAll, futureYears = 0 }) => {
+interface YearSemesterPeriodSelectorProps {
+  value?: DateRange
+  onChange: (range: DateRange) => void
+  option: string
+  setOption: (option: string) => void
+  allowAll?: boolean
+  futureYears?: number
+}
+
+export const YearSemesterPeriodSelector = ({
+  value,
+  onChange,
+  option,
+  setOption,
+  allowAll,
+  futureYears = 0,
+}: YearSemesterPeriodSelectorProps) => {
   const { t } = useTranslation()
 
   const [semesterReset, setSemesterReset] = useState(true)
@@ -149,17 +202,20 @@ export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption,
   const { semesters, selectedSemester } = useSemesters(value?.start ?? new Date(), semesterReset)
   const { periods, selectedPeriod } = usePeriods(value?.start ?? new Date(), periodReset, semesterReset)
 
-  const handleOptionChange = event => {
-    setOption(event.target.value)
+  const handleOptionChange = (event: React.MouseEvent<HTMLElement>) => {
+    // This group isn't `exclusive`, so MUI's own (event, value) callback value would be an array;
+    // we read the clicked button's native `value` attribute directly instead, as the original did.
+    const newOption = event.currentTarget.getAttribute('value')
+    if (newOption) setOption(newOption)
   }
 
-  const handleYearChange = ({ start, end }) => {
+  const handleYearChange = ({ start, end }: DateRange) => {
     setPeriodReset(true)
     setSemesterReset(true)
     onChange({ start, end })
   }
 
-  const handleSemesterChange = ({ start, end }) => {
+  const handleSemesterChange = ({ start, end }: DateRange) => {
     setPeriodReset(true)
 
     if (start.getMonth() === STUDY_YEAR_START_MONTH - 1 && end.getMonth() === STUDY_YEAR_START_MONTH - 2) {
@@ -171,7 +227,7 @@ export const YearSemesterPeriodSelector = ({ value, onChange, option, setOption,
     onChange({ start, end })
   }
 
-  const handlePeriodChange = ({ start, end }) => {
+  const handlePeriodChange = ({ start, end }: DateRange) => {
     const fourMonthsFromStart = new Date(start)
     fourMonthsFromStart.setMonth(fourMonthsFromStart.getMonth() + 4)
 

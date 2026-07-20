@@ -3,8 +3,18 @@ import { useField, useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import type { DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 
-const FormikDatePicker = ({ name, ...props }) => {
+interface FormikDatePickerProps extends Omit<
+  DatePickerProps<Date>,
+  'value' | 'onChange' | 'format' | 'maxDate' | 'slots' | 'slotProps'
+> {
+  name: string
+}
+
+type DatePickerSlotProps = DatePickerProps<Date>['slotProps']
+
+const FormikDatePicker = ({ name, ...props }: FormikDatePickerProps) => {
   const [field, meta] = useField(name)
   const { setFieldValue } = useFormikContext()
   const { t } = useTranslation()
@@ -14,7 +24,6 @@ const FormikDatePicker = ({ name, ...props }) => {
   return (
     <DatePicker
       format="dd/MM/yyyy"
-      id={field.name}
       value={new Date(field.value) ?? null}
       onChange={value => {
         setFieldValue(name, value, true)
@@ -24,6 +33,7 @@ const FormikDatePicker = ({ name, ...props }) => {
       }}
       slotProps={{
         textField: {
+          id: field.name,
           fullWidth: true,
           margin: 'normal',
           helperText: t(meta.error),
@@ -37,16 +47,19 @@ const FormikDatePicker = ({ name, ...props }) => {
             'data-cy': `formik-date-picker-field-${name}-input`,
           },
         },
+        // These three slots' MUI prop types don't include `data-cy` (only used for Cypress
+        // selectors, has no runtime meaning to MUI), so a cast to the real slot prop type is
+        // needed to attach it.
         field: {
           'data-cy': `formik-date-picker-field-${name}`,
-        },
+        } as DatePickerSlotProps['field'],
         inputAdornment: {
           'data-cy': `formik-date-picker-keyboard-field-${name}`,
           'aria-label': 'change date',
-        },
+        } as DatePickerSlotProps['inputAdornment'],
         openPickerButton: {
           'data-cy': `formik-date-picker-field-${name}-popper`,
-        },
+        } as DatePickerSlotProps['openPickerButton'],
       }}
       maxDate={new Date('2300-01-01')}
       {...props}
