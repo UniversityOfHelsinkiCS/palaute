@@ -1,12 +1,19 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import type { GetFeedbackTargetFeedbacksResponse } from '@common/types/feedbackTarget'
 import apiClient from '../util/apiClient'
 
-const useFeedbackTargetFeedbacks = (targetId, groupId, options = {}) => {
+const useFeedbackTargetFeedbacks = (
+  targetId: number | string,
+  groupId: string,
+  options: Partial<UseQueryOptions<GetFeedbackTargetFeedbacksResponse>> = {}
+) => {
   const queryKey = ['feedbackTargetFeedbacks', targetId, groupId]
 
   const queryFn = async () => {
     const urlQueryString = groupId !== 'ALL' ? `?groupId=${groupId}` : ''
-    const { data } = await apiClient.get(`/feedback-targets/${targetId}/feedbacks${urlQueryString}`)
+    const { data } = await apiClient.get<GetFeedbackTargetFeedbacksResponse>(
+      `/feedback-targets/${targetId}/feedbacks${urlQueryString}`
+    )
 
     return data
   }
@@ -15,10 +22,9 @@ const useFeedbackTargetFeedbacks = (targetId, groupId, options = {}) => {
     queryKey,
     queryFn,
     enabled: Boolean(targetId),
-    refetchOnFocus: false,
+    refetchOnWindowFocus: false,
     refetchOnMount: false,
     refetchInterval: false,
-    keepPreviousData: true,
     ...options,
   })
 

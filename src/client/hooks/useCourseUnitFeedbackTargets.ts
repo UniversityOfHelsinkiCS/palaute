@@ -1,9 +1,20 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, UseQueryOptions } from '@tanstack/react-query'
+import type { GetFeedbackTargetsForCourseUnitResponse } from '@common/types/feedbackTarget'
 
 import apiClient from '../util/apiClient'
 import { getSafeCourseCode } from '../util/courseIdentifiers'
 
-const useCourseUnitFeedbackTargets = (code, options = {}) => {
+type UseCourseUnitFeedbackTargetsOptions = Partial<UseQueryOptions<GetFeedbackTargetsForCourseUnitResponse>> & {
+  courseRealisationStartDateAfter?: Date
+  courseRealisationStartDateBefore?: Date
+  courseRealisationEndDateAfter?: Date
+  courseRealisationEndDateBefore?: Date
+  feedbackType?: string
+  includeSurveys?: boolean
+  isOrganisationSurvey?: boolean
+}
+
+const useCourseUnitFeedbackTargets = (code: string, options: UseCourseUnitFeedbackTargetsOptions = {}) => {
   const {
     courseRealisationStartDateAfter,
     courseRealisationStartDateBefore,
@@ -50,9 +61,12 @@ const useCourseUnitFeedbackTargets = (code, options = {}) => {
   const safeCourseCode = getSafeCourseCode({ courseCode: code })
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/feedback-targets/for-course-unit/${safeCourseCode}`, {
-      params,
-    })
+    const { data } = await apiClient.get<GetFeedbackTargetsForCourseUnitResponse>(
+      `/feedback-targets/for-course-unit/${safeCourseCode}`,
+      {
+        params,
+      }
+    )
 
     return data
   }

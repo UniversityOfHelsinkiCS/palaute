@@ -1,11 +1,13 @@
+import type { GetContinuousFeedbacksResponse } from '@common/types/feedbackTarget'
+
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useFeedbackTargetContinuousFeedbacks = (targetId, isEnabled = true) => {
+const useFeedbackTargetContinuousFeedbacks = (targetId: number | string, isEnabled = true) => {
   const queryKey = ['feedbackTargetContinuousFeedbacks', targetId]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/continuous-feedback/${targetId}`)
+    const { data } = await apiClient.get<GetContinuousFeedbacksResponse>(`/continuous-feedback/${targetId}`)
 
     return data
   }

@@ -1,12 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
+import type { GetFeedbackTargetsForCourseRealisationResponse } from '@common/types/feedbackTarget'
 
 import apiClient from '../util/apiClient'
 
-const useCourseRealisationFeedbackTargets = (id, options = {}) => {
+const useCourseRealisationFeedbackTargets = (id: string, options = {}) => {
   const queryKey = ['courseRealisationFeedbackTargets', id]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/feedback-targets/for-course-realisation/${id}`)
+    const { data } = await apiClient.get<GetFeedbackTargetsForCourseRealisationResponse>(
+      `/feedback-targets/for-course-realisation/${id}`
+    )
 
     return data
   }

@@ -30,3 +30,17 @@ export type UserPreferences = {
   summaryView: string
   defaultView: string
 }
+
+// GET /users/:id
+export type GetUserDetailsResponse = User & {
+  username: string
+  secondaryEmail?: string | null
+  studentNumber?: string | null
+  degreeStudyRight?: boolean | null
+  norppaFeedbackGiven?: boolean
+  lastLoggedIn?: string | null
+  createdAt: string
+  updatedAt: string
+  iamGroups: string[]
+  access: OrganisationWithAccess[]
+}

@@ -1,11 +1,13 @@
+import type { GetFeedbackTargetUsersResponse } from '@common/types/feedbackTarget'
+
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useFeedbackTargetUsers = (targetId, options = {}) => {
+const useFeedbackTargetUsers = (targetId: number | string, options = {}) => {
   const queryKey = ['feedbackTargetUsers', targetId]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/feedback-targets/${targetId}/users`)
+    const { data } = await apiClient.get<GetFeedbackTargetUsersResponse>(`/feedback-targets/${targetId}/users`)
 
     return data
   }

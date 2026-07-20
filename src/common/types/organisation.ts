@@ -1,4 +1,5 @@
 import type { LocalizedString } from './common'
+import type { Question } from './question'
 
 export type OrganisationAccess = {
   read?: boolean
@@ -61,3 +62,16 @@ type OrganisationLogEntry = {
 
 // GET /organisations/:code/logs
 export type GetOrganisationLogsResponse = OrganisationLogEntry[]
+
+// GET /organisations/:code/open
+export type GetOrganisationOpenQuestionsResponse = Array<{
+  code: string
+  name: LocalizedString
+  realisations: Array<{
+    id: number
+    name: LocalizedString
+    startDate: string
+    endDate: string
+    questions: Array<{ question: Question; responses: string[] }>
+  }>
+}>

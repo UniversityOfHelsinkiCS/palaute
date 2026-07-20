@@ -1,11 +1,13 @@
+import type { GetOrganisationOpenQuestionsResponse } from '@common/types/organisation'
+
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
-const useProgrammeOpenQuestions = (code, options = {}) => {
+const useProgrammeOpenQuestions = (code: string, options = {}) => {
   const queryKey = ['programmeOpenQuestions', code]
 
   const queryFn = async () => {
-    const { data } = await apiClient.get(`/organisations/${code}/open`)
+    const { data } = await apiClient.get<GetOrganisationOpenQuestionsResponse>(`/organisations/${code}/open`)
 
     return data
   }

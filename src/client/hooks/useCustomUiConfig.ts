@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from 'react'
 
-const useCustomUiConfig = configName => {
-  const [customUiConfig, setCustomUiConfig] = useState(null)
+const useCustomUiConfig = (configName?: string) => {
+  const [customUiConfig, setCustomUiConfig] = useState<unknown>(null)
 
   useEffect(() => {
     if (configName) {

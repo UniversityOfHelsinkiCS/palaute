@@ -1,3 +1,5 @@
+import type { GetNoadCoursesResponse } from '@common/types/feedbackTarget'
+
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 
@@ -5,7 +7,7 @@ const useNoadfeedbackTargets = (options = {}) => {
   const queryKey = 'noadCourses'
 
   const queryFn = async () => {
-    const { data } = await apiClient.get('/courses')
+    const { data } = await apiClient.get<GetNoadCoursesResponse>('/courses')
 
     return data
   }
