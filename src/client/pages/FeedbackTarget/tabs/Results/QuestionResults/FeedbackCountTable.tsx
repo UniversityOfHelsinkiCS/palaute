@@ -190,7 +190,7 @@ export const MonthlySummaries = ({
               id={summaryId}
               aria-controls={detailsId}
               expandIcon={<ArrowDropDownIcon />}
-              sx={{ ...focusIndicatorStyle() }}
+              sx={focusIndicatorStyle()}
               disableRipple
             >
               <Typography>

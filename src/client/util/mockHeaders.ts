@@ -1,6 +1,6 @@
 const ITEM_NAME = 'fakeUser'
 
-export const setHeaders = uid => {
+export const setHeaders = (uid: string) => {
   localStorage.setItem(ITEM_NAME, JSON.stringify({ uid }))
 }
 

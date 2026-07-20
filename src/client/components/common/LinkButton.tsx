@@ -6,6 +6,7 @@ import type { ButtonProps, SxProps, Theme } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
 import { visuallyHidden } from '@mui/utils'
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 
 type LinkButtonProps = Omit<ButtonProps<'a'>, 'component' | 'href' | 'title' | 'ref'> & {
   title: React.ReactNode
@@ -16,12 +17,14 @@ type LinkButtonProps = Omit<ButtonProps<'a'>, 'component' | 'href' | 'title' | '
 
 const LinkButton = ({ title, to, external = false, sx = {}, ...rest }: LinkButtonProps) => {
   const { t } = useTranslation()
-  const buttonSx = {
-    ...sx,
-    textDecoration: 'underline',
-    '&:hover': { textDecoration: 'underline' },
-    ...focusIndicatorStyle(),
-  }
+  const buttonSx = mergeSx(
+    sx,
+    {
+      textDecoration: 'underline',
+      '&:hover': { textDecoration: 'underline' },
+    },
+    focusIndicatorStyle()
+  )
 
   if (external) {
     return (

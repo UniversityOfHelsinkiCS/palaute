@@ -1,6 +1,6 @@
 import { format, isValid } from 'date-fns'
 
-const formatDate = (date, dateFormat = 'dd.MM.yyyy') => {
+const formatDate = (date?: Date | string | number, dateFormat = 'dd.MM.yyyy') => {
   if (!date) {
     return undefined
   }

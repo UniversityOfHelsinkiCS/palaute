@@ -3,10 +3,18 @@ import { Box, ToggleButton, ToggleButtonGroup, Typography, Alert } from '@mui/ma
 import { Theme } from '@mui/material/styles'
 import { useTranslation } from 'react-i18next'
 import type { User } from '@common/types/user'
+import type { LocalizedString } from '@common/types/common'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
 import { sortGroups } from './utils'
+
+type Group = {
+  id: string
+  name: LocalizedString
+  studentCount?: number
+  teachers?: Array<User>
+}
 
 type GroupOption = {
   id: string
@@ -25,7 +33,7 @@ type GroupButtonProps = {
 type GroupSelectorProps = {
   groupId: string
   setGroupId: (groupId: string) => void
-  groups: GroupOption[]
+  groups: Group[]
   groupsAvailable: boolean
   studentCount: number
 }

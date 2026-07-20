@@ -1,19 +1,21 @@
 import { Chip, Tooltip } from '@mui/material'
-import React, { CSSProperties } from 'react'
+import type { SxProps, Theme } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import type { User } from '@common/types/user'
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 
 type TeacherChipProps = {
   user: User
   onDelete?: () => void
   tooltip?: string
   outlined?: boolean
-  style?: CSSProperties
+  sx?: SxProps<Theme>
   tooltipPlacement: 'bottom' | 'top' | 'left' | 'right'
 }
 
-const TeacherChip = ({ user, onDelete, tooltip, outlined, style, tooltipPlacement }: TeacherChipProps) => {
+const TeacherChip = ({ user, onDelete, tooltip, outlined, sx, tooltipPlacement }: TeacherChipProps) => {
   const { t } = useTranslation()
 
   return (
@@ -34,7 +36,7 @@ const TeacherChip = ({ user, onDelete, tooltip, outlined, style, tooltipPlacemen
         component="a"
         href={user.email ? `mailto:${user.email}` : undefined}
         size="small"
-        sx={{ margin: '1px', ...style, fontWeight: 'normal', ...focusIndicatorStyle() }}
+        sx={mergeSx({ margin: '1px', fontWeight: 'normal' }, sx, focusIndicatorStyle())}
       />
     </Tooltip>
   )

@@ -1,10 +1,31 @@
+import type { LocalizedString } from '@common/types/common'
 import { LANGUAGES } from './common'
 import { getLanguageValue } from './languageUtils'
 
-export const getCourseCode = ({ courseCode, userCreated }) => (userCreated || !courseCode ? '' : courseCode)
+type CourseUnitLike = {
+  courseCode?: string
+  userCreated?: boolean
+  name?: LocalizedString
+}
 
-export const getInterimFeedbackName = (feedbackTargetName, courseRealisationName, t) => {
-  const interimFeedbackName = {}
+type CourseRealisationLike = {
+  name?: LocalizedString
+}
+
+type FeedbackTargetLike = {
+  userCreated?: boolean
+  name?: LocalizedString
+}
+
+export const getCourseCode = ({ courseCode, userCreated }: CourseUnitLike) =>
+  userCreated || !courseCode ? '' : courseCode
+
+export const getInterimFeedbackName = (
+  feedbackTargetName: LocalizedString,
+  courseRealisationName: LocalizedString,
+  t: (key: string) => string
+): LocalizedString => {
+  const interimFeedbackName: LocalizedString = {}
 
   LANGUAGES.forEach(language => {
     const fbtName = getLanguageValue(feedbackTargetName, language)
@@ -16,7 +37,7 @@ export const getInterimFeedbackName = (feedbackTargetName, courseRealisationName
   return interimFeedbackName
 }
 
-export const getSurveyType = (courseUnit, feedbackTarget = {}) => {
+export const getSurveyType = (courseUnit: CourseUnitLike, feedbackTarget: FeedbackTargetLike = {}) => {
   const isOrganisationSurvey = courseUnit.userCreated
   const isInterimFeedback = !isOrganisationSurvey && feedbackTarget?.userCreated
 
@@ -26,7 +47,11 @@ export const getSurveyType = (courseUnit, feedbackTarget = {}) => {
   }
 }
 
-export const getPrimaryCourseName = (courseUnit, courseRealisation, feedbackTarget) => {
+export const getPrimaryCourseName = (
+  courseUnit: CourseUnitLike,
+  courseRealisation: CourseRealisationLike,
+  feedbackTarget: FeedbackTargetLike
+) => {
   const { isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
 
   if (isInterimFeedback) return feedbackTarget.name
@@ -34,7 +59,12 @@ export const getPrimaryCourseName = (courseUnit, courseRealisation, feedbackTarg
   return courseRealisation.name
 }
 
-export const getSecondaryCourseName = (courseRealisation, courseUnit, feedbackTarget, language) => {
+export const getSecondaryCourseName = (
+  courseRealisation: CourseRealisationLike,
+  courseUnit: CourseUnitLike,
+  feedbackTarget: FeedbackTargetLike,
+  language: string
+) => {
   const { isOrganisationSurvey, isInterimFeedback } = getSurveyType(courseUnit, feedbackTarget)
 
   if (isOrganisationSurvey) return getLanguageValue(courseUnit.name, language)
@@ -43,7 +73,13 @@ export const getSecondaryCourseName = (courseRealisation, courseUnit, feedbackTa
   return getCourseCode(courseUnit)
 }
 
-export const getSafeCourseCode = ({ courseCode, forUrl = true, safeString = '_' }) => {
+type GetSafeCourseCodeParams = {
+  courseCode?: string
+  forUrl?: boolean
+  safeString?: string
+}
+
+export const getSafeCourseCode = ({ courseCode, forUrl = true, safeString = '_' }: GetSafeCourseCodeParams) => {
   // There are course codes that include slash character (/), which is problematic in URLs and XLSX sheet names.
   // To avoid problems, course codes are encoded for URLs to safely handle slashes. Backend decodes course code before querying database.
   // For XLSX sheet names, slashes are replaced with given safeString (or underscore by default).

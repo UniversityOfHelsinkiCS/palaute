@@ -1,7 +1,8 @@
 import { fi, sv, enGB as en } from 'date-fns/locale'
 import i18next from 'i18next'
+import type { LocalizedString } from '@common/types/common'
 
-export const getLanguageValue = (values, preferred) => {
+export const getLanguageValue = (values: LocalizedString, preferred: string) => {
   if (!values) {
     return null
   }
@@ -10,7 +11,6 @@ export const getLanguageValue = (values, preferred) => {
 
   if (values[preferred]) return values[preferred]
 
-  // eslint-disable-next-line
   for (const lang of possibleLangs) {
     if (values[lang]) return values[lang]
   }
@@ -18,12 +18,12 @@ export const getLanguageValue = (values, preferred) => {
   return null
 }
 
-export const localeForLanguage = lang => {
+export const localeForLanguage = (lang: string) => {
   if (!lang) return en
   return { fi, sv, en }[lang]
 }
 
-export const getAllTranslations = key => ({
+export const getAllTranslations = (key: string) => ({
   fi: i18next.getFixedT('fi')(key),
   sv: i18next.getFixedT('sv')(key),
   en: i18next.getFixedT('en')(key),

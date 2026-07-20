@@ -5,6 +5,12 @@ import HttpApi from 'i18next-http-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 import { basePath, LANGUAGES, TRANSLATION_NAMESPACE } from './common'
 
+declare global {
+  interface Window {
+    __i18n__: typeof i18n
+  }
+}
+
 /**
  * Load the translation files using Http backend, from public server resources (public/locales/)
  * We swap around the default namespace separator and keyseparator of i18n, because of how existing code used namespaces.
@@ -31,5 +37,5 @@ i18n
     supportedLngs: LANGUAGES,
   })
 
-// eslint-disable-next-line
+// eslint-disable-next-line no-underscore-dangle
 window.__i18n__ = i18n

@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
-const QuestionLanguageContext = createContext(null)
+const QuestionLanguageContext = createContext<string | null>(null)
 
 export const QuestionLanguageProvider = QuestionLanguageContext.Provider
 

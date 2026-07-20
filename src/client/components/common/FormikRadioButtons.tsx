@@ -5,6 +5,7 @@ import React from 'react'
 import type { ReactNode } from 'react'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 
 type FormikRadioOption<T> = {
   value: T
@@ -38,7 +39,7 @@ const FormikRadioButtons = <T,>({ name, options, valueMapper, disabled, ...props
           value={value}
           control={<Radio disabled={disabled} disableFocusRipple />}
           label={label}
-          sx={{ pr: 1, ...optionFocusIndicatorStyle() }}
+          sx={mergeSx({ pr: 1 }, optionFocusIndicatorStyle())}
         />
       ))}
     </RadioGroup>

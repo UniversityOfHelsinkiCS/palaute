@@ -1,5 +1,8 @@
-export const focusIndicatorStyle = ({ color } = {}) => {
-  const focusIndicatorStyle = {
+import type { Theme } from '@mui/material'
+import type { SystemStyleObject } from '@mui/system'
+
+export const focusIndicatorStyle = ({ color }: { color?: string } = {}): SystemStyleObject<Theme> => {
+  const focusIndicatorStyle: SystemStyleObject<Theme> = {
     '&.Mui-focusVisible': {
       outline: '3px solid',
       outlineColor: theme => color ?? theme.palette.primary.main,
@@ -10,7 +13,7 @@ export const focusIndicatorStyle = ({ color } = {}) => {
   return focusIndicatorStyle
 }
 
-export const optionFocusIndicatorStyle = ({ color } = {}) => ({
+export const optionFocusIndicatorStyle = ({ color }: { color?: string } = {}): SystemStyleObject<Theme> => ({
   display: 'inline-flex',
   maxWidth: 'fit-content',
   alignItems: 'center',
@@ -22,7 +25,7 @@ export const optionFocusIndicatorStyle = ({ color } = {}) => ({
   },
 })
 
-export const switchFocusIndicatorStyle = {
+export const switchFocusIndicatorStyle: SystemStyleObject<Theme> = {
   '& .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb': {
     outline: '3px solid',
     outlineColor: theme => theme.palette.primary.main,

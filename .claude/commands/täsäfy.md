@@ -41,6 +41,8 @@ import type { LinkProps, Theme } from '@mui/material'
 
 **Merging sx props**: use `mergeSx` from `src/client/util/sx.ts` whenever multiple sx-style objects/arrays need to be combined — not just when merging with an incoming `sx` prop (e.g. `sx={mergeSx(styles.foo, sx)}`), but any time local styles themselves are merged. Don't concatenate or spread sx arrays/objects by hand. See `AlertLink.tsx`, `LinkChip.tsx` for usage.
 
+**Typing sx-returning helpers**: type util functions/objects that produce sx values as `SystemStyleObject<Theme>` (from `@mui/system`) rather than leaving them inferred — this gives real property checking and lets nested `theme =>` callbacks infer their param type without an explicit annotation. But once typed this way, never object-spread the result (`{ ...a, ...b }`) into another sx literal — it blows up overload resolution on `Button`-family components. Use `mergeSx` instead.
+
 ## Backend (Express)
 
 Use appropriate TypeScript types for Express request and response objects: `AuthenticatedRequest` from `server/types.ts` and `Response<DTO>` from `'express'` (where `DTO` is the response type from `@common/types/`). Import correct Sequelize models if needed from `server/models`.

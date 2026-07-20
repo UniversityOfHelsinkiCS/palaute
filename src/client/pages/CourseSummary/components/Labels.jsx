@@ -19,21 +19,15 @@ export const TeacherChips = ({ teachers, responsibleTeachers, administrativePers
   return (
     <Box display="flex" flexWrap="wrap" maxWidth="100rem">
       {responsibleTeachers.map(t => (
-        <TeacherChip key={t.id} user={t} tooltip={responsibleTeacher} outlined style={{ backgroundColor: grey[300] }} />
+        <TeacherChip key={t.id} user={t} tooltip={responsibleTeacher} outlined sx={{ backgroundColor: grey[300] }} />
       ))}
 
       {teachers.map(t => (
-        <TeacherChip key={t.id} user={t} tooltip={teacher} style={{ backgroundColor: grey[200] }} />
+        <TeacherChip key={t.id} user={t} tooltip={teacher} sx={{ backgroundColor: grey[200] }} />
       ))}
 
       {administrativePersons.map(t => (
-        <TeacherChip
-          key={t.id}
-          user={t}
-          tooltip={administrativePerson}
-          outlined
-          style={{ backgroundColor: grey[100] }}
-        />
+        <TeacherChip key={t.id} user={t} tooltip={administrativePerson} outlined sx={{ backgroundColor: grey[100] }} />
       ))}
     </Box>
   )

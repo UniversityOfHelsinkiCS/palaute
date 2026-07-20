@@ -15,14 +15,10 @@ import {
 import { useTranslation } from 'react-i18next'
 import { Close, Edit } from '@mui/icons-material'
 import { focusIndicatorStyle, optionFocusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 import styles from '../../util/chipStyles'
 
-const radioButtonStyle = {
-  ml: 1,
-  my: 1,
-  pr: 1,
-  ...optionFocusIndicatorStyle(),
-}
+const radioButtonStyle = mergeSx({ ml: 1, my: 1, pr: 1 }, optionFocusIndicatorStyle())
 
 const QuestionPublicityToggle = ({
   questionId,
@@ -111,7 +107,7 @@ const QuestionPublicityToggle = ({
               onClick={handleClose}
               aria-label={t('common:close')}
               aria-describedby={disabled ? 'question-publicity-disabled-info' : undefined}
-              sx={{ ml: 1, ...focusIndicatorStyle() }}
+              sx={mergeSx({ ml: 1 }, focusIndicatorStyle())}
               disableFocusRipple
             >
               <Close fontSize="small" />

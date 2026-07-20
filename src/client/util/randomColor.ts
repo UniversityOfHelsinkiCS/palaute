@@ -36,12 +36,7 @@ const colors = [
 ]
 const N = colors.length
 
-/**
- *
- * @param {number} hash
- * @return {string} color
- */
-export const generate = (hash, minShade = 1, maxShade = 3) => {
+export const generate = (hash: number, minShade = 1, maxShade = 3): string => {
   const shade = ((hash % (maxShade - minShade)) + minShade) * 100
   const hue = hash % N
   return colors[hue][shade]

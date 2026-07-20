@@ -4,6 +4,7 @@ import { Checkbox, CheckboxProps, FormControlLabel, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 
 type FormikCheckboxProps = Omit<CheckboxProps, 'name' | 'checked'> & {
   name: string
@@ -36,7 +37,7 @@ const FormikCheckbox = ({ name, label, ariaDescription, sx = {}, ...props }: For
           />
         }
         label={label}
-        sx={{ ...sx, pr: 1, ...optionFocusIndicatorStyle() }}
+        sx={mergeSx(sx, { pr: 1 }, optionFocusIndicatorStyle())}
       />
     </>
   )

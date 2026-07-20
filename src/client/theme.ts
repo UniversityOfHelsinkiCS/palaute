@@ -3,6 +3,26 @@ import { green, grey, lightBlue } from '@mui/material/colors'
 import { useMemo } from 'react'
 import { deepmerge } from '@mui/utils'
 import { PaletteMode, ThemeOptions } from '@mui/material'
+import type { PaletteColor, SimplePaletteColorOptions } from '@mui/material/styles'
+
+declare module '@mui/material/styles' {
+  interface Palette {
+    chipSuccess: PaletteColor
+    chipWarning: PaletteColor
+    chipError: PaletteColor
+    chipOngoing: PaletteColor
+    chipContinuous: PaletteColor
+    chipInterim: PaletteColor
+  }
+  interface PaletteOptions {
+    chipSuccess?: SimplePaletteColorOptions
+    chipWarning?: SimplePaletteColorOptions
+    chipError?: SimplePaletteColorOptions
+    chipOngoing?: SimplePaletteColorOptions
+    chipContinuous?: SimplePaletteColorOptions
+    chipInterim?: SimplePaletteColorOptions
+  }
+}
 
 type ThemeFunction = (mode: PaletteMode | undefined) => ThemeOptions
 

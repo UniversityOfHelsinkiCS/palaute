@@ -1,6 +1,6 @@
 import { SUMMARY_COLORS, SUMMARY_COLOR_SCALE_MAX, SUMMARY_COLOR_SCALE_MIN } from './common'
 
-const getColorIndex = mean => {
+const getColorIndex = (mean: number) => {
   if (mean < 1.0) return 0 // Case: no data
   if (mean <= SUMMARY_COLOR_SCALE_MIN) return 1 // Case: bad
   if (mean >= SUMMARY_COLOR_SCALE_MAX) return SUMMARY_COLORS.length - 1 // Case: awesome
@@ -16,4 +16,4 @@ const getColorIndex = mean => {
   return index
 }
 
-export const getColor = mean => SUMMARY_COLORS[getColorIndex(mean)]
+export const getColor = (mean: number) => SUMMARY_COLORS[getColorIndex(mean)]

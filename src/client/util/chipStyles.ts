@@ -1,8 +1,10 @@
 import { css, keyframes } from '@mui/material'
+import type { Theme } from '@mui/material'
+import type { SystemStyleObject } from '@mui/system'
 
 import { focusIndicatorStyle } from './accessibility'
 
-const common = {
+const common: SystemStyleObject<Theme> = {
   '&:hover': {
     borderRadius: '3px',
   },
@@ -33,7 +35,7 @@ const flow = keyframes`
   }
 `
 
-const styles = {
+const styles: Record<string, SystemStyleObject<Theme>> = {
   interactive: {
     ...common,
   },
@@ -56,7 +58,7 @@ const styles = {
     `,
   },
   shimmering: {
-    background: theme => theme.palette.primary,
+    background: theme => theme.palette.primary.main,
     backgroundImage: 'linear-gradient(55deg, #edf7ff 10%, #d2e7fc 30%, #edf7ff 50%)',
     backgroundSize: '150px, 20px',
     animation: css`
@@ -66,7 +68,7 @@ const styles = {
     borderColor: theme => theme.palette.chipOngoing.main,
   },
   shimmeringSecondary: {
-    background: theme => theme.palette.primary,
+    background: theme => theme.palette.primary.main,
     backgroundImage: 'linear-gradient(55deg, #ccffcc 10%, #99ff99 30%, #ccffcc 50%)',
     backgroundSize: '150px, 20px',
     animation: css`
@@ -76,7 +78,7 @@ const styles = {
     borderColor: theme => theme.palette.chipContinuous.main,
   },
   interim: {
-    background: theme => theme.palette.primary,
+    background: theme => theme.palette.primary.main,
     backgroundImage: 'linear-gradient(55deg, #ead8ee 10%, #d4b4d9 30%, #ead8ee 50%)',
     backgroundSize: '150px, 20px',
     animation: css`

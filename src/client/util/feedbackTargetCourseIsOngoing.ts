@@ -1,4 +1,9 @@
-const feedbackTargetCourseIsOngoing = ({ courseRealisation, opensAt }) => {
+type FeedbackTargetCourseIsOngoingParams = {
+  courseRealisation?: { startDate?: string }
+  opensAt?: string
+}
+
+const feedbackTargetCourseIsOngoing = ({ courseRealisation, opensAt }: FeedbackTargetCourseIsOngoingParams) => {
   if (!courseRealisation) return false
   const { startDate } = courseRealisation
 

@@ -1,6 +1,6 @@
 import { format, parseISO } from 'date-fns'
 
-export const getDateRangeString = (startDate, endDate) => {
+export const getDateRangeString = (startDate: string | Date, endDate: string | Date) => {
   if (typeof startDate === 'string') {
     startDate = parseISO(startDate)
   }
@@ -16,7 +16,7 @@ export const getDateRangeString = (startDate, endDate) => {
   return `${startDateString}–${endDateString}`
 }
 
-export const getStartAndEndString = (startDate, endDate) => {
+export const getStartAndEndString = (startDate: string | Date, endDate: string | Date) => {
   if (typeof startDate === 'string') {
     startDate = parseISO(startDate)
   }

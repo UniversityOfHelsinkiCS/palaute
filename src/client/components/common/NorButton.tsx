@@ -3,6 +3,7 @@ import Button from '@mui/material/Button'
 import { ButtonProps } from '@mui/material'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { mergeSx } from '../../util/sx'
 
 type NorButtonVariant = 'primary' | 'secondary' | 'error' | 'cancel' | 'empty'
 
@@ -38,7 +39,7 @@ export const NorButton = forwardRef<HTMLButtonElement, NorButtonProps>(
         disabled={disabled}
         startIcon={icon}
         disableRipple
-        sx={{ ...(sx ?? {}), ...focusIndicatorStyle() }}
+        sx={mergeSx(sx, focusIndicatorStyle())}
         {...props}
       >
         {children}

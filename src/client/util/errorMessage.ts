@@ -1,4 +1,6 @@
-const getGeneralError = error => {
+import type { AxiosError } from 'axios'
+
+const getGeneralError = (error: AxiosError): string | null => {
   if (error.message?.toLowerCase() === 'network error') {
     return 'common:fetchError'
   }
@@ -18,7 +20,7 @@ const getGeneralError = error => {
   return null
 }
 
-const getFeedbackTargetError = error => {
+const getFeedbackTargetError = (error: AxiosError): string => {
   const res = error.response
 
   if (res?.status === 403) {
