@@ -7,7 +7,7 @@ import type { SwitchProps } from '@mui/material'
 import { switchFocusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'
 
-interface FormikSwitchProps extends Omit<SwitchProps, 'name' | 'checked' | 'onChange'> {
+type FormikSwitchProps = Omit<SwitchProps, 'name' | 'checked' | 'onChange'> & {
   name: string
   label: ReactNode
 }

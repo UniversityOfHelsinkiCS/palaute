@@ -15,7 +15,7 @@ const styles = {
   },
 }
 
-interface FixedContainerProps {
+type FixedContainerProps = {
   children: ReactNode
   intersectionObserverOptions?: IntersectionOptions
 }

@@ -4,7 +4,7 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'
 
-interface EnrollByTokenParams {
+type EnrollByTokenParams = {
   user: User
   token: string
 }

@@ -12,7 +12,7 @@ import { User } from '../../models/user'
  * Only teachers and org admins can get the enrolment token.
  * The enrolment token can always be fetched, but can only be used if the feedback target is open for enrolment.
  */
-interface GetEnrolmentTokenParams {
+type GetEnrolmentTokenParams = {
   feedbackTargetId: number
   user: User
 }

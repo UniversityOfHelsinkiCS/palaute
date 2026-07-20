@@ -1,6 +1,6 @@
 import { Organisation } from './Organisation'
 
-export interface CourseUnit {
+export type CourseUnit = {
   notGivingFeedback: boolean
   organisations: Organisation[]
 }

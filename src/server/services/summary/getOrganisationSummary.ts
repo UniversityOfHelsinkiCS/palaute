@@ -51,7 +51,7 @@ const withOrganisationAccessCheck =
     return asyncFunction(params)
   }
 
-interface GetCourseUnitSummariesParams {
+type GetCourseUnitSummariesParams = {
   organisationId: string
   startDate: string
   endDate: string
@@ -122,7 +122,7 @@ const getCourseUnitSummaries = async ({
   return aggregatedCourseUnits
 }
 
-interface GetCourseRealisationSummariesParams {
+type GetCourseRealisationSummariesParams = {
   organisationId: string
   startDate: string
   endDate: string
@@ -189,7 +189,7 @@ const getCourseRealisationSummaries = async ({
   return courseRealisations
 }
 
-interface GetOrganisationSummaryParams {
+type GetOrganisationSummaryParams = {
   organisationId: string
   startDate: string
   endDate: string
@@ -229,7 +229,7 @@ const getOrganisationSummary = async ({
   return organisation
 }
 
-interface GetChildOrganisationsParams {
+type GetChildOrganisationsParams = {
   organisationId: string
   startDate: string
   endDate: string
@@ -285,7 +285,7 @@ const getChildOrganisations = async ({
   return rootOrganisation
 }
 
-interface GetOrganisationSummaryWithChildOrganisationsParams {
+type GetOrganisationSummaryWithChildOrganisationsParams = {
   organisationId: string
   startDate: string
   endDate: string
@@ -359,7 +359,7 @@ const getOrganisationSummaryWithChildOrganisations = async ({
   return organisation
 }
 
-interface GetOrganisationSummaryWithCourseUnitsParams {
+type GetOrganisationSummaryWithCourseUnitsParams = {
   organisationId: string
   startDate: string
   endDate: string
@@ -427,7 +427,7 @@ const getOrganisationSummaryWithCourseUnits = async ({
   return organisation
 }
 
-interface GetOrganisationSummaryWithTagsParams {
+type GetOrganisationSummaryWithTagsParams = {
   organisationId: string
   startDate: string
   endDate: string

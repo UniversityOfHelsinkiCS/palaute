@@ -4,7 +4,7 @@ import type { Tag } from '@common/types/organisation'
 import { getLanguageValue } from '../../util/languageUtils'
 import { generate } from '../../util/randomColor'
 
-interface TagChipProps {
+type TagChipProps = {
   tag: Tag
   language?: string
   compact?: boolean

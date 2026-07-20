@@ -7,7 +7,7 @@ import { OpenInNew } from '@mui/icons-material'
 import { visuallyHidden } from '@mui/utils'
 import { focusIndicatorStyle } from '../../util/accessibility'
 
-interface LinkButtonProps extends Omit<ButtonProps<'a'>, 'component' | 'href' | 'title' | 'ref'> {
+type LinkButtonProps = Omit<ButtonProps<'a'>, 'component' | 'href' | 'title' | 'ref'> & {
   title: React.ReactNode
   to: string
   external?: boolean

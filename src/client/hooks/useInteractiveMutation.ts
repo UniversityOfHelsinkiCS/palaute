@@ -2,7 +2,7 @@ import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-interface UseInteractiveMutationOptions {
+type UseInteractiveMutationOptions = {
   success?: string
   error?: string | ((error: unknown) => string)
 }

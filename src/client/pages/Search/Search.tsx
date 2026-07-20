@@ -32,7 +32,7 @@ const styles: {
   },
 }
 
-interface Organisation {
+type Organisation = {
   name: LocalizedString
   code: string
 }

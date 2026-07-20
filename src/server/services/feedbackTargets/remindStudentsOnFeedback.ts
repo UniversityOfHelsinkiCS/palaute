@@ -4,7 +4,7 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'
 
-interface RemindStudentsParams {
+type RemindStudentsParams = {
   feedbackTargetId: number
   reminderText: string
   courseName: LocalizedString

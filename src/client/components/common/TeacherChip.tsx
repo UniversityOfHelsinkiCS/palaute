@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import type { User } from '@common/types/user'
 import { focusIndicatorStyle } from '../../util/accessibility'
 
-interface TeacherChipProps {
+type TeacherChipProps = {
   user: User
   onDelete?: () => void
   tooltip?: string

@@ -4,7 +4,7 @@ import { FeedbackTarget, CourseRealisation, UserFeedbackTarget, CourseUnit } fro
 import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
 import { User } from '../../models/user'
 
-interface GetForCourseUnitParams {
+type GetForCourseUnitParams = {
   courseCode: string
   user: User
   startDateAfter?: string

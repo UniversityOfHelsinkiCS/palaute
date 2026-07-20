@@ -3,12 +3,12 @@ import type { Question } from '@common/types/question'
 import apiClient from '../util/apiClient'
 import queryClient from '../util/queryClient'
 
-interface FeedbackTargetWithSurveys {
+type FeedbackTargetWithSurveys = {
   id: number
   surveys: { teacherSurvey: { id: number } }
 }
 
-interface UpdateTeacherSurveyArgs {
+type UpdateTeacherSurveyArgs = {
   questions: (Question & { editable?: boolean })[]
   groupingQuestion?: Question | null
 }

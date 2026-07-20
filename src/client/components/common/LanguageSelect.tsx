@@ -17,7 +17,7 @@ const style = {
   },
 }
 
-interface LanguageSelectProps {
+type LanguageSelectProps = {
   value: string
   onChange: (value: string) => void
   label: ReactNode

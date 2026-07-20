@@ -4,16 +4,16 @@ import { CourseUnit, Feedback, Question } from '../../models'
 import { getAllUniversitySurveys, getProgrammeSurvey } from '../surveys'
 import { sequelize } from '../../db/dbConnection'
 
-interface FeedbackData {
+type FeedbackData = {
   questionId: number
   data: string
 }
 
-interface CourseUnitWithExtra extends CourseUnit {
+type CourseUnitWithExtra = CourseUnit & {
   course_code: string
 }
 
-interface FeedbackWithExtra extends Feedback {
+type FeedbackWithExtra = Feedback & {
   course_code: string
   feedback_target_id: number
   name: LocalizedString
@@ -22,12 +22,12 @@ interface FeedbackWithExtra extends Feedback {
   data: FeedbackData[]
 }
 
-interface QuestionWithResponses {
+type QuestionWithResponses = {
   question: Question
   responses: string[]
 }
 
-interface Realisation {
+type Realisation = {
   id: number
   name: LocalizedString
   startDate: string
@@ -35,7 +35,7 @@ interface Realisation {
   questions: QuestionWithResponses[]
 }
 
-interface CourseWithRealisations {
+type CourseWithRealisations = {
   code: string
   name: LocalizedString
   realisations: Realisation[]

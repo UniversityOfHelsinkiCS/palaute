@@ -65,7 +65,7 @@ const getStudentsWithFeedbackStatus = async (feedbackTargetId: number) => {
   return students
 }
 
-interface GetStudentsParams {
+type GetStudentsParams = {
   feedbackTargetId: number
   user: UserType
 }

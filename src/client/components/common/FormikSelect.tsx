@@ -4,12 +4,12 @@ import { useField } from 'formik'
 import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import type { SelectProps } from '@mui/material'
 
-interface FormikSelectOption {
+type FormikSelectOption = {
   value: string | number
   label: ReactNode
 }
 
-interface FormikSelectProps extends Omit<SelectProps, 'name' | 'value' | 'onChange' | 'options'> {
+type FormikSelectProps = Omit<SelectProps, 'name' | 'value' | 'onChange' | 'options'> & {
   name: string
   label: ReactNode
   options: FormikSelectOption[]

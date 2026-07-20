@@ -4,7 +4,7 @@ import { getSummaryAccessibleOrganisationIds } from './access'
 import { Organisation, User } from '../../models'
 import { sumSummaries, getScopedSummary } from './utils'
 
-interface GetUserOrganisationSummariesParams {
+type GetUserOrganisationSummariesParams = {
   startDate: string
   endDate: string
   user: User

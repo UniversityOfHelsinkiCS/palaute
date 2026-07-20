@@ -196,7 +196,7 @@ const getJSON = <T extends Organisation | CourseUnit>(targets: T[], targetType: 
   return targetJSON
 }
 
-interface ExportXLSXParams {
+type ExportXLSXParams = {
   user: User
   startDate: string
   endDate: string

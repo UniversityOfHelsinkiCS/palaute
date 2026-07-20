@@ -82,7 +82,7 @@ const getExtraOrgVariants = (entity: any, extraOrgId: string) =>
       feedbackTargets: fbtSums,
     }))
 
-interface GetFeedbackTargetsParams {
+type GetFeedbackTargetsParams = {
   startDate: Date
   endDate: Date
   transaction: Transaction
@@ -172,7 +172,7 @@ const getFeedbackTargets = async ({ startDate, endDate, transaction }: GetFeedba
   return feedbackTargets
 }
 
-interface FeedbackTargetSummary {
+type FeedbackTargetSummary = {
   entityId: string
   entityType: string
   userCreated?: boolean
@@ -194,7 +194,7 @@ interface FeedbackTargetSummary {
   cuTagIds: number[]
   extraOrgIds?: string[]
 }
-interface BuildSummariesForPeriodParams {
+type BuildSummariesForPeriodParams = {
   startDate: Date
   endDate: Date
   rootOrganisations: string[]

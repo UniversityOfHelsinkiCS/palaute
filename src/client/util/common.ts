@@ -28,7 +28,7 @@ export const inE2EMode = process.env.REACT_APP_E2E === 'true'
 export const basePath = inDevelopment || inE2EMode ? '' : process.env.BASE_PATH
 
 // must match values from /config/*
-interface Config {
+type Config = {
   DEV_ADMINS: string[]
   INCLUDE_COURSES: string[]
   TAGS_ENABLED: string[]

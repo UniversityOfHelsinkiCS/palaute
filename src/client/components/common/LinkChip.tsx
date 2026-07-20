@@ -16,7 +16,7 @@ const common = {
   cursor: 'pointer',
 }
 
-interface LinkChipProps extends Omit<ChipProps, 'onClick' | 'variant' | 'size'> {
+type LinkChipProps = Omit<ChipProps, 'onClick' | 'variant' | 'size'> & {
   to: string
 }
 

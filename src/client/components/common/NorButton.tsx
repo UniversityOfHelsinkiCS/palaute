@@ -6,7 +6,7 @@ import { focusIndicatorStyle } from '../../util/accessibility'
 
 type NorButtonVariant = 'primary' | 'secondary' | 'error' | 'cancel' | 'empty'
 
-interface NorButtonProps extends Omit<ButtonProps, 'color' | 'variant'> {
+type NorButtonProps = Omit<ButtonProps, 'color' | 'variant'> & {
   color?: NorButtonVariant
   icon?: ReactNode
   to?: string

@@ -3,7 +3,7 @@ import type { ReactNode } from 'react'
 import { Box, Card, CardContent, Typography } from '@mui/material'
 import type { SxProps, Theme } from '@mui/material'
 
-interface CardSectionProps {
+type CardSectionProps = {
   title: string
   children: ReactNode
   sx?: SxProps<Theme>

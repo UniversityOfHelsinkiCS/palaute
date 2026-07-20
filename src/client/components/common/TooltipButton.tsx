@@ -5,7 +5,7 @@ import type { ButtonProps } from '@mui/material/Button'
 import Tooltip from '@mui/material/Tooltip'
 import { focusIndicatorStyle } from '../../util/accessibility'
 
-interface TooltipButtonProps extends ButtonProps {
+type TooltipButtonProps = ButtonProps & {
   tooltip: string
   always?: boolean
   children: ReactNode

@@ -3,7 +3,7 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User as UserType } from '../../models/user'
 
-interface GetLogsParams {
+type GetLogsParams = {
   feedbackTargetId: number
   user: UserType
 }

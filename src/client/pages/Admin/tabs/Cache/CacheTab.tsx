@@ -5,12 +5,12 @@ import { useSnackbar } from 'notistack'
 import apiClient from '../../../../util/apiClient'
 import { NorButton } from '../../../../components/common/NorButton'
 
-interface CacheInfo {
+type CacheInfo = {
   name: string
   keyCount: number
 }
 
-interface CacheCardProps {
+type CacheCardProps = {
   name: string
   keyCount: number
   onInvalidate: (name: string) => void

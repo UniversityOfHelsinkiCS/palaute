@@ -37,7 +37,7 @@ export const refreshFeedbackTargetHiddenCount = async (feedbackTargetId: number,
   return hiddenCount
 }
 
-interface HideFeedbackParams {
+type HideFeedbackParams = {
   feedbackTargetId: number
   questionId: number
   hidden: boolean
@@ -110,7 +110,7 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
   return totalChanged
 }
 
-interface AdminDeleteFeedbackParams {
+type AdminDeleteFeedbackParams = {
   feedbackTargetId: number
   questionId: number
   user: User

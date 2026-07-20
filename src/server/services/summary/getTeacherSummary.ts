@@ -39,7 +39,7 @@ const filterHiddenCount = async ({
   return organisationsJson
 }
 
-interface GetTeacherSummaryParams {
+type GetTeacherSummaryParams = {
   startDate: string
   endDate: string
   user: User

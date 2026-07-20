@@ -4,7 +4,7 @@ import { User } from '../../models/user'
 import { FeedbackTarget } from '../../models/feedbackTarget'
 import { UserFeedbackTarget } from '../../models/userFeedbackTarget'
 
-interface GetAccessParams {
+type GetAccessParams = {
   userFeedbackTarget: UserFeedbackTarget | null
   user: User
   feedbackTarget: FeedbackTarget

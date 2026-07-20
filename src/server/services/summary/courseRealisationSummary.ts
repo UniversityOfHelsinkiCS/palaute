@@ -45,7 +45,7 @@ const getCourseRealisationSummaryEntities = async (courseCode: string) => {
   return courseRealisations
 }
 
-interface GetCourseRealisationSummariesParams {
+type GetCourseRealisationSummariesParams = {
   courseCode: string
   accessibleCourseRealisationIds: string[]
   organisationAccess: boolean

@@ -16,6 +16,7 @@ These apply regardless of which side of the codebase the file is on.
 - Make sure to use correct relative imports.
 - Never use typecasting (`as` keyword) to bypass type checking unless it is completely unavoidable, in which case explain why in a comment.
 - **Type architecture**: backend-response shapes (wire types) live in `src/common/types/` and are imported by both sides via the `@common/*` alias. `src/client/types/` is for client-only types (UI/view-model/form state) — no backend-response shapes there.
+- Use `type`, not `interface`.
 
 ### Type-only imports
 

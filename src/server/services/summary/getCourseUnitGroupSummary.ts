@@ -16,7 +16,7 @@ import { getUserOrganisationAccess } from '../organisationAccess/organisationAcc
 import { getAllUniversitySurveys } from '../surveys'
 import { Survey } from '../../models/survey'
 
-interface GetCourseUnitGroupSummaryParams {
+type GetCourseUnitGroupSummaryParams = {
   user: User
   courseCode: string
   startDate: string

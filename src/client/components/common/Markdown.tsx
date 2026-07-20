@@ -40,7 +40,7 @@ const defaultComponents: Components = {
   h4: H4,
 }
 
-interface MarkdownProps extends ComponentProps<typeof ReactMarkdown> {
+type MarkdownProps = ComponentProps<typeof ReactMarkdown> & {
   disallowImages?: boolean
 }
 

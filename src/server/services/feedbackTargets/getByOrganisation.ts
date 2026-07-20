@@ -29,7 +29,7 @@ const getYearGrouped = (feedbackTargets: any[]) => {
   )
 }
 
-interface GetPublicByOrganisationParams {
+type GetPublicByOrganisationParams = {
   organisationCodes: string[]
   startDate?: string | Date
   endDate?: string | Date
@@ -132,7 +132,7 @@ const getPublicByOrganisation = async ({ organisationCodes, startDate, endDate }
   return getYearGrouped(fbtsWithStartDate)
 }
 
-interface GetByOrganisationParams {
+type GetByOrganisationParams = {
   organisationCode: string
   startDate?: string | Date
   endDate?: string | Date

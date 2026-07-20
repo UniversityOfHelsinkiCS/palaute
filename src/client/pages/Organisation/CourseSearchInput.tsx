@@ -13,7 +13,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import type { DateRange } from '../../types/DateRange'
 import type { CourseRealisation, FeedbackTarget } from '../../types'
 
-export interface InitialValues {
+export type InitialValues = {
   name: LocalizedString
   startDate: Date
   endDate: Date

@@ -1,5 +1,5 @@
 import { CourseUnitOrganisation } from './CourseUnitOrganisation'
 
-export interface Organisation {
+export type Organisation = {
   courseUnitOrganisation: CourseUnitOrganisation
 }

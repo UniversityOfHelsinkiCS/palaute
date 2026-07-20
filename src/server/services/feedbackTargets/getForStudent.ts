@@ -60,7 +60,7 @@ const getFeedbackTargetsForStudent = async (userId: string) => {
   return filteredFeedbackTargets.map(feedbackTargetToJSON)
 }
 
-interface GetForStudentParams {
+type GetForStudentParams = {
   user: User
 }
 

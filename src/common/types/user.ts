@@ -2,7 +2,7 @@ import type { LanguageId } from './common'
 import type { OrganisationAccess, OrganisationWithAccess } from './organisation'
 import type { BannerRecord } from './banner'
 
-export interface User {
+export type User = {
   id: string
   email: string | null
   firstName?: string

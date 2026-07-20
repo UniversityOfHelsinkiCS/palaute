@@ -5,7 +5,7 @@ import type { TabsProps, TabProps } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { handleTabKeyDown } from './utils'
 
-interface StatusTabProps extends Omit<TabProps, 'label'> {
+type StatusTabProps = Omit<TabProps, 'label'> & {
   status: string
   count?: number
   countLabel?: ReactNode
@@ -73,7 +73,7 @@ export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...pro
   return tabElement
 }
 
-interface StatusTabsProps extends TabsProps {
+type StatusTabsProps = TabsProps & {
   status: string
   tabOrder: string[]
   children: ReactNode

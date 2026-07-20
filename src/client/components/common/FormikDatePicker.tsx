@@ -5,10 +5,10 @@ import { TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import type { DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 
-interface FormikDatePickerProps extends Omit<
+type FormikDatePickerProps = Omit<
   DatePickerProps<Date>,
   'value' | 'onChange' | 'format' | 'maxDate' | 'slots' | 'slotProps'
-> {
+> & {
   name: string
 }
 

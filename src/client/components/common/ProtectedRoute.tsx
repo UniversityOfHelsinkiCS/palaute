@@ -3,7 +3,7 @@ import React from 'react'
 import type { ReactNode } from 'react'
 import { Navigate } from 'react-router-dom'
 
-interface ProtectedRouteProps {
+type ProtectedRouteProps = {
   children: ReactNode
   hasAccess: boolean
   notify?: boolean

@@ -39,7 +39,7 @@ const styles = {
   },
 }
 
-interface BannerProps {
+type BannerProps = {
   banner: { id?: number; data?: BannerData }
   language: LanguageId | null | undefined
   onClose?: (id: number) => void

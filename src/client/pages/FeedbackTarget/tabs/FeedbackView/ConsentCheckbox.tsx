@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import FormikCheckbox from '../../../../components/common/FormikCheckbox'
 
-interface ConsentCheckboxProps {
+type ConsentCheckboxProps = {
   label: string
   dataCy: string
   handleChange: (field: string, value: boolean) => void

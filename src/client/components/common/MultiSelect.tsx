@@ -3,13 +3,13 @@ import { Box, Checkbox, Chip, FormControl, IconButton, InputLabel, ListItemText,
 import { Close } from '@mui/icons-material'
 import { generate } from '../../util/randomColor'
 
-interface MultiSelectOption {
+type MultiSelectOption = {
   id: number
   label: string
   hash?: number
 }
 
-interface MultiSelectProps {
+type MultiSelectProps = {
   value: number[]
   onChange: (value: number[]) => void
   options: MultiSelectOption[]

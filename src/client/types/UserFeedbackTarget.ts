@@ -1,3 +1,3 @@
-export interface UserFeedbackTarget {
+export type UserFeedbackTarget = {
   notGivingFeedback: boolean
 }

@@ -2,7 +2,7 @@ import React from 'react'
 
 import { Box, CircularProgress, Alert } from '@mui/material'
 
-interface LoadingProgressProps {
+type LoadingProgressProps = {
   isError?: boolean
   message?: string
 }

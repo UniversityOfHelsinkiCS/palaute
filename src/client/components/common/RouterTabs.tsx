@@ -8,7 +8,7 @@ import { handleTabKeyDown } from './utils'
 
 const stripSearch = (path: string) => path.split('?')[0]
 
-interface RouterTabsProps extends TabsProps {
+type RouterTabsProps = TabsProps & {
   children: ReactNode
 }
 
@@ -48,7 +48,7 @@ export const RouterTabs = ({ children, ...props }: RouterTabsProps) => {
   )
 }
 
-interface RouterTabProps extends Omit<TabProps, 'label'> {
+type RouterTabProps = Omit<TabProps, 'label'> & {
   label: ReactNode
   to: string
   disabled?: boolean

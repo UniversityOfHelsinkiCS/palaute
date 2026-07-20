@@ -11,7 +11,7 @@ import { getDateRangeString } from '../../util/getDateRangeString'
 import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
 
-interface ErrorDetailsProps {
+type ErrorDetailsProps = {
   feedbackTargetId: string
   message?: string
   response: { status: number }

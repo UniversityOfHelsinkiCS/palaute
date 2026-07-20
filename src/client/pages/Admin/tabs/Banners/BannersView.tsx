@@ -19,7 +19,7 @@ import queryClient from '../../../../util/queryClient'
 type PaletteHue = 'white' | 'primary' | 'secondary' | 'success' | 'info' | 'warning' | 'error'
 type Lightness = 'light' | 'main' | 'dark'
 
-interface FormValues {
+type FormValues = {
   textFi: string
   textSv: string
   textEn: string
@@ -62,7 +62,7 @@ const bannerDataToFormValues = (banner: BannerRecord): FormValues => ({
   endDate: new Date(banner.endDate),
 })
 
-interface BannerPreviewProps {
+type BannerPreviewProps = {
   values: FormValues
 }
 
@@ -106,7 +106,7 @@ const accessGroupOptions = [
   { value: 'ADMIN', label: 'ADMIN' },
 ]
 
-interface FuckReactProps {
+type FuckReactProps = {
   value: BannerRecord | null
   funcThing: (value: BannerRecord) => void
 }
@@ -118,7 +118,7 @@ const FuckReact = ({ value, funcThing }: FuckReactProps) => {
   return <div />
 }
 
-interface BannerFormProps {
+type BannerFormProps = {
   onSubmit: (values: FormValues) => Promise<void>
   selected: BannerRecord | null
   open: boolean

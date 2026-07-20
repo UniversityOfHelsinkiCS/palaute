@@ -4,7 +4,7 @@ import cache from './feedbackTargetCache'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'
 
-interface DeleteTeacherParams {
+type DeleteTeacherParams = {
   feedbackTargetId: number
   teacherId: string
   user: User

@@ -9,7 +9,7 @@ import { KeyboardReturnOutlined } from '@mui/icons-material'
 
 import ErrorDetails from './ErrorDetails'
 
-interface ErrorViewProps {
+type ErrorViewProps = {
   children?: ReactNode
   message?: string
   response?: { status: number }

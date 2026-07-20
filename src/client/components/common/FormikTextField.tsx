@@ -5,7 +5,7 @@ import { TextFieldProps } from '@mui/material'
 
 import TextField from './TextField'
 
-interface FormikTextFieldProps extends Omit<TextFieldProps, 'name' | 'value' | 'error'> {
+type FormikTextFieldProps = Omit<TextFieldProps, 'name' | 'value' | 'error'> & {
   name: string
   showErrorInHelperText?: boolean
 }

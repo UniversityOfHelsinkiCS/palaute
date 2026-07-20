@@ -9,7 +9,7 @@ import { User } from '../../models/user'
  * where action is either viewing or mutating.
  * Throws 404 when id does not match anything, so you don't have to check that.
  */
-interface GetFeedbackTargetContextParams {
+type GetFeedbackTargetContextParams = {
   feedbackTargetId: number | string
   user: User
 }

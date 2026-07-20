@@ -5,7 +5,7 @@ import { visuallyHidden } from '@mui/utils'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
-interface FormikCheckboxProps extends Omit<CheckboxProps, 'name' | 'checked'> {
+type FormikCheckboxProps = Omit<CheckboxProps, 'name' | 'checked'> & {
   name: string
   label: React.ReactNode
   ariaDescription?: string

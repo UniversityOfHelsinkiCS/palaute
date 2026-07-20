@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'
 
-interface InstructionsProps {
+type InstructionsProps = {
   title: string
   sx?: SxProps<Theme>
   alertProps?: AlertProps

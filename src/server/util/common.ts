@@ -52,7 +52,7 @@ export const endOfStudyYear = (date: Date | string | number) => {
 const parseDate = (d: Date | string | number) =>
   parseFromTimeZone(new Date(d) as unknown as string, { timeZone: 'Europe/Helsinki' })
 
-export interface DateRangeInput {
+export type DateRangeInput = {
   startDate: Date | string | number
   endDate: Date | string | number
 }

@@ -134,7 +134,7 @@ const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId
   return updates
 }
 
-interface UpdateParams {
+type UpdateParams = {
   feedbackTargetId: number
   user: User
   body: any

@@ -8,14 +8,14 @@ import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
 import { useSemesters } from '../../util/semesterUtils'
 import { focusIndicatorStyle } from '../../util/accessibility'
 
-interface DateRange {
+type DateRange = {
   start: Date
   end: Date
 }
 
 type Season = 'spring' | 'fall' | 'both'
 
-interface Semester extends DateRange {
+type Semester = DateRange & {
   season: Season
 }
 
@@ -33,7 +33,7 @@ const styles = {
   },
 }
 
-interface FilterSelectorProps<T> {
+type FilterSelectorProps<T> = {
   selectorTarget: string
   value: T
   onChange: (option: T) => void
@@ -83,7 +83,7 @@ const FilterSelector = <T,>({ selectorTarget, value, onChange, options, getDispl
   )
 }
 
-interface YearSelectorProps {
+type YearSelectorProps = {
   value: DateRange | 'all'
   onChange: (range: DateRange | 'all') => void
   years: DateRange[]
@@ -176,7 +176,7 @@ const PeriodSelector = ({
   )
 }
 
-interface YearSemesterPeriodSelectorProps {
+type YearSemesterPeriodSelectorProps = {
   value?: DateRange
   onChange: (range: DateRange) => void
   option: string

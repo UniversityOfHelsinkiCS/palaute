@@ -5,7 +5,7 @@ import { FeedbackTarget } from '../../models'
  * Update included attributes if usage changes.
  * Note that auth is done when user actually gets the redirected page
  */
-interface GetForCourseRealisationParams {
+type GetForCourseRealisationParams = {
   courseRealisationId: string
 }
 

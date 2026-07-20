@@ -6,12 +6,12 @@ import type { ReactNode } from 'react'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
-interface FormikRadioOption<T> {
+type FormikRadioOption<T> = {
   value: T
   label: ReactNode
 }
 
-interface FormikRadioButtonsProps<T> extends Omit<RadioGroupProps, 'name' | 'value' | 'onChange' | 'onBlur'> {
+type FormikRadioButtonsProps<T> = Omit<RadioGroupProps, 'name' | 'value' | 'onChange' | 'onBlur'> & {
   name: string
   options: FormikRadioOption<T>[]
   valueMapper: (value: string) => T

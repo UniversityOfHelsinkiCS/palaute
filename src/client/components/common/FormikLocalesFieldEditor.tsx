@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import FormikTextField from './FormikTextField'
 import { LANGUAGES } from '../../util/common'
 
-interface FormikLocalesFieldEditorProps {
+type FormikLocalesFieldEditorProps = {
   name: string
   localesLabelString: string
   languages?: string[]

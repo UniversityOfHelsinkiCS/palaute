@@ -6,7 +6,7 @@ export type OrganisationAccess = {
   admin?: boolean
 }
 
-export interface Organisation {
+export type Organisation = {
   id: string
   name: LocalizedString
   code: string

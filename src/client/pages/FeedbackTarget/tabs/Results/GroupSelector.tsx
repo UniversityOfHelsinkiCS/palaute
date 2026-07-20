@@ -8,21 +8,21 @@ import TeacherChip from '../../../../components/common/TeacherChip'
 import PaperTooltip from '../../../../components/common/PaperTooltip'
 import { sortGroups } from './utils'
 
-interface GroupOption {
+type GroupOption = {
   id: string
   name: string
   studentCount?: number
   teachers?: Array<User>
 }
 
-interface GroupButtonProps {
+type GroupButtonProps = {
   option: GroupOption
   onClick: () => void
   value: string
   [key: string]: any
 }
 
-interface GroupSelectorProps {
+type GroupSelectorProps = {
   groupId: string
   setGroupId: (groupId: string) => void
   groups: GroupOption[]

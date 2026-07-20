@@ -3,7 +3,7 @@ import { useMutation } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 import queryClient from '../util/queryClient'
 
-interface UseQuestionPublicityMutationParams {
+type UseQuestionPublicityMutationParams = {
   resource: string
   resourceId: number | string
 }

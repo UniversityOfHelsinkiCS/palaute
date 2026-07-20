@@ -105,7 +105,7 @@ export const createFeedbackTargetLog = async (feedbackTarget: FeedbackTarget, up
   await createFromData(feedbackTarget.id, user, data)
 }
 
-interface FeedbackResponseLogData {
+type FeedbackResponseLogData = {
   feedbackTarget: FeedbackTarget
   user: User
   responseText: string

@@ -6,7 +6,7 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User as UserType } from '../../models/user'
 
-interface GetStudentTokensParams {
+type GetStudentTokensParams = {
   feedbackTargetId: number
   user: UserType
 }
