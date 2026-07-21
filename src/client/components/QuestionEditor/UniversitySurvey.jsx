@@ -27,7 +27,7 @@ const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
     try {
       await saveSurveyValues(values, universitySurvey.id)
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (e) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

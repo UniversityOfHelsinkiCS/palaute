@@ -7,7 +7,7 @@ const validateLikertQuestion = (data: string, question: Question) => {
     if (!question.required && data === '') return true
     const value = parseInt(data, 10)
     return value >= 0 && value <= 5
-  } catch (_) {
+  } catch {
     return false
   }
 }
@@ -18,7 +18,7 @@ const validateSingleChoice = (data: string, question: Question) => {
   try {
     if (!question.required && data === '') return true
     return question.data.options.map(opt => opt.id).includes(data)
-  } catch (_) {
+  } catch {
     return false
   }
 }
@@ -34,7 +34,7 @@ const validateMultiChoice = (data: string[], question: Question) => {
       valid = valid && ids.includes(id)
     })
     return valid
-  } catch (_) {
+  } catch {
     return false
   }
 }
@@ -73,7 +73,7 @@ export const validateFeedback = async (data: QuestionAnswer[], feedbackTarget: F
       }
     })
     return valid
-  } catch (e) {
+  } catch {
     return false
   }
 }

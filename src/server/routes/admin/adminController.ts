@@ -532,7 +532,7 @@ const createBanner = async (req: AuthenticatedRequest, res: Response) => {
 
   try {
     await banner.save()
-  } catch (err) {
+  } catch {
     throw ApplicationError.BadRequest('Fakd')
   }
 
@@ -552,7 +552,7 @@ const updateBanner = async (req: AuthenticatedRequest, res: Response) => {
 
   try {
     await banner.save()
-  } catch (err) {
+  } catch {
     throw ApplicationError.BadRequest('Fakd')
   }
 

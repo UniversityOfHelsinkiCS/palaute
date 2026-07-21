@@ -49,7 +49,7 @@ const NorppaFeedback = () => {
         variant: 'success',
         autoHideDuration: 6000,
       })
-    } catch (e) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

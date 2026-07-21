@@ -34,7 +34,7 @@ const useDeleteContinuousFeedback = () => {
         continuousFeedbackId,
       })
       enqueueSnackbar(t('feedbackTargetResults:deleteSuccess'), { variant: 'success' })
-    } catch (e) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

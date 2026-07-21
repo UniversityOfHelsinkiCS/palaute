@@ -38,7 +38,7 @@ const useDeleteOpenFeedback = () => {
         feedbackContent: feedback.data,
         questionId: feedback.questionId,
       })
-    } catch (e) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

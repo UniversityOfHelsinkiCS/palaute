@@ -60,7 +60,7 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
     try {
       await mutation.mutateAsync(newPublicQuestionIds)
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (error) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

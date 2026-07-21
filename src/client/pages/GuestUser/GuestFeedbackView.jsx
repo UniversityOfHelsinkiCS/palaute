@@ -163,7 +163,7 @@ const GuestFeedbackView = () => {
           autoHideDuration: 6000,
         })
       }
-    } catch (e) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

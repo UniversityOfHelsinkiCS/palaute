@@ -207,7 +207,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
 
         setDisabledCourseCodes(updatedOrganisation.disabledCourseCodes)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-      } catch (error) {
+      } catch {
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },
@@ -232,7 +232,7 @@ const CourseSettingsContainer = ({ organisation, courseUnits }) => {
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
 
         queryClient.invalidateQueries(['organisation'])
-      } catch (error) {
+      } catch {
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },

@@ -45,7 +45,7 @@ const useUpdateOpenFeedbackVisibility = () => {
         hidden: !feedback.hidden,
         feedbackTargetId,
       })
-    } catch (e) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }

@@ -18,7 +18,7 @@ if (!inProduction) {
       let restMsg = ''
       try {
         restMsg = JSON.stringify(rest)
-      } catch (e) {
+      } catch {
         // eslint-disable-next-line no-console
         console.error('Failed to stringify log message', rest)
       }

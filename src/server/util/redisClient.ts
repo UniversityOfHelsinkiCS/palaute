@@ -32,7 +32,7 @@ const client = {
       await redisClient.get('key')
       await redisClient.del('key')
       logger.info('Redis client connected')
-    } catch (error) {
+    } catch {
       logger.warn('Connection to redis failed, cache not available')
       Sentry.captureException(new Error('Redis connection failed, cache not available'))
       // Mock the client methods to avoid errors

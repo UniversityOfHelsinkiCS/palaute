@@ -87,7 +87,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         continuousFeedbackEnabled: nextEnabled,
       })
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (error) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
@@ -100,7 +100,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         sendContinuousFeedbackDigestEmail: nextSendDigestEmail,
       })
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (error) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
@@ -121,7 +121,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
         continuousFeedbackPreamble: preamble,
       })
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (error) {
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
