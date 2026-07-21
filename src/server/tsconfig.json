@@ -6,6 +6,8 @@
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "target": "es6",
+    // enable strict once server is fully audited for TS7's strict-by-default change
+    "strict": false,
     "noImplicitAny": true,
     "moduleResolution": "nodenext",
     "sourceMap": true,
