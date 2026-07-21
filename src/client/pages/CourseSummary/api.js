@@ -205,7 +205,7 @@ export const useUnpinOrganisationMutation = () => {
   const queryClient = useQueryClient()
 
   return useMutation({
-    mutationFn: organisationId => apiClient.delete(`users/me/pinned-organisations/${organisationId}`),
+    mutationFn: organisationId => apiClient.delete(`users/me/pinned-organisations/${String(organisationId)}`),
     onMutate: async organisationId => {
       await queryClient.cancelQueries({ queryKey: PINNED_ORGANISATIONS_KEY })
       const previous = queryClient.getQueryData(PINNED_ORGANISATIONS_KEY) ?? []

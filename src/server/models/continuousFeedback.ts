@@ -21,7 +21,7 @@ class ContinuousFeedback extends Model<
   // --- Acual DB columns ---
   // ------------------------
   declare id: CreationOptional<number>
-  declare data: Record<string, any>
+  declare data: string
   declare userId: string
   declare feedbackTargetId: number
   declare sendInDigestEmail: CreationOptional<boolean>

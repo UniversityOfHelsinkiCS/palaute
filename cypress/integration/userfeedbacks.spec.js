@@ -42,7 +42,7 @@ describe('User feedbacks view', () => {
 
   it('Feedback is visible immediately after being given', () => {
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })
@@ -60,7 +60,7 @@ describe('User feedbacks view', () => {
   it('Teacher can censor a feedback', () => {
     // student gives feedback
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })
@@ -72,14 +72,14 @@ describe('User feedbacks view', () => {
 
     // teacher censors the feedback
     cy.loginAs(teacher)
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/results`))
     cy.scrollTo('bottom', { ensureScrollable: false })
     cy.get('[data-testid="VisibilityIcon"]').click()
     cy.contains('This answer is hidden')
 
     // it is now hidden from student
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/results`))
     cy.contains('Other comments and such').should('not.exist')
   })
 
@@ -93,7 +93,7 @@ describe('User feedbacks view', () => {
       .should('exist')
 
     // student gives feedback
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}`))
     cy.get('input[value=5]').each($el => {
       cy.get($el).click()
     })

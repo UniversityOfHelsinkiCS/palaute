@@ -19,7 +19,7 @@ describe('In accessibility testing', () => {
     cy.setFeedbackActive()
     cy.getTestFbtId().as('fbtId')
     cy.loginAs(student)
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}`))
     cy.injectAxe()
   })
   it('Empty feedback form does not have accessibility issues', () => {

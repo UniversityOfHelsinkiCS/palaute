@@ -20,7 +20,7 @@ export const updateFeedbackCorrespondent = async (user: User): Promise<void> => 
   })
 
   if (organisations.length !== organisationCodes.length) {
-    const msg = `Warning: could not find all organisations with these codes: ${organisationCodes}`
+    const msg = `Warning: could not find all organisations with these codes: ${organisationCodes.join(', ')}`
     logger.error(msg)
     Sentry.captureMessage(msg)
   }

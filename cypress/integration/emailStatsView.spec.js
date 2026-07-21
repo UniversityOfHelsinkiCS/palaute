@@ -35,7 +35,7 @@ describe('Admin email stats view', () => {
     // Go to edit view as teacher
     cy.loginAs(teacher)
     cy.getTestFbtId().as('fbtId')
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/edit`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/edit`))
 
     // Add two custom questions
     cy.contains('Add question').click()

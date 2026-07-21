@@ -15,9 +15,10 @@ import { StatusTabs, StatusTab } from '../../components/common/StatusTabs'
 const MyFeedbacks = () => {
   const location = useLocation()
 
-  const { status = 'waiting' } = qs.parse(location.search, {
+  const { status: rawStatus } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
+  const status = typeof rawStatus === 'string' ? rawStatus : 'waiting'
 
   const { t } = useTranslation()
   const { feedbackTargets, isLoading } = useFeedbackTargetsForStudent()

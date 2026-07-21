@@ -6,7 +6,7 @@ describe('Noad user', () => {
     cy.setFeedbackActive()
     cy.getTestFbtId().as('fbtId')
     cy.loginAs(admin)
-    cy.get('@fbtId').then(fbtId => {
+    cy.get<number>('@fbtId').then(fbtId => {
       cy.visit(`/targets/${fbtId}/togen`)
       // Get the token link text
       cy.get(`[data-cy=noad-token-${student.studentNumber}]`).then($el => {

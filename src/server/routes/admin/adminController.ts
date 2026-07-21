@@ -1,3 +1,4 @@
+import z from 'zod/v4'
 import Router, { Response } from 'express'
 import type {
   GetInactiveCourseRealisationsResponse,
@@ -146,10 +147,18 @@ const findUser = async (req: AuthenticatedRequest, res: Response) => {
   })
 }
 
+const FindFeedbackTargetsQuerySchema = z.object({
+  id: z.string().optional(),
+  code: z.string().optional(),
+  name: z.string().optional(),
+  curName: z.string().optional(),
+  language: z.string().optional(),
+  fbtStatus: z.string().optional(),
+  curStatus: z.string().optional(),
+})
+
 const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => {
-  const {
-    query: { id, code, name, curName, language, fbtStatus, curStatus },
-  } = req
+  const { id, code, name, curName, language, fbtStatus, curStatus } = FindFeedbackTargetsQuerySchema.parse(req.query)
   const params: Record<string, unknown> = {}
   const nameLength = Number(name?.length ?? 0)
   const curNameLength = Number(curName?.length ?? 0)
@@ -242,10 +251,15 @@ const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
   })
 }
 
+const FindOrganisationSurveysQuerySchema = z.object({
+  id: z.string().optional(),
+  orgCode: z.string().optional(),
+  name: z.string().optional(),
+  language: z.string().optional(),
+})
+
 const findOrganisationSurveys = async (req: AuthenticatedRequest, res: Response) => {
-  const {
-    query: { id, orgCode, name, language },
-  } = req
+  const { id, orgCode, name, language } = FindOrganisationSurveysQuerySchema.parse(req.query)
   const params: Record<string, unknown> = {}
   const nameLength = (name?.length ?? 0) as number
 

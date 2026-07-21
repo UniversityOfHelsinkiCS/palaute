@@ -35,7 +35,7 @@ describe('When course has only one enrolled student', () => {
   describe('After answering feedback questions', () => {
     beforeEach(() => {
       cy.loginAs(student)
-      cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+      cy.get<number>('@fbtId').then(id => cy.visit(`/targets/${id}`))
       cy.get('[data-cy=confirm-giving-feedback-dialog-give-feedback]').click()
       cy.get('input[value=5]').each($el => {
         cy.wrap($el).click()
@@ -78,7 +78,7 @@ describe('When course has only one enrolled student', () => {
 
       it('Teacher should see feedback results', () => {
         cy.loginAs(teacher)
-        cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
+        cy.get<number>('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
         cy.contains('Multiple choice questions')
         cy.contains('Testikysymys 1')
       })

@@ -37,7 +37,7 @@ describe('Teacher view', () => {
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`a[href*="/targets/${id}"]`).first().click()
@@ -56,7 +56,7 @@ describe('Teacher view', () => {
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
 
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
@@ -71,7 +71,7 @@ describe('Teacher view', () => {
     cy.get('[data-cy="my-teaching-no-courses"]').should('not.exist')
 
     cy.get('[data-cy=my-teaching-course-unit-item-TEST_COURSE]').should('exist')
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
@@ -99,13 +99,13 @@ describe('Teacher view', () => {
 
     // Check that the counter feedback missing chip is rendered on the CU level
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist')
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="feedback-response-chip-missing-${id}"]`)
     })
 
     // Check that the counter feedback missing chip is rendered on the feedback target level
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
@@ -114,7 +114,7 @@ describe('Teacher view', () => {
 
     // Check that the counter feedback given chip is rendered on the feedback target level
 
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
@@ -132,7 +132,7 @@ describe('Teacher view', () => {
     cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
@@ -149,7 +149,7 @@ describe('Teacher view', () => {
     cy.get('@endedTab').click()
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').should('exist').click()
-    cy.get('@fbtId').then(id => {
+    cy.get('@fbtId').then((/** @type {number} */ id) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${id}"]`).should('exist')
       cy.get(`[data-cy="my-teaching-feedback-target-period-info-${id}"]`).should('exist')
 
@@ -171,7 +171,7 @@ describe('Teacher view', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
 
-    cy.get('@fbtId').then(parentId => {
+    cy.get('@fbtId').then((/** @type {number} */ parentId) => {
       cy.createInterimFeedback(parentId, interimFeedbackBody)
 
       cy.get(`[data-cy="my-teaching-active-tab"]`).contains('Active').should('exist').click()
@@ -191,7 +191,7 @@ describe('Teacher view', () => {
 
     cy.get('[data-cy=my-teaching-course-unit-accordion-TEST_COURSE]').click()
 
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/edit-feedback-response`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/edit-feedback-response`))
 
     cy.get('textarea').first().type('Counter feedback for students to see')
     cy.get('[data-cy=openFeedbackResponseSubmitDialog]').click()
@@ -202,11 +202,11 @@ describe('Teacher view', () => {
 
     cy.contains('TEST_COURSE').click()
 
-    cy.get('@fbtId').then(id => cy.get(`[data-cy=feedback-response-chip-given-${id}]`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.get(`[data-cy=feedback-response-chip-given-${id}]`))
   })
 
   it('Teacher can add questions to a survey', () => {
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/edit`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/edit`))
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
     cy.get('input[id^=likert-question-en-questions]').type('Test question')
@@ -219,7 +219,7 @@ describe('Teacher view', () => {
   })
 
   it('Teacher can edit a question', () => {
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/edit`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/edit`))
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
     cy.get('input[id^=likert-question-en-questions]').type('Test question')
@@ -241,8 +241,8 @@ describe('Teacher view', () => {
     cy.giveFeedback(student)
     cy.visit(`/courses`)
     cy.get('div').contains('TEST_COURSE').click()
-    cy.get('@fbtId').then(id => cy.get(`a[href*="/targets/${id}"]`).first().click())
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.get(`a[href*="/targets/${id}"]`).first().click())
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/results`))
     cy.contains('Feedback').click()
     cy.contains('Multiple choice questions')
   })

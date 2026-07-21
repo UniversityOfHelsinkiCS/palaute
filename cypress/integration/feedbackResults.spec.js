@@ -14,14 +14,14 @@ describe('Feedback results', () => {
     // Initial feedback count on my teaching page
     cy.visit('/courses')
     cy.get('@fbtId')
-      .then(id => cy.get(`[data-cy="my-teaching-feedback-target-secondary-text-${id}"]`))
+      .then((/** @type {number} */ id) => cy.get(`[data-cy="my-teaching-feedback-target-secondary-text-${id}"]`))
       .invoke('text')
       .then(text => {
         cy.wrap(text).as('myTeachingInitialCount')
       })
 
     // Initial feedback count on feedback page
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}`))
     cy.get('[data-cy=feedback-target-feedback-count-percentage]')
       .invoke('text')
       .then(text => {
@@ -47,7 +47,7 @@ describe('Feedback results', () => {
 
     // Verify feedback count increased on feedback page
     cy.loginAs(teacher)
-    cy.get('@fbtId').then(id => cy.visit(`/targets/${id}`))
+    cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}`))
     cy.get('[data-cy=feedback-target-feedback-count-percentage]')
       .invoke('text')
       .then(newCount => {
@@ -61,7 +61,7 @@ describe('Feedback results', () => {
     // Verify feedback count increased on my teaching page
     cy.visit('/courses')
     cy.get('@fbtId')
-      .then(id => cy.get(`[data-cy="my-teaching-feedback-target-secondary-text-${id}"]`))
+      .then((/** @type {number} */ id) => cy.get(`[data-cy="my-teaching-feedback-target-secondary-text-${id}"]`))
       .invoke('text')
       .then(newCount => {
         cy.get('@myTeachingInitialCount').then(initialCount => {

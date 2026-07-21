@@ -22,6 +22,9 @@ if (!inProduction) {
         // eslint-disable-next-line no-console
         console.error('Failed to stringify log message', rest)
       }
+      // message/timestamp are intentionally loosely typed by winston; best-effort stringifying
+      // arbitrary log values here is the desired behavior for a logger
+      // eslint-disable-next-line typescript/no-base-to-string, typescript/restrict-template-expressions
       const msg = `${timestamp} ${level}: ${message} ${restMsg}`
       return msg
     }

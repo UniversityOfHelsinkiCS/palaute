@@ -149,9 +149,10 @@ const MyTeaching = () => {
   const startDate = format(new Date(dateRange.start), 'yyyy-MM-dd')
   const endDate = format(new Date(dateRange.end), 'yyyy-MM-dd')
 
-  const { status = 'active' } = qs.parse(location.search, {
+  const { status: rawStatus } = qs.parse(location.search, {
     ignoreQueryPrefix: true,
   })
+  const status = typeof rawStatus === 'string' ? rawStatus : 'active'
 
   const useYearFilter = status === 'ended' && !showAllYears
 

@@ -12,7 +12,7 @@ describe('University Survey', () => {
     const questionTitle = 'How minttu was the course?'
 
     // Initially, the new university question is not visible
-    cy.get('@fbtId').then(fbtId => cy.visit(`/targets/${fbtId}/feedback`))
+    cy.get('@fbtId').then((/** @type {number} */ fbtId) => cy.visit(`/targets/${fbtId}/feedback`))
     cy.contains(questionTitle).should('not.exist')
 
     // Go to the admin edit page and add a new university question
@@ -25,7 +25,7 @@ describe('University Survey', () => {
     cy.get('[data-cy=question-card-save-edit]').click()
 
     // Go back to the feedback form and check that the new question is now visible
-    cy.get('@fbtId').then(fbtId => cy.visit(`/targets/${fbtId}/feedback`))
+    cy.get('@fbtId').then((/** @type {number} */ fbtId) => cy.visit(`/targets/${fbtId}/feedback`))
     cy.contains(questionTitle)
   })
 })

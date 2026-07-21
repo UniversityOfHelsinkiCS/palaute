@@ -21,7 +21,9 @@ describe('Responsible Teachers', () => {
 
     cy.getTestFbtId().as('parentId')
 
-    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
+    cy.get('@parentId').then((/** @type {number} */ parentId) =>
+      cy.createInterimFeedback(parentId, interimFeedbackBody)
+    )
 
     // Login as Tommi Testaaja
     cy.loginAs(teacher)
@@ -32,7 +34,7 @@ describe('Responsible Teachers', () => {
 
     // Visit the coursepage where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist')
-    cy.get('@parentId').then(parentId => {
+    cy.get('@parentId').then((/** @type {number} */ parentId) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
 
@@ -60,7 +62,7 @@ describe('Responsible Teachers', () => {
     cy.get('[data-cy="interim-feedback-editor-save"]').click()
 
     // Visit the interim feedbacks
-    cy.get('@parentId').then(parentId => {
+    cy.get('@parentId').then((/** @type {number} */ parentId) => {
       cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
@@ -92,7 +94,7 @@ describe('Responsible Teachers', () => {
 
     // Visit the coursepage where teacher is the responsible teacher
     cy.get('[data-cy="my-teaching-course-unit-item-TEST_COURSE"').should('exist')
-    cy.get('@parentId').then(parentId => {
+    cy.get('@parentId').then((/** @type {number} */ parentId) => {
       cy.get(`[data-cy="my-teaching-feedback-target-item-link-${parentId}"]`).should('exist').click()
     })
 
@@ -162,7 +164,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can edit interim feedbacks', () => {
-    cy.get('@parentId').then(parentId => {
+    cy.get('@parentId').then((/** @type {number} */ parentId) => {
       cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
@@ -243,7 +245,7 @@ describe('Responsible Teachers', () => {
   })
 
   it('can not create/edit questions for ongoing interim feedback', () => {
-    cy.get('@parentId').then(parentId => {
+    cy.get('@parentId').then((/** @type {number} */ parentId) => {
       cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 
@@ -274,7 +276,9 @@ describe('Responsible Teachers', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
     cy.getTestFbtId().as('parentId')
-    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
+    cy.get('@parentId').then((/** @type {number} */ parentId) =>
+      cy.createInterimFeedback(parentId, interimFeedbackBody)
+    )
 
     cy.get('@interimFeedback').then(interimFeedback => {
       cy.visit(`/targets/${interimFeedback.id}`)
@@ -321,7 +325,9 @@ describe('Students', () => {
       endDate: new Date().setDate(today.getDate() + 7),
     }
     cy.getTestFbtId().as('parentId')
-    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
+    cy.get('@parentId').then((/** @type {number} */ parentId) =>
+      cy.createInterimFeedback(parentId, interimFeedbackBody)
+    )
 
     // Login as Olli Oppilas
     cy.loginAs(student)
@@ -392,7 +398,9 @@ describe('Admin Users', () => {
 
     cy.getTestFbtId().as('parentId')
 
-    cy.get('@parentId').then(parentId => cy.createInterimFeedback(parentId, interimFeedbackBody))
+    cy.get('@parentId').then((/** @type {number} */ parentId) =>
+      cy.createInterimFeedback(parentId, interimFeedbackBody)
+    )
 
     cy.loginAs(admin)
   })
@@ -431,7 +439,7 @@ describe('Admin Users', () => {
   it('can delete interim feedbacks after feedback has been given', () => {
     cy.giveInterimFeedback(student)
 
-    cy.get('@parentId').then(parentId => {
+    cy.get('@parentId').then((/** @type {number} */ parentId) => {
       cy.visit(`/targets/${parentId}/interim-feedback`)
     })
 

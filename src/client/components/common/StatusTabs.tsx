@@ -8,9 +8,9 @@ import { handleTabKeyDown } from './utils'
 type StatusTabProps = Omit<TabProps, 'label'> & {
   status: string
   count?: number
-  countLabel?: ReactNode
+  countLabel?: string
   badgeColor?: 'primary' | 'secondary' | 'default' | 'error' | 'info' | 'success' | 'warning'
-  label: ReactNode
+  label: string
 }
 
 export const StatusTab = ({ status, count, countLabel, badgeColor, label, ...props }: StatusTabProps) => {

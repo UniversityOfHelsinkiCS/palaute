@@ -102,8 +102,8 @@ const sumSummaries = (summaries?: Summary[]) => {
         const key1 = `${s.entityId}:${s.extraOrgIds ? s.extraOrgIds.join('+') : ''}`
         const key2 = `${s2.entityId}:${s2.extraOrgIds ? s2.extraOrgIds.join('+') : ''}`
 
-        const timespan1 = `${startDate}:${endDate}`
-        const timespan2 = `${startDate2}:${endDate2}`
+        const timespan1 = `${startDate.toISOString()}:${endDate.toISOString()}`
+        const timespan2 = `${startDate2.toISOString()}:${endDate2.toISOString()}`
 
         if (!datefns.isValid(s2.startDate) || !datefns.isValid(s2.endDate)) {
           return false
