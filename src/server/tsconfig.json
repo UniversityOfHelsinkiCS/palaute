@@ -1,15 +1,14 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "nodenext",
     "emitDeclarationOnly": false,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "allowJs": true,
     "target": "es6",
     "noImplicitAny": true,
-    "moduleResolution": "node",
+    "moduleResolution": "nodenext",
     "sourceMap": true,
-    "baseUrl": ".",
     "types": ["node"],
     "resolveJsonModule": true,
     "paths": {

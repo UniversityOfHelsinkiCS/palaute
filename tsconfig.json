@@ -4,8 +4,7 @@
     "module": "commonjs",
     "rootDir": ".",
     "jsx": "react",
-    "outDir": "build",
-    "baseUrl": "."
+    "outDir": "build"
   },
   "files": [],
   "exclude": ["cypress"],
