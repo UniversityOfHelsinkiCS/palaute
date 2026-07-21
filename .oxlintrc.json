@@ -1,7 +1,10 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["import", "react", "jsx-a11y"],
+  "plugins": ["import", "react", "jsx-a11y", "typescript"],
   "jsPlugins": ["eslint-plugin-cypress"],
+  "options": {
+    "typeAware": true
+  },
   "categories": {
     "correctness": "error",
     "suspicious": "error"
@@ -38,6 +41,17 @@
     "react/react-compiler": "warn",
     "jsx-a11y/no-autofocus": "warn",
     "jsx-a11y/prefer-tag-over-role": "off",
+    "typescript/no-floating-promises": "warn",
+    "typescript/no-base-to-string": "off",
+    "typescript/no-misused-spread": "off",
+    "typescript/no-unnecessary-boolean-literal-compare": "off",
+    "typescript/no-unnecessary-template-expression": "off",
+    "typescript/no-unnecessary-type-assertion": "off",
+    "typescript/no-unnecessary-type-conversion": "off",
+    "typescript/no-unsafe-type-assertion": "off",
+    "typescript/no-useless-default-assignment": "off",
+    "typescript/restrict-template-expressions": "off",
+    "typescript/unbound-method": "off",
     "cypress/no-assigning-return-values": "error",
     "cypress/no-unnecessary-waiting": "error",
     "cypress/no-async-tests": "error",
