@@ -14,7 +14,7 @@ module.exports = defineConfig({
     specPattern: 'cypress/**/*.spec.{js,ts}',
     experimentalRunAllSpecs: true,
 
-    setupNodeEvents(on, config) {
+    setupNodeEvents(on) {
       on('task', {
         checkFolder,
         readXLSX,

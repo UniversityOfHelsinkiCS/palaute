@@ -1,7 +1,6 @@
 import path from 'path'
 
 import react from '@vitejs/plugin-react-swc'
-import eslint from 'vite-plugin-eslint'
 
 import * as config from 'config'
 import { defineConfig } from 'vite'
@@ -11,7 +10,6 @@ import { sentryVitePlugin } from '@sentry/vite-plugin'
 export default defineConfig({
   plugins: [
     react(),
-    eslint(),
     sentryVitePlugin({
       applicationKey: 'norppa-course-feedback',
     }),

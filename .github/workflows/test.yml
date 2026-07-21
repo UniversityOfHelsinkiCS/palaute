@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Build project for linting
         run: npm ci
-      - name: Run eslint and ts checks
+      - name: Run oxlint and ts checks
         run: npm run lint
 
   translations:

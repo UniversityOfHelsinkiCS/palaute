@@ -1,0 +1,46 @@
+{
+  "$schema": "./node_modules/oxlint/configuration_schema.json",
+  "plugins": ["import", "react", "jsx-a11y"],
+  "jsPlugins": ["eslint-plugin-cypress"],
+  "categories": {
+    "correctness": "error",
+    "suspicious": "error"
+  },
+  "settings": {
+    "react": {
+      "version": "19.2.3"
+    }
+  },
+  "ignorePatterns": ["**/node_modules", "**/dist", "**/stats.json", "**/build", "**/migrations/**"],
+  "rules": {
+    "no-shadow": "off",
+    "no-console": "warn",
+    "no-unused-vars": [
+      "error",
+      {
+        "ignoreRestSiblings": true
+      }
+    ],
+    "import/default": "off",
+    "import/no-named-as-default-member": "off",
+    "import/no-unassigned-import": "off",
+    "import/no-cycle": "error",
+    "no-fallthrough": "error",
+    "no-case-declarations": "error",
+    "no-redeclare": "error",
+    "no-self-compare": "error",
+    "no-prototype-builtins": "error",
+    "no-constructor-return": "error",
+    "no-throw-literal": "error",
+    "react/exhaustive-deps": "warn",
+    "react/button-has-type": "error",
+    "react/jsx-no-constructed-context-values": "error",
+    "react/react-compiler": "warn",
+    "jsx-a11y/no-autofocus": "warn",
+    "jsx-a11y/prefer-tag-over-role": "off",
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "error",
+    "cypress/no-async-tests": "error",
+    "cypress/unsafe-to-chain-command": "error"
+  }
+}

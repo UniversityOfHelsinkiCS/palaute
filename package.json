@@ -12,7 +12,7 @@
     "start:prod": "NODE_ENV=production node --max-old-space-size=4096 ./build/src/server/index.js",
     "start:test": "NODE_ENV=test node --max-old-space-size=4096 ./build/src/server/index.js",
     "build": "npm run clean-build && npm run build:server && npm run build:client",
-    "build:client": "npm run ts-check:client && DISABLE_ESLINT_PLUGIN=true tsc && vite build",
+    "build:client": "npm run ts-check:client && tsc && vite build",
     "build:server": "cross-env NODE_ENV=development && tsc --build src/server",
     "clean-build": "rimraf ./build",
     "test": "npm run test:setup && sleep 10 && npm run test:e2e",
@@ -22,7 +22,7 @@
     "test:cypress": "cypress open",
     "test:run": "cypress run",
     "format": "prettier --write 'src/**/*.{js,jsx,ts,tsx,json,css,md}'",
-    "lint": "concurrently --kill-others-on-fail --raw \"npm run ts-check\" \"eslint 'src/**/*.{js,jsx,ts,tsx}'\"",
+    "lint": "concurrently --kill-others-on-fail --raw \"npm run ts-check\" \"oxlint .\"",
     "bash": "docker-compose run app bash",
     "reset": "docker-compose down -v && docker-compose up --build",
     "ts-check:client": "tsc --skipLibCheck --noEmit --project src/client/tsconfig.json",
@@ -30,10 +30,10 @@
     "ts-check": "concurrently --kill-others-on-fail --raw \"npm run ts-check:client\" \"npm run ts-check:server\"",
     "prepare": "husky",
     "translations": "node ./tools/analyzeTranslations.js",
-    "ndc": "npx no-dead-code@latest --ignore .eslintrc.js config prettier.config.js"
+    "ndc": "npx no-dead-code@latest --ignore config prettier.config.js"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": "eslint",
+    "src/**/*.{js,jsx,ts,tsx}": "oxlint",
     "**/*.{js,jsx,ts,tsx,json,css,md}": "prettier --write"
   },
   "engines": {
@@ -108,7 +108,6 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "7.28.6",
     "@babel/preset-react": "7.28.5",
     "@babel/preset-typescript": "7.28.5",
     "@types/compression": "1.8.1",
@@ -125,8 +124,6 @@
     "@types/react-dom": "19.2.3",
     "@types/react-router-dom": "5.3.3",
     "@types/umzug": "3.0.0",
-    "@typescript-eslint/eslint-plugin": "7.18.0",
-    "@typescript-eslint/parser": "7.18.0",
     "axe-core": "4.12.1",
     "babel-plugin-react-compiler": "19.0.0-beta-ebf51a3-20250411",
     "browserify-fs": "1.0.0",
@@ -134,22 +131,13 @@
     "cross-env": "10.1.0",
     "cypress": "15.9.0",
     "cypress-axe": "1.7.0",
-    "eslint": "8.57.1",
-    "eslint-config-airbnb": "19.0.4",
-    "eslint-config-airbnb-typescript": "18.0.0",
-    "eslint-config-prettier": "10.1.8",
-    "eslint-config-react-app": "7.0.1",
     "eslint-plugin-cypress": "3.6.0",
-    "eslint-plugin-import": "2.32.0",
-    "eslint-plugin-jsx-a11y": "6.10.2",
-    "eslint-plugin-prettier": "5.5.5",
-    "eslint-plugin-react": "7.37.5",
-    "eslint-plugin-react-compiler": "19.0.0-beta-ebf51a3-20250411",
     "husky": "9.1.7",
     "lint-staged": "15.5.2",
     "minimist": "1.2.8",
     "nodemon": "3.1.11",
     "os-browserify": "0.3.0",
+    "oxlint": "1.74.0",
     "path-browserify": "1.0.1",
     "prettier": "3.8.0",
     "process": "0.11.10",
@@ -158,8 +146,7 @@
     "stream-browserify": "3.0.0",
     "ts-node": "10.9.2",
     "typescript": "5.9.3",
-    "util": "0.12.5",
-    "vite-plugin-eslint": "1.8.1"
+    "util": "0.12.5"
   },
   "optionalDependencies": {
     "@rollup/rollup-darwin-arm64": "4.55.1"
@@ -183,6 +170,6 @@
       "build/client",
       "**/**.log"
     ],
-    "delay": "2500"
+    "delay": 2500
   }
 }
