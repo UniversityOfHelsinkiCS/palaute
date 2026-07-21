@@ -43,7 +43,6 @@
     "jsx-a11y/prefer-tag-over-role": "off",
     "typescript/no-floating-promises": "warn",
     "typescript/no-base-to-string": "off",
-    "typescript/no-misused-spread": "off",
     "typescript/no-unnecessary-template-expression": "off",
     "typescript/no-unnecessary-type-assertion": "off",
     "typescript/no-unnecessary-type-conversion": "off",

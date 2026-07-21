@@ -19,12 +19,16 @@ type InstructionsProps = {
 const Instructions = ({ title, sx, alertProps, iconButtonProps, collapseProps, children }: InstructionsProps) => {
   const [expand, setExpand] = useState(false)
   const { t } = useTranslation()
+  const rootSlotProps = alertProps?.slotProps?.root
+  // slotProps.root can be a function of ownerState per MUI's typing, but this component doesn't
+  // support that form, so only merge it when it's the plain object form.
+  const rootSlotPropsObject = typeof rootSlotProps === 'function' ? undefined : rootSlotProps
 
   return (
     <Box sx={mergeSx(sx, { my: 2 })}>
       <Alert
         severity="info"
-        slotProps={{ root: { role: undefined, ...alertProps?.slotProps?.root } }}
+        slotProps={{ root: { role: undefined, ...rootSlotPropsObject } }}
         {...alertProps}
         action={
           <Tooltip title={expand ? t('common:hide') : t('common:show')}>

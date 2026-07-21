@@ -310,6 +310,9 @@ router.get(
       return {
         ...plainCU,
         feedbackTargets: plainCU.feedbackTargets?.map(fbt => ({
+          // cu.get({ plain: true }) recursively plain-ifies included associations in Sequelize,
+          // so fbt is already a plain object at runtime despite its FeedbackTarget (model) type
+          // eslint-disable-next-line typescript/no-misused-spread
           ...fbt,
           summary: {
             data: {

@@ -104,9 +104,7 @@ router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
 
   const persons = await User.findAll({
     attributes: ['id', 'firstName', 'lastName', 'email', 'secondaryEmail', 'studentNumber'],
-    where: {
-      ...where,
-    },
+    where,
     order: [
       ['firstName', 'ASC'],
       ['lastName', 'ASC'],

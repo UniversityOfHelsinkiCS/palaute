@@ -214,6 +214,9 @@ const findFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
 
   if (curStatus === 'ongoing') {
     include[1].where = {
+      // include[1].where is only ever set to a plain object above (or left undefined), never an
+      // array, despite Sequelize's WhereOptions type allowing array variants in general
+      // eslint-disable-next-line typescript/no-misused-spread
       ...include[1].where,
       startDate: { [Op.lte]: now },
       endDate: { [Op.gte]: now },

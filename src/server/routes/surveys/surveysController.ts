@@ -178,7 +178,7 @@ const getFullOrganisationSurvey = async (req: AuthenticatedRequest, res: Respons
 
   const questions = universitySurvey.questions.concat(survey.questions)
 
-  const response = { ...universitySurvey, questions }
+  const response = { ...universitySurvey.toJSON(), questions }
 
   res.send(response)
 }

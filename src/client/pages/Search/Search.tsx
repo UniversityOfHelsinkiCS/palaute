@@ -1,7 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { format, isValid } from 'date-fns/esm'
-import { Alert, Autocomplete, Box, Paper, SxProps, TextField, Theme, Typography, Stack } from '@mui/material'
+import { Alert, Autocomplete, Box, Paper, type SxProps, TextField, Theme, Typography, Stack } from '@mui/material'
+import type { SystemStyleObject } from '@mui/system'
 import { useQuery } from '@tanstack/react-query'
 import type { LocalizedString } from '@common/types/common'
 import apiClient from '../../util/apiClient'
@@ -15,9 +16,7 @@ import { getSemesterRange } from '../../util/semesterUtils'
 import useOrganisationsList from '../../hooks/useOrganisationsList'
 import useIsMobile from '../../hooks/useIsMobile'
 
-const styles: {
-  [key: string]: SxProps<Theme>
-} = {
+const styles: Record<string, SystemStyleObject<Theme>> = {
   date: {
     position: 'sticky',
     top: '4rem',
@@ -102,12 +101,12 @@ const CalendarViewMobile = ({ feedbackTargetGrouping }: { feedbackTargetGrouping
           <Box sx={{ pt: '12px', pb: '12px', pl: '12px', backgroundColor: '#00000014' }}>{year}</Box>
           {months.map(([firstDayOfMonth, days]) => (
             <Stack key={firstDayOfMonth} spacing={2} sx={{ pl: '12px' }}>
-              <Box sx={{ ...styles.date, position: 'static', pt: '16px', pb: '12px' }}>
+              <Box sx={[styles.date, { position: 'static', pt: '16px', pb: '12px' }]}>
                 {toMonth(firstDayOfMonth, i18n.language)}
               </Box>
               {days.map(([startDate, feedbackTargets]) => (
                 <Stack key={startDate} spacing={1}>
-                  <Box sx={{ ...styles.date, position: 'static' }}>{format(Date.parse(startDate), 'dd/MM')}</Box>
+                  <Box sx={[styles.date, { position: 'static' }]}>{format(Date.parse(startDate), 'dd/MM')}</Box>
                   <Stack spacing={1}>
                     {feedbackTargets.map(fbt => (
                       <FeedbackTargetItem key={fbt.id} fbt={fbt} />

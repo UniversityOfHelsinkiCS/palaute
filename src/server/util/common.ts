@@ -12,6 +12,8 @@ export const normalizeOrganisationCode = (r: string) => {
   }
 
   const [left, right] = r.split('_')
+  // organisation codes are always plain ASCII digits/letters, no multi-code-point characters to mishandle
+  // eslint-disable-next-line typescript/no-misused-spread
   const prefix = [...left].filter(isNumber).join('')
   const suffix = `${left[0]}${right}`
   const providercode = `${prefix}0-${suffix}`
