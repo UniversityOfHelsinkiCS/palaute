@@ -1,5 +1,5 @@
 import { NextFunction, Response } from 'express'
-import { UnauthenticatedRequest } from 'types'
+import { UnauthenticatedRequest } from '../types'
 import { IAM_GROUPS_HEADER } from '../util/config'
 
 const parse = (groupString: string) => {

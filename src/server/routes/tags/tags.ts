@@ -1,6 +1,6 @@
 import { Router, Response } from 'express'
 import { Op, Transaction } from 'sequelize'
-import { AuthenticatedRequest } from 'types'
+import { AuthenticatedRequest } from '../../types'
 import { OrganisationAccess } from '@common/types/organisation'
 import { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit } from '../../models'
 import { CourseUnitsTag } from '../../models/courseUnitsTag'

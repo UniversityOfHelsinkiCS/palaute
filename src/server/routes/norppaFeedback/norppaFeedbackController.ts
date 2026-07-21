@@ -1,6 +1,6 @@
 import { Router, type Response } from 'express'
 import type { GetNorppaFeedbackCountResponse } from '@common/types/admin'
-import type { AuthenticatedRequest } from 'types'
+import type { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { NorppaFeedback, User } from '../../models'
 import { adminAccess } from '../../middleware/adminAccess'

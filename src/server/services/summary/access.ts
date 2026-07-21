@@ -1,5 +1,5 @@
 import { QueryTypes } from 'sequelize'
-import { User } from 'models'
+import { User } from '../../models'
 import { sequelize } from '../../db/dbConnection'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 

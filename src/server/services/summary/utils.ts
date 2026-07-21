@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import * as datefns from 'date-fns'
-import { FeedbackData } from 'models/feedback'
+import { FeedbackData } from '../../models/feedback'
 import { InferAttributes } from 'sequelize'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
 import { Summary, Organisation, CourseUnit, CourseRealisation } from '../../models'

@@ -1,5 +1,5 @@
 import type { NextFunction, Response } from 'express'
-import { AuthenticatedRequest } from 'types'
+import { AuthenticatedRequest } from '../types'
 import { ApplicationError } from '../util/ApplicationError'
 
 const adminAccess = (req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
