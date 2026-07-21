@@ -48,7 +48,6 @@
     "typescript/no-unnecessary-type-assertion": "off",
     "typescript/no-unnecessary-type-conversion": "off",
     "typescript/restrict-template-expressions": "off",
-    "typescript/unbound-method": "off",
     // requires strictNullChecks to run at all; revisit once server/client strict mode is turned on
     "typescript/no-unnecessary-boolean-literal-compare": "off",
     // requires strictNullChecks to run at all; revisit once server/client strict mode is turned on

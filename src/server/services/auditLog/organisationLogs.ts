@@ -63,7 +63,9 @@ export const createOrganisationSurveyLog = async (survey: any, questions: any[],
     if (question.id) {
       const previousQuestion = previousQuestions.find(q => q.id === question.id)
       // Get the changed values of the question
-      const difference = _.fromPairs(_.differenceWith(_.toPairs(question), _.toPairs(previousQuestion), _.isEqual))
+      const difference = _.fromPairs(
+        _.differenceWith(_.toPairs(question), _.toPairs(previousQuestion), (a, b) => _.isEqual(a, b))
+      )
       // eslint-disable-next-line no-continue
       if (Object.keys(difference).length === 0) continue
 
