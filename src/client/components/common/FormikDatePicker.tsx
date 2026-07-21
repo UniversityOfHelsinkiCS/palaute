@@ -24,7 +24,7 @@ const FormikDatePicker = ({ name, ...props }: FormikDatePickerProps) => {
   return (
     <DatePicker
       format="dd/MM/yyyy"
-      value={new Date(field.value) ?? null}
+      value={field.value ? new Date(field.value) : null}
       onChange={value => {
         setFieldValue(name, value, true)
       }}
