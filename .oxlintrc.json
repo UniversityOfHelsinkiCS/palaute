@@ -44,14 +44,18 @@
     "typescript/no-floating-promises": "warn",
     "typescript/no-base-to-string": "off",
     "typescript/no-misused-spread": "off",
-    "typescript/no-unnecessary-boolean-literal-compare": "off",
     "typescript/no-unnecessary-template-expression": "off",
     "typescript/no-unnecessary-type-assertion": "off",
     "typescript/no-unnecessary-type-conversion": "off",
-    "typescript/no-unsafe-type-assertion": "off",
-    "typescript/no-useless-default-assignment": "off",
     "typescript/restrict-template-expressions": "off",
     "typescript/unbound-method": "off",
+    // requires strictNullChecks to run at all; revisit once server/client strict mode is turned on
+    "typescript/no-unnecessary-boolean-literal-compare": "off",
+    // requires strictNullChecks to run at all; revisit once server/client strict mode is turned on
+    "typescript/no-useless-default-assignment": "off",
+    // legitimate findings, but fixing them properly means improving the underlying (mostly `any`) types
+    // rather than just silencing the cast; couples to the same strict-mode cleanup as the two rules above
+    "typescript/no-unsafe-type-assertion": "off",
     "cypress/no-assigning-return-values": "error",
     "cypress/no-unnecessary-waiting": "error",
     "cypress/no-async-tests": "error",
