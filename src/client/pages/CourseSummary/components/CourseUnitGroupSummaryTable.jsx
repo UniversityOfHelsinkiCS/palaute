@@ -445,6 +445,7 @@ const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, v
       </Box>
       {depth !== 'hide' && Boolean(isLoading) && (
         <Box sx={styles.loadingContainer}>
+          {/* oxlint-disable-next-line jsx-a11y/aria-role */}
           <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden />
           <Typography>{t('courseSummary:loading')}</Typography>
         </Box>
