@@ -20,7 +20,14 @@ module.exports = defineConfig({
       // TODO: remove this custom preprocessor once Cypress >= 15.19.0 is published to npm.
       // The built-in ts-loader preprocessor crashes on typescript@7 (no JS compiler API left);
       // Cypress ships a native fix for this in 15.19.0 (see cypress-io/cypress#34258 / #34277).
-      on('file:preprocessor', createBundler())
+      on(
+        'file:preprocessor',
+        createBundler({
+          // spec files use `require('path')` for path.join; esbuild targets
+          // the browser by default and doesn't polyfill node builtins
+          alias: { path: 'path-browserify' },
+        })
+      )
       on('task', {
         checkFolder,
         readXLSX,
