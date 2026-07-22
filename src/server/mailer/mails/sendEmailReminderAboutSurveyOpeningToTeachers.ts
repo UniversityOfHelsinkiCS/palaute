@@ -111,7 +111,7 @@ export const emailReminderAboutSurveyOpeningToTeachers = (
     if (SHOW_COURSE_CODES_WITH_COURSE_NAMES) {
       displayName = `${fbtCourseCode} ${getLanguageValue(name, language)}`
     } else {
-      displayName = `${getLanguageValue(name, language)}`
+      displayName = getLanguageValue(name, language)
     }
 
     const openFrom = {
@@ -131,7 +131,7 @@ export const emailReminderAboutSurveyOpeningToTeachers = (
 
     const smallCourseWarning = `${t('mails:reminderAboutSurveyOpeningToTeachers:smallCourseWarning', { count: FEEDBACK_HIDDEN_STUDENT_COUNT })}<br/>`
 
-    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${`${PUBLIC_URL}/targets/${id}/edit`}>
+    courseNamesAndUrls = `${courseNamesAndUrls}<a href=${PUBLIC_URL}/targets/${id}/edit>
         ${displayName}
         </a> (${openFrom[language]} ${closesOn[language]})
         ${summary?.data.studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT ? smallCourseWarning : ''}

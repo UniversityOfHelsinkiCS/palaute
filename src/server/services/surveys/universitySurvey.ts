@@ -53,7 +53,7 @@ export const createUniversitySurvey = async (validFrom: Date) => {
   )
 
   const clonedIdMap = new Map(questionsToClone.map((q, i) => [q.id, cloned[i].id]))
-  const questionIds = source.questionIds.map(id => (id === WORKLOAD_QUESTION_ID ? id : clonedIdMap.get(id)!))
+  const questionIds = source.questionIds.map(id => (id === WORKLOAD_QUESTION_ID ? id : clonedIdMap.get(id)))
 
   const newSurvey = await Survey.create({ type: 'university', typeId: source.typeId, validFrom, questionIds })
   await newSurvey.populateQuestions()

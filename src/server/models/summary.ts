@@ -29,6 +29,8 @@ export type SummaryData = {
 /**
  * Summary represents any single row in course summary.
  */
+export type SummaryAttributes = InferAttributes<Summary>
+
 class Summary extends Model<InferAttributes<Summary>, InferCreationAttributes<Summary>> {
   declare id: CreationOptional<number>
   declare entityId: string

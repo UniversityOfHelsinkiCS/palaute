@@ -190,8 +190,11 @@ const Search = () => {
 
   const [option, setOption] = React.useState<string>(searchParams.get('option') ?? 'semester')
   const [dateRange, setDateRange] = React.useState<DateRange>(() => {
-    // Converting to string is important, params.get may return 0 which would take us to the 70s
+    // Converting to string is important: params.get can return null, and new Date(null) silently
+    // resolves to epoch 1970 instead of an invalid date, unlike new Date(String(null))
+    // eslint-disable-next-line typescript/no-unnecessary-type-conversion
     const start = new Date(String(searchParams.get('startDate')))
+    // eslint-disable-next-line typescript/no-unnecessary-type-conversion
     const end = new Date(String(searchParams.get('endDate')))
 
     return isValid(start) && isValid(end) ? { start, end } : getSemesterRange(new Date())

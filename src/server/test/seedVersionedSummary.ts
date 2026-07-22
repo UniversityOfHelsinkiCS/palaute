@@ -137,7 +137,7 @@ export const initVersionedSummary = async ({ user }: { user: { hyPersonSisuId: s
 
   // Use the existing seed survey as the "old" version and only add the new survey on top
   const existingSurvey = await getUniversitySurvey(new Date('2024-09-01'))
-  const oldLikertIds = existingSurvey.questions!.filter(q => q.type === 'LIKERT').map(q => q.id)
+  const oldLikertIds = existingSurvey.questions.filter(q => q.type === 'LIKERT').map(q => q.id)
 
   const { newLikertIds } = await seedNewSurvey()
 

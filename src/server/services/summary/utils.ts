@@ -4,11 +4,11 @@ import { FeedbackData } from '../../models/feedback'
 import { InferAttributes } from 'sequelize'
 import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
 import { Summary, Organisation, CourseUnit, CourseRealisation } from '../../models'
-import { SummaryData, SummaryResult } from '../../models/summary'
+import { SummaryAttributes, SummaryData, SummaryResult } from '../../models/summary'
 
 const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {
-    return (WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) as number) + 1
+    return WORKLOAD_QUESTION_ID_ORDER.indexOf(optionId) + 1
   }
   return Number(optionId)
 }
@@ -72,7 +72,7 @@ const sumSummaryDatas = (summaryDatas: SummaryData[]) => {
   return data
 }
 
-const sumSummaries = (summaries?: Summary[]) => {
+const sumSummaries = (summaries?: SummaryAttributes[]) => {
   if (!summaries?.length) {
     return undefined
   }
@@ -138,11 +138,12 @@ const sumSummaries = (summaries?: Summary[]) => {
   const startDate = datefns.min(validStartDates)
   const endDate = datefns.max(validEndDates)
 
-  // TODO: fix this, causes bugs by overriding values from the first summary
-  const summary = filteredSummaries[0]
-  summary.data = data
-  summary.startDate = datefns.formatISO(startDate)
-  summary.endDate = datefns.formatISO(endDate)
+  const summary: SummaryAttributes = {
+    ...filteredSummaries[0],
+    data,
+    startDate: datefns.formatISO(startDate),
+    endDate: datefns.formatISO(endDate),
+  }
 
   return summary
 }

@@ -79,7 +79,7 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
       if (answer.data === feedbackContent && answer.questionId === questionId) {
         matchedCount += 1
 
-        const isCurrentlyHidden = Boolean(answer.hidden)
+        const isCurrentlyHidden = answer.hidden === true
         if (isCurrentlyHidden !== hidden) {
           changedCount += 1
           return { ...answer, hidden }

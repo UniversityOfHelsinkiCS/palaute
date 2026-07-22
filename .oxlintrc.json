@@ -42,9 +42,6 @@
     "jsx-a11y/no-autofocus": "warn",
     "jsx-a11y/prefer-tag-over-role": "off",
     "typescript/no-floating-promises": "warn",
-    "typescript/no-unnecessary-template-expression": "off",
-    "typescript/no-unnecessary-type-assertion": "off",
-    "typescript/no-unnecessary-type-conversion": "off",
     // requires strictNullChecks to run at all; revisit once server/client strict mode is turned on
     "typescript/no-unnecessary-boolean-literal-compare": "off",
     // requires strictNullChecks to run at all; revisit once server/client strict mode is turned on

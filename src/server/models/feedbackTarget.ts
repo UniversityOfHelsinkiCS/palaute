@@ -27,7 +27,7 @@ import { UserFeedbackTarget } from './userFeedbackTarget'
 import { sequelize } from '../db/dbConnection'
 import type { CourseUnit } from './courseUnit'
 import type { Question } from './question'
-import type Summary from './summary'
+import type { SummaryAttributes } from './summary'
 import type { Tag } from './tag'
 import type { Group } from './group'
 
@@ -76,7 +76,7 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare courseUnit?: CourseUnit
   declare courseRealisation?: CourseRealisation
   declare userFeedbackTargets?: UserFeedbackTarget[]
-  declare summary?: Summary
+  declare summary?: SummaryAttributes
   declare groups?: Group[]
   declare courseRealisationName?: LocalizedString
 
@@ -390,7 +390,7 @@ FeedbackTarget.init(
     studentCount: {
       type: VIRTUAL,
       get() {
-        return this.dataValues.studentCount ? Number(this.dataValues.studentCount) : 0
+        return this.dataValues.studentCount ?? 0
       },
     },
     publicQuestionIds: {

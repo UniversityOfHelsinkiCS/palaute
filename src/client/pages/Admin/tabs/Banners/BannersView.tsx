@@ -226,8 +226,8 @@ const BannerView = () => {
               <Banner banner={banner} language={authorizedUser?.language} disabled />
               <Box display="flex" columnGap={2}>
                 <div>Color: {banner.data.color}</div>
-                <div>Start date: {String(banner.startDate)}</div>
-                <div>End date: {String(banner.endDate)}</div>
+                <div>Start date: {banner.startDate}</div>
+                <div>End date: {banner.endDate}</div>
                 <div>Access group: {banner.accessGroup}</div>
                 <Box ml="auto">
                   <NorButton

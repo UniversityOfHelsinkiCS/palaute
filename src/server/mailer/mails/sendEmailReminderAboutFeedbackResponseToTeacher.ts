@@ -86,7 +86,7 @@ export const emailReminderAboutFeedbackResponseToTeachers = (
     courseNamesAndUrlsDisplayName = `${courseCode} ${courseNamesAndUrlsDisplayName}`
   }
 
-  const courseNamesAndUrls = `<a href=${`${PUBLIC_URL}/targets/${feedbackTarget.id}/results`}>
+  const courseNamesAndUrls = `<a href=${PUBLIC_URL}/targets/${feedbackTarget.id}/results>
       ${courseNamesAndUrlsDisplayName}
       </a> <br/>`
 

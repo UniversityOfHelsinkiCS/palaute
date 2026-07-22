@@ -272,7 +272,7 @@ const buildSummariesForPeriod = async ({
       for (const optionId of optionIds) {
         if (Number(optionId) !== 0) {
           // skip the NO ANSWER option
-          const count = Number(result[questionId].distribution[optionId])
+          const count = result[questionId].distribution[optionId]
           totalCount += count
           sum += mapOptionIdToValue(optionId, questionId) * count
         }

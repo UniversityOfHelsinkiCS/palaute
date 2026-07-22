@@ -57,6 +57,9 @@ export const sendFeedbackSummaryReminderToStudents = async (
     .filter(student => student.email)
     .map(student => ({
       email: student.email,
+      // the cast is needed to keep the mapped array's inferred type narrow enough for
+      // sendNotificationAboutFeedbackResponseToStudents, even though it's a no-op locally
+      // eslint-disable-next-line typescript/no-unnecessary-type-assertion
       language: student.language || ('en' as LanguageId),
     }))
   return sendNotificationAboutFeedbackResponseToStudents(

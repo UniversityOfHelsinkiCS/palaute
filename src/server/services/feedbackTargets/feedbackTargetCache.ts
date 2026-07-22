@@ -56,9 +56,9 @@ const onFeedbackTargetChange = (feedbackTarget: FeedbackTarget) => {
 
 const onSurveyChange = (survey: Survey) => {
   if (survey.type === 'feedbackTarget') {
-    cache.invalidate(survey.feedbackTargetId as number)
+    cache.invalidate(survey.feedbackTargetId)
   } else if (survey.type === 'programme') {
-    onOrganisationChange(survey.typeId as string)
+    onOrganisationChange(survey.typeId)
   } else {
     cache.invalidateAll()
   }

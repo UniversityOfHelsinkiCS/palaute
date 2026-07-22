@@ -26,7 +26,7 @@ export const getUserOrganisationSummaries = async ({
 
   const excludedIds = new Set(SUMMARY_EXCLUDED_ORG_IDS)
   const accessibleNonExcludedIds = new Set(accessibleOrgIds.filter(id => !excludedIds.has(id)))
-  const parentMap = new Map(allOrgs.map(o => [o.id, o.dataValues.parentId as string | null]))
+  const parentMap = new Map(allOrgs.map(o => [o.id, o.dataValues.parentId]))
 
   const hasAccessibleAncestor = (id: string): boolean => {
     let currentId = parentMap.get(id)

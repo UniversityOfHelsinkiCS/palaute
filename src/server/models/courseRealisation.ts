@@ -15,7 +15,7 @@ import type { FeedbackTarget } from './feedbackTarget'
 import type { Organisation } from './organisation'
 import type { Tag } from './tag'
 import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
-import Summary from './summary'
+import type { SummaryAttributes } from './summary'
 
 export type CourseRealisationTeachingLanguages = LanguageId[]
 
@@ -37,7 +37,7 @@ class CourseRealisation extends Model<InferAttributes<CourseRealisation>, InferC
   declare organisations?: NonAttribute<Organisation[]>
   declare tags?: NonAttribute<Tag[]>
   declare courseRealisationsOrganisations?: CourseRealisationsOrganisation[]
-  declare summary?: Summary
+  declare summary?: SummaryAttributes
 }
 
 CourseRealisation.init(

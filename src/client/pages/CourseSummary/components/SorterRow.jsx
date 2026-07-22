@@ -64,7 +64,7 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
           {questions.map(q => (
             <Sort
               key={q.id}
-              field={q.id}
+              field={String(q.id)}
               label={getLanguageValue(q.data.label, i18n.language)}
               width={styles.resultCell.minWidth}
             />

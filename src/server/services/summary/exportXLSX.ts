@@ -18,6 +18,7 @@ import {
   Question,
   Summary,
 } from '../../models'
+import type { SummaryAttributes } from '../../models/summary'
 import {
   getScopedSummary,
   sumSummaries,
@@ -157,7 +158,7 @@ const getDefaultHeaders = (questions: InferAttributes<Question>[], t: TFunction,
 const commonPartOfAoa = (
   language: LanguageId,
   questions: InferAttributes<Question>[],
-  target: { summary?: Summary; name: LocalizedString | null }
+  target: { summary?: SummaryAttributes; name: LocalizedString | null }
 ) => {
   const targetName = target.name ? (getLanguageValue(target.name, language) ?? '') : ''
   const summaryData = target.summary?.data

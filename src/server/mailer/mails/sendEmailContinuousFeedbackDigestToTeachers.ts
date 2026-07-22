@@ -134,7 +134,7 @@ const emailContinuousFeedbackDigestToTeachers = (
     }
 
     courseNameLinksAndNewFeedback = `${courseNameLinksAndNewFeedback}
-    <a href=${`${PUBLIC_URL}/targets/${id}/continuous-feedback`}>${name}</a>
+    <a href=${PUBLIC_URL}/targets/${id}/continuous-feedback>${name}</a>
     <ul>
     ${userFeedbackTarget.continuousFeedback.map(({ data }) => `<li>${data}</li>`).join('')}
     </ul>`

@@ -88,8 +88,11 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
   // Date range
 
   const [dateRange, setDateRange] = React.useState(() => {
-    // Converting to string is important, params.get may return 0 which would take us to the 70s
+    // Converting to string is important: params.get can return null, and new Date(null) silently
+    // resolves to epoch 1970 instead of an invalid date, unlike new Date(String(null))
+    // eslint-disable-next-line typescript/no-unnecessary-type-conversion
     const start = new Date(String(params.get('startDate')))
+    // eslint-disable-next-line typescript/no-unnecessary-type-conversion
     const end = new Date(String(params.get('endDate')))
 
     return isValid(start) && isValid(end) ? { start, end } : getYearRange(new Date())

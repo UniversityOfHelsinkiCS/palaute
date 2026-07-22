@@ -29,12 +29,12 @@ const Sort = ({ field, label, width }) => {
   const { t } = useTranslation()
   const { sortBy, setSortBy } = useSummaryContext()
 
-  const currentSortByField = String(sortBy[0])
-  const currentOrderByField = String(sortBy[1])
+  const currentSortByField = sortBy[0]
+  const currentOrderByField = sortBy[1]
 
   const isDesc = currentOrderByField === 'desc'
   const isAsc = currentOrderByField === 'asc'
-  const isActive = currentSortByField === String(field)
+  const isActive = currentSortByField === field
   const isNextDesc = !isActive || !isDesc
 
   return (

@@ -15,6 +15,7 @@ import {
 import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import type Summary from './summary'
+import type { SummaryAttributes } from './summary'
 import type { CourseUnit } from './courseUnit'
 import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 import type { Tag } from './tag'
@@ -39,7 +40,7 @@ class Organisation extends Model<InferAttributes<Organisation>, InferCreationAtt
   // --- ideally refactor away ---
   // -----------------------------
   declare isFaculty?: boolean
-  declare summary?: Summary
+  declare summary?: SummaryAttributes
   declare courseUnits?: CourseUnit[]
   declare summaries?: Summary[]
   declare groupSummaries?: Summary[]

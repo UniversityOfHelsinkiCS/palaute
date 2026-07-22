@@ -10,7 +10,7 @@ const createFromData = async (feedbackTargetId: number, user: User, data: object
   const log = await FeedbackTargetLog.create({
     data: logData,
     feedbackTargetId: String(feedbackTargetId),
-    userId: String(user.id),
+    userId: user.id,
   })
 
   return log

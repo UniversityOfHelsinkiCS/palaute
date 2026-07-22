@@ -79,8 +79,8 @@ const Responsibles = ({ organisation }) => {
     const paramsStart = params.get('startDate')
     const paramsEnd = params.get('endDate')
 
-    const start = paramsStart ? new Date(String(params.get('startDate'))) : ongoingAcademicYearRange.start
-    const end = paramsEnd ? new Date(String(params.get('endDate'))) : ongoingAcademicYearRange.end
+    const start = paramsStart ? new Date(paramsStart) : ongoingAcademicYearRange.start
+    const end = paramsEnd ? new Date(paramsEnd) : ongoingAcademicYearRange.end
 
     return isValid(start) && isValid(end) ? { start, end } : { start: new Date(), end: new Date() }
   })

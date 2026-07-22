@@ -14,10 +14,7 @@ export const getHeaders = () => [
 ]
 
 export const getData = results => {
-  const data = results.map(r => [
-    ...Object.values(r),
-    ((r.feedbacks / r.ufbts) * 100).toFixed(2).toString().replace('.', ','),
-  ])
+  const data = results.map(r => [...Object.values(r), ((r.feedbacks / r.ufbts) * 100).toFixed(2).replace('.', ',')])
   return data
 }
 

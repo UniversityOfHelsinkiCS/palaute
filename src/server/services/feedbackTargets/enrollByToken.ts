@@ -10,7 +10,7 @@ type EnrollByTokenParams = {
 }
 
 const enrollByToken = async ({ user, token }: EnrollByTokenParams) => {
-  const decoded = jwt.verify(token, process.env.JWT_KEY as string) as { feedbackTargetId: number }
+  const decoded = jwt.verify(token, process.env.JWT_KEY) as { feedbackTargetId: number }
   const { feedbackTargetId } = decoded
 
   const { feedbackTarget, userFeedbackTarget } = await getFeedbackTargetContext({ feedbackTargetId, user })

@@ -16,7 +16,7 @@ export const seedFeedbacks = async (feedbackDatas: FeedbackData[]) => {
   })
 
   await Promise.all(
-    fbt!.userFeedbackTargets.map(async (uft, idx) => {
+    fbt.userFeedbackTargets.map(async (uft, idx) => {
       if (idx >= feedbackDatas.length) return
       const ftData = feedbackDatas[idx]
       const ft = await Feedback.create({

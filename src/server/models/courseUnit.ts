@@ -14,6 +14,7 @@ import type { LocalizedString } from '@common/types/common'
 import { sequelize } from '../db/dbConnection'
 import { logger } from '../util/logger'
 import type Summary from './summary'
+import type { SummaryAttributes } from './summary'
 import { Organisation } from './organisation'
 import type { CourseRealisation } from './courseRealisation'
 import type { FeedbackTarget } from './feedbackTarget'
@@ -40,7 +41,7 @@ class CourseUnit extends Model<InferAttributes<CourseUnit>, InferCreationAttribu
   // --- Virtual fields. ---------
   // --- ideally refactor away ---
   // -----------------------------
-  declare summary?: Summary
+  declare summary?: SummaryAttributes
   declare summaries?: Summary[]
   declare groupSummaries?: Summary[]
   declare courseRealisations?: CourseRealisation[]

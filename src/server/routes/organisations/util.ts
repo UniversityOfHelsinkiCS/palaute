@@ -10,9 +10,9 @@ export const getAccessAndOrganisation = async (user: User, code: string, require
 
   const organisation = await Organisation.findOne({ where: { code } })
 
-  const hasReadAccess = user.isAdmin || Boolean(access?.read)
-  const hasWriteAccess = user.isAdmin || Boolean(access?.write)
-  const hasAdminAccess = user.isAdmin || Boolean(access?.admin)
+  const hasReadAccess = user.isAdmin || access?.read
+  const hasWriteAccess = user.isAdmin || access?.write
+  const hasAdminAccess = user.isAdmin || access?.admin
 
   const missingRights: ('read' | 'write' | 'admin')[] = []
   if (requiredAccess?.read && !hasReadAccess) missingRights.push('read')

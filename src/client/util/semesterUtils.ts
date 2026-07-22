@@ -53,7 +53,7 @@ export const useSemesters = (
     semesters.push({
       start: new Date(`${startYear}-0${STUDY_YEAR_START_MONTH}-01`),
       end: subDays(new Date(`${startYear + 1}-01-01`), 1),
-      season: 'fall' as Season,
+      season: 'fall',
     })
   }
 

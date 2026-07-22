@@ -52,11 +52,15 @@ const Organisation = () => {
     return <ErrorView message={errors.getGeneralError(error)} response={error?.response} />
   }
 
+  // organisation?.access?.* is boolean | undefined; ProtectedRoute's hasAccess prop requires a
+  // strict boolean, so these conversions matter even though today's usage is purely truthy checks
+  /* eslint-disable typescript/no-unnecessary-type-conversion */
   const hasReadAccess = Boolean(organisation?.access?.read)
   const hasWriteAccess = Boolean(organisation?.access?.write)
   const hasAdminAccess = Boolean(organisation?.access?.admin)
 
   const isFaculty = Boolean(organisation?.isFaculty)
+  /* eslint-enable typescript/no-unnecessary-type-conversion */
 
   if (!hasReadAccess) {
     return <Navigate to="/" />

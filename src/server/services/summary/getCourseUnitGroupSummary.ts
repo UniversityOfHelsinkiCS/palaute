@@ -7,8 +7,8 @@ import {
   CourseUnitsOrganisation,
   UserFeedbackTarget,
   User,
-  Summary,
 } from '../../models'
+import type { SummaryAttributes } from '../../models/summary'
 import { sumSummaries, getScopedSummary } from './utils'
 import { getAccessibleCourseRealisationIds } from './access'
 import { ApplicationError } from '../../util/ApplicationError'
@@ -120,17 +120,15 @@ export const getCourseUnitGroupSummaries = async ({
 
   type SurveyGroup = {
     survey: Survey | null
-    summary: Summary | undefined
+    summary: SummaryAttributes | undefined
     feedbackTargets: FeedbackTarget[]
   }
 
-  // must convert to JSON to avoid sumSummaries modifying the original summary objects
-  // TODO: remove the conversion and `as Summary` cast once sumSummaries is fixed
   const summarizeGroup = (fbts: typeof orderedFeedbackTargets) =>
     sumSummaries(
       fbts
         .filter(fbt => fbt?.opensAt <= new Date())
-        .map(fbt => fbt?.summary?.toJSON() as Summary)
+        .map(fbt => fbt?.summary)
         .filter(s => Boolean(s))
     )
 
