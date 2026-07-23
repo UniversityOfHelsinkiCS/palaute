@@ -11,7 +11,7 @@ jobs:
       - name: Build project for linting
         run: npm ci
       - name: Run oxlint with type checks
-        run: npm run lint
+        run: npm run lint:quiet
 
   translations:
     runs-on: ubuntu-latest
