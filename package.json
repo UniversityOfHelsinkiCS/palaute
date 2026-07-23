@@ -106,8 +106,8 @@
     "zod": "^3.25.76"
   },
   "devDependencies": {
-    "@babel/preset-react": "7.28.5",
-    "@babel/preset-typescript": "7.28.5",
+    "@babel/preset-react": "8.0.1",
+    "@babel/preset-typescript": "8.0.1",
     "@bahmutov/cypress-esbuild-preprocessor": "2.2.8",
     "@types/compression": "1.8.1",
     "@types/config": "^3.3.5",
