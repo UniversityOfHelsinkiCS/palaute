@@ -126,7 +126,7 @@
     "axe-core": "4.12.1",
     "babel-plugin-react-compiler": "19.0.0-beta-ebf51a3-20250411",
     "browserify-fs": "1.0.0",
-    "concurrently": "9.2.1",
+    "concurrently": "9.2.4",
     "cross-env": "10.1.0",
     "cypress": "15.9.0",
     "cypress-axe": "1.7.0",
