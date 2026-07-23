@@ -17,7 +17,7 @@ jobs:
     needs: test
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - name: Echo confirmation
         run: echo "Tests run"
