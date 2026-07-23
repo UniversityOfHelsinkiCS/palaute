@@ -68,5 +68,3 @@ erDiagram
     continuousFeedback }o--|| feedbackTarget : "targets"
     user }o--|| norppaFeedback : "may have"
 ```
-
-

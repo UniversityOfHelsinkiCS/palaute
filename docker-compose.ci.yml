@@ -8,7 +8,7 @@ services:
       args:
         - E2E=true
         - NODE_CONFIG_ENV=hy
-    command: ['npm','run', 'start:test']
+    command: ['npm', 'run', 'start:test']
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?targetServerType=primary
       - REDIS_HOST=redis
@@ -24,7 +24,7 @@ services:
     depends_on:
       - db
       - jami
-  
+
   redis:
     image: redis:6.2.16
     command: redis-server
@@ -38,7 +38,7 @@ services:
     ports:
       - 5432:5432
     container_name: palaute_test_db
-  
+
   jami:
     image: quay.io/toska/jami:production
     environment:

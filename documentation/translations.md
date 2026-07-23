@@ -54,9 +54,9 @@ NodeJS example
 ```js
 const i18n = require('../utils/i18n')
 
-const getHelloMessage = (user) => {
+const getHelloMessage = user => {
   const t = i18n.getFixedT(user.language)
-  
+
   return t('common:hello') // Hello in user's language
 }
 ```

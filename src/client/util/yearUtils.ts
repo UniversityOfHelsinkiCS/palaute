@@ -25,7 +25,7 @@ export const useAcademicYears = (
   const now = new Date()
   const until = futureYears > 0 ? new Date(new Date().setFullYear(now.getFullYear() + futureYears)) : now
 
-  for (let date = until; date >= new Date(`2020-0${STUDY_YEAR_START_MONTH}-01`); ) {
+  for (let date = until; date >= new Date(`2020-0${STUDY_YEAR_START_MONTH}-01`);) {
     academicYears.push(getYearRange(date))
     date = subYears(date, 1)
   }

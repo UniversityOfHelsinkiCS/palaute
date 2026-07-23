@@ -18,7 +18,7 @@ The `npm run test` command builds the testing environment each time from scratch
 
 For writing tests locally there is a docker compose file for the purpose that allows you to make changes to the build while developing. Essentially meaning that the tests are run in dev envinroment rather than builded application.
 
-`npm run test:setuplocal` to spin up quickly the app in dev mode with an empty database. CHANGE the baseUrl port from 8000 to 3000 in [cypress config](/cypress.config.js) 
+`npm run test:setuplocal` to spin up quickly the app in dev mode with an empty database. CHANGE the baseUrl port from 8000 to 3000 in [cypress config](/cypress.config.js)
 
 When all of the services are running in the docker compose, Cypress can be started either in the headless mode with `npm run test:run` or opened with `npm run test:cypress`.
 
