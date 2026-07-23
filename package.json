@@ -35,7 +35,7 @@
     "**/*": "oxfmt --no-error-on-unmatched-pattern"
   },
   "engines": {
-    "node": "23.11.1"
+    "node": "24.18.0"
   },
   "dependencies": {
     "@emotion/react": "11.14.0",
