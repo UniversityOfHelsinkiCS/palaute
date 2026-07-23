@@ -79,11 +79,14 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     return showSummariesWithNoFeedbackParam ? showSummariesWithNoFeedbackParam === 'true' : false
   })
 
-  const updateShowSummariesWithNoFeedbackQS = React.useCallback(showSummariesWithNoFeedback => {
-    setShowSummariesWithNoFeedback(showSummariesWithNoFeedback)
-    params.set('showSummariesWithNoFeedback', showSummariesWithNoFeedback)
-    setParams(params)
-  }, [])
+  const updateShowSummariesWithNoFeedbackQS = React.useCallback(
+    showSummariesWithNoFeedback => {
+      setShowSummariesWithNoFeedback(showSummariesWithNoFeedback)
+      params.set('showSummariesWithNoFeedback', showSummariesWithNoFeedback)
+      setParams(params)
+    },
+    [params, setParams]
+  )
 
   // Date range
 
@@ -100,14 +103,17 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
 
   const questions = useSummaryQuestions(organisationCode, dateRange.start)
 
-  const updateDateRangeQS = React.useCallback(dateRange => {
-    setDateRange(dateRange)
-    if (isValid(dateRange.start) && isValid(dateRange.end)) {
-      params.set('startDate', format(dateRange.start, 'yyyy-MM-dd'))
-      params.set('endDate', format(dateRange.end, 'yyyy-MM-dd'))
-      setParams(params)
-    }
-  }, [])
+  const updateDateRangeQS = React.useCallback(
+    dateRange => {
+      setDateRange(dateRange)
+      if (isValid(dateRange.start) && isValid(dateRange.end)) {
+        params.set('startDate', format(dateRange.start, 'yyyy-MM-dd'))
+        params.set('endDate', format(dateRange.end, 'yyyy-MM-dd'))
+        setParams(params)
+      }
+    },
+    [params, setParams]
+  )
 
   // Option: all or filter
 
@@ -116,11 +122,14 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     return option || 'filter'
   })
 
-  const updateOptionQS = React.useCallback(option => {
-    setOption(option)
-    params.set('option', option)
-    setParams(params)
-  }, [])
+  const updateOptionQS = React.useCallback(
+    option => {
+      setOption(option)
+      params.set('option', option)
+      setParams(params)
+    },
+    [params, setParams]
+  )
 
   // Sort by
 
@@ -130,14 +139,17 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     return sortByField && order ? [sortByField, order] : ['code', 'asc']
   })
 
-  const updateSortByQS = React.useCallback(sortBy => {
-    setSortBy(sortBy)
-    params.set('sortBy', sortBy[0])
-    params.set('order', sortBy[1])
-    setParams(params)
-  }, [])
+  const updateSortByQS = React.useCallback(
+    sortBy => {
+      setSortBy(sortBy)
+      params.set('sortBy', sortBy[0])
+      params.set('order', sortBy[1])
+      setParams(params)
+    },
+    [params, setParams]
+  )
 
-  const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])
+  const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy])
 
   // Separate organisation id
   const [extraOrgId, setExtraOrgId] = React.useState(() => {
@@ -145,11 +157,14 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     return extraOrgId || ''
   })
 
-  const updateExtraOrgIdQS = React.useCallback(extraOrgId => {
-    setExtraOrgId(extraOrgId)
-    params.set('extraOrgId', extraOrgId)
-    setParams(params)
-  }, [])
+  const updateExtraOrgIdQS = React.useCallback(
+    extraOrgId => {
+      setExtraOrgId(extraOrgId)
+      params.set('extraOrgId', extraOrgId)
+      setParams(params)
+    },
+    [params, setParams]
+  )
 
   // How to show separate organisation courses
   const [extraOrgMode, setExtraOrgMode] = React.useState(() => {
@@ -157,11 +172,14 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     return extraOrgMode || 'include'
   })
 
-  const updateExtraOrgModeQS = React.useCallback(extraOrgMode => {
-    setExtraOrgMode(extraOrgMode)
-    params.set('extraOrgMode', extraOrgMode)
-    setParams(params)
-  }, [])
+  const updateExtraOrgModeQS = React.useCallback(
+    extraOrgMode => {
+      setExtraOrgMode(extraOrgMode)
+      params.set('extraOrgMode', extraOrgMode)
+      setParams(params)
+    },
+    [params, setParams]
+  )
 
   const value = React.useMemo(
     () => ({
@@ -180,7 +198,22 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       extraOrgMode,
       setExtraOrgMode: updateExtraOrgModeQS,
     }),
-    [showSummariesWithNoFeedback, dateRange, option, sortBy[0], sortBy[1], questions, extraOrgId, extraOrgMode]
+    [
+      showSummariesWithNoFeedback,
+      updateShowSummariesWithNoFeedbackQS,
+      dateRange,
+      updateDateRangeQS,
+      option,
+      updateOptionQS,
+      sortBy,
+      updateSortByQS,
+      sortFunction,
+      questions,
+      extraOrgId,
+      updateExtraOrgIdQS,
+      extraOrgMode,
+      updateExtraOrgModeQS,
+    ]
   )
 
   return <summaryContext.Provider value={value}>{children}</summaryContext.Provider>

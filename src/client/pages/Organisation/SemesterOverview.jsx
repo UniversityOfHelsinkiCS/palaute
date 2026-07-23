@@ -691,11 +691,11 @@ const SemesterOverview = ({ organisation }) => {
 
   const contextValue = React.useMemo(
     () => ({
-      selection: selected.current,
+      selection: sidebarContent,
       onClick: onFeedbackTargetClick,
       showCurName,
     }),
-    [onFeedbackTargetClick, showCurName]
+    [sidebarContent, onFeedbackTargetClick, showCurName]
   )
 
   return (
