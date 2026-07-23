@@ -41,7 +41,7 @@ describe('When course has only one enrolled student', () => {
         cy.wrap($el).click()
       })
       cy.getUniversityQuestions().then(questions => {
-        const openQuestion = questions.find(q => q.type === 'OPEN')
+        const openQuestion = questions.find(q => q.type === 'OPEN')!
         cy.get(`textarea[id=${openQuestion.id}-input]`).type('Other comments and such')
       })
     })

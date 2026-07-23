@@ -58,7 +58,7 @@ declare global {
       setFeedbackActive(): Chainable
       setFeedbackInactive(): Chainable
       getTestFbtId(): Chainable
-      getUniversityQuestions(): Chainable
+      getUniversityQuestions(): Chainable<{ id: number; type: string }[]>
     }
   }
 }
