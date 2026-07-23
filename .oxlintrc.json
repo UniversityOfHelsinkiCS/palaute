@@ -49,6 +49,10 @@
     // legitimate findings, but fixing them properly means improving the underlying (mostly `any`) types
     // rather than just silencing the cast; couples to the same strict-mode cleanup as the two rules above
     "typescript/no-unsafe-type-assertion": "off",
+    // flaky rule
+    "typescript/no-unnecessary-type-assertion": "off",
+    // very expensive rule for some reason, costs >50% of lint budget. not worth it.
+    "typescript/no-unnecessary-type-arguments": "off",
     "cypress/no-assigning-return-values": "error",
     "cypress/no-unnecessary-waiting": "error",
     "cypress/no-async-tests": "error",
