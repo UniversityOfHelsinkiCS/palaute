@@ -128,7 +128,7 @@
     "browserify-fs": "1.0.0",
     "concurrently": "9.2.4",
     "cross-env": "10.1.0",
-    "cypress": "15.9.0",
+    "cypress": "15.18.1",
     "cypress-axe": "1.7.0",
     "eslint-plugin-cypress": "3.6.0",
     "husky": "9.1.7",
