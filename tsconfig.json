@@ -3,7 +3,7 @@
     "target": "es6",
     "module": "commonjs",
     "rootDir": ".",
-    "jsx": "react",
+    "jsx": "react-jsx",
     "outDir": "build"
   },
   "files": [],

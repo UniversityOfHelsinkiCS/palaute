@@ -39,6 +39,9 @@
     "react/button-has-type": "error",
     "react/jsx-no-constructed-context-values": "error",
     "react/react-compiler": "warn",
+    // project uses the automatic JSX runtime (react-jsx); oxlint has no jsxRuntime
+    // setting to detect this, so this classic-runtime-only rule must stay off
+    "react/react-in-jsx-scope": "off",
     "jsx-a11y/no-autofocus": "warn",
     "jsx-a11y/prefer-tag-over-role": "off",
     "typescript/no-floating-promises": "warn",
