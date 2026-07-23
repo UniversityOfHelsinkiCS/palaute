@@ -1,0 +1,3 @@
+npm run lint
+scripts/grep_dot_only.sh
+npm run translations -- --lang fi,en --quiet
