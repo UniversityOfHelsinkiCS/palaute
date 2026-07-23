@@ -10,7 +10,7 @@ jobs:
       - uses: actions/checkout@v6
       - name: Build project for linting
         run: npm ci
-      - name: Run oxlint and ts checks
+      - name: Run oxlint with type checks
         run: npm run lint
 
   translations:
@@ -43,7 +43,7 @@ jobs:
             universitySurvey.spec.js,
             userfeedbacks.spec.js,
             versionedUniversitySurvey.spec.js,
-            accessibility.spec.js
+            accessibility.spec.js,
           ]
     runs-on: ubuntu-latest
 
