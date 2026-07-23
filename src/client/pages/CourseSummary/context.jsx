@@ -83,7 +83,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setShowSummariesWithNoFeedback(showSummariesWithNoFeedback)
     params.set('showSummariesWithNoFeedback', showSummariesWithNoFeedback)
     setParams(params)
-  })
+  }, [])
 
   // Date range
 
@@ -107,7 +107,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
       params.set('endDate', format(dateRange.end, 'yyyy-MM-dd'))
       setParams(params)
     }
-  })
+  }, [])
 
   // Option: all or filter
 
@@ -120,7 +120,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setOption(option)
     params.set('option', option)
     setParams(params)
-  })
+  }, [])
 
   // Sort by
 
@@ -135,7 +135,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     params.set('sortBy', sortBy[0])
     params.set('order', sortBy[1])
     setParams(params)
-  })
+  }, [])
 
   const sortFunction = React.useMemo(() => getSummarySortFunction(sortBy[0]), [sortBy[0]])
 
@@ -149,7 +149,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setExtraOrgId(extraOrgId)
     params.set('extraOrgId', extraOrgId)
     setParams(params)
-  })
+  }, [])
 
   // How to show separate organisation courses
   const [extraOrgMode, setExtraOrgMode] = React.useState(() => {
@@ -161,7 +161,7 @@ export const SummaryContextProvider = ({ children, organisationCode }) => {
     setExtraOrgMode(extraOrgMode)
     params.set('extraOrgMode', extraOrgMode)
     setParams(params)
-  })
+  }, [])
 
   const value = React.useMemo(
     () => ({

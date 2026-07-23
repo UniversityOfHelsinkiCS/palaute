@@ -695,7 +695,7 @@ const SemesterOverview = ({ organisation }) => {
       onClick: onFeedbackTargetClick,
       showCurName,
     }),
-    [selected.current, onFeedbackTargetClick, showCurName]
+    [onFeedbackTargetClick, showCurName]
   )
 
   return (
