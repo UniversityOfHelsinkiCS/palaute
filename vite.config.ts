@@ -39,7 +39,7 @@ export default defineConfig({
     'process.env': process.env,
     CONFIG: (() => {
       const configObj = config.util.toObject(undefined)
-      for (const key of config.get('PRIVATE_KEYS')) {
+      for (const key of config.get<string[]>('PRIVATE_KEYS')) {
         delete configObj[key]
       }
 
