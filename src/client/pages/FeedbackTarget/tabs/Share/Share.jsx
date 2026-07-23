@@ -2,7 +2,7 @@ import { FileCopyOutlined, Email } from '@mui/icons-material'
 import { Box, Chip, Paper, Typography, Alert } from '@mui/material'
 import { differenceInHours, format } from 'date-fns'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import QRCode from 'react-qr-code'
 

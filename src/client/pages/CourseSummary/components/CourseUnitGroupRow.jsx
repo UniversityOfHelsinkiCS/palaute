@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'

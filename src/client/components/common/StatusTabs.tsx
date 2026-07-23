@@ -2,7 +2,6 @@ import type { TabsProps, TabProps } from '@mui/material'
 import type { ReactNode } from 'react'
 
 import { Tabs, Tab, Badge, Tooltip } from '@mui/material'
-import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { handleTabKeyDown } from './utils'

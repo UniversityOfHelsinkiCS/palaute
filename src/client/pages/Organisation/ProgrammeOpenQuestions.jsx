@@ -1,5 +1,5 @@
 import { Box, Typography, Divider, Link } from '@mui/material'
-import React, { useState, useRef, forwardRef } from 'react'
+import { useState, useRef, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, Link as RouterLink } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'

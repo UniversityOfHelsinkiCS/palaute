@@ -8,7 +8,6 @@ import {
   PeopleOutlined,
 } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route, useParams, Routes, Navigate, useMatch } from 'react-router-dom'
 

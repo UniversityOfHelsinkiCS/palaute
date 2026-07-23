@@ -1,5 +1,4 @@
 import { Chip } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import LinkChip from '../../../components/common/LinkChip'

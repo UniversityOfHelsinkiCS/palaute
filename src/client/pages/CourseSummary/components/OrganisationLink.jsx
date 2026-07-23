@@ -1,6 +1,5 @@
 import { Search, SettingsOutlined } from '@mui/icons-material'
 import { Box, IconButton, Tooltip } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

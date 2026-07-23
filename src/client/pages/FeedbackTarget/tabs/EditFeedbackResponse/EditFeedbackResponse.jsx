@@ -1,7 +1,7 @@
 import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
 import { Formik, Form, useField } from 'formik'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import AlertLink from '../../../../components/common/AlertLink'

@@ -1,7 +1,7 @@
 import { CssBaseline, GlobalStyles, Zoom } from '@mui/material'
 import { ThemeProvider, StyledEngineProvider } from '@mui/material/styles'
 import { SnackbarProvider, SnackbarKey } from 'notistack'
-import React, { Suspense, useEffect } from 'react'
+import { Suspense, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Route, Routes } from 'react-router-dom'
 

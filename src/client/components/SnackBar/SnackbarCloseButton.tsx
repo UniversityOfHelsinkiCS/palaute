@@ -1,7 +1,6 @@
 import CloseIcon from '@mui/icons-material/Close'
 import { IconButton } from '@mui/material'
 import { SnackbarKey, useSnackbar } from 'notistack'
-import React from 'react'
 
 type SnackbarCloseButtonProps = {
   snackbarKey: SnackbarKey

@@ -11,7 +11,6 @@ import {
 } from '@mui/icons-material'
 /** @jsxImportSource @emotion/react */
 import { Alert, Box, Link } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useMatch, useLocation } from 'react-router-dom'
 

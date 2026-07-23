@@ -2,7 +2,7 @@ import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
 /** @jsxImportSource @emotion/react */
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
 import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 

@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material'
 import { uniq } from 'lodash-es'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'

@@ -1,5 +1,4 @@
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'

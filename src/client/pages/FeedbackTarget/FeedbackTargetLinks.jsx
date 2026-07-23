@@ -1,7 +1,6 @@
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 import { Stack } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import LinkButton from '../../components/common/LinkButton'

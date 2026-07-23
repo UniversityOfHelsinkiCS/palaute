@@ -1,5 +1,4 @@
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import React from 'react'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { inProduction } from '../../util/common'

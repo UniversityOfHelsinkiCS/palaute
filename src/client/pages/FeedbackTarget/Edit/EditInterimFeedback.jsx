@@ -1,6 +1,6 @@
 import { SettingsOutlined } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 

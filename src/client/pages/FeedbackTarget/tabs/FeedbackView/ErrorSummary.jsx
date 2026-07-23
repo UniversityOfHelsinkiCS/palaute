@@ -1,5 +1,5 @@
 import { Alert, AlertTitle, List, ListItem, Button } from '@mui/material'
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../../../util/accessibility'

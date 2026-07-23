@@ -1,6 +1,5 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../util/common'

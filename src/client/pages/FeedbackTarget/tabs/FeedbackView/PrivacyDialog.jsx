@@ -1,5 +1,4 @@
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import LinkButton from '../../../../components/common/LinkButton'

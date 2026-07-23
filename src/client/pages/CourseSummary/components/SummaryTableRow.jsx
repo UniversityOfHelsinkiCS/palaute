@@ -1,7 +1,6 @@
 import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { format, isValid } from 'date-fns'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams, Link } from 'react-router-dom'
 

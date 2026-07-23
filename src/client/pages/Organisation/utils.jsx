@@ -1,5 +1,4 @@
 import { format, parseISO } from 'date-fns'
-import React from 'react'
 import * as Yup from 'yup'
 
 export const getUpperLevelQuestions = survey =>

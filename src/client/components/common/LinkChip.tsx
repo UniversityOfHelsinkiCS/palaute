@@ -1,7 +1,6 @@
 import type { ChipProps, Theme } from '@mui/material'
 
 import { Chip } from '@mui/material'
-import React from 'react'
 import { Link } from 'react-router-dom'
 
 import { mergeSx } from '../../util/sx'

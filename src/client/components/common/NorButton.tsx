@@ -1,6 +1,6 @@
 import { ButtonProps } from '@mui/material'
 import Button from '@mui/material/Button'
-import React, { forwardRef, ReactNode } from 'react'
+import { forwardRef, ReactNode } from 'react'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'

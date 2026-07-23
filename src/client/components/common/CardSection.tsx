@@ -2,7 +2,6 @@ import type { SxProps, Theme } from '@mui/material'
 import type { ReactNode } from 'react'
 
 import { Box, Card, CardContent, Typography } from '@mui/material'
-import React from 'react'
 
 type CardSectionProps = {
   title: string

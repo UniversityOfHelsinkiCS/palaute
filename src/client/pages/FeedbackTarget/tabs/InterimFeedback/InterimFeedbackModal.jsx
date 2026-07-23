@@ -2,7 +2,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import { Dialog, Box, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'

@@ -1,6 +1,5 @@
 import { Box, Dialog, Grid2 as Grid, DialogTitle } from '@mui/material'
 import { Form, Formik } from 'formik'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import FormikDatePicker from '../../../../components/common/FormikDatePicker'

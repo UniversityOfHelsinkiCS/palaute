@@ -1,7 +1,6 @@
 import type { TooltipProps } from '@mui/material'
 
 import { styled, Tooltip, tooltipClasses } from '@mui/material'
-import React from 'react'
 
 const PaperTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />

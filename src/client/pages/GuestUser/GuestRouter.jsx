@@ -1,5 +1,5 @@
 import { Container } from '@mui/material'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { Navigate, useParams } from 'react-router'
 import { Route, Routes, useLocation } from 'react-router-dom'
 

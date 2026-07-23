@@ -1,5 +1,4 @@
 import { Box, Tab, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes } from 'react-router'
 import { Link } from 'react-router-dom'

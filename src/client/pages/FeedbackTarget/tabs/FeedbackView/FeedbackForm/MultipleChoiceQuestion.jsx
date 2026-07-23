@@ -1,6 +1,5 @@
 import { FormControl, FormGroup, FormControlLabel, Checkbox, FormHelperText } from '@mui/material'
 import { useField } from 'formik'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'

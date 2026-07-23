@@ -1,6 +1,6 @@
 import { uniq } from 'lodash-es'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'

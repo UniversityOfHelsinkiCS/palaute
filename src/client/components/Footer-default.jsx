@@ -1,6 +1,5 @@
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
 import { formatDistanceToNow } from 'date-fns/esm'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { images, inProduction, inStaging } from '../util/common'

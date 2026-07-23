@@ -3,7 +3,6 @@ import type { LanguageId } from '@common/types/common'
 
 import { Close } from '@mui/icons-material'
 import { Box, Grid2 as Grid, Paper } from '@mui/material'
-import React from 'react'
 
 import { getLanguageValue } from '../../util/languageUtils'
 import Markdown from './Markdown'

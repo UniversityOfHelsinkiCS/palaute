@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 import { useField } from 'formik'
-import React from 'react'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'

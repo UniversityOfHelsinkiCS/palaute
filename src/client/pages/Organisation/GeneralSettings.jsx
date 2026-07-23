@@ -11,7 +11,7 @@ import {
   Stack,
 } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 

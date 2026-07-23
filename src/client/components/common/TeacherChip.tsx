@@ -2,7 +2,6 @@ import type { User } from '@common/types/user'
 import type { SxProps, Theme } from '@mui/material'
 
 import { Chip, Tooltip } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'

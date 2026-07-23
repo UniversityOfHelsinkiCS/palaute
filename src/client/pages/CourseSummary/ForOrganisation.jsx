@@ -1,5 +1,4 @@
 import { Box, LinearProgress } from '@mui/material'
-import React from 'react'
 
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import { useSummaries } from './api'

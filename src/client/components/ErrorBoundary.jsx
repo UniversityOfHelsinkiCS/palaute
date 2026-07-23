@@ -1,6 +1,6 @@
 import { Container } from '@mui/material'
 import * as Sentry from '@sentry/browser'
-import React, { Component } from 'react'
+import { Component } from 'react'
 
 import { NorButton } from './common/NorButton'
 

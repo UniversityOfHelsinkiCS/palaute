@@ -1,5 +1,5 @@
 import { Box, Grid2 as Grid, Typography } from '@mui/material'
-import React, { forwardRef, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../common/FormikTextField'

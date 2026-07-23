@@ -1,6 +1,5 @@
 import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'

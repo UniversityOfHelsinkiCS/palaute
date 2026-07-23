@@ -1,6 +1,6 @@
 import { Box, CircularProgress, Typography, TextField, Alert } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { writeFileXLSX, utils } from 'xlsx'
 
 import { NorButton } from '../../../../components/common/NorButton'

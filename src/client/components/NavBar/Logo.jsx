@@ -1,7 +1,6 @@
 import Box from '@mui/material/Box'
 /** @jsxImportSource @emotion/react */
 import merge from 'lodash/merge'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

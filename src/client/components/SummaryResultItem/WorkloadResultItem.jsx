@@ -1,7 +1,6 @@
 import ArrowIcon from '@mui/icons-material/TrendingFlat'
 import { Box } from '@mui/material'
 import { sumBy, isEmpty, round, orderBy } from 'lodash-es'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { WORKLOAD_QUESTION_ID_ORDER } from '../../util/common'

@@ -3,7 +3,6 @@ import type { LinkProps, Theme } from '@mui/material'
 import ExternalLinkIcon from '@mui/icons-material/OpenInNew'
 import { Link, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const styles = {

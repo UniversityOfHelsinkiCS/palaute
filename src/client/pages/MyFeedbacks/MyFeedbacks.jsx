@@ -1,6 +1,6 @@
 import { Typography, Alert, Box } from '@mui/material'
 import qs from 'qs'
-import React, { useMemo, Fragment } from 'react'
+import { useMemo, Fragment } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useLocation } from 'react-router-dom'
 

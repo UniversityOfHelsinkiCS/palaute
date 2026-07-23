@@ -1,5 +1,3 @@
-import React from 'react'
-
 import Markdown from '../../../../../components/common/Markdown'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'

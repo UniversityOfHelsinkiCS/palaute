@@ -1,7 +1,7 @@
 import { Box, Switch, FormGroup, FormControlLabel, Alert, TextField } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import CardSection from '../../../../components/common/CardSection'

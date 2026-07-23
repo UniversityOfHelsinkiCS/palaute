@@ -1,7 +1,6 @@
 import DownIcon from '@mui/icons-material/KeyboardArrowDown'
 import UpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { IconButton, Tooltip, Box } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled }) => {

@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { getLanguageValue } from '../../util/languageUtils'
 import Markdown from '../common/Markdown'
 

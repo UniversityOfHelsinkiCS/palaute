@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import * as Sentry from '@sentry/browser'
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import DevTools from '../components/DevTools'

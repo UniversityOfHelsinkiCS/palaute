@@ -1,5 +1,4 @@
 import { Box, Typography, Grid2 as Grid, Stack, Divider, Link } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { TagChip } from '../../components/common/TagChip'

@@ -1,5 +1,4 @@
 import { Box, Container, Divider, Grid, Link, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { inProduction, inStaging } from '../util/common'

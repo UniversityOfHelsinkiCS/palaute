@@ -1,5 +1,3 @@
-import React from 'react'
-
 import LikertResultItem from './LikertResultItem'
 import ResultItemBase from './ResultItemBase'
 import WorkloadResultItem from './WorkloadResultItem'

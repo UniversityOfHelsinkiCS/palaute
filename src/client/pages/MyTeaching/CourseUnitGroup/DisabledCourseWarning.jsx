@@ -1,6 +1,5 @@
 import WarningAmberIcon from '@mui/icons-material/WarningAmber'
 import { Box, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const DisabledCourseWarning = () => {

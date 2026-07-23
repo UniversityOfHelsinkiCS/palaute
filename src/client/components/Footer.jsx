@@ -1,5 +1,3 @@
-import React from 'react'
-
 import { CUSTOM_FOOTER_COMPONENT } from '../util/common'
 import DefaultFooter from './Footer-default'
 import TauFooter from './Footer-tau'

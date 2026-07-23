@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 import type { IntersectionOptions } from 'react-intersection-observer'
 
 import { Container, Paper } from '@mui/material'
-import React from 'react'
 import { useInView } from 'react-intersection-observer'
 
 const styles = {

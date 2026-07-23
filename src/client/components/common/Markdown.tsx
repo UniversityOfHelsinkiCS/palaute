@@ -3,7 +3,6 @@ import type { ComponentProps } from 'react'
 import type { Components, ExtraProps } from 'react-markdown'
 
 import { Link, Typography } from '@mui/material'
-import React from 'react'
 import ReactMarkdown from 'react-markdown'
 
 import { mergeSx } from '../../util/sx'

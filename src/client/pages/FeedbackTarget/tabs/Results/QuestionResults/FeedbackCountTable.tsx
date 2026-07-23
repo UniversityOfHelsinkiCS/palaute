@@ -13,7 +13,6 @@ import {
   Box,
 } from '@mui/material'
 import { addHours, startOfDay, differenceInCalendarDays, parseISO } from 'date-fns'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../../../../util/accessibility'

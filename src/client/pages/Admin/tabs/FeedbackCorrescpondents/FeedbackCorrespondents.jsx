@@ -1,5 +1,4 @@
 import { Box, Chip, Typography } from '@mui/material'
-import React from 'react'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import useQuery from '../../../../hooks/useQuery'

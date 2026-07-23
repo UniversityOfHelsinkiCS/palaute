@@ -1,6 +1,5 @@
 import { Box, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import React from 'react'
 
 import { OpenFeedbackContainer } from '../OpenFeedback/OpenFeedback'
 

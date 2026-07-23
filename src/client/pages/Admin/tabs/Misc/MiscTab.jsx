@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import React from 'react'
 
 import { NorButton } from '../../../../components/common/NorButton'
 import apiClient from '../../../../util/apiClient'

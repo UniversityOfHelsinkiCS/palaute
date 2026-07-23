@@ -2,7 +2,7 @@ import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
 import { Box, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
 import { lightFormat, parseISO } from 'date-fns'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

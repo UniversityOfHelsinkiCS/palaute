@@ -2,7 +2,7 @@ import { EditOutlined, FileCopyOutlined } from '@mui/icons-material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 import { useField } from 'formik'
-import React, { useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'

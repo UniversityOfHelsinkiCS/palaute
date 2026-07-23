@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../util/apiClient'

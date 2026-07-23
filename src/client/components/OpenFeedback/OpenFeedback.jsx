@@ -1,7 +1,6 @@
 import { DeleteForever, Visibility, VisibilityOff } from '@mui/icons-material'
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'

@@ -1,6 +1,5 @@
 import { FormHelperText } from '@mui/material'
 import { useField } from 'formik'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../../../../../components/common/FormikTextField'

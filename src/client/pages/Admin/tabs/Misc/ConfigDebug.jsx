@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import React from 'react'
 
 import apiClient from '../../../../util/apiClient'
 

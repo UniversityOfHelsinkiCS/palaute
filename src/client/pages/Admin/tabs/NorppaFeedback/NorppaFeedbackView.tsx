@@ -2,7 +2,7 @@ import { AddAlertOutlined, Undo } from '@mui/icons-material'
 import { Box, Paper, Typography, IconButton, FormControlLabel, Checkbox, Alert } from '@mui/material'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'

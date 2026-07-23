@@ -1,6 +1,5 @@
 import { Box, ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
 import { parseISO } from 'date-fns'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 

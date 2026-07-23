@@ -3,7 +3,6 @@ import type { ReactNode } from 'react'
 
 import { Switch, FormControlLabel } from '@mui/material'
 import { useField } from 'formik'
-import React from 'react'
 
 import { switchFocusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'

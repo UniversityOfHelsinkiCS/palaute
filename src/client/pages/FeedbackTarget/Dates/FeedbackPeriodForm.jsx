@@ -1,7 +1,7 @@
 import { WarningAmber } from '@mui/icons-material'
 import { Box, Tooltip, Link, Alert } from '@mui/material'
 import { Formik, Form } from 'formik'
-import React, { useState, useRef } from 'react'
+import { useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
 import CardSection from '../../../components/common/CardSection'

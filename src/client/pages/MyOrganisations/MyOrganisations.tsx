@@ -1,5 +1,4 @@
 import { Box, Typography, Card, CardActionArea, Chip } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

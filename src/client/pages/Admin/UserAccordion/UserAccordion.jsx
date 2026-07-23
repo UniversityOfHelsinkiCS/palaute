@@ -16,7 +16,6 @@ import {
 } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { format } from 'date-fns'
-import React from 'react'
 
 import { NorButton } from '../../../components/common/NorButton'
 import useUserDetails from '../../../hooks/useUserDetails'

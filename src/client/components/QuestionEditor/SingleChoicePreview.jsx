@@ -1,5 +1,4 @@
 import { RadioGroup, FormControlLabel, Radio } from '@mui/material'
-import React from 'react'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import { getLanguageValue } from '../../util/languageUtils'

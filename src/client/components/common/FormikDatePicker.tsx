@@ -3,7 +3,6 @@ import type { DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 import { TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useField, useFormikContext } from 'formik'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 type FormikDatePickerProps = Omit<

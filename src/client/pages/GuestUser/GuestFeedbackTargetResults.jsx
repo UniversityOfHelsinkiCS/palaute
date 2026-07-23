@@ -1,7 +1,7 @@
 import BarChartIcon from '@mui/icons-material/BarChart'
 import TableRowsIcon from '@mui/icons-material/TableRows'
 import { Box, Alert, Tooltip } from '@mui/material'
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, Navigate } from 'react-router-dom'
 

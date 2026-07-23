@@ -1,5 +1,4 @@
 import { Box } from '@mui/material'
-import React from 'react'
 import { useParams } from 'react-router'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'

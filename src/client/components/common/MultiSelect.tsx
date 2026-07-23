@@ -1,6 +1,5 @@
 import { Close } from '@mui/icons-material'
 import { Box, Checkbox, Chip, FormControl, IconButton, InputLabel, ListItemText, MenuItem, Select } from '@mui/material'
-import React from 'react'
 
 import { generate } from '../../util/randomColor'
 

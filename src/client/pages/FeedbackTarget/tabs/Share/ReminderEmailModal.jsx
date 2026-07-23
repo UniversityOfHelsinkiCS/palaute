@@ -1,6 +1,6 @@
 import { Box, Typography, Modal, TextField } from '@mui/material'
 import { differenceInHours } from 'date-fns'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../../../components/common/NorButton'

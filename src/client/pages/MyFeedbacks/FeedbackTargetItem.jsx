@@ -5,7 +5,7 @@ import FeedbackClosedIcon from '@mui/icons-material/Lock'
 import { Box, ListItemText, Chip, Dialog, DialogTitle, ListItem, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 

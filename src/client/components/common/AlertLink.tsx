@@ -2,7 +2,6 @@ import type { LinkProps, Theme } from '@mui/material'
 
 import { Link, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { mergeSx } from '../../util/sx'

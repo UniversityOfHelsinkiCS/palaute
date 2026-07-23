@@ -1,7 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { countBy, round } from 'lodash-es'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { getArrow } from '../../../../../components/SummaryResultItem/WorkloadResultItem'

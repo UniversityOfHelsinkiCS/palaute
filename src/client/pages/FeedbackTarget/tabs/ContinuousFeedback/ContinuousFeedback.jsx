@@ -2,7 +2,7 @@ import { keyframes } from '@emotion/react'
 import { DeleteForever } from '@mui/icons-material'
 import { Box, Typography, Alert, IconButton } from '@mui/material'
 import { format } from 'date-fns'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 

@@ -1,6 +1,5 @@
 import { ExpandMore } from '@mui/icons-material'
 import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, Typography } from '@mui/material'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import TeacherChip from '../../../components/common/TeacherChip'

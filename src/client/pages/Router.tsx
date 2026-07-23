@@ -1,5 +1,5 @@
 import { Container, type SxProps, type Theme } from '@mui/material'
-import React, { Suspense } from 'react'
+import { Suspense } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'

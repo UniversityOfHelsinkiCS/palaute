@@ -1,5 +1,4 @@
 import { Snackbar } from '@mui/material'
-import React from 'react'
 
 import { NorButton } from '../common/NorButton'
 

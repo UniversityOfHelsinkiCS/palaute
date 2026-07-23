@@ -2,7 +2,7 @@ import { Add } from '@mui/icons-material'
 import { Alert, Box } from '@mui/material'
 import { addDays } from 'date-fns'
 import { useSnackbar } from 'notistack'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams, useNavigate } from 'react-router-dom'
 
