@@ -59,4 +59,4 @@ Use appropriate TypeScript types for Express request and response objects: `Auth
 After conversion, run the following in order and fix any errors that come up:
 
 1. `npx oxlint --type-check --fix src/server` (backend) or `npx oxlint --type-check --fix src/client` (frontend) — catches type errors and lint issues in one pass
-2. `npx prettier --write <converted-file-path>`
+2. `npx oxfmt <converted-file-path>`
