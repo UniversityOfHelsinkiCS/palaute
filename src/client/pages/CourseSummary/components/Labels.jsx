@@ -1,14 +1,14 @@
+import { Box, CircularProgress, Link, Tooltip, Typography } from '@mui/material'
+import { grey } from '@mui/material/colors'
+import { useIsFetching } from '@tanstack/react-query'
+import { lightFormat } from 'date-fns'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { grey } from '@mui/material/colors'
-
-import { useIsFetching } from '@tanstack/react-query'
-import { Box, CircularProgress, Link, Tooltip, Typography } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
-import { lightFormat } from 'date-fns'
-import { getLanguageValue } from '../../../util/languageUtils'
+
 import TeacherChip from '../../../components/common/TeacherChip'
 import { getDateRangeString } from '../../../util/getDateRangeString'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 export const TeacherChips = ({ teachers, responsibleTeachers, administrativePersons }) => {
   const { t } = useTranslation()

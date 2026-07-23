@@ -1,13 +1,14 @@
-import React from 'react'
-import { useSnackbar } from 'notistack'
-import { useTranslation } from 'react-i18next'
 import { uniq } from 'lodash-es'
+import { useSnackbar } from 'notistack'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
+import useUpdateTeacherSurvey from '../../hooks/useUpdateTeacherSurvey'
+import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
 import { validateQuestions } from './utils'
-import { getFormInitialValues } from './getFormInitialValues'
-import useInteractiveMutation from '../../hooks/useInteractiveMutation'
-import useUpdateTeacherSurvey from '../../hooks/useUpdateTeacherSurvey'
 
 const TeacherSurvey = ({ feedbackTarget }) => {
   const { t } = useTranslation()

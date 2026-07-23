@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import type { ReactNode } from 'react'
-import { Alert, Box, Collapse, IconButton, Typography, Tooltip } from '@mui/material'
 import type { AlertProps, CollapseProps, IconButtonProps, SxProps, Theme } from '@mui/material'
+import type { ReactNode } from 'react'
+
 import { ExpandMore, ExpandLess } from '@mui/icons-material'
+import { Alert, Box, Collapse, IconButton, Typography, Tooltip } from '@mui/material'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'
 

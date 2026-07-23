@@ -1,5 +1,4 @@
-import React from 'react'
-import { addHours, startOfDay, differenceInCalendarDays, parseISO } from 'date-fns'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import {
   Table,
   TableBody,
@@ -13,11 +12,13 @@ import {
   AccordionDetails,
   Box,
 } from '@mui/material'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import { addHours, startOfDay, differenceInCalendarDays, parseISO } from 'date-fns'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { focusIndicatorStyle } from '../../../../../util/accessibility'
 import { localeForLanguage } from '../../../../../util/languageUtils'
 import { capitalizeString } from './utils'
-import { focusIndicatorStyle } from '../../../../../util/accessibility'
 
 const groupFeedbacksByDay = (feedbacks: Array<{ createdAt: string }>) => {
   const byDayObj: Record<number, number> = {}

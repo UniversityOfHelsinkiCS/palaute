@@ -1,10 +1,11 @@
 import * as Sentry from '@sentry/node'
 import { Op } from 'sequelize'
+
 import { sequelize } from '../../db/dbConnection'
 import { Organisation, OrganisationFeedbackCorrespondent, User } from '../../models'
 import { normalizeOrganisationCode } from '../../util/common'
-import { logger } from '../../util/logger'
 import { FEEDBACK_CORRESPONDENT_SPECIAL_GROUP } from '../../util/config'
+import { logger } from '../../util/logger'
 
 export const updateFeedbackCorrespondent = async (user: User): Promise<void> => {
   // Update feedback correspondents of user

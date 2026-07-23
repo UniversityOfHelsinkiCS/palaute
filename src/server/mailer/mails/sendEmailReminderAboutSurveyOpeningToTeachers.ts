@@ -1,7 +1,9 @@
-import { addDays, format } from 'date-fns'
 import { LanguageId } from '@common/types/common'
+import { addDays, format } from 'date-fns'
 import { Op } from 'sequelize'
+
 import { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User, Summary } from '../../models'
+import { getOrCreateTeacherSurvey } from '../../services/surveys'
 import {
   TEACHER_REMINDER_DAYS_TO_OPEN,
   PUBLIC_URL,
@@ -9,11 +11,10 @@ import {
   SHOW_COURSE_CODES_WITH_COURSE_NAMES,
   FEEDBACK_HIDDEN_STUDENT_COUNT,
 } from '../../util/config'
-import { pate } from '../pateClient'
-import { createRecipientsForFeedbackTargets, OpeningEmailInfo } from './util'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
-import { getOrCreateTeacherSurvey } from '../../services/surveys'
+import { pate } from '../pateClient'
+import { createRecipientsForFeedbackTargets, OpeningEmailInfo } from './util'
 
 export const getFeedbackTargetsAboutToOpenForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({

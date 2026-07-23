@@ -1,10 +1,10 @@
+import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
+import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, IconButton, Tooltip, Typography } from '@mui/material'
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
-import { useSummaryContext } from '../context'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'
+import { useSummaryContext } from '../context'
 
 const AngledHeading = ({ label, isActive }) => (
   <Tooltip title={label} placement="bottom">

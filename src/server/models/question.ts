@@ -1,3 +1,5 @@
+import type { Question as QuestionDTO, QuestionData, QuestionSecondaryType, QuestionType } from '@common/types/question'
+
 import {
   Model,
   JSONB,
@@ -8,7 +10,7 @@ import {
   CreationOptional,
   INTEGER,
 } from 'sequelize'
-import type { Question as QuestionDTO, QuestionData, QuestionSecondaryType, QuestionType } from '@common/types/question'
+
 import { sequelize } from '../db/dbConnection'
 import { WORKLOAD_QUESTION_ID } from '../util/config'
 

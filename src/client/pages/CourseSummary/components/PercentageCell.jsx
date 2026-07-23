@@ -1,6 +1,6 @@
+import { Box, Chip, Tooltip } from '@mui/material'
 import React from 'react'
 import { Link } from 'react-router'
-import { Box, Chip, Tooltip } from '@mui/material'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'
 

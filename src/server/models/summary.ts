@@ -11,6 +11,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 export type SummaryResult = {

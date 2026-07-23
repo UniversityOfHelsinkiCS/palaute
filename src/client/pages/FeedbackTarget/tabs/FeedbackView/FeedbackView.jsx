@@ -1,31 +1,27 @@
-import React, { useState } from 'react'
-/** @jsxImportSource @emotion/react */
-
-import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
-
 import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
-import { useTranslation, Trans } from 'react-i18next'
+/** @jsxImportSource @emotion/react */
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
-import { NorButton } from '../../../../components/common/NorButton'
+import React, { useState } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 
-import FeedbackForm from './FeedbackForm'
-import { QuestionLanguageProvider } from '../../../../util/questionLanguageContext'
+import AlertLink from '../../../../components/common/AlertLink'
+import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import { NorButton } from '../../../../components/common/NorButton'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
+import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
+import { QuestionLanguageProvider } from '../../../../util/questionLanguageContext'
+import ConfirmGivingFeedbackDialog from '../../../MyFeedbacks/ConfirmGivingFeedbackDialog'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import { ConsentCheckbox } from './ConsentCheckbox'
+import ErrorSummary from './ErrorSummary'
+import FeedbackForm from './FeedbackForm'
 import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
-import AlertLink from '../../../../components/common/AlertLink'
-import ErrorSummary from './ErrorSummary'
-
 import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedbackOpen, useSaveValues } from './utils'
-
-import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
-import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING, FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
-import ConfirmGivingFeedbackDialog from '../../../MyFeedbacks/ConfirmGivingFeedbackDialog'
-import { ConsentCheckbox } from './ConsentCheckbox'
 
 const FormContainer = ({
   onSubmit,

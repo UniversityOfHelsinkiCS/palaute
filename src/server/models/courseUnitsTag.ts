@@ -1,4 +1,5 @@
 import { Model, INTEGER, STRING, DATE, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 import { CourseUnit } from './courseUnit'
 

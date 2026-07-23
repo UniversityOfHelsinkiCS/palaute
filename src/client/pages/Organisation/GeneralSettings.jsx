@@ -1,5 +1,3 @@
-import React, { useState } from 'react'
-
 import {
   Card,
   CardContent,
@@ -12,21 +10,21 @@ import {
   Typography,
   Stack,
 } from '@mui/material'
-
 import { useMutation } from '@tanstack/react-query'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
-import { getStudentListVisibility } from './utils'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
+import useOrganisation from '../../hooks/useOrganisation'
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import apiClient from '../../util/apiClient'
-import queryClient from '../../util/queryClient'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
-import FeedbackCorrespondent from './FeedbackCorrespondent'
-import CourseSettings from './CourseSettings'
-import useOrganisation from '../../hooks/useOrganisation'
-import Tags from './Tags'
 import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/common'
+import queryClient from '../../util/queryClient'
+import CourseSettings from './CourseSettings'
+import FeedbackCorrespondent from './FeedbackCorrespondent'
+import Tags from './Tags'
+import { getStudentListVisibility } from './utils'
 
 const radioButtonStyle = {
   ml: 1,

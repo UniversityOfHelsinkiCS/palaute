@@ -1,3 +1,5 @@
+import type { LocalizedString } from '@common/types/common'
+
 import {
   Model,
   JSONB,
@@ -10,16 +12,17 @@ import {
   DATE,
   NonAttribute,
 } from 'sequelize'
-import type { LocalizedString } from '@common/types/common'
-import { sequelize } from '../db/dbConnection'
-import { logger } from '../util/logger'
-import type Summary from './summary'
-import type { SummaryAttributes } from './summary'
-import { Organisation } from './organisation'
+
 import type { CourseRealisation } from './courseRealisation'
 import type { FeedbackTarget } from './feedbackTarget'
+import type Summary from './summary'
+import type { SummaryAttributes } from './summary'
 import type { Tag } from './tag'
+
+import { sequelize } from '../db/dbConnection'
+import { logger } from '../util/logger'
 import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
+import { Organisation } from './organisation'
 
 export type CourseUnitValidityPeriod = {
   startDate: Date

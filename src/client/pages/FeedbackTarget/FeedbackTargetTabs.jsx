@@ -1,7 +1,6 @@
+import { Tab, Tooltip, Box, Paper, Tabs } from '@mui/material'
 import React, { useMemo } from 'react'
 import { useLocation, Link } from 'react-router-dom'
-
-import { Tab, Tooltip, Box, Paper, Tabs } from '@mui/material'
 
 import { handleTabKeyDown } from '../../components/common/utils'
 

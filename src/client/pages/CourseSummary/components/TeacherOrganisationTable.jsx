@@ -1,16 +1,17 @@
-import React from 'react'
-import { Box, Typography, TableContainer, Table, TableBody, CircularProgress, Button } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import { orderBy } from 'lodash-es'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Box, Typography, TableContainer, Table, TableBody, CircularProgress, Button } from '@mui/material'
 import { useIsFetching } from '@tanstack/react-query'
+import { orderBy } from 'lodash-es'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSummaryContext } from '../context'
+
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
-import { OrganisationLink } from './OrganisationLink'
-import { getLanguageValue } from '../../../util/languageUtils'
-import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
 import { focusIndicatorStyle } from '../../../util/accessibility'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { useSummaryContext } from '../context'
+import { OrganisationLink } from './OrganisationLink'
+import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
 
 const styles = {
   titleContainer: {

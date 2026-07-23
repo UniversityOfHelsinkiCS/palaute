@@ -1,5 +1,5 @@
-import { countBy, flatMap, sumBy } from 'lodash-es'
 import { useTheme } from '@mui/material'
+import { countBy, flatMap, sumBy } from 'lodash-es'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { getColor } from '../../../../../util/resultColors'

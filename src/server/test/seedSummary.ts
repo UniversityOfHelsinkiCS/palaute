@@ -1,4 +1,5 @@
 import { startOfDay, subDays } from 'date-fns'
+
 import {
   Organisation,
   CourseUnit,
@@ -11,9 +12,9 @@ import {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
 } from '../models'
+import { buildSummaries } from '../services/summary/buildSummaries'
 import { getUniversitySurvey } from '../services/surveys'
 import { createTestObject } from './utils'
-import { buildSummaries } from '../services/summary/buildSummaries'
 
 const CURRENT_YEAR = new Date().getFullYear()
 

@@ -1,12 +1,12 @@
-import React from 'react'
-
 import { Box, Container, Typography, Card, CardContent } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { getLanguageValue } from '../../util/languageUtils'
-import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
-import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
+
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
 import useNoadUser from '../../hooks/useNoadUser'
+import { getLanguageValue } from '../../util/languageUtils'
+import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
 
 const styles = {
   heading: {

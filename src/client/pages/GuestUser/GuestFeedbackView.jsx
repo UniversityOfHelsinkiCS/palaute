@@ -1,21 +1,20 @@
-import React, { useState } from 'react'
-/** @jsxImportSource @emotion/react */
-
-import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 import { Box, Card, CardContent, Alert } from '@mui/material'
-import { useTranslation, Trans } from 'react-i18next'
+/** @jsxImportSource @emotion/react */
 import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
-import FeedbackForm from '../FeedbackTarget/tabs/FeedbackView/FeedbackForm'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
+import React, { useState } from 'react'
+import { useTranslation, Trans } from 'react-i18next'
+import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 
 import AlertLink from '../../components/common/AlertLink'
-import ErrorSummary from '../FeedbackTarget/tabs/FeedbackView/ErrorSummary'
-
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { NorButton } from '../../components/common/NorButton'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import ErrorSummary from '../FeedbackTarget/tabs/FeedbackView/ErrorSummary'
+import FeedbackForm from '../FeedbackTarget/tabs/FeedbackView/FeedbackForm'
+import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 import {
   makeValidate,
   getInitialValues,
@@ -23,10 +22,7 @@ import {
   formatDate,
   checkIsFeedbackOpen,
 } from '../FeedbackTarget/tabs/FeedbackView/utils'
-
 import { saveValues } from './utils'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { NorButton } from '../../components/common/NorButton'
 
 const FormContainer = ({
   onSubmit,

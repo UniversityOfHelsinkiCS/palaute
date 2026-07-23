@@ -1,14 +1,12 @@
+import { uniq } from 'lodash-es'
+import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { uniq } from 'lodash-es'
-
-import { useSnackbar } from 'notistack'
-
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
-import QuestionEditor from './QuestionEditor'
-import { getFormInitialValues } from './getFormInitialValues'
 import apiClient from '../../util/apiClient'
+import { getFormInitialValues } from './getFormInitialValues'
+import QuestionEditor from './QuestionEditor'
 
 const saveSurveyValues = async (values, surveyId) => {
   const { questions } = values

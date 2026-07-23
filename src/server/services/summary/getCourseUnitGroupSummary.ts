@@ -1,4 +1,7 @@
 import _ from 'lodash'
+
+import type { SummaryAttributes } from '../../models/summary'
+
 import {
   CourseUnit,
   FeedbackTarget,
@@ -8,13 +11,12 @@ import {
   UserFeedbackTarget,
   User,
 } from '../../models'
-import type { SummaryAttributes } from '../../models/summary'
-import { sumSummaries, getScopedSummary } from './utils'
-import { getAccessibleCourseRealisationIds } from './access'
+import { Survey } from '../../models/survey'
 import { ApplicationError } from '../../util/ApplicationError'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 import { getAllUniversitySurveys } from '../surveys'
-import { Survey } from '../../models/survey'
+import { getAccessibleCourseRealisationIds } from './access'
+import { sumSummaries, getScopedSummary } from './utils'
 
 type GetCourseUnitGroupSummaryParams = {
   user: User

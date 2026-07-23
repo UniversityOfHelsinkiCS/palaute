@@ -1,10 +1,10 @@
+import { Box } from '@mui/material'
 import React from 'react'
 
-import { Box } from '@mui/material'
 import LikertQuestion from './LikertQuestion'
+import MultipleChoiceQuestion from './MultipleChoiceQuestion'
 import OpenQuestion from './OpenQuestion'
 import SingleChoiceQuestion from './SingleChoiceQuestion'
-import MultipleChoiceQuestion from './MultipleChoiceQuestion'
 import Text from './Text'
 
 const componentByType = {

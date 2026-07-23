@@ -1,10 +1,11 @@
-import React from 'react'
-import { Dialog } from '@mui/material'
 import { SettingsOutlined } from '@mui/icons-material'
+import { Dialog } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { NorButton } from '../../../components/common/NorButton'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
 import FeedbackPeriodForm from './FeedbackPeriodForm'
-import { NorButton } from '../../../components/common/NorButton'
 
 const EditFeedbackTargetDates = () => {
   const { t } = useTranslation()

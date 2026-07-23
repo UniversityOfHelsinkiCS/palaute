@@ -1,5 +1,7 @@
-import React, { useRef, useState } from 'react'
-
+import { PersonOutlined } from '@mui/icons-material'
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
+import MailOutlineIcon from '@mui/icons-material/MailOutline'
+import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
   Toolbar,
@@ -16,26 +18,22 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { uniq } from 'lodash-es'
-
-import { Link, useLocation, matchPath } from 'react-router-dom'
+import React, { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link, useLocation, matchPath } from 'react-router-dom'
 
-import MenuIcon from '@mui/icons-material/Menu'
-import { PersonOutlined } from '@mui/icons-material'
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
-import MailOutlineIcon from '@mui/icons-material/MailOutline'
-import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import Logo from './Logo'
-import { handleLogout } from './utils'
-import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
-import useLocalStorageState from '../../hooks/useLocalStorageState'
-import UserPermissionsWindow from './UserPermissionsWindow'
+import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import useIsMobile from '../../hooks/useIsMobile'
-import Banner from '../common/Banner'
-import { LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/common'
-import useWaitingFeedbackCount from './useWaitingFeedbackCount'
+import useLocalStorageState from '../../hooks/useLocalStorageState'
+import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/common'
+import Banner from '../common/Banner'
+import Logo from './Logo'
+import UserPermissionsWindow from './UserPermissionsWindow'
+import useWaitingFeedbackCount from './useWaitingFeedbackCount'
+import { handleLogout } from './utils'
 
 const whiteFocusIndicatorStyle = focusIndicatorStyle({ color: 'white' })
 

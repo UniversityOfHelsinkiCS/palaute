@@ -1,7 +1,9 @@
-import axios, { AxiosHeaders } from 'axios'
 import type { InternalAxiosRequestConfig } from 'axios'
-import { getHeaders } from './mockHeaders'
+
+import axios, { AxiosHeaders } from 'axios'
+
 import { basePath, inProduction, inE2EMode } from './common'
+import { getHeaders } from './mockHeaders'
 
 const apiClient = axios.create({ baseURL: `${basePath}/api` })
 const getNoadUrl = (url?: string) => `/noad${url}`

@@ -1,6 +1,7 @@
 import { addYears, subYears, subDays } from 'date-fns'
-import { startOfStudyYear } from './startOfStudyYear'
+
 import { STUDY_YEAR_START_MONTH } from './common'
+import { startOfStudyYear } from './startOfStudyYear'
 
 type Year = {
   start: Date

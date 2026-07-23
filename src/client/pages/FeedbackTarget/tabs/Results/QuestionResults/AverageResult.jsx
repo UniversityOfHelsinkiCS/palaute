@@ -1,11 +1,12 @@
-import React from 'react'
-import { useTranslation } from 'react-i18next'
-import { countBy, round } from 'lodash-es'
 import { Box, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import { getColor } from '../../../../../util/resultColors'
+import { countBy, round } from 'lodash-es'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { getArrow } from '../../../../../components/SummaryResultItem/WorkloadResultItem'
 import { getLanguageValue } from '../../../../../util/languageUtils'
+import { getColor } from '../../../../../util/resultColors'
 
 const styles = {
   resultItem: {

@@ -1,5 +1,6 @@
-import { Op } from 'sequelize'
 import _ from 'lodash'
+import { Op } from 'sequelize'
+
 import { OrganisationLog, Organisation, Question, User } from '../../models'
 
 const createFromData = async (organisationId: string, user: User, data: object) => {

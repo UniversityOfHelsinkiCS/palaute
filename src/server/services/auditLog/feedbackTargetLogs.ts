@@ -1,4 +1,5 @@
 import _ from 'lodash'
+
 import { Question, FeedbackTargetLog, FeedbackTarget, User } from '../../models'
 
 const createFromData = async (feedbackTargetId: number, user: User, data: object) => {

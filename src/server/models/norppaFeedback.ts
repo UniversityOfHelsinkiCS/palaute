@@ -9,6 +9,7 @@ import {
   Model,
   STRING,
 } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class NorppaFeedback extends Model<InferAttributes<NorppaFeedback>, InferCreationAttributes<NorppaFeedback>> {

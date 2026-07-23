@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-
+import { Edit } from '@mui/icons-material'
 import {
   Switch,
   Box,
@@ -17,22 +16,22 @@ import {
   IconButton,
   Link as MuiLink,
 } from '@mui/material'
-import { Edit } from '@mui/icons-material'
-import { useTranslation } from 'react-i18next'
 import { useMutation } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams, Link } from 'react-router-dom'
 
-import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
-import apiClient from '../../util/apiClient'
-import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { TagChip } from '../../components/common/TagChip'
-import CourseUnitTagSelector from './CourseUnitTagSelector'
+import useOrganisation from '../../hooks/useOrganisation'
+import useOrganisationCourseUnits from '../../hooks/useOrganisationCourseUnits'
+import { switchFocusIndicatorStyle } from '../../util/accessibility'
+import apiClient from '../../util/apiClient'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
 import { getLanguageValue } from '../../util/languageUtils'
 import queryClient from '../../util/queryClient'
-import { getSafeCourseCode } from '../../util/courseIdentifiers'
-import { switchFocusIndicatorStyle } from '../../util/accessibility'
+import CourseUnitTagSelector from './CourseUnitTagSelector'
 
 const getCourseUnitItems = (courseUnits, disabledCourseCodes, studentListVisibleCourseCodes, language = 'en') =>
   (courseUnits ?? []).map(({ id, courseCode, name, tags }) => ({

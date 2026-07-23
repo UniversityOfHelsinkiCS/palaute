@@ -1,7 +1,7 @@
+import { FeedbackTarget } from '../../models'
 import { getProgrammeSurveysByCourseUnit } from './programmeSurvey'
 import { getOrCreateTeacherSurvey } from './teacherSurvey'
 import { getUniversitySurvey } from './universitySurvey'
-import { FeedbackTarget } from '../../models'
 
 export const getFeedbackTargetSurveys = async (feedbackTarget: FeedbackTarget) => {
   const opensAt =

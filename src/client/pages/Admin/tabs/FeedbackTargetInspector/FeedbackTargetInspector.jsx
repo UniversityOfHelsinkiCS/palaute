@@ -1,15 +1,13 @@
-import React from 'react'
-
 import { Box, Checkbox, FormControlLabel } from '@mui/material'
 import { debounce } from 'lodash-es'
+import React from 'react'
 
-import apiClient from '../../../../util/apiClient'
 import useHistoryState from '../../../../hooks/useHistoryState'
-
-import LocalesSearchField from '../../Inspector/LocalesSearchField'
+import apiClient from '../../../../util/apiClient'
 import InspectorResults from '../../Inspector/InspectorResults'
-import { parseDates } from '../../Inspector/utils'
+import LocalesSearchField from '../../Inspector/LocalesSearchField'
 import TextSearchField from '../../Inspector/TextSearchField'
+import { parseDates } from '../../Inspector/utils'
 
 const FeedbackTargetInspector = () => {
   const [potentialFeedbackTargets, setPotentialFeedbackTargets] = useHistoryState('potentialFeedbacktargets', [])

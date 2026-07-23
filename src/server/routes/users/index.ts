@@ -1,6 +1,7 @@
 import { Router } from 'express'
-import { router as userRouter } from './userController'
+
 import { router as pinsRouter } from './pinsController'
+import { router as userRouter } from './userController'
 
 const router = Router()
 router.use(pinsRouter)

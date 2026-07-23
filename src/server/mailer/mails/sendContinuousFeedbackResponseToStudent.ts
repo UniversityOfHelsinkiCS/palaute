@@ -2,9 +2,9 @@ import { format } from 'date-fns'
 
 import { ContinuousFeedback, FeedbackTarget, CourseRealisation, User, CourseUnit } from '../../models'
 import { PUBLIC_URL } from '../../util/config'
-import { pate } from '../pateClient'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
+import { pate } from '../pateClient'
 
 const getStudentWithContinuousFeedbackResponse = async (continuousFeedbackId: number) => {
   const continuousFeedback = await ContinuousFeedback.findByPk(continuousFeedbackId, {

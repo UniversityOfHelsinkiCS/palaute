@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 
-import { INTERIM_FEEDBACKS_ENABLED } from '../../../../util/common'
 import apiClient from '../../../../util/apiClient'
+import { INTERIM_FEEDBACKS_ENABLED } from '../../../../util/common'
 
 export const useInterimFeedbackParent = (interimFbtId, enable = true) => {
   const queryFn = async () => {

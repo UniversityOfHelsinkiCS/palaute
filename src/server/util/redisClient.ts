@@ -1,7 +1,8 @@
-import { createClient } from 'redis'
 import * as Sentry from '@sentry/node'
-import { logger } from './logger'
+import { createClient } from 'redis'
+
 import { REDIS_CONFIG } from './config'
+import { logger } from './logger'
 
 const reconnectStrategy = (attempts: number) => {
   if (attempts > 0) throw Error('Connection failed')

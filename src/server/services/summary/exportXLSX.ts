@@ -1,12 +1,11 @@
-import XLSX from 'xlsx'
+import { LanguageId, LocalizedString } from '@common/types/common'
+import { TFunction } from 'i18next'
 import _ from 'lodash'
 import { InferAttributes, ModelStatic, Op } from 'sequelize'
-import { TFunction } from 'i18next'
-import { LanguageId, LocalizedString } from '@common/types/common'
+import XLSX from 'xlsx'
 
-import { getSummaryAccessibleOrganisationIds, getAccessibleCourseRealisationIds } from './access'
-import { getLanguageValue } from '../../util/languageUtils'
-import { getSummaryQuestions } from '../questions'
+import type { SummaryAttributes } from '../../models/summary'
+
 import {
   Organisation,
   CourseUnit,
@@ -18,7 +17,14 @@ import {
   Question,
   Summary,
 } from '../../models'
-import type { SummaryAttributes } from '../../models/summary'
+import { ApplicationError } from '../../util/ApplicationError'
+import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
+import { i18n } from '../../util/i18n'
+import { getLanguageValue } from '../../util/languageUtils'
+import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
+import { getSummaryQuestions } from '../questions'
+import { getSummaryAccessibleOrganisationIds, getAccessibleCourseRealisationIds } from './access'
+import { getTeacherSummary } from './getTeacherSummary'
 import {
   getScopedSummary,
   sumSummaries,
@@ -26,11 +32,6 @@ import {
   mapCourseIdsToCourseCodes,
   getOrganisationCourseRealisationIds,
 } from './utils'
-import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
-import { i18n } from '../../util/i18n'
-import { getTeacherSummary } from './getTeacherSummary'
-import { ApplicationError } from '../../util/ApplicationError'
-import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
 const getOrganisations = async (scopedSummary: ModelStatic<Summary>, organisationIds: string[]) => {
   const organisations = await Organisation.findAll({

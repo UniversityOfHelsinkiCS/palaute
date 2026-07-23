@@ -1,4 +1,5 @@
 import { startOfDay } from 'date-fns'
+
 import {
   Organisation,
   CourseUnit,
@@ -13,9 +14,9 @@ import {
   Survey,
   Question,
 } from '../models'
+import { buildSummaries } from '../services/summary/buildSummaries'
 import { getUniversitySurvey } from '../services/surveys'
 import { createTestObject } from './utils'
-import { buildSummaries } from '../services/summary/buildSummaries'
 
 const IDS = {
   ORG: 'norppa-versioned-summary-org-1',

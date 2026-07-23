@@ -1,6 +1,6 @@
+import { useQuery } from '@tanstack/react-query'
 import { orderBy, sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../../util/apiClient'
 import { getLanguageValue } from '../../util/languageUtils'

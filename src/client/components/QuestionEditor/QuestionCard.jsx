@@ -1,29 +1,26 @@
-import React, { useEffect, useRef } from 'react'
-
-import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
-
-import DeleteIcon from '@mui/icons-material/Delete'
 import { EditOutlined, FileCopyOutlined } from '@mui/icons-material'
-
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 import { useField } from 'formik'
+import React, { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { LANGUAGES } from '../../util/common'
-import { NorButton } from '../common/NorButton'
-import { focusIndicatorStyle } from '../../util/accessibility'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
+import { LANGUAGES } from '../../util/common'
+import FormikRadioButtons from '../common/FormikRadioButtons'
+import FormikSwitch from '../common/FormikSwitch'
+import { NorButton } from '../common/NorButton'
+import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
+import ChoiceEditor from './ChoiceEditor'
 import LikertEditor from './LikertEditor'
 import LikertPreview from './LikertPreview'
+import MultipleChoicePreview from './MultipleChoicePreview'
 import OpenEditor from './OpenEditor'
 import OpenPreview from './OpenPreview'
-import ChoiceEditor from './ChoiceEditor'
+import OrderButtons from './OrderButtons'
 import SingleChoicePreview from './SingleChoicePreview'
-import MultipleChoicePreview from './MultipleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
-import FormikSwitch from '../common/FormikSwitch'
-import OrderButtons from './OrderButtons'
-import FormikRadioButtons from '../common/FormikRadioButtons'
-import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,

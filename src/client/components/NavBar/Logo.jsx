@@ -1,15 +1,11 @@
-import React from 'react'
+import Box from '@mui/material/Box'
 /** @jsxImportSource @emotion/react */
-
-import { useTranslation } from 'react-i18next'
-
 import merge from 'lodash/merge'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
-import Box from '@mui/material/Box'
-
 import hyLogo from '../../assets/hy_logo.svg'
-
 import { useUiConfig } from '../CustomUiConfigProvider'
 
 const styles = {

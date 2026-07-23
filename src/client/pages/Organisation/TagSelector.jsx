@@ -1,11 +1,12 @@
-import React from 'react'
 import { SettingsBackupRestore } from '@mui/icons-material'
 import { Box, IconButton } from '@mui/material'
 import { useSnackbar } from 'notistack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
 import MultiSelect from '../../components/common/MultiSelect'
-import { getLanguageValue } from '../../util/languageUtils'
 import { NorButton } from '../../components/common/NorButton'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const TagSelector = ({ objectIds, originalTagIds, tags, onClose, mutation }) => {
   const { enqueueSnackbar } = useSnackbar()

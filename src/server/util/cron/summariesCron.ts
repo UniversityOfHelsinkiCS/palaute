@@ -1,6 +1,6 @@
+import { buildSummaries } from '../../services/summary/buildSummaries'
 import { inProduction } from '../config'
 import { schedule } from './schedule'
-import { buildSummaries } from '../../services/summary/buildSummaries'
 
 const run = async () => {
   await buildSummaries()

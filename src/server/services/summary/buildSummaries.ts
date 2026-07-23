@@ -1,7 +1,11 @@
-import { Op, QueryTypes, literal } from 'sequelize'
 import type { Transaction } from 'sequelize'
-import _ from 'lodash'
+
 import { differenceInYears, formatISO, subDays } from 'date-fns'
+import _ from 'lodash'
+import { Op, QueryTypes, literal } from 'sequelize'
+
+import { getPeriodDates } from '../../../common/studyPeriods'
+import { sequelize } from '../../db/dbConnection'
 import {
   Feedback,
   UserFeedbackTarget,
@@ -14,12 +18,10 @@ import {
   CourseUnitsOrganisation,
   CourseRealisationsOrganisation,
 } from '../../models'
-import { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } from '../../util/config'
-import { sequelize } from '../../db/dbConnection'
-import { sumSummaryDatas, mapOptionIdToValue } from './utils'
-import { logger } from '../../util/logger'
 import { prefixTagId } from '../../util/common'
-import { getPeriodDates } from '../../../common/studyPeriods'
+import { WORKLOAD_QUESTION_ID, OPEN_UNIVERSITY_ORG_ID } from '../../util/config'
+import { logger } from '../../util/logger'
+import { sumSummaryDatas, mapOptionIdToValue } from './utils'
 
 /**
  * Find all root organisation ids. There usually should be only one, which in config is UNIVERSITY_ROOT_ID,

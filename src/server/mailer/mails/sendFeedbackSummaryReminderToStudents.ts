@@ -1,10 +1,11 @@
-import { format } from 'date-fns'
 import { LanguageId, LocalizedString } from '@common/types/common'
+import { format } from 'date-fns'
+
+import { FeedbackTarget } from '../../models'
 import { PUBLIC_URL } from '../../util/config'
-import { pate } from '../pateClient'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
-import { FeedbackTarget } from '../../models'
+import { pate } from '../pateClient'
 
 const sendNotificationAboutFeedbackResponseToStudents = async (
   urlToSeeFeedbackSummary: string,

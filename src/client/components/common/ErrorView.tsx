@@ -1,11 +1,11 @@
-import React from 'react'
 import type { ReactNode } from 'react'
-import { Link } from 'react-router-dom'
-import { useParams } from 'react-router'
-import { useTranslation } from 'react-i18next'
 
-import { Alert, Box, Link as MuiLink, Typography } from '@mui/material'
 import { KeyboardReturnOutlined } from '@mui/icons-material'
+import { Alert, Box, Link as MuiLink, Typography } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import ErrorDetails from './ErrorDetails'
 

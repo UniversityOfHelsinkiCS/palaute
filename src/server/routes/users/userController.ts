@@ -1,17 +1,18 @@
-import { InferAttributes, Op, WhereOptions } from 'sequelize'
-import _ from 'lodash'
-import { Response, Router } from 'express'
-
 import type { GetLoginResponse } from '@common/types/user'
-import { ApplicationError } from '../../util/ApplicationError'
+
+import { Response, Router } from 'express'
+import _ from 'lodash'
+import { InferAttributes, Op, WhereOptions } from 'sequelize'
+
 import { User } from '../../models'
-import { AuthenticatedRequest } from '../../types'
+import { getBannersForUser } from '../../services/banners/getForUser'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { getUserPreferences, updateFeedbackCorrespondent } from '../../services/users'
 import { userCache } from '../../services/users/cache'
+import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getUserIams, getUsersIamsById } from '../../util/jami'
 import { getLastRestart } from '../../util/lastRestart'
-import { getUserPreferences, updateFeedbackCorrespondent } from '../../services/users'
-import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
-import { getBannersForUser } from '../../services/banners/getForUser'
 
 const router = Router()
 

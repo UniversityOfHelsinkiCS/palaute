@@ -1,10 +1,10 @@
-import React, { useEffect } from 'react'
 import { Box } from '@mui/material'
+import React, { useEffect } from 'react'
 
-import useUpdateSettingsRead from './useUpdateSettingsRead'
-import EditFeedbackTarget from './EditFeedbackTarget'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import EditFeedbackTarget from './EditFeedbackTarget'
+import useUpdateSettingsRead from './useUpdateSettingsRead'
 
 const Settings = () => {
   const id = useFeedbackTargetId()

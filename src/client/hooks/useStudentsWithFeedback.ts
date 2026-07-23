@@ -1,6 +1,7 @@
+import type { GetStudentsWithFeedbackResponse } from '@common/types/feedbackTarget'
+
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
-import type { GetStudentsWithFeedbackResponse } from '@common/types/feedbackTarget'
 import apiClient from '../util/apiClient'
 
 const useStudentsWithFeedback = (

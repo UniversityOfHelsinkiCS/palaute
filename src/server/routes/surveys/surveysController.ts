@@ -1,20 +1,22 @@
-import { Response, Router } from 'express'
 import type {
   GetUniversitySurveyResponse,
   GetUniversitySurveyVersionsResponse,
   GetProgrammeSurveyResponse,
 } from '@common/types/survey'
+
+import { Response, Router } from 'express'
 import z from 'zod/v4'
+
 import { sequelize } from '../../db/dbConnection'
-import { ApplicationError } from '../../util/ApplicationError'
 import { Survey, Question, Organisation, User } from '../../models'
 import { createOrganisationSurveyLog } from '../../services/auditLog'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import {
   getUniversitySurvey as _getUniversitySurvey,
   createUniversitySurvey as _createUniversitySurvey,
 } from '../../services/surveys'
-import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
 
 const checkUserWriteAccess = async (survey: Survey, user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)

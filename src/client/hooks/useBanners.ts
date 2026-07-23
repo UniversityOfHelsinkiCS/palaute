@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetBannersResponse } from '@common/types/banner'
+
+import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const useBanners = () => {

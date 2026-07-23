@@ -1,8 +1,8 @@
-import axios from 'axios'
+import { OrganisationAccess } from '@common/types/organisation'
 import * as Sentry from '@sentry/node'
+import axios from 'axios'
 import _ from 'lodash'
 
-import { OrganisationAccess } from '@common/types/organisation'
 import { User } from '../models'
 import { JAMI_URL, API_TOKEN, inProduction } from './config'
 import { logger } from './logger'

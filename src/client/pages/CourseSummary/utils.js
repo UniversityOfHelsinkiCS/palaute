@@ -1,5 +1,6 @@
-import React from 'react'
 import { orderBy } from 'lodash-es'
+import React from 'react'
+
 import { useSummaryContext } from './context'
 
 export const useOrderedAndFilteredOrganisations = organisations => {

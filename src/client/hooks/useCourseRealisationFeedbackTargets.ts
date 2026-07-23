@@ -1,5 +1,6 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetFeedbackTargetsForCourseRealisationResponse } from '@common/types/feedbackTarget'
+
+import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 

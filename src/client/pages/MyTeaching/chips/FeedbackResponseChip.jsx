@@ -1,9 +1,10 @@
+import { Chip } from '@mui/material'
 /* eslint-disable no-nested-ternary */
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Chip } from '@mui/material'
-import styles from '../../../util/chipStyles'
+
 import LinkChip from '../../../components/common/LinkChip'
+import styles from '../../../util/chipStyles'
 
 function getFeedbackUrl(id, interimFeedbackId, feedbackResponseSent, ongoing, continuous) {
   const baseFeedbackUrl = interimFeedbackId ? `/targets/${id}/interim-feedback/${interimFeedbackId}` : `/targets/${id}`

@@ -1,14 +1,15 @@
-import React from 'react'
-import { useSearchParams, Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
 import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { format, isValid } from 'date-fns'
-import { getLanguageValue } from '../../../util/languageUtils'
-import { getSafeCourseCode } from '../../../util/courseIdentifiers'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useSearchParams, Link } from 'react-router-dom'
+
 import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultItem'
-import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
 import { focusIndicatorStyle } from '../../../util/accessibility'
+import { getSafeCourseCode } from '../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
 
 const styles = {
   cell: {

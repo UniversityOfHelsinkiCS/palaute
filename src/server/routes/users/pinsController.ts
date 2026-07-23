@@ -1,7 +1,8 @@
 import { Response, Router } from 'express'
-import { ApplicationError } from '../../util/ApplicationError'
+
 import { Organisation, UserOrganisationPin } from '../../models'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
 
 const router = Router()
 

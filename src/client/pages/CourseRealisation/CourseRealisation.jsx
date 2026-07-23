@@ -1,10 +1,10 @@
-import React from 'react'
-import { useParams, Navigate } from 'react-router-dom'
 import { useSnackbar } from 'notistack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { useParams, Navigate } from 'react-router-dom'
 
-import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
 
 const getCourseRealisationFeedbackTarget = feedbackTargets =>
   (feedbackTargets ?? []).find(({ feedbackType }) => feedbackType === 'courseRealisation')

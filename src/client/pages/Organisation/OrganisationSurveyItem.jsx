@@ -1,22 +1,17 @@
+import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-
-import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
-
 import { Link, useParams } from 'react-router-dom'
 
-import { useDeleteOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
-
+import { NorButton } from '../../components/common/NorButton'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
-
-import PercentageCell from '../CourseSummary/components/PercentageCell'
-import FeedbackResponseChip from '../MyTeaching/chips/FeedbackResponseChip'
-
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import { NorButton } from '../../components/common/NorButton'
+import PercentageCell from '../CourseSummary/components/PercentageCell'
+import FeedbackResponseChip from '../MyTeaching/chips/FeedbackResponseChip'
+import { useDeleteOrganisationSurveyMutation } from './useOrganisationSurveyMutation'
 
 const OrganisationSurveyItem = ({ organisationSurvey }) => {
   const { code } = useParams()

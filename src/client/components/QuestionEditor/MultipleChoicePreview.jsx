@@ -1,9 +1,9 @@
-import React from 'react'
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material'
+import React from 'react'
 
+import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import { getLanguageValue } from '../../util/languageUtils'
 import PreviewBase from './PreviewBase'
-import { optionFocusIndicatorStyle } from '../../util/accessibility'
 
 const MultipleChoicePreview = ({ question, language }) => {
   const label = getLanguageValue(question.data?.label, language)

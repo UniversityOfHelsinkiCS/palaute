@@ -1,5 +1,6 @@
-import React, { Profiler } from 'react'
 import type { ProfilerOnRenderCallback, ReactNode } from 'react'
+
+import React, { Profiler } from 'react'
 
 const onRenderCallback: ProfilerOnRenderCallback = (id, phase, actualDuration, baseDuration, startTime, commitTime) => {
   // eslint-disable-next-line no-console

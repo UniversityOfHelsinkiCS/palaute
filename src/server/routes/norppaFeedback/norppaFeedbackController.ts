@@ -1,9 +1,12 @@
-import { Router, type Response } from 'express'
 import type { GetNorppaFeedbackCountResponse } from '@common/types/admin'
+
+import { Router, type Response } from 'express'
+
 import type { AuthenticatedRequest } from '../../types'
-import { ApplicationError } from '../../util/ApplicationError'
-import { NorppaFeedback, User } from '../../models'
+
 import { adminAccess } from '../../middleware/adminAccess'
+import { NorppaFeedback, User } from '../../models'
+import { ApplicationError } from '../../util/ApplicationError'
 
 const submitFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req

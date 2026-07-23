@@ -1,4 +1,5 @@
 import { Router } from 'express'
+
 import { getTeacherCourseUnits } from '../../services/myTeaching/myTeachingService'
 import { getMyTeachingTabCounts } from '../../services/myTeaching/tabCountService'
 import { AuthenticatedRequest } from '../../types'

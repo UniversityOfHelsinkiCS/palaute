@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import type { InactiveCourseRealisation } from '@common/types/admin'
+
 import {
   Box,
   Typography,
@@ -12,11 +13,11 @@ import {
   LinearProgress,
 } from '@mui/material'
 import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
 
-import type { InactiveCourseRealisation } from '@common/types/admin'
-import apiClient from '../../../../util/apiClient'
 import useInactiveCourseRealisations from '../../../../hooks/useInactiveCourseRealisations'
 import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
+import apiClient from '../../../../util/apiClient'
 
 const Enable = ({
   cur,

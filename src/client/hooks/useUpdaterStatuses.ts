@@ -1,4 +1,5 @@
 import type { GetUpdaterStatusesResponse } from '@common/types/admin'
+
 import apiClient from '../util/apiClient'
 import useQuery from './useQuery'
 

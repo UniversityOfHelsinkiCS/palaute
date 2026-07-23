@@ -1,10 +1,9 @@
-import React from 'react'
 import { Box, Grid2 as Grid, Typography } from '@mui/material'
-
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import FormikTextField from './FormikTextField'
 import { LANGUAGES } from '../../util/common'
+import FormikTextField from './FormikTextField'
 
 type FormikLocalesFieldEditorProps = {
   name: string

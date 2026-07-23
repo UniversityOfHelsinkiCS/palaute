@@ -1,6 +1,7 @@
-import _ from 'lodash'
 import { compareAsc, subDays, getDate, addMonths, getYear } from 'date-fns'
+import _ from 'lodash'
 import { InferAttributes, Op } from 'sequelize'
+
 import {
   FeedbackTarget,
   CourseRealisation,

@@ -1,16 +1,17 @@
-import { Response, Router } from 'express'
 import Sentry from '@sentry/node'
-import { ApplicationError } from '../../util/ApplicationError'
+import { Response, Router } from 'express'
+
 import { UserFeedbackTarget, FeedbackTarget, Feedback } from '../../models'
-import { validateFeedback } from '../../util/feedbackValidator'
 import { getFeedbackTargetContext } from '../../services/feedbackTargets'
+import { refreshFeedbackTargetHiddenCount } from '../../services/feedbackTargets/hideFeedback'
 import {
   updateSummaryAfterFeedbackCreated,
   updateSummaryAfterFeedbackDestroyed,
 } from '../../services/summary/updateSummaryOnFeedback'
-import { refreshFeedbackTargetHiddenCount } from '../../services/feedbackTargets/hideFeedback'
-import { logger } from '../../util/logger'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
+import { validateFeedback } from '../../util/feedbackValidator'
+import { logger } from '../../util/logger'
 
 const create = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req

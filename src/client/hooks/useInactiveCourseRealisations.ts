@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetInactiveCourseRealisationsResponse } from '@common/types/admin'
+
+import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const useInactiveCourseRealisations = () => {

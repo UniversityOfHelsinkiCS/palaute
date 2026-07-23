@@ -1,4 +1,5 @@
 import { LocalizedString } from '@common/types/common'
+
 import { normalizeOrganisationCode } from '../../util/common'
 import { getOrganisationData } from '../../util/jami'
 import { redis } from '../../util/redisClient'

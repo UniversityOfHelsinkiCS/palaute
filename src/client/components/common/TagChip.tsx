@@ -1,6 +1,8 @@
-import React from 'react'
-import { Chip, Tooltip } from '@mui/material'
 import type { Tag } from '@common/types/organisation'
+
+import { Chip, Tooltip } from '@mui/material'
+import React from 'react'
+
 import { getLanguageValue } from '../../util/languageUtils'
 import { generate } from '../../util/randomColor'
 

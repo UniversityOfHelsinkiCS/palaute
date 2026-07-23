@@ -1,15 +1,13 @@
-import React from 'react'
-
 import { FormControl, RadioGroup, FormControlLabel, Radio, FormHelperText } from '@mui/material'
-
 import { useField } from 'formik'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { getLanguageValue } from '../../../../../util/languageUtils'
 import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
+import { getLanguageValue } from '../../../../../util/languageUtils'
+import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 import QuestionBase from './QuestionBase'
 import { getDontKnowOption, useDelayedTouched } from './utils'
-import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 
 const styles = {
   optionLabel: {

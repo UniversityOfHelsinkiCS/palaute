@@ -1,5 +1,5 @@
-import React from 'react'
 import { Paper } from '@mui/material'
+import React from 'react'
 
 const CourseUnitItemContainer = ({ children }) => (
   <Paper

@@ -1,10 +1,10 @@
 import { sequelize } from '../../db/dbConnection'
 import { UserFeedbackTarget, User, Feedback, CourseUnit } from '../../models'
-import { ALWAYS_SHOW_STUDENT_LIST } from '../../util/config'
+import { User as UserType } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
+import { ALWAYS_SHOW_STUDENT_LIST } from '../../util/config'
 import { logger } from '../../util/logger'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
-import { User as UserType } from '../../models/user'
 
 const getStudentListVisibility = async (courseUnitId: string) => {
   const organisationRows = await sequelize.query(

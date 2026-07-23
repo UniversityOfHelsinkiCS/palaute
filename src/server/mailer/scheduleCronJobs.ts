@@ -1,7 +1,6 @@
 import { inProduction, inStaging, SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED } from '../util/config'
-import { logger } from '../util/logger'
 import { schedule } from '../util/cron/schedule'
-
+import { logger } from '../util/logger'
 import {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailReminderAboutSurveyOpeningToTeachers,

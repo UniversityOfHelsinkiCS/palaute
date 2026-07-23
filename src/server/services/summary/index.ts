@@ -1,4 +1,6 @@
 import { getCourseRealisationSummaries } from './courseRealisationSummary'
+import { exportXLSX } from './exportXLSX'
+import { getCourseUnitGroupSummaries } from './getCourseUnitGroupSummary'
 import {
   getOrganisationSummary,
   getOrganisationSummaryWithChildOrganisations,
@@ -7,8 +9,6 @@ import {
 } from './getOrganisationSummary'
 import { getTeacherSummary } from './getTeacherSummary'
 import { getUserOrganisationSummaries } from './getUserOrganisationSummary'
-import { getCourseUnitGroupSummaries } from './getCourseUnitGroupSummary'
-import { exportXLSX } from './exportXLSX'
 
 export {
   getOrganisationSummary,

@@ -1,11 +1,12 @@
-import React from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Box } from '@mui/material'
-import { useTranslation } from 'react-i18next'
 import { Visibility } from '@mui/icons-material'
-import { NorButton } from '../../../../../components/common/NorButton'
+import { Box } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
+
 import FixedContainer from '../../../../../components/common/FixedContainer'
 import LanguageSelect from '../../../../../components/common/LanguageSelect'
+import { NorButton } from '../../../../../components/common/NorButton'
 
 const styles = {
   saveButton: {

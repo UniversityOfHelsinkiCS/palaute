@@ -1,11 +1,12 @@
+import { subDays } from 'date-fns'
 import _ from 'lodash'
 import { Op, fn, col } from 'sequelize'
-import { subDays } from 'date-fns'
+
+import { FeedbackTarget, UserFeedbackTarget } from '../../models'
+import { cacheFeedbackTargetById } from '../../services/feedbackTargets'
 import { inProduction, inStaging } from '../config'
 import { logger } from '../logger'
 import { schedule } from './schedule'
-import { FeedbackTarget, UserFeedbackTarget } from '../../models'
-import { cacheFeedbackTargetById } from '../../services/feedbackTargets'
 
 const run = async () => {
   const start = Date.now()

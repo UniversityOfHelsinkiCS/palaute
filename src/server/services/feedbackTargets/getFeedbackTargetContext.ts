@@ -1,7 +1,7 @@
 import { FeedbackTarget, UserFeedbackTarget, CourseRealisation, Summary } from '../../models'
+import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
 import { getAccess } from './getAccess'
-import { User } from '../../models/user'
 
 /**
  * Fetch fbt, ufbt and compute access object.

@@ -1,6 +1,7 @@
-import _ from 'lodash'
 import { subDays } from 'date-fns'
+import _ from 'lodash'
 import { Op } from 'sequelize'
+
 import {
   ContinuousFeedback,
   FeedbackTarget,
@@ -9,11 +10,11 @@ import {
   UserFeedbackTarget,
   CourseUnit,
 } from '../../models'
-import { logger } from '../../util/logger'
-import { pate } from '../pateClient'
 import { PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
+import { logger } from '../../util/logger'
+import { pate } from '../pateClient'
 
 const getTeachersWithContinuousFeedback = async () => {
   const newContinuousFeedback = await ContinuousFeedback.findAll({

@@ -1,7 +1,9 @@
+import type { GetCourseUnitsResponsibleResponse } from '@common/types/courseUnit'
+
+import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
-import { useQuery } from '@tanstack/react-query'
-import type { GetCourseUnitsResponsibleResponse } from '@common/types/courseUnit'
+
 import apiClient from '../util/apiClient'
 import { getLanguageValue } from '../util/languageUtils'
 

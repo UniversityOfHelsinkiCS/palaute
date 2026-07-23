@@ -1,4 +1,3 @@
-import React from 'react'
 import {
   Box,
   Paper,
@@ -15,13 +14,14 @@ import {
   MenuItem,
 } from '@mui/material'
 import { formatDuration, intervalToDuration } from 'date-fns'
+import React from 'react'
 
-import apiClient from '../../../../util/apiClient'
-import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import useUpdaterStatuses from '../../../../hooks/useUpdaterStatuses'
-import { GRAYLOG_URL, inProduction } from '../../../../util/common'
 import ExternalLink from '../../../../components/common/ExternalLink'
+import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
+import useUpdaterStatuses from '../../../../hooks/useUpdaterStatuses'
+import apiClient from '../../../../util/apiClient'
+import { GRAYLOG_URL, inProduction } from '../../../../util/common'
 
 const createGraylogLink = updaterStatus => {
   const baseUrl = GRAYLOG_URL

@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-
+import { FileCopyOutlined, Circle } from '@mui/icons-material'
 import {
   Dialog,
   DialogTitle,
@@ -16,22 +15,20 @@ import {
   Alert,
   Autocomplete,
 } from '@mui/material'
-
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { FileCopyOutlined, Circle } from '@mui/icons-material'
-import { NorButton } from '../common/NorButton'
-import CustomWidthTooltip from '../common/CustomWidthTooltip'
-
-import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import useCourseUnitFeedbackTargets from '../../hooks/useCourseUnitFeedbackTargets'
-import { getLanguageValue } from '../../util/languageUtils'
-import formatDate from '../../util/formatDate'
-import { LoadingProgress } from '../common/LoadingProgress'
+import useTeacherCourseUnits from '../../hooks/useTeacherCourseUnits'
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { useOrganisationSurveysForUser } from '../../pages/Organisation/useOrganisationsSurveysForUser'
-import { sortOrganisations, getSurveysWithQuestions } from './utils'
 import { ORGANISATION_SURVEYS_ENABLED } from '../../util/common'
+import formatDate from '../../util/formatDate'
+import { getLanguageValue } from '../../util/languageUtils'
+import CustomWidthTooltip from '../common/CustomWidthTooltip'
+import { LoadingProgress } from '../common/LoadingProgress'
+import { NorButton } from '../common/NorButton'
+import { sortOrganisations, getSurveysWithQuestions } from './utils'
 
 const styles = {
   listItem: {

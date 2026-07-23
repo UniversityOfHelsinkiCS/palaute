@@ -1,13 +1,9 @@
-import { addYears } from 'date-fns'
 import { LocalizedString } from '@common/types/common'
+import { addYears } from 'date-fns'
 import { Op } from 'sequelize'
 import { v4 as uuidv4 } from 'uuid'
-import { i18n } from '../../util/i18n'
 
-import { logger } from '../../util/logger'
-import { formatActivityPeriod } from '../../util/common'
 import { sequelize } from '../../db/dbConnection'
-import { LANGUAGES } from '../../util/config'
 import {
   CourseUnit,
   CourseRealisation,
@@ -24,9 +20,13 @@ import {
   OrganisationSurveyCourse,
   Summary,
 } from '../../models'
+import { AccessStatus } from '../../models/userFeedbackTarget'
+import { formatActivityPeriod } from '../../util/common'
+import { LANGUAGES } from '../../util/config'
+import { i18n } from '../../util/i18n'
+import { logger } from '../../util/logger'
 import cache from '../feedbackTargets/feedbackTargetCache'
 import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
-import { AccessStatus } from '../../models/userFeedbackTarget'
 
 const getOrganisationCourseUnit = async (organisationId: string) => {
   const organisationCourseUnit = await CourseUnit.findOne({

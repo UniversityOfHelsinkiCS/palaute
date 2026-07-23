@@ -1,4 +1,5 @@
 import { CreationOptional, InferAttributes, InferCreationAttributes, INTEGER, Model, STRING } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class CourseRealisationsOrganisation extends Model<

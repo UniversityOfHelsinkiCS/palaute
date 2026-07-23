@@ -1,12 +1,13 @@
-import React from 'react'
 import { Box, LinearProgress } from '@mui/material'
-import { useSummaries } from './api'
-import { SummaryContextProvider, useSummaryContext } from './context'
-import SummaryScrollContainer from './components/SummaryScrollContainer'
+import React from 'react'
+
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
+import { useSummaries } from './api'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
-import SorterRowWithFilters from './components/SorterRow'
 import OrganisationSummaryRow from './components/OrganisationRow'
+import SorterRowWithFilters from './components/SorterRow'
+import SummaryScrollContainer from './components/SummaryScrollContainer'
+import { SummaryContextProvider, useSummaryContext } from './context'
 import GenerateReport from './GenerateReport'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {

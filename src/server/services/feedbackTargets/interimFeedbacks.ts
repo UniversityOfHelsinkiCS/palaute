@@ -1,9 +1,7 @@
-import { v4 as uuidv4 } from 'uuid'
 import { LocalizedString } from '@common/types/common'
+import { v4 as uuidv4 } from 'uuid'
+
 import { sequelize } from '../../db/dbConnection'
-
-import { getFeedbackTargetContext } from './getFeedbackTargetContext'
-
 import {
   CourseUnit,
   CourseRealisation,
@@ -14,11 +12,11 @@ import {
   User,
   Summary,
 } from '../../models'
-
-import { logger } from '../../util/logger'
-import { DateRangeInput, formatActivityPeriod } from '../../util/common'
-import { ApplicationError } from '../../util/ApplicationError'
 import { User as UserType } from '../../models/user'
+import { ApplicationError } from '../../util/ApplicationError'
+import { DateRangeInput, formatActivityPeriod } from '../../util/common'
+import { logger } from '../../util/logger'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 const getInterimFeedbackParentFbt = async (interimFbtId: number | string, user: UserType) => {
   const { access, feedbackTarget: interimFeedbackTarget } = await getFeedbackTargetContext({

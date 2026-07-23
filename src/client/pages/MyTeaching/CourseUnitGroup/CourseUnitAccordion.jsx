@@ -1,23 +1,19 @@
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 
-import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
-
-import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
-import DisabledCourseWarning from './DisabledCourseWarning'
-
-import commonStyles from '../utils/styles'
-import { getLatestFeedbackTarget, hasOngoingInterimFeedbacks } from '../utils/utils'
-
-import { getLanguageValue } from '../../../util/languageUtils'
+import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../util/common'
 import { getCourseCode } from '../../../util/courseIdentifiers'
-
+import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import { getLanguageValue } from '../../../util/languageUtils'
 import FeedbackResponseChip from '../chips/FeedbackResponseChip'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
-import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
-import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
-import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../util/common'
+import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
+import commonStyles from '../utils/styles'
+import { getLatestFeedbackTarget, hasOngoingInterimFeedbacks } from '../utils/utils'
+import DisabledCourseWarning from './DisabledCourseWarning'
 
 const styles = {
   accordion: {

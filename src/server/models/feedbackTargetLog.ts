@@ -8,6 +8,7 @@ import {
   CreationOptional,
   JSONB,
 } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class FeedbackTargetLog extends Model<InferAttributes<FeedbackTargetLog>, InferCreationAttributes<FeedbackTargetLog>> {

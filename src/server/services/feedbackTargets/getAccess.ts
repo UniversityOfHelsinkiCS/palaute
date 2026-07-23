@@ -1,8 +1,8 @@
+import { FeedbackTarget } from '../../models/feedbackTarget'
+import { User } from '../../models/user'
+import { UserFeedbackTarget } from '../../models/userFeedbackTarget'
 import { getOrganisationAccessByCourseUnitId } from '../organisationAccess/organisationAccess'
 import { Access } from './Access'
-import { User } from '../../models/user'
-import { FeedbackTarget } from '../../models/feedbackTarget'
-import { UserFeedbackTarget } from '../../models/userFeedbackTarget'
 
 type GetAccessParams = {
   userFeedbackTarget: UserFeedbackTarget | null

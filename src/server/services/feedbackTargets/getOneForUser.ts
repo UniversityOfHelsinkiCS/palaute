@@ -1,4 +1,5 @@
 import _ from 'lodash'
+
 import {
   FeedbackTarget,
   CourseUnit,
@@ -11,11 +12,11 @@ import {
   Group,
   Summary,
 } from '../../models'
+import { User as UserType } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
+import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
 import cache from './feedbackTargetCache'
 import { getAccess } from './getAccess'
-import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
-import { User as UserType } from '../../models/user'
 
 const populateGroupInformation = (feedbackTarget: FeedbackTarget) => {
   for (const group of feedbackTarget.groups ?? []) {

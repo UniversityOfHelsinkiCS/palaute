@@ -1,6 +1,7 @@
-import React from 'react'
 import { Box } from '@mui/material'
 import * as Sentry from '@sentry/browser'
+import React from 'react'
+
 import { NorButton } from '../../components/common/NorButton'
 
 const ErrorCausingComponent = () => {

@@ -1,4 +1,5 @@
 import * as Sentry from '@sentry/browser'
+
 import { inProduction, inE2EMode, GIT_SHA, SENTRY_DSN } from './common'
 
 const initializeSentry = () => {

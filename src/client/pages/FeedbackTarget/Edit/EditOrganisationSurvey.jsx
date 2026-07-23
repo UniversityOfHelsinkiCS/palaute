@@ -1,10 +1,12 @@
-import React, { useState } from 'react'
 import { SettingsOutlined } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
+import { NorButton } from '../../../components/common/NorButton'
 import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEditor'
-import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
+import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import {
   getOverlappingStudentTeachers,
   getOrganisationSurveySchema,
@@ -12,7 +14,6 @@ import {
   hasNewCourses,
 } from '../../Organisation/utils'
 import { useFeedbackTargetContext } from '../FeedbackTargetContext'
-import { NorButton } from '../../../components/common/NorButton'
 
 const EditOrganisationSurvey = () => {
   const { t } = useTranslation()

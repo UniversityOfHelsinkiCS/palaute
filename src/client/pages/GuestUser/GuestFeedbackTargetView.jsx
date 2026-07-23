@@ -1,24 +1,20 @@
-import React from 'react'
+import { Box, Typography, Tab } from '@mui/material'
 /** @jcssImportSource @emotion/react */
-
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 import { Route, useParams, Link, Routes, Navigate, useMatch } from 'react-router-dom'
 
-import { Box, Typography, Tab } from '@mui/material'
-
-import { useTranslation } from 'react-i18next'
+import ExternalLink from '../../components/common/ExternalLink'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { RouterTabs } from '../../components/common/RouterTabs'
-import { getLanguageValue } from '../../util/languageUtils'
+import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import useFeedbackTarget from '../../hooks/useFeedbackTarget'
-import GuestFeedbackView from './GuestFeedbackView'
+import { getLanguageValue } from '../../util/languageUtils'
 import GuestFeedbackTargetResults from './GuestFeedbackTargetResults'
-
-import ExternalLink from '../../components/common/ExternalLink'
-
+import GuestFeedbackView from './GuestFeedbackView'
 import { getCoursePeriod, getFeedbackPeriod } from './utils'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 
 const styles = {
   datesContainer: {

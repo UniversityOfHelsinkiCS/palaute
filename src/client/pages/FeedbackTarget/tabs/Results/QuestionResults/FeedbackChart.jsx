@@ -1,11 +1,12 @@
-import React from 'react'
+import { Box, Typography } from '@mui/material'
 import { addHours, startOfDay, subDays, parseISO, differenceInCalendarDays } from 'date-fns'
 import { groupBy, sortBy } from 'lodash-es'
 import 'chart.js/auto'
 import 'chartjs-adapter-date-fns'
+import React from 'react'
 import { Line } from 'react-chartjs-2'
-import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+
 import { localeForLanguage } from '../../../../../util/languageUtils'
 import { buildDailySeries, DailyFeedbackCountTable, MonthlySummaries } from './FeedbackCountTable'
 

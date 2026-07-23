@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react'
 import { Box, Switch, FormGroup, FormControlLabel, Alert, TextField } from '@mui/material'
 import { useMutation } from '@tanstack/react-query'
-import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import CardSection from '../../../../components/common/CardSection'
+import { NorButton } from '../../../../components/common/NorButton'
+import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
 import apiClient from '../../../../util/apiClient'
 import queryClient from '../../../../util/queryClient'
-import CardSection from '../../../../components/common/CardSection'
-import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
-import { NorButton } from '../../../../components/common/NorButton'
 
 const updateContinuousFeedbackStatus = async ({
   id,

@@ -1,11 +1,12 @@
 import { Alert, Box } from '@mui/material'
 import { format } from 'date-fns'
 import React from 'react'
-import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
+
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import { LogItem } from '../../../../components/Logs/LogItem'
+import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
-import { LogItem } from '../../../../components/Logs/LogItem'
 
 const getLogMessage = data => {
   if (!data) {

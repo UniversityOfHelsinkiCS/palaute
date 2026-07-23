@@ -1,10 +1,10 @@
-import { Organisation } from '../../models/organisation'
+import { CourseRealisationsTag, CourseRealisation } from '../../models'
 import { FeedbackTarget } from '../../models/feedbackTarget'
+import { Organisation } from '../../models/organisation'
 import { Survey } from '../../models/survey'
+import { FEEDBACK_TARGET_CACHE_TTL } from '../../util/config'
 import { logger } from '../../util/logger'
 import { redis } from '../../util/redisClient'
-import { CourseRealisationsTag, CourseRealisation } from '../../models'
-import { FEEDBACK_TARGET_CACHE_TTL } from '../../util/config'
 
 const getKey = (feedbackTargetId: number | string) => `feedbackTarget:${feedbackTargetId}`
 

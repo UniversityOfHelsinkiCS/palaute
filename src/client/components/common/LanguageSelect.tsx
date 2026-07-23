@@ -1,14 +1,12 @@
-import React from 'react'
+import type { SelectChangeEvent } from '@mui/material'
 import type { ReactNode } from 'react'
 
 import { Select, MenuItem, FormControl, InputLabel } from '@mui/material'
-import type { SelectChangeEvent } from '@mui/material'
-
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { LANGUAGES } from '../../util/common'
-
 import useId from '../../hooks/useId'
+import { LANGUAGES } from '../../util/common'
 
 const style = {
   select: {

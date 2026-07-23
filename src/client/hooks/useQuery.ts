@@ -1,4 +1,5 @@
 import { useQuery as useBaseQuery, UseQueryOptions, UseQueryResult, QueryKey } from '@tanstack/react-query'
+
 import useId from './useId'
 
 type CustomQueryOptions<TData> = Omit<UseQueryOptions<TData>, 'queryKey'> & {

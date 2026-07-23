@@ -1,6 +1,6 @@
+import { mailer } from '../../mailer'
 import { CRON_DISABLED } from '../config'
 import { logger } from '../logger'
-import { mailer } from '../../mailer'
 import { start as startPrecacheFeedbackTargetsCron } from './precacheFeedbackTargetsCron'
 import { start as startSummariesCron } from './summariesCron'
 

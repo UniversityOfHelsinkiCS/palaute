@@ -8,6 +8,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class OrganisationFeedbackCorrespondent extends Model<

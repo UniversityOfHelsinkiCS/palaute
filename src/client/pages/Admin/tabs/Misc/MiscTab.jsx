@@ -1,13 +1,12 @@
-import React from 'react'
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
+import React from 'react'
 
+import { NorButton } from '../../../../components/common/NorButton'
+import apiClient from '../../../../util/apiClient'
+import ConfigDebug from './ConfigDebug'
 import EditUniversitySurveyAccordion from './EditUniversitySurveyAccordion'
 import EmailAccordion from './EmailAccordion'
-import ConfigDebug from './ConfigDebug'
-
-import apiClient from '../../../../util/apiClient'
-import { NorButton } from '../../../../components/common/NorButton'
 
 const MiscTab = () => {
   const { enqueueSnackbar } = useSnackbar()

@@ -1,21 +1,20 @@
+import { FileCopyOutlined, Email } from '@mui/icons-material'
+import { Box, Chip, Paper, Typography, Alert } from '@mui/material'
+import { differenceInHours, format } from 'date-fns'
+import { useSnackbar } from 'notistack'
 import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import QRCode from 'react-qr-code'
 
-import { Box, Chip, Paper, Typography, Alert } from '@mui/material'
-import { FileCopyOutlined, Email } from '@mui/icons-material'
-import { useSnackbar } from 'notistack'
-import { useTranslation } from 'react-i18next'
-import { differenceInHours, format } from 'date-fns'
-
-import { copyLink } from '../../utils'
+import { NorButton } from '../../../../components/common/NorButton'
+import { TooltipButton } from '../../../../components/common/TooltipButton'
+import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-import ReminderEmailModal from './ReminderEmailModal'
-import { TooltipButton } from '../../../../components/common/TooltipButton'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
-import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { copyLink } from '../../utils'
+import ReminderEmailModal from './ReminderEmailModal'
 
 const ShareItem = ({ chipLabel, buttonLabel, linkText, copyLink }) => (
   <Paper sx={{ my: 4 }}>

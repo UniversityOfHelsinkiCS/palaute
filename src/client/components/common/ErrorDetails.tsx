@@ -1,15 +1,14 @@
+import { Box, Typography } from '@mui/material'
 /* eslint-disable no-nested-ternary */
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Typography } from '@mui/material'
-
+import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
+import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
-import { getLanguageValue } from '../../util/languageUtils'
 import { getDateRangeString } from '../../util/getDateRangeString'
-import { getPrimaryCourseName, getSecondaryCourseName } from '../../util/courseIdentifiers'
-import { useFeedbackTargetErrorViewDetails } from '../../hooks/useFeedbackTargetErrorViewDetails'
+import { getLanguageValue } from '../../util/languageUtils'
 
 type ErrorDetailsProps = {
   feedbackTargetId: string

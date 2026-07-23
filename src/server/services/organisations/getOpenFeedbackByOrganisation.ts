@@ -1,8 +1,9 @@
-import { QueryTypes } from 'sequelize'
 import { LocalizedString } from '@common/types/common'
+import { QueryTypes } from 'sequelize'
+
+import { sequelize } from '../../db/dbConnection'
 import { CourseUnit, Feedback, Question } from '../../models'
 import { getAllUniversitySurveys, getProgrammeSurvey } from '../surveys'
-import { sequelize } from '../../db/dbConnection'
 
 type FeedbackData = {
   questionId: number

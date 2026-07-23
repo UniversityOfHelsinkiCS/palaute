@@ -1,4 +1,5 @@
 import { Model, INTEGER, STRING, BOOLEAN, InferCreationAttributes, InferAttributes, CreationOptional } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class CourseUnitsOrganisation extends Model<

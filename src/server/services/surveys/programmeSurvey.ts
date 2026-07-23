@@ -1,6 +1,7 @@
 import { QueryTypes } from 'sequelize'
-import { Survey } from '../../models/survey'
+
 import { sequelize } from '../../db/dbConnection'
+import { Survey } from '../../models/survey'
 
 export const getProgrammeSurveysByCourseUnit = async (courseUnitId: string) => {
   const programmeSurveys = await sequelize.query(

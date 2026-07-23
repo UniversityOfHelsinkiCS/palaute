@@ -1,10 +1,11 @@
 import { subDays } from 'date-fns'
 import { Op } from 'sequelize'
+
 import { FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User, UserFeedbackTarget } from '../../models'
 import { PUBLIC_URL, FEEDBACK_SYSTEM, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
-import { pate } from '../pateClient'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
+import { pate } from '../pateClient'
 
 export const getFeedbackTargetsWithoutResponseForTeachers = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({

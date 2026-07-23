@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react'
 import { Box, FormControl, InputLabel, MenuItem, Select, ToggleButton, ToggleButtonGroup } from '@mui/material'
+import React, { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import type { Period } from '../../../common/studyPeriods'
-import { usePeriods } from '../../util/periodUtils'
-import { STUDY_YEAR_START_MONTH } from '../../util/common'
-import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
-import { useSemesters } from '../../util/semesterUtils'
+
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { STUDY_YEAR_START_MONTH } from '../../util/common'
+import { usePeriods } from '../../util/periodUtils'
+import { useSemesters } from '../../util/semesterUtils'
+import { getYearDisplayName, useAcademicYears } from '../../util/yearUtils'
 
 type DateRange = {
   start: Date

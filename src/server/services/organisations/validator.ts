@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+
 import { User } from '../../models'
 
 export const validateStudentNumbers = async (studentNumbers: string[]) => {

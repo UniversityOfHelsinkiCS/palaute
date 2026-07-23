@@ -1,3 +1,5 @@
+import type { BannerAccessGroup, BannerData, BannerRecord } from '@common/types/banner'
+
 import {
   Model,
   JSONB,
@@ -8,7 +10,7 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize'
-import type { BannerAccessGroup, BannerData, BannerRecord } from '@common/types/banner'
+
 import { sequelize } from '../db/dbConnection'
 
 class Banner extends Model<InferAttributes<Banner>, InferCreationAttributes<Banner>> {

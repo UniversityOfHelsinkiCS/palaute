@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { Op } from 'sequelize'
+
 import {
   Organisation,
   CourseUnit,
@@ -12,15 +13,15 @@ import {
   CourseRealisationsTag,
 } from '../../models'
 import { SummaryData } from '../../models/summary'
-import { sumSummaryDatas, sumSummaries, getScopedSummary } from './utils'
 import { ApplicationError } from '../../util/ApplicationError'
-import { getSummaryAccessibleOrganisationIds } from './access'
+import { prefixTagId } from '../../util/common'
 import {
   SUMMARY_EXCLUDED_ORG_IDS,
   SUMMARY_SKIP_ORG_IDS,
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS,
 } from '../../util/config'
-import { prefixTagId } from '../../util/common'
+import { getSummaryAccessibleOrganisationIds } from './access'
+import { sumSummaryDatas, sumSummaries, getScopedSummary } from './utils'
 
 /**
  * Wrap a function that requires organisation access check.

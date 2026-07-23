@@ -1,6 +1,5 @@
-import React from 'react'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 /** @jsxImportSource @emotion/react */
-
 import {
   Box,
   AccordionSummary,
@@ -13,7 +12,7 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import React from 'react'
 
 import useEmailsToBeSent from '../../../../hooks/useEmailsToBeSent'
 

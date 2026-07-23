@@ -1,6 +1,7 @@
+import type { GetUserDetailsResponse } from '@common/types/user'
+
 import { useQuery, UseQueryOptions } from '@tanstack/react-query'
 
-import type { GetUserDetailsResponse } from '@common/types/user'
 import apiClient from '../util/apiClient'
 
 const useUserDetails = (userId: string, options: Partial<UseQueryOptions<GetUserDetailsResponse>> = {}) => {

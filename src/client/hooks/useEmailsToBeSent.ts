@@ -1,6 +1,8 @@
-import { useState } from 'react'
-import { useQuery } from '@tanstack/react-query'
 import type { GetEmailsToBeSentResponse } from '@common/types/admin'
+
+import { useQuery } from '@tanstack/react-query'
+import { useState } from 'react'
+
 import apiClient from '../util/apiClient'
 
 const emptyEmails: GetEmailsToBeSentResponse = {

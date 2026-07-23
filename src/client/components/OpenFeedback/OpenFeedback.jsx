@@ -3,8 +3,9 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { boxPrintStyle } from '../../util/printStyle'
+
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { boxPrintStyle } from '../../util/printStyle'
 
 const styles = {
   listItem: {

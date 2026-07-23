@@ -1,6 +1,7 @@
-import React from 'react'
 /** @jsxImportSource @emotion/react */
 import { Tooltip } from '@mui/material'
+import React from 'react'
+
 import { getColor } from '../../util/resultColors'
 
 const styles = {

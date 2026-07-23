@@ -1,9 +1,8 @@
-import _ from 'lodash'
 import { differenceInMonths, getYear } from 'date-fns'
-
+import _ from 'lodash'
 import { Op } from 'sequelize'
-import { UserFeedbackTarget, FeedbackTarget, CourseUnit, Summary, CourseRealisation, User } from '../../models'
 
+import { UserFeedbackTarget, FeedbackTarget, CourseUnit, Summary, CourseRealisation, User } from '../../models'
 import { type DateRangeInput, formatActivityPeriod } from '../../util/common'
 
 const getTeacherCourseUnits = async (user: User, query: DateRangeInput) => {

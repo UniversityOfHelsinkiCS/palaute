@@ -1,4 +1,5 @@
 import type { OrganisationAccess } from '@common/types/organisation'
+
 import useAuthorizedUser from './useAuthorizedUser'
 
 const useUserOrganisationAccess = (): Record<string, OrganisationAccess> => {

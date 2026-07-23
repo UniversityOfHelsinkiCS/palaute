@@ -1,6 +1,6 @@
 import { FeedbackTarget, UserFeedbackTarget, User } from '../models'
-import { createTestObject } from './utils'
 import { TEST_COURSE_UNIT_ID, TEST_COURSE_REALISATION_ID } from './testIds'
+import { createTestObject } from './utils'
 
 export const seedFeedbackTargetsForTeacher = async ({
   teacher,

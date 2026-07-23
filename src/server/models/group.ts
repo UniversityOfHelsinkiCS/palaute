@@ -1,4 +1,5 @@
 import { Model, JSONB, STRING, VIRTUAL, INTEGER, DATE, InferAttributes, InferCreationAttributes } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class Group extends Model<InferAttributes<Group>, InferCreationAttributes<Group>> {

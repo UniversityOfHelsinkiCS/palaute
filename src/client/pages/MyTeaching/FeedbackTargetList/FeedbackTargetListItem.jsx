@@ -1,19 +1,16 @@
-import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { parseISO } from 'date-fns'
-
 import { Box, ListItemText, ListItem, Typography, Link, Tooltip } from '@mui/material'
+import { parseISO } from 'date-fns'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
 
-import FeedbackResponseChip from '../chips/FeedbackResponseChip'
-import InterimFeedbackChip from '../chips/InterimFeedbackChip'
-
-import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
+import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
-import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
-
+import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
 import { getLanguageValue } from '../../../util/languageUtils'
+import FeedbackResponseChip from '../chips/FeedbackResponseChip'
+import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 import { formatDate, getFeedbackPercentageString } from '../utils/utils'
 
 const FeedbackTargetPeriodInfo = ({ feedbackTarget }) => {

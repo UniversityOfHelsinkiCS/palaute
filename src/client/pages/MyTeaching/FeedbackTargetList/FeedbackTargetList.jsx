@@ -1,9 +1,9 @@
-import React from 'react'
 import { Box, Typography, List } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import FeedbackTargetListItem from './FeedbackTargetListItem'
 import { hasOngoingInterimFeedbacks } from '../utils/utils'
+import FeedbackTargetListItem from './FeedbackTargetListItem'
 
 const FeedbackTargetList = ({ courseRealisation }) => {
   const { t } = useTranslation()

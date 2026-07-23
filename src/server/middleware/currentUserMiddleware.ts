@@ -1,13 +1,14 @@
-import jwt from 'jsonwebtoken'
 import { NextFunction, Response } from 'express'
+import jwt from 'jsonwebtoken'
+
+import { User } from '../models'
+import { populateUserAccess } from '../services/organisationAccess/organisationAccess'
+import { getUserByUsername } from '../services/users'
 import { AuthenticatedRequest, UnauthenticatedRequest } from '../types'
 import { ApplicationError } from '../util/ApplicationError'
 import { JWT_KEY } from '../util/config'
-import { User } from '../models'
-import { logger } from '../util/logger'
-import { getUserByUsername } from '../services/users'
 import { getUserIams } from '../util/jami'
-import { populateUserAccess } from '../services/organisationAccess/organisationAccess'
+import { logger } from '../util/logger'
 
 const getLoggedInAsUser = async (loggedInAsUserId: string) => {
   const loggedInAsUser = await User.findByPk(loggedInAsUserId)

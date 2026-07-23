@@ -1,13 +1,11 @@
-import React, { forwardRef, useImperativeHandle, useRef } from 'react'
-
 import { Box, Grid2 as Grid, Typography } from '@mui/material'
+import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import OptionEditor from './OptionEditor'
+import useIsMobile from '../../hooks/useIsMobile'
 import FormikTextField from '../common/FormikTextField'
 import LinkButton from '../common/LinkButton'
-
-import useIsMobile from '../../hooks/useIsMobile'
+import OptionEditor from './OptionEditor'
 
 const styles = {
   container: theme => ({

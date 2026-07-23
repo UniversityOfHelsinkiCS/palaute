@@ -1,11 +1,12 @@
-import React from 'react'
-import { Box } from '@mui/material'
 import ArrowIcon from '@mui/icons-material/TrendingFlat'
-import { useTranslation } from 'react-i18next'
+import { Box } from '@mui/material'
 import { sumBy, isEmpty, round, orderBy } from 'lodash-es'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
+import { WORKLOAD_QUESTION_ID_ORDER } from '../../util/common'
 import { getLanguageValue } from '../../util/languageUtils'
 import ResultItemBase from './ResultItemBase'
-import { WORKLOAD_QUESTION_ID_ORDER } from '../../util/common'
 
 const normalizeMean = mean => {
   const diff = mean - 3

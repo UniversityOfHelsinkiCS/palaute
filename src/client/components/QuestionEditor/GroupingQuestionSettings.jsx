@@ -1,4 +1,4 @@
-import React from 'react'
+import { Add, ExpandMore } from '@mui/icons-material'
 import {
   Accordion,
   AccordionDetails,
@@ -11,16 +11,17 @@ import {
   TableHead,
   TableRow,
 } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Add, ExpandMore } from '@mui/icons-material'
+
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
-import TeacherChip from '../common/TeacherChip'
 import Instructions from '../common/Instructions'
-import { createQuestion } from './utils'
-import QuestionCard from './QuestionCard'
 import { NorButton } from '../common/NorButton'
+import TeacherChip from '../common/TeacherChip'
+import QuestionCard from './QuestionCard'
+import { createQuestion } from './utils'
 
 const GroupInformation = ({ groups }) => {
   const { t } = useTranslation()

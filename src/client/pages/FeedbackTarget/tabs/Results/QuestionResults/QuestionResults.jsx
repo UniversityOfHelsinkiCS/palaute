@@ -1,7 +1,6 @@
-import React, { useMemo } from 'react'
-import { groupBy } from 'lodash-es'
-
 import { Box, Typography, Chip } from '@mui/material'
+import { groupBy } from 'lodash-es'
+import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import QuestionItem from './QuestionItem'

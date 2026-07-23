@@ -1,25 +1,20 @@
+import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-
 import { Link, useParams, Routes, Route, useLocation } from 'react-router-dom'
 
-import { Card, CardContent, Box, Typography, Chip } from '@mui/material'
-
+import { NorButton } from '../../../../components/common/NorButton'
+import ProtectedRoute from '../../../../components/common/ProtectedRoute'
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import useInteractiveMutation from '../../../../hooks/useInteractiveMutation'
-
-import PercentageCell from '../../../CourseSummary/components/PercentageCell'
-import FeedbackResponseChip from '../../../MyTeaching/chips/FeedbackResponseChip'
-import ProtectedRoute from '../../../../components/common/ProtectedRoute'
-
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { getStartAndEndString } from '../../../../util/getDateRangeString'
 import { getLanguageValue } from '../../../../util/languageUtils'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
-
-import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
+import PercentageCell from '../../../CourseSummary/components/PercentageCell'
+import FeedbackResponseChip from '../../../MyTeaching/chips/FeedbackResponseChip'
 // eslint-disable-next-line import/no-cycle
 import InterimFeedbackModal from './InterimFeedbackModal'
-import { NorButton } from '../../../../components/common/NorButton'
+import { useDeleteInterimFeedbackMutation } from './useInterimFeedbackMutation'
 
 const InterimFeedbackItem = ({ interimFeedback }) => {
   const { id: parentId } = useParams()

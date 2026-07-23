@@ -1,5 +1,6 @@
-import _ from 'lodash'
 import { startOfDay, subDays } from 'date-fns'
+import _ from 'lodash'
+
 import {
   FeedbackTarget,
   User,
@@ -13,6 +14,8 @@ import {
   CourseRealisationsOrganisation,
   FeedbackTargetLog,
 } from '../models'
+import feedbackTargetCache from '../services/feedbackTargets/feedbackTargetCache'
+import { userCache } from '../services/users/cache'
 import { UNIVERSITY_ROOT_ID } from '../util/config'
 import {
   TEST_ORGANISATION_ID,
@@ -22,8 +25,6 @@ import {
   TEST_COURSE_REALISATION_ID,
 } from './testIds'
 import { createTestObject } from './utils'
-import { userCache } from '../services/users/cache'
-import feedbackTargetCache from '../services/feedbackTargets/feedbackTargetCache'
 
 const CURRENT_YEAR = new Date().getFullYear()
 

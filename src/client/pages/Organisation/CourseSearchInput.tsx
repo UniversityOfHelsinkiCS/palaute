@@ -1,17 +1,20 @@
-import React, { useState } from 'react'
-import { Autocomplete, TextField, Grid2 as Grid, Chip } from '@mui/material'
-import { useTranslation } from 'react-i18next'
-import { useFormikContext } from 'formik'
 import type { LocalizedString } from '@common/types/common'
 import type { User } from '@common/types/user'
-import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
-import { useDebounce } from './useDebounce'
+
+import { Autocomplete, TextField, Grid2 as Grid, Chip } from '@mui/material'
+import { useFormikContext } from 'formik'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import type { CourseRealisation, FeedbackTarget } from '../../types'
+import type { DateRange } from '../../types/DateRange'
+
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
-import { getSemesterRange } from '../../util/semesterUtils'
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
-import type { DateRange } from '../../types/DateRange'
-import type { CourseRealisation, FeedbackTarget } from '../../types'
+import { getSemesterRange } from '../../util/semesterUtils'
+import { useDebounce } from './useDebounce'
+import { useOrganisationCourseSearch } from './useOrganisationCourseSearch'
 
 export type InitialValues = {
   name: LocalizedString

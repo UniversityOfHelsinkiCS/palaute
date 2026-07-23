@@ -1,6 +1,6 @@
+import { format, parseISO } from 'date-fns'
 import React from 'react'
 import * as Yup from 'yup'
-import { format, parseISO } from 'date-fns'
 
 export const getUpperLevelQuestions = survey =>
   (survey?.universitySurvey?.questions ?? []).filter(q => q.type !== 'TEXT')

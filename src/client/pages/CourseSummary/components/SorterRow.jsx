@@ -1,11 +1,12 @@
-import React from 'react'
 import { Box } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSummaryContext } from '../context'
+
 import { YearSemesterPeriodSelector } from '../../../components/common/YearSemesterPeriodSelector'
-import Sort from './Sort'
 import { getLanguageValue } from '../../../util/languageUtils'
+import { useSummaryContext } from '../context'
 import RowHeader from './RowHeader'
+import Sort from './Sort'
 
 const styles = {
   filterContainer: {

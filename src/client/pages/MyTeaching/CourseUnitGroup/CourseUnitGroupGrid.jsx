@@ -1,6 +1,5 @@
-import React from 'react'
-
 import { Grid2 as Grid } from '@mui/material'
+import React from 'react'
 
 const CourseUnitGroupGrid = ({ children }) => (
   <Grid container spacing={2}>

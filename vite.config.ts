@@ -1,10 +1,8 @@
-import path from 'path'
-
-import react from '@vitejs/plugin-react-swc'
-
-import * as config from 'config'
-import { defineConfig } from 'vite'
 import { sentryVitePlugin } from '@sentry/vite-plugin'
+import react from '@vitejs/plugin-react-swc'
+import * as config from 'config'
+import path from 'path'
+import { defineConfig } from 'vite'
 
 // https://vitejs.dev/config/
 export default defineConfig({

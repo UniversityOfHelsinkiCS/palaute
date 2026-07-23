@@ -1,5 +1,6 @@
 /* eslint-disable no-bitwise */
 import React from 'react'
+
 import { generate } from '../util/randomColor'
 
 const hash = (s: string): number =>

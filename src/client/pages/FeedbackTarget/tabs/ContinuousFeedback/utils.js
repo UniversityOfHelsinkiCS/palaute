@@ -1,6 +1,6 @@
 import apiClient from '../../../../util/apiClient'
-import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 
 export const saveContinuousFeedback = async (values, feedbackTargetId) => {
   const { feedback } = values

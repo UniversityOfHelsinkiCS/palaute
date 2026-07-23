@@ -1,9 +1,9 @@
 import jwt from 'jsonwebtoken'
 
-import { ApplicationError } from '../../util/ApplicationError'
-import { getFeedbackTargetContext } from './getFeedbackTargetContext'
-import { JWT_KEY } from '../../util/config'
 import { User } from '../../models/user'
+import { ApplicationError } from '../../util/ApplicationError'
+import { JWT_KEY } from '../../util/config'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 /**
  * @feat Gradu survey

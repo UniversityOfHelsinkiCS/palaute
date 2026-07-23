@@ -1,8 +1,10 @@
-import { Response, Router } from 'express'
 import type { GetCourseUnitsByOrganisationResponse } from '@common/types/courseUnit'
-import { Op, QueryTypes } from 'sequelize'
-import _ from 'lodash'
 
+import { Response, Router } from 'express'
+import _ from 'lodash'
+import { Op, QueryTypes } from 'sequelize'
+
+import { sequelize } from '../../db/dbConnection'
 import {
   UserFeedbackTarget,
   FeedbackTarget,
@@ -12,10 +14,8 @@ import {
   Tag,
   Summary,
 } from '../../models'
-
-import { sequelize } from '../../db/dbConnection'
-import { INCLUDE_COURSES } from '../../util/config'
 import { AuthenticatedRequest } from '../../types'
+import { INCLUDE_COURSES } from '../../util/config'
 
 const getCourseUnitsForTeacher = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req

@@ -1,8 +1,3 @@
-import React from 'react'
-
-import { Route, useParams, Routes, Navigate, useMatch } from 'react-router-dom'
-
-import { Box, Typography } from '@mui/material'
 import {
   CalendarTodayOutlined,
   CommentOutlined,
@@ -12,28 +7,31 @@ import {
   DynamicFormOutlined,
   PeopleOutlined,
 } from '@mui/icons-material'
+import { Box, Typography } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Route, useParams, Routes, Navigate, useMatch } from 'react-router-dom'
 
+import ErrorView from '../../components/common/ErrorView'
+import LinkButton from '../../components/common/LinkButton'
+import { LoadingProgress } from '../../components/common/LoadingProgress'
+import ProtectedRoute from '../../components/common/ProtectedRoute'
+import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
+import Title from '../../components/common/Title'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useOrganisation from '../../hooks/useOrganisation'
 import { ORGANISATION_SURVEYS_ENABLED, SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS } from '../../util/common'
+import errors from '../../util/errorMessage'
+import { getLanguageValue } from '../../util/languageUtils'
+import ForOrganisation from '../CourseSummary/ForOrganisation'
 import EditSurvey from './EditSurvey'
 import GeneralSettings from './GeneralSettings'
-import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
-import OrganisationSurveys from './OrganisationSurveys'
-import useOrganisation from '../../hooks/useOrganisation'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { getLanguageValue } from '../../util/languageUtils'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
 import OrganisationLogs from './OrganisationLogs'
-import SemesterOverview from './SemesterOverview'
+import OrganisationSurveys from './OrganisationSurveys'
+import ProgrammeOpenQuestions from './ProgrammeOpenQuestions'
 import Responsibles from './Responsibles'
 import ResponsiblesXlsx from './ResponsiblesXlsx'
-import Title from '../../components/common/Title'
-import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
-import ErrorView from '../../components/common/ErrorView'
-import errors from '../../util/errorMessage'
-import ProtectedRoute from '../../components/common/ProtectedRoute'
-import LinkButton from '../../components/common/LinkButton'
-import ForOrganisation from '../CourseSummary/ForOrganisation'
+import SemesterOverview from './SemesterOverview'
 
 const Organisation = () => {
   const { code } = useParams()

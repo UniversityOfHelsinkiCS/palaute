@@ -1,4 +1,5 @@
 import type { NextFunction, Response } from 'express'
+
 import { AuthenticatedRequest } from '../types'
 import { ApplicationError } from '../util/ApplicationError'
 

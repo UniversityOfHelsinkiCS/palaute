@@ -1,19 +1,15 @@
-import React from 'react'
-import { useSnackbar } from 'notistack'
-import { useTranslation } from 'react-i18next'
-
-import { Stack } from '@mui/material'
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
-
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
-import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
+import { Stack } from '@mui/material'
+import { useSnackbar } from 'notistack'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import LinkButton from '../../components/common/LinkButton'
 import { NorButton } from '../../components/common/NorButton'
-
-import { getLanguageValue } from '../../util/languageUtils'
 import { getPrimaryCourseName } from '../../util/courseIdentifiers'
-
+import { getLanguageValue } from '../../util/languageUtils'
+import { useFeedbackTargetContext } from './FeedbackTargetContext'
+import { useInterimFeedbackParent } from './tabs/InterimFeedback/useInterimFeedbacks'
 import { getCourseUnitSummaryPath, copyLink } from './utils'
 
 const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {

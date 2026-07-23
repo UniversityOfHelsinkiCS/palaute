@@ -1,9 +1,10 @@
 import { Box } from '@mui/material'
 import React from 'react'
 import { useParams } from 'react-router'
-import useOrganisationLogs from '../../hooks/useOrganisationLogs'
+
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { LogItem } from '../../components/Logs/LogItem'
+import useOrganisationLogs from '../../hooks/useOrganisationLogs'
 
 const getLogMessage = data => {
   let messages = []

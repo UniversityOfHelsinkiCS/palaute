@@ -1,11 +1,3 @@
-import React from 'react'
-/** @jsxImportSource @emotion/react */
-
-import { Navigate, Route, Routes, useMatch, useLocation } from 'react-router-dom'
-
-import { Alert, Box, Link } from '@mui/material'
-
-import { useTranslation } from 'react-i18next'
 import {
   EditOutlined,
   ListOutlined,
@@ -17,35 +9,40 @@ import {
   ForumOutlined,
   VisibilityOutlined,
 } from '@mui/icons-material'
+/** @jsxImportSource @emotion/react */
+import { Alert, Box, Link } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Navigate, Route, Routes, useMatch, useLocation } from 'react-router-dom'
 
+import ErrorView from '../../components/common/ErrorView'
+import ProtectedRoute from '../../components/common/ProtectedRoute'
+import Title from '../../components/common/Title'
 import {
   ALWAYS_SHOW_STUDENT_LIST,
   INTERIM_FEEDBACKS_ENABLED,
   SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING,
 } from '../../util/common'
-import Results from './tabs/Results'
-import FeedbackView from './tabs/FeedbackView'
-import StudentsWithFeedback from './tabs/StudentsWithFeedback'
-import EditFeedbackResponse from './tabs/EditFeedbackResponse'
-import Share from './tabs/Share'
-import Links from './tabs/Links'
-import Settings from './tabs/Settings'
-import Logs from './tabs/Logs'
-import ContinuousFeedback from './tabs/ContinuousFeedback'
-// eslint-disable-next-line import/no-cycle
-import InterimFeedback from './tabs/InterimFeedback'
-import { getLanguageValue } from '../../util/languageUtils'
-import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
-import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
 import { getCourseCode, getPrimaryCourseName, getSurveyType } from '../../util/courseIdentifiers'
+import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOld from '../../util/feedbackTargetIsOld'
+import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { getLanguageValue } from '../../util/languageUtils'
 import { feedbackTargetIsOpenOrClosed } from './Dates/utils'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
-import ErrorView from '../../components/common/ErrorView'
-import ProtectedRoute from '../../components/common/ProtectedRoute'
-import Title from '../../components/common/Title'
-import { FeedbackTargetTabsContainer, FeedbackTargetTab } from './FeedbackTargetTabs'
 import FeedbackTargetInformation from './FeedbackTargetInformation'
+import { FeedbackTargetTabsContainer, FeedbackTargetTab } from './FeedbackTargetTabs'
+import ContinuousFeedback from './tabs/ContinuousFeedback'
+import EditFeedbackResponse from './tabs/EditFeedbackResponse'
+import FeedbackView from './tabs/FeedbackView'
+// eslint-disable-next-line import/no-cycle
+import InterimFeedback from './tabs/InterimFeedback'
+import Links from './tabs/Links'
+import Logs from './tabs/Logs'
+import Results from './tabs/Results'
+import Settings from './tabs/Settings'
+import Share from './tabs/Share'
+import StudentsWithFeedback from './tabs/StudentsWithFeedback'
 import { getActiveTabName } from './utils'
 
 const styles = {

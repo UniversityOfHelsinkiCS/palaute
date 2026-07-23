@@ -1,6 +1,7 @@
-import React from 'react'
 import { Box, Dialog, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
 import TagSelector from './TagSelector'
 import useUpdateCourseUnitTags from './useUpdateCourseUnitTags'
 

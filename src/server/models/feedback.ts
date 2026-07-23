@@ -1,3 +1,5 @@
+import type { QuestionAnswer } from '@common/types/question'
+
 import {
   Model,
   JSONB,
@@ -9,7 +11,7 @@ import {
   DATE,
   INTEGER,
 } from 'sequelize'
-import type { QuestionAnswer } from '@common/types/question'
+
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
 

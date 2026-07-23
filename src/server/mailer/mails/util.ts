@@ -1,10 +1,12 @@
+import { LanguageId, LocalizedString } from '@common/types/common'
 import { format } from 'date-fns'
 import jwt from 'jsonwebtoken'
-import { LanguageId, LocalizedString } from '@common/types/common'
-import { getLanguageValue } from '../../util/languageUtils'
-import { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS, PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
-import { CourseUnit, FeedbackTarget, Question, User } from '../../models'
+
 import type { SummaryAttributes } from '../../models/summary'
+
+import { CourseUnit, FeedbackTarget, Question, User } from '../../models'
+import { JWT_KEY, NOAD_LINK_EXPIRATION_DAYS, PUBLIC_URL, SHOW_COURSE_CODES_WITH_COURSE_NAMES } from '../../util/config'
+import { getLanguageValue } from '../../util/languageUtils'
 
 const getNoAdUrl = (username: string, userId: string, days: number) => {
   const token = jwt.sign({ username }, JWT_KEY, { expiresIn: `${days}d` })

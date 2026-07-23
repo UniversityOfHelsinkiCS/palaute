@@ -1,19 +1,20 @@
-import { Box, IconButton, Tooltip } from '@mui/material'
 import { PushPin, PushPinOutlined } from '@mui/icons-material'
+import { Box, IconButton, Tooltip } from '@mui/material'
+import { orderBy } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
-import { orderBy } from 'lodash-es'
-import RowHeader from './RowHeader'
-import { TAGS_ENABLED } from '../../../util/common'
+
 import useRandomColor from '../../../hooks/useRandomColor'
-import { useSummaryContext } from '../context'
-import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
+import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
+import { TAGS_ENABLED } from '../../../util/common'
 import { useSummaries, usePinnedOrganisations, usePinOrganisationMutation, useUnpinOrganisationMutation } from '../api'
+import { useSummaryContext } from '../context'
 import { useOrderedAndFilteredOrganisations } from '../utils'
 import { OrganisationLabel, TagLabel } from './Labels'
-import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { OrganisationLink } from './OrganisationLink'
+import RowHeader from './RowHeader'
+import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
 
 const ChildOrganisationsList = ({ organisationId, initialChildOrganisations }) => {
   const { organisation, isLoading } = useSummaries({

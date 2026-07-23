@@ -1,10 +1,11 @@
-import _ from 'lodash'
 import * as datefns from 'date-fns'
-import { FeedbackData } from '../../models/feedback'
+import _ from 'lodash'
 import { InferAttributes } from 'sequelize'
-import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
+
 import { Summary, Organisation, CourseUnit, CourseRealisation } from '../../models'
+import { FeedbackData } from '../../models/feedback'
 import { SummaryAttributes, SummaryData, SummaryResult } from '../../models/summary'
+import { WORKLOAD_QUESTION_ID_ORDER, WORKLOAD_QUESTION_ID } from '../../util/config'
 
 const mapOptionIdToValue = (optionId: string, questionId: string | number) => {
   if (Number(questionId) === WORKLOAD_QUESTION_ID) {

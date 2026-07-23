@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+
 import { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } from '../../models'
 import { pate } from '../pateClient'
 import { notificationAboutSurveyOpeningToStudents } from './sendEmailAboutSurveyOpeningToStudents'

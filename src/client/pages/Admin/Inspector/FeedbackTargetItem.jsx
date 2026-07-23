@@ -1,8 +1,3 @@
-import React, { useState } from 'react'
-import { useTranslation } from 'react-i18next'
-
-import { Link } from 'react-router-dom'
-
 import {
   Accordion,
   AccordionDetails,
@@ -18,13 +13,15 @@ import {
   TableRow,
   TableCell,
 } from '@mui/material'
-
 import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
-import apiClient from '../../../util/apiClient'
-import { getLanguageValue } from '../../../util/languageUtils'
-import { getCourseCode, getPrimaryCourseName } from '../../../util/courseIdentifiers'
 import { NorButton } from '../../../components/common/NorButton'
+import apiClient from '../../../util/apiClient'
+import { getCourseCode, getPrimaryCourseName } from '../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../util/languageUtils'
 
 const Details = ({ feedbackTarget: fbt }) => (
   <TableContainer>

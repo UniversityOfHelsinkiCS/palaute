@@ -1,3 +1,5 @@
+import { LanguageId } from '@common/types/common'
+import _ from 'lodash'
 import {
   Model,
   STRING,
@@ -11,13 +13,12 @@ import {
   HasManyGetAssociationsMixin,
   HasManyHasAssociationMixin,
 } from 'sequelize'
-import _ from 'lodash'
-import { LanguageId } from '@common/types/common'
+
+import type { FeedbackTarget } from './feedbackTarget'
+import type { Organisation } from './organisation'
 
 import { sequelize } from '../db/dbConnection'
 import { UserFeedbackTarget } from './userFeedbackTarget'
-import type { FeedbackTarget } from './feedbackTarget'
-import type { Organisation } from './organisation'
 
 class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
   // --- Acual DB columns ---

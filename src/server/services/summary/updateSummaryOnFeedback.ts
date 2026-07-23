@@ -1,8 +1,8 @@
-import feedbackTargetCache from '../feedbackTargets/feedbackTargetCache'
 import { Feedback, Summary, UserFeedbackTarget } from '../../models'
-import { addFeedbackDataToSummary, removeFeedbackDataFromSummary } from './utils'
+import feedbackTargetCache from '../feedbackTargets/feedbackTargetCache'
 import { createSummaryForFeedbackTarget } from './createSummary'
 import { getOrCreateSummary } from './getOrCreateSummary'
+import { addFeedbackDataToSummary, removeFeedbackDataFromSummary } from './utils'
 
 export const updateSummaryAfterFeedbackCreated = async (feedbackTargetId: number, feedback: Feedback) => {
   let summary = await Summary.findOne({

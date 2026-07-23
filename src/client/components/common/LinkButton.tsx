@@ -1,10 +1,12 @@
+import type { ButtonProps, SxProps, Theme } from '@mui/material'
+
+import { OpenInNew } from '@mui/icons-material'
+import { Button, Link as MuiLink, Box } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Button, Link as MuiLink, Box } from '@mui/material'
-import type { ButtonProps, SxProps, Theme } from '@mui/material'
-import { OpenInNew } from '@mui/icons-material'
-import { visuallyHidden } from '@mui/utils'
+
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'
 

@@ -1,6 +1,7 @@
 import { QueryTypes } from 'sequelize'
-import { User } from '../../models'
+
 import { sequelize } from '../../db/dbConnection'
+import { User } from '../../models'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
 export const getSummaryAccessibleOrganisationIds = async (user: User) => {

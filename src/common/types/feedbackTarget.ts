@@ -1,7 +1,7 @@
 import type { LocalizedString } from './common'
-import type { User } from './user'
 import type { CourseUnit } from './courseUnit'
 import type { Question } from './question'
+import type { User } from './user'
 
 export type CourseRealisation = {
   id: string

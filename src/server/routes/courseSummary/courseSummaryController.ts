@@ -1,8 +1,7 @@
-import z from 'zod/v4'
-import { Response, Router } from 'express'
 import { format } from 'date-fns'
+import { Response, Router } from 'express'
+import z from 'zod/v4'
 
-import { ApplicationError } from '../../util/ApplicationError'
 import {
   getOrganisationSummaryWithChildOrganisations,
   getOrganisationSummaryWithCourseUnits,
@@ -13,8 +12,9 @@ import {
   getCourseUnitGroupSummaries,
   exportXLSX,
 } from '../../services/summary'
-import { startOfStudyYear, endOfStudyYear } from '../../util/common'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
+import { startOfStudyYear, endOfStudyYear } from '../../util/common'
 
 /**
  * Parse dates from query parameters. If both dates are not valid, default to current study year

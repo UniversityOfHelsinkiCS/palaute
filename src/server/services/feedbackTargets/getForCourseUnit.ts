@@ -1,8 +1,9 @@
 import _ from 'lodash'
 import { Op } from 'sequelize'
+
 import { FeedbackTarget, CourseRealisation, UserFeedbackTarget, CourseUnit } from '../../models'
-import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
 import { User } from '../../models/user'
+import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
 
 type GetForCourseUnitParams = {
   courseCode: string

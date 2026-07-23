@@ -1,13 +1,13 @@
+import { Typography, Box, Card, CardContent, Alert, Tooltip } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import { Typography, Box, Card, CardContent, Alert, Tooltip } from '@mui/material'
 
-import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import Markdown from '../../../../components/common/Markdown'
-import { boxPrintStyle } from '../../../../util/printStyle'
 import { NorButton } from '../../../../components/common/NorButton'
+import feedbackTargetIsEnded from '../../../../util/feedbackTargetIsEnded'
+import { boxPrintStyle } from '../../../../util/printStyle'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 
 const FeedbackResponse = ({ feedbackTarget }) => {
   const { t } = useTranslation()

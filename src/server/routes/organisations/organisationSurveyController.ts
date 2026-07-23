@@ -1,6 +1,8 @@
-import _ from 'lodash'
 import { Response, Router } from 'express'
+import _ from 'lodash'
 
+import { getFeedbackTargetContext } from '../../services/feedbackTargets/getFeedbackTargetContext'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import {
   initializeOrganisationCourseUnit,
   createOrganisationFeedbackTarget,
@@ -16,14 +18,12 @@ import {
   getOrganisationSurveyCourseStudents,
   createOrganisationSurveyCourses,
 } from '../../services/organisations/organisationSurveys'
-import { getFeedbackTargetContext } from '../../services/feedbackTargets/getFeedbackTargetContext'
 import { validateStudentNumbers } from '../../services/organisations/validator'
-import { ApplicationError } from '../../util/ApplicationError'
-import { getAccessAndOrganisation } from './util'
 import { createSummaryForFeedbackTarget } from '../../services/summary/createSummary'
 import { updateSummaryOnOrganisationSurveyEdit } from '../../services/summary/updateSummaryOnOrganisationSurveyEdit'
-import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
+import { getAccessAndOrganisation } from './util'
 
 const getOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req

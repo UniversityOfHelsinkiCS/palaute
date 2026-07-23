@@ -1,17 +1,17 @@
-import React from 'react'
-import { useParams } from 'react-router'
 import { Box, Typography, Alert } from '@mui/material'
 import { Form, Formik } from 'formik'
-import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
-import { saveContinuousFeedback } from './utils'
 import { NorButton } from '../../../../components/common/NorButton'
-import { ConsentCheckbox } from '../FeedbackView/ConsentCheckbox'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import queryClient from '../../../../util/queryClient'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import { ConsentCheckbox } from '../FeedbackView/ConsentCheckbox'
+import { saveContinuousFeedback } from './utils'
 
 const styles = {
   description: {

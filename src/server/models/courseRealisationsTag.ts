@@ -1,4 +1,5 @@
 import { Model, INTEGER, STRING, CreationOptional, InferAttributes, InferCreationAttributes, DATE } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class CourseRealisationsTag extends Model<

@@ -1,6 +1,7 @@
 import { Response, Request } from 'express'
-import { ApplicationError } from '../../util/ApplicationError'
+
 import { FeedbackTarget } from '../../models'
+import { ApplicationError } from '../../util/ApplicationError'
 
 export const redirectFromCoursesPage = async (req: Request, res: Response) => {
   const courseId = req.params.id

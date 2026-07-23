@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react'
-import { Route, Routes, useLocation } from 'react-router-dom'
 import { Container } from '@mui/material'
+import React, { useMemo } from 'react'
 import { Navigate, useParams } from 'react-router'
+import { Route, Routes, useLocation } from 'react-router-dom'
 
 import GuestCourses from './GuestCourses'
 import GuestFeedbackTargetView from './GuestFeedbackTargetView'

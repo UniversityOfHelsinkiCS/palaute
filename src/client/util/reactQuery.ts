@@ -1,6 +1,8 @@
-import { produce } from 'immer'
-import type { Draft } from 'immer'
 import type { QueryKey } from '@tanstack/react-query'
+import type { Draft } from 'immer'
+
+import { produce } from 'immer'
+
 import queryClient from './queryClient'
 
 /**

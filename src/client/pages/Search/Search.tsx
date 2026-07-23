@@ -1,20 +1,22 @@
+import type { LocalizedString } from '@common/types/common'
+import type { SystemStyleObject } from '@mui/system'
+
+import { Alert, Autocomplete, Box, Paper, type SxProps, TextField, Theme, Typography, Stack } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { format, isValid } from 'date-fns/esm'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { format, isValid } from 'date-fns/esm'
-import { Alert, Autocomplete, Box, Paper, type SxProps, TextField, Theme, Typography, Stack } from '@mui/material'
-import type { SystemStyleObject } from '@mui/system'
-import { useQuery } from '@tanstack/react-query'
-import type { LocalizedString } from '@common/types/common'
+
+import ExternalLink from '../../components/common/ExternalLink'
+import Title from '../../components/common/Title'
+import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
+import useIsMobile from '../../hooks/useIsMobile'
+import useOrganisationsList from '../../hooks/useOrganisationsList'
+import useURLSearchParams from '../../hooks/useURLSearchParams'
 import apiClient from '../../util/apiClient'
 import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
-import useURLSearchParams from '../../hooks/useURLSearchParams'
-import Title from '../../components/common/Title'
 import { getLanguageValue } from '../../util/languageUtils'
-import ExternalLink from '../../components/common/ExternalLink'
-import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { getSemesterRange } from '../../util/semesterUtils'
-import useOrganisationsList from '../../hooks/useOrganisationsList'
-import useIsMobile from '../../hooks/useIsMobile'
 
 const styles: Record<string, SystemStyleObject<Theme>> = {
   date: {

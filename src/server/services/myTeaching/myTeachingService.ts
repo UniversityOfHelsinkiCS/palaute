@@ -10,7 +10,6 @@ import {
   Summary,
   type User,
 } from '../../models'
-
 import { DateRangeInput, formatActivityPeriod } from '../../util/common'
 
 const getAllTeacherCourseUnits = async (user: User, query: DateRangeInput & { isOrganisationSurvey?: string }) => {

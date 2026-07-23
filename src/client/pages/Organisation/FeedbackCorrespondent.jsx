@@ -1,16 +1,15 @@
-import React, { useState } from 'react'
-
 import { TextField, Card, CardContent, Box, Typography, Alert, List, ListItem, ListItemText } from '@mui/material'
-import { useSnackbar } from 'notistack'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { debounce } from 'lodash-es'
+import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
-import { debounce } from 'lodash-es'
 
-import useOrganisation from '../../hooks/useOrganisation'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import apiClient from '../../util/apiClient'
 import { NorButton } from '../../components/common/NorButton'
+import useOrganisation from '../../hooks/useOrganisation'
+import apiClient from '../../util/apiClient'
 
 const updateFeedbackCorrespondents =
   code =>

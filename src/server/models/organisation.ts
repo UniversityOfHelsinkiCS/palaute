@@ -1,3 +1,5 @@
+import type { LocalizedString } from '@common/types/common'
+
 import {
   Model,
   JSONB,
@@ -12,16 +14,17 @@ import {
   CreationOptional,
   HasManyGetAssociationsMixin,
 } from 'sequelize'
-import type { LocalizedString } from '@common/types/common'
-import { sequelize } from '../db/dbConnection'
+
+import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
+import type { CourseUnit } from './courseUnit'
+import type { OrganisationLog } from './organisationLog'
 import type Summary from './summary'
 import type { SummaryAttributes } from './summary'
-import type { CourseUnit } from './courseUnit'
-import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 import type { Tag } from './tag'
-import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
 import type { User } from './user'
-import type { OrganisationLog } from './organisationLog'
+
+import { sequelize } from '../db/dbConnection'
+import { CourseUnitsOrganisation } from './courseUnitsOrganisation'
 
 class Organisation extends Model<InferAttributes<Organisation>, InferCreationAttributes<Organisation>> {
   // --- Acual DB columns ---

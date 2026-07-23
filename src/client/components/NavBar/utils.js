@@ -1,6 +1,6 @@
+import apiClient from '../../util/apiClient'
 import { inProduction } from '../../util/common'
 import { clearHeaders } from '../../util/mockHeaders'
-import apiClient from '../../util/apiClient'
 
 const devLogout = () => {
   clearHeaders()

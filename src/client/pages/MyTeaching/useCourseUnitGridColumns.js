@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
 import useMediaQuery from '@mui/material/useMediaQuery'
+import { useEffect, useState } from 'react'
 
 const useCourseUnitGridColumns = theme => {
   const [columns, setColumns] = useState(0)

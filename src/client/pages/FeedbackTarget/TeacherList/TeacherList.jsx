@@ -1,11 +1,12 @@
-import React from 'react'
-import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, Typography } from '@mui/material'
 import { ExpandMore } from '@mui/icons-material'
+import { Accordion, AccordionDetails, AccordionSummary, List, ListItem, Typography } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+
 import TeacherChip from '../../../components/common/TeacherChip'
-import { deleteResponsibleTeacher } from './api'
 import { focusIndicatorStyle } from '../../../util/accessibility'
+import { useFeedbackTargetContext } from '../FeedbackTargetContext'
+import { deleteResponsibleTeacher } from './api'
 
 const TeacherList = ({ teachers, title, open, ...rest }) => {
   const { t } = useTranslation()

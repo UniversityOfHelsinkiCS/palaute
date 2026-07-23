@@ -1,10 +1,12 @@
-import React from 'react'
-import { Box, Grid2 as Grid, Paper } from '@mui/material'
-import { Close } from '@mui/icons-material'
-import type { LanguageId } from '@common/types/common'
 import type { BannerData } from '@common/types/banner'
-import Markdown from './Markdown'
+import type { LanguageId } from '@common/types/common'
+
+import { Close } from '@mui/icons-material'
+import { Box, Grid2 as Grid, Paper } from '@mui/material'
+import React from 'react'
+
 import { getLanguageValue } from '../../util/languageUtils'
+import Markdown from './Markdown'
 import { NorButton } from './NorButton'
 
 const styles = {

@@ -1,5 +1,5 @@
-import useShibbolethPinger from './Pinger-shibboleth'
 import useDefaultPinger from './Pinger-default'
+import useShibbolethPinger from './Pinger-shibboleth'
 
 const usePinger = (pingerName: 'Pinger-default' | 'Pinger-shibboleth') => {
   const PingerHooks = {

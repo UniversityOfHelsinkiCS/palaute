@@ -1,12 +1,12 @@
 import _ from 'lodash'
 
-import { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/config'
 import { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } from '../../models'
+import { PublicFeedback } from '../../models/feedback'
+import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
+import { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/config'
 import { getAccess } from './getAccess'
 import { getAdditionalDataFromCacheOrDb } from './getOneForUser'
-import { User } from '../../models/user'
-import { PublicFeedback } from '../../models/feedback'
 
 const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets: UserFeedbackTarget[], groupingQuestionId: number) =>
   _.countBy(

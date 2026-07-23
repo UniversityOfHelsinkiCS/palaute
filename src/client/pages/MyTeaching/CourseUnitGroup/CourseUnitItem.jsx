@@ -1,14 +1,12 @@
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography } from '@mui/material'
 
-import DisabledCourseWarning from './DisabledCourseWarning'
-import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
-
-import commonStyles from '../utils/styles'
-
-import { getLanguageValue } from '../../../util/languageUtils'
 import { getCourseCode } from '../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../util/languageUtils'
+import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
+import commonStyles from '../utils/styles'
+import DisabledCourseWarning from './DisabledCourseWarning'
 
 const styles = {
   item: {

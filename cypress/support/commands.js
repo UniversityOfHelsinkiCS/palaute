@@ -1,4 +1,5 @@
 import { addDays } from 'date-fns'
+
 import { admin, student, teacher } from '../fixtures/headers'
 
 Cypress.Commands.add('loginAs', user => {

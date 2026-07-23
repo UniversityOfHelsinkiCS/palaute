@@ -1,15 +1,11 @@
-import React from 'react'
-
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
-
-import { useTranslation } from 'react-i18next'
 import { formatDistanceToNow } from 'date-fns/esm'
-
-import ExternalLink from './common/ExternalLink'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 import { images, inProduction, inStaging } from '../util/common'
-
 import { localeForLanguage } from '../util/languageUtils'
+import ExternalLink from './common/ExternalLink'
 
 const styles = {
   logo: {

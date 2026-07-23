@@ -1,5 +1,6 @@
-import React from 'react'
+import type { Survey } from '@common/types/survey'
 
+import { FileCopyOutlined, Circle } from '@mui/icons-material'
 import {
   Dialog,
   DialogTitle,
@@ -10,12 +11,10 @@ import {
   ListItemIcon,
   ListItemText,
 } from '@mui/material'
-import { FileCopyOutlined, Circle } from '@mui/icons-material'
-
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import type { Survey } from '@common/types/survey'
-import { getLanguageValue } from '../../util/languageUtils'
 
+import { getLanguageValue } from '../../util/languageUtils'
 import { NorButton } from '../common/NorButton'
 
 type CopyUniversityQuestionsDialogProps = {

@@ -3,9 +3,9 @@ import 'chart.js/auto'
 import { Bar } from 'react-chartjs-2'
 import { useTranslation } from 'react-i18next'
 
-import { getMultipleChoiceChartConfig } from './utils'
-import ResultsContent from './ResultsContent'
 import AccessibleChartTable from './AccessibleChartTable'
+import ResultsContent from './ResultsContent'
+import { getMultipleChoiceChartConfig } from './utils'
 
 const MultipleChoiceResults = ({ question, feedbackCount, showTable }) => {
   const { t, i18n } = useTranslation()

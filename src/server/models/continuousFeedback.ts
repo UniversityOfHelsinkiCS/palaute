@@ -10,9 +10,11 @@ import {
   CreationOptional,
   DATE,
 } from 'sequelize'
-import { sequelize } from '../db/dbConnection'
-import type { User } from './user'
+
 import type { FeedbackTarget } from './feedbackTarget'
+import type { User } from './user'
+
+import { sequelize } from '../db/dbConnection'
 
 class ContinuousFeedback extends Model<
   InferAttributes<ContinuousFeedback>,

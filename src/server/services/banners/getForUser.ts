@@ -1,4 +1,5 @@
 import { Op } from 'sequelize'
+
 import { Banner, User } from '../../models'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 

@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetNoadUserResponse } from '@common/types/user'
+
+import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const useNoadUser = (options = {}) => {

@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetCourseUnitsByOrganisationResponse } from '@common/types/courseUnit'
+
+import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const useOrganisationCourseUnits = (code: string | undefined, options = {}) => {

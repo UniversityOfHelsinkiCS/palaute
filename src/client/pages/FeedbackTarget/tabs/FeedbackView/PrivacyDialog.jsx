@@ -1,10 +1,9 @@
-import React from 'react'
-
 import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material'
-
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { NorButton } from '../../../../components/common/NorButton'
+
 import LinkButton from '../../../../components/common/LinkButton'
+import { NorButton } from '../../../../components/common/NorButton'
 
 const PrivacyDialog = ({ open, onClose }) => {
   const { t } = useTranslation()

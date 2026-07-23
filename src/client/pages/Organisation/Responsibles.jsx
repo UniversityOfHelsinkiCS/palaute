@@ -1,8 +1,4 @@
-import React, { useMemo, useEffect } from 'react'
-import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router'
-import { writeFileXLSX, utils } from 'xlsx'
-import { format, isValid } from 'date-fns'
+import { ArrowDropDown, Menu as MenuIcon, KeyboardArrowDown, KeyboardArrowUp, Download } from '@mui/icons-material'
 import {
   Box,
   Typography,
@@ -21,12 +17,17 @@ import {
   Menu,
   MenuItem,
 } from '@mui/material'
-import { ArrowDropDown, Menu as MenuIcon, KeyboardArrowDown, KeyboardArrowUp, Download } from '@mui/icons-material'
-import useURLSearchParams from '../../hooks/useURLSearchParams'
+import { format, isValid } from 'date-fns'
+import React, { useMemo, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useParams } from 'react-router'
+import { writeFileXLSX, utils } from 'xlsx'
+
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { getYearRange, useAcademicYears } from '../../util/yearUtils'
 import { NorButton } from '../../components/common/NorButton'
 import { YearSelector } from '../../components/common/YearSemesterPeriodSelector'
+import useURLSearchParams from '../../hooks/useURLSearchParams'
+import { getYearRange, useAcademicYears } from '../../util/yearUtils'
 import {
   useOrganisationFeedbackTargets,
   getCourseRealisationName,

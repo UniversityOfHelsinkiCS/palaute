@@ -1,13 +1,14 @@
-import React from 'react'
 import { Box } from '@mui/material'
 import { orderBy } from 'lodash-es'
+import React from 'react'
+
 import useRandomColor from '../../../hooks/useRandomColor'
+import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { useSummaryContext } from '../context'
 import { OrganisationLabel } from './Labels'
-import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
+import { OrganisationLink } from './OrganisationLink'
 import RowHeader from './RowHeader'
 import { CourseUnitSummaryRow, SummaryResultElements } from './SummaryRow'
-import { OrganisationLink } from './OrganisationLink'
 
 const TeacherOrganisationRow = ({ organisation, questions }) => {
   const { sortBy, sortFunction, showSeparateOrganisationCourses } = useSummaryContext()

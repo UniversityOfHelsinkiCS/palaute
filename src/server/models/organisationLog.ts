@@ -8,8 +8,10 @@ import {
   InferCreationAttributes,
   CreationOptional,
 } from 'sequelize'
-import { sequelize } from '../db/dbConnection'
+
 import type { User } from './user'
+
+import { sequelize } from '../db/dbConnection'
 
 class OrganisationLog extends Model<InferAttributes<OrganisationLog>, InferCreationAttributes<OrganisationLog>> {
   declare id: CreationOptional<number>

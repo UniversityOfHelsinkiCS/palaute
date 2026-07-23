@@ -7,9 +7,7 @@ import {
   sendEmailAboutSurveyOpeningToStudents,
   sendEmailToStudentsWhenOpeningImmediately,
 } from './mails'
-
 import { returnEmailsToBeSentToday } from './mails/stats'
-
 import { runContinuousFeedbackCron, runPateCron, scheduleCronJobs } from './scheduleCronJobs'
 
 export const mailer = {

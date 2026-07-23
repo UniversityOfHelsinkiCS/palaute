@@ -1,15 +1,13 @@
-import _ from 'lodash'
-import { Response, Router } from 'express'
-import { Op } from 'sequelize'
 import type {
   GetOrganisationsResponse,
   GetOrganisationResponse,
   GetOrganisationLogsResponse,
 } from '@common/types/organisation'
-import { AuthenticatedRequest } from '../../types'
-import { formatActivityPeriod } from '../../util/common'
-import { getOrganisationsList } from '../../services/organisations/getOrganisationsList'
-import { ORGANISATION_SURVEYS_ENABLED } from '../../util/config'
+
+import { Response, Router } from 'express'
+import _ from 'lodash'
+import { Op } from 'sequelize'
+
 import {
   Organisation,
   OrganisationLog,
@@ -19,13 +17,17 @@ import {
   FeedbackTarget,
   Summary,
 } from '../../models'
-import { ApplicationError } from '../../util/ApplicationError'
 import { createOrganisationLog } from '../../services/auditLog'
+import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import getOpenFeedbackByOrganisation from '../../services/organisations/getOpenFeedbackByOrganisation'
-import { getAccessAndOrganisation } from './util'
+import { getOrganisationsList } from '../../services/organisations/getOrganisationsList'
+import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
+import { formatActivityPeriod } from '../../util/common'
+import { ORGANISATION_SURVEYS_ENABLED } from '../../util/config'
 import { router as feedbackCorrespondentRouter } from './feedbackCorrespondentController'
 import { router as organisationSurveyRouter } from './organisationSurveyController'
-import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { getAccessAndOrganisation } from './util'
 
 export const router = Router()
 

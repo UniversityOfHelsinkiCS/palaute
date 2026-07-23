@@ -1,13 +1,14 @@
-import React from 'react'
-import { blueGrey } from '@mui/material/colors'
-import { useTranslation } from 'react-i18next'
 import { Box, Typography } from '@mui/material'
+import { blueGrey } from '@mui/material/colors'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+
 import { getLanguageValue } from '../../../util/languageUtils'
+import { useSummaryContext } from '../context'
 import { CourseUnitLabel } from './Labels'
 import RowHeader from './RowHeader'
-import { FeedbackTargetSummaryRow, SummaryResultElements } from './SummaryRow'
 import { SorterRow } from './SorterRow'
-import { useSummaryContext } from '../context'
+import { FeedbackTargetSummaryRow, SummaryResultElements } from './SummaryRow'
 
 const questionFilter = q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD'
 

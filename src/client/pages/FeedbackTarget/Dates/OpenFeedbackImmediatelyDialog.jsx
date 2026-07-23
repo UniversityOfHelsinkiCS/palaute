@@ -1,7 +1,7 @@
-import React from 'react'
-
 import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { NorButton } from '../../../components/common/NorButton'
 
 const OpenFeedbackImmediatelyDialog = ({ open = false, onClose, onConfirm }) => {

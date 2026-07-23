@@ -1,20 +1,16 @@
-import React, { useState } from 'react'
-
-import { useParams, useNavigate } from 'react-router-dom'
-
+import CloseIcon from '@mui/icons-material/Close'
+import { Dialog, Box, IconButton } from '@mui/material'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { Dialog, Box, IconButton } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
+import React, { useState } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 
 import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
-
-import useOrganisations from '../../../../hooks/useOrganisations'
 import useFeedbackTarget from '../../../../hooks/useFeedbackTarget'
-
-import { FeedbackTargetContextProvider } from '../../FeedbackTargetContext'
+import useOrganisations from '../../../../hooks/useOrganisations'
 // eslint-disable-next-line import/no-cycle
 import FeedbackTargetContent from '../../FeedbackTargetContent'
+import { FeedbackTargetContextProvider } from '../../FeedbackTargetContext'
 
 const InterimFeedbackModal = () => {
   const navigate = useNavigate()

@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react'
-import { orderBy, sum, uniq } from 'lodash-es'
+import { ArrowDropDown, CalendarTodayOutlined, ChevronRight, Menu, List } from '@mui/icons-material'
 import {
   Box,
   Link as MuiLink,
@@ -19,28 +18,30 @@ import {
   Switch,
   Paper,
 } from '@mui/material'
-import { ArrowDropDown, CalendarTodayOutlined, ChevronRight, Menu, List } from '@mui/icons-material'
 import { useQuery } from '@tanstack/react-query'
+import { format } from 'date-fns'
+import { orderBy, sum, uniq } from 'lodash-es'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 import { Link, useSearchParams } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-import { format } from 'date-fns'
+
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { getLanguageValue } from '../../util/languageUtils'
-import TeacherChip from '../../components/common/TeacherChip'
 import MultiSelect from '../../components/common/MultiSelect'
+import { NorButton } from '../../components/common/NorButton'
+import { TagChip } from '../../components/common/TagChip'
+import TeacherChip from '../../components/common/TeacherChip'
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useHistoryState from '../../hooks/useHistoryState'
-import { TagChip } from '../../components/common/TagChip'
-import { NorButton } from '../../components/common/NorButton'
-import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
-import TagSelector from './TagSelector'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
-import { getYearRange } from '../../util/yearUtils'
-import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
-import { getSafeCourseCode } from '../../util/courseIdentifiers'
-import { organisationFeedbackTargetsQueryFn } from './responsiblesUtils'
 import { optionFocusIndicatorStyle, switchFocusIndicatorStyle } from '../../util/accessibility'
+import { getSafeCourseCode } from '../../util/courseIdentifiers'
+import { FeedbackTargetGrouping } from '../../util/feedbackTargetGrouping'
+import { getLanguageValue } from '../../util/languageUtils'
+import { getYearRange } from '../../util/yearUtils'
+import { organisationFeedbackTargetsQueryFn } from './responsiblesUtils'
+import TagSelector from './TagSelector'
+import useUpdateCourseRealisationTags from './useUpdateCourseRealisationTags'
 
 const SelectionContext = React.createContext({})
 

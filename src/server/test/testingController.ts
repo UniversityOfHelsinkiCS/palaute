@@ -3,17 +3,16 @@ import _ from 'lodash'
 import morgan from 'morgan'
 
 import { FeedbackTarget } from '../models'
-
-import { ApplicationError } from '../util/ApplicationError'
-import { initTestSummary } from './seedSummary'
-import { seedFeedbackTargetsForTeacher } from './seedFeedbackTargets'
-import { seedDb, seedUsers, seedOrganisationCorrespondent } from './seed'
-import { TEST_COURSE_REALISATION_ID } from './testIds'
-import { inProduction } from '../util/config'
 import { getUniversitySurvey } from '../services/surveys'
 import { AuthenticatedRequest } from '../types'
+import { ApplicationError } from '../util/ApplicationError'
+import { inProduction } from '../util/config'
+import { seedDb, seedUsers, seedOrganisationCorrespondent } from './seed'
 import { seedFeedbacks } from './seedFeedbacks'
+import { seedFeedbackTargetsForTeacher } from './seedFeedbackTargets'
+import { initTestSummary } from './seedSummary'
 import { initVersionedSummary } from './seedVersionedSummary'
+import { TEST_COURSE_REALISATION_ID } from './testIds'
 
 const initSummary = async (req: AuthenticatedRequest, res: Response) => {
   await initTestSummary({ user: _.pick(req.body, ['hyPersonSisuId', 'uid']) })

@@ -1,10 +1,9 @@
+import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
 import React, { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
-
-import FormikTextField from '../common/FormikTextField'
 import AlertLink from '../common/AlertLink'
+import FormikTextField from '../common/FormikTextField'
 
 const LanguageTextEditor = ({ name, language, inputRef }) => {
   const { i18n } = useTranslation()

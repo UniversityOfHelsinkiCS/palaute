@@ -1,11 +1,12 @@
-import React from 'react'
 import { Alert, Box } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSummaryContext } from './context'
+
 import { useTeacherSummaries } from './api'
-import TeacherOrganisationRow from './components/TeacherOrganisationRow'
 import SummaryRowFilters from './components/SummaryRowFilters'
+import TeacherOrganisationRow from './components/TeacherOrganisationRow'
 import TeacherOrganisationTable from './components/TeacherOrganisationTable'
+import { useSummaryContext } from './context'
 
 const MyCourses = ({ tableView = false }) => {
   const { t } = useTranslation()

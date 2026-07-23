@@ -1,14 +1,13 @@
-import React, { useEffect } from 'react'
-
-import * as Sentry from '@sentry/browser'
-import { useTranslation } from 'react-i18next'
 import { Box } from '@mui/material'
+import * as Sentry from '@sentry/browser'
+import React, { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import NavBar from '../components/NavBar'
-import Footer from '../components/Footer'
 import DevTools from '../components/DevTools'
-import Router from './Router'
+import Footer from '../components/Footer'
+import NavBar from '../components/NavBar'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
+import Router from './Router'
 
 const AdUser = () => {
   const { i18n } = useTranslation()

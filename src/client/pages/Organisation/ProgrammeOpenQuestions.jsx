@@ -1,17 +1,17 @@
-import React, { useState, useRef, forwardRef } from 'react'
-import { useParams, Link as RouterLink } from 'react-router-dom'
 import { Box, Typography, Divider, Link } from '@mui/material'
+import React, { useState, useRef, forwardRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useParams, Link as RouterLink } from 'react-router-dom'
 import { useReactToPrint } from 'react-to-print'
 
-import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
-import { filterCoursesWithNoResponses, filterCoursesByDate, formateDates } from './utils'
+import ExportButton from '../../components/common/ExportButton'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { NorButton } from '../../components/common/NorButton'
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useHistoryState from '../../hooks/useHistoryState'
-import ExportButton from '../../components/common/ExportButton'
-import { NorButton } from '../../components/common/NorButton'
+import useProgrammeOpenQuestions from '../../hooks/useProgrammeOpenQuestions'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
+import { filterCoursesWithNoResponses, filterCoursesByDate, formateDates } from './utils'
 
 const styles = {
   courseTitle: {

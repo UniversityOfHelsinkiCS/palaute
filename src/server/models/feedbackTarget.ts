@@ -1,3 +1,6 @@
+import type { LocalizedString } from '@common/types/common'
+
+import _ from 'lodash'
 import {
   Op,
   DATE,
@@ -17,19 +20,17 @@ import {
   HasOneGetAssociationMixin,
 } from 'sequelize'
 
-import _ from 'lodash'
-
-import type { LocalizedString } from '@common/types/common'
-import { Organisation } from './organisation'
-import { CourseRealisation } from './courseRealisation'
-import { User } from './user'
-import { UserFeedbackTarget } from './userFeedbackTarget'
-import { sequelize } from '../db/dbConnection'
 import type { CourseUnit } from './courseUnit'
+import type { Group } from './group'
 import type { Question } from './question'
 import type { SummaryAttributes } from './summary'
 import type { Tag } from './tag'
-import type { Group } from './group'
+
+import { sequelize } from '../db/dbConnection'
+import { CourseRealisation } from './courseRealisation'
+import { Organisation } from './organisation'
+import { User } from './user'
+import { UserFeedbackTarget } from './userFeedbackTarget'
 
 class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreationAttributes<FeedbackTarget>> {
   // --- Acual DB columns ---

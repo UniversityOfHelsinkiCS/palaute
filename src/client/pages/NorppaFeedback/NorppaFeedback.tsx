@@ -1,17 +1,17 @@
-import React from 'react'
-import { useNavigate } from 'react-router'
-
 import { Box, Typography } from '@mui/material'
 import { Form, Formik } from 'formik'
-import { useTranslation } from 'react-i18next'
 import { useSnackbar } from 'notistack'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router'
 
-import FormikTextField from '../../components/common/FormikTextField'
-import FormikCheckBox from '../../components/common/FormikCheckbox'
-import { saveValues } from './utils'
 import type { NorppaFeedbackFormValues } from './utils'
-import Title from '../../components/common/Title'
+
+import FormikCheckBox from '../../components/common/FormikCheckbox'
+import FormikTextField from '../../components/common/FormikTextField'
 import { NorButton } from '../../components/common/NorButton'
+import Title from '../../components/common/Title'
+import { saveValues } from './utils'
 
 const styles = {
   description: {

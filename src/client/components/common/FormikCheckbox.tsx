@@ -1,7 +1,7 @@
-import React from 'react'
-import { useField } from 'formik'
 import { Checkbox, CheckboxProps, FormControlLabel, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
+import { useField } from 'formik'
+import React from 'react'
 
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'

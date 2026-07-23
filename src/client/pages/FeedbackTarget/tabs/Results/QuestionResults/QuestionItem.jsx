@@ -1,18 +1,19 @@
-import React from 'react'
 import { Box, Card, Typography } from '@mui/material'
 import { uniq } from 'lodash-es'
 import { useSnackbar } from 'notistack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
+import Instructions from '../../../../../components/common/Instructions'
+import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
 import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
 import { getLanguageValue } from '../../../../../util/languageUtils'
-import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
+import { boxPrintStyle } from '../../../../../util/printStyle'
 import AverageResult from './AverageResult'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
 import SingleChoiceResults from './SingleChoiceResults'
-import Instructions from '../../../../../components/common/Instructions'
-import { boxPrintStyle } from '../../../../../util/printStyle'
 import { getAcualAnswerCount } from './utils'
 
 const componentByType = {

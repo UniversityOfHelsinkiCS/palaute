@@ -1,9 +1,8 @@
+import { Box, Typography } from '@mui/material'
 import { React } from 'react'
 
-import { Box, Typography } from '@mui/material'
-
-import useFeedbackTargetUsers from '../../../../hooks/useFeedbackTargetUsers'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
+import useFeedbackTargetUsers from '../../../../hooks/useFeedbackTargetUsers'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const Links = () => {

@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../../util/apiClient'
 
 type UseOrganisationCourseSearchOptions = {

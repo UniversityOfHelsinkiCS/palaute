@@ -1,6 +1,7 @@
-import { css, keyframes } from '@mui/material'
 import type { Theme } from '@mui/material'
 import type { SystemStyleObject } from '@mui/system'
+
+import { css, keyframes } from '@mui/material'
 
 import { focusIndicatorStyle } from './accessibility'
 

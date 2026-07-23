@@ -1,6 +1,8 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
+import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import CheckIcon from '@mui/icons-material/Check'
+import ClearIcon from '@mui/icons-material/Clear'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
   Box,
   Typography,
@@ -16,19 +18,18 @@ import {
   Alert,
   ButtonBase,
 } from '@mui/material'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import CheckIcon from '@mui/icons-material/Check'
-import ClearIcon from '@mui/icons-material/Clear'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
 import { visuallyHidden } from '@mui/utils'
 import { lightFormat } from 'date-fns'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
+
+import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultItem'
+import { focusIndicatorStyle } from '../../../util/accessibility'
+import { getLanguageValue } from '../../../util/languageUtils'
+import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
 import { useSummaryContext } from '../context'
 import { TeacherChips } from './Labels'
-import { getLanguageValue } from '../../../util/languageUtils'
-import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultItem'
-import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
-import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const styles = {
   cell: {

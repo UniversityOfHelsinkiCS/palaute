@@ -1,11 +1,12 @@
 import { Response, Router } from 'express'
-import { ContinuousFeedback, UserFeedbackTarget } from '../../models'
-import { ApplicationError } from '../../util/ApplicationError'
+
 import { sendEmailContinuousFeedbackResponseToStudent } from '../../mailer/mails'
-import { getFeedbackTargetContext } from '../../services/feedbackTargets'
 import { adminAccess } from '../../middleware/adminAccess'
-import { AuthenticatedRequest } from '../../types'
+import { ContinuousFeedback, UserFeedbackTarget } from '../../models'
+import { getFeedbackTargetContext } from '../../services/feedbackTargets'
 import { Access } from '../../services/feedbackTargets/Access'
+import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
 
 const getStudentContinuousFeedbacks = async (user: any, feedbackTargetId: number) => {
   const userFeedbackTarget = await UserFeedbackTarget.scope('students').findOne({

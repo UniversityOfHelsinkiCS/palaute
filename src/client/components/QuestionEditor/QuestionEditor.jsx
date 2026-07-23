@@ -1,16 +1,15 @@
-import React, { useState, useRef } from 'react'
+import { Add } from '@mui/icons-material'
 import { Menu, MenuItem, Box } from '@mui/material'
 import { FieldArray, Form, Formik, useField } from 'formik'
+import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Add } from '@mui/icons-material'
 
-import QuestionCard from './QuestionCard'
-import { NorButton } from '../common/NorButton'
-
-import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
-import QuestionEditorActions from './QuestionEditorActions'
+import { NorButton } from '../common/NorButton'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
+import QuestionCard from './QuestionCard'
+import QuestionEditorActions from './QuestionEditorActions'
+import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 
 const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()

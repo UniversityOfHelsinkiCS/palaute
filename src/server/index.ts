@@ -3,19 +3,19 @@
 import dotenv from 'dotenv'
 dotenv.config()
 
-import path from 'path'
-import express, { Request, Response } from 'express'
 import compression from 'compression'
-import { PORT, inProduction, inE2EMode, inDevelopment } from './util/config'
-import { connectToDatabase } from './db/dbConnection'
-import { redis } from './util/redisClient'
-import { scheduleCronJobs } from './util/cron/scheduleCronJobs'
-import { logger } from './util/logger'
-import { updateLastRestart } from './util/lastRestart'
-import { initializeFunctions } from './db/postgresFunctions'
-import updaterClient from './util/updaterClient'
-import { router } from './routes'
+import express, { Request, Response } from 'express'
+import path from 'path'
 
+import { connectToDatabase } from './db/dbConnection'
+import { initializeFunctions } from './db/postgresFunctions'
+import { router } from './routes'
+import { PORT, inProduction, inE2EMode, inDevelopment } from './util/config'
+import { scheduleCronJobs } from './util/cron/scheduleCronJobs'
+import { updateLastRestart } from './util/lastRestart'
+import { logger } from './util/logger'
+import { redis } from './util/redisClient'
+import updaterClient from './util/updaterClient'
 import './util/i18n'
 
 const app = express()

@@ -1,4 +1,4 @@
-import React from 'react'
+import { ExpandMore } from '@mui/icons-material'
 import {
   Accordion,
   AccordionDetails,
@@ -12,8 +12,9 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
-import { ExpandMore } from '@mui/icons-material'
 import { useQuery } from '@tanstack/react-query'
+import React from 'react'
+
 import apiClient from '../../../../util/apiClient'
 
 const ConfigDebug = () => {

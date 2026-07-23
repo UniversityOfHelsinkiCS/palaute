@@ -1,15 +1,16 @@
-import React, { useState } from 'react'
-import { differenceInHours } from 'date-fns'
 import { Box, Typography, Modal, TextField } from '@mui/material'
+import { differenceInHours } from 'date-fns'
+import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { NorButton } from '../../../../components/common/NorButton'
-import { getLanguageValue } from '../../../../util/languageUtils'
-import { getInterimFeedbackName, getPrimaryCourseName } from '../../../../util/courseIdentifiers'
-import { formatClosesAt, getDefaultMessageLanguage } from './utils'
 import { TooltipButton } from '../../../../components/common/TooltipButton'
-import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
-import { useSendReminderEmail } from './api'
 import useInteractiveMutation from '../../../../hooks/useInteractiveMutation'
+import { FEEDBACK_REMINDER_COOLDOWN } from '../../../../util/common'
+import { getInterimFeedbackName, getPrimaryCourseName } from '../../../../util/courseIdentifiers'
+import { getLanguageValue } from '../../../../util/languageUtils'
+import { useSendReminderEmail } from './api'
+import { formatClosesAt, getDefaultMessageLanguage } from './utils'
 
 const styles = {
   container: {

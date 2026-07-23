@@ -1,7 +1,7 @@
-import React from 'react'
-import { SnackbarKey, useSnackbar } from 'notistack'
-import { IconButton } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { IconButton } from '@mui/material'
+import { SnackbarKey, useSnackbar } from 'notistack'
+import React from 'react'
 
 type SnackbarCloseButtonProps = {
   snackbarKey: SnackbarKey

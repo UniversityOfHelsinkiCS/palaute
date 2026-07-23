@@ -1,5 +1,5 @@
-import { formatActivityPeriod } from '../../util/common'
 import { Summary } from '../../models'
+import { formatActivityPeriod } from '../../util/common'
 
 export const createSummaryForFeedbackTarget = async (
   feedbackTargetId: number,

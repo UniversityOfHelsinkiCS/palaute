@@ -1,12 +1,9 @@
-import React from 'react'
-
 import { Box, Container, Divider, Grid, Link, Typography } from '@mui/material'
-
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
-import ExternalLink from './common/ExternalLink'
-
 import { inProduction, inStaging } from '../util/common'
+import ExternalLink from './common/ExternalLink'
 
 const Footer = ({ user }) => {
   const { t } = useTranslation()

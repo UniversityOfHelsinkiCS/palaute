@@ -1,4 +1,5 @@
 import type { LocalizedString } from '@common/types/common'
+
 import { LANGUAGES } from './common'
 import { getLanguageValue } from './languageUtils'
 

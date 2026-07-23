@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetOrganisationLogsResponse } from '@common/types/organisation'
+
+import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const defaultCacheTime = 900000

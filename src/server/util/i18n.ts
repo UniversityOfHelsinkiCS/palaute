@@ -1,6 +1,7 @@
 import i18n from 'i18next'
-import FsBackend from 'i18next-fs-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
+import FsBackend from 'i18next-fs-backend'
+
 import { TRANSLATION_NAMESPACE } from './config'
 
 i18n

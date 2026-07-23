@@ -1,16 +1,13 @@
-import React from 'react'
-
-import { IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
-
-import { FieldArray, useField } from 'formik'
-import CloseIcon from '@mui/icons-material/Close'
 import { Add } from '@mui/icons-material'
-
+import CloseIcon from '@mui/icons-material/Close'
+import { IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
+import { FieldArray, useField } from 'formik'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import FormikTextField from '../common/FormikTextField'
 import { NorButton } from '../common/NorButton'
 import { createOption } from './utils'
-import FormikTextField from '../common/FormikTextField'
 
 const styles = {
   optionsContainer: {

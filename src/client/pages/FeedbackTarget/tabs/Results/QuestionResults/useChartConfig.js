@@ -1,7 +1,7 @@
-import React from 'react'
+import { Chart } from 'chart.js'
 import annotationPlugin from 'chartjs-plugin-annotation'
 import ChartDataLabels from 'chartjs-plugin-datalabels'
-import { Chart } from 'chart.js'
+import React from 'react'
 
 /**
  * Needs to be called somewhere once

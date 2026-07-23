@@ -1,17 +1,16 @@
-import React, { useState } from 'react'
 import { Autocomplete, Chip, Box, Dialog, Grid2 as Grid, Typography, TextField, DialogTitle } from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
-import { useTranslation } from 'react-i18next'
 import { debounce } from 'lodash-es'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
 import FormikDatePicker from '../../components/common/FormikDatePicker'
-import CourseSearchInput from './CourseSearchInput'
-import { NorButton } from '../../components/common/NorButton'
-
-import apiClient from '../../util/apiClient'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
-import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../util/common'
 import Instructions from '../../components/common/Instructions'
+import { NorButton } from '../../components/common/NorButton'
+import apiClient from '../../util/apiClient'
+import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../util/common'
+import CourseSearchInput from './CourseSearchInput'
 
 const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()

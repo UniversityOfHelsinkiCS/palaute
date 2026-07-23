@@ -1,6 +1,6 @@
+import { Snackbar } from '@mui/material'
 import React from 'react'
 
-import { Snackbar } from '@mui/material'
 import { NorButton } from '../common/NorButton'
 
 const AdminLoggedInAsBanner = ({ isLoggedInAs, exitLoggedInAs }) => (

@@ -1,8 +1,8 @@
-import { orderBy } from 'lodash-es'
 import { lightFormat } from 'date-fns'
+import { orderBy } from 'lodash-es'
 
-import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
+import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
 
 export const getLatestFeedbackTarget = courseRealisations => {

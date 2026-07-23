@@ -1,7 +1,8 @@
 import { Op } from 'sequelize'
+
+import { Organisation, User } from '../../models'
 import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
 import { getSummaryAccessibleOrganisationIds } from './access'
-import { Organisation, User } from '../../models'
 import { sumSummaries, getScopedSummary } from './utils'
 
 type GetUserOrganisationSummariesParams = {

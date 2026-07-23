@@ -1,11 +1,11 @@
+import { OrganisationAccess } from '@common/types/organisation'
 import { Op, QueryTypes } from 'sequelize'
 
-import { OrganisationAccess } from '@common/types/organisation'
+import { sequelize } from '../../db/dbConnection'
 import { User, Organisation } from '../../models'
 import { normalizeOrganisationCode } from '../../util/common'
-import { getAccessToAll, getUserIamAccess } from '../../util/jami'
 import { inProduction, DEV_ADMINS } from '../../util/config'
-import { sequelize } from '../../db/dbConnection'
+import { getAccessToAll, getUserIamAccess } from '../../util/jami'
 
 export const getAdminOrganisationAccess = () => getAccessToAll()
 

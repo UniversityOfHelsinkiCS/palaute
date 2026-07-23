@@ -1,9 +1,10 @@
-import { Container, Paper } from '@mui/material'
 import type { Theme } from '@mui/material'
-import React from 'react'
 import type { ReactNode } from 'react'
-import { useInView } from 'react-intersection-observer'
 import type { IntersectionOptions } from 'react-intersection-observer'
+
+import { Container, Paper } from '@mui/material'
+import React from 'react'
+import { useInView } from 'react-intersection-observer'
 
 const styles = {
   floatingWrapper: {

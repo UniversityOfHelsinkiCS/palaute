@@ -1,10 +1,11 @@
 import { Op } from 'sequelize'
+
 import { UserFeedbackTarget, FeedbackTarget, CourseRealisation, CourseUnit, Organisation, User } from '../../models'
-import { pate } from '../pateClient'
-import { createRecipientsForFeedbackTargets, getFeedbackTargetLink, OpeningEmailInfo } from './util'
+import { SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE } from '../../util/config'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
-import { SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE } from '../../util/config'
+import { pate } from '../pateClient'
+import { createRecipientsForFeedbackTargets, getFeedbackTargetLink, OpeningEmailInfo } from './util'
 
 export const getOpenFeedbackTargetsForStudents = async () => {
   const feedbackTargets = await FeedbackTarget.findAll({

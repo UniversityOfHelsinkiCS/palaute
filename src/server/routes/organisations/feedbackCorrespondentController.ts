@@ -1,10 +1,11 @@
 import { Response, Router } from 'express'
+
 import { User, OrganisationFeedbackCorrespondent } from '../../models'
-import { ApplicationError } from '../../util/ApplicationError'
-import { getAccessAndOrganisation } from './util'
 import { createOrganisationLog } from '../../services/auditLog'
-import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/config'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
+import { ENABLE_CORRESPONDENT_MANAGEMENT } from '../../util/config'
+import { getAccessAndOrganisation } from './util'
 
 const addOrganisationFeedbackCorrespondent = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req

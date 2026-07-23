@@ -1,11 +1,12 @@
-import { differenceInHours, format } from 'date-fns'
 import { LanguageId, LocalizedString } from '@common/types/common'
-import { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } from '../../util/config'
+import { differenceInHours, format } from 'date-fns'
+
+import { FeedbackTarget } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
-import { pate } from '../pateClient'
+import { FEEDBACK_REMINDER_COOLDOWN, PUBLIC_URL } from '../../util/config'
 import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
-import { FeedbackTarget } from '../../models'
+import { pate } from '../pateClient'
 
 const sendReminderToGiveFeedbackToStudents = async (
   urlToGiveFeedback: string,

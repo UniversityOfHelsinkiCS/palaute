@@ -1,24 +1,21 @@
 import { subDays, addDays, format } from 'date-fns'
 import _ from 'lodash'
 import { QueryTypes } from 'sequelize'
+
 import { sequelize } from '../../db/dbConnection'
-
-import { createRecipientsForFeedbackTargets } from './util'
-
-import {
-  getFeedbackTargetsAboutToOpenForTeachers,
-  emailReminderAboutSurveyOpeningToTeachers,
-} from './sendEmailReminderAboutSurveyOpeningToTeachers'
-
-import {
-  getFeedbackTargetsWithoutResponseForTeachers,
-  emailReminderAboutFeedbackResponseToTeachers,
-} from './sendEmailReminderAboutFeedbackResponseToTeacher'
-
 import {
   getOpenFeedbackTargetsForStudents,
   notificationAboutSurveyOpeningToStudents,
 } from './sendEmailAboutSurveyOpeningToStudents'
+import {
+  getFeedbackTargetsWithoutResponseForTeachers,
+  emailReminderAboutFeedbackResponseToTeachers,
+} from './sendEmailReminderAboutFeedbackResponseToTeacher'
+import {
+  getFeedbackTargetsAboutToOpenForTeachers,
+  emailReminderAboutSurveyOpeningToTeachers,
+} from './sendEmailReminderAboutSurveyOpeningToTeachers'
+import { createRecipientsForFeedbackTargets } from './util'
 
 const getStudentEmailCounts = async () => {
   const studentEmailCounts = await sequelize.query<{

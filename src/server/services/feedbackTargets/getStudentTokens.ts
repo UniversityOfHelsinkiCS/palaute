@@ -1,10 +1,10 @@
 import jwt from 'jsonwebtoken'
 
 import { UserFeedbackTarget, User } from '../../models'
-import { JWT_KEY } from '../../util/config'
-import { ApplicationError } from '../../util/ApplicationError'
-import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User as UserType } from '../../models/user'
+import { ApplicationError } from '../../util/ApplicationError'
+import { JWT_KEY } from '../../util/config'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 type GetStudentTokensParams = {
   feedbackTargetId: number

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Close, Edit } from '@mui/icons-material'
 import {
   Box,
   Chip,
@@ -12,11 +12,12 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Close, Edit } from '@mui/icons-material'
+
 import { focusIndicatorStyle, optionFocusIndicatorStyle } from '../../util/accessibility'
-import { mergeSx } from '../../util/sx'
 import styles from '../../util/chipStyles'
+import { mergeSx } from '../../util/sx'
 
 const radioButtonStyle = mergeSx({ ml: 1, my: 1, pr: 1 }, optionFocusIndicatorStyle())
 

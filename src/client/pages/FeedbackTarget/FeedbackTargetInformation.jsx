@@ -1,14 +1,15 @@
+import { Box, Typography, Grid2 as Grid, Stack, Divider, Link } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Box, Typography, Grid2 as Grid, Stack, Divider, Link } from '@mui/material'
-import { useFeedbackTargetContext } from './FeedbackTargetContext'
-import FeedbackTargetDatesAndCounts from './Dates/Dates'
-import { getLanguageValue } from '../../util/languageUtils'
-import { getPrimaryCourseName, getSecondaryCourseName, getSurveyType } from '../../util/courseIdentifiers'
+
 import { TagChip } from '../../components/common/TagChip'
-import TeacherList from './TeacherList/TeacherList'
+import { getPrimaryCourseName, getSecondaryCourseName, getSurveyType } from '../../util/courseIdentifiers'
+import { getLanguageValue } from '../../util/languageUtils'
+import FeedbackTargetDatesAndCounts from './Dates/Dates'
 import FeedbackTargetEdit from './Edit/FeedbackTargetEdit'
+import { useFeedbackTargetContext } from './FeedbackTargetContext'
 import FeedbackTargetLinks from './FeedbackTargetLinks'
+import TeacherList from './TeacherList/TeacherList'
 
 const FeedbackTargetInformation = () => {
   const { i18n, t } = useTranslation()

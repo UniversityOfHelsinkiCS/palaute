@@ -1,13 +1,14 @@
+import { Alert, Box, LinearProgress } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Alert, Box, LinearProgress } from '@mui/material'
 import { useParams } from 'react-router'
-import { useCourseUnitGroupSummaries } from './api'
-import SummaryScrollContainer from './components/SummaryScrollContainer'
+
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
-import { useSummaryContext } from './context'
+import { useCourseUnitGroupSummaries } from './api'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
 import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
+import SummaryScrollContainer from './components/SummaryScrollContainer'
+import { useSummaryContext } from './context'
 
 const filterContainerSx = {
   display: 'flex',

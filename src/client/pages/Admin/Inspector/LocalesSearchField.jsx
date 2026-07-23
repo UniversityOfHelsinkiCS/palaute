@@ -1,6 +1,5 @@
-import React from 'react'
-
 import { Box, Select, MenuItem, TextField } from '@mui/material'
+import React from 'react'
 
 const LocalesSearchField = ({ label, handleChange, query, setQuery, queryKey = 'name', clearKeys = ['id'] }) => {
   const handleFocus = () => {

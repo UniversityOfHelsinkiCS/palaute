@@ -1,16 +1,14 @@
-import React from 'react'
-
-import { Dialog, DialogTitle, DialogContent, DialogActions, FormGroup, FormControlLabel, Checkbox } from '@mui/material'
-import { DeleteOutlined } from '@mui/icons-material'
-
-import { useTranslation } from 'react-i18next'
 import { Question } from '@common/types/question'
-import { getLanguageValue } from '../../util/languageUtils'
-import { getQuestionId } from './utils'
+import { DeleteOutlined } from '@mui/icons-material'
+import { Dialog, DialogTitle, DialogContent, DialogActions, FormGroup, FormControlLabel, Checkbox } from '@mui/material'
+import React from 'react'
+import { useTranslation } from 'react-i18next'
 
-import { NorButton } from '../common/NorButton'
 import { optionFocusIndicatorStyle } from '../../util/accessibility'
+import { getLanguageValue } from '../../util/languageUtils'
 import { mergeSx } from '../../util/sx'
+import { NorButton } from '../common/NorButton'
+import { getQuestionId } from './utils'
 
 type QuestionId = number | string // Just created questions have temporary id that is string while the question id is a number otherwise
 

@@ -1,6 +1,5 @@
-import React from 'react'
-
 import { Badge, Typography } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 const getGroupBadgeLabel = (t, count) =>

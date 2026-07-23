@@ -1,5 +1,6 @@
-import morgan from 'morgan'
 import { Request } from 'express'
+import morgan from 'morgan'
+
 import { inProduction } from '../util/config'
 import { logger } from '../util/logger'
 

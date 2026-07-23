@@ -1,5 +1,3 @@
-import z from 'zod/v4'
-import Router, { Response } from 'express'
 import type {
   GetInactiveCourseRealisationsResponse,
   GetUpdaterStatusesResponse,
@@ -7,17 +5,16 @@ import type {
 } from '@common/types/admin'
 import type { GetBannersResponse } from '@common/types/banner'
 
-import { IncludeOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
 import { LocalizedString } from '@common/types/common'
-import _ from 'lodash'
 import { format, subMonths } from 'date-fns'
+import Router, { Response } from 'express'
+import _ from 'lodash'
+import { IncludeOptions, Op, QueryTypes, WhereOptions } from 'sequelize'
+import z from 'zod/v4'
 
-import { ApplicationError } from '../../util/ApplicationError'
-import updaterClient from '../../util/updaterClient'
-import feedbackTargetCache from '../../services/feedbackTargets/feedbackTargetCache'
-import { userCache } from '../../services/users/cache'
-import { redis } from '../../util/redisClient'
-
+import { sequelize } from '../../db/dbConnection'
+import { mailer } from '../../mailer'
+import { adminAccess } from '../../middleware/adminAccess'
 import {
   FeedbackTarget,
   CourseRealisation,
@@ -29,15 +26,15 @@ import {
   InactiveCourseRealisation,
   Banner,
 } from '../../models'
-
-import { sequelize } from '../../db/dbConnection'
-import { logger } from '../../util/logger'
-
-import { mailer } from '../../mailer'
-import { adminAccess } from '../../middleware/adminAccess'
+import feedbackTargetCache from '../../services/feedbackTargets/feedbackTargetCache'
 import { buildSummaries } from '../../services/summary/buildSummaries'
+import { userCache } from '../../services/users/cache'
 import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
 import { getLanguageValue } from '../../util/languageUtils'
+import { logger } from '../../util/logger'
+import { redis } from '../../util/redisClient'
+import updaterClient from '../../util/updaterClient'
 
 const runUpdater = async (req: AuthenticatedRequest, res: Response) => {
   logger.info('Running updater on demand')

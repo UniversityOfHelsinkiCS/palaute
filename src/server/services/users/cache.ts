@@ -1,7 +1,7 @@
-import { logger } from '../../util/logger'
-import { USER_CACHE_TTL } from '../../util/config'
-import { redis } from '../../util/redisClient'
 import { User } from '../../models'
+import { USER_CACHE_TTL } from '../../util/config'
+import { logger } from '../../util/logger'
+import { redis } from '../../util/redisClient'
 
 const getKey = (uid: string) => `user:${uid}`
 

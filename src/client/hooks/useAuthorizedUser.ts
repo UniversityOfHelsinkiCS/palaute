@@ -1,5 +1,7 @@
 import type { GetLoginResponse } from '@common/types/user'
+
 import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const useAuthorizedUser = (options = {}) => {

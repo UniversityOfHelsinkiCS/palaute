@@ -1,12 +1,14 @@
-import React from 'react'
+import type { LocalizedString } from '@common/types/common'
+import type { User } from '@common/types/user'
+
 import { Box, ToggleButton, ToggleButtonGroup, Typography, Alert } from '@mui/material'
 import { Theme } from '@mui/material/styles'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import type { User } from '@common/types/user'
-import type { LocalizedString } from '@common/types/common'
-import { getLanguageValue } from '../../../../util/languageUtils'
-import TeacherChip from '../../../../components/common/TeacherChip'
+
 import PaperTooltip from '../../../../components/common/PaperTooltip'
+import TeacherChip from '../../../../components/common/TeacherChip'
+import { getLanguageValue } from '../../../../util/languageUtils'
 import { sortGroups } from './utils'
 
 type Group = {

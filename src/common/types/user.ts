@@ -1,6 +1,6 @@
+import type { BannerRecord } from './banner'
 import type { LanguageId } from './common'
 import type { OrganisationAccess, OrganisationWithAccess } from './organisation'
-import type { BannerRecord } from './banner'
 
 export type User = {
   id: string

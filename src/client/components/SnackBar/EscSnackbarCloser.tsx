@@ -1,5 +1,5 @@
-import { useEffect } from 'react'
 import { useSnackbar } from 'notistack'
+import { useEffect } from 'react'
 
 const EscSnackbarCloser = () => {
   const { closeSnackbar } = useSnackbar()

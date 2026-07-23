@@ -1,5 +1,6 @@
-import { Question, Survey } from '../../models'
 import type { FeedbackTarget } from '../../models/feedbackTarget'
+
+import { Question, Survey } from '../../models'
 
 /**
  *

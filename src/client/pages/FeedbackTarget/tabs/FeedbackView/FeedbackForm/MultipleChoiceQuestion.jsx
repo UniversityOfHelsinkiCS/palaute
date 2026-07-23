@@ -1,15 +1,13 @@
-import React from 'react'
-
 import { FormControl, FormGroup, FormControlLabel, Checkbox, FormHelperText } from '@mui/material'
-
 import { useField } from 'formik'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
 import { getLanguageValue } from '../../../../../util/languageUtils'
+import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 import QuestionBase from './QuestionBase'
 import { useDelayedTouched } from './utils'
-import { optionFocusIndicatorStyle } from '../../../../../util/accessibility'
-import { useQuestionLanguage } from '../../../../../util/questionLanguageContext'
 
 const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)

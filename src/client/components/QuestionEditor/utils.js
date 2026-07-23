@@ -1,5 +1,6 @@
-import { v4 as uuidv4 } from 'uuid'
 import { sortBy } from 'lodash-es'
+import { v4 as uuidv4 } from 'uuid'
+
 import { getLanguageValue } from '../../util/languageUtils'
 
 const TEMP_ID = Symbol('tempId')

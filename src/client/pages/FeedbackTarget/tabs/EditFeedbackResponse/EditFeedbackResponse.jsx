@@ -1,20 +1,18 @@
-import React, { useState } from 'react'
-import { Formik, Form, useField } from 'formik'
-
 import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
-
-import { useTranslation } from 'react-i18next'
+import { Formik, Form, useField } from 'formik'
 import { useSnackbar } from 'notistack'
+import React, { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
-import FormikTextField from '../../../../components/common/FormikTextField'
 import AlertLink from '../../../../components/common/AlertLink'
+import FormikTextField from '../../../../components/common/FormikTextField'
+import Instructions from '../../../../components/common/Instructions'
 import Markdown from '../../../../components/common/Markdown'
+import { optionFocusIndicatorStyle } from '../../../../util/accessibility'
+import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import useFeedbackTargetId from '../../useFeedbackTargetId'
 import ResponseEmailButton from './ResponseEmailButton'
 import useUpdateFeedbackResponse from './useUpdateFeedbackResponse'
-import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
-import Instructions from '../../../../components/common/Instructions'
-import useFeedbackTargetId from '../../useFeedbackTargetId'
-import { optionFocusIndicatorStyle } from '../../../../util/accessibility'
 
 const getInitialValues = feedbackTarget => ({
   feedbackResponse: feedbackTarget.feedbackResponse ?? '',

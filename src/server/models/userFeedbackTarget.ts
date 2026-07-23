@@ -10,10 +10,12 @@ import {
   CreationOptional,
   NonAttribute,
 } from 'sequelize'
-import { sequelize } from '../db/dbConnection'
-import type { User } from './user'
+
 import type Feedback from './feedback'
 import type { FeedbackTarget } from './feedbackTarget'
+import type { User } from './user'
+
+import { sequelize } from '../db/dbConnection'
 
 export type AccessStatus = 'STUDENT' | 'TEACHER' | 'RESPONSIBLE_TEACHER'
 

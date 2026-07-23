@@ -1,5 +1,5 @@
-import feedbackTargetCache from '../feedbackTargets/feedbackTargetCache'
 import { Summary } from '../../models'
+import feedbackTargetCache from '../feedbackTargets/feedbackTargetCache'
 import { getOrCreateSummary } from './getOrCreateSummary'
 
 export const updateSummaryOnOrganisationSurveyEdit = async (feedbackTargetId: number, updatedStudentCount: number) => {

@@ -1,4 +1,4 @@
-import React from 'react'
+import { Download, Close } from '@mui/icons-material'
 import {
   Checkbox,
   CircularProgress,
@@ -11,13 +11,14 @@ import {
   Typography,
   IconButton,
 } from '@mui/material'
-import { Download, Close } from '@mui/icons-material'
 import { useSnackbar } from 'notistack'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
+
 import { NorButton } from '../../components/common/NorButton'
-import { useSummaryContext } from './context'
-import apiClient from '../../util/apiClient'
 import { optionFocusIndicatorStyle, focusIndicatorStyle } from '../../util/accessibility'
+import apiClient from '../../util/apiClient'
+import { useSummaryContext } from './context'
 
 const checkBoxStyle = {
   ml: 1,

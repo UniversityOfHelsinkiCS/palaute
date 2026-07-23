@@ -1,5 +1,6 @@
 import _ from 'lodash'
 import { InferAttributes, Op } from 'sequelize'
+
 import { Organisation, CourseUnit, FeedbackTarget, UserFeedbackTarget, CourseRealisation, User } from '../../models'
 import { SummaryData } from '../../models/summary'
 import { sumSummaries, getScopedSummary } from './utils'

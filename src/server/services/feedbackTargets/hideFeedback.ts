@@ -1,11 +1,12 @@
 import type { Transaction } from 'sequelize'
-import feedbackTargetCache from './feedbackTargetCache'
+
 import { sequelize } from '../../db/dbConnection'
 import { Feedback, UserFeedbackTarget, FeedbackTarget } from '../../models'
 import { FeedbackData } from '../../models/feedback'
-import { ApplicationError } from '../../util/ApplicationError'
-import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 import { User } from '../../models/user'
+import { ApplicationError } from '../../util/ApplicationError'
+import feedbackTargetCache from './feedbackTargetCache'
+import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 const countHiddenAnswers = (data: FeedbackData) =>
   Array.isArray(data) ? data.filter(answer => answer.hidden === true).length : 0

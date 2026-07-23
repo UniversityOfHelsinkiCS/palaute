@@ -1,5 +1,6 @@
 import * as Sentry from '@sentry/node'
 import { NextFunction, Request, Response } from 'express'
+
 import { ApplicationError } from '../util/ApplicationError'
 import { logger } from '../util/logger'
 

@@ -1,7 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+
 import apiClient from '../../util/apiClient'
-import { useSummaryContext } from './context'
 import { getSafeCourseCode } from '../../util/courseIdentifiers'
+import { useSummaryContext } from './context'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 

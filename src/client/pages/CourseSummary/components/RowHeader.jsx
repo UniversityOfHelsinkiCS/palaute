@@ -1,7 +1,7 @@
+import { ChevronRight } from '@mui/icons-material'
+import { Box, ButtonBase } from '@mui/material'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Box, ButtonBase } from '@mui/material'
-import { ChevronRight } from '@mui/icons-material'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'
 

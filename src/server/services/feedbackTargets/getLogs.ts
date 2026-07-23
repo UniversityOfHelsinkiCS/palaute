@@ -1,7 +1,7 @@
 import { FeedbackTargetLog, User } from '../../models'
+import { User as UserType } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
-import { User as UserType } from '../../models/user'
 
 type GetLogsParams = {
   feedbackTargetId: number

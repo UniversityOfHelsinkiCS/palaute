@@ -1,19 +1,17 @@
 import 'intersection-observer'
 import './util/resizeObserverPolyfill'
-
+import { QueryClientProvider } from '@tanstack/react-query'
 import React from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
-import { QueryClientProvider } from '@tanstack/react-query'
 
+import ErrorBoundary from './components/ErrorBoundary'
+import App from './pages/App'
 import { inProduction, basePath, DEV_USERNAME } from './util/common'
 import { getHeaders, setHeaders } from './util/mockHeaders'
-import initializeSentry from './util/sentry'
-import queryClient from './util/queryClient'
 import './util/i18n'
-
-import App from './pages/App'
-import ErrorBoundary from './components/ErrorBoundary'
+import queryClient from './util/queryClient'
+import initializeSentry from './util/sentry'
 
 initializeSentry()
 

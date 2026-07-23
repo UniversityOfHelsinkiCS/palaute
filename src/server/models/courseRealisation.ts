@@ -1,3 +1,5 @@
+import type { LanguageId, LocalizedString } from '@common/types/common'
+
 import {
   STRING,
   BOOLEAN,
@@ -9,13 +11,14 @@ import {
   CreationOptional,
   NonAttribute,
 } from 'sequelize'
-import type { LanguageId, LocalizedString } from '@common/types/common'
-import { sequelize } from '../db/dbConnection'
+
+import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 import type { FeedbackTarget } from './feedbackTarget'
 import type { Organisation } from './organisation'
-import type { Tag } from './tag'
-import type { CourseRealisationsOrganisation } from './courseRealisationsOrganisation'
 import type { SummaryAttributes } from './summary'
+import type { Tag } from './tag'
+
+import { sequelize } from '../db/dbConnection'
 
 export type CourseRealisationTeachingLanguages = LanguageId[]
 

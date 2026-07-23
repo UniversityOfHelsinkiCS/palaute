@@ -1,12 +1,12 @@
+import { mailer } from '../../mailer'
+import { User } from '../../models'
+import { ApplicationError } from '../../util/ApplicationError'
+import { createFeedbackResponseLog } from '../auditLog/feedbackTargetLogs'
 import {
   updateSummaryAfterFeedbackResponseCreated,
   updateSummaryAfterFeedbackResponseDeleted,
 } from '../summary/updateSummaryOnFeedbackResponse'
-import { mailer } from '../../mailer'
-import { ApplicationError } from '../../util/ApplicationError'
-import { createFeedbackResponseLog } from '../auditLog/feedbackTargetLogs'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
-import { User } from '../../models'
 
 export const updateFeedbackResponse = async ({
   feedbackTargetId,

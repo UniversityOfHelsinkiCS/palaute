@@ -1,4 +1,5 @@
 import { STRING, INTEGER, DATE, Model, InferAttributes, InferCreationAttributes, CreationOptional } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class UserOrganisationPin extends Model<

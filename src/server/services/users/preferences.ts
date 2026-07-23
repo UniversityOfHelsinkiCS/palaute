@@ -6,6 +6,7 @@
  */
 
 import _ from 'lodash'
+
 import { FeedbackTarget, UserFeedbackTarget, Summary, CourseRealisation, User } from '../../models'
 import { startOfStudyYear, endOfStudyYear } from '../../util/common'
 

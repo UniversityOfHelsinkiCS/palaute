@@ -1,12 +1,9 @@
-import React from 'react'
-/** @jsxImportSource @emotion/react */
-
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
-
+/** @jsxImportSource @emotion/react */
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import ExternalLink from '../../components/common/ExternalLink'
-
 import { images } from '../../util/common'
 
 const styles = {

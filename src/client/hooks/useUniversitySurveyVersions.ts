@@ -1,5 +1,7 @@
-import { useQuery } from '@tanstack/react-query'
 import type { GetUniversitySurveyVersionsResponse } from '@common/types/survey'
+
+import { useQuery } from '@tanstack/react-query'
+
 import apiClient from '../util/apiClient'
 
 const useUniversitySurveyVersions = () => {

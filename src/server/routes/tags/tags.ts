@@ -1,13 +1,14 @@
+import { OrganisationAccess } from '@common/types/organisation'
 import { Router, Response } from 'express'
 import { Op, Transaction } from 'sequelize'
-import { AuthenticatedRequest } from '../../types'
-import { OrganisationAccess } from '@common/types/organisation'
+
+import { sequelize } from '../../db/dbConnection'
 import { CourseRealisation, Organisation, Tag, CourseRealisationsTag, CourseUnit } from '../../models'
 import { CourseUnitsTag } from '../../models/courseUnitsTag'
-import { ApplicationError } from '../../util/ApplicationError'
-import { sequelize } from '../../db/dbConnection'
-import { TAGS_ENABLED } from '../../util/config'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { AuthenticatedRequest } from '../../types'
+import { ApplicationError } from '../../util/ApplicationError'
+import { TAGS_ENABLED } from '../../util/config'
 
 /**
  * Check whether user has access to organisation with given code

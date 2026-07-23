@@ -1,13 +1,13 @@
 import React from 'react'
 import { useParams } from 'react-router'
 
+import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useOrganisations from '../../hooks/useOrganisations'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { FeedbackTargetContextProvider } from './FeedbackTargetContext'
-import FeedbackTargetContent from './FeedbackTargetContent'
 import Error from './Error'
+import FeedbackTargetContent from './FeedbackTargetContent'
+import { FeedbackTargetContextProvider } from './FeedbackTargetContext'
 
 const FeedbackTarget = () => {
   const { id } = useParams()

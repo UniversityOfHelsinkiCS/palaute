@@ -1,8 +1,10 @@
+import type { GetNoadUserResponse } from '@common/types/user'
+
 import { Response } from 'express'
 import { Includeable } from 'sequelize'
-import type { GetNoadUserResponse } from '@common/types/user'
-import { AuthenticatedRequest } from '../../types'
+
 import { UserFeedbackTarget, FeedbackTarget, CourseUnit, Feedback, CourseRealisation, Organisation } from '../../models'
+import { AuthenticatedRequest } from '../../types'
 
 const getFeedbackTargetsIncludes = (userId: string, accessStatus?: string): Includeable[] => {
   // where parameter cant have undefined values

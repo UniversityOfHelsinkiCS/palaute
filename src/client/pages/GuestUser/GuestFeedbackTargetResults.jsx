@@ -1,19 +1,17 @@
-import React, { useState, useEffect } from 'react'
-import { useParams, Navigate } from 'react-router-dom'
-import { useTranslation } from 'react-i18next'
-
-import { Box, Alert, Tooltip } from '@mui/material'
-import TableRowsIcon from '@mui/icons-material/TableRows'
 import BarChartIcon from '@mui/icons-material/BarChart'
+import TableRowsIcon from '@mui/icons-material/TableRows'
+import { Box, Alert, Tooltip } from '@mui/material'
+import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
+import { useParams, Navigate } from 'react-router-dom'
 
+import { LoadingProgress } from '../../components/common/LoadingProgress'
+import { NorButton } from '../../components/common/NorButton'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import useFeedbackTargetFeedbacks from '../../hooks/useFeedbackTargetFeedbacks'
-import QuestionResults from '../FeedbackTarget/tabs/Results/QuestionResults'
-import FeedbackResponse from '../FeedbackTarget/tabs/Results/FeedbackResponse'
-import { NorButton } from '../../components/common/NorButton'
-
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import { LoadingProgress } from '../../components/common/LoadingProgress'
+import FeedbackResponse from '../FeedbackTarget/tabs/Results/FeedbackResponse'
+import QuestionResults from '../FeedbackTarget/tabs/Results/QuestionResults'
 import FeedbackChart from '../FeedbackTarget/tabs/Results/QuestionResults/FeedbackChart'
 
 const NotEnoughFeedbacks = ({ t }) => (

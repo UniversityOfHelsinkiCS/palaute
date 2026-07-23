@@ -1,11 +1,12 @@
-import React from 'react'
 import { Box, Divider, LinearProgress, Typography } from '@mui/material'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { useSummaryContext } from './context'
+
 import { useOrganisationSummaries, usePinnedOrganisations } from './api'
-import { useOrderedAndFilteredOrganisations } from './utils'
 import OrganisationSummaryRow from './components/OrganisationRow'
 import SummaryRowFilters from './components/SummaryRowFilters'
+import { useSummaryContext } from './context'
+import { useOrderedAndFilteredOrganisations } from './utils'
 
 const MyOrganisations = () => {
   const { t } = useTranslation()

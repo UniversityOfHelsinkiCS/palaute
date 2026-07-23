@@ -1,4 +1,5 @@
 import { DATE, InferCreationAttributes, Model, NOW, STRING } from 'sequelize'
+
 import { sequelize } from '../db/dbConnection'
 
 class UpdaterStatus extends Model<InferCreationAttributes<UpdaterStatus>, InferCreationAttributes<UpdaterStatus>> {
