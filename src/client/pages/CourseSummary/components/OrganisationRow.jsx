@@ -198,10 +198,13 @@ const OrganisationSummaryRow = ({
   return (
     <Box ref={ref} display="flex" flexDirection="column" alignItems="stretch" gap="0.4rem">
       <Box display="flex" alignItems="stretch" gap="0.2rem">
-        <Box display="flex" alignItems="center" sx={{ width: '23.5rem', flexShrink: 0 }}>
-          {showPinButton && <PinButton organisation={initialOrganisation} />}
-          <RowHeader openable={!alwaysOpen} label={label} isOpen={nextIsOpen} handleOpenRow={handleOpenRow} />
-        </Box>
+        <RowHeader
+          openable={!alwaysOpen}
+          label={label}
+          isOpen={nextIsOpen}
+          handleOpenRow={handleOpenRow}
+          beforeContent={showPinButton && <PinButton organisation={initialOrganisation} />}
+        />
         {inView && (
           <OrganisationResultsLoader
             questions={questions}

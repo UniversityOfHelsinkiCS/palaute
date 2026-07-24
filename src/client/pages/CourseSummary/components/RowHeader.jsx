@@ -5,8 +5,17 @@ import { Link as RouterLink } from 'react-router-dom'
 import { focusIndicatorStyle } from '../../../util/accessibility'
 
 const styles = {
+  // Fixed-width, non-shrinking column so the header stays aligned with the result
+  // columns beside it regardless of viewport width. `beforeContent` (the pin button)
+  // shares this column, which is why accordionButton below is allowed to shrink.
+  column: {
+    width: '23.5rem',
+    flexShrink: 0,
+    display: 'flex',
+    alignItems: 'center',
+  },
   accordionButton: {
-    width: '23rem',
+    flexGrow: 1,
     flexShrink: 1,
     minWidth: 0,
     minHeight: '48px',
@@ -30,8 +39,7 @@ const styles = {
     ...focusIndicatorStyle(),
   },
   unclickableLabel: {
-    width: '23.5rem',
-    flexShrink: 0,
+    flexGrow: 1,
     minHeight: '48px',
     paddingInline: '0.5rem',
     display: 'flex',
@@ -52,8 +60,9 @@ const styles = {
   },
 }
 
-const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, link }) => (
-  <>
+const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, link, beforeContent }) => (
+  <Box sx={styles.column}>
+    {beforeContent}
     {openable ? (
       <ButtonBase onClick={handleOpenRow} sx={styles.accordionButton} variant="contained" disableRipple>
         <Box sx={{ flexGrow: 1, minWidth: 0 }}>{label}</Box>
@@ -75,7 +84,7 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
         )}
       </>
     )}
-  </>
+  </Box>
 )
 
 export default RowHeader
