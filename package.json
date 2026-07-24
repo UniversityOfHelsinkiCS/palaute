@@ -57,7 +57,7 @@
     "chartjs-plugin-annotation": "3.1.0",
     "chartjs-plugin-datalabels": "2.2.0",
     "compression": "1.8.1",
-    "config": "3.3.12",
+    "config": "4.4.2",
     "date-fns": "2.30.0",
     "date-fns-timezone": "0.1.4",
     "dotenv": "16.6.1",
@@ -105,7 +105,7 @@
   "devDependencies": {
     "@bahmutov/cypress-esbuild-preprocessor": "2.2.8",
     "@types/compression": "1.8.1",
-    "@types/config": "^3.3.5",
+    "@types/config": "^4.0.0",
     "@types/jsonwebtoken": "9.0.10",
     "@types/lodash": "4.17.23",
     "@types/lodash-es": "4.17.12",
