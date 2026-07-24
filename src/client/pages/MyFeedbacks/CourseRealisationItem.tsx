@@ -1,8 +1,14 @@
 import { Card, CardContent, List } from '@mui/material'
 
+import type { CourseRealisationWithFeedbackTargets } from './utils'
+
 import FeedbackTargetItem from './FeedbackTargetItem'
 
-const CourseRealisationItem = ({ courseRealisation }) => {
+type CourseRealisationItemProps = {
+  courseRealisation: CourseRealisationWithFeedbackTargets
+}
+
+const CourseRealisationItem = ({ courseRealisation }: CourseRealisationItemProps) => {
   const { feedbackTargets } = courseRealisation
 
   return (

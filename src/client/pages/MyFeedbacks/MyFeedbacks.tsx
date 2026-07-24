@@ -9,7 +9,12 @@ import { StatusTabs, StatusTab } from '../../components/common/StatusTabs'
 import Title from '../../components/common/Title'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
 import CourseRealisationItem from './CourseRealisationItem'
-import { filterFeedbackTargets, getCourseRealisationsWithFeedbackTargets, sortCourseRealisations } from './utils'
+import {
+  filterFeedbackTargets,
+  getCourseRealisationsWithFeedbackTargets,
+  getTargetsForStatus,
+  sortCourseRealisations,
+} from './utils'
 
 const MyFeedbacks = () => {
   const location = useLocation()
@@ -27,20 +32,20 @@ const MyFeedbacks = () => {
   const sortedCourseRealisations = useMemo(
     () =>
       sortCourseRealisations(
-        getCourseRealisationsWithFeedbackTargets(filteredFeedbackTargets[status] ?? filterFeedbackTargets.waiting)
+        getCourseRealisationsWithFeedbackTargets(getTargetsForStatus(filteredFeedbackTargets, status))
       ),
     [filteredFeedbackTargets, status]
   )
 
   const showNoFeedbackAlert = !isLoading && sortedCourseRealisations.length === 0
   const counts = {
-    ongoing: filteredFeedbackTargets.ongoing?.length,
-    waiting: filteredFeedbackTargets.waiting?.length,
-    given: filteredFeedbackTargets.given?.length,
-    ended: filteredFeedbackTargets.ended?.length,
+    ongoing: filteredFeedbackTargets.ongoing.length,
+    waiting: filteredFeedbackTargets.waiting.length,
+    given: filteredFeedbackTargets.given.length,
+    ended: filteredFeedbackTargets.ended.length,
   }
 
-  const tabOrder = ['waiting', 'given', 'ended']
+  const tabOrder: string[] = ['waiting', 'given', 'ended']
   if (counts.ongoing && !tabOrder.includes('ongoing')) tabOrder.unshift('ongoing')
 
   const getPageTitle = () => {

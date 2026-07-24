@@ -1,3 +1,5 @@
+import type { FeedbackTargetForStudent } from '@common/types/feedbackTarget'
+
 import FeedbackGivenIcon from '@mui/icons-material/Check'
 import FeedbackNotGivenIcon from '@mui/icons-material/Close'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
@@ -23,7 +25,13 @@ import { getLanguageValue } from '../../util/languageUtils'
 import noFeedbackAllowed from '../../util/noFeedbackAllowed'
 import { getCourseName } from './utils'
 
-const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }) => {
+type NoFeedbackActionsProps = {
+  editPath: string
+  noFeedbackAllowed: boolean
+  onNotGivingFeedback: () => void
+}
+
+const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback }: NoFeedbackActionsProps) => {
   const { t } = useTranslation()
 
   return (
@@ -42,7 +50,12 @@ const NoFeedbackActions = ({ editPath, noFeedbackAllowed, onNotGivingFeedback })
   )
 }
 
-const NotGivingFeedbackButton = ({ noFeedbackAllowed, onNotGivingFeedback }) => {
+type NotGivingFeedbackButtonProps = {
+  noFeedbackAllowed: boolean
+  onNotGivingFeedback: () => void
+}
+
+const NotGivingFeedbackButton = ({ noFeedbackAllowed, onNotGivingFeedback }: NotGivingFeedbackButtonProps) => {
   const { t } = useTranslation()
 
   if (noFeedbackAllowed) {
@@ -55,7 +68,14 @@ const NotGivingFeedbackButton = ({ noFeedbackAllowed, onNotGivingFeedback }) => 
   return null
 }
 
-const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback }) => {
+type FeedbackGivenActionsProps = {
+  editPath: string
+  onDelete: () => void
+  viewPath: string
+  notGivingFeedback?: boolean
+}
+
+const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback }: FeedbackGivenActionsProps) => {
   const { t } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -100,7 +120,13 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback 
   )
 }
 
-const GiveModifyFeedbackButton = ({ notGivingFeedback, editPath, componentLink }) => {
+type GiveModifyFeedbackButtonProps = {
+  notGivingFeedback?: boolean
+  editPath: string
+  componentLink: typeof Link
+}
+
+const GiveModifyFeedbackButton = ({ notGivingFeedback, editPath, componentLink }: GiveModifyFeedbackButtonProps) => {
   const { t } = useTranslation()
 
   if (notGivingFeedback) {
@@ -129,7 +155,12 @@ const GiveModifyFeedbackButton = ({ notGivingFeedback, editPath, componentLink }
   )
 }
 
-const RemoveFeedbackButton = ({ notGivingFeedback, setOpen }) => {
+type RemoveFeedbackButtonProps = {
+  notGivingFeedback?: boolean
+  setOpen: (open: boolean) => void
+}
+
+const RemoveFeedbackButton = ({ notGivingFeedback, setOpen }: RemoveFeedbackButtonProps) => {
   const { t } = useTranslation()
 
   const handleOpen = () => {
@@ -146,7 +177,11 @@ const RemoveFeedbackButton = ({ notGivingFeedback, setOpen }) => {
   )
 }
 
-const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }) => {
+type FeedbackSummaryButtonForOpenGivenTargetProps = {
+  viewPath: string
+}
+
+const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }: FeedbackSummaryButtonForOpenGivenTargetProps) => {
   const { t } = useTranslation()
 
   if (!SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
@@ -165,7 +200,11 @@ const FeedbackSummaryButtonForOpenGivenTarget = ({ viewPath }) => {
   return null
 }
 
-const FeedbackEndedActions = ({ viewPath }) => {
+type FeedbackEndedActionsProps = {
+  viewPath: string
+}
+
+const FeedbackEndedActions = ({ viewPath }: FeedbackEndedActionsProps) => {
   const { t } = useTranslation()
 
   return (
@@ -175,7 +214,11 @@ const FeedbackEndedActions = ({ viewPath }) => {
   )
 }
 
-const ContinuousFeedbackActions = ({ viewPath }) => {
+type ContinuousFeedbackActionsProps = {
+  viewPath: string
+}
+
+const ContinuousFeedbackActions = ({ viewPath }: ContinuousFeedbackActionsProps) => {
   const { t } = useTranslation()
 
   return (
@@ -256,14 +299,18 @@ const NoFeedbackGivenChip = () => {
   return (
     <Chip
       variant="outlined"
-      icon={<FeedbackNotGivenIcon color="chipError" />}
+      icon={<FeedbackNotGivenIcon sx={{ color: theme => theme.palette.chipError.main }} />}
       label={t('userFeedbacks:noFeedbackGivenChip')}
       sx={styles.error}
     />
   )
 }
 
-const PeriodInfoAddition = ({ isEnded }) => {
+type PeriodInfoAdditionProps = {
+  isEnded: boolean
+}
+
+const PeriodInfoAddition = ({ isEnded }: PeriodInfoAdditionProps) => {
   const { t } = useTranslation()
 
   if (!isEnded && SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
@@ -273,12 +320,17 @@ const PeriodInfoAddition = ({ isEnded }) => {
   return null
 }
 
-const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
+type FeedbackTargetItemProps = {
+  feedbackTarget: FeedbackTargetForStudent
+  divider?: boolean
+}
+
+const FeedbackTargetItem = ({ feedbackTarget, divider }: FeedbackTargetItemProps) => {
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
 
-  const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit, summary } = feedbackTarget
+  const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit } = feedbackTarget
 
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
   const periodInfo = t('common:feedbackOpenPeriod', {
@@ -289,14 +341,13 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const courseName = getCourseName(feedbackTarget, t)
   const visibleCourseCode = getCourseCode(courseUnit)
   const translatedName = getLanguageValue(courseName, i18n.language)
-  const { studentCount } = summary.data
 
   const editPath = `/targets/${id}/feedback`
   const continuousPath = `/targets/${id}/continuous-feedback`
   const viewPath = `/targets/${id}/results`
 
   const feedbackGiven = Boolean(feedback)
-  const feedbackResponseGiven = feedbackResponse?.length > 3
+  const feedbackResponseGiven = (feedbackResponse?.length ?? 0) > 3
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
   const isEnded = feedbackTargetIsEnded(feedbackTarget)
   const notStarted = feedbackTargetCourseIsOngoing(feedbackTarget) && !isOpen
@@ -305,17 +356,17 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
   const { continuousFeedbackEnabled } = feedbackTarget
 
   const onDelete = async () => {
-    await apiClient.delete(`/feedbacks/${feedback.id}`)
-    queryClient.invalidateQueries(['feedbackTargetsForStudent'])
+    await apiClient.delete(`/feedbacks/${feedback?.id}`)
+    queryClient.invalidateQueries({ queryKey: ['feedbackTargetsForStudent'] })
     // Invalidate the waiting feedback count for the student
-    queryClient.invalidateQueries(['myFeedbacksWaitingFeedbackCount'])
+    queryClient.invalidateQueries({ queryKey: ['myFeedbacksWaitingFeedbackCount'] })
 
     enqueueSnackbar(t('userFeedbacks:deleted'), { variant: 'success' })
   }
 
   const onNotGivingFeedback = async () => {
     await apiClient.put(`/feedback-targets/${feedbackTarget.id}/not-giving-feedback`)
-    queryClient.invalidateQueries(['feedbackTargetsForStudent'])
+    queryClient.invalidateQueries({ queryKey: ['feedbackTargetsForStudent'] })
     enqueueSnackbar(t('userFeedbacks:noFeedbackGiven'), { variant: 'success' })
   }
 
@@ -366,7 +417,6 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }) => {
             editPath={editPath}
             noFeedbackAllowed={noFeedbackAllowedEnabled}
             onNotGivingFeedback={onNotGivingFeedback}
-            studentCount={studentCount}
           />
         )}
       </Box>

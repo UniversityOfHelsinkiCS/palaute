@@ -1,5 +1,5 @@
 import type { LocalizedString } from './common'
-import type { CourseUnit } from './courseUnit'
+import type { CourseUnit, CourseUnitOrganisation } from './courseUnit'
 import type { Question } from './question'
 import type { User } from './user'
 
@@ -143,18 +143,24 @@ export type GetFeedbackTargetUsersResponse = Array<{
 // GET /feedback-targets/:id/students-with-feedback
 export type GetStudentsWithFeedbackResponse = Array<User & { feedbackGiven?: boolean }>
 
-type FeedbackTargetForStudent = {
+export type FeedbackTargetForStudent = {
   id: number
   name: LocalizedString
   opensAt: string
   closesAt: string
   feedbackType: string
   accessStatus: string
-  feedback?: unknown
-  courseUnit: CourseUnit & { organisations?: unknown[] }
+  userCreated: boolean
+  continuousFeedbackEnabled: boolean
+  feedbackResponse?: string | null
+  feedback?: { id: number; createdAt: string; data: unknown } | null
+  courseUnit: CourseUnit & {
+    userCreated: boolean
+    organisations: Array<{ courseUnitOrganisation: CourseUnitOrganisation }>
+  }
   courseRealisation: CourseRealisation
   userFeedbackTargets: UserFeedbackTarget[]
-  summary?: unknown
+  summary?: { data: { studentCount: number } }
 }
 
 // GET /feedback-targets/for-student

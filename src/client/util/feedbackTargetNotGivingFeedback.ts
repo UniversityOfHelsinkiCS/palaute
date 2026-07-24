@@ -1,5 +1,7 @@
-import { FeedbackTarget } from '../types/FeedbackTarget'
+type NotGivingFeedbackParams = {
+  userFeedbackTargets: Array<{ notGivingFeedback?: boolean }>
+}
 
-const notGivingFeedback = ({ userFeedbackTargets }: FeedbackTarget) => userFeedbackTargets[0].notGivingFeedback
+const notGivingFeedback = ({ userFeedbackTargets }: NotGivingFeedbackParams) => userFeedbackTargets[0].notGivingFeedback
 
 export default notGivingFeedback
