@@ -132,6 +132,9 @@ const destroy = async (req: AuthenticatedRequest, res: Response) => {
   const feedbackTarget = await FeedbackTarget.findByPk(userFeedbackTarget.feedbackTargetId)
 
   if (!feedbackTarget) throw ApplicationError.NotFound()
+
+  if (!feedbackTarget.isOpen()) throw ApplicationError.Forbidden('Feedback is not open')
+
   await feedback.destroy()
   await refreshFeedbackTargetHiddenCount(userFeedbackTarget.feedbackTargetId)
 
