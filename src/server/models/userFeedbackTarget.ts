@@ -23,16 +23,16 @@ class UserFeedbackTarget extends Model<
   InferAttributes<UserFeedbackTarget>,
   InferCreationAttributes<UserFeedbackTarget>
 > {
-  public id!: CreationOptional<number>
-  public accessStatus!: AccessStatus
-  public feedbackId: number | null
-  public groupIds: string[] | null
-  public userId!: string
-  public feedbackTargetId!: number
-  public feedbackOpenEmailSent!: boolean
-  public isAdministrativePerson!: boolean
-  public userCreated!: boolean
-  public notGivingFeedback!: boolean
+  declare id: CreationOptional<number>
+  declare accessStatus: AccessStatus
+  declare feedbackId: number | null
+  declare groupIds: string[] | null
+  declare userId: string
+  declare feedbackTargetId: number
+  declare feedbackOpenEmailSent: boolean
+  declare isAdministrativePerson: boolean
+  declare userCreated: boolean
+  declare notGivingFeedback: boolean
 
   declare user?: User
   declare feedbackTarget?: FeedbackTarget
