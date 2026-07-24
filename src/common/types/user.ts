@@ -15,6 +15,7 @@ export type GetNoadUserResponse = User
 
 // GET /login
 export type GetLoginResponse = User & {
+  username: string
   iamGroups: string[]
   lastRestart: string
   banners: BannerRecord[]
