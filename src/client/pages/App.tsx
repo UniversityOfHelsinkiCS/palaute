@@ -31,7 +31,7 @@ const App = () => {
     i18n.on('languageChanged', (lng: 'en' | 'fi' | 'sv') => {
       document.documentElement.lang = lng
     })
-  }, [])
+  }, [i18n])
 
   return (
     <LocalizationProvider>

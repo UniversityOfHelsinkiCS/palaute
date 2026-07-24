@@ -26,9 +26,9 @@ const AdUser = () => {
 
   useEffect(() => {
     if (authorizedUser?.language) {
-      i18n.changeLanguage(authorizedUser.language)
+      void i18n.changeLanguage(authorizedUser.language)
     }
-  }, [authorizedUser?.language])
+  }, [i18n, authorizedUser?.language])
 
   if (isLoading) return null
 
