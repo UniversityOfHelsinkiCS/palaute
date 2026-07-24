@@ -1,3 +1,5 @@
+import type { GetFeedbackTargetsForCourseRealisationResponse } from '@common/types/feedbackTarget'
+
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { useParams, Navigate } from 'react-router-dom'
@@ -5,7 +7,7 @@ import { useParams, Navigate } from 'react-router-dom'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useCourseRealisationFeedbackTargets from '../../hooks/useCourseRealisationFeedbackTargets'
 
-const getCourseRealisationFeedbackTarget = feedbackTargets =>
+const getCourseRealisationFeedbackTarget = (feedbackTargets?: GetFeedbackTargetsForCourseRealisationResponse) =>
   (feedbackTargets ?? []).find(({ feedbackType }) => feedbackType === 'courseRealisation')
 
 const CourseRealisation = () => {

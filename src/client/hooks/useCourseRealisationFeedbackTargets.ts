@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 
 import apiClient from '../util/apiClient'
 
-const useCourseRealisationFeedbackTargets = (id: string, options = {}) => {
+const useCourseRealisationFeedbackTargets = (id: string | undefined, options = {}) => {
   const queryKey = ['courseRealisationFeedbackTargets', id]
 
   const queryFn = async () => {
