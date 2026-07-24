@@ -30,9 +30,8 @@ const styles = {
     ...focusIndicatorStyle(),
   },
   unclickableLabel: {
-    width: '22rem',
-    flexShrink: 1,
-    minWidth: 0,
+    width: '23.5rem',
+    flexShrink: 0,
     minHeight: '48px',
     paddingInline: '0.5rem',
     display: 'flex',
@@ -54,7 +53,6 @@ const styles = {
 }
 
 const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, link }) => (
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   <>
     {openable ? (
       <ButtonBase onClick={handleOpenRow} sx={styles.accordionButton} variant="contained" disableRipple>
@@ -62,7 +60,6 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
         <ChevronRight className="row-header-arrow" sx={{ ...styles.arrow, ...(isOpen ? styles.arrowOpen : {}) }} />
       </ButtonBase>
     ) : (
-      // eslint-disable-next-line react/jsx-no-useless-fragment
       <>
         {link ? (
           <ButtonBase
