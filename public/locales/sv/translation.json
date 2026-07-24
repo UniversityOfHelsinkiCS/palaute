@@ -678,6 +678,7 @@
     "activateContinuousFeedbackDigest": "Skicka ett dagligt sammanfattning via e-post om ny kontinuerlig respons",
     "continuousFeedbackGiven": "Given kontinuerlig respons",
     "noContinuousFeedbackGiven": "Ingen kontinuerlig respons har ännu getts",
+    "noContinuousFeedbackGivenStudentClosed": "Du har inte gett någon kontinuerlig respons, och kontinuerlig respons är nu stängd för denna kurs.",
     "continuousFeedbackInactive": "Fortlöpande feedback är inte aktiverad",
     "continuousFeedbackStudentInfo": "Du ser här den kontinuerliga responsen som du gett, och eventuella svar. Ditt namn visas inte för kursens personal i anslutning till din respons.",
     "respondContinuousFeedback": "Svara",

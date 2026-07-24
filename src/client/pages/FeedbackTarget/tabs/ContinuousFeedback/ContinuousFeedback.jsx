@@ -157,15 +157,19 @@ const ContinuousFeedback = () => {
 
   const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
 
-  const showSettings = isResponsibleTeacher || isAdmin || isOrganisationAdmin
-  const showFeedbackList = !!(isTeacher || continuousFeedbacks?.length)
-
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
+
+  const isFeedbackEnabled = feedbackTarget.continuousFeedbackEnabled
+
+  const showSettings = isResponsibleTeacher || isAdmin || isOrganisationAdmin
+  const showFeedbackList = !!(
+    isTeacher ||
+    continuousFeedbacks?.length ||
+    (isStudent && isFeedbackEnabled && !isOngoing)
+  )
 
   const studentCount = feedbackTarget.summary?.data?.studentCount ?? 0
   const isSmallCourse = studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT
-
-  const isFeedbackEnabled = feedbackTarget.continuousFeedbackEnabled
 
   return (
     <Box id="feedback-target-tab-content">
@@ -189,7 +193,11 @@ const ContinuousFeedback = () => {
 
             {isStudent && (
               <Box sx={{ mb: 4 }}>
-                <Alert severity="info">{t('feedbackTargetView:continuousFeedbackStudentInfo')}</Alert>
+                <Alert severity="info">
+                  {!isOngoing && !continuousFeedbacks?.length
+                    ? t('feedbackTargetView:noContinuousFeedbackGivenStudentClosed')
+                    : t('feedbackTargetView:continuousFeedbackStudentInfo')}
+                </Alert>
               </Box>
             )}
 

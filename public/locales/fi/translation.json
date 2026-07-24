@@ -685,6 +685,7 @@
     "activateContinuousFeedbackDigest": "Lähetä päivittäinen sähköpostikooste uudesta jatkuvasta palautteesta",
     "continuousFeedbackGiven": "Annettu jatkuva palaute",
     "noContinuousFeedbackGiven": "Jatkuvaa palautetta ei ole vielä annettu",
+    "noContinuousFeedbackGivenStudentClosed": "Et ole antanut jatkuvaa palautetta, ja jatkuvan palautteen antaminen on nyt päättynyt tällä kurssilla.",
     "continuousFeedbackInactive": "Jatkuva palaute ei ole käytössä",
     "continuousFeedbackStudentInfo": "Näet tässä antamasi jatkuvan palautteen ja mahdolliset vastaukset. Nimesi ei näy kurssin henkilökunnalle palautteen yhteydessä.",
     "respondContinuousFeedback": "Vastaa",
