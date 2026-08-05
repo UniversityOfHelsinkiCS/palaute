@@ -28,7 +28,7 @@ describe('When course has only one enrolled student', () => {
     it('Student can close the warning and continue to feedback form after reading the warning', () => {
       cy.get('[data-cy=confirm-giving-feedback-dialog-give-feedback]').click()
       cy.contains('Attention!').should('not.exist')
-      cy.contains('Testikysymys 1 *')
+      cy.contains('Test question 1 *')
     })
   })
 
@@ -80,7 +80,7 @@ describe('When course has only one enrolled student', () => {
         cy.loginAs(teacher)
         cy.get<number>('@fbtId').then(id => cy.visit(`/targets/${id}/results`))
         cy.contains('Multiple choice questions')
-        cy.contains('Testikysymys 1')
+        cy.contains('Test question 1')
       })
     })
   })
