@@ -16,6 +16,10 @@ describe('Versioned university survey questions in summary view', () => {
   it('my-organisations view: shows old questions for 2024-2025 and new questions for 2025-2026', () => {
     cy.visit('/course-summary/my-organisations')
 
+    // The view defaults to the current study year, which has no seeded data
+    cy.get('#year-selector', { timeout: 12000 }).click()
+    cy.get('[data-cy="year-selector-item-2025–2026"]').click()
+
     cy.contains('Versioned test org', { timeout: 12000 })
 
     // Select 2024-2025 (before the synthetic 2025-08-01 cutover)
