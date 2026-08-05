@@ -40,6 +40,10 @@ const styles = {
   },
   unclickableLabel: {
     flexGrow: 1,
+    // Same as accordionButton: allows the label to shrink and ellipsize instead of
+    // overflowing the fixed-width column onto the result cells.
+    flexShrink: 1,
+    minWidth: 0,
     minHeight: '48px',
     paddingInline: '0.5rem',
     display: 'flex',

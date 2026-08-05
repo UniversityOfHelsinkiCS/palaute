@@ -42,7 +42,12 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
   const translatedName = getLanguageValue(name, language)
 
   const link = feedbackTarget ? (
-    <Link variant="body2" component={RouterLink} to={`/targets/${feedbackTarget.id}/results`}>
+    <Link
+      variant="body2"
+      component={RouterLink}
+      to={`/targets/${feedbackTarget.id}/results`}
+      sx={{ display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' }}
+    >
       {translatedName}
     </Link>
   ) : (
