@@ -49,6 +49,7 @@ jobs:
             organisationSurvey.spec.js,
             programme.spec.js,
             search.spec.ts,
+            smallCourseFeedback.spec.ts,
             teacherview.spec.js,
             universitySurvey.spec.js,
             userfeedbacks.spec.js,
