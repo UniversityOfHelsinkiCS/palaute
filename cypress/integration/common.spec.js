@@ -9,9 +9,14 @@ describe('Common tests', () => {
     cy.contains('Testaaja').click()
     cy.contains('SV').click()
     cy.contains('Mina responser')
+
+    // The chosen language must also survive navigation
+    cy.get('[data-cy="navbar-link-Bläddra kurser"]').click()
+    cy.contains('Sök programmets kurser')
+
     cy.contains('Testaaja').click()
     cy.contains('FI').click()
-    cy.contains('Kurssipalautteeni')
+    cy.contains('Hae ohjelman opetusta')
   })
   it('CONFIG is populated correctly', () => {
     cy.loginAs(admin)

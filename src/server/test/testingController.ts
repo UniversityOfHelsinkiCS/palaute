@@ -31,6 +31,9 @@ const userHeadersToUser = (userHeaders: any) => ({
   lastName: userHeaders.sn,
   email: userHeaders.mail,
   studentNumber: userHeaders.studentNumber,
+  // In production this comes from the importer, and a lot of the UI behaves differently when it is
+  // set, so seeded users need it too
+  language: userHeaders.preferredLanguage,
 })
 
 const seedTestUsers2 = async (req: AuthenticatedRequest, res: Response) => {
