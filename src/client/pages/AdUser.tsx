@@ -1,6 +1,6 @@
 import { Box } from '@mui/material'
 import * as Sentry from '@sentry/browser'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import DevTools from '../components/DevTools'
@@ -24,10 +24,14 @@ const AdUser = () => {
     }
   }, [authorizedUser])
 
+  const languageApplied = useRef(false)
+
   useEffect(() => {
-    if (authorizedUser?.language) {
-      void i18n.changeLanguage(authorizedUser.language)
-    }
+    if (languageApplied.current) return
+    if (!authorizedUser?.language) return
+
+    languageApplied.current = true
+    void i18n.changeLanguage(authorizedUser.language)
   }, [i18n, authorizedUser?.language])
 
   if (isLoading) return null

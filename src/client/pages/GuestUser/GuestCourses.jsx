@@ -4,7 +4,6 @@ import { useTranslation } from 'react-i18next'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useNoadfeedbackTargets from '../../hooks/useNoadfeedbackTargets'
-import useNoadUser from '../../hooks/useNoadUser'
 import { getLanguageValue } from '../../util/languageUtils'
 import GuestFeedbackTargetItem from './GuestFeedbackTargetItem'
 
@@ -38,14 +37,8 @@ const NoOpenFeedbacks = ({ t }) => (
 )
 
 const GuestCourses = () => {
-  const { noadUser } = useNoadUser()
   const { feedbackTargets, isLoading } = useNoadfeedbackTargets()
   const { i18n, t } = useTranslation()
-
-  React.useEffect(() => {
-    if (!noadUser) return
-    i18n.changeLanguage(noadUser.language)
-  }, [noadUser])
 
   if (isLoading) {
     return <LoadingProgress />
