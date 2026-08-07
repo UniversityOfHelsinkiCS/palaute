@@ -1,16 +1,26 @@
 import { Box, LinearProgress } from '@mui/material'
+import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 
+import { NorButton } from '../../components/common/NorButton'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import { useSummaries } from './api'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
 import OrganisationSummaryRow from './components/OrganisationRow'
+import { OrganisationTable } from './components/OrganisationSummaryTableView'
 import SorterRowWithFilters from './components/SorterRow'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { SummaryContextProvider, useSummaryContext } from './context'
 import GenerateReport from './GenerateReport'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
-  const { dateRange, tagId } = useSummaryContext()
+  const { t } = useTranslation()
+  const [tableView, setTableView] = useState(false)
+  const { authorizedUser: user } = useAuthorizedUser()
+
+  const { dateRange, tagId, questions } = useSummaryContext()
+  console.log(dateRange)
 
   const { organisation, isLoading } = useSummaries({
     entityId: initialOrganisation.id,
@@ -23,23 +33,32 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem" pl="0.5rem">
-        <GenerateReport organisationId={initialOrganisation.id} />
+        <Box sx={{ display: 'flex', gap: 1 }}>
+          {user.isAdmin && (
+            <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
+              {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
+            </NorButton>
+          )}
+          <GenerateReport organisationId={initialOrganisation.id} />
+        </Box>
         <Box sx={{ mt: 1 }} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', minHeight: '70px' }}>
           {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-          <SorterRowWithFilters />
+          <SorterRowWithFilters hideColumns={tableView} />
         </Box>
-        {isLoading ? (
-          <LinearProgress />
-        ) : (
-          <OrganisationSummaryRow
-            alwaysOpen
-            organisationId={initialOrganisation.id}
-            organisation={organisation}
-            startDate={dateRange.start}
-            endDate={dateRange.end}
-          />
-        )}
+        {isLoading && <LinearProgress />}
+        {!isLoading &&
+          (tableView ? (
+            <OrganisationTable organisation={organisation} questions={questions} dateRange={dateRange} />
+          ) : (
+            <OrganisationSummaryRow
+              alwaysOpen
+              organisationId={initialOrganisation.id}
+              organisation={organisation}
+              startDate={dateRange.start}
+              endDate={dateRange.end}
+            />
+          ))}
       </Box>
     </SummaryScrollContainer>
   )

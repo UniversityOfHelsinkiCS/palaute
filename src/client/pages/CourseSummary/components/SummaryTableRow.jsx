@@ -173,6 +173,7 @@ export const SummaryTableRow = ({
   indent = false,
   open,
   handleOpen,
+  dateRange,
 }) => {
   const { t, i18n } = useTranslation()
   const data = summary?.data
@@ -180,7 +181,11 @@ export const SummaryTableRow = ({
   const feedbackResponsePercentage = data ? (data.feedbackResponsePercentage * 100).toFixed() : null
   const hiddenCount = data?.hiddenCount || 0
 
-  const targetUrl = getCourseUnitSummaryUrl({ courseCode: targetCode })
+  const targetUrl = getCourseUnitSummaryUrl({
+    courseCode: targetCode,
+    startDate: dateRange?.start,
+    endDate: dateRange?.end,
+  })
 
   return (
     <TableRow

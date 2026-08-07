@@ -164,7 +164,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
   )
 }
 
-const TagRow = ({ tag, organisation, questions, depth, showCu = false }) => {
+const TagRow = ({ tag, organisation, questions, depth, showCu = false, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation, tagId: tag.id })
@@ -199,13 +199,14 @@ const TagRow = ({ tag, organisation, questions, depth, showCu = false }) => {
             summary={courseUnitsLoading ? undefined : cu.summary}
             questions={questions}
             depth={depth + 1}
+            dateRange={dateRange}
           />
         ))}
     </>
   )
 }
 
-const OrganisationRow = ({ organisation, questions, depth, showCu = false }) => {
+const OrganisationRow = ({ organisation, questions, depth, showCu = false, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
 
@@ -237,7 +238,14 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false }) => 
       {open && (
         <>
           {childOrganisations.map(org => (
-            <OrganisationRow key={org.id} organisation={org} questions={questions} depth={depth + 1} showCu={showCu} />
+            <OrganisationRow
+              key={org.id}
+              organisation={org}
+              questions={questions}
+              depth={depth + 1}
+              showCu={showCu}
+              dateRange={dateRange}
+            />
           ))}
           {tags.map(tag => (
             <TagRow
@@ -247,6 +255,7 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false }) => 
               questions={questions}
               depth={depth + 1}
               showCu={showCu}
+              dateRange={dateRange}
             />
           ))}
           {courseUnits.map(cu => (
@@ -257,6 +266,7 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false }) => 
               summary={cu.summary}
               questions={questions}
               depth={depth + 1}
+              dateRange={dateRange}
             />
           ))}
         </>
@@ -265,7 +275,7 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false }) => 
   )
 }
 
-const OrganisationTable = ({ organisation, questions }) => {
+export const OrganisationTable = ({ organisation, questions, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = useState('orgs') // 'hide', 'orgs', 'cu'
 
@@ -331,6 +341,7 @@ const OrganisationTable = ({ organisation, questions }) => {
                   questions={questions}
                   depth={1}
                   showCu={depth === 'cu'}
+                  dateRange={dateRange}
                 />
               </TableBody>
             </Table>
@@ -343,7 +354,7 @@ const OrganisationTable = ({ organisation, questions }) => {
 
 const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
   const { t } = useTranslation()
-  const { questions } = useSummaryContext()
+  const { questions, dateRange } = useSummaryContext()
 
   const university = otherOrgs.find(org => org.id === UNIVERSITY_ROOT_ID)
   const { childOrganisations: universityChildOrgs } = useChildOrganisations(university)
@@ -365,7 +376,7 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
             {t('courseSummary:pinnedOrganisationsLong', { count: pinnedOrgs.length })}
           </Typography>
           {pinnedOrgs.map(org => (
-            <OrganisationTable key={org.id} organisation={org} questions={questions} />
+            <OrganisationTable key={org.id} organisation={org} questions={questions} dateRange={dateRange} />
           ))}
         </Box>
       )}
@@ -377,7 +388,7 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
             </Typography>
           )}
           {unpinnedOrgsWithoutUniversity.map(org => (
-            <OrganisationTable key={org.id} organisation={org} questions={questions} />
+            <OrganisationTable key={org.id} organisation={org} questions={questions} dateRange={dateRange} />
           ))}
         </Box>
       )}
