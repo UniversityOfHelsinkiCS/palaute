@@ -16,7 +16,7 @@ import { OrganisationLink } from './OrganisationLink'
 import RowHeader from './RowHeader'
 import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
 
-const ChildOrganisationsList = ({ organisationId, initialChildOrganisations }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     include: 'childOrganisations',
@@ -37,11 +37,13 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations }) =
       organisation={org}
       organisationId={org.id}
       alwaysOpen={orderedAndFilteredOrganisations.length === 1}
+      startDate={startDate}
+      endDate={endDate}
     />
   ))
 }
 
-const TagSummaryRow = ({ tag, questions, organisationId }) => {
+const TagSummaryRow = ({ tag, questions, organisationId, startDate, endDate }) => {
   const [isTransitioning, startTransition] = React.useTransition()
   const [isOpen, setIsOpen] = React.useState(false)
   const [nextIsOpen, setNextIsOpen] = React.useState(isOpen)
@@ -69,14 +71,22 @@ const TagSummaryRow = ({ tag, questions, organisationId }) => {
           alignItems="stretch"
           gap="0.4rem"
         >
-          {isOpen && <CourseUnitsList organisationId={organisationId} questions={questions} tagId={tag.id} />}
+          {isOpen && (
+            <CourseUnitsList
+              organisationId={organisationId}
+              questions={questions}
+              tagId={tag.id}
+              startDate={startDate}
+              endDate={endDate}
+            />
+          )}
         </Box>
       )}
     </Box>
   )
 }
 
-const TagList = ({ organisationId, initialTags, questions }) => {
+const TagList = ({ organisationId, initialTags, questions, startDate, endDate }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     include: 'tags',
@@ -95,7 +105,14 @@ const TagList = ({ organisationId, initialTags, questions }) => {
   }
 
   return orderedTags?.map(t => (
-    <TagSummaryRow key={t.id} tag={t} questions={questions} organisationId={organisationId} />
+    <TagSummaryRow
+      key={t.id}
+      tag={t}
+      questions={questions}
+      organisationId={organisationId}
+      startDate={startDate}
+      endDate={endDate}
+    />
   ))
 }
 
@@ -226,12 +243,16 @@ const OrganisationSummaryRow = ({
               <ChildOrganisationsList
                 organisationId={organisationId}
                 initialChildOrganisations={initialOrganisation?.childOrganisations}
+                startDate={startDate}
+                endDate={endDate}
               />
               {tagsEnabled && (
                 <TagList
                   organisationId={organisationId}
                   initialTags={initialOrganisation?.tags}
                   questions={questions}
+                  startDate={startDate}
+                  endDate={endDate}
                 />
               )}
               <CourseUnitsList

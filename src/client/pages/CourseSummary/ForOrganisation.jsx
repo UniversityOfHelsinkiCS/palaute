@@ -20,7 +20,6 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   const { authorizedUser: user } = useAuthorizedUser()
 
   const { dateRange, tagId, questions } = useSummaryContext()
-  console.log(dateRange)
 
   const { organisation, isLoading } = useSummaries({
     entityId: initialOrganisation.id,
