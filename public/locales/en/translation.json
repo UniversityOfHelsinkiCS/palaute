@@ -579,7 +579,8 @@
     "showCurs": "Show course realisations",
     "openCuSummary": "Open course unit summary",
     "openFeedbackPage": "Open feedback page",
-    "courseStaffInfo": "Not available in course unit level. Course staff is listed for each course realisation."
+    "courseStaffInfo": "Not available in course unit level. Course staff is listed for each course realisation.",
+    "noSummaryInfo": "Summary is not available for this time period."
   },
   "generateReport": {
     "selectIncluded": "Select content to download",

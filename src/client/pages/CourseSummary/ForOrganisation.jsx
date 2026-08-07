@@ -1,4 +1,4 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box, LinearProgress, Alert } from '@mui/material'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -23,8 +23,6 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
 
   const { organisation, isLoading } = useSummaries({
     entityId: initialOrganisation.id,
-    startDate: dateRange.start,
-    endDate: dateRange.end,
     enabled: true,
     tagId,
   })
@@ -32,7 +30,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem" pl="0.5rem">
-        <Box sx={{ display: 'flex', gap: 1 }}>
+        <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
           {user.isAdmin && (
             <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
               {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
@@ -40,13 +38,14 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
           )}
           <GenerateReport organisationId={initialOrganisation.id} />
         </Box>
-        <Box sx={{ mt: 1 }} />
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', minHeight: '70px' }}>
           {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-          <SorterRowWithFilters hideColumns={tableView} />
+          <SorterRowWithFilters hideColumns={tableView || !organisation} />
         </Box>
         {isLoading && <LinearProgress />}
+        {!organisation && <Alert severity="info">{t('courseSummary:noSummaryInfo')}</Alert>}
         {!isLoading &&
+          Boolean(organisation) &&
           (tableView ? (
             <OrganisationTable organisation={organisation} questions={questions} dateRange={dateRange} />
           ) : (

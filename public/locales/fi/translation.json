@@ -574,7 +574,8 @@
     "showCurs": "Näytä kurssitoteutukset",
     "openCuSummary": "Avaa opintojakson yhteenveto",
     "openFeedbackPage": "Avaa palautesivu",
-    "courseStaffInfo": "Ei saatavilla opintojaksotasolla. Kurssin henkilökunta on listattu kullekin toteutukselle erikseen."
+    "courseStaffInfo": "Ei saatavilla opintojaksotasolla. Kurssin henkilökunta on listattu kullekin toteutukselle erikseen.",
+    "noSummaryInfo": "Yhteenvetoa tälle ajanjaksolle ei ole saatavilla."
   },
   "generateReport": {
     "selectIncluded": "Valitse ladattava sisältö",

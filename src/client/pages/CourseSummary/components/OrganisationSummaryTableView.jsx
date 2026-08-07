@@ -336,7 +336,7 @@ export const OrganisationTable = ({ organisation, questions, dateRange }) => {
               <SummaryTableHeader questions={questions} />
               <TableBody>
                 <OrganisationRow
-                  key={organisation.id}
+                  key={organisation?.id}
                   organisation={organisation}
                   questions={questions}
                   depth={1}

@@ -569,7 +569,8 @@
     "showCurs": "Visa kursinstanser",
     "openCuSummary": "Öppna studieavsnittets sammanfattning",
     "openFeedbackPage": "Öppna responssidan",
-    "courseStaffInfo": "Inte tillgängligt på studieavsnittsnivå. Kurspersonal listas för kursinstanser."
+    "courseStaffInfo": "Inte tillgängligt på studieavsnittsnivå. Kurspersonal listas för kursinstanser.",
+    "noSummaryInfo": "Sammanfattning är inte tillgänglig för den här tidsperioden."
   },
   "generateReport": {
     "selectIncluded": "Välj innehåll att exportera",
