@@ -111,7 +111,7 @@ const SummaryInContext = () => {
             element={
               <Box role="tabpanel" id="tabpanel-my-organisations" aria-labelledby="tab-my-organisations">
                 <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
-                  <MyOrganisations />
+                  <MyOrganisations tableView={tableView} />
                 </ProtectedRoute>
               </Box>
             }

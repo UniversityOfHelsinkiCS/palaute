@@ -1,4 +1,6 @@
-import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase } from '@mui/material'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase, Button } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { format, isValid } from 'date-fns'
 import { useTranslation } from 'react-i18next'
@@ -42,6 +44,17 @@ const styles = {
     alignItems: 'center',
     width: '2.5rem',
     height: '2.5rem',
+  },
+  openRowButton: {
+    p: 1,
+    borderRadius: 1,
+    textTransform: 'none',
+    color: '#000000de',
+    textAlign: 'left',
+    '&:hover': {
+      backgroundColor: '#e0e0e0',
+    },
+    ...focusIndicatorStyle(),
   },
 }
 
@@ -122,11 +135,49 @@ export const SummaryTableHeader = ({ questions }) => {
   )
 }
 
-export const SummaryTableRow = ({ target, targetCode, questions, summary, depth = 1 }) => {
+const TargetComponent = ({ target, targetCode, targetUrl, indent, open, handleOpen }) => {
+  const { t } = useTranslation()
+  if (targetCode && targetUrl) {
+    return (
+      <Tooltip title={t('courseSummary:openCuSummary')} placement="bottom" arrow describeChild>
+        <ButtonBase component={Link} to={targetUrl} sx={styles.linkButton}>
+          <Typography variant="body2">{target}</Typography>
+        </ButtonBase>
+      </Tooltip>
+    )
+  }
+
+  if (handleOpen) {
+    return (
+      <Button
+        startIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+        onClick={handleOpen}
+        sx={styles.openRowButton}
+        disableRipple
+        aria-label={`${target}: ${open ? t('courseSummary:hideBreakdown') : t('courseSummary:showBreakdown')}`}
+      >
+        <Typography>{target}</Typography>
+      </Button>
+    )
+  }
+
+  return <Typography sx={{ pl: indent ? 4 : 0 }}>{target}</Typography>
+}
+
+export const SummaryTableRow = ({
+  target,
+  targetCode,
+  questions,
+  summary,
+  depth = 1,
+  indent = false,
+  open,
+  handleOpen,
+}) => {
   const { t, i18n } = useTranslation()
   const data = summary?.data
-  const percent = data ? ((summary.data.feedbackCount / summary.data.studentCount) * 100).toFixed() : null
-  const feedbackResponsePercentage = data ? (summary.data.feedbackResponsePercentage * 100).toFixed() : null
+  const percent = data ? ((data.feedbackCount / data.studentCount) * 100).toFixed() : null
+  const feedbackResponsePercentage = data ? (data.feedbackResponsePercentage * 100).toFixed() : null
   const hiddenCount = data?.hiddenCount || 0
 
   const targetUrl = getCourseUnitSummaryUrl({ courseCode: targetCode })
@@ -141,15 +192,14 @@ export const SummaryTableRow = ({ target, targetCode, questions, summary, depth 
       }}
     >
       <SummaryTableCell component="th" scope="row" sx={{ position: 'sticky', left: 0, zIndex: 2 }}>
-        {targetCode && targetUrl ? (
-          <Tooltip title={t('courseSummary:openCuSummary')} placement="bottom" arrow describeChild>
-            <ButtonBase component={Link} to={targetUrl} sx={styles.linkButton}>
-              <Typography variant="body2">{target}</Typography>
-            </ButtonBase>
-          </Tooltip>
-        ) : (
-          <Typography>{target}</Typography>
-        )}
+        <TargetComponent
+          target={target}
+          targetCode={targetCode}
+          targetUrl={targetUrl}
+          indent={indent}
+          open={open}
+          handleOpen={handleOpen}
+        />
       </SummaryTableCell>
       {questions.map(q => {
         const isWorkloadQuestion = q?.secondaryType === 'WORKLOAD'
