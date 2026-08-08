@@ -1,10 +1,12 @@
 /// <reference types="cypress" />
 
+import { addDays } from 'date-fns'
+
 const { organisationCorrespondent } = require('../fixtures/headers')
 
 describe('Organisation settings', () => {
   beforeEach(() => {
-    cy.createFeedbackTarget()
+    cy.createFeedbackTarget({ opensAt: addDays(new Date(), -1) })
     cy.seedTestOrgCorrespondent(organisationCorrespondent)
     cy.loginAs(organisationCorrespondent)
   })
