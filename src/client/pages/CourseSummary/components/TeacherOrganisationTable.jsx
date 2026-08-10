@@ -65,7 +65,7 @@ const styles = {
 }
 
 const TeacherOrganisationTable = ({ organisation, questions }) => {
-  const { sortBy, sortFunction, showSeparateOrganisationCourses } = useSummaryContext()
+  const { sortBy, sortFunction, showSeparateOrganisationCourses, dateRange } = useSummaryContext()
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = React.useState('cu') // 'hide', 'programme', 'cu'
 
@@ -109,16 +109,6 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
           </Button>
           {linkComponent}
         </Box>
-        {depth !== 'hide' && (
-          <Button
-            variant="outlined"
-            onClick={() => (depth === 'cu' ? setDepth('programme') : setDepth('cu'))}
-            sx={styles.cuButton}
-            disableRipple
-          >
-            {depth === 'cu' ? t('courseSummary:hideCourseUnits') : t('courseSummary:showCourseUnits')}
-          </Button>
-        )}
       </Box>
       {depth !== 'hide' && Boolean(isFetching) && (
         <Box sx={styles.loadingContainer}>
@@ -140,6 +130,8 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
                   target={`${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`}
                   summary={organisation.summary}
                   questions={questions}
+                  open={depth === 'cu'}
+                  handleOpen={() => (depth === 'cu' ? setDepth('programme') : setDepth('cu'))}
                 />
                 {depth === 'cu' &&
                   orderedCourseUnits.map(cu => (
@@ -150,6 +142,7 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
                       summary={cu.summary}
                       questions={questions}
                       depth={2}
+                      dateRange={dateRange}
                     />
                   ))}
               </TableBody>

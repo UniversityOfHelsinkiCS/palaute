@@ -135,8 +135,15 @@ export const SummaryTableHeader = ({ questions }) => {
   )
 }
 
-const TargetComponent = ({ target, targetCode, targetUrl, indent, open, handleOpen }) => {
+const TargetComponent = ({ target, targetCode, targetUrl, indent, open, handleOpen, targetComponentId }) => {
   const { t } = useTranslation()
+
+  const handleLinkClick = () => {
+    setTimeout(() => {
+      document.getElementById(targetComponentId)?.focus({ preventScroll: true })
+    }, 0)
+  }
+
   if (targetCode && targetUrl) {
     return (
       <Tooltip title={t('courseSummary:openCuSummary')} placement="bottom" arrow describeChild>
@@ -161,6 +168,21 @@ const TargetComponent = ({ target, targetCode, targetUrl, indent, open, handleOp
     )
   }
 
+  if (targetComponentId) {
+    return (
+      <Button
+        component="a"
+        href={`#${targetComponentId}`}
+        onClick={handleLinkClick}
+        sx={styles.openRowButton}
+        disableRipple
+        aria-label={`${target}: t('courseSummary:showBreakdown')}`}
+      >
+        <Typography>{target}</Typography>
+      </Button>
+    )
+  }
+
   return <Typography sx={{ pl: indent ? 4 : 0 }}>{target}</Typography>
 }
 
@@ -174,6 +196,7 @@ export const SummaryTableRow = ({
   open,
   handleOpen,
   dateRange,
+  targetComponentId,
 }) => {
   const { t, i18n } = useTranslation()
   const data = summary?.data
@@ -204,6 +227,7 @@ export const SummaryTableRow = ({
           indent={indent}
           open={open}
           handleOpen={handleOpen}
+          targetComponentId={targetComponentId}
         />
       </SummaryTableCell>
       {questions.map(q => {

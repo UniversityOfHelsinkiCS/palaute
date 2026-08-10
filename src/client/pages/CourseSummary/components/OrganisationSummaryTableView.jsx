@@ -2,7 +2,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Box, Typography, TableContainer, Table, TableBody, CircularProgress, Button } from '@mui/material'
 import { useIsFetching } from '@tanstack/react-query'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
@@ -56,6 +56,7 @@ const styles = {
     backgroundColor: 'transparent',
     borderRadius: 2,
     px: 1.5,
+    scrollMarginTop: '8rem',
     textTransform: 'none',
     '& .MuiButton-startIcon svg': {
       fontSize: 32,
@@ -66,6 +67,8 @@ const styles = {
     ...focusIndicatorStyle({ color: 'white' }),
   },
 }
+
+const getOrganisationTableButtonId = organisationId => `organisation-table-button-${organisationId}`
 
 const UniversityTable = ({ organisation, childOrganisations, questions }) => {
   const { t, i18n } = useTranslation()
@@ -102,16 +105,6 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
           </Button>
           {linkComponent}
         </Box>
-        {depth !== 'hide' && (
-          <Button
-            variant="outlined"
-            onClick={() => (depth === 'all' ? setDepth('uni') : setDepth('all'))}
-            sx={styles.cuButton}
-            disableRipple
-          >
-            {depth === 'all' ? t('courseSummary:hideBreakdown') : t('courseSummary:showBreakdown')}
-          </Button>
-        )}
       </Box>
       {depth !== 'hide' && Boolean(isFetching) && (
         <Box sx={styles.loadingContainer}>
@@ -131,8 +124,10 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
               <TableBody>
                 <SummaryTableRow
                   target={`${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`}
-                  summary={organisation.summary}
+                  summary={organisation?.summary}
                   questions={questions}
+                  open={depth === 'all'}
+                  handleOpen={() => (depth === 'all' ? setDepth('uni') : setDepth('all'))}
                 />
                 {depth === 'all' &&
                   childOrganisations.map(org => (
@@ -142,6 +137,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                       summary={org.summary}
                       questions={questions}
                       depth={2}
+                      targetComponentId={getOrganisationTableButtonId(org.id)}
                     />
                   ))}
                 {depth === 'all' &&
@@ -164,14 +160,10 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
   )
 }
 
-const TagRow = ({ tag, organisation, questions, depth, showCu = false, dateRange }) => {
+const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation, tagId: tag.id })
-
-  useEffect(() => {
-    setOpen(showCu)
-  }, [showCu])
 
   const openable = courseUnits.length > 0
 
@@ -206,20 +198,19 @@ const TagRow = ({ tag, organisation, questions, depth, showCu = false, dateRange
   )
 }
 
-const OrganisationRow = ({ organisation, questions, depth, showCu = false, dateRange }) => {
+const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false, dateRange }) => {
   const { t, i18n } = useTranslation()
-  const [open, setOpen] = useState(false)
+  const [open, setOpen] = useState(initiallyOpen)
 
   const { summary, isLoading: summaryLoading } = useSummary(organisation)
   const { childOrganisations, isLoading: childOrganisationsLoading } = useChildOrganisations(organisation)
-  const { tags, isLoading: tagsLoading } = useTags(organisation, TAGS_ENABLED.includes(organisation?.code))
+  const { tags, isLoading: tagsLoading } = useTags({
+    organisation,
+    tagsEnabled: TAGS_ENABLED.includes(organisation?.code),
+  })
   const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation })
 
-  useEffect(() => {
-    setOpen(showCu)
-  }, [showCu])
-
-  if (summaryLoading || childOrganisationsLoading || tagsLoading || (showCu && courseUnitsLoading))
+  if (summaryLoading || childOrganisationsLoading || tagsLoading || courseUnitsLoading)
     return <SummaryTableRow target={t('courseSummary:loading')} questions={questions} depth={depth} />
 
   const openable = childOrganisations.length > 0 || tags.length > 0 || courseUnits.length > 0
@@ -243,7 +234,6 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false, dateR
               organisation={org}
               questions={questions}
               depth={depth + 1}
-              showCu={showCu}
               dateRange={dateRange}
             />
           ))}
@@ -254,7 +244,6 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false, dateR
               organisation={organisation}
               questions={questions}
               depth={depth + 1}
-              showCu={showCu}
               dateRange={dateRange}
             />
           ))}
@@ -275,7 +264,7 @@ const OrganisationRow = ({ organisation, questions, depth, showCu = false, dateR
   )
 }
 
-export const OrganisationTable = ({ organisation, questions, dateRange }) => {
+export const OrganisationTable = ({ organisation, questions, dateRange, firstRowOpen = true }) => {
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = useState('orgs') // 'hide', 'orgs', 'cu'
 
@@ -293,6 +282,7 @@ export const OrganisationTable = ({ organisation, questions, dateRange }) => {
       <Box sx={styles.titleContainer}>
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
           <Button
+            id={getOrganisationTableButtonId(organisation?.id)}
             type="button"
             onClick={() => (depth === 'hide' ? setDepth('orgs') : setDepth('hide'))}
             startIcon={depth === 'hide' ? <ExpandMoreIcon /> : <ExpandLessIcon />}
@@ -308,16 +298,6 @@ export const OrganisationTable = ({ organisation, questions, dateRange }) => {
           </Button>
           {linkComponent}
         </Box>
-        {depth !== 'hide' && (
-          <Button
-            variant="outlined"
-            onClick={() => (depth === 'cu' ? setDepth('orgs') : setDepth('cu'))}
-            sx={styles.cuButton}
-            disableRipple
-          >
-            {depth === 'cu' ? t('courseSummary:hideBreakdown') : t('courseSummary:showBreakdown')}
-          </Button>
-        )}
       </Box>
       {depth !== 'hide' && Boolean(isFetching) && (
         <Box sx={styles.loadingContainer}>
@@ -340,7 +320,7 @@ export const OrganisationTable = ({ organisation, questions, dateRange }) => {
                   organisation={organisation}
                   questions={questions}
                   depth={1}
-                  showCu={depth === 'cu'}
+                  initiallyOpen={firstRowOpen}
                   dateRange={dateRange}
                 />
               </TableBody>
@@ -376,7 +356,13 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
             {t('courseSummary:pinnedOrganisationsLong', { count: pinnedOrgs.length })}
           </Typography>
           {pinnedOrgs.map(org => (
-            <OrganisationTable key={org.id} organisation={org} questions={questions} dateRange={dateRange} />
+            <OrganisationTable
+              key={org.id}
+              organisation={org}
+              questions={questions}
+              dateRange={dateRange}
+              firstRowOpen={true}
+            />
           ))}
         </Box>
       )}
@@ -388,7 +374,13 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
             </Typography>
           )}
           {unpinnedOrgsWithoutUniversity.map(org => (
-            <OrganisationTable key={org.id} organisation={org} questions={questions} dateRange={dateRange} />
+            <OrganisationTable
+              key={org.id}
+              organisation={org}
+              questions={questions}
+              dateRange={dateRange}
+              firstRowOpen={false}
+            />
           ))}
         </Box>
       )}

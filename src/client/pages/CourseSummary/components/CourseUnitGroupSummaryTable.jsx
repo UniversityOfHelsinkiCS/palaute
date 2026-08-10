@@ -112,6 +112,17 @@ const styles = {
     width: '2.5rem',
     height: '2.5rem',
   },
+  openRowButton: {
+    p: 1,
+    borderRadius: 1,
+    textTransform: 'none',
+    color: '#000000de',
+    textAlign: 'left',
+    '&:hover': {
+      backgroundColor: '#e0e0e0',
+    },
+    ...focusIndicatorStyle(),
+  },
 }
 
 const addTimePeriod = timePeriod => {
@@ -270,7 +281,15 @@ const CourseUnitGroupSummaryTableHeader = ({ questions }) => {
   )
 }
 
-const CourseUnitGroupSummaryTableRow = ({ target, surveyGroup, questions, timePeriod, depth = 1 }) => {
+const CourseUnitGroupSummaryTableRow = ({
+  target,
+  surveyGroup,
+  questions,
+  timePeriod,
+  depth = 1,
+  open,
+  handleOpen,
+}) => {
   const { t, i18n } = useTranslation()
   const isCourseUnitGroup = Boolean(target?.surveyGroups)
 
@@ -324,7 +343,15 @@ const CourseUnitGroupSummaryTableRow = ({ target, surveyGroup, questions, timePe
             </ButtonBase>
           </Tooltip>
         ) : (
-          <Typography>{title}</Typography>
+          <Button
+            startIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            onClick={handleOpen}
+            sx={styles.openRowButton}
+            disableRipple
+            aria-label={`${title}: ${open ? t('courseSummary:hideCurs') : t('courseSummary:showCurs')}`}
+          >
+            <Typography>{title}</Typography>
+          </Button>
         )}
       </SummaryTableCell>
       <SummaryTableCell>{teacherChips}</SummaryTableCell>
@@ -433,16 +460,6 @@ const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, v
         >
           {courseUnitTitle}
         </Button>
-        {depth !== 'hide' && (
-          <Button
-            variant="outlined"
-            onClick={() => (depth === 'cur' ? setDepth('cu') : setDepth('cur'))}
-            sx={styles.curButton}
-            disableRipple
-          >
-            {depth === 'cur' ? t('courseSummary:hideCurs') : t('courseSummary:showCurs')}
-          </Button>
-        )}
       </Box>
       {depth !== 'hide' && Boolean(isLoading) && (
         <Box sx={styles.loadingContainer}>
@@ -468,6 +485,8 @@ const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, v
                   surveyGroup={group}
                   questions={questions}
                   timePeriod={courseUnitGroupTimePeriod}
+                  open={depth === 'cur'}
+                  handleOpen={() => (depth === 'cur' ? setDepth('cu') : setDepth('cur'))}
                 />
                 {depth === 'cur' &&
                   group.feedbackTargets.map(fbt => (

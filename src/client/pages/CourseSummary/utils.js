@@ -54,7 +54,7 @@ export const useChildOrganisations = organisation => {
   return { childOrganisations: orderedAndFilteredOrganisations, isLoading: isLoading ?? false }
 }
 
-export const useTags = (organisation, tagsEnabled) => {
+export const useTags = ({ organisation, tagsEnabled }) => {
   const { i18n } = useTranslation()
 
   const initialTags = organisation?.tags
@@ -92,7 +92,7 @@ export const useOrderedCourseUnits = ({ organisation, tagId }) => {
   const orderedCourseUnits = useMemo(
     () =>
       courseUnits?.length > 0
-        ? orderBy(courseUnits, [cu => sortFunction(cu.summary), cu => cu.code], [sortBy[1], 'asc'])
+        ? orderBy(courseUnits, [cu => sortFunction(cu.summary), cu => cu.courseCode], [sortBy[1], 'asc'])
         : [],
     [courseUnits, sortFunction, sortBy[0], sortBy[1]]
   )
