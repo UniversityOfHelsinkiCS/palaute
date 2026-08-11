@@ -17,6 +17,8 @@ import { OrganisationLink } from './OrganisationLink'
 import RowHeader from './RowHeader'
 import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
 
+export const getOrganisationTableButtonId = organisationId => `organisation-table-button-${organisationId}`
+
 const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, noPins = false }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
@@ -143,7 +145,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   )
 }
 
-export const PinButton = ({ organisation }) => {
+export const PinButton = ({ organisation, tableView }) => {
   const { t } = useTranslation()
   const { pinnedOrganisations } = usePinnedOrganisations()
   const pinMutation = usePinOrganisationMutation()
@@ -163,6 +165,15 @@ export const PinButton = ({ organisation }) => {
     } else {
       pinMutation.mutate(organisation)
     }
+
+    setTimeout(() => {
+      const target = document.getElementById(getOrganisationTableButtonId(organisation?.id))
+
+      if (target) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+        target.focus()
+      }
+    }, 100)
   }
 
   return (
@@ -172,21 +183,27 @@ export const PinButton = ({ organisation }) => {
       onOpen={() => setTooltipOpen(true)}
       onClose={() => setTooltipOpen(false)}
     >
-      <span style={{ display: 'flex', alignItems: 'center' }}>
+      <span style={{ display: 'flex', alignItems: 'center' }} aria-label={undefined}>
         <IconButton
           onClick={handleClick}
           disabled={isMutating}
+          size={tableView ? 'large' : 'medium'}
           sx={{
-            color: 'text.secondary',
+            color: tableView ? 'primary.main' : 'text.secondary',
             m: 0.5,
             '&:hover': {
               backgroundColor: '#e0e0e0',
             },
             ...focusIndicatorStyle(),
           }}
+          aria-label={t(isPinned ? 'courseSummary:unpinOrganisation' : 'courseSummary:pinOrganisation')}
           disableRipple
         >
-          {isPinned ? <PushPin fontSize="small" /> : <PushPinOutlined fontSize="small" />}
+          {isPinned ? (
+            <PushPin fontSize={tableView ? 'medium' : 'small'} />
+          ) : (
+            <PushPinOutlined fontSize={tableView ? 'medium' : 'small'} />
+          )}
         </IconButton>
       </span>
     </Tooltip>

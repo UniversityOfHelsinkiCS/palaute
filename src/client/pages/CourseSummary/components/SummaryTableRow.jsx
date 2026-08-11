@@ -303,7 +303,7 @@ export const SummaryTableRow = ({
       </SummaryTableCell>
       {extraCells?.map((cell, idx) => (
         <SummaryTableCell key={`extra-${idx}`}>
-          <SummaryTableCellContent width="5rem" backgroundColor="transparent">
+          <SummaryTableCellContent width="6rem" backgroundColor="transparent">
             {cell}
           </SummaryTableCellContent>
         </SummaryTableCell>

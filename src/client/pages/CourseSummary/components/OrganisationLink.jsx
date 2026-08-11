@@ -19,7 +19,10 @@ export const OrganisationLink = ({ code, access, tableView = false }) => {
         },
       }}
     >
-      <Tooltip title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')} placement="top">
+      <Tooltip
+        title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')}
+        placement="bottom"
+      >
         <IconButton
           id={`settings-button-${code}`}
           component={Link}
@@ -28,8 +31,7 @@ export const OrganisationLink = ({ code, access, tableView = false }) => {
           sx={{
             color: tableView ? 'white' : 'primary.main',
             '&:hover': {
-              color: tableView ? 'white' : 'primary.light',
-              backgroundColor: tableView ? 'primary.dark' : 'transparent',
+              backgroundColor: tableView ? 'primary.dark' : '#e0e0e0',
             },
             ...focusIndicatorStyle({ color: tableView ? 'white' : 'primary.main' }),
           }}

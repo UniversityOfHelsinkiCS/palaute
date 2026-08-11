@@ -1,6 +1,6 @@
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Box, Typography, TableContainer, Table, TableBody, CircularProgress, Button } from '@mui/material'
+import { Box, Typography, TableContainer, Table, TableBody, CircularProgress, Button, Stack } from '@mui/material'
 import { useIsFetching } from '@tanstack/react-query'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +13,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 import { useSummary, useChildOrganisations, useTags, useOrderedCourseUnits } from '../utils'
 import { OrganisationLink } from './OrganisationLink'
-import { PinButton } from './OrganisationRow'
+import { PinButton, getOrganisationTableButtonId } from './OrganisationRow'
 import SummaryRowFilters from './SummaryRowFilters'
 import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
 
@@ -69,7 +69,21 @@ const styles = {
   },
 }
 
-const getOrganisationTableButtonId = organisationId => `organisation-table-button-${organisationId}`
+const OrganisationActions = ({ organisation, showPin = true }) => {
+  const access = useUserOrganisationAccessByCode(organisation?.code)
+  const pinButtonComponent = <PinButton organisation={organisation} tableView />
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} />
+
+  if (!organisation) {
+    return <Typography>–</Typography>
+  }
+  return (
+    <Stack direction="row" spacing={0}>
+      {linkComponent && <span style={{ display: 'flex', alignItems: 'center' }}>{linkComponent}</span>}
+      {showPin && pinButtonComponent}
+    </Stack>
+  )
+}
 
 const UniversityTable = ({ organisation, childOrganisations, questions }) => {
   const { t, i18n } = useTranslation()
@@ -129,7 +143,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                   questions={questions}
                   open={depth === 'all'}
                   handleOpen={() => (depth === 'all' ? setDepth('uni') : setDepth('all'))}
-                  extraCells={[<Typography key="no-actions">–</Typography>]}
+                  extraCells={[<OrganisationActions key="actions" organisation={organisation} showPin={false} />]}
                 />
                 {depth === 'all' &&
                   childOrganisations.map(org => (
@@ -140,7 +154,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                       questions={questions}
                       depth={2}
                       targetComponentId={getOrganisationTableButtonId(org.id)}
-                      extraCells={[<PinButton key="actions" organisation={org} />]}
+                      extraCells={[<OrganisationActions key="actions" organisation={org} />]}
                     />
                   ))}
                 {depth === 'all' &&
@@ -231,7 +245,7 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
         open={openable ? open : undefined}
         handleOpen={openable ? () => setOpen(!open) : undefined}
         indent={!openable}
-        extraCells={showActions ? [<PinButton key="actions" organisation={organisation} />] : undefined}
+        extraCells={showActions ? [<OrganisationActions key="actions" organisation={organisation} />] : undefined}
       />
       {open && (
         <>
