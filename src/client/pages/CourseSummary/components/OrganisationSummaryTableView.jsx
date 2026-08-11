@@ -13,6 +13,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 import { useSummary, useChildOrganisations, useTags, useOrderedCourseUnits } from '../utils'
 import { OrganisationLink } from './OrganisationLink'
+import { PinButton } from './OrganisationRow'
 import SummaryRowFilters from './SummaryRowFilters'
 import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
 
@@ -120,7 +121,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
               <caption style={styles.caption}>
                 {`${t('organisationSettings:summaryTab')}: ${organisationTitle}`}
               </caption>
-              <SummaryTableHeader questions={questions} />
+              <SummaryTableHeader questions={questions} extraCols={[t('common:actions')]} />
               <TableBody>
                 <SummaryTableRow
                   target={`${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`}
@@ -128,6 +129,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                   questions={questions}
                   open={depth === 'all'}
                   handleOpen={() => (depth === 'all' ? setDepth('uni') : setDepth('all'))}
+                  extraCells={[<Typography key="no-actions">–</Typography>]}
                 />
                 {depth === 'all' &&
                   childOrganisations.map(org => (
@@ -138,6 +140,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                       questions={questions}
                       depth={2}
                       targetComponentId={getOrganisationTableButtonId(org.id)}
+                      extraCells={[<PinButton key="actions" organisation={org} />]}
                     />
                   ))}
                 {depth === 'all' &&
@@ -149,6 +152,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                       summary={cu.summary}
                       questions={questions}
                       depth={2}
+                      extraCells={[<Typography key="no-actions">–</Typography>]}
                     />
                   ))}
               </TableBody>
@@ -160,7 +164,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
   )
 }
 
-const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
+const TagRow = ({ tag, organisation, questions, depth, dateRange, showActions }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation, tagId: tag.id })
@@ -177,6 +181,7 @@ const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
         open={openable ? open : undefined}
         handleOpen={openable ? () => setOpen(!open) : undefined}
         indent={!openable}
+        extraCells={showActions ? [<Typography key="no-actions">–</Typography>] : undefined}
       />
       {open &&
         courseUnits.map(cu => (
@@ -192,13 +197,14 @@ const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
             questions={questions}
             depth={depth + 1}
             dateRange={dateRange}
+            extraCells={showActions ? [<Typography key="no-actions">–</Typography>] : undefined}
           />
         ))}
     </>
   )
 }
 
-const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false, dateRange }) => {
+const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false, showActions = false, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(initiallyOpen)
 
@@ -225,6 +231,7 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
         open={openable ? open : undefined}
         handleOpen={openable ? () => setOpen(!open) : undefined}
         indent={!openable}
+        extraCells={showActions ? [<PinButton key="actions" organisation={organisation} />] : undefined}
       />
       {open && (
         <>
@@ -235,6 +242,7 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
               questions={questions}
               depth={depth + 1}
               dateRange={dateRange}
+              showActions={showActions}
             />
           ))}
           {tags.map(tag => (
@@ -245,6 +253,7 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
               questions={questions}
               depth={depth + 1}
               dateRange={dateRange}
+              showActions={showActions}
             />
           ))}
           {courseUnits.map(cu => (
@@ -256,6 +265,7 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
               questions={questions}
               depth={depth + 1}
               dateRange={dateRange}
+              extraCells={showActions ? [<Typography key="no-actions">–</Typography>] : undefined}
             />
           ))}
         </>
@@ -264,7 +274,7 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
   )
 }
 
-export const OrganisationTable = ({ organisation, questions, dateRange, firstRowOpen = true }) => {
+export const OrganisationTable = ({ organisation, questions, dateRange, firstRowOpen = true, showActions = true }) => {
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = useState('orgs') // 'hide', 'orgs', 'cu'
 
@@ -313,7 +323,7 @@ export const OrganisationTable = ({ organisation, questions, dateRange, firstRow
               <caption style={styles.caption}>
                 {`${t('organisationSettings:summaryTab')}: ${organisationTitle}`}
               </caption>
-              <SummaryTableHeader questions={questions} />
+              <SummaryTableHeader questions={questions} extraCols={showActions ? [t('common:actions')] : undefined} />
               <TableBody>
                 <OrganisationRow
                   key={organisation?.id}
@@ -322,6 +332,7 @@ export const OrganisationTable = ({ organisation, questions, dateRange, firstRow
                   depth={1}
                   initiallyOpen={firstRowOpen}
                   dateRange={dateRange}
+                  showActions={showActions}
                 />
               </TableBody>
             </Table>

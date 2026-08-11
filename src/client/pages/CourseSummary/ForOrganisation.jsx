@@ -47,7 +47,12 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
         {!isLoading &&
           Boolean(organisation) &&
           (tableView ? (
-            <OrganisationTable organisation={organisation} questions={questions} dateRange={dateRange} />
+            <OrganisationTable
+              organisation={organisation}
+              questions={questions}
+              dateRange={dateRange}
+              showActions={false}
+            />
           ) : (
             <OrganisationSummaryRow
               alwaysOpen

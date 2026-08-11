@@ -7,6 +7,7 @@ import { useInView } from 'react-intersection-observer'
 
 import useRandomColor from '../../../hooks/useRandomColor'
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
+import { focusIndicatorStyle } from '../../../util/accessibility'
 import { TAGS_ENABLED } from '../../../util/common'
 import { useSummaries, usePinnedOrganisations, usePinOrganisationMutation, useUnpinOrganisationMutation } from '../api'
 import { useSummaryContext } from '../context'
@@ -141,7 +142,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   )
 }
 
-const PinButton = ({ organisation }) => {
+export const PinButton = ({ organisation }) => {
   const { t } = useTranslation()
   const { pinnedOrganisations } = usePinnedOrganisations()
   const pinMutation = usePinOrganisationMutation()
@@ -171,7 +172,19 @@ const PinButton = ({ organisation }) => {
       onClose={() => setTooltipOpen(false)}
     >
       <span style={{ display: 'flex', alignItems: 'center' }}>
-        <IconButton onClick={handleClick} size="small" disabled={isMutating} sx={{ color: 'text.secondary' }}>
+        <IconButton
+          onClick={handleClick}
+          disabled={isMutating}
+          sx={{
+            color: 'text.secondary',
+            m: 0.5,
+            '&:hover': {
+              backgroundColor: '#e0e0e0',
+            },
+            ...focusIndicatorStyle(),
+          }}
+          disableRipple
+        >
           {isPinned ? <PushPin fontSize="small" /> : <PushPinOutlined fontSize="small" />}
         </IconButton>
       </span>

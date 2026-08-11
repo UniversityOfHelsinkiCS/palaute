@@ -112,7 +112,7 @@ const SummaryTableCellContent = ({ width, backgroundColor, children, ...props })
   </Box>
 )
 
-export const SummaryTableHeader = ({ questions }) => {
+export const SummaryTableHeader = ({ questions, extraCols }) => {
   const { t, i18n } = useTranslation()
 
   return (
@@ -130,6 +130,9 @@ export const SummaryTableHeader = ({ questions }) => {
         <SummaryTableHeaderCell>{t('courseSummary:feedbackPercentage')}</SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('courseSummary:feedbackResponsePercentage')}</SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('courseSummary:censoredCount')}</SummaryTableHeaderCell>
+        {extraCols?.map((col, idx) => (
+          <SummaryTableHeaderCell key={`extra-column-${idx}`}>{col}</SummaryTableHeaderCell>
+        ))}
       </TableRow>
     </TableHead>
   )
@@ -197,6 +200,7 @@ export const SummaryTableRow = ({
   handleOpen,
   dateRange,
   targetComponentId,
+  extraCells,
 }) => {
   const { t, i18n } = useTranslation()
   const data = summary?.data
@@ -297,6 +301,13 @@ export const SummaryTableRow = ({
           <Typography>{hiddenCount}</Typography>
         </SummaryTableCellContent>
       </SummaryTableCell>
+      {extraCells?.map((cell, idx) => (
+        <SummaryTableCell key={`extra-${idx}`}>
+          <SummaryTableCellContent width="5rem" backgroundColor="transparent">
+            {cell}
+          </SummaryTableCellContent>
+        </SummaryTableCell>
+      ))}
     </TableRow>
   )
 }
