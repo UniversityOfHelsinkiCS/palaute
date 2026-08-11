@@ -179,7 +179,7 @@ const TargetComponent = ({ target, targetCode, targetUrl, indent, open, handleOp
         onClick={handleLinkClick}
         sx={styles.openRowButton}
         disableRipple
-        aria-label={`${target}: t('courseSummary:showBreakdown')}`}
+        aria-label={`${target}: ${t('courseSummary:showBreakdown')}`}
       >
         <Typography>{target}</Typography>
       </Button>
