@@ -60,6 +60,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
               organisation={organisation}
               startDate={dateRange.start}
               endDate={dateRange.end}
+              noPins={true}
             />
           ))}
       </Box>

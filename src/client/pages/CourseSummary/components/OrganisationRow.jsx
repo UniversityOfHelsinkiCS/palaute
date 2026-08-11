@@ -17,7 +17,7 @@ import { OrganisationLink } from './OrganisationLink'
 import RowHeader from './RowHeader'
 import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
 
-const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate }) => {
+const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, noPins = false }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     include: 'childOrganisations',
@@ -40,6 +40,7 @@ const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, sta
       alwaysOpen={orderedAndFilteredOrganisations.length === 1}
       startDate={startDate}
       endDate={endDate}
+      noPins={noPins}
     />
   ))
 }
@@ -199,6 +200,7 @@ const OrganisationSummaryRow = ({
   startDate,
   endDate,
   showPinButton = true,
+  noPins = false,
 }) => {
   const { questions } = useSummaryContext()
   const { ref, inView } = useInView({
@@ -233,7 +235,7 @@ const OrganisationSummaryRow = ({
           label={label}
           isOpen={nextIsOpen}
           handleOpenRow={handleOpenRow}
-          beforeContent={showPinButton && <PinButton organisation={initialOrganisation} />}
+          beforeContent={showPinButton && !noPins && <PinButton organisation={initialOrganisation} />}
         />
         {inView && (
           <OrganisationResultsLoader
@@ -258,6 +260,7 @@ const OrganisationSummaryRow = ({
                 initialChildOrganisations={initialOrganisation?.childOrganisations}
                 startDate={startDate}
                 endDate={endDate}
+                noPins={noPins}
               />
               {tagsEnabled && (
                 <TagList
