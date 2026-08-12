@@ -1,9 +1,9 @@
 import { Box, LinearProgress, Alert } from '@mui/material'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../components/common/NorButton'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import { useSummaries } from './api'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
@@ -16,7 +16,7 @@ import GenerateReport from './GenerateReport'
 
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { t } = useTranslation()
-  const [tableView, setTableView] = useState(false)
+  const [tableView, setTableView] = useLocalStorageState('tableView', false)
   const { authorizedUser: user } = useAuthorizedUser()
 
   const { dateRange, tagId, questions } = useSummaryContext()

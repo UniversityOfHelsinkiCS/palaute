@@ -1,7 +1,6 @@
 import { BarChartOutlined, School } from '@mui/icons-material'
 import { Box, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
 
@@ -10,6 +9,7 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { updateSummaries } from './api'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { SummaryContextProvider } from './context'
@@ -28,7 +28,7 @@ const SummaryInContext = () => {
   const preferredView = user?.preferences?.summaryView ?? 'my-organisations'
   const defaultPath = `${pathnameBase}/${preferredView}`
 
-  const [tableView, setTableView] = useState(false)
+  const [tableView, setTableView] = useLocalStorageState('tableView', false)
 
   const handleUpdateData = async forceAll => {
     const duration = await updateSummaries({ forceAll })
