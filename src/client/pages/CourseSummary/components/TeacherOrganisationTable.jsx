@@ -64,8 +64,8 @@ const styles = {
   },
 }
 
-const TeacherOrganisationTable = ({ organisation, questions }) => {
-  const { sortBy, sortFunction, showSeparateOrganisationCourses, dateRange } = useSummaryContext()
+const TeacherOrganisationTable = ({ organisation, questions, dateRange }) => {
+  const { sortBy, sortFunction, showSeparateOrganisationCourses } = useSummaryContext()
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = React.useState('cu') // 'hide', 'programme', 'cu'
 
@@ -87,7 +87,7 @@ const TeacherOrganisationTable = ({ organisation, questions }) => {
 
   const access = useUserOrganisationAccessByCode(organisation?.code)
 
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} tableView />
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} tableView />
 
   return (
     <Box sx={{ mb: 2 }}>

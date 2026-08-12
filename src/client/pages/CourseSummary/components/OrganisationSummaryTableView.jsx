@@ -69,10 +69,10 @@ const styles = {
   },
 }
 
-const OrganisationActions = ({ organisation, showPin = true }) => {
+const OrganisationActions = ({ organisation, showPin = true, dateRange }) => {
   const access = useUserOrganisationAccessByCode(organisation?.code)
   const pinButtonComponent = <PinButton organisation={organisation} tableView />
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} />
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} />
 
   if (!organisation) {
     return <Typography>–</Typography>
@@ -85,7 +85,7 @@ const OrganisationActions = ({ organisation, showPin = true }) => {
   )
 }
 
-const UniversityTable = ({ organisation, childOrganisations, questions }) => {
+const UniversityTable = ({ organisation, childOrganisations, questions, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = useState('all') // 'hide', 'uni', 'all'
 
@@ -98,7 +98,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
   const organisationTitle = `${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`
 
   const access = useUserOrganisationAccessByCode(organisation?.code)
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} tableView />
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} tableView />
 
   return (
     <Box sx={{ mb: 2 }}>
@@ -143,7 +143,14 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                   questions={questions}
                   open={depth === 'all'}
                   handleOpen={() => (depth === 'all' ? setDepth('uni') : setDepth('all'))}
-                  extraCells={[<OrganisationActions key="actions" organisation={organisation} showPin={false} />]}
+                  extraCells={[
+                    <OrganisationActions
+                      key="actions"
+                      organisation={organisation}
+                      showPin={false}
+                      dateRange={dateRange}
+                    />,
+                  ]}
                 />
                 {depth === 'all' &&
                   childOrganisations.map(org => (
@@ -154,7 +161,7 @@ const UniversityTable = ({ organisation, childOrganisations, questions }) => {
                       questions={questions}
                       depth={2}
                       targetComponentId={getOrganisationTableButtonId(org.id)}
-                      extraCells={[<OrganisationActions key="actions" organisation={org} />]}
+                      extraCells={[<OrganisationActions key="actions" organisation={org} dateRange={dateRange} />]}
                     />
                   ))}
                 {depth === 'all' &&
@@ -245,7 +252,11 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
         open={openable ? open : undefined}
         handleOpen={openable ? () => setOpen(!open) : undefined}
         indent={!openable}
-        extraCells={showActions ? [<OrganisationActions key="actions" organisation={organisation} />] : undefined}
+        extraCells={
+          showActions
+            ? [<OrganisationActions key="actions" organisation={organisation} dateRange={dateRange} />]
+            : undefined
+        }
       />
       {open && (
         <>
@@ -299,7 +310,7 @@ export const OrganisationTable = ({ organisation, questions, dateRange, firstRow
   const organisationTitle = `${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`
 
   const access = useUserOrganisationAccessByCode(organisation?.code)
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} tableView />
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} tableView />
 
   return (
     <Box sx={{ mb: 2 }}>
@@ -373,7 +384,12 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <SummaryRowFilters hideColumns />
       {university && (
-        <UniversityTable organisation={university} childOrganisations={universityChildOrgs} questions={questions} />
+        <UniversityTable
+          organisation={university}
+          childOrganisations={universityChildOrgs}
+          questions={questions}
+          dateRange={dateRange}
+        />
       )}
       {pinnedOrgs.length > 0 && (
         <Box>
@@ -404,7 +420,7 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
               organisation={org}
               questions={questions}
               dateRange={dateRange}
-              firstRowOpen={false}
+              firstRowOpen={unpinnedOrgsWithoutUniversity.length === 1}
             />
           ))}
         </Box>

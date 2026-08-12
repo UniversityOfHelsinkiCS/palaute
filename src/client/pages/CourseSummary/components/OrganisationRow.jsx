@@ -120,7 +120,7 @@ const TagList = ({ organisationId, initialTags, questions, startDate, endDate })
   ))
 }
 
-const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questions }) => {
+const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questions, dateRange }) => {
   const initialSummary = initialOrganisation?.summary
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
@@ -135,7 +135,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
 
   const summary = initialSummary ?? organisation?.summary
 
-  const linkComponent = <OrganisationLink code={initialOrganisation?.code} access={access} />
+  const linkComponent = <OrganisationLink code={initialOrganisation?.code} access={access} dateRange={dateRange} />
 
   return (
     <>
@@ -219,7 +219,7 @@ const OrganisationSummaryRow = ({
   showPinButton = true,
   noPins = false,
 }) => {
-  const { questions } = useSummaryContext()
+  const { questions, dateRange } = useSummaryContext()
   const { ref, inView } = useInView({
     triggerOnce: true,
   })
@@ -259,6 +259,7 @@ const OrganisationSummaryRow = ({
             questions={questions}
             organisationId={organisationId}
             initialOrganisation={initialOrganisation}
+            dateRange={dateRange}
           />
         )}
       </Box>

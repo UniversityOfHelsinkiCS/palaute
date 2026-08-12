@@ -10,7 +10,7 @@ import { useSummaryContext } from './context'
 const MyCourses = ({ tableView = false }) => {
   const { t } = useTranslation()
 
-  const { questions } = useSummaryContext()
+  const { questions, dateRange } = useSummaryContext()
   const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries()
 
   const show = !isOrganisationsLoading && questions?.length && organisations && questions
@@ -22,9 +22,19 @@ const MyCourses = ({ tableView = false }) => {
         organisations.length > 0 &&
         organisations.map(organisation =>
           tableView ? (
-            <TeacherOrganisationTable key={organisation.id} questions={questions} organisation={organisation} />
+            <TeacherOrganisationTable
+              key={organisation.id}
+              questions={questions}
+              organisation={organisation}
+              dateRange={dateRange}
+            />
           ) : (
-            <TeacherOrganisationRow key={organisation.id} questions={questions} organisation={organisation} />
+            <TeacherOrganisationRow
+              key={organisation.id}
+              questions={questions}
+              organisation={organisation}
+              dateRange={dateRange}
+            />
           )
         )}
       {show && organisations.length === 0 && (

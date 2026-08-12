@@ -10,7 +10,7 @@ import { OrganisationLink } from './OrganisationLink'
 import RowHeader from './RowHeader'
 import { CourseUnitSummaryRow, SummaryResultElements } from './SummaryRow'
 
-const TeacherOrganisationRow = ({ organisation, questions }) => {
+const TeacherOrganisationRow = ({ organisation, questions, dateRange }) => {
   const { sortBy, sortFunction, showSeparateOrganisationCourses } = useSummaryContext()
   const [isOpen, setIsOpen] = React.useState(true)
 
@@ -30,7 +30,7 @@ const TeacherOrganisationRow = ({ organisation, questions }) => {
 
   const access = useUserOrganisationAccessByCode(organisation?.code)
 
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} />
+  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} />
 
   return (
     <Box
