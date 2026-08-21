@@ -18,7 +18,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const { language } = i18n
 
-  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
+  const { authorizedUser } = useAuthorizedUser()
   const deleteMutation = useDeleteOrganisationSurveyMutation(code)
   const deleteOrganisationSurvey = useInteractiveMutation(surveyId => deleteMutation.mutateAsync(surveyId), {
     success: t('organisationSurveys:removeSuccess'),
@@ -36,7 +36,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const feedbackCount = summary?.data?.feedbackCount || 0
 
-  const isAdmin = !isUserLoading && authorizedUser.isAdmin
+  const isAdmin = !!authorizedUser?.isAdmin
   const studentCount = students.length
   const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(organisationSurvey)

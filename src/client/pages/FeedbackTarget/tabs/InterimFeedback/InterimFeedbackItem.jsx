@@ -22,7 +22,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
   const { language } = i18n
 
-  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
+  const { authorizedUser } = useAuthorizedUser()
   const deleteMutation = useDeleteInterimFeedbackMutation(parentId)
   const deleteInterimFeedback = useInteractiveMutation(fbtId => deleteMutation.mutateAsync(fbtId), {
     success: t('interimFeedback:removeSuccess'),
@@ -42,7 +42,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const feedbackCount = summary?.data?.feedbackCount || 0
   const studentCount = summary?.data?.studentCount || 0
 
-  const isAdmin = !isUserLoading && authorizedUser.isAdmin
+  const isAdmin = !!authorizedUser?.isAdmin
   const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(interimFeedback)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)

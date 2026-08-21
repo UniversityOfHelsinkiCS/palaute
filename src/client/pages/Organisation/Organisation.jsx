@@ -39,7 +39,7 @@ const Organisation = () => {
 
   const { t, i18n } = useTranslation()
   const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
-  const { authorizedUser, isLoading: isUserLoading } = useAuthorizedUser()
+  const { authorizedUser } = useAuthorizedUser()
 
   if (isLoading) {
     return <LoadingProgress />
@@ -63,7 +63,7 @@ const Organisation = () => {
     return <Navigate to="/" />
   }
 
-  const isAdmin = !isUserLoading && authorizedUser.isAdmin
+  const isAdmin = !!authorizedUser?.isAdmin
 
   const name = getLanguageValue(organisation.name, i18n.language)
 
