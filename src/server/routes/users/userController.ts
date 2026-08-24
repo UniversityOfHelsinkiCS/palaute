@@ -50,7 +50,7 @@ router.get('/login', async (req: AuthenticatedRequest, res: Response<GetLoginRes
 // This is currently used in OrganisationSurveyEditor and FeedbackCorrespondent.
 // In both cases users should be limited to HY employees,
 // so only the users that belong to 'hy-employees' IAM group are returned.
-// If getUser is laer needed in some new feature, this filtering can be made conditional.
+// If getUser is later needed in some new feature, this filtering can be made conditional.
 router.get('/users', async (req: AuthenticatedRequest, res: Response) => {
   const userQuery = req.query.user
   if (!userQuery || typeof userQuery !== 'string' || userQuery.length < 3) {
