@@ -569,6 +569,7 @@
     "showSummary": "Show summary",
     "showBreakdown": "Show breakdown",
     "hideBreakdown": "Hide breakdown",
+    "organisationSettings": "Organisation settings",
     "summaryTarget": "Summary target",
     "courseUnit": "Course unit",
     "treeView": "Show tree view",
@@ -577,7 +578,7 @@
     "courseStaff": "Course staff",
     "hideCurs": "Hide course realisations",
     "showCurs": "Show course realisations",
-    "openCuSummary": "Open course unit summary",
+    "openSummary": "Open summary",
     "openFeedbackPage": "Open feedback page",
     "courseStaffInfo": "Not available in course unit level. Course staff is listed for each course realisation.",
     "noSummaryInfo": "Summary is not available for this time period."

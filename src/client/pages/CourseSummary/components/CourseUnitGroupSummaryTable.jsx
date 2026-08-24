@@ -30,6 +30,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
 import { useSummaryContext } from '../context'
 import { TeacherChips } from './Labels'
+import { NoActions, ExpandRowButton } from './OrganisationSummaryTableView'
 
 const styles = {
   cell: {
@@ -112,17 +113,6 @@ const styles = {
     width: '2.5rem',
     height: '2.5rem',
   },
-  openRowButton: {
-    p: 1,
-    borderRadius: 1,
-    textTransform: 'none',
-    color: '#000000de',
-    textAlign: 'left',
-    '&:hover': {
-      backgroundColor: '#e0e0e0',
-    },
-    ...focusIndicatorStyle(),
-  },
 }
 
 const addTimePeriod = timePeriod => {
@@ -204,8 +194,8 @@ const FeedbackResponseIndicator = ({ percentage, isCourseUnitGroup, isOpen, t })
   if (isCourseUnitGroup)
     return (
       <>
-        <Tooltip title={t('courseSummary:feedbackResponsePercentage')}>
-          <Box sx={styles.tooltipArea} aria-hidden aria-label={undefined}>
+        <Tooltip title={t('courseSummary:feedbackResponsePercentage')} arrow placement="bottom">
+          <Box sx={styles.tooltipArea} aria-hidden="true" aria-label={undefined}>
             {`${percentage} %`}
           </Box>
         </Tooltip>
@@ -227,8 +217,8 @@ const FeedbackResponseIndicator = ({ percentage, isCourseUnitGroup, isOpen, t })
 
   return (
     <>
-      <Tooltip title={text}>
-        <Box sx={styles.tooltipArea} aria-hidden aria-label={undefined}>
+      <Tooltip title={text} arrow placement="bottom">
+        <Box sx={styles.tooltipArea} aria-hidden="true" aria-label={undefined}>
           {icon}
         </Box>
       </Tooltip>
@@ -266,6 +256,7 @@ const CourseUnitGroupSummaryTableHeader = ({ questions }) => {
         <SummaryTableHeaderCell sx={{ position: 'sticky', left: 0, zIndex: 3 }}>
           {t('courseSummary:summaryTarget')}
         </SummaryTableHeaderCell>
+        <SummaryTableHeaderCell>{t('common:actions')}</SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('courseSummary:courseStaff')}</SummaryTableHeaderCell>
         {questions.map(q => (
           <SummaryTableHeaderCell key={q.id} sx={styles.headerCell}>
@@ -307,7 +298,7 @@ const CourseUnitGroupSummaryTableRow = ({
   const { teachers, responsibleTeachers, administrativePersons } = staff
   const teacherChips = isCourseUnitGroup ? (
     <>
-      <SummaryTableCellContent width="3.5rem" aria-hidden>
+      <SummaryTableCellContent width="3.5rem" aria-hidden="true">
         <Tooltip title={t('courseSummary:courseStaffInfo')}>
           <Box sx={styles.tooltipArea}>
             <Typography>–</Typography>
@@ -343,15 +334,21 @@ const CourseUnitGroupSummaryTableRow = ({
             </ButtonBase>
           </Tooltip>
         ) : (
-          <Button
-            startIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-            onClick={handleOpen}
-            sx={styles.openRowButton}
-            disableRipple
-            aria-label={`${title}: ${open ? t('courseSummary:hideCurs') : t('courseSummary:showCurs')}`}
-          >
-            <Typography>{title}</Typography>
-          </Button>
+          <Typography>{title}</Typography>
+        )}
+      </SummaryTableCell>
+      <SummaryTableCell>
+        {isCourseUnitGroup ? (
+          <ExpandRowButton
+            expanded={open}
+            handleExpand={handleOpen}
+            targetName={`${target?.courseCode}${addTimePeriod(timePeriod)}`}
+            showLabel="courseSummary:showCurs"
+            hideLabel="courseSummary:hideCurs"
+            t={t}
+          />
+        ) : (
+          <NoActions />
         )}
       </SummaryTableCell>
       <SummaryTableCell>{teacherChips}</SummaryTableCell>
@@ -371,7 +368,7 @@ const CourseUnitGroupSummaryTableRow = ({
             <SummaryTableCellContent
               width="3.5rem"
               backgroundColor={mean ? getBackgroundColor({ value: normalizedMean, factor: 0.8 }) : 'transparent'}
-              aria-hidden
+              aria-hidden="true"
             >
               {isWorkloadQuestion &&
                 (mean > 0 ? (
@@ -464,7 +461,7 @@ const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, v
       {depth !== 'hide' && Boolean(isLoading) && (
         <Box sx={styles.loadingContainer}>
           {/* oxlint-disable-next-line jsx-a11y/aria-role */}
-          <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden />
+          <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden="true" />
           <Typography>{t('courseSummary:loading')}</Typography>
         </Box>
       )}

@@ -30,7 +30,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
   return (
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem" pl="0.5rem">
-        <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+        <Box sx={{ display: 'flex', gap: 1, my: 2 }}>
           {user.isAdmin && (
             <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
               {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
@@ -47,12 +47,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
         {!isLoading &&
           Boolean(organisation) &&
           (tableView ? (
-            <OrganisationTable
-              organisation={organisation}
-              questions={questions}
-              dateRange={dateRange}
-              showActions={false}
-            />
+            <OrganisationTable organisation={organisation} questions={questions} dateRange={dateRange} noPins={true} />
           ) : (
             <OrganisationSummaryRow
               alwaysOpen

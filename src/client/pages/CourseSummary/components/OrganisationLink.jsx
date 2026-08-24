@@ -6,7 +6,7 @@ import { Link, useSearchParams } from 'react-router-dom'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'
 
-export const OrganisationLink = ({ code, access, tableView = false, dateRange }) => {
+export const OrganisationLink = ({ code, access, dateRange }) => {
   const { t } = useTranslation()
   const { write } = access
 
@@ -48,15 +48,15 @@ export const OrganisationLink = ({ code, access, tableView = false, dateRange })
           to={link}
           size="large"
           sx={{
-            color: tableView ? 'white' : 'primary.main',
+            color: 'primary.main',
             '&:hover': {
-              backgroundColor: tableView ? 'primary.dark' : '#e0e0e0',
+              backgroundColor: '#e0e0e0',
             },
-            ...focusIndicatorStyle({ color: tableView ? 'white' : 'primary.main' }),
+            ...focusIndicatorStyle(),
           }}
-          disableRipple
+          disableFocusRipple
         >
-          {write ? <SettingsOutlined sx={{ fontSize: '26px' }} /> : <Search sx={{ fontSize: '24px' }} />}
+          {write ? <SettingsOutlined sx={{ fontSize: '24px' }} /> : <Search sx={{ fontSize: '24px' }} />}
         </IconButton>
       </Tooltip>
     </Box>

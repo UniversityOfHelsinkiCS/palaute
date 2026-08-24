@@ -1,12 +1,11 @@
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase, Button } from '@mui/material'
+import { Box, Typography, Tooltip, TableHead, TableCell, TableRow, ButtonBase } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { format, isValid } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { useSearchParams, Link } from 'react-router-dom'
 
 import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultItem'
+import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { focusIndicatorStyle } from '../../../util/accessibility'
 import { getSafeCourseCode } from '../../../util/courseIdentifiers'
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -33,6 +32,7 @@ const styles = {
     textDecoration: 'underline',
     p: 0.5,
     borderRadius: 1,
+    scrollMarginTop: 'calc(var(--sticky-header-height, 0px) + 8px)',
     '&:hover': {
       color: 'primary.dark',
     },
@@ -45,35 +45,31 @@ const styles = {
     width: '2.5rem',
     height: '2.5rem',
   },
-  openRowButton: {
-    p: 1,
-    borderRadius: 1,
-    textTransform: 'none',
-    color: '#000000de',
-    textAlign: 'left',
-    '&:hover': {
-      backgroundColor: '#e0e0e0',
-    },
-    ...focusIndicatorStyle(),
-  },
 }
 
-const getCourseUnitSummaryUrl = ({ courseCode, startDate, endDate }) => {
-  const safeCourseCode = getSafeCourseCode({ courseCode })
+const useSummaryLink = ({ code, dateRange, isCourseUnit = false }) => {
+  const access = useUserOrganisationAccessByCode(code)
 
-  const courseLinkURL = new URL(`/course-summary/course-unit/${safeCourseCode}`, 'http://dummy')
-  if (isValid(startDate) && isValid(endDate)) {
-    courseLinkURL.searchParams.append('startDate', format(startDate, 'yyyy-MM-dd'))
-    courseLinkURL.searchParams.append('endDate', format(endDate, 'yyyy-MM-dd'))
-  }
+  const path = isCourseUnit ? `/course-summary/course-unit/${code}` : `/organisations/${code}/summary`
+  const urlObject = new URL(path, 'http://dummy')
 
+  const startDate = dateRange?.start
+  const endDate = dateRange?.end
   const [searchParams] = useSearchParams()
   const optionParam = searchParams.get('option')
+
   if (optionParam) {
-    courseLinkURL.searchParams.append('option', optionParam)
+    urlObject.searchParams.append('option', optionParam)
   }
 
-  const link = `${courseLinkURL.pathname}${courseLinkURL.search}`
+  if (isValid(startDate) && isValid(endDate)) {
+    urlObject.searchParams.append('startDate', format(startDate, 'yyyy-MM-dd'))
+    urlObject.searchParams.append('endDate', format(endDate, 'yyyy-MM-dd'))
+  }
+
+  const link = `${urlObject.pathname}${urlObject.search}`
+
+  if (!isCourseUnit && (!access || Object.keys(access).length === 0)) return null
 
   return link
 }
@@ -112,7 +108,7 @@ const SummaryTableCellContent = ({ width, backgroundColor, children, ...props })
   </Box>
 )
 
-export const SummaryTableHeader = ({ questions, extraCols }) => {
+export const SummaryTableHeader = ({ questions }) => {
   const { t, i18n } = useTranslation()
 
   return (
@@ -121,6 +117,7 @@ export const SummaryTableHeader = ({ questions, extraCols }) => {
         <SummaryTableHeaderCell sx={{ position: 'sticky', left: 0, zIndex: 3 }}>
           {t('courseSummary:summaryTarget')}
         </SummaryTableHeaderCell>
+        <SummaryTableHeaderCell>{t('common:actions')}</SummaryTableHeaderCell>
         {questions.map(q => (
           <SummaryTableHeaderCell key={q.id} align="left">
             {getLanguageValue(q.data.label, i18n.language)}
@@ -130,63 +127,27 @@ export const SummaryTableHeader = ({ questions, extraCols }) => {
         <SummaryTableHeaderCell>{t('courseSummary:feedbackPercentage')}</SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('courseSummary:feedbackResponsePercentage')}</SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('courseSummary:censoredCount')}</SummaryTableHeaderCell>
-        {extraCols?.map((col, idx) => (
-          <SummaryTableHeaderCell key={`extra-column-${idx}`}>{col}</SummaryTableHeaderCell>
-        ))}
       </TableRow>
     </TableHead>
   )
 }
 
-const TargetComponent = ({ target, targetCode, targetUrl, indent, open, handleOpen, targetComponentId }) => {
+const TargetComponent = ({ target, targetUrl }) => {
   const { t } = useTranslation()
 
-  const handleLinkClick = () => {
-    setTimeout(() => {
-      document.getElementById(targetComponentId)?.focus({ preventScroll: true })
-    }, 0)
-  }
-
-  if (targetCode && targetUrl) {
+  if (targetUrl) {
     return (
-      <Tooltip title={t('courseSummary:openCuSummary')} placement="bottom" arrow describeChild>
+      <Tooltip title={t('courseSummary:openSummary')} placement="bottom-start" arrow describeChild>
         <ButtonBase component={Link} to={targetUrl} sx={styles.linkButton}>
-          <Typography variant="body2">{target}</Typography>
+          <Typography variant="body2" fontSize="16px">
+            {target}
+          </Typography>
         </ButtonBase>
       </Tooltip>
     )
   }
 
-  if (handleOpen) {
-    return (
-      <Button
-        startIcon={open ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-        onClick={handleOpen}
-        sx={styles.openRowButton}
-        disableRipple
-        aria-label={`${target}: ${open ? t('courseSummary:hideBreakdown') : t('courseSummary:showBreakdown')}`}
-      >
-        <Typography>{target}</Typography>
-      </Button>
-    )
-  }
-
-  if (targetComponentId) {
-    return (
-      <Button
-        component="a"
-        href={`#${targetComponentId}`}
-        onClick={handleLinkClick}
-        sx={styles.openRowButton}
-        disableRipple
-        aria-label={`${target}: ${t('courseSummary:showBreakdown')}`}
-      >
-        <Typography>{target}</Typography>
-      </Button>
-    )
-  }
-
-  return <Typography sx={{ pl: indent ? 4 : 0 }}>{target}</Typography>
+  return <Typography>{target}</Typography>
 }
 
 export const SummaryTableRow = ({
@@ -195,12 +156,9 @@ export const SummaryTableRow = ({
   questions,
   summary,
   depth = 1,
-  indent = false,
-  open,
-  handleOpen,
   dateRange,
-  targetComponentId,
-  extraCells,
+  isCourseUnit = false,
+  actions,
 }) => {
   const { t, i18n } = useTranslation()
   const data = summary?.data
@@ -208,10 +166,10 @@ export const SummaryTableRow = ({
   const feedbackResponsePercentage = data ? (data.feedbackResponsePercentage * 100).toFixed() : null
   const hiddenCount = data?.hiddenCount || 0
 
-  const targetUrl = getCourseUnitSummaryUrl({
-    courseCode: targetCode,
-    startDate: dateRange?.start,
-    endDate: dateRange?.end,
+  const targetUrl = useSummaryLink({
+    code: isCourseUnit ? getSafeCourseCode({ courseCode: targetCode }) : targetCode,
+    dateRange,
+    isCourseUnit,
   })
 
   return (
@@ -224,16 +182,9 @@ export const SummaryTableRow = ({
       }}
     >
       <SummaryTableCell component="th" scope="row" sx={{ position: 'sticky', left: 0, zIndex: 2 }}>
-        <TargetComponent
-          target={target}
-          targetCode={targetCode}
-          targetUrl={targetUrl}
-          indent={indent}
-          open={open}
-          handleOpen={handleOpen}
-          targetComponentId={targetComponentId}
-        />
+        <TargetComponent target={target} targetUrl={targetUrl} />
       </SummaryTableCell>
+      <SummaryTableCell>{actions}</SummaryTableCell>
       {questions.map(q => {
         const isWorkloadQuestion = q?.secondaryType === 'WORKLOAD'
         const mean = data?.result?.[q.id]?.mean?.toFixed(2) || 0
@@ -250,11 +201,11 @@ export const SummaryTableRow = ({
             <SummaryTableCellContent
               width="3.5rem"
               backgroundColor={mean ? getBackgroundColor({ value: normalizedMean, factor: 0.8 }) : 'transparent'}
-              aria-hidden
+              aria-hidden="true"
             >
               {isWorkloadQuestion &&
                 (mean > 0 ? (
-                  <Tooltip title={screenReaderText}>
+                  <Tooltip title={screenReaderText} arrow placement="bottom">
                     <Box sx={styles.tooltipArea}>{getArrow(mean)}</Box>
                   </Tooltip>
                 ) : (
@@ -301,13 +252,6 @@ export const SummaryTableRow = ({
           <Typography>{hiddenCount}</Typography>
         </SummaryTableCellContent>
       </SummaryTableCell>
-      {extraCells?.map((cell, idx) => (
-        <SummaryTableCell key={`extra-${idx}`}>
-          <SummaryTableCellContent width="6rem" backgroundColor="transparent">
-            {cell}
-          </SummaryTableCellContent>
-        </SummaryTableCell>
-      ))}
     </TableRow>
   )
 }

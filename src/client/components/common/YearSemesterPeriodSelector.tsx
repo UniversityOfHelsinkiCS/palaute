@@ -258,12 +258,12 @@ export const YearSemesterPeriodSelector = ({
             id="all-filter-selector"
             value={option}
             onChange={handleOptionChange}
-            sx={{ color: 'primary', ml: 0.5 }}
+            sx={{ color: 'primary', ml: 0.8 }}
           >
-            <ToggleButton value="all" size="small" sx={focusIndicatorStyle()} disableRipple>
+            <ToggleButton value="all" size="small" sx={focusIndicatorStyle()} disableFocusRipple>
               {t('courseSummary:all')}
             </ToggleButton>
-            <ToggleButton value="filter" size="small" sx={focusIndicatorStyle()} disableRipple>
+            <ToggleButton value="filter" size="small" sx={focusIndicatorStyle()} disableFocusRipple>
               {t('courseSummary:filter')}
             </ToggleButton>
           </ToggleButtonGroup>

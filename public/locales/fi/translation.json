@@ -564,6 +564,7 @@
     "showSummary": "Näytä yhteenveto",
     "hideBreakdown": "Piilota erittely",
     "showBreakdown": "Näytä erittely",
+    "organisationSettings": "Organisaation asetukset",
     "summaryTarget": "Yhteenvedon kohde",
     "courseUnit": "Opintojakso",
     "treeView": "Näytä puunäkymä",
@@ -572,7 +573,7 @@
     "courseStaff": "Kurssin henkilökunta",
     "hideCurs": "Piilota kurssitoteutukset",
     "showCurs": "Näytä kurssitoteutukset",
-    "openCuSummary": "Avaa opintojakson yhteenveto",
+    "openSummary": "Avaa yhteenveto",
     "openFeedbackPage": "Avaa palautesivu",
     "courseStaffInfo": "Ei saatavilla opintojaksotasolla. Kurssin henkilökunta on listattu kullekin toteutukselle erikseen.",
     "noSummaryInfo": "Yhteenvetoa tälle ajanjaksolle ei ole saatavilla."

@@ -19,6 +19,29 @@ import { CourseUnitsList, Loader, SummaryResultElements } from './SummaryRow'
 
 export const getOrganisationTableButtonId = organisationId => `organisation-table-button-${organisationId}`
 
+const styles = {
+  pinButton: {
+    color: 'text.secondary',
+    m: 0.5,
+    '&:hover': {
+      backgroundColor: '#e0e0e0',
+    },
+    ...focusIndicatorStyle(),
+  },
+  pinButtonTableView: {
+    color: 'white',
+    backgroundColor: 'primary.main',
+    width: '3.5rem',
+    height: '3.5rem',
+    borderRadius: 5,
+    scrollMarginTop: 'calc(var(--sticky-header-height, 0px) + 8px)',
+    scrollMarginLeft: 'calc(var(--sticky-column-width, 0px) + 8px)',
+    '&:hover': {
+      backgroundColor: 'primary.dark',
+    },
+    ...focusIndicatorStyle(),
+  },
+}
 const ChildOrganisationsList = ({ organisationId, initialChildOrganisations, startDate, endDate, noPins = false }) => {
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
@@ -145,7 +168,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   )
 }
 
-export const PinButton = ({ organisation, tableView }) => {
+export const PinButton = ({ organisation, targetName }) => {
   const { t } = useTranslation()
   const { pinnedOrganisations } = usePinnedOrganisations()
   const pinMutation = usePinOrganisationMutation()
@@ -176,36 +199,31 @@ export const PinButton = ({ organisation, tableView }) => {
     }, 100)
   }
 
+  const buttonText = isPinned ? t('courseSummary:unpinOrganisation') : t('courseSummary:pinOrganisation')
+  const fullButtonText = `${buttonText}${targetName ? `, ${targetName}` : ''}`
+
   return (
     <Tooltip
-      title={t(isPinned ? 'courseSummary:unpinOrganisation' : 'courseSummary:pinOrganisation')}
+      title={fullButtonText}
       open={tooltipOpen}
       onOpen={() => setTooltipOpen(true)}
       onClose={() => setTooltipOpen(false)}
+      arrow
+      placement="bottom"
     >
-      <span style={{ display: 'flex', alignItems: 'center' }} aria-label={undefined}>
-        <IconButton
-          onClick={handleClick}
-          disabled={isMutating}
-          size={tableView ? 'large' : 'medium'}
-          sx={{
-            color: tableView ? 'primary.main' : 'text.secondary',
-            m: 0.5,
-            '&:hover': {
-              backgroundColor: '#e0e0e0',
-            },
-            ...focusIndicatorStyle(),
-          }}
-          aria-label={t(isPinned ? 'courseSummary:unpinOrganisation' : 'courseSummary:pinOrganisation')}
-          disableRipple
-        >
-          {isPinned ? (
-            <PushPin fontSize={tableView ? 'medium' : 'small'} />
-          ) : (
-            <PushPinOutlined fontSize={tableView ? 'medium' : 'small'} />
-          )}
-        </IconButton>
-      </span>
+      <IconButton
+        onClick={handleClick}
+        disabled={isMutating}
+        sx={targetName ? styles.pinButtonTableView : styles.pinButton}
+        disableFocusRipple
+        aria-label={fullButtonText}
+      >
+        {isPinned ? (
+          <PushPin fontSize={targetName ? 'medium' : 'small'} />
+        ) : (
+          <PushPinOutlined fontSize={targetName ? 'medium' : 'small'} />
+        )}
+      </IconButton>
     </Tooltip>
   )
 }
@@ -252,7 +270,14 @@ const OrganisationSummaryRow = ({
           label={label}
           isOpen={nextIsOpen}
           handleOpenRow={handleOpenRow}
-          beforeContent={showPinButton && !noPins && <PinButton organisation={initialOrganisation} />}
+          beforeContent={
+            showPinButton &&
+            !noPins && (
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                <PinButton organisation={initialOrganisation} />
+              </span>
+            )
+          }
         />
         {inView && (
           <OrganisationResultsLoader

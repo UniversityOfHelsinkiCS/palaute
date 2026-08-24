@@ -1,9 +1,22 @@
 import ExpandLessIcon from '@mui/icons-material/ExpandLess'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Box, Typography, TableContainer, Table, TableBody, CircularProgress, Button, Stack } from '@mui/material'
+import SettingsIcon from '@mui/icons-material/Settings'
+import {
+  Box,
+  Typography,
+  TableContainer,
+  Table,
+  TableBody,
+  CircularProgress,
+  Button,
+  Stack,
+  IconButton,
+  Tooltip,
+} from '@mui/material'
 import { useIsFetching } from '@tanstack/react-query'
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'react-router-dom'
 
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { focusIndicatorStyle } from '../../../util/accessibility'
@@ -12,7 +25,6 @@ import { TAGS_ENABLED } from '../../../util/common'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 import { useSummary, useChildOrganisations, useTags, useOrderedCourseUnits } from '../utils'
-import { OrganisationLink } from './OrganisationLink'
 import { PinButton, getOrganisationTableButtonId } from './OrganisationRow'
 import SummaryRowFilters from './SummaryRowFilters'
 import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
@@ -42,15 +54,6 @@ const styles = {
     py: 4,
     border: '1px solid gray',
   },
-  cuButton: {
-    color: 'white',
-    borderColor: 'white',
-    py: 1,
-    '&:hover': {
-      backgroundColor: 'primary.dark',
-    },
-    ...focusIndicatorStyle({ color: 'white' }),
-  },
   expandButton: {
     typography: 'h6',
     color: 'white',
@@ -67,125 +70,102 @@ const styles = {
     },
     ...focusIndicatorStyle({ color: 'white' }),
   },
+  actionButton: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    height: '3.5rem',
+    width: '3.5rem',
+    borderRadius: 5,
+    color: 'white',
+    backgroundColor: 'primary.main',
+    scrollMarginTop: 'calc(var(--sticky-header-height, 0px) + 8px)',
+    scrollMarginLeft: 'calc(var(--sticky-column-width, 0px) + 8px)',
+    '&:hover': {
+      backgroundColor: 'primary.dark',
+    },
+    ...focusIndicatorStyle(),
+  },
 }
 
-const OrganisationActions = ({ organisation, showPin = true, dateRange }) => {
-  const access = useUserOrganisationAccessByCode(organisation?.code)
-  const pinButtonComponent = <PinButton organisation={organisation} tableView />
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} />
+export const NoActions = () => (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      width: '3.5rem',
+      height: '3.5rem',
+      borderRadius: 2,
+      backgroundColor: 'transparent',
+    }}
+  >
+    <Typography>–</Typography>
+  </Box>
+)
 
-  if (!organisation) {
-    return <Typography>–</Typography>
-  }
+export const ExpandRowButton = ({
+  expanded,
+  handleExpand,
+  targetName,
+  t,
+  showLabel = 'courseSummary:showBreakdown',
+  hideLabel = 'courseSummary:hideBreakdown',
+}) => (
+  <Tooltip title={`${expanded ? t(hideLabel) : t(showLabel)}, ${targetName}`} arrow placement="bottom">
+    <IconButton
+      sx={styles.actionButton}
+      onClick={handleExpand}
+      disableFocusRipple
+      aria-expanded={expanded}
+      aria-label={`${expanded ? t(hideLabel) : t(showLabel)}, ${targetName}`}
+    >
+      {expanded ? (
+        <ExpandLessIcon aria-hidden="true" sx={{ fontSize: '30px' }} />
+      ) : (
+        <ExpandMoreIcon aria-hidden="true" sx={{ fontSize: '30px' }} />
+      )}
+    </IconButton>
+  </Tooltip>
+)
+
+const OrganisationSettingsButton = ({ code, t }) => {
+  const access = useUserOrganisationAccessByCode(code)
+
+  if (!access?.write) return null
+
   return (
-    <Stack direction="row" spacing={0}>
-      {linkComponent && <span style={{ display: 'flex', alignItems: 'center' }}>{linkComponent}</span>}
-      {showPin && pinButtonComponent}
+    <Tooltip title={`${t('courseSummary:organisationSettings')}, ${code}`} arrow placement="bottom">
+      <IconButton
+        component={Link}
+        to={`/organisations/${code}/settings`}
+        sx={styles.actionButton}
+        disableFocusRipple
+        aria-label={`${t('courseSummary:organisationSettings')}, ${code}`}
+      >
+        {<SettingsIcon aria-hidden="true" />}
+      </IconButton>
+    </Tooltip>
+  )
+}
+
+const Actions = ({ targetName, organisation, rowExpanded, handleExpand, showPin = true, t }) => {
+  if (!targetName) {
+    return <NoActions />
+  }
+
+  return (
+    <Stack direction="row" spacing={1}>
+      {handleExpand && (
+        <ExpandRowButton expanded={rowExpanded} handleExpand={handleExpand} targetName={targetName} t={t} />
+      )}
+      {organisation && showPin && <PinButton organisation={organisation} targetName={targetName} />}
+      {organisation && <OrganisationSettingsButton code={organisation.code} t={t} />}
     </Stack>
   )
 }
 
-const UniversityTable = ({ organisation, childOrganisations, questions, dateRange }) => {
-  const { t, i18n } = useTranslation()
-  const [depth, setDepth] = useState('all') // 'hide', 'uni', 'all'
-
-  const isFetching = useIsFetching({
-    queryKey: ['summaries-v2', organisation?.id],
-  })
-
-  const { courseUnits } = useOrderedCourseUnits({ organisation })
-
-  const organisationTitle = `${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`
-
-  const access = useUserOrganisationAccessByCode(organisation?.code)
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} tableView />
-
-  return (
-    <Box sx={{ mb: 2 }}>
-      <Box sx={styles.titleContainer}>
-        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          <Button
-            type="button"
-            onClick={() => (depth === 'hide' ? setDepth('all') : setDepth('hide'))}
-            startIcon={depth === 'hide' ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-            sx={styles.expandButton}
-            aria-label={
-              depth === 'hide'
-                ? `${organisationTitle}: ${t('courseSummary:showSummary')}`
-                : `${organisationTitle}: ${t('courseSummary:hideSummary')}`
-            }
-            disableRipple
-          >
-            {organisationTitle}
-          </Button>
-          {linkComponent}
-        </Box>
-      </Box>
-      {depth !== 'hide' && Boolean(isFetching) && (
-        <Box sx={styles.loadingContainer}>
-          {/* oxlint-disable-next-line jsx-a11y/aria-role */}
-          <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden />
-          <Typography>{t('courseSummary:loading')}</Typography>
-        </Box>
-      )}
-      {depth !== 'hide' && !isFetching && (
-        <Box sx={{ p: 1, border: '1px solid gray' }}>
-          <TableContainer sx={{ maxHeight: Math.floor(window.innerHeight * 0.8), overflow: 'auto' }}>
-            <Table stickyHeader>
-              <caption style={styles.caption}>
-                {`${t('organisationSettings:summaryTab')}: ${organisationTitle}`}
-              </caption>
-              <SummaryTableHeader questions={questions} extraCols={[t('common:actions')]} />
-              <TableBody>
-                <SummaryTableRow
-                  target={`${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`}
-                  summary={organisation?.summary}
-                  questions={questions}
-                  open={depth === 'all'}
-                  handleOpen={() => (depth === 'all' ? setDepth('uni') : setDepth('all'))}
-                  extraCells={[
-                    <OrganisationActions
-                      key="actions"
-                      organisation={organisation}
-                      showPin={false}
-                      dateRange={dateRange}
-                    />,
-                  ]}
-                />
-                {depth === 'all' &&
-                  childOrganisations.map(org => (
-                    <SummaryTableRow
-                      key={org.id}
-                      target={`${org.code} ${getLanguageValue(org.name, i18n.language)}`}
-                      summary={org.summary}
-                      questions={questions}
-                      depth={2}
-                      targetComponentId={getOrganisationTableButtonId(org.id)}
-                      extraCells={[<OrganisationActions key="actions" organisation={org} dateRange={dateRange} />]}
-                    />
-                  ))}
-                {depth === 'all' &&
-                  courseUnits.map(cu => (
-                    <SummaryTableRow
-                      key={cu.id}
-                      target={`${t('courseSummary:courseUnit')}: ${cu.courseCode} ${getLanguageValue(cu.name, i18n.language)}`}
-                      targetCode={cu.courseCode}
-                      summary={cu.summary}
-                      questions={questions}
-                      depth={2}
-                      extraCells={[<Typography key="no-actions">–</Typography>]}
-                    />
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </Box>
-      )}
-    </Box>
-  )
-}
-
-const TagRow = ({ tag, organisation, questions, depth, dateRange, showActions }) => {
+const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(false)
   const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation, tagId: tag.id })
@@ -197,35 +177,54 @@ const TagRow = ({ tag, organisation, questions, depth, dateRange, showActions })
       <SummaryTableRow
         target={`${t('courseSummary:tagLabel')}: ${getLanguageValue(tag.name, i18n.language)}`}
         summary={tag.summary}
+        dateRange={dateRange}
         questions={questions}
         depth={depth}
         open={openable ? open : undefined}
         handleOpen={openable ? () => setOpen(!open) : undefined}
         indent={!openable}
-        extraCells={showActions ? [<Typography key="no-actions">–</Typography>] : undefined}
+        actions={
+          <Actions
+            targetName={getLanguageValue(tag.name, i18n.language)}
+            rowExpanded={open}
+            handleExpand={() => setOpen(!open)}
+            t={t}
+          />
+        }
       />
       {open &&
-        courseUnits.map(cu => (
-          <SummaryTableRow
-            key={cu.id}
-            target={
-              courseUnitsLoading
-                ? t('courseSummary:loading')
-                : `${t('courseSummary:courseUnit')}: ${cu.courseCode} ${getLanguageValue(cu.name, i18n.language)}`
-            }
-            targetCode={courseUnitsLoading ? undefined : cu.courseCode}
-            summary={courseUnitsLoading ? undefined : cu.summary}
-            questions={questions}
-            depth={depth + 1}
-            dateRange={dateRange}
-            extraCells={showActions ? [<Typography key="no-actions">–</Typography>] : undefined}
-          />
-        ))}
+        courseUnits.map(cu => {
+          const targetName = `${cu.courseCode} ${getLanguageValue(cu.name, i18n.language)}`
+          return (
+            <SummaryTableRow
+              key={cu.id}
+              target={
+                courseUnitsLoading ? t('courseSummary:loading') : `${t('courseSummary:courseUnit')}: ${targetName}`
+              }
+              targetCode={cu.courseCode}
+              summary={courseUnitsLoading ? undefined : cu.summary}
+              dateRange={dateRange}
+              questions={questions}
+              depth={depth + 1}
+              isCourseUnit
+              actions={<NoActions />}
+            />
+          )
+        })}
     </>
   )
 }
 
-const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false, showActions = false, dateRange }) => {
+const OrganisationRow = ({
+  organisation,
+  questions,
+  depth,
+  initiallyOpen = false,
+  orgsOnly = false,
+  showRootPin = true,
+  noPins = false,
+  dateRange,
+}) => {
   const { t, i18n } = useTranslation()
   const [open, setOpen] = useState(initiallyOpen)
 
@@ -240,22 +239,26 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
   if (summaryLoading || childOrganisationsLoading || tagsLoading || courseUnitsLoading)
     return <SummaryTableRow target={t('courseSummary:loading')} questions={questions} depth={depth} />
 
-  const openable = childOrganisations.length > 0 || tags.length > 0 || courseUnits.length > 0
+  const openable = childOrganisations.length > 0 || (!orgsOnly && (tags.length > 0 || courseUnits.length > 0))
 
   return (
     <>
       <SummaryTableRow
         target={`${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`}
+        targetCode={organisation?.code}
         summary={summary}
+        dateRange={dateRange}
         questions={questions}
         depth={depth}
-        open={openable ? open : undefined}
-        handleOpen={openable ? () => setOpen(!open) : undefined}
-        indent={!openable}
-        extraCells={
-          showActions
-            ? [<OrganisationActions key="actions" organisation={organisation} dateRange={dateRange} />]
-            : undefined
+        actions={
+          <Actions
+            targetName={organisation?.code}
+            organisation={organisation}
+            rowExpanded={openable ? open : undefined}
+            handleExpand={openable ? () => setOpen(!open) : undefined}
+            showPin={showRootPin && !noPins}
+            t={t}
+          />
         }
       />
       {open && (
@@ -267,50 +270,120 @@ const OrganisationRow = ({ organisation, questions, depth, initiallyOpen = false
               questions={questions}
               depth={depth + 1}
               dateRange={dateRange}
-              showActions={showActions}
+              orgsOnly={orgsOnly}
+              noPins={noPins}
             />
           ))}
-          {tags.map(tag => (
-            <TagRow
-              key={tag.id}
-              tag={tag}
-              organisation={organisation}
-              questions={questions}
-              depth={depth + 1}
-              dateRange={dateRange}
-              showActions={showActions}
-            />
-          ))}
-          {courseUnits.map(cu => (
-            <SummaryTableRow
-              key={cu.id}
-              target={`${t('courseSummary:courseUnit')}: ${cu.courseCode} ${getLanguageValue(cu.name, i18n.language)}`}
-              targetCode={cu.courseCode}
-              summary={cu.summary}
-              questions={questions}
-              depth={depth + 1}
-              dateRange={dateRange}
-              extraCells={showActions ? [<Typography key="no-actions">–</Typography>] : undefined}
-            />
-          ))}
+          {!orgsOnly &&
+            tags.map(tag => (
+              <TagRow
+                key={tag.id}
+                tag={tag}
+                organisation={organisation}
+                questions={questions}
+                depth={depth + 1}
+                dateRange={dateRange}
+              />
+            ))}
+          {!orgsOnly &&
+            courseUnits.map(cu => {
+              const targetName = `${cu.courseCode} ${getLanguageValue(cu.name, i18n.language)}`
+              return (
+                <SummaryTableRow
+                  key={cu.id}
+                  target={`${t('courseSummary:courseUnit')}: ${targetName}`}
+                  targetCode={cu.courseCode}
+                  summary={cu.summary}
+                  dateRange={dateRange}
+                  questions={questions}
+                  depth={depth + 1}
+                  isCourseUnit
+                  actions={<NoActions />}
+                />
+              )
+            })}
         </>
       )}
     </>
   )
 }
 
-export const OrganisationTable = ({ organisation, questions, dateRange, firstRowOpen = true, showActions = true }) => {
+export const OrganisationTable = ({
+  organisation,
+  questions,
+  dateRange,
+  firstRowOpen = true,
+  orgsOnly = false,
+  showRootPin = true,
+  noPins = false,
+}) => {
   const { t, i18n } = useTranslation()
   const [depth, setDepth] = useState('orgs') // 'hide', 'orgs', 'cu'
+  const [isScrollable, setIsScrollable] = useState(false)
+  const [stickyHeaderHeight, setStickyHeaderHeight] = useState(0)
+  const [stickyColumnWidth, setStickyColumnWidth] = useState(0)
+  const tableContainerRef = useRef(null)
 
   const isFetching = useIsFetching({
     queryKey: ['summaries-v2', organisation?.id],
   })
 
   const organisationTitle = `${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`
+  const captionId = `caption-${organisation?.code}`
 
-  const access = useUserOrganisationAccessByCode(organisation?.code)
-  const linkComponent = <OrganisationLink code={organisation?.code} access={access} dateRange={dateRange} tableView />
+  useLayoutEffect(() => {
+    const container = tableContainerRef.current
+
+    if (!container) return undefined
+
+    const checkScrollable = () =>
+      setIsScrollable(
+        container.scrollHeight - container.clientHeight > 1 || container.scrollWidth - container.clientWidth > 1
+      )
+
+    checkScrollable()
+
+    const resizeObserver = new ResizeObserver(checkScrollable)
+    resizeObserver.observe(container)
+
+    const headerRow = container.querySelector('thead tr')
+    const headerResizeObserver = new ResizeObserver(([entry]) => setStickyHeaderHeight(entry.target.offsetHeight))
+    if (headerRow) headerResizeObserver.observe(headerRow)
+
+    const stickyColumnCell = container.querySelector('th[scope="row"]')
+    const stickyColumnResizeObserver = new ResizeObserver(([entry]) => setStickyColumnWidth(entry.target.offsetWidth))
+    if (stickyColumnCell) stickyColumnResizeObserver.observe(stickyColumnCell)
+
+    return () => {
+      resizeObserver.disconnect()
+      headerResizeObserver.disconnect()
+      stickyColumnResizeObserver.disconnect()
+    }
+  }, [depth, isFetching])
+
+  // Sticky header/column don't clip the scrollport, so the browser's native
+  // scroll-into-view-on-focus doesn't know they visually obscure content
+  // underneath them. Nudge the scroll position manually when that happens.
+  const handleFocusWithinTable = event => {
+    const container = tableContainerRef.current
+    const target = event.target
+
+    if (!container || !target || target === container) return
+
+    const buffer = 8
+    const containerRect = container.getBoundingClientRect()
+    const targetRect = target.getBoundingClientRect()
+
+    const topObstruction = containerRect.top + stickyHeaderHeight
+    if (targetRect.top < topObstruction) {
+      container.scrollTop = Math.max(0, container.scrollTop - (topObstruction - targetRect.top + buffer))
+    }
+
+    const leftObstruction = containerRect.left + stickyColumnWidth
+    if (targetRect.left < leftObstruction) {
+      container.scrollLeft = Math.max(0, container.scrollLeft - (leftObstruction - targetRect.left + buffer))
+    }
+  }
 
   return (
     <Box sx={{ mb: 2 }}>
@@ -327,28 +400,45 @@ export const OrganisationTable = ({ organisation, questions, dateRange, firstRow
                 ? `${organisationTitle}: ${t('courseSummary:showSummary')}`
                 : `${organisationTitle}: ${t('courseSummary:hideSummary')}`
             }
-            disableRipple
+            aria-expanded={depth !== 'hide'}
+            disableFocusRipple
           >
             {organisationTitle}
           </Button>
-          {linkComponent}
         </Box>
       </Box>
       {depth !== 'hide' && Boolean(isFetching) && (
         <Box sx={styles.loadingContainer}>
           {/* oxlint-disable-next-line jsx-a11y/aria-role */}
-          <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden />
+          <CircularProgress size="2rem" variant="indeterminate" role={undefined} aria-hidden="true" />
           <Typography>{t('courseSummary:loading')}</Typography>
         </Box>
       )}
       {depth !== 'hide' && !isFetching && (
         <Box sx={{ p: 1, border: '1px solid gray' }}>
-          <TableContainer sx={{ maxHeight: Math.floor(window.innerHeight * 0.8), overflow: 'auto' }}>
+          <TableContainer
+            ref={tableContainerRef}
+            onFocus={handleFocusWithinTable}
+            style={{
+              '--sticky-header-height': `${stickyHeaderHeight}px`,
+              '--sticky-column-width': `${stickyColumnWidth}px`,
+            }}
+            sx={{
+              maxHeight: Math.floor(window.innerHeight * 0.8),
+              overflow: 'auto',
+              '&:focus-visible': {
+                outline: '3px solid',
+                outlineColor: 'primary.main',
+                outlineOffset: '3px',
+              },
+            }}
+            {...(isScrollable ? { tabIndex: 0, 'aria-labelledby': captionId } : {})}
+          >
             <Table stickyHeader>
-              <caption style={styles.caption}>
+              <caption id={captionId} style={styles.caption}>
                 {`${t('organisationSettings:summaryTab')}: ${organisationTitle}`}
               </caption>
-              <SummaryTableHeader questions={questions} extraCols={showActions ? [t('common:actions')] : undefined} />
+              <SummaryTableHeader questions={questions} />
               <TableBody>
                 <OrganisationRow
                   key={organisation?.id}
@@ -357,7 +447,9 @@ export const OrganisationTable = ({ organisation, questions, dateRange, firstRow
                   depth={1}
                   initiallyOpen={firstRowOpen}
                   dateRange={dateRange}
-                  showActions={showActions}
+                  orgsOnly={orgsOnly}
+                  showRootPin={showRootPin}
+                  noPins={noPins}
                 />
               </TableBody>
             </Table>
@@ -373,22 +465,21 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
   const { questions, dateRange } = useSummaryContext()
 
   const university = otherOrgs.find(org => org.id === UNIVERSITY_ROOT_ID)
-  const { childOrganisations: universityChildOrgs } = useChildOrganisations(university)
 
-  const unpinnedOrgsWithoutUniversity =
-    university && universityChildOrgs
-      ? universityChildOrgs.filter(org => !pinnedOrgs.some(p => p.id === org.id))
-      : otherOrgs.filter(org => org.id !== UNIVERSITY_ROOT_ID)
+  const unpinnedOrgsWithoutUniversity = otherOrgs.filter(org => org.id !== UNIVERSITY_ROOT_ID)
+
+  const justOneOrg = unpinnedOrgsWithoutUniversity.length === 1
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <SummaryRowFilters hideColumns />
       {university && (
-        <UniversityTable
+        <OrganisationTable
           organisation={university}
-          childOrganisations={universityChildOrgs}
           questions={questions}
           dateRange={dateRange}
+          orgsOnly={true}
+          showRootPin={false}
         />
       )}
       {pinnedOrgs.length > 0 && (
@@ -420,7 +511,8 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
               organisation={org}
               questions={questions}
               dateRange={dateRange}
-              firstRowOpen={unpinnedOrgsWithoutUniversity.length === 1}
+              firstRowOpen={justOneOrg}
+              showRootPin={!justOneOrg}
             />
           ))}
         </Box>
