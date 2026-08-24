@@ -184,12 +184,16 @@ const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
         handleOpen={openable ? () => setOpen(!open) : undefined}
         indent={!openable}
         actions={
-          <Actions
-            targetName={getLanguageValue(tag.name, i18n.language)}
-            rowExpanded={open}
-            handleExpand={() => setOpen(!open)}
-            t={t}
-          />
+          courseUnits?.length === 0 ? (
+            <NoActions />
+          ) : (
+            <Actions
+              targetName={getLanguageValue(tag.name, i18n.language)}
+              rowExpanded={open}
+              handleExpand={() => setOpen(!open)}
+              t={t}
+            />
+          )
         }
       />
       {open &&
