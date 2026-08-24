@@ -1,5 +1,5 @@
 import { BarChartOutlined, School } from '@mui/icons-material'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Alert } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Route, Routes, useMatch } from 'react-router-dom'
@@ -35,6 +35,7 @@ const SummaryInContext = () => {
     if (duration) enqueueSnackbar(`Valmis, kesti ${(duration / 1000).toFixed()} sekuntia`)
   }
 
+  const hasSummaryAccess = user?.preferences?.hasSummaryAccess
   const hasAccessToMyOrganisations = Object.keys(user?.organisationAccess ?? {}).length > 0
 
   return (
@@ -54,15 +55,22 @@ const SummaryInContext = () => {
           <Typography variant="h4" component="h1">
             {t('courseSummary:heading')}
           </Typography>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            {user?.isAdmin && (
-              <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
-                {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
-              </NorButton>
-            )}
-            <GenerateReport />
-          </Box>
+          {hasSummaryAccess && (
+            <Box sx={{ display: 'flex', gap: 1 }}>
+              {user?.isAdmin && (
+                <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
+                  {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
+                </NorButton>
+              )}
+              <GenerateReport />
+            </Box>
+          )}
         </Box>
+        {!hasSummaryAccess && (
+          <Alert severity="info" sx={{ mt: 4 }}>
+            {t('courseSummary:noSummaryForUser')}
+          </Alert>
+        )}
         {user?.isAdmin && (
           <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap', marginTop: 2 }}>
             <NorButton color="secondary" onClick={() => handleUpdateData(false)} data-cy="update-data">
@@ -74,54 +82,58 @@ const SummaryInContext = () => {
           </Box>
         )}
       </Box>
-      <RouterTabs variant="scrollable" scrollButtons="auto">
-        <RouterTab
-          label={t('courseSummary:myCourses')}
-          icon={<School />}
-          to={`/course-summary/my-courses${search}`}
-          tabId="my-courses"
-          data-cy="my-courses"
-        />
+      {hasSummaryAccess && (
+        <>
+          <RouterTabs variant="scrollable" scrollButtons="auto">
+            <RouterTab
+              label={t('courseSummary:myCourses')}
+              icon={<School />}
+              to={`/course-summary/my-courses${search}`}
+              tabId="my-courses"
+              data-cy="my-courses"
+            />
 
-        {hasAccessToMyOrganisations && (
-          <RouterTab
-            label={t('courseSummary:myOrganisations')}
-            icon={<BarChartOutlined />}
-            to={`/course-summary/my-organisations${search}`}
-            tabId="my-organisations"
-            data-cy="my-organisations"
-          />
-        )}
-      </RouterTabs>
-      <SummaryScrollContainer>
-        <Routes>
-          <Route
-            path="/my-courses"
-            element={
-              <Box role="tabpanel" id="tabpanel-my-courses" aria-labelledby="tab-my-courses">
-                <ProtectedRoute hasAccess>
-                  <MyCourses tableView={tableView} />
-                </ProtectedRoute>
-              </Box>
-            }
-          />
+            {hasAccessToMyOrganisations && (
+              <RouterTab
+                label={t('courseSummary:myOrganisations')}
+                icon={<BarChartOutlined />}
+                to={`/course-summary/my-organisations${search}`}
+                tabId="my-organisations"
+                data-cy="my-organisations"
+              />
+            )}
+          </RouterTabs>
+          <SummaryScrollContainer>
+            <Routes>
+              <Route
+                path="/my-courses"
+                element={
+                  <Box role="tabpanel" id="tabpanel-my-courses" aria-labelledby="tab-my-courses">
+                    <ProtectedRoute hasAccess>
+                      <MyCourses tableView={tableView} />
+                    </ProtectedRoute>
+                  </Box>
+                }
+              />
 
-          <Route
-            path="/my-organisations"
-            element={
-              <Box role="tabpanel" id="tabpanel-my-organisations" aria-labelledby="tab-my-organisations">
-                <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
-                  <MyOrganisations tableView={tableView} />
-                </ProtectedRoute>
-              </Box>
-            }
-          />
+              <Route
+                path="/my-organisations"
+                element={
+                  <Box role="tabpanel" id="tabpanel-my-organisations" aria-labelledby="tab-my-organisations">
+                    <ProtectedRoute redirectPath={defaultPath} hasAccess={hasAccessToMyOrganisations}>
+                      <MyOrganisations tableView={tableView} />
+                    </ProtectedRoute>
+                  </Box>
+                }
+              />
 
-          <Route path="/course-unit/:code" element={<ForCourseUnitGroup tableView={tableView} />} />
+              <Route path="/course-unit/:code" element={<ForCourseUnitGroup tableView={tableView} />} />
 
-          <Route path="*" element={<Navigate to={defaultPath} />} />
-        </Routes>
-      </SummaryScrollContainer>
+              <Route path="*" element={<Navigate to={defaultPath} />} />
+            </Routes>
+          </SummaryScrollContainer>
+        </>
+      )}
     </>
   )
 }

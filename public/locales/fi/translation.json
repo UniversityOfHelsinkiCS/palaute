@@ -576,7 +576,8 @@
     "openSummary": "Avaa yhteenveto",
     "openFeedbackPage": "Avaa palautesivu",
     "courseStaffInfo": "Ei saatavilla opintojaksotasolla. Kurssin henkilökunta on listattu kullekin toteutukselle erikseen.",
-    "noSummaryInfo": "Yhteenvetoa tälle ajanjaksolle ei ole saatavilla."
+    "noSummaryInfo": "Yhteenvetoa tälle ajanjaksolle ei ole saatavilla.",
+    "noSummaryForUser": "Sinulla ei ole kursseja tai organisaatioita, joista yhteenveto olisi saatavilla."
   },
   "generateReport": {
     "selectIncluded": "Valitse ladattava sisältö",

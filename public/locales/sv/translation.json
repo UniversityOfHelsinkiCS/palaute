@@ -571,7 +571,8 @@
     "openSummary": "Öppna sammanfattning",
     "openFeedbackPage": "Öppna responssidan",
     "courseStaffInfo": "Inte tillgängligt på studieavsnittsnivå. Kurspersonal listas för kursinstanser.",
-    "noSummaryInfo": "Sammanfattning är inte tillgänglig för den här tidsperioden."
+    "noSummaryInfo": "Sammanfattning är inte tillgänglig för den här tidsperioden.",
+    "noSummaryForUser": "Du har inga kurser eller organisationer med tillgängliga sammanfattningar."
   },
   "generateReport": {
     "selectIncluded": "Välj innehåll att exportera",
