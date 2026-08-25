@@ -182,7 +182,6 @@ const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
         depth={depth}
         open={openable ? open : undefined}
         handleOpen={openable ? () => setOpen(!open) : undefined}
-        indent={!openable}
         actions={
           courseUnits?.length === 0 ? (
             <NoActions />
@@ -249,7 +248,7 @@ const OrganisationRow = ({
     <>
       <SummaryTableRow
         target={`${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`}
-        targetCode={organisation?.code}
+        targetCode={!noPins ? organisation?.code : undefined}
         summary={summary}
         dateRange={dateRange}
         questions={questions}
