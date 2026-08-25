@@ -335,6 +335,9 @@ export const OrganisationTable = ({
   const organisationTitle = `${organisation?.code} ${getLanguageValue(organisation?.name, i18n.language)}`
   const captionId = `caption-${organisation?.code}`
 
+  // The table container should have tabIndex=0 when it is scrollable, so that keyboard user can focus it and scroll.
+  // However, when the table is not scrollable, focusing table container would be useless and just an extra stop.
+  // When the content of the table changes, it is checked if the table is scrollable or not to set the tabIndex correctly.
   useLayoutEffect(() => {
     const container = tableContainerRef.current
 
