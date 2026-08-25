@@ -176,9 +176,9 @@ const getBackgroundColor = ({ value, factor }) => {
   const backgroundColors = {
     1: '#d355b3',
     2: '#e8a6d7',
-    3: '#a8def0',
+    3: '#faee8a',
     4: '#a6e8b6',
-    5: '#289a44',
+    5: '#2dae4d',
   }
 
   for (let i = 1; i < 5; i++) {
@@ -420,7 +420,7 @@ const CourseUnitGroupSummaryTableRow = ({
         </SummaryTableCellContent>
       </SummaryTableCell>
       <SummaryTableCell>
-        <SummaryTableCellContent width="3.5rem" backgroundColor={hiddenCount > 0 ? '#e8a6d7' : '#a8def0'}>
+        <SummaryTableCellContent width="3.5rem" backgroundColor={hiddenCount > 0 ? '#faee8a' : '#a6e8b6'}>
           <Typography>{hiddenCount}</Typography>
         </SummaryTableCellContent>
       </SummaryTableCell>
