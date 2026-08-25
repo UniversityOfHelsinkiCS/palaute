@@ -17,7 +17,9 @@ const MyCourses = ({ tableView = false }) => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      <SummaryRowFilters hideColumns={tableView} />
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+        <SummaryRowFilters hideColumns={tableView} />
+      </Box>
       {show &&
         organisations.length > 0 &&
         organisations.map(organisation =>

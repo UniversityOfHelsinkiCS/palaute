@@ -478,7 +478,9 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-      <SummaryRowFilters hideColumns />
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+        <SummaryRowFilters hideColumns />
+      </Box>
       {university && (
         <OrganisationTable
           organisation={university}

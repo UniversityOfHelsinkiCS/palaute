@@ -72,7 +72,9 @@ const MyOrganisations = ({ tableView = false }) => {
 
     return (
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
-        <SummaryRowFilters filterType="my-organisation" />
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
+          <SummaryRowFilters filterType="my-organisation" />
+        </Box>
         {isLoading ? <LinearProgress /> : items}
       </Box>
     )

@@ -24,13 +24,18 @@ const SortSelector = ({ questions }) => {
     { field: 'feedbackCountCensored', label: t('courseSummary:censoredCount') },
   ]
 
-  const options = fields.flatMap(({ field, label }) => [
-    { field, order: 'asc', label },
-    { field, order: 'desc', label },
-  ])
+  const defaultOption = { field: 'code', order: 'asc', label: t('courseSummary:summaryTarget') }
+
+  const options = [
+    defaultOption,
+    ...fields.flatMap(({ field, label }) => [
+      { field, order: 'asc', label },
+      { field, order: 'desc', label },
+    ]),
+  ]
 
   const selectedIndex = options.findIndex(({ field, order }) => field === sortBy[0] && order === sortBy[1])
-  const value = selectedIndex === -1 ? '' : String(selectedIndex)
+  const value = selectedIndex === -1 ? '0' : String(selectedIndex)
 
   const handleChange = event => {
     const { field, order } = options[Number(event.target.value)]
@@ -47,20 +52,21 @@ const SortSelector = ({ questions }) => {
         labelId={labelId}
         id={selectId}
         label={t('courseSummary:sortBy')}
-        notched
         value={value}
         onChange={handleChange}
-        displayEmpty
         sx={focusIndicatorStyle()}
       >
-        <MenuItem value="" disabled>
-          {t('courseSummary:sortByPlaceholder')}
-        </MenuItem>
-        {options.map(({ field, order, label }, index) => (
-          <MenuItem key={`${field}-${order}`} value={String(index)}>
-            {`${label} (${order === 'desc' ? t('common:descending') : t('common:ascending')})`}
-          </MenuItem>
-        ))}
+        {options.map(({ field, order, label }, index) =>
+          index === 0 ? (
+            <MenuItem key={`${field}-${order}`} value={String(index)}>
+              {label}
+            </MenuItem>
+          ) : (
+            <MenuItem key={`${field}-${order}`} value={String(index)}>
+              {`${label}, ${order === 'desc' ? t('common:descending') : t('common:ascending')}`}
+            </MenuItem>
+          )
+        )}
       </Select>
     </FormControl>
   )
