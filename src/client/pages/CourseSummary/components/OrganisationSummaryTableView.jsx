@@ -499,7 +499,7 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
               organisation={org}
               questions={questions}
               dateRange={dateRange}
-              firstRowOpen={true}
+              firstRowOpen={false}
             />
           ))}
         </Box>
@@ -517,7 +517,7 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
               organisation={org}
               questions={questions}
               dateRange={dateRange}
-              firstRowOpen={justOneOrg}
+              firstRowOpen={justOneOrg && pinnedOrgs.length === 0}
               showRootPin={!justOneOrg}
             />
           ))}
