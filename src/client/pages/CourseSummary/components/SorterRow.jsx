@@ -6,6 +6,7 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 import RowHeader from './RowHeader'
 import Sort from './Sort'
+import SortSelector from './SortSelector'
 
 const styles = {
   filterContainer: {
@@ -58,7 +59,7 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
           {filterComponent}
         </Box>
       )}
-      {!hideColumns && (
+      {!hideColumns ? (
         <Box sx={{ display: 'flex', alignItems: 'stretch', gap: '0.2rem' }}>
           <RowHeader />
           {questions.map(q => (
@@ -82,6 +83,8 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
           />
           <Sort field="feedbackCountCensored" label={t('courseSummary:censoredCount')} width={styles.countCell.width} />
         </Box>
+      ) : (
+        <SortSelector questions={questions} />
       )}
     </>
   )

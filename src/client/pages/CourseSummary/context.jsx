@@ -9,13 +9,18 @@ import { getYearRange } from '../../util/yearUtils'
 const getSummarySortFunction = sortField => {
   switch (sortField) {
     case 'feedbackCount':
-      return summary => summary.data.feedbackCount
+      return summary => summary?.data?.feedbackCount
     case 'feedbackPercentage':
-      return summary => summary.data.feedbackCount / summary.data.studentCount
+      return summary => summary?.data && summary.data.feedbackCount / summary.data.studentCount
     case 'feedbackResponsePercentage':
-      return summary => summary.data.feedbackResponsePercentage
+      return summary => summary?.data?.feedbackResponsePercentage
+    // The censored (manually hidden) feedback count, shown in its own column - previously
+    // missing here, so picking this column fell through to the default case below and silently
+    // sorted by nothing (every row read as undefined).
+    case 'feedbackCountCensored':
+      return summary => summary?.data?.hiddenCount
     default:
-      return summary => summary.data.result[sortField]?.mean
+      return summary => summary?.data?.result?.[sortField]?.mean
   }
 }
 

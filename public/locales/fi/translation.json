@@ -529,6 +529,8 @@
     "orderByCodeAsc": "Koodi nousevasti",
     "orderByFeedbackCountAsc": "Palautteiden määrä nousevasti",
     "orderByFeedbackCountDesc": "Palautteiden määrä laskevasti",
+    "sortBy": "Järjestä",
+    "sortByPlaceholder": "Valitse sarake",
     "startDateLabel": "Alkaen päivästä",
     "teachingLanguages": "Opetuskielet",
     "year": "Lukuvuosi",

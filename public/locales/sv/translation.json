@@ -520,6 +520,8 @@
     "orderByCodeAsc": "Kod i stigande ordning",
     "orderByFeedbackCountAsc": "Antal responser i stigande ordning",
     "orderByFeedbackCountDesc": "Antal reponser i fallande ordning",
+    "sortBy": "Sortera efter",
+    "sortByPlaceholder": "Välj kolumn",
     "startDateLabel": "Från och med",
     "teachingLanguages": "Undervisningsspråk",
     "year": "Läsår",
