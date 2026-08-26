@@ -6,6 +6,7 @@ import { YearSemesterPeriodSelector } from '../../components/common/YearSemester
 import { useCourseUnitGroupSummaries } from './api'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
 import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
+import SorterRowWithFilters from './components/SorterRow'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { useSummaryContext } from './context'
 
@@ -35,15 +36,19 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
   return (
     <SummaryScrollContainer>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.3rem' }}>
-        <Box sx={filterContainerSx}>
-          <YearSemesterPeriodSelector
-            value={dateRange}
-            onChange={setDateRange}
-            option={option}
-            setOption={setOption}
-            allowAll
-          />
-        </Box>
+        {tableView ? (
+          <SorterRowWithFilters hideColumns allTime />
+        ) : (
+          <Box sx={filterContainerSx}>
+            <YearSemesterPeriodSelector
+              value={dateRange}
+              onChange={setDateRange}
+              option={option}
+              setOption={setOption}
+              allowAll
+            />
+          </Box>
+        )}
         {tableView &&
           courseUnitGroup &&
           surveyGroups.map((group, index) => (

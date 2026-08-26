@@ -20,6 +20,7 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { lightFormat } from 'date-fns'
+import { orderBy } from 'lodash-es'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
@@ -430,8 +431,14 @@ const CourseUnitGroupSummaryTableRow = ({
 
 const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, validUntil, isLoading }) => {
   const { t, i18n } = useTranslation()
-  const { questions: contextQuestions } = useSummaryContext()
+  const { questions: contextQuestions, sortBy, sortFunction } = useSummaryContext()
   const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
+
+  const sortedFeedbackTargets = orderBy(
+    group.feedbackTargets ?? [],
+    [fbt => sortFunction(fbt.summary), fbt => fbt.courseRealisation?.startDate],
+    [sortBy[1], 'desc']
+  )
 
   const [depth, setDepth] = React.useState('cur') // 'hide', 'cu', 'cur'
 
@@ -486,7 +493,7 @@ const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, v
                   handleOpen={() => (depth === 'cur' ? setDepth('cu') : setDepth('cur'))}
                 />
                 {depth === 'cur' &&
-                  group.feedbackTargets.map(fbt => (
+                  sortedFeedbackTargets.map(fbt => (
                     <CourseUnitGroupSummaryTableRow
                       key={fbt.id}
                       target={fbt}

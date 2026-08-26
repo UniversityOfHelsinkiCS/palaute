@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material'
 import { blueGrey } from '@mui/material/colors'
+import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'
@@ -53,8 +54,14 @@ const fbtListSx = {
 }
 
 const SurveyGroupSection = ({ courseUnitGroup, group, showTimePeriod, validUntil }) => {
-  const { questions: contextQuestions } = useSummaryContext()
+  const { questions: contextQuestions, sortBy, sortFunction } = useSummaryContext()
   const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
+
+  const sortedFeedbackTargets = orderBy(
+    group.feedbackTargets ?? [],
+    [fbt => sortFunction(fbt.summary), fbt => fbt.courseRealisation?.startDate],
+    [sortBy[1], 'desc']
+  )
 
   let timeframe = null
   if (showTimePeriod) {
@@ -84,7 +91,7 @@ const SurveyGroupSection = ({ courseUnitGroup, group, showTimePeriod, validUntil
         timeframe={timeframe}
       />
       <Box sx={fbtListSx}>
-        {group.feedbackTargets.map(fbt => (
+        {sortedFeedbackTargets.map(fbt => (
           <FeedbackTargetSummaryRow key={fbt.id} feedbackTarget={fbt} questions={questions} />
         ))}
       </Box>
