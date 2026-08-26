@@ -118,7 +118,18 @@ export const getCourseUnitGroupSummaries = async ({
     }
   }
 
-  const orderedFeedbackTargets = _.orderBy(feedbackTargets, fbt => fbt?.courseRealisation?.startDate, 'desc')
+  // If the user only has access via being staff on some feedback targets (no organisation access),
+  // only show the feedback targets where they are a responsible teacher, teacher, or administrative person.
+  const visibleFeedbackTargets =
+    user.isAdmin || hasOrgAccess
+      ? feedbackTargets
+      : feedbackTargets.filter(fbt =>
+          fbt?.userFeedbackTargets?.some(
+            ufbt => ufbt.userId === user.id && (ufbt.hasTeacherAccess() || ufbt.isAdministrativePerson)
+          )
+        )
+
+  const orderedFeedbackTargets = _.orderBy(visibleFeedbackTargets, fbt => fbt?.courseRealisation?.startDate, 'desc')
 
   type SurveyGroup = {
     survey: Survey | null
