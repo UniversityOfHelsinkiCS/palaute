@@ -44,10 +44,8 @@ const SortSelector = ({ questions }) => {
   }
 
   return (
-    <FormControl size="small" sx={{ minWidth: '16rem' }}>
-      <InputLabel id={labelId} shrink>
-        {t('courseSummary:sortBy')}
-      </InputLabel>
+    <FormControl size="small" sx={{ width: '18rem' }}>
+      <InputLabel id={labelId}>{t('courseSummary:sortBy')}</InputLabel>
       <Select
         labelId={labelId}
         id={selectId}

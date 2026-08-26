@@ -53,14 +53,13 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
 
   return (
     <>
-      {(filterComponent || additionalFilters) && (
-        <Box sx={styles.filterContainer}>
-          {additionalFilters}
-          {filterComponent}
-        </Box>
-      )}
-      {!hideColumns ? (
-        <Box sx={{ display: 'flex', alignItems: 'stretch', gap: '0.2rem' }}>
+      <Box sx={styles.filterContainer}>
+        {additionalFilters}
+        {filterComponent}
+        {hideColumns && <SortSelector questions={questions} />}
+      </Box>
+      {!hideColumns && (
+        <Box sx={{ display: 'flex', alignItems: 'stretch', gap: '0.2rem', width: '100%' }}>
           <RowHeader />
           {questions.map(q => (
             <Sort
@@ -83,8 +82,6 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
           />
           <Sort field="feedbackCountCensored" label={t('courseSummary:censoredCount')} width={styles.countCell.width} />
         </Box>
-      ) : (
-        <SortSelector questions={questions} />
       )}
     </>
   )
