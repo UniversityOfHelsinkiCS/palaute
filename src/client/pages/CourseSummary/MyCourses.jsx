@@ -1,6 +1,7 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingBar'
 import { useTeacherSummaries } from './api'
 import NoSummaryAlert from './components/NoSummaryAlert'
 import { OrganisationTable } from './components/OrganisationSummaryTableView'
@@ -22,7 +23,7 @@ const MyCourses = ({ tableView = false }) => {
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
         <SummaryRowFilters hideColumns={tableView || noSummary} showSortSelector={tableView && !noSummary} />
       </Box>
-      {isOrganisationsLoading && <LinearProgress />}
+      {isOrganisationsLoading && <AccessibleLoadingBar />}
       {show &&
         organisations?.length > 0 &&
         organisations.map(organisation =>

@@ -1,7 +1,8 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
+import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingBar'
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { useCourseUnitGroupSummaries } from './api'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
@@ -65,7 +66,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
               isLoading={isLoading}
             />
           ))}
-        {isLoading && <LinearProgress />}
+        {isLoading && <AccessibleLoadingBar />}
         {!isLoading &&
           !tableView &&
           courseUnitGroup &&

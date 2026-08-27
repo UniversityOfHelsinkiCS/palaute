@@ -1,6 +1,7 @@
-import { Box, LinearProgress } from '@mui/material'
+import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingBar'
 import { NorButton } from '../../components/common/NorButton'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
@@ -42,8 +43,8 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
             showSortSelector={tableView && Boolean(organisation)}
           />
         </Box>
-        {isLoading && <LinearProgress />}
-        {!organisation && <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} />}
+        {isLoading && <AccessibleLoadingBar />}
+        {!isLoading && !organisation && <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} />}
         {!isLoading &&
           Boolean(organisation) &&
           (tableView ? (

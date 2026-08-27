@@ -1,7 +1,8 @@
-import { Box, Divider, LinearProgress, Typography } from '@mui/material'
+import { Box, Divider, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingBar'
 import { useOrganisationSummaries, usePinnedOrganisations } from './api'
 import NoSummaryAlert from './components/NoSummaryAlert'
 import OrganisationSummaryRow from './components/OrganisationRow'
@@ -76,7 +77,7 @@ const MyOrganisations = ({ tableView = false }) => {
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
           <SummaryRowFilters filterType="my-organisation" hideColumns={items.length === 0} />
         </Box>
-        {isLoading && <LinearProgress />}
+        {isLoading && <AccessibleLoadingBar />}
         {!isLoading && (items.length === 0 ? <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} /> : items)}
       </Box>
     )
