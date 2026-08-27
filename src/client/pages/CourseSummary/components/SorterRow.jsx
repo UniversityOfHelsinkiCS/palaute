@@ -46,7 +46,13 @@ const styles = {
   },
 }
 
-export const SorterRow = ({ filterComponent, additionalFilters, questions: questionsProp, hideColumns = false }) => {
+export const SorterRow = ({
+  filterComponent,
+  additionalFilters,
+  questions: questionsProp,
+  hideColumns = false,
+  showSortSelector = false,
+}) => {
   const { t, i18n } = useTranslation()
   const { questions: contextQuestions } = useSummaryContext()
   const questions = questionsProp ?? contextQuestions
@@ -56,7 +62,7 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
       <Box sx={styles.filterContainer}>
         {additionalFilters}
         {filterComponent}
-        {hideColumns && <SortSelector questions={questions} />}
+        {showSortSelector && <SortSelector questions={questions} />}
       </Box>
       {!hideColumns && (
         <Box sx={{ display: 'flex', alignItems: 'stretch', gap: '0.2rem', width: '100%' }}>
@@ -87,7 +93,7 @@ export const SorterRow = ({ filterComponent, additionalFilters, questions: quest
   )
 }
 
-const SorterRowWithFilters = ({ allTime = false, filterComponents, hideColumns = false }) => {
+const SorterRowWithFilters = ({ allTime = false, filterComponents, hideColumns = false, showSortSelector = false }) => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
 
   const handleChangeTimeRange = nextDateRange => {
@@ -104,7 +110,14 @@ const SorterRowWithFilters = ({ allTime = false, filterComponents, hideColumns =
     />
   )
 
-  return <SorterRow filterComponent={filterComponent} additionalFilters={filterComponents} hideColumns={hideColumns} />
+  return (
+    <SorterRow
+      filterComponent={filterComponent}
+      additionalFilters={filterComponents}
+      hideColumns={hideColumns}
+      showSortSelector={showSortSelector}
+    />
+  )
 }
 
 export default SorterRowWithFilters

@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useOrganisationSummaries, usePinnedOrganisations } from './api'
+import NoSummaryAlert from './components/NoSummaryAlert'
 import OrganisationSummaryRow from './components/OrganisationRow'
 import OrganisationSummaryTableView from './components/OrganisationSummaryTableView'
 import SummaryRowFilters from './components/SummaryRowFilters'
@@ -73,9 +74,10 @@ const MyOrganisations = ({ tableView = false }) => {
     return (
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
-          <SummaryRowFilters filterType="my-organisation" />
+          <SummaryRowFilters filterType="my-organisation" hideColumns={items.length === 0} />
         </Box>
-        {isLoading ? <LinearProgress /> : items}
+        {isLoading && <LinearProgress />}
+        {!isLoading && (items.length === 0 ? <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} /> : items)}
       </Box>
     )
   }

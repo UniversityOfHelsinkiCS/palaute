@@ -547,7 +547,7 @@
     "given": "given",
     "notGiven": "not given",
     "noCourses": "No course statistics available from this timespan. Your courses will appear here once they get feedback.",
-    "noCourseRealisations": "Course unit {{ courseCode }} has no realisations in the selected time period.",
+    "noCourseRealisations": "Course unit {{ courseCode }} has no realisations in the selected time period or you don't have access to their summary.",
     "coursePage": "Course page",
     "myOrganisations": "Organisation",
     "myCourses": "My courses",

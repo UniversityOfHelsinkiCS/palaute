@@ -25,6 +25,7 @@ import { TAGS_ENABLED } from '../../../util/common'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 import { useSummary, useChildOrganisations, useTags, useOrderedCourseUnits } from '../utils'
+import NoSummaryAlert from './NoSummaryAlert'
 import { PinButton, getOrganisationTableButtonId } from './OrganisationRow'
 import SummaryRowFilters from './SummaryRowFilters'
 import { SummaryTableHeader, SummaryTableRow } from './SummaryTableRow'
@@ -224,6 +225,7 @@ const OrganisationRow = ({
   depth,
   initiallyOpen = false,
   orgsOnly = false,
+  courseUnitsOnly = false,
   showRootPin = true,
   noPins = false,
   dateRange,
@@ -232,10 +234,12 @@ const OrganisationRow = ({
   const [open, setOpen] = useState(initiallyOpen)
 
   const { summary, isLoading: summaryLoading } = useSummary(organisation)
-  const { childOrganisations, isLoading: childOrganisationsLoading } = useChildOrganisations(organisation)
+  const { childOrganisations, isLoading: childOrganisationsLoading } = useChildOrganisations(organisation, {
+    enabled: !courseUnitsOnly,
+  })
   const { tags, isLoading: tagsLoading } = useTags({
     organisation,
-    tagsEnabled: TAGS_ENABLED.includes(organisation?.code),
+    tagsEnabled: !courseUnitsOnly && TAGS_ENABLED.includes(organisation?.code),
   })
   const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation })
 
@@ -274,6 +278,7 @@ const OrganisationRow = ({
               depth={depth + 1}
               dateRange={dateRange}
               orgsOnly={orgsOnly}
+              courseUnitsOnly={courseUnitsOnly}
               noPins={noPins}
             />
           ))}
@@ -317,6 +322,7 @@ export const OrganisationTable = ({
   dateRange,
   firstRowOpen = true,
   orgsOnly = false,
+  courseUnitsOnly = false,
   showRootPin = true,
   noPins = false,
 }) => {
@@ -454,6 +460,7 @@ export const OrganisationTable = ({
                   initiallyOpen={firstRowOpen}
                   dateRange={dateRange}
                   orgsOnly={orgsOnly}
+                  courseUnitsOnly={courseUnitsOnly}
                   showRootPin={showRootPin}
                   noPins={noPins}
                 />
@@ -476,11 +483,14 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
 
   const justOneOrg = unpinnedOrgsWithoutUniversity.length === 1
 
+  const noSummary = pinnedOrgs?.length + otherOrgs?.length === 0
+
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
-        <SummaryRowFilters hideColumns />
+        <SummaryRowFilters hideColumns showSortSelector={!noSummary} />
       </Box>
+      {noSummary && <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} />}
       {university && (
         <OrganisationTable
           organisation={university}

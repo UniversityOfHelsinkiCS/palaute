@@ -542,7 +542,7 @@
     "given": "annettu",
     "notGiven": "ei annettu",
     "noCourses": "Ei näytettäviä kursseja tältä aikaväliltä. Kurssisi saadessa palautetta se ilmestyy tänne.",
-    "noCourseRealisations": "Opintojaksolla {{courseCode}} ei ole toteutuksia valitulla aikavälillä.",
+    "noCourseRealisations": "Opintojaksolla {{courseCode}} ei ole toteutuksia valitulla aikavälillä tai sinulla ei ole pääsyä niiden yhteenvetoon.",
     "coursePage": "Kurssisivu",
     "myOrganisations": "Organisaatio",
     "myCourses": "Kurssini",

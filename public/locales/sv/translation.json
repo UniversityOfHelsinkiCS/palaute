@@ -536,7 +536,7 @@
     "given": "given",
     "notGiven": "inte given",
     "noCourses": "Inga kurser för den valda tidsperioden. När din kurs får feedback visas den här.",
-    "noCourseRealisations": "Studieavnitten {{courseCode}} har inga instanser i den valda tidsperioden.",
+    "noCourseRealisations": "Studieavnitten {{ courseCode }} har inga instanser i den valda tidsperioden eller så har du inte tillgång till deras sammanfattning.",
     "coursePage": "Kurssida",
     "myOrganisations": "Utbildningsprogram",
     "myCourses": "Mina kurser",

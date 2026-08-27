@@ -1,10 +1,11 @@
-import { Alert, Box } from '@mui/material'
+import { Box, LinearProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { useTeacherSummaries } from './api'
+import NoSummaryAlert from './components/NoSummaryAlert'
+import { OrganisationTable } from './components/OrganisationSummaryTableView'
 import SummaryRowFilters from './components/SummaryRowFilters'
 import TeacherOrganisationRow from './components/TeacherOrganisationRow'
-import TeacherOrganisationTable from './components/TeacherOrganisationTable'
 import { useSummaryContext } from './context'
 
 const MyCourses = ({ tableView = false }) => {
@@ -14,21 +15,25 @@ const MyCourses = ({ tableView = false }) => {
   const { organisations, isLoading: isOrganisationsLoading } = useTeacherSummaries()
 
   const show = !isOrganisationsLoading && questions?.length && organisations && questions
+  const noSummary = show && organisations?.length === 0
 
   return (
     <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem">
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px' }}>
-        <SummaryRowFilters hideColumns={tableView} />
+        <SummaryRowFilters hideColumns={tableView || noSummary} showSortSelector={tableView && !noSummary} />
       </Box>
+      {isOrganisationsLoading && <LinearProgress />}
       {show &&
-        organisations.length > 0 &&
+        organisations?.length > 0 &&
         organisations.map(organisation =>
           tableView ? (
-            <TeacherOrganisationTable
+            <OrganisationTable
               key={organisation.id}
-              questions={questions}
               organisation={organisation}
+              questions={questions}
               dateRange={dateRange}
+              showRootPin={false}
+              courseUnitsOnly
             />
           ) : (
             <TeacherOrganisationRow
@@ -39,11 +44,7 @@ const MyCourses = ({ tableView = false }) => {
             />
           )
         )}
-      {show && organisations.length === 0 && (
-        <Box my="1rem" mx="2rem">
-          <Alert severity="info">{t('courseSummary:noCourses')}</Alert>
-        </Box>
-      )}
+      {noSummary && <NoSummaryAlert alertText={t('courseSummary:noCourses')} />}
     </Box>
   )
 }

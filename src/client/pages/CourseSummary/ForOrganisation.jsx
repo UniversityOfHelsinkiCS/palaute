@@ -1,4 +1,4 @@
-import { Box, LinearProgress, Alert } from '@mui/material'
+import { Box, LinearProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../components/common/NorButton'
@@ -7,6 +7,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import { useSummaries } from './api'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
+import NoSummaryAlert from './components/NoSummaryAlert'
 import OrganisationSummaryRow from './components/OrganisationRow'
 import { OrganisationTable } from './components/OrganisationSummaryTableView'
 import SorterRowWithFilters from './components/SorterRow'
@@ -40,10 +41,13 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', minHeight: '70px' }}>
           {OPEN_UNIVERSITY_ORG_ID && <ExtraOrganisationModeSelector organisationId={OPEN_UNIVERSITY_ORG_ID} />}
-          <SorterRowWithFilters hideColumns={tableView || !organisation} />
+          <SorterRowWithFilters
+            hideColumns={tableView || !organisation}
+            showSortSelector={tableView && Boolean(organisation)}
+          />
         </Box>
         {isLoading && <LinearProgress />}
-        {!organisation && <Alert severity="info">{t('courseSummary:noSummaryInfo')}</Alert>}
+        {!organisation && <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} />}
         {!isLoading &&
           Boolean(organisation) &&
           (tableView ? (

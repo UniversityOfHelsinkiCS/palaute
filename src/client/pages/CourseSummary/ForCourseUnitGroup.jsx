@@ -1,4 +1,4 @@
-import { Alert, Box, LinearProgress } from '@mui/material'
+import { Box, LinearProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
@@ -6,6 +6,7 @@ import { YearSemesterPeriodSelector } from '../../components/common/YearSemester
 import { useCourseUnitGroupSummaries } from './api'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
 import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
+import NoSummaryAlert from './components/NoSummaryAlert'
 import SorterRowWithFilters from './components/SorterRow'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { useSummaryContext } from './context'
@@ -37,7 +38,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
     <SummaryScrollContainer>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.3rem' }}>
         {tableView ? (
-          <SorterRowWithFilters hideColumns allTime />
+          <SorterRowWithFilters hideColumns allTime showSortSelector={Boolean(courseUnitGroup)} />
         ) : (
           <Box sx={filterContainerSx}>
             <YearSemesterPeriodSelector
@@ -49,6 +50,9 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
             />
           </Box>
         )}
+        {!isLoading && !courseUnitGroup && (
+          <NoSummaryAlert alertText={t('courseSummary:noCourseRealisations', { courseCode: code })} />
+        )}
         {tableView &&
           courseUnitGroup &&
           surveyGroups.map((group, index) => (
@@ -58,23 +62,21 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
               group={group}
               showTimePeriod={multipleGroups}
               validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
+              isLoading={isLoading}
             />
           ))}
-        {isLoading && !tableView && <LinearProgress />}
+        {isLoading && <LinearProgress />}
         {!isLoading &&
           !tableView &&
-          (courseUnitGroup ? (
-            surveyGroups.map((group, index) => (
-              <SurveyGroupSection
-                key={group.survey?.id ?? 'single'}
-                courseUnitGroup={courseUnitGroup}
-                group={group}
-                showTimePeriod={multipleGroups}
-                validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
-              />
-            ))
-          ) : (
-            <Alert severity="info">{t('courseSummary:noCourseRealisations', { courseCode: code })}</Alert>
+          courseUnitGroup &&
+          surveyGroups.map((group, index) => (
+            <SurveyGroupSection
+              key={group.survey?.id ?? 'single'}
+              courseUnitGroup={courseUnitGroup}
+              group={group}
+              showTimePeriod={multipleGroups}
+              validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
+            />
           ))}
       </Box>
     </SummaryScrollContainer>

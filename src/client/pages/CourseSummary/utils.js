@@ -36,13 +36,13 @@ export const useSummary = organisation => {
   return { summary: summary ?? null, isLoading: isLoading ?? false }
 }
 
-export const useChildOrganisations = organisation => {
+export const useChildOrganisations = (organisation, { enabled = true } = {}) => {
   const initialChildOrganisations = organisation?.childOrganisations
 
   const { organisation: organisationWithChildren, isLoading } = useSummaries({
     entityId: organisation?.id,
     include: 'childOrganisations',
-    enabled: !initialChildOrganisations?.length && Boolean(organisation),
+    enabled: enabled && !initialChildOrganisations?.length && Boolean(organisation),
   })
 
   const childOrganisations =
