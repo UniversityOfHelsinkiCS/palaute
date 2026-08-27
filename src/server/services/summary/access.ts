@@ -2,11 +2,15 @@ import { QueryTypes } from 'sequelize'
 
 import { sequelize } from '../../db/dbConnection'
 import { User } from '../../models'
+import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
 export const getSummaryAccessibleOrganisationIds = async (user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)
+  const excludedIds = new Set(SUMMARY_EXCLUDED_ORG_IDS)
   const accessibleOrganisationIds = organisationAccess
+    // Excluded organisations should not contribute their parentId to the accessible set.
+    .filter(access => !excludedIds.has(access.organisation.id))
     .flatMap(access => [access.organisation.id, access.organisation.parentId])
     .filter((id): id is string => Boolean(id))
 
