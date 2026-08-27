@@ -2,7 +2,6 @@ import { Box, LinearProgress } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../components/common/NorButton'
-import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import { useSummaries } from './api'
@@ -18,7 +17,6 @@ import GenerateReport from './GenerateReport'
 const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => {
   const { t } = useTranslation()
   const [tableView, setTableView] = useLocalStorageState('tableView', false)
-  const { authorizedUser: user } = useAuthorizedUser()
 
   const { dateRange, tagId, questions } = useSummaryContext()
 
@@ -32,11 +30,9 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
     <SummaryScrollContainer>
       <Box display="flex" flexDirection="column" alignItems="stretch" gap="0.3rem" pl="0.5rem">
         <Box sx={{ display: 'flex', gap: 1, my: 2 }}>
-          {user.isAdmin && (
-            <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
-              {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
-            </NorButton>
-          )}
+          <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
+            {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
+          </NorButton>
           <GenerateReport organisationId={initialOrganisation.id} />
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '8px', minHeight: '70px' }}>

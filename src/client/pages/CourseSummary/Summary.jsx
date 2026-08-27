@@ -57,11 +57,9 @@ const SummaryInContext = () => {
           </Typography>
           {hasSummaryAccess && (
             <Box sx={{ display: 'flex', gap: 1 }}>
-              {user?.isAdmin && (
-                <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
-                  {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
-                </NorButton>
-              )}
+              <NorButton color="secondary" onClick={() => setTableView(!tableView)} sx={{ p: 1 }}>
+                {tableView ? t('courseSummary:treeView') : t('courseSummary:tableView')}
+              </NorButton>
               <GenerateReport />
             </Box>
           )}
