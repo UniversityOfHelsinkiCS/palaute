@@ -141,6 +141,7 @@ const QuestionCard = ({
   showMoveButtons = true,
   showRequiredToggle = true,
   elevation = 2,
+  editorLevel,
 }) => {
   const { t } = useTranslation()
   const [field, , helpers] = useField(name)
@@ -215,7 +216,7 @@ const QuestionCard = ({
         {isEditing ? (
           <>
             <Box mb={2}>
-              <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} />
+              <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} editorLevel={editorLevel} />
             </Box>
             <ActionsContainer>
               <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>

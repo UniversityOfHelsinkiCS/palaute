@@ -5,9 +5,10 @@ import { lightFormat } from 'date-fns'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
+import Instructions from '../../../components/common/Instructions'
 import TeacherChip from '../../../components/common/TeacherChip'
 import { getDateRangeString } from '../../../util/getDateRangeString'
-import { getLanguageValue } from '../../../util/languageUtils'
+import { getLanguageValue, getResolvedShortLabel, getShortLabelValue } from '../../../util/languageUtils'
 
 export const TeacherChips = ({ teachers, responsibleTeachers, administrativePersons }) => {
   const { t } = useTranslation()
@@ -121,6 +122,46 @@ export const OrganisationLabel = ({ organisation, dates }) => {
         {Boolean(isFetching) && <CircularProgress size={20} />}
       </Box>
     </Box>
+  )
+}
+
+// Table headers show a question's shortLabel (when set) instead of its full label, to
+// keep the sticky header from growing too tall. This renders a collapsible info box
+// listing "short label: full question" for every question that has been shortened.
+export const QuestionFullLabels = ({ questions }) => {
+  const { t, i18n } = useTranslation()
+
+  const shortenedQuestions = (questions ?? [])
+    .map(q => {
+      const shortLabel = getResolvedShortLabel(q.data?.shortLabel, i18n.language)
+      const usedShortLabel =
+        shortLabel && shortLabel === getShortLabelValue(q.data?.shortLabel, q.data?.label, i18n.language)
+
+      return {
+        id: q.id,
+        shortLabel: usedShortLabel ? shortLabel : null,
+        label: getLanguageValue(q.data?.label, i18n.language),
+      }
+    })
+    .filter(q => q.shortLabel && q.shortLabel !== q.label)
+
+  if (shortenedQuestions.length === 0) return null
+
+  return (
+    <Instructions title={t('courseSummary:fullQuestions')} sx={{ width: 'fit-content' }}>
+      <Box component="dl" sx={{ m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
+        {shortenedQuestions.map(q => (
+          <Box key={q.id} sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+            <Typography component="dt" variant="body2" sx={{ fontWeight: 600 }}>
+              {`${q.shortLabel}:`}
+            </Typography>
+            <Typography component="dd" variant="body2" sx={{ m: 0 }}>
+              {q.label}
+            </Typography>
+          </Box>
+        ))}
+      </Box>
+    </Instructions>
   )
 }
 

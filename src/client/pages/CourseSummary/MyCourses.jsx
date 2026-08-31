@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next'
 
 import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingBar'
 import { useTeacherSummaries } from './api'
+import { QuestionFullLabels } from './components/Labels'
 import NoSummaryAlert from './components/NoSummaryAlert'
 import { OrganisationTable } from './components/OrganisationSummaryTableView'
 import SummaryRowFilters from './components/SummaryRowFilters'
@@ -24,6 +25,7 @@ const MyCourses = ({ tableView = false }) => {
         <SummaryRowFilters hideColumns={tableView || noSummary} showSortSelector={tableView && !noSummary} />
       </Box>
       {isOrganisationsLoading && <AccessibleLoadingBar />}
+      {tableView && show && <QuestionFullLabels questions={questions} />}
       {show &&
         organisations?.length > 0 &&
         organisations.map(organisation =>

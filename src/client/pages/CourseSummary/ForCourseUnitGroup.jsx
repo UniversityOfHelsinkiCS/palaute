@@ -6,7 +6,8 @@ import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingB
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { useCourseUnitGroupSummaries } from './api'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
-import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
+import CourseUnitGroupSummaryTable, { questionFilter } from './components/CourseUnitGroupSummaryTable'
+import { QuestionFullLabels } from './components/Labels'
 import NoSummaryAlert from './components/NoSummaryAlert'
 import SorterRowWithFilters from './components/SorterRow'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
@@ -24,7 +25,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
   const { t } = useTranslation()
   const { code } = useParams()
 
-  const { dateRange, setDateRange, option, setOption } = useSummaryContext()
+  const { dateRange, setDateRange, option, setOption, questions: contextQuestions } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
     courseCode: code,
     startDate: dateRange.start,
@@ -34,6 +35,15 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
 
   const surveyGroups = courseUnitGroup?.surveyGroups ?? []
   const multipleGroups = surveyGroups.length > 1
+
+  // Each survey group can have its own question set (or fall back to the context's),
+  // so the info box needs the union of all of them, deduped by question id.
+  const questionsById = new Map()
+  surveyGroups.forEach(group => {
+    const groupQuestions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
+    groupQuestions.forEach(q => questionsById.set(q.id, q))
+  })
+  const questions = [...questionsById.values()]
 
   return (
     <SummaryScrollContainer>
@@ -54,6 +64,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
         {!isLoading && !courseUnitGroup && (
           <NoSummaryAlert alertText={t('courseSummary:noCourseRealisations', { courseCode: code })} />
         )}
+        {tableView && courseUnitGroup && <QuestionFullLabels questions={questions} />}
         {tableView &&
           courseUnitGroup &&
           surveyGroups.map((group, index) => (

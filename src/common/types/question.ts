@@ -12,6 +12,9 @@ export type TextSectionData = {
 
 export type AnswerableQuestionData = {
   label: LocalizedString
+  // Short version of the label, shown instead of the full label in narrow contexts
+  // such as the course summary table headers. Falls back to `label` when not set.
+  shortLabel?: LocalizedString
   description?: LocalizedString
   options?: QuestionOption[]
 }

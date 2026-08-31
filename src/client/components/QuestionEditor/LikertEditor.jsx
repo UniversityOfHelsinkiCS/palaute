@@ -5,37 +5,38 @@ import { useTranslation } from 'react-i18next'
 import FormikTextField from '../common/FormikTextField'
 import LinkButton from '../common/LinkButton'
 
-const LanguageLikertEditor = ({ name, language, inputRef }) => {
+const LikertField = ({ name, language, fieldName, labelKey, helperKey, inputRef }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
   return (
-    <>
-      <Box mb={2}>
-        <FormikTextField
-          id={`likert-question-${language}-${name}`}
-          name={`${name}.data.label.${language}`}
-          label={t('questionEditor:label')}
-          fullWidth
-          inputRef={inputRef}
-        />
-      </Box>
-
-      <FormikTextField
-        id={`likert-description-${language}-${name}`}
-        name={`${name}.data.description.${language}`}
-        label={t('questionEditor:description')}
-        helperText={t('questionEditor:descriptionHelper')}
-        fullWidth
-      />
-    </>
+    <FormikTextField
+      id={`likert-${fieldName}-${language}-${name}`}
+      name={`${name}.data.${fieldName}.${language}`}
+      label={t(`questionEditor:${labelKey}`)}
+      helperText={helperKey ? t(`questionEditor:${helperKey}`) : undefined}
+      fullWidth
+      inputRef={inputRef}
+    />
   )
 }
 
+const ALL_FIELDS = [
+  { fieldName: 'label', labelKey: 'label' },
+  { fieldName: 'shortLabel', labelKey: 'shortLabel', helperKey: 'shortLabelHelper' },
+  { fieldName: 'description', labelKey: 'description', helperKey: 'descriptionHelper' },
+]
+
 const LikertEditor = forwardRef((props, ref) => {
   const { t } = useTranslation()
-  const { name, languages = ['fi', 'sv', 'en'] } = props
+  const { name, languages = ['fi', 'sv', 'en'], editorLevel } = props
   const firstInputRef = useRef(null)
+
+  const showShortLabel = editorLevel === 'programme' || editorLevel === 'university'
+  const FIELDS = showShortLabel ? ALL_FIELDS : ALL_FIELDS.filter(field => field.fieldName !== 'shortLabel')
+
+  // One "row" per heading + each field.
+  const ROW_COUNT = FIELDS.length + 1
 
   useImperativeHandle(ref, () => ({
     focusFirst: () => {
@@ -43,21 +44,50 @@ const LikertEditor = forwardRef((props, ref) => {
     },
   }))
 
+  // In desktop view, each language has its inputs in one column. Columns are side by side.
+  // In mobile view, all inputs in Finnish come first, followed by Swedish and English.
+  const orderSx = (rowIndex, languageIndex) => ({
+    order: {
+      xs: languageIndex * ROW_COUNT + rowIndex,
+      md: rowIndex * languages.length + languageIndex,
+    },
+  })
+
   return (
-    <Grid rowSpacing={1} columnSpacing={4} container>
-      {languages.map((language, idx) => (
-        <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-          <Box mb={2}>
+    <Box>
+      <Grid columnSpacing={4} rowSpacing={2} container alignItems="stretch">
+        {languages.map((language, languageIndex) => (
+          <Grid size={{ xs: 12, md: 4 }} key={`heading-${language}`} sx={orderSx(0, languageIndex)}>
             <Typography variant="h6" component="h2">
               {language.toUpperCase()}
             </Typography>
-          </Box>
+          </Grid>
+        ))}
 
-          <LanguageLikertEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+        {FIELDS.map((field, fieldIdx) =>
+          languages.map((language, languageIndex) => (
+            <Grid
+              size={{ xs: 12, md: 4 }}
+              key={`${field.fieldName}-${language}`}
+              sx={orderSx(fieldIdx + 1, languageIndex)}
+            >
+              <LikertField
+                name={name}
+                language={language}
+                fieldName={field.fieldName}
+                labelKey={field.labelKey}
+                helperKey={field.helperKey}
+                inputRef={fieldIdx === 0 && languageIndex === 0 ? firstInputRef : undefined}
+              />
+            </Grid>
+          ))
+        )}
+
+        <Grid size={12} sx={{ order: ROW_COUNT * languages.length }}>
+          <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external />
         </Grid>
-      ))}
-      <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external />
-    </Grid>
+      </Grid>
+    </Box>
   )
 })
 

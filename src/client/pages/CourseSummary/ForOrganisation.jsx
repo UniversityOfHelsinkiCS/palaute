@@ -7,6 +7,7 @@ import useLocalStorageState from '../../hooks/useLocalStorageState'
 import { OPEN_UNIVERSITY_ORG_ID } from '../../util/common'
 import { useSummaries } from './api'
 import ExtraOrganisationModeSelector from './components/ExtraOrganisationModeSelector'
+import { QuestionFullLabels } from './components/Labels'
 import NoSummaryAlert from './components/NoSummaryAlert'
 import OrganisationSummaryRow from './components/OrganisationRow'
 import { OrganisationTable } from './components/OrganisationSummaryTableView'
@@ -45,6 +46,7 @@ const OrganisationSummaryInContext = ({ organisation: initialOrganisation }) => 
         </Box>
         {isLoading && <AccessibleLoadingBar />}
         {!isLoading && !organisation && <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} />}
+        {tableView && !isLoading && Boolean(organisation) && <QuestionFullLabels questions={questions} />}
         {!isLoading &&
           Boolean(organisation) &&
           (tableView ? (

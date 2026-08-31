@@ -25,6 +25,7 @@ import { TAGS_ENABLED } from '../../../util/common'
 import { getLanguageValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 import { useSummary, useChildOrganisations, useTags, useOrderedCourseUnits } from '../utils'
+import { QuestionFullLabels } from './Labels'
 import NoSummaryAlert from './NoSummaryAlert'
 import { PinButton, getOrganisationTableButtonId } from './OrganisationRow'
 import SummaryRowFilters from './SummaryRowFilters'
@@ -491,6 +492,7 @@ const OrganisationSummaryTableView = ({ pinnedOrgs, otherOrgs }) => {
         <SummaryRowFilters hideColumns showSortSelector={!noSummary} />
       </Box>
       {noSummary && <NoSummaryAlert alertText={t('courseSummary:noSummaryInfo')} />}
+      {!noSummary && <QuestionFullLabels questions={questions} />}
       {university && (
         <OrganisationTable
           organisation={university}

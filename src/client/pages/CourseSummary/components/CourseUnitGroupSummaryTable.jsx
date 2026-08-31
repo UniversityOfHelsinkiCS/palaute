@@ -27,7 +27,7 @@ import { Link } from 'react-router-dom'
 
 import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultItem'
 import { focusIndicatorStyle } from '../../../util/accessibility'
-import { getLanguageValue } from '../../../util/languageUtils'
+import { getLanguageValue, getShortLabelValue } from '../../../util/languageUtils'
 import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
 import { useSummaryContext } from '../context'
 import { TeacherChips } from './Labels'
@@ -171,7 +171,7 @@ const getStaff = feedbackTarget => {
   return { teachers, responsibleTeachers, administrativePersons }
 }
 
-const questionFilter = q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD'
+export const questionFilter = q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD'
 
 const getBackgroundColor = ({ value, factor }) => {
   const backgroundColors = {
@@ -261,7 +261,7 @@ const CourseUnitGroupSummaryTableHeader = ({ questions }) => {
         <SummaryTableHeaderCell>{t('courseSummary:courseStaff')}</SummaryTableHeaderCell>
         {questions.map(q => (
           <SummaryTableHeaderCell key={q.id} sx={styles.headerCell}>
-            {getLanguageValue(q.data.label, i18n.language)}
+            {getShortLabelValue(q.data.shortLabel, q.data.label, i18n.language)}
           </SummaryTableHeaderCell>
         ))}
         <SummaryTableHeaderCell>{`${t('courseSummary:feedbackCount')} / ${t('courseSummary:studentCount')}`}</SummaryTableHeaderCell>

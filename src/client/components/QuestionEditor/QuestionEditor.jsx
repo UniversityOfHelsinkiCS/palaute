@@ -44,7 +44,14 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   )
 }
 
-const QuestionEditorForm = ({ saveChanges, editable, handlePublicityToggle, actions, groupingQuestionSettings }) => {
+const QuestionEditorForm = ({
+  saveChanges,
+  editable,
+  handlePublicityToggle,
+  actions,
+  groupingQuestionSettings,
+  editorLevel,
+}) => {
   const addButtonRef = useRef()
   const { t, i18n } = useTranslation()
   const questionLanguage = useQuestionLanguage()
@@ -117,6 +124,7 @@ const QuestionEditorForm = ({ saveChanges, editable, handlePublicityToggle, acti
                   onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
                   editable={editable}
                   onPublicityToggle={makePublicityToggle(question)}
+                  editorLevel={editorLevel}
                 />
               ))}
 
@@ -186,6 +194,7 @@ const QuestionEditor = ({
   groupingQuestionSettings,
   userCreated,
   curStartDate,
+  editorLevel,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false} enableReinitialize>
     {({ handleSubmit }) => (
@@ -206,6 +215,7 @@ const QuestionEditor = ({
           )
         }
         groupingQuestionSettings={groupingQuestionSettings}
+        editorLevel={editorLevel}
       />
     )}
   </Formik>

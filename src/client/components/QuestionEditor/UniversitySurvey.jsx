@@ -57,6 +57,7 @@ const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
         handlePublicityToggle={onPublicityToggle}
         publicQuestionIds={publicQuestionIds}
         publicityConfigurableQuestionIds={allQuestionIds}
+        editorLevel="university"
       />
       {onCreateVersionClick && (
         <Box display="flex" justifyContent="flex-end" mt={2}>

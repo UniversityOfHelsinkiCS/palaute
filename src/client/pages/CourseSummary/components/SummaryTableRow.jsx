@@ -8,7 +8,7 @@ import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultIt
 import { useUserOrganisationAccessByCode } from '../../../hooks/useUserOrganisationAccess'
 import { focusIndicatorStyle } from '../../../util/accessibility'
 import { getSafeCourseCode } from '../../../util/courseIdentifiers'
-import { getLanguageValue } from '../../../util/languageUtils'
+import { getLanguageValue, getShortLabelValue } from '../../../util/languageUtils'
 import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
 
 const styles = {
@@ -120,7 +120,7 @@ export const SummaryTableHeader = ({ questions }) => {
         <SummaryTableHeaderCell>{t('common:actions')}</SummaryTableHeaderCell>
         {questions.map(q => (
           <SummaryTableHeaderCell key={q.id} align="left">
-            {getLanguageValue(q.data.label, i18n.language)}
+            {getShortLabelValue(q.data.shortLabel, q.data.label, i18n.language)}
           </SummaryTableHeaderCell>
         ))}
         <SummaryTableHeaderCell>{`${t('courseSummary:feedbackCount')} / ${t('courseSummary:studentCount')}`}</SummaryTableHeaderCell>
