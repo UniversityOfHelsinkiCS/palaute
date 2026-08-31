@@ -289,7 +289,7 @@ describe('Responsible Teachers', () => {
     // Add likert question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
-    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-label-en-questions.0"]').clear().type('Rate the importance of testing')
     cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
 
     cy.get('[data-cy="question-card-save-edit"]').click()
@@ -415,7 +415,7 @@ describe('Admin Users', () => {
     // Add likert question to the survey
     cy.get('[data-cy="question-editor-add-question"]').click()
     cy.get('[data-cy="question-editor-type-menu-select-likert"]').click()
-    cy.get('[id="likert-question-en-questions.0"]').clear().type('Rate the importance of testing')
+    cy.get('[id="likert-label-en-questions.0"]').clear().type('Rate the importance of testing')
     cy.get('[id="likert-description-en-questions.0"]').clear().type('Something something')
 
     cy.get('[data-cy="question-card-save-edit"]').click()

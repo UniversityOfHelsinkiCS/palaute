@@ -20,8 +20,8 @@ describe('University Survey', () => {
     cy.contains('Edit university survey').click()
     cy.get('[data-cy=question-editor-add-question]').click()
     cy.get('[data-cy=question-editor-type-menu-select-likert]').click()
-    // Text field id is likert-question-fi-questions.n
-    cy.get('[id^=likert-question-fi-questions]').last().type(questionTitle)
+    // Text field id is likert-label-fi-questions.n
+    cy.get('[id^=likert-label-fi-questions]').last().type(questionTitle)
     cy.get('[data-cy=question-card-save-edit]').click()
 
     // Go back to the feedback form and check that the new question is now visible

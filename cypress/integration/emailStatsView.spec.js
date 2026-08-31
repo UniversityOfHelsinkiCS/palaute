@@ -40,12 +40,12 @@ describe('Admin email stats view', () => {
     // Add two custom questions
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
-    cy.get('input[id^=likert-question-en-questions]').type('Minthu custom question')
+    cy.get('input[id^=likert-label-en-questions]').type('Minthu custom question')
     cy.get('[data-cy=question-card-save-edit]').click()
 
     cy.contains('Add question').click()
     cy.get('li').contains('Scale of values').click()
-    cy.get('input[id^=likert-question-en-questions]').type('Soju custom question')
+    cy.get('input[id^=likert-label-en-questions]').type('Soju custom question')
     cy.get('[data-cy=question-card-save-edit]').click()
 
     // Go to admin view and check out the email
