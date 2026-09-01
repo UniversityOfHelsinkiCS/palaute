@@ -13,7 +13,7 @@ export const FeedbackTargetContextProvider = ({ id, isAdmin, organisation, feedb
 
   const accessContext = React.useMemo(() => {
     const orgAccess = organisation?.access
-    const accessStatus = feedbackTarget?.accessStatus
+    const accessStatus = feedbackTarget?.accessStatus ?? []
 
     const isResponsibleTeacher = accessStatus.includes('RESPONSIBLE_TEACHER') || isAdmin
     const isTeacher = accessStatus.includes('TEACHER') || isResponsibleTeacher || isAdmin

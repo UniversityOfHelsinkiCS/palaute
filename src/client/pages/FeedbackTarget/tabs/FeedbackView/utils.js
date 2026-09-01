@@ -57,11 +57,11 @@ const getInitialAnswerByType = type => {
  * @returns {object[]} array of questions in correct order
  */
 export const getQuestions = feedbackTarget => {
-  const { surveys } = feedbackTarget
+  const { surveys } = feedbackTarget ?? {}
 
   if (STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL) {
-    const uniOpenQuestions = surveys?.universitySurvey?.questions
-    const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
+    const uniOpenQuestions = surveys?.universitySurvey?.questions ?? []
+    const programmeSurveyQuestions = (surveys?.programmeSurveys ?? []).reduce(
       (questions, survey) => questions.concat(survey.questions),
       []
     )
@@ -79,10 +79,10 @@ export const getQuestions = feedbackTarget => {
     return allQuestionsInInitialOrder
   }
 
-  const uniOpenQuestions = surveys?.universitySurvey?.questions.filter(q => q.type === 'OPEN') ?? []
-  const filteredUniQuestions = surveys?.universitySurvey?.questions.filter(q => q.type !== 'OPEN') ?? []
+  const uniOpenQuestions = surveys?.universitySurvey?.questions?.filter(q => q.type === 'OPEN') ?? []
+  const filteredUniQuestions = surveys?.universitySurvey?.questions?.filter(q => q.type !== 'OPEN') ?? []
 
-  const programmeSurveyQuestions = surveys.programmeSurveys.reduce(
+  const programmeSurveyQuestions = (surveys?.programmeSurveys ?? []).reduce(
     (questions, survey) => questions.concat(survey.questions),
     []
   )

@@ -54,7 +54,9 @@ const FeedbackTargetItem = ({ feedbackTarget, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { courseRealisation, surveys } = feedbackTarget
 
-  const periodInfo = `${formatDate(courseRealisation.startDate)}–${formatDate(courseRealisation.endDate)}`
+  const periodInfo = courseRealisation
+    ? `${formatDate(courseRealisation.startDate)}–${formatDate(courseRealisation.endDate)}`
+    : ''
 
   const questions = surveys?.teacherSurvey?.questions ?? []
 
@@ -125,7 +127,7 @@ const FeedbackTargetListForCourseSurvey = ({
 const CopyFromCourseDialog = ({ open = false, onClose, onCopy }) => {
   const { t, i18n } = useTranslation()
   const { feedbackTarget } = useFeedbackTargetContext()
-  const { userCreated } = feedbackTarget // userCreated is true for organisation surveys
+  const { userCreated } = feedbackTarget ?? {} // userCreated is true for organisation surveys
 
   const [value, setValue] = useState(null)
   const { courseUnits = [] } = useTeacherCourseUnits()
