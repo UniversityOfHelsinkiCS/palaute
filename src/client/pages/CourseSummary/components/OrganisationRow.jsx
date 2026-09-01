@@ -320,6 +320,8 @@ const OrganisationSummaryRow = ({
                 questions={questions}
                 startDate={startDate}
                 endDate={endDate}
+                // Course units under a tag are listed in the tag rows, don't duplicate them here
+                excludeTagged={tagsEnabled}
               />
             </>
           )}

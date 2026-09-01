@@ -212,13 +212,22 @@ export const FeedbackTargetSummaryRow = ({ feedbackTarget, questions }) => {
   )
 }
 
-export const CourseUnitsList = ({ organisationId, initialCourseUnits, questions, startDate, endDate, tagId }) => {
+export const CourseUnitsList = ({
+  organisationId,
+  initialCourseUnits,
+  questions,
+  startDate,
+  endDate,
+  tagId,
+  excludeTagged = false,
+}) => {
   const { sortFunction, sortBy } = useSummaryContext()
   const { organisation, isLoading } = useSummaries({
     entityId: organisationId,
     include: 'courseUnits',
     enabled: !initialCourseUnits?.length,
     tagId,
+    excludeTagged,
   })
 
   const childCourseUnits = initialCourseUnits ?? organisation?.courseUnits

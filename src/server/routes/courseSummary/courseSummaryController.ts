@@ -38,6 +38,7 @@ const OrganisationsQuerySchema = DatesQuerySchema.extend({
   entityId: z.string(),
   include: z.enum(['childOrganisations', 'courseUnits', 'tags']).optional(),
   tagId: z.string().optional(),
+  excludeTagged: z.string().optional(),
   extraOrgId: z.string().optional(),
   extraOrgMode: z.enum(['include', 'exclude', 'only']).optional(),
 })
@@ -52,6 +53,7 @@ const getOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) => {
     entityId,
     include,
     tagId,
+    excludeTagged,
     extraOrgId,
     extraOrgMode,
   } = OrganisationsQuerySchema.parse(req.query)
@@ -92,6 +94,7 @@ const getOrganisationsV2 = async (req: AuthenticatedRequest, res: Response) => {
       endDate,
       user,
       tagId,
+      excludeTagged: excludeTagged === 'true',
       extraOrgId,
       extraOrgMode,
     })

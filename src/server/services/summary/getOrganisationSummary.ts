@@ -52,6 +52,38 @@ const withOrganisationAccessCheck =
     return asyncFunction(params)
   }
 
+/**
+ * Get the course codes and course realisation ids that are under some tag of the organisation.
+ * These are shown under their tag rows, so at organisation level we don't want to show them again.
+ */
+const getTaggedEntityIds = async (organisationId: string) => {
+  const tags = await Tag.findAll({
+    where: { organisationId },
+    attributes: ['id'],
+  })
+  const tagIds = tags.map(tag => tag.id)
+
+  if (tagIds.length === 0) {
+    return { taggedCourseCodes: new Set<string>(), taggedCourseRealisationIds: new Set<string>() }
+  }
+
+  const [taggedCourseUnits, taggedCourseRealisations] = await Promise.all([
+    CourseUnitsTag.findAll({
+      attributes: ['courseCode'],
+      where: { tagId: tagIds },
+    }),
+    CourseRealisationsTag.findAll({
+      attributes: ['courseRealisationId'],
+      where: { tagId: tagIds },
+    }),
+  ])
+
+  return {
+    taggedCourseCodes: new Set(taggedCourseUnits.map(cut => cut.courseCode)),
+    taggedCourseRealisationIds: new Set(taggedCourseRealisations.map(crt => crt.courseRealisationId)),
+  }
+}
+
 type GetCourseUnitSummariesParams = {
   organisationId: string
   startDate: string
@@ -365,6 +397,7 @@ type GetOrganisationSummaryWithCourseUnitsParams = {
   startDate: string
   endDate: string
   tagId?: string
+  excludeTagged?: boolean
   extraOrgId?: string
   extraOrgMode?: 'include' | 'exclude' | 'only'
 }
@@ -374,18 +407,32 @@ const getOrganisationSummaryWithCourseUnits = async ({
   startDate,
   endDate,
   tagId,
+  excludeTagged,
   extraOrgId,
   extraOrgMode,
 }: GetOrganisationSummaryWithCourseUnitsParams) => {
-  const [organisation, courseUnits, courseRealisations] = await Promise.all([
+  const [organisation, allCourseUnits, allCourseRealisations, taggedEntityIds] = await Promise.all([
     getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
     getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
     getCourseRealisationSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
+    // Only needed when listing the organisation level rows (no tag selected)
+    !tagId && excludeTagged
+      ? getTaggedEntityIds(organisationId)
+      : Promise.resolve({ taggedCourseCodes: new Set<string>(), taggedCourseRealisationIds: new Set<string>() }),
   ])
 
   if (!organisation) {
     return null
   }
+
+  // Course units and course realisations that are under a tag of this organisation are
+  // listed under their tag row, so leave them out of the organisation level listing.
+  const courseUnits = allCourseUnits.filter(cu => !taggedEntityIds.taggedCourseCodes.has(cu.courseCode))
+  const courseRealisations = allCourseRealisations.filter(
+    cur =>
+      !taggedEntityIds.taggedCourseRealisationIds.has(cur.id) &&
+      !taggedEntityIds.taggedCourseCodes.has(cur.feedbackTargets?.[0]?.courseUnit?.courseCode ?? '')
+  )
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.

@@ -238,11 +238,16 @@ const OrganisationRow = ({
   const { childOrganisations, isLoading: childOrganisationsLoading } = useChildOrganisations(organisation, {
     enabled: !courseUnitsOnly,
   })
+  const tagsEnabled = !courseUnitsOnly && TAGS_ENABLED.includes(organisation?.code)
   const { tags, isLoading: tagsLoading } = useTags({
     organisation,
-    tagsEnabled: !courseUnitsOnly && TAGS_ENABLED.includes(organisation?.code),
+    tagsEnabled,
   })
-  const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({ organisation })
+  // Course units under a tag are listed in the tag rows, don't duplicate them here
+  const { courseUnits, isLoading: courseUnitsLoading } = useOrderedCourseUnits({
+    organisation,
+    excludeTagged: tagsEnabled,
+  })
 
   if (summaryLoading || childOrganisationsLoading || tagsLoading || courseUnitsLoading)
     return <SummaryTableRow target={t('courseSummary:loading')} questions={questions} depth={depth} />

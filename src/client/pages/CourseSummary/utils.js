@@ -75,7 +75,7 @@ export const useTags = ({ organisation, tagsEnabled }) => {
   return { tags: orderedTags, isLoading: isLoading ?? false }
 }
 
-export const useOrderedCourseUnits = ({ organisation, tagId }) => {
+export const useOrderedCourseUnits = ({ organisation, tagId, excludeTagged = false }) => {
   const { sortFunction, sortBy } = useSummaryContext()
   const initialCourseUnits = organisation?.courseUnits
 
@@ -84,6 +84,7 @@ export const useOrderedCourseUnits = ({ organisation, tagId }) => {
     include: 'courseUnits',
     enabled: !initialCourseUnits?.length && Boolean(organisation),
     tagId,
+    excludeTagged,
   })
 
   const courseUnits =
