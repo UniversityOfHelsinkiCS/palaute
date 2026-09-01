@@ -2,7 +2,7 @@ import { FormControl, InputLabel, MenuItem, Select } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../../util/accessibility'
-import { getLanguageValue } from '../../../util/languageUtils'
+import { getShortLabelValue } from '../../../util/languageUtils'
 import { useSummaryContext } from '../context'
 
 /**
@@ -17,7 +17,10 @@ const SortSelector = ({ questions }) => {
   const selectId = 'sort-selector'
 
   const fields = [
-    ...questions.map(q => ({ field: String(q.id), label: getLanguageValue(q.data.label, i18n.language) })),
+    ...questions.map(q => ({
+      field: String(q.id),
+      label: getShortLabelValue(q.data.shortLabel, q.data.label, i18n.language),
+    })),
     { field: 'feedbackCount', label: t('courseSummary:feedbackCount') },
     { field: 'feedbackPercentage', label: t('courseSummary:feedbackPercentage') },
     { field: 'feedbackResponsePercentage', label: t('courseSummary:feedbackResponsePercentage') },
