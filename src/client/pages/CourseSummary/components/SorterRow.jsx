@@ -96,7 +96,7 @@ export const SorterRow = ({
 const SorterRowWithFilters = ({
   allTime = false,
   filterComponents,
-  questions,
+  questions = undefined,
   hideColumns = false,
   showSortSelector = false,
 }) => {
