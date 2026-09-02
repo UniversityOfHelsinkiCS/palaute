@@ -25,7 +25,7 @@ const MyCourses = ({ tableView = false }) => {
         <SummaryRowFilters hideColumns={tableView || noSummary} showSortSelector={tableView && !noSummary} />
       </Box>
       {isOrganisationsLoading && <AccessibleLoadingBar />}
-      {tableView && show && <QuestionFullLabels questions={questions} />}
+      {tableView && show && !noSummary && <QuestionFullLabels questions={questions} />}
       {show &&
         organisations?.length > 0 &&
         organisations.map(organisation =>
