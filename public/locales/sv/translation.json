@@ -773,9 +773,10 @@
       "greeting": "Bästa ansvariga lärare",
       "administrativePersonGreetingAddition": "/ administratör ",
       "greetingWithWelcome": "välkommen till Helsingfors universitets Norppa-kursresponssystem!",
-      "text": "{{greeting}} <br/>\nKursresponsblanketten för följande kurser öppnas inom en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:instructionsAndSupport)",
+      "text": "{{greeting}} <br/>\nKursresponsblanketten för följande kurser öppnas inom en vecka: <br/>\n{{- courseNamesAndUrls}}\nDu kan lägga till egna frågor innan det. Du kan lägga till frågor med att klicka på kursens namn. Tack! <br/>\n\n$t(mails:reminderAboutSurveyOpeningToTeachers:newUniversityQuestionsInfo) <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Utöver universitets- och programnivåns frågor har följande frågor lagts till i enkäten:",
-      "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter. Återkoppling samlas in endast från studenter som ger sitt samtycke till det."
+      "smallCourseWarning": "Observera! Den här kursen har färre än {{count}} registrerade studenter. Återkoppling samlas in endast från studenter som ger sitt samtycke till det.",
+      "newUniversityQuestionsInfo": "I samband med den nya undervisningsplansperioden har nya frågor på universitetsnivå tagits i bruk i Norppa. Mer information: <a href=\"https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/\">https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/</a>"
     },
     "instructionsAndSupport": "Kontakta stödet."
   }

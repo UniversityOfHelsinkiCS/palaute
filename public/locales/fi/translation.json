@@ -782,9 +782,10 @@
       "greeting": "Hyvä vastuuopettaja",
       "administrativePersonGreetingAddition": "/ hallintohenkilö",
       "greetingWithWelcome": "tervetuloa käyttämään Helsingin yliopiston Norppa-kurssipalautejärjestelmää!",
-      "text": "{{greeting}} <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon sisällä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:instructionsAndSupport)",
+      "text": "{{greeting}} <br/> \nKurssipalautelomake seuraaville kursseille aukeaa viikon sisällä: <br/>\n{{- courseNamesAndUrls}}\nLisääthän mahdolliset omat kysymyksesi ennen palautejakson alkamista. Pääset muokkaamaan kysymyksiä ja aukioloaikaa linkistä. Opiskelija saa yhden sähköpostimuistutuksen palautteesta, silloin kun palautelomake aukeaa. Kiitos! <br/>\n\n$t(mails:reminderAboutSurveyOpeningToTeachers:newUniversityQuestionsInfo) <br/>\n\n$t(mails:instructionsAndSupport)",
       "questionsText": "Yliopisto- ja ohjelmatason kysymysten lisäksi kyselyllä on seuraavat lisäkysymykset:",
-      "smallCourseWarning": "Huomio! Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Palaute kerätään vain opiskelijoilta, jotka antavat siihen suostumuksensa."
+      "smallCourseWarning": "Huomio! Tälle kurssille on ilmoittautunut alle {{count}} opiskelijaa. Palaute kerätään vain opiskelijoilta, jotka antavat siihen suostumuksensa.",
+      "newUniversityQuestionsInfo": "Norpassa on uuden opetussuunnitelmakauden myötä otettu käyttöön uudet yliopistotason kysymykset. Lisätietoa: <a href=\"https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/\">https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/</a>"
     },
     "instructionsAndSupport": "Ota yhteyttä tukeen."
   },
