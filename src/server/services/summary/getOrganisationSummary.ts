@@ -20,7 +20,7 @@ import {
   SUMMARY_SKIP_ORG_IDS,
   UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS,
 } from '../../util/config'
-import { getSummaryAccessibleOrganisationIds } from './access'
+import { getDirectlyAccessibleOrganisationIds, getSummaryAccessibleOrganisationIds } from './access'
 import { sumSummaryDatas, sumSummaries, getScopedSummary } from './utils'
 
 /**
@@ -34,9 +34,13 @@ const withOrganisationAccessCheck =
       organisationId: string
       accessibleOrganisationIds?: string[]
       universityWideAccess?: boolean
+      hasDirectAccess?: boolean
     }
   ) => {
-    const organisationIds = await getSummaryAccessibleOrganisationIds(params.user)
+    const [organisationIds, directlyAccessibleOrganisationIds] = await Promise.all([
+      getSummaryAccessibleOrganisationIds(params.user),
+      getDirectlyAccessibleOrganisationIds(params.user),
+    ])
     const userSpecialGroups = Object.keys(params.user.specialGroup)
     const universityWideAccess = UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS.some(group =>
       userSpecialGroups.includes(group)
@@ -48,6 +52,9 @@ const withOrganisationAccessCheck =
 
     params.accessibleOrganisationIds = organisationIds
     params.universityWideAccess = universityWideAccess
+    // The organisation may be accessible only as a navigational parent of an organisation the user
+    // has access to. In that case its own contents should not be shown, only its child organisations.
+    params.hasDirectAccess = universityWideAccess || directlyAccessibleOrganisationIds.includes(params.organisationId)
 
     return asyncFunction(params)
   }
@@ -398,6 +405,7 @@ type GetOrganisationSummaryWithCourseUnitsParams = {
   endDate: string
   tagId?: string
   excludeTagged?: boolean
+  hasDirectAccess?: boolean
   extraOrgId?: string
   extraOrgMode?: 'include' | 'exclude' | 'only'
 }
@@ -408,9 +416,24 @@ const getOrganisationSummaryWithCourseUnits = async ({
   endDate,
   tagId,
   excludeTagged,
+  hasDirectAccess,
   extraOrgId,
   extraOrgMode,
 }: GetOrganisationSummaryWithCourseUnitsParams) => {
+  // The user may only be able to see this organisation as a parent of an organisation they
+  // have access to. Its own course units should not be shown.
+  if (!hasDirectAccess) {
+    const organisation = await getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode })
+
+    if (!organisation) {
+      return null
+    }
+
+    organisation.courseUnits = []
+
+    return organisation
+  }
+
   const [organisation, allCourseUnits, allCourseRealisations, taggedEntityIds] = await Promise.all([
     getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
     getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
@@ -479,6 +502,7 @@ type GetOrganisationSummaryWithTagsParams = {
   organisationId: string
   startDate: string
   endDate: string
+  hasDirectAccess?: boolean
   extraOrgId?: string
   extraOrgMode?: 'include' | 'exclude' | 'only'
 }
@@ -487,6 +511,7 @@ const getOrganisationSummaryWithTags = async ({
   organisationId,
   startDate,
   endDate,
+  hasDirectAccess,
   extraOrgId,
   extraOrgMode,
 }: GetOrganisationSummaryWithTagsParams) => {
@@ -495,6 +520,14 @@ const getOrganisationSummaryWithTags = async ({
 
   if (!organisation) {
     return null
+  }
+
+  // Same as with course units: the tags of an organisation the user can only navigate through
+  // are not theirs to see, and expanding a tag row would list its course units.
+  if (!hasDirectAccess) {
+    organisation.tags = []
+
+    return organisation
   }
 
   const tags = await Tag.findAll({

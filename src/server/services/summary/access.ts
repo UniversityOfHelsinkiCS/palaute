@@ -5,6 +5,12 @@ import { User } from '../../models'
 import { SUMMARY_EXCLUDED_ORG_IDS } from '../../util/config'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 
+/**
+ * Organisations the user may navigate: the ones they have access to, plus their parents.
+ * The parents are included only so that a parent row can be rendered and expanded to reach
+ * the accessible children. Do not use this to decide whether the contents (course units, tags)
+ * of an organisation may be shown - use getDirectlyAccessibleOrganisationIds for that.
+ */
 export const getSummaryAccessibleOrganisationIds = async (user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)
   const excludedIds = new Set(SUMMARY_EXCLUDED_ORG_IDS)
@@ -15,6 +21,17 @@ export const getSummaryAccessibleOrganisationIds = async (user: User) => {
     .filter((id): id is string => Boolean(id))
 
   return accessibleOrganisationIds
+}
+
+/**
+ * Organisations the user acually has access to, without the navigational parents.
+ * Only these organisations' own course units and tags may be shown to the user.
+ */
+export const getDirectlyAccessibleOrganisationIds = async (user: User) => {
+  const organisationAccess = await getUserOrganisationAccess(user)
+  const excludedIds = new Set(SUMMARY_EXCLUDED_ORG_IDS)
+
+  return organisationAccess.map(access => access.organisation.id).filter(id => !excludedIds.has(id))
 }
 
 export const getAccessibleCourseRealisationIds = async (user: User) => {

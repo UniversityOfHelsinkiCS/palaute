@@ -23,7 +23,11 @@ import { i18n } from '../../util/i18n'
 import { getLanguageValue } from '../../util/languageUtils'
 import { getUserOrganisationAccess } from '../organisationAccess/organisationAccess'
 import { getSummaryQuestions } from '../questions'
-import { getSummaryAccessibleOrganisationIds, getAccessibleCourseRealisationIds } from './access'
+import {
+  getSummaryAccessibleOrganisationIds,
+  getDirectlyAccessibleOrganisationIds,
+  getAccessibleCourseRealisationIds,
+} from './access'
 import { getTeacherSummary } from './getTeacherSummary'
 import {
   getScopedSummary,
@@ -217,7 +221,10 @@ export const exportXLSX = async ({
   includeCURs,
   organisationId,
 }: ExportXLSXParams) => {
-  const accessibleOrganisationIds = await getSummaryAccessibleOrganisationIds(user)
+  const [accessibleOrganisationIds, directlyAccessibleOrganisationIds] = await Promise.all([
+    getSummaryAccessibleOrganisationIds(user),
+    getDirectlyAccessibleOrganisationIds(user),
+  ])
 
   if (organisationId && !accessibleOrganisationIds.includes(organisationId)) {
     throw ApplicationError.Forbidden('User does not have access to the organisation')
@@ -252,7 +259,11 @@ export const exportXLSX = async ({
   const organisationIds = organisationId ? [organisationId] : accessibleOrganisationIds
   const organisations = await getOrganisations(scopedSummary, organisationIds)
 
+  // An organisation may be in organisationIds only because it is the parent of an organisation the
+  // user has access to. Its own course units should not end up in the export.
+  const directlyAccessibleIds = new Set(directlyAccessibleOrganisationIds)
   const courseUnitIds = organisations
+    .filter(org => directlyAccessibleIds.has(org.id))
     .flatMap(org => org.courseUnitsOrganisations?.map(cuo => cuo.courseUnitId) ?? [])
     .filter((courseUnitId): courseUnitId is string => Boolean(courseUnitId))
   const courseUnits = await getCourseUnits(scopedSummary, courseUnitIds)
