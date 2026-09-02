@@ -6,12 +6,13 @@ import { AccessibleLoadingBar } from '../../components/common/AccessibleLoadingB
 import { YearSemesterPeriodSelector } from '../../components/common/YearSemesterPeriodSelector'
 import { useCourseUnitGroupSummaries } from './api'
 import SurveyGroupSection from './components/CourseUnitGroupRow'
-import CourseUnitGroupSummaryTable, { questionFilter } from './components/CourseUnitGroupSummaryTable'
+import CourseUnitGroupSummaryTable from './components/CourseUnitGroupSummaryTable'
 import { QuestionFullLabels } from './components/Labels'
 import NoSummaryAlert from './components/NoSummaryAlert'
 import SorterRowWithFilters from './components/SorterRow'
 import SummaryScrollContainer from './components/SummaryScrollContainer'
 import { useSummaryContext } from './context'
+import { getSortQuestionKey, getUnionOfGroupQuestions } from './surveyGroupQuestionUtils'
 
 const filterContainerSx = {
   display: 'flex',
@@ -25,7 +26,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
   const { t } = useTranslation()
   const { code } = useParams()
 
-  const { dateRange, setDateRange, option, setOption, questions: contextQuestions } = useSummaryContext()
+  const { dateRange, setDateRange, option, setOption, questions: contextQuestions, sortBy } = useSummaryContext()
   const { courseUnitGroup, isLoading } = useCourseUnitGroupSummaries({
     courseCode: code,
     startDate: dateRange.start,
@@ -36,20 +37,17 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
   const surveyGroups = courseUnitGroup?.surveyGroups ?? []
   const multipleGroups = surveyGroups.length > 1
 
-  // Each survey group can have its own question set (or fall back to the context's),
-  // so the info box needs the union of all of them, deduped by question id.
-  const questionsById = new Map()
-  surveyGroups.forEach(group => {
-    const groupQuestions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
-    groupQuestions.forEach(q => questionsById.set(q.id, q))
-  })
-  const questions = [...questionsById.values()]
+  const questions = getUnionOfGroupQuestions(surveyGroups, contextQuestions)
+
+  // The sort selector stores a single question id, which is only meaningful in the survey it came
+  // from. Pass the survey-independent key along so each group can resolve its own question.
+  const sortQuestionKey = getSortQuestionKey({ sortField: sortBy[0], surveyGroups, contextQuestions })
 
   return (
     <SummaryScrollContainer>
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: '0.3rem' }}>
         {tableView ? (
-          <SorterRowWithFilters hideColumns allTime showSortSelector={Boolean(courseUnitGroup)} />
+          <SorterRowWithFilters hideColumns allTime questions={questions} showSortSelector={Boolean(courseUnitGroup)} />
         ) : (
           <Box sx={filterContainerSx}>
             <YearSemesterPeriodSelector
@@ -74,6 +72,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
               group={group}
               showTimePeriod={multipleGroups}
               validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
+              sortQuestionKey={sortQuestionKey}
               isLoading={isLoading}
             />
           ))}
@@ -88,6 +87,7 @@ const ForCourseUnitGroup = ({ tableView = false }) => {
               group={group}
               showTimePeriod={multipleGroups}
               validUntil={surveyGroups[index - 1]?.survey?.validFrom ?? null}
+              sortQuestionKey={sortQuestionKey}
             />
           ))}
       </Box>

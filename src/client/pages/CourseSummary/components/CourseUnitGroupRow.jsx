@@ -4,13 +4,12 @@ import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 
 import { getLanguageValue } from '../../../util/languageUtils'
-import { useSummaryContext } from '../context'
+import { getSummarySortFunction, useSummaryContext } from '../context'
+import { questionFilter, resolveGroupSortField } from '../surveyGroupQuestionUtils'
 import { CourseUnitLabel } from './Labels'
 import RowHeader from './RowHeader'
 import { SorterRow } from './SorterRow'
 import { FeedbackTargetSummaryRow, SummaryResultElements } from './SummaryRow'
-
-const questionFilter = q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD'
 
 const CourseUnitGroupAggregateRow = ({ courseUnitGroup, summary, questions, timeframe }) => {
   const { i18n } = useTranslation()
@@ -53,9 +52,14 @@ const fbtListSx = {
   borderLeft: `solid 3px ${blueGrey[100]}`,
 }
 
-const SurveyGroupSection = ({ courseUnitGroup, group, showTimePeriod, validUntil }) => {
-  const { questions: contextQuestions, sortBy, sortFunction } = useSummaryContext()
+const SurveyGroupSection = ({ courseUnitGroup, group, showTimePeriod, validUntil, sortQuestionKey }) => {
+  const { questions: contextQuestions, sortBy } = useSummaryContext()
   const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
+
+  // When sorting by a question, resolve the id it has in this group's survey. A group whose survey
+  // does not include the question keeps its default ordering instead of sorting by nothing.
+  const sortField = resolveGroupSortField({ sortField: sortBy[0], sortQuestionKey, questions })
+  const sortFunction = sortField ? getSummarySortFunction(sortField) : () => undefined
 
   const sortedFeedbackTargets = orderBy(
     group.feedbackTargets ?? [],

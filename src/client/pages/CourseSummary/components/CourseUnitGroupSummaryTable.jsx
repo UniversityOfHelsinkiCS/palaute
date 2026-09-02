@@ -29,7 +29,8 @@ import { getArrow } from '../../../components/SummaryResultItem/WorkloadResultIt
 import { focusIndicatorStyle } from '../../../util/accessibility'
 import { getLanguageValue, getShortLabelValue } from '../../../util/languageUtils'
 import { getMeanOption } from '../../FeedbackTarget/tabs/Results/QuestionResults/AverageResult'
-import { useSummaryContext } from '../context'
+import { getSummarySortFunction, useSummaryContext } from '../context'
+import { questionFilter, resolveGroupSortField } from '../surveyGroupQuestionUtils'
 import { TeacherChips } from './Labels'
 import { NoActions, ExpandRowButton } from './OrganisationSummaryTableView'
 
@@ -170,8 +171,6 @@ const getStaff = feedbackTarget => {
 
   return { teachers, responsibleTeachers, administrativePersons }
 }
-
-export const questionFilter = q => q.type === 'LIKERT' || q.secondaryType === 'WORKLOAD'
 
 const getBackgroundColor = ({ value, factor }) => {
   const backgroundColors = {
@@ -429,10 +428,22 @@ const CourseUnitGroupSummaryTableRow = ({
   )
 }
 
-const CourseUnitGroupSummaryTable = ({ courseUnitGroup, group, showTimePeriod, validUntil, isLoading }) => {
+const CourseUnitGroupSummaryTable = ({
+  courseUnitGroup,
+  group,
+  showTimePeriod,
+  validUntil,
+  sortQuestionKey,
+  isLoading,
+}) => {
   const { t, i18n } = useTranslation()
-  const { questions: contextQuestions, sortBy, sortFunction } = useSummaryContext()
+  const { questions: contextQuestions, sortBy } = useSummaryContext()
   const questions = group.survey ? (group.survey.questions ?? []).filter(questionFilter) : contextQuestions
+
+  // When sorting by a question, resolve the id it has in this group's survey. A group whose survey
+  // does not include the question keeps its default ordering instead of sorting by nothing.
+  const sortField = resolveGroupSortField({ sortField: sortBy[0], sortQuestionKey, questions })
+  const sortFunction = sortField ? getSummarySortFunction(sortField) : () => undefined
 
   const sortedFeedbackTargets = orderBy(
     group.feedbackTargets ?? [],

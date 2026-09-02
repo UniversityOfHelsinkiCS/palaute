@@ -93,7 +93,13 @@ export const SorterRow = ({
   )
 }
 
-const SorterRowWithFilters = ({ allTime = false, filterComponents, hideColumns = false, showSortSelector = false }) => {
+const SorterRowWithFilters = ({
+  allTime = false,
+  filterComponents,
+  questions,
+  hideColumns = false,
+  showSortSelector = false,
+}) => {
   const { dateRange, setDateRange, option, setOption } = useSummaryContext()
 
   const handleChangeTimeRange = nextDateRange => {
@@ -114,6 +120,7 @@ const SorterRowWithFilters = ({ allTime = false, filterComponents, hideColumns =
     <SorterRow
       filterComponent={filterComponent}
       additionalFilters={filterComponents}
+      questions={questions}
       hideColumns={hideColumns}
       showSortSelector={showSortSelector}
     />

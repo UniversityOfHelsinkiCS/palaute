@@ -6,7 +6,7 @@ import useURLSearchParams from '../../hooks/useURLSearchParams'
 import apiClient from '../../util/apiClient'
 import { getYearRange } from '../../util/yearUtils'
 
-const getSummarySortFunction = sortField => {
+export const getSummarySortFunction = sortField => {
   switch (sortField) {
     case 'feedbackCount':
       return summary => summary?.data?.feedbackCount
