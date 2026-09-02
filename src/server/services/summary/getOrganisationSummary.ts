@@ -91,6 +91,28 @@ const getTaggedEntityIds = async (organisationId: string) => {
   }
 }
 
+/**
+ * Get the course codes and course realisation ids of a single tag. A course realisation belongs to
+ * a tag either directly or through the course code of its course unit.
+ */
+const getTagEntityIds = async (tagId: string) => {
+  const [taggedCourseUnits, taggedCourseRealisations] = await Promise.all([
+    CourseUnitsTag.findAll({
+      attributes: ['courseCode'],
+      where: { tagId },
+    }),
+    CourseRealisationsTag.findAll({
+      attributes: ['courseRealisationId'],
+      where: { tagId },
+    }),
+  ])
+
+  return {
+    taggedCourseCodes: new Set(taggedCourseUnits.map(cut => cut.courseCode)),
+    taggedCourseRealisationIds: new Set(taggedCourseRealisations.map(crt => crt.courseRealisationId)),
+  }
+}
+
 type GetCourseUnitSummariesParams = {
   organisationId: string
   startDate: string
@@ -166,16 +188,18 @@ type GetCourseRealisationSummariesParams = {
   organisationId: string
   startDate: string
   endDate: string
-  tagId?: string
   extraOrgId?: string
   extraOrgMode?: 'include' | 'exclude' | 'only'
 }
 
+/**
+ * Get all course realisations of the organisation. Tag scoping is not done here but by the caller,
+ * because a course realisation belongs to a tag also through the course code of its course unit.
+ */
 const getCourseRealisationSummaries = async ({
   organisationId,
   startDate,
   endDate,
-  tagId,
   extraOrgId,
   extraOrgMode,
 }: GetCourseRealisationSummariesParams) => {
@@ -210,18 +234,6 @@ const getCourseRealisationSummaries = async ({
           },
         ],
       },
-      ...(tagId
-        ? [
-            {
-              // Include only if tagId defined in this request
-              model: CourseRealisationsTag,
-              as: 'courseRealisationsTags',
-              attributes: [],
-              where: { tagId },
-              required: true,
-            },
-          ]
-        : []),
     ],
     // logging: true,
   })
@@ -434,34 +446,49 @@ const getOrganisationSummaryWithCourseUnits = async ({
     return organisation
   }
 
+  // When a tag is selected, we need its entities to scope the course realisations to it.
+  // Otherwise we need the entities of all tags, to leave them out of the organisation level listing.
+  const getRelevantTagEntityIds = () => {
+    if (tagId) return getTagEntityIds(tagId)
+    if (excludeTagged) return getTaggedEntityIds(organisationId)
+
+    return Promise.resolve({ taggedCourseCodes: new Set<string>(), taggedCourseRealisationIds: new Set<string>() })
+  }
+
   const [organisation, allCourseUnits, allCourseRealisations, taggedEntityIds] = await Promise.all([
     getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
     getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
-    getCourseRealisationSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
-    // Only needed when listing the organisation level rows (no tag selected)
-    !tagId && excludeTagged
-      ? getTaggedEntityIds(organisationId)
-      : Promise.resolve({ taggedCourseCodes: new Set<string>(), taggedCourseRealisationIds: new Set<string>() }),
+    getCourseRealisationSummaries({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
+    getRelevantTagEntityIds(),
   ])
 
   if (!organisation) {
     return null
   }
 
-  // Course units and course realisations that are under a tag of this organisation are
-  // listed under their tag row, so leave them out of the organisation level listing.
-  const courseUnits = allCourseUnits.filter(cu => !taggedEntityIds.taggedCourseCodes.has(cu.courseCode))
-  const courseRealisations = allCourseRealisations.filter(
-    cur => !taggedEntityIds.taggedCourseRealisationIds.has(cur.id)
+  const courseCodeOf = (cur: (typeof allCourseRealisations)[number]) =>
+    cur.feedbackTargets?.[0]?.courseUnit?.courseCode ?? ''
+
+  // Scope both to the tag row being expanded, or, at organisation level, leave out everything that
+  // belongs to some tag of the organisation, since it is listed under that tag row instead.
+  // Course realisations are never rows of their own here, but they are the source of the partial
+  // course unit rows below, so they need the same scoping. A course realisation belongs to a tag
+  // either directly or through the course code of its course unit.
+  const courseUnits = tagId
+    ? allCourseUnits
+    : allCourseUnits.filter(cu => !taggedEntityIds.taggedCourseCodes.has(cu.courseCode))
+  const courseRealisations = allCourseRealisations.filter(cur =>
+    tagId
+      ? taggedEntityIds.taggedCourseRealisationIds.has(cur.id) ||
+        taggedEntityIds.taggedCourseCodes.has(courseCodeOf(cur))
+      : !taggedEntityIds.taggedCourseRealisationIds.has(cur.id) &&
+        !taggedEntityIds.taggedCourseCodes.has(courseCodeOf(cur))
   )
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
-  // Compare against allCourseUnits instead of the tag-filtered courseUnits: if a CU row exists at
-  // all, it is already listed either here or under its tag row, so its CURs must not be turned into
-  // a partial CU row on top of that. CURs of a CU that has no row anywhere still get one here.
   const partialCourseRealisations = courseRealisations.filter(
-    cur => !allCourseUnits.some(cu => cu.groupId === cur.feedbackTargets?.[0].courseUnit?.groupId)
+    cur => !courseUnits.some(cu => cu.groupId === cur.feedbackTargets?.[0].courseUnit?.groupId)
   )
 
   // Group course realisations by associated course unit group id
