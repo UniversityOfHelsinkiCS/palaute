@@ -113,6 +113,48 @@ const getTagEntityIds = async (tagId: string) => {
   }
 }
 
+type GetOrganisationCourseUnitGroupIdsParams = {
+  organisationId: string
+  tagId?: string
+}
+
+/**
+ * Get the group ids of all course units of the organisation, without the validity period and
+ * summary conditions of getCourseUnitSummaries. These course units are the organisation's own,
+ * so their course realisations must not be shown as partial rows even when the course unit itself
+ * is left out of the listing.
+ */
+const getOrganisationCourseUnitGroupIds = async ({
+  organisationId,
+  tagId,
+}: GetOrganisationCourseUnitGroupIdsParams) => {
+  const courseUnits = await CourseUnit.findAll({
+    attributes: ['groupId'],
+    include: [
+      {
+        model: CourseUnitsOrganisation,
+        as: 'courseUnitsOrganisations',
+        attributes: [],
+        where: { organisationId },
+        required: true,
+      },
+      ...(tagId
+        ? [
+            {
+              model: CourseUnitsTag,
+              as: 'courseUnitsTags',
+              attributes: [],
+              where: { tagId },
+              required: true,
+            },
+          ]
+        : []),
+    ],
+  })
+
+  return new Set(courseUnits.map(cu => cu.groupId))
+}
+
 type GetCourseUnitSummariesParams = {
   organisationId: string
   startDate: string
@@ -455,12 +497,14 @@ const getOrganisationSummaryWithCourseUnits = async ({
     return Promise.resolve({ taggedCourseCodes: new Set<string>(), taggedCourseRealisationIds: new Set<string>() })
   }
 
-  const [organisation, allCourseUnits, allCourseRealisations, taggedEntityIds] = await Promise.all([
-    getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
-    getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
-    getCourseRealisationSummaries({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
-    getRelevantTagEntityIds(),
-  ])
+  const [organisation, allCourseUnits, allCourseRealisations, taggedEntityIds, organisationCourseUnitGroupIds] =
+    await Promise.all([
+      getOrganisationSummary({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
+      getCourseUnitSummaries({ organisationId, startDate, endDate, tagId, extraOrgId, extraOrgMode }),
+      getCourseRealisationSummaries({ organisationId, startDate, endDate, extraOrgId, extraOrgMode }),
+      getRelevantTagEntityIds(),
+      getOrganisationCourseUnitGroupIds({ organisationId, tagId }),
+    ])
 
   if (!organisation) {
     return null
@@ -487,9 +531,19 @@ const getOrganisationSummaryWithCourseUnits = async ({
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
-  const partialCourseRealisations = courseRealisations.filter(
-    cur => !courseUnits.some(cu => cu.groupId === cur.feedbackTargets?.[0].courseUnit?.groupId)
-  )
+  // Only course realisations whose course unit is not the organisation's own are partial: the
+  // organisation is then just partially responsible for the course. If the course unit does belong
+  // to the organisation but is left out of the listing (its validity period has not started, or it
+  // has no summary in the range), its realisations are not shown as a partial row.
+  const partialCourseRealisations = courseRealisations.filter(cur => {
+    const groupId = cur.feedbackTargets?.[0].courseUnit?.groupId
+
+    if (organisationCourseUnitGroupIds.has(groupId)) {
+      return false
+    }
+
+    return !courseUnits.some(cu => cu.groupId === groupId)
+  })
 
   // Group course realisations by associated course unit group id
   const groupedPartialCourseUnits = _.groupBy(
