@@ -452,15 +452,16 @@ const getOrganisationSummaryWithCourseUnits = async ({
   // listed under their tag row, so leave them out of the organisation level listing.
   const courseUnits = allCourseUnits.filter(cu => !taggedEntityIds.taggedCourseCodes.has(cu.courseCode))
   const courseRealisations = allCourseRealisations.filter(
-    cur =>
-      !taggedEntityIds.taggedCourseRealisationIds.has(cur.id) &&
-      !taggedEntityIds.taggedCourseCodes.has(cur.feedbackTargets?.[0]?.courseUnit?.courseCode ?? '')
+    cur => !taggedEntityIds.taggedCourseRealisationIds.has(cur.id)
   )
 
   // Mangeling to do: we dont want to show individual CURs under organisation.
   // Instead, construct partial CUs from them.
+  // Compare against allCourseUnits instead of the tag-filtered courseUnits: if a CU row exists at
+  // all, it is already listed either here or under its tag row, so its CURs must not be turned into
+  // a partial CU row on top of that. CURs of a CU that has no row anywhere still get one here.
   const partialCourseRealisations = courseRealisations.filter(
-    cur => !courseUnits.some(cu => cu.groupId === cur.feedbackTargets?.[0].courseUnit?.groupId)
+    cur => !allCourseUnits.some(cu => cu.groupId === cur.feedbackTargets?.[0].courseUnit?.groupId)
   )
 
   // Group course realisations by associated course unit group id
