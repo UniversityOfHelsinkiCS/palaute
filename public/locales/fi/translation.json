@@ -72,6 +72,8 @@
     "sort": "Järjestä",
     "ascending": "nousevasti",
     "descending": "laskevasti",
+    "sortedAscending": "Järjestetty nousevasti",
+    "sortedDescending": "Järjestetty laskevasti",
     "additional": "Täydentävät",
     "feedbacksGivenRatio": "Palautteita annettu / Ilmoittautuneiden määrä",
     "id": "Tunniste",

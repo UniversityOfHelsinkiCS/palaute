@@ -72,6 +72,8 @@
     "sort": "Sort",
     "ascending": "ascending",
     "descending": "descending",
+    "sortedAscending": "Sorted ascending",
+    "sortedDescending": "Sorted descending",
     "additional": "Additional",
     "feedbacksGivenRatio": "Feedbacks given / Enrolled student count",
     "id": "Identifier",
