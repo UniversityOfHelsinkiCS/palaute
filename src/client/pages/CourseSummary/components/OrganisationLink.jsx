@@ -30,6 +30,9 @@ export const OrganisationLink = ({ code, access, dateRange }) => {
 
   if (!access || Object.keys(access).length === 0) return null
 
+  const buttonTitleBase = t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')
+  const fullButtonTitle = `${buttonTitleBase}, ${code}`
+
   return (
     <Box
       sx={{
@@ -38,10 +41,7 @@ export const OrganisationLink = ({ code, access, dateRange }) => {
         },
       }}
     >
-      <Tooltip
-        title={t(write ? 'courseSummary:programmeSettings' : 'courseSummary:programmeSummary')}
-        placement="bottom"
-      >
+      <Tooltip title={fullButtonTitle} placement="bottom">
         <IconButton
           id={`settings-button-${code}`}
           component={Link}
