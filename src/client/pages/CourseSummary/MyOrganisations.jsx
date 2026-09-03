@@ -40,7 +40,13 @@ const MyOrganisations = ({ tableView = false }) => {
     const items = []
     if (pinnedRows.length > 0) {
       items.push(
-        <Typography key="pinned-header" variant="subtitle2" color="text.secondary" sx={{ mt: 0.5, ml: 0.5 }}>
+        <Typography
+          key="pinned-header"
+          component="h2"
+          variant="subtitle2"
+          color="text.secondary"
+          sx={{ mt: 0.5, ml: 0.5 }}
+        >
           {t('courseSummary:pinnedOrganisations')}
         </Typography>
       )
