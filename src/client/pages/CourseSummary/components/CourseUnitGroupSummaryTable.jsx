@@ -17,6 +17,7 @@ import {
   Button,
   Alert,
   ButtonBase,
+  useMediaQuery,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { lightFormat } from 'date-fns'
@@ -253,7 +254,7 @@ const CourseUnitGroupSummaryTableHeader = ({ questions }) => {
   return (
     <TableHead>
       <TableRow>
-        <SummaryTableHeaderCell sx={{ position: 'sticky', left: 0, zIndex: 3 }}>
+        <SummaryTableHeaderCell sx={{ position: { xs: 'static', md: 'sticky' }, left: 0, zIndex: 3 }}>
           {t('courseSummary:summaryTarget')}
         </SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('common:actions')}</SummaryTableHeaderCell>
@@ -327,7 +328,11 @@ const CourseUnitGroupSummaryTableRow = ({
         },
       }}
     >
-      <SummaryTableCell component="th" scope="row" sx={{ position: 'sticky', left: 0, zIndex: 2 }}>
+      <SummaryTableCell
+        component="th"
+        scope="row"
+        sx={{ position: { xs: 'static', md: 'sticky' }, left: 0, zIndex: 2 }}
+      >
         {!isCourseUnitGroup && target?.id ? (
           <Tooltip title={t('courseSummary:openFeedbackPage')} placement="bottom" arrow describeChild>
             <ButtonBase component={Link} to={`/targets/${target.id}/results`} sx={styles.linkButton}>
@@ -455,6 +460,10 @@ const CourseUnitGroupSummaryTable = ({
 
   const [depth, setDepth] = React.useState('cur') // 'hide', 'cu', 'cur'
 
+  // Below md the sticky header and sticky first column would take up nearly the whole
+  // viewport, leaving no room for the actual data. There, the table scrolls normally instead.
+  const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'))
+
   const courseUnitGroupTimePeriod = getSurveyGroupTimePeriod({ surveyGroup: group, validUntil, showTimePeriod })
 
   const courseUnitTitle = `${courseUnitGroup?.courseCode} ${getLanguageValue(courseUnitGroup?.name, i18n.language)}${addTimePeriod(courseUnitGroupTimePeriod)}`
@@ -492,8 +501,8 @@ const CourseUnitGroupSummaryTable = ({
       )}
       {depth !== 'hide' && !isLoading && fbtCount > 0 && (
         <Box sx={{ p: 1, border: '1px solid gray' }}>
-          <TableContainer sx={{ maxHeight: Math.floor(window.innerHeight * 0.8), overflow: 'auto' }}>
-            <Table stickyHeader>
+          <TableContainer sx={{ maxHeight: { xs: 'none', md: '80vh' }, overflow: 'auto' }}>
+            <Table stickyHeader={!isSmall}>
               <caption style={styles.caption}>{`${t('organisationSettings:summaryTab')}: ${courseUnitTitle}`}</caption>
               <CourseUnitGroupSummaryTableHeader questions={questions} />
               <TableBody>

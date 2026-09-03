@@ -12,6 +12,7 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  useMediaQuery,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { useIsFetching } from '@tanstack/react-query'
@@ -374,6 +375,15 @@ export const OrganisationTable = ({
   const [stickyColumnWidth, setStickyColumnWidth] = useState(0)
   const tableContainerRef = useRef(null)
 
+  // Below md the sticky header and sticky first column would take up nearly the whole
+  // viewport, leaving no room for the acual data. There, the table scrolls normally instead.
+  const isSmall = useMediaQuery(theme => theme.breakpoints.down('md'))
+
+  // The measured sizes are kept but ignored while small, so nothing scrolls around
+  // obstructions that are not there and the values are ready again on resize.
+  const headerObstruction = isSmall ? 0 : stickyHeaderHeight
+  const columnObstruction = isSmall ? 0 : stickyColumnWidth
+
   const isFetching = useIsFetching({
     queryKey: ['summaries-v2', organisation?.id],
   })
@@ -399,6 +409,9 @@ export const OrganisationTable = ({
     const resizeObserver = new ResizeObserver(checkScrollable)
     resizeObserver.observe(container)
 
+    // Nothing is sticky on small screens, so there is no obstruction to measure.
+    if (isSmall) return () => resizeObserver.disconnect()
+
     const headerRow = container.querySelector('thead tr')
     const headerResizeObserver = new ResizeObserver(([entry]) => setStickyHeaderHeight(entry.target.offsetHeight))
     if (headerRow) headerResizeObserver.observe(headerRow)
@@ -412,7 +425,7 @@ export const OrganisationTable = ({
       headerResizeObserver.disconnect()
       stickyColumnResizeObserver.disconnect()
     }
-  }, [depth, isFetching])
+  }, [depth, isFetching, isSmall])
 
   // Sticky header/column don't clip the scrollport, so the browser's native
   // scroll-into-view-on-focus doesn't know they visually obscure content
@@ -427,12 +440,12 @@ export const OrganisationTable = ({
     const containerRect = container.getBoundingClientRect()
     const targetRect = target.getBoundingClientRect()
 
-    const topObstruction = containerRect.top + stickyHeaderHeight
+    const topObstruction = containerRect.top + headerObstruction
     if (targetRect.top < topObstruction) {
       container.scrollTop = Math.max(0, container.scrollTop - (topObstruction - targetRect.top + buffer))
     }
 
-    const leftObstruction = containerRect.left + stickyColumnWidth
+    const leftObstruction = containerRect.left + columnObstruction
     if (targetRect.left < leftObstruction) {
       container.scrollLeft = Math.max(0, container.scrollLeft - (leftObstruction - targetRect.left + buffer))
     }
@@ -473,11 +486,11 @@ export const OrganisationTable = ({
             ref={tableContainerRef}
             onFocus={handleFocusWithinTable}
             style={{
-              '--sticky-header-height': `${stickyHeaderHeight}px`,
-              '--sticky-column-width': `${stickyColumnWidth}px`,
+              '--sticky-header-height': `${headerObstruction}px`,
+              '--sticky-column-width': `${columnObstruction}px`,
             }}
             sx={{
-              maxHeight: Math.floor(window.innerHeight * 0.8),
+              maxHeight: { xs: 'none', md: '80vh' },
               overflow: 'auto',
               '&:focus-visible': {
                 outline: '3px solid',
@@ -487,7 +500,7 @@ export const OrganisationTable = ({
             }}
             {...(isScrollable ? { tabIndex: 0, 'aria-labelledby': captionId } : {})}
           >
-            <Table stickyHeader>
+            <Table stickyHeader={!isSmall}>
               <caption id={captionId} style={styles.caption}>
                 {`${t('organisationSettings:summaryTab')}: ${organisationTitle}`}
               </caption>

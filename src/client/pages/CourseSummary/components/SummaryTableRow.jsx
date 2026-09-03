@@ -114,7 +114,7 @@ export const SummaryTableHeader = ({ questions }) => {
   return (
     <TableHead>
       <TableRow>
-        <SummaryTableHeaderCell sx={{ position: 'sticky', left: 0, zIndex: 3 }}>
+        <SummaryTableHeaderCell sx={{ position: { xs: 'static', md: 'sticky' }, left: 0, zIndex: 3 }}>
           {t('courseSummary:summaryTarget')}
         </SummaryTableHeaderCell>
         <SummaryTableHeaderCell>{t('common:actions')}</SummaryTableHeaderCell>
@@ -181,7 +181,11 @@ export const SummaryTableRow = ({
         },
       }}
     >
-      <SummaryTableCell component="th" scope="row" sx={{ position: 'sticky', left: 0, zIndex: 2 }}>
+      <SummaryTableCell
+        component="th"
+        scope="row"
+        sx={{ position: { xs: 'static', md: 'sticky' }, left: 0, zIndex: 2 }}
+      >
         <TargetComponent target={target} targetUrl={targetUrl} />
       </SummaryTableCell>
       <SummaryTableCell>{actions}</SummaryTableCell>

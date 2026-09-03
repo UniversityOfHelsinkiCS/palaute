@@ -119,7 +119,12 @@ export const OrganisationLabel = ({ organisation, dates }) => {
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Typography
           variant="body2"
-          sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '20rem', overflow: 'hidden' }}
+          sx={{
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            width: { xs: '12rem', md: '20rem' },
+            overflow: 'hidden',
+          }}
         >
           {getLanguageValue(organisation?.name, i18n.language)}
         </Typography>
@@ -184,7 +189,12 @@ export const TagLabel = ({ tag, dates }) => {
       <Box sx={{ display: 'flex', gap: '1rem' }}>
         <Typography
           variant="body2"
-          sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '20rem', overflow: 'hidden' }}
+          sx={{
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            width: { xs: '12rem', md: '20rem' },
+            overflow: 'hidden',
+          }}
         >
           {getLanguageValue(tag?.name, i18n.language)}
         </Typography>
