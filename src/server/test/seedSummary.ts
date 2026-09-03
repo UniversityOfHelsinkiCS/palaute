@@ -73,6 +73,9 @@ export const initTestSummary = async ({ user }: { user: any }) => {
   await createTestObject(CourseUnit, {
     id: testData.TEST_COURSE_UNIT_ID,
     groupId: testData.TEST_COURSE_UNIT_GROUP_ID,
+    validityPeriod: {
+      startDate: startOfDay(new Date(`${CURRENT_YEAR}-01-01`)),
+    },
     name: {
       fi: 'Yhteenveto-kurssi',
       en: 'Summary test course',
