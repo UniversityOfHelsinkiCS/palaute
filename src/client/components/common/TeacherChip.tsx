@@ -20,7 +20,7 @@ const TeacherChip = ({ user, onDelete, tooltip, outlined, sx, tooltipPlacement }
   const { t } = useTranslation()
 
   return (
-    <Tooltip title={tooltip || user.email} placement={tooltipPlacement}>
+    <Tooltip title={tooltip || user.email} placement={tooltipPlacement} arrow>
       <Chip
         variant={outlined ? 'outlined' : 'filled'}
         label={`${user.firstName ?? ''} ${user.lastName ?? ''}`.trim()}

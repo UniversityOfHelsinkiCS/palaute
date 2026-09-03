@@ -17,7 +17,7 @@ export const TeacherChips = ({ teachers, responsibleTeachers, administrativePers
   const administrativePerson = t('courseSummary:administrativePerson')
 
   return (
-    <Box display="flex" flexWrap="wrap" maxWidth="100rem">
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', maxWidth: '100rem', gap: 0.5, ml: 0.7, mb: 0.7 }}>
       {responsibleTeachers.map(t => (
         <TeacherChip key={t.id} user={t} tooltip={responsibleTeacher} outlined sx={{ backgroundColor: grey[300] }} />
       ))}
@@ -66,15 +66,14 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
     .map(ufbt => ufbt.user)
 
   return (
-    <Box display="flex" flexDirection="column" whiteSpace="nowrap" overflow="hidden">
-      <Tooltip textOverflow="ellipsis" overflow="hidden" title={translatedName} arrow>
+    <Box sx={{ display: 'flex', flexDirection: 'column', whiteSpace: 'nowrap', overflow: 'hidden' }}>
+      <Tooltip sx={{ textOverflow: 'ellipsis', overflow: 'hidden' }} title={translatedName} arrow>
         {link}
       </Tooltip>
-      <Box display="flex" alignItems="center" mb={0.5}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.5, mr: 2 }}>
         <Typography color="textSecondary" variant="body2">
           {datePeriod}
         </Typography>
-        <Box mr={2} />
       </Box>
       <TeacherChips
         teachers={teachers}
@@ -86,8 +85,8 @@ export const FeedbackTargetLabel = ({ feedbackTarget, language }) => {
 }
 
 export const CourseUnitLabel = ({ name, code, extras = [] }) => (
-  <Box display="flex" flexDirection="column" pl="0.5rem">
-    <Box display="flex" gap="1rem" alignItems="center">
+  <Box sx={{ display: 'flex', flexDirection: 'column', pl: '0.5rem' }}>
+    <Box sx={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
       <Typography variant="caption" color="textSecondary">
         {code}
       </Typography>
@@ -97,7 +96,10 @@ export const CourseUnitLabel = ({ name, code, extras = [] }) => (
         </Typography>
       ))}
     </Box>
-    <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+    <Typography
+      variant="body2"
+      sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '20rem', overflow: 'hidden' }}
+    >
       {name}
     </Typography>
   </Box>
@@ -110,12 +112,15 @@ export const OrganisationLabel = ({ organisation, dates }) => {
   })
 
   return (
-    <Box display="flex" flexDirection="column" pl="0.5rem">
+    <Box sx={{ display: 'flex', flexDirection: 'column', pl: '0.5rem' }}>
       <Typography variant="caption" color="textSecondary">
         {organisation?.code}
       </Typography>
-      <Box display="flex" gap="1rem">
-        <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Typography
+          variant="body2"
+          sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '20rem', overflow: 'hidden' }}
+        >
           {getLanguageValue(organisation?.name, i18n.language)}
         </Typography>
         {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
@@ -172,12 +177,15 @@ export const TagLabel = ({ tag, dates }) => {
   })
 
   return (
-    <Box display="flex" flexDirection="column" pl="0.5rem">
+    <Box sx={{ display: 'flex', flexDirection: 'column', pl: '0.5rem' }}>
       <Typography variant="caption" color="textSecondary">
         {t('courseSummary:tagLabel')}
       </Typography>
-      <Box display="flex" gap="1rem">
-        <Typography variant="body2" whiteSpace="nowrap" textOverflow="ellipsis" width="20rem" overflow="hidden">
+      <Box sx={{ display: 'flex', gap: '1rem' }}>
+        <Typography
+          variant="body2"
+          sx={{ whiteSpace: 'nowrap', textOverflow: 'ellipsis', width: '20rem', overflow: 'hidden' }}
+        >
           {getLanguageValue(tag?.name, i18n.language)}
         </Typography>
         {dates && <Typography variant="caption">({getDateRangeString(dates.startDate, dates.endDate)})</Typography>}
