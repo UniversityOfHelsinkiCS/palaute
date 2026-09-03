@@ -13,6 +13,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
 import { useIsFetching } from '@tanstack/react-query'
 import { useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -90,21 +91,28 @@ const styles = {
   },
 }
 
-export const NoActions = () => (
-  <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-      width: '3.5rem',
-      height: '3.5rem',
-      borderRadius: 2,
-      backgroundColor: 'transparent',
-    }}
-  >
-    <Typography>–</Typography>
-  </Box>
-)
+export const NoActions = () => {
+  const { t } = useTranslation()
+
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '3.5rem',
+        height: '3.5rem',
+        borderRadius: 2,
+        backgroundColor: 'transparent',
+      }}
+    >
+      <Typography aria-hidden="true">–</Typography>
+      <Box component="span" sx={{ ...visuallyHidden, width: '0px', height: '0px' }}>
+        {t('courseSummary:noActionsAvailable')}
+      </Box>
+    </Box>
+  )
+}
 
 export const ExpandRowButton = ({
   expanded,
