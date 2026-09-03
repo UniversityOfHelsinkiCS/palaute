@@ -23,6 +23,7 @@ const styles = {
   pinButton: {
     color: 'text.secondary',
     m: 0.5,
+    ml: 1,
     '&:hover': {
       backgroundColor: '#e0e0e0',
     },
@@ -168,7 +169,7 @@ const OrganisationResultsLoader = ({ organisationId, initialOrganisation, questi
   )
 }
 
-export const PinButton = ({ organisation, targetName }) => {
+export const PinButton = ({ organisation, tableView = false }) => {
   const { t } = useTranslation()
   const { pinnedOrganisations } = usePinnedOrganisations()
   const pinMutation = usePinOrganisationMutation()
@@ -200,7 +201,8 @@ export const PinButton = ({ organisation, targetName }) => {
   }
 
   const buttonText = isPinned ? t('courseSummary:unpinOrganisation') : t('courseSummary:pinOrganisation')
-  const fullButtonText = `${buttonText}${targetName ? `, ${targetName}` : ''}`
+  const orgCodeText = organisation?.code ? `, ${organisation.code}` : ''
+  const fullButtonText = `${buttonText}${orgCodeText}`
 
   return (
     <Tooltip
@@ -214,14 +216,14 @@ export const PinButton = ({ organisation, targetName }) => {
       <IconButton
         onClick={handleClick}
         disabled={isMutating}
-        sx={targetName ? styles.pinButtonTableView : styles.pinButton}
+        sx={tableView ? styles.pinButtonTableView : styles.pinButton}
         disableFocusRipple
         aria-label={fullButtonText}
       >
         {isPinned ? (
-          <PushPin fontSize={targetName ? 'medium' : 'small'} />
+          <PushPin fontSize={tableView ? 'medium' : 'small'} />
         ) : (
-          <PushPinOutlined fontSize={targetName ? 'medium' : 'small'} />
+          <PushPinOutlined fontSize={tableView ? 'medium' : 'small'} />
         )}
       </IconButton>
     </Tooltip>

@@ -161,7 +161,7 @@ const Actions = ({ targetName, organisation, rowExpanded, handleExpand, showPin 
       {handleExpand && (
         <ExpandRowButton expanded={rowExpanded} handleExpand={handleExpand} targetName={targetName} t={t} />
       )}
-      {organisation && showPin && <PinButton organisation={organisation} targetName={targetName} />}
+      {organisation && showPin && <PinButton organisation={organisation} tableView />}
       {organisation && <OrganisationSettingsButton code={organisation.code} t={t} />}
     </Stack>
   )
