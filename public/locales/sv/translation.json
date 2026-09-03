@@ -564,6 +564,8 @@
     "showSummary": "Visa sammanfattning",
     "hideBreakdown": "Göm uppdelning",
     "showBreakdown": "Visa uppdelning",
+    "breakdownRowCountOne": "{{count}} rad",
+    "breakdownRowCountMany": "{{count}} rader",
     "organisationSettings": "Organisationsinställningar",
     "summaryTarget": "Sammanfattat objekt",
     "courseUnit": "Studieavsnitt",

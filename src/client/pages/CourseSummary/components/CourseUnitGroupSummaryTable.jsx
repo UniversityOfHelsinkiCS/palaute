@@ -280,6 +280,7 @@ const CourseUnitGroupSummaryTableRow = ({
   depth = 1,
   open,
   handleOpen,
+  childCount,
 }) => {
   const { t, i18n } = useTranslation()
   const isCourseUnitGroup = Boolean(target?.surveyGroups)
@@ -343,6 +344,7 @@ const CourseUnitGroupSummaryTableRow = ({
             expanded={open}
             handleExpand={handleOpen}
             targetName={`${target?.courseCode}${addTimePeriod(timePeriod)}`}
+            childCount={childCount}
             showLabel="courseSummary:showCurs"
             hideLabel="courseSummary:hideCurs"
             t={t}
@@ -502,6 +504,7 @@ const CourseUnitGroupSummaryTable = ({
                   timePeriod={courseUnitGroupTimePeriod}
                   open={depth === 'cur'}
                   handleOpen={() => (depth === 'cur' ? setDepth('cu') : setDepth('cur'))}
+                  childCount={fbtCount}
                 />
                 {depth === 'cur' &&
                   sortedFeedbackTargets.map(fbt => (

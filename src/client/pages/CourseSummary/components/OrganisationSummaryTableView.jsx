@@ -110,26 +110,43 @@ export const ExpandRowButton = ({
   expanded,
   handleExpand,
   targetName,
+  childCount,
   t,
   showLabel = 'courseSummary:showBreakdown',
   hideLabel = 'courseSummary:hideBreakdown',
-}) => (
-  <Tooltip title={`${expanded ? t(hideLabel) : t(showLabel)}, ${targetName}`} arrow placement="bottom">
-    <IconButton
-      sx={styles.actionButton}
-      onClick={handleExpand}
-      disableFocusRipple
-      aria-expanded={expanded}
-      aria-label={`${expanded ? t(hideLabel) : t(showLabel)}, ${targetName}`}
-    >
-      {expanded ? (
-        <ExpandLessIcon aria-hidden="true" sx={{ fontSize: '30px' }} />
-      ) : (
-        <ExpandMoreIcon aria-hidden="true" sx={{ fontSize: '30px' }} />
-      )}
-    </IconButton>
-  </Tooltip>
-)
+}) => {
+  // The number of rows the button reveals is part of its label, so that screen reader users hear how
+  // large the breakdown is before opening it. The state change itself is announced via aria-expanded.
+  const label = [
+    expanded ? t(hideLabel) : t(showLabel),
+    targetName,
+    childCount === undefined
+      ? undefined
+      : t(childCount === 1 ? 'courseSummary:breakdownRowCountOne' : 'courseSummary:breakdownRowCountMany', {
+          count: childCount,
+        }),
+  ]
+    .filter(Boolean)
+    .join(', ')
+
+  return (
+    <Tooltip title={label} arrow placement="bottom">
+      <IconButton
+        sx={styles.actionButton}
+        onClick={handleExpand}
+        disableFocusRipple
+        aria-expanded={expanded}
+        aria-label={label}
+      >
+        {expanded ? (
+          <ExpandLessIcon aria-hidden="true" sx={{ fontSize: '30px' }} />
+        ) : (
+          <ExpandMoreIcon aria-hidden="true" sx={{ fontSize: '30px' }} />
+        )}
+      </IconButton>
+    </Tooltip>
+  )
+}
 
 const OrganisationSettingsButton = ({ code, t }) => {
   const access = useUserOrganisationAccessByCode(code)
@@ -151,7 +168,7 @@ const OrganisationSettingsButton = ({ code, t }) => {
   )
 }
 
-const Actions = ({ targetName, organisation, rowExpanded, handleExpand, showPin = true, t }) => {
+const Actions = ({ targetName, organisation, rowExpanded, handleExpand, childCount, showPin = true, t }) => {
   if (!targetName) {
     return <NoActions />
   }
@@ -159,7 +176,13 @@ const Actions = ({ targetName, organisation, rowExpanded, handleExpand, showPin 
   return (
     <Stack direction="row" spacing={1}>
       {handleExpand && (
-        <ExpandRowButton expanded={rowExpanded} handleExpand={handleExpand} targetName={targetName} t={t} />
+        <ExpandRowButton
+          expanded={rowExpanded}
+          handleExpand={handleExpand}
+          targetName={targetName}
+          childCount={childCount}
+          t={t}
+        />
       )}
       {organisation && showPin && <PinButton organisation={organisation} tableView />}
       {organisation && <OrganisationSettingsButton code={organisation.code} t={t} />}
@@ -192,6 +215,7 @@ const TagRow = ({ tag, organisation, questions, depth, dateRange }) => {
               targetName={getLanguageValue(tag.name, i18n.language)}
               rowExpanded={open}
               handleExpand={() => setOpen(!open)}
+              childCount={courseUnits.length}
               t={t}
             />
           )
@@ -253,6 +277,8 @@ const OrganisationRow = ({
     return <SummaryTableRow target={t('courseSummary:loading')} questions={questions} depth={depth} />
 
   const openable = childOrganisations.length > 0 || (!orgsOnly && (tags.length > 0 || courseUnits.length > 0))
+  // Must match the rows rendered below when the row is open
+  const childCount = childOrganisations.length + (orgsOnly ? 0 : tags.length + courseUnits.length)
 
   return (
     <>
@@ -269,6 +295,7 @@ const OrganisationRow = ({
             organisation={organisation}
             rowExpanded={openable ? open : undefined}
             handleExpand={openable ? () => setOpen(!open) : undefined}
+            childCount={openable ? childCount : undefined}
             showPin={showRootPin && !noPins}
             t={t}
           />

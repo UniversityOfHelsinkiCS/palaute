@@ -569,6 +569,8 @@
     "showSummary": "Näytä yhteenveto",
     "hideBreakdown": "Piilota erittely",
     "showBreakdown": "Näytä erittely",
+    "breakdownRowCountOne": "{{count}} rivi",
+    "breakdownRowCountMany": "{{count}} riviä",
     "organisationSettings": "Organisaation asetukset",
     "summaryTarget": "Yhteenvedon kohde",
     "courseUnit": "Opintojakso",

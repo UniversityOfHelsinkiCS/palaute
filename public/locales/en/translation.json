@@ -574,6 +574,8 @@
     "showSummary": "Show summary",
     "showBreakdown": "Show breakdown",
     "hideBreakdown": "Hide breakdown",
+    "breakdownRowCountOne": "{{count}} row",
+    "breakdownRowCountMany": "{{count}} rows",
     "organisationSettings": "Organisation settings",
     "summaryTarget": "Summary target",
     "courseUnit": "Course unit",
