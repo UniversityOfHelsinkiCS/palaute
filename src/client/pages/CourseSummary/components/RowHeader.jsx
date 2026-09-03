@@ -68,7 +68,13 @@ const RowHeader = ({ openable = false, isOpen = false, handleOpenRow, label, lin
   <Box sx={styles.column}>
     {beforeContent}
     {openable ? (
-      <ButtonBase onClick={handleOpenRow} sx={styles.accordionButton} variant="contained" disableRipple>
+      <ButtonBase
+        onClick={handleOpenRow}
+        sx={styles.accordionButton}
+        variant="contained"
+        disableRipple
+        aria-expanded={isOpen}
+      >
         <Box sx={{ flexGrow: 1, minWidth: 0 }}>{label}</Box>
         <ChevronRight className="row-header-arrow" sx={{ ...styles.arrow, ...(isOpen ? styles.arrowOpen : {}) }} />
       </ButtonBase>
