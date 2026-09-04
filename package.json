@@ -60,7 +60,7 @@
     "config": "3.3.12",
     "date-fns": "2.30.0",
     "date-fns-timezone": "0.1.4",
-    "dotenv": "16.6.1",
+    "dotenv": "17.4.2",
     "express": "5.2.1",
     "formik": "2.4.9",
     "i18next": "26.3.6",
