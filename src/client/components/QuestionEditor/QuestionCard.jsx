@@ -1,12 +1,11 @@
-import { EditOutlined, FileCopyOutlined } from '@mui/icons-material'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { Card, CardContent, IconButton, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
+import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@mui/icons-material'
+import { Card, CardContent, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 import { useField } from 'formik'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { focusIndicatorStyle } from '../../util/accessibility'
 import { LANGUAGES } from '../../util/common'
+import { getLanguageValue } from '../../util/languageUtils'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import FormikSwitch from '../common/FormikSwitch'
 import { NorButton } from '../common/NorButton'
@@ -55,37 +54,27 @@ const getTitleByType = (question, t) => {
 const ActionsContainer = ({ children }) => (
   <div>
     <Divider />
-    <Box mt={2} display="flex" justifyContent="space-between" alignItems="center">
+    <Box
+      sx={{
+        mt: 2,
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        justifyContent: 'space-between',
+        alignItems: { xs: 'stretch', sm: 'center' },
+        gap: '1rem',
+      }}
+    >
       {children}
     </Box>
   </div>
 )
 
-const EditActions = ({
-  onMoveUp,
-  onMoveDown,
-  onRemove,
-  moveUpDisabled,
-  moveDownDisabled,
-  showMoveButtons,
-  showRequiredToggle,
-  name,
-  publicityConfigurable,
-  isPublic,
-}) => {
+const EditActions = ({ showRequiredToggle, name, publicityConfigurable, isPublic }) => {
   const { t } = useTranslation()
-
-  const handleRemove = () => {
-    const hasConfirmed = window.confirm(t('questionEditor:removeQuestionConfirmation'))
-
-    if (hasConfirmed) {
-      onRemove()
-    }
-  }
 
   return (
     <>
-      <Box ml="1rem" mr="2rem">
+      <Box sx={{ mr: { xs: 0, sm: '2rem' }, display: 'flex', alignItems: 'center', minHeight: '38px' }}>
         {publicityConfigurable ? (
           <FormikRadioButtons
             name={`${name}.public`}
@@ -103,23 +92,6 @@ const EditActions = ({
         )}
       </Box>
       {showRequiredToggle && <FormikSwitch label={t('common:required')} name={`${name}.required`} />}
-
-      {showMoveButtons && (
-        <OrderButtons
-          onMoveUp={onMoveUp}
-          onMoveDown={onMoveDown}
-          moveUpDisabled={moveUpDisabled}
-          moveDownDisabled={moveDownDisabled}
-        />
-      )}
-
-      <Tooltip title={t('questionEditor:removeQuestion')}>
-        <div>
-          <IconButton onClick={handleRemove} size="large" sx={focusIndicatorStyle()} disableRipple>
-            <DeleteIcon />
-          </IconButton>
-        </div>
-      </Tooltip>
     </>
   )
 }
@@ -165,7 +137,6 @@ const QuestionCard = ({
     onMoveDown,
     moveUpDisabled: moveUpDisabled || isGrouping,
     moveDownDisabled: moveDownDisabled || isGrouping,
-    showMoveButtons,
   }
 
   const handlePublicityToggle = isPublic => {
@@ -174,6 +145,21 @@ const QuestionCard = ({
       public: isPublic,
     })
     onPublicityToggle(isPublic)
+  }
+
+  const handleRemove = () => {
+    const value = getLanguageValue(question.data?.label ?? question.data?.content, language)
+    const label = value && value.length > 60 ? `${value.slice(0, 60).trim()}…` : value
+
+    const hasConfirmed = window.confirm(
+      label
+        ? t('questionEditor:removeQuestionLabelConfirmation', { label })
+        : t('questionEditor:removeQuestionConfirmation')
+    )
+
+    if (hasConfirmed) {
+      onRemove()
+    }
   }
 
   const editorRef = useRef(null)
@@ -189,13 +175,18 @@ const QuestionCard = ({
   return (
     <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
-        <Grid container direction="row" justifyContent="space-between" mb="1.5rem">
-          <Grid size={4}>
-            <Box display="flex" gap="0.5rem">
+        <Grid
+          container
+          direction="row"
+          spacing="0.5rem"
+          sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '1.5rem' }}
+        >
+          <Grid size={{ xs: 12, sm: 4 }}>
+            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
               <Chip label={title} variant="outlined" />
             </Box>
           </Grid>
-          <Grid size={4} display="flex" justifyContent="center">
+          <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'center' } }}>
             {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
               <QuestionPublicityToggle
                 questionId={question.id}
@@ -205,7 +196,7 @@ const QuestionCard = ({
               />
             )}
           </Grid>
-          <Grid size={4} display="flex" justifyContent="end">
+          <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'end' } }}>
             {question.chip && (
               <Tooltip title={t('questionEditor:uneditableTooltip')}>
                 <Chip label={t(question.chip)} variant="outlined" />
@@ -215,35 +206,49 @@ const QuestionCard = ({
         </Grid>
         {isEditing ? (
           <>
-            <Box mb={2}>
+            <Box sx={{ mb: 2 }}>
               <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} editorLevel={editorLevel} />
             </Box>
             <ActionsContainer>
-              <div style={{ display: 'flex', alignItems: 'end', width: '100%' }}>
-                <Box mr="auto">
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  alignItems: { xs: 'stretch', sm: 'end' },
+                  gap: '1rem',
+                  width: '100%',
+                }}
+              >
+                <EditActions
+                  publicityConfigurable={publicityConfigurable}
+                  isPublic={question.public}
+                  showRequiredToggle={requiredConfigurable}
+                  name={name}
+                />
+                <Box sx={{ ml: { xs: 0, sm: 'auto' } }}>
                   <NorButton data-cy="question-card-save-edit" color="primary" onClick={onStopEditing}>
                     {t('questionEditor:done')}
                   </NorButton>
                 </Box>
-                <EditActions
-                  publicityConfigurable={publicityConfigurable}
-                  isPublic={question.public}
-                  {...orderButtonsProps}
-                  onRemove={onRemove}
-                  showRequiredToggle={requiredConfigurable}
-                  name={name}
-                />
-              </div>
+              </Box>
             </ActionsContainer>
           </>
         ) : (
           <>
-            <Box mb={canEdit ? 2 : 0}>
+            <Box sx={{ mb: canEdit ? 2 : 0 }}>
               <PreviewComponent question={question} language={language} />
             </Box>
             {canEdit && (
               <ActionsContainer>
-                <div style={{ display: 'flex', gap: '16px' }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'stretch', sm: 'center' },
+                    flexWrap: 'wrap',
+                    gap: '16px',
+                  }}
+                >
                   {canDuplicate && (
                     <NorButton icon={<FileCopyOutlined />} onClick={onCopy} color="secondary">
                       {t('questionEditor:duplicate')}
@@ -252,8 +257,11 @@ const QuestionCard = ({
                   <NorButton color="secondary" onClick={onStartEditing} data-cy="editQuestion" icon={<EditOutlined />}>
                     {t('common:edit')}
                   </NorButton>
-                </div>
-                {!isGrouping && <OrderButtons {...orderButtonsProps} />}
+                  <NorButton color="cancel" onClick={handleRemove} data-cy="removeQuestion" icon={<DeleteOutlined />}>
+                    {t('questionEditor:removeQuestion')}
+                  </NorButton>
+                </Box>
+                {showMoveButtons && !isGrouping && <OrderButtons {...orderButtonsProps} />}
               </ActionsContainer>
             )}
           </>

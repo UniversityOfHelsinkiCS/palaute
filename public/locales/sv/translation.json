@@ -209,6 +209,7 @@
     "label": "Fråga",
     "content": "Innehåll",
     "removeQuestionConfirmation": "Är du säker på att du vill radera frågan?",
+    "removeQuestionLabelConfirmation": "Är du säker på att du vill radera frågan \"{{label}}\"?",
     "removeOptionConfirmation": "Är du säker på att du vill radera alternativet?",
     "description": "Beskrivning",
     "done": "Spara",

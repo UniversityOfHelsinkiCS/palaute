@@ -223,6 +223,7 @@
     "label": "Question",
     "content": "Content",
     "removeQuestionConfirmation": "Are you sure you want to remove this question?",
+    "removeQuestionLabelConfirmation": "Are you sure you want to remove the question \"{{label}}\"?",
     "removeOptionConfirmation": "Are you sure you want to remove this option?",
     "description": "Description",
     "done": "Save",
