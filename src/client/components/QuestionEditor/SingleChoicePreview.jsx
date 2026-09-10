@@ -11,8 +11,14 @@ const SingleChoicePreview = ({ question, language }) => {
   const required = question.required ?? false
 
   return (
-    <PreviewBase label={label} description={description} required={required}>
-      <RadioGroup>
+    <PreviewBase
+      label={label}
+      description={description}
+      required={required}
+      labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
+      id={`question-${question.id}`}
+    >
+      <RadioGroup aria-labelledby={`question-${question.id}-legend`} sx={{ paddingLeft: '0.8rem' }}>
         {options.map(option => (
           <FormControlLabel
             value={option.id}

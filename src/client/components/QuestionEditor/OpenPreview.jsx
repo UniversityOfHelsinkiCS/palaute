@@ -7,9 +7,17 @@ const OpenPreview = ({ question, language }) => {
   const description = getLanguageValue(question.data?.description, language)
   const required = question.required ?? false
 
+  const inputId = `question-${question.id}-input`
+
   return (
-    <PreviewBase label={label} description={description} required={required}>
-      <TextField multiline fullWidth />
+    <PreviewBase
+      id={`question-${question.id}`}
+      label={label}
+      description={description}
+      required={required}
+      labelProps={{ component: 'label', htmlFor: inputId }}
+    >
+      <TextField id={inputId} multiline fullWidth />
     </PreviewBase>
   )
 }

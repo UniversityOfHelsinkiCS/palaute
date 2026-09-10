@@ -11,8 +11,14 @@ const MultipleChoicePreview = ({ question, language }) => {
   const required = question.required ?? false
 
   return (
-    <PreviewBase label={label} description={description} required={required}>
-      <FormGroup>
+    <PreviewBase
+      label={label}
+      description={description}
+      required={required}
+      labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
+      id={`question-${question.id}`}
+    >
+      <FormGroup role="group" aria-labelledby={`question-${question.id}-legend`}>
         {options.map(option => (
           <FormControlLabel
             value={option.id}

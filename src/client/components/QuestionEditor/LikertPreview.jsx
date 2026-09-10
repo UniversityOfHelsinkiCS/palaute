@@ -30,8 +30,14 @@ const LikertPreview = ({ question, language }) => {
   }
 
   return (
-    <PreviewBase label={label} description={description} required={required}>
-      <RadioGroup row>
+    <PreviewBase
+      label={label}
+      description={description}
+      required={required}
+      labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
+      id={`question-${question.id}`}
+    >
+      <RadioGroup row aria-labelledby={`question-${question.id}-legend`}>
         {options.map(option => (
           <FormControlLabel
             labelPlacement="top"

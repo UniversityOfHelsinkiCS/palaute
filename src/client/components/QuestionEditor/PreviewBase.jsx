@@ -3,16 +3,17 @@ import { useTranslation } from 'react-i18next'
 
 import Markdown from '../common/Markdown'
 
-const PreviewBase = ({ label, description, children, required = false }) => {
+const PreviewBase = ({ id, label, description, children, required = false, labelProps = {} }) => {
   const { t } = useTranslation()
+  const descriptionId = description ? `${id}-description` : undefined
 
   return (
-    <Box>
-      <Typography component="h2" variant="h6" sx={{ mb: 1 }}>
+    <Box id={id}>
+      <Typography variant="h6" sx={{ mb: 1 }} {...labelProps}>
         {`${label || t('questionEditor:label')}${required ? ' *' : ''}`}
       </Typography>
       {description && (
-        <Box sx={{ mb: 3 }}>
+        <Box id={descriptionId} sx={{ mb: 3 }}>
           <Markdown>{description}</Markdown>
         </Box>
       )}
