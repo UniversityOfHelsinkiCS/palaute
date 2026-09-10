@@ -119,7 +119,7 @@
     "axe-core": "4.12.1",
     "concurrently": "9.2.4",
     "cross-env": "10.1.0",
-    "cypress": "15.18.1",
+    "cypress": "16.0.0",
     "cypress-axe": "1.7.0",
     "eslint-plugin-cypress": "6.4.3",
     "husky": "9.1.7",
