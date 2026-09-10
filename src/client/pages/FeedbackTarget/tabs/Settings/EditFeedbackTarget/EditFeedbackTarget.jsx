@@ -38,6 +38,20 @@ const EditFeedbackTarget = () => {
 
   const organisationNames = getOrganisationNames(feedbackTarget, language)
 
+  const upperLevelQuestionsInfo = [
+    t(
+      upperLevelQuestions.length === 1
+        ? 'editFeedbackTarget:upperLevelQuestionCountOne'
+        : 'editFeedbackTarget:upperLevelQuestionCountMany',
+      { count: upperLevelQuestions.length }
+    ),
+    t('editFeedbackTarget:upperLevelQuestionsUneditableInfo'),
+    organisationNames.primaryOrganisation
+      ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', { organisation: organisationNames.primaryOrganisation })
+      : t('editFeedbackTarget:upperLevelQuestionsInfoMany', { organisations: organisationNames.allOrganisations }),
+    t('editFeedbackTarget:addAndPreviewQuestionsInfo'),
+  ].join(' ')
+
   const previewLink = interimFeedbackId
     ? `/targets/${id}/interim-feedback/${interimFeedbackId}/feedback`
     : `/targets/${id}/feedback`
@@ -46,18 +60,8 @@ const EditFeedbackTarget = () => {
     <QuestionLanguageProvider value={previewLanguage}>
       <CardSection title={t('feedbackView:editSurvey')}>
         {upperLevelQuestions.length > 0 && (
-          <Box mb={2}>
-            <Alert severity="info">
-              {organisationNames.primaryOrganisation
-                ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', {
-                    count: upperLevelQuestions.length,
-                    primaryOrganisation: organisationNames.primaryOrganisation,
-                  })
-                : t('editFeedbackTarget:upperLevelQuestionsInfoMany', {
-                    count: upperLevelQuestions.length,
-                    organisations: organisationNames.allOrganisations,
-                  })}
-            </Alert>
+          <Box sx={{ mb: 2 }}>
+            <Alert severity="info">{upperLevelQuestionsInfo}</Alert>
           </Box>
         )}
 

@@ -3,7 +3,7 @@ import feedbackTargetIsOpen from '../../../../../util/feedbackTargetIsOpen'
 export const getUpperLevelQuestions = feedbackTarget => {
   const { universitySurvey, programmeSurveys } = feedbackTarget.surveys ?? {}
 
-  return [...(universitySurvey?.questions ?? []), ...(programmeSurveys?.questions ?? [])]
+  return [...(universitySurvey?.questions ?? []), ...(programmeSurveys?.flatMap(survey => survey.questions) ?? [])]
 }
 
 export const feedbackTargetIsOpenOrClosed = feedbackTarget => {
