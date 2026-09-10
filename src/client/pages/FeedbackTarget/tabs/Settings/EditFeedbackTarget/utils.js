@@ -3,7 +3,10 @@ import feedbackTargetIsOpen from '../../../../../util/feedbackTargetIsOpen'
 export const getUpperLevelQuestions = feedbackTarget => {
   const { universitySurvey, programmeSurveys } = feedbackTarget.surveys ?? {}
 
-  return [...(universitySurvey?.questions ?? []), ...(programmeSurveys?.flatMap(survey => survey.questions) ?? [])]
+  return {
+    universityQuestions: universitySurvey?.questions ?? [],
+    programmeQuestions: programmeSurveys?.flatMap(survey => survey.questions) ?? [],
+  }
 }
 
 export const feedbackTargetIsOpenOrClosed = feedbackTarget => {
@@ -19,24 +22,17 @@ const getOrganisationName = ({ name }, language) => {
   return localizedName.replace("'", '`')
 }
 
-export const getOrganisationNames = (feedbackTarget, language) => {
-  const { organisations } = feedbackTarget.courseUnit
+// A programme survey belongs to the organisation whose code is its typeId, so the organisations that
+// have acually contributed questions are the ones with a non-empty programme survey
+export const getContributingOrganisationNames = (feedbackTarget, language) => {
+  const { programmeSurveys } = feedbackTarget.surveys ?? {}
+  const { organisations } = feedbackTarget.courseUnit ?? {}
 
-  if (!organisations) return { primaryOrganisation: 'Helsingin yliopisto' }
+  const contributingCodes = (programmeSurveys ?? [])
+    .filter(survey => survey.questions?.some(q => q.type !== 'TEXT'))
+    .map(survey => survey.typeId)
 
-  if (organisations.length === 1)
-    return {
-      primaryOrganisation: getOrganisationName(organisations[0], language),
-    }
-
-  const lastCode = organisations[organisations.length - 1].code
-
-  const allOrganisations = organisations.reduce((a, b) => {
-    if (b.code === lastCode) return `${a}${getOrganisationName(b, language)}`
-    return `${a}${getOrganisationName(b, language)}, `
-  }, '')
-
-  return {
-    allOrganisations,
-  }
+  return (organisations ?? [])
+    .filter(organisation => contributingCodes.includes(organisation.code))
+    .map(organisation => getOrganisationName(organisation, language))
 }

@@ -7,7 +7,7 @@ import { TeacherSurvey } from '../../../../../components/QuestionEditor'
 import { QuestionLanguageProvider } from '../../../../../util/questionLanguageContext'
 import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
 import Toolbar from './Toolbar'
-import { getUpperLevelQuestions, getOrganisationNames, feedbackTargetIsOpenOrClosed } from './utils'
+import { getUpperLevelQuestions, getContributingOrganisationNames, feedbackTargetIsOpenOrClosed } from './utils'
 
 const styles = {
   heading: {
@@ -34,21 +34,38 @@ const EditFeedbackTarget = () => {
     return null
   }
 
-  const upperLevelQuestions = getUpperLevelQuestions(feedbackTarget).filter(q => q.type !== 'TEXT')
+  const { universityQuestions, programmeQuestions } = getUpperLevelQuestions(feedbackTarget)
 
-  const organisationNames = getOrganisationNames(feedbackTarget, language)
+  const universityQuestionCount = universityQuestions.filter(q => q.type !== 'TEXT').length
+  const programmeQuestionCount = programmeQuestions.filter(q => q.type !== 'TEXT').length
+
+  const organisationNames = getContributingOrganisationNames(feedbackTarget, language)
+
+  const questionCountInfo = `${[
+    t(
+      universityQuestionCount === 1
+        ? 'editFeedbackTarget:universityQuestionCountOne'
+        : 'editFeedbackTarget:universityQuestionCountMany',
+      { count: universityQuestionCount }
+    ),
+    programmeQuestionCount > 0 &&
+      t(
+        programmeQuestionCount === 1
+          ? 'editFeedbackTarget:programmeQuestionCountOne'
+          : 'editFeedbackTarget:programmeQuestionCountMany',
+        { count: programmeQuestionCount }
+      ),
+    organisationNames.length > 0 &&
+      (organisationNames.length === 1
+        ? t('editFeedbackTarget:responsibleOrganisationOne', { organisation: organisationNames[0] })
+        : t('editFeedbackTarget:responsibleOrganisationMany', { organisations: organisationNames.join(', ') })),
+  ]
+    .filter(Boolean)
+    .join(' ')}.`
 
   const upperLevelQuestionsInfo = [
-    t(
-      upperLevelQuestions.length === 1
-        ? 'editFeedbackTarget:upperLevelQuestionCountOne'
-        : 'editFeedbackTarget:upperLevelQuestionCountMany',
-      { count: upperLevelQuestions.length }
-    ),
+    questionCountInfo,
     t('editFeedbackTarget:upperLevelQuestionsUneditableInfo'),
-    organisationNames.primaryOrganisation
-      ? t('editFeedbackTarget:upperLevelQuestionsInfoOne', { organisation: organisationNames.primaryOrganisation })
-      : t('editFeedbackTarget:upperLevelQuestionsInfoMany', { organisations: organisationNames.allOrganisations }),
     t('editFeedbackTarget:addAndPreviewQuestionsInfo'),
   ].join(' ')
 
@@ -59,7 +76,7 @@ const EditFeedbackTarget = () => {
   return (
     <QuestionLanguageProvider value={previewLanguage}>
       <CardSection title={t('feedbackView:editSurvey')}>
-        {upperLevelQuestions.length > 0 && (
+        {universityQuestionCount + programmeQuestionCount > 0 && (
           <Box sx={{ mb: 2 }}>
             <Alert severity="info">{upperLevelQuestionsInfo}</Alert>
           </Box>

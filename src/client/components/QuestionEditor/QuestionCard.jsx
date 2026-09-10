@@ -1,5 +1,5 @@
 import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@mui/icons-material'
-import { Card, CardContent, Tooltip, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
+import { Card, CardContent, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
 import { useField } from 'formik'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -197,11 +197,7 @@ const QuestionCard = ({
             )}
           </Grid>
           <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'end' } }}>
-            {question.chip && (
-              <Tooltip title={t('questionEditor:uneditableTooltip')}>
-                <Chip label={t(question.chip)} variant="outlined" />
-              </Tooltip>
-            )}
+            {question.chip && <Chip label={t(question.chip)} variant="outlined" />}
           </Grid>
         </Grid>
         {isEditing ? (
