@@ -41,6 +41,8 @@ const QuestionPublicityToggle = ({
     !disabled ? t('common:editable') : notEditableInfo
   }`
 
+  const label = t(checked ? 'common:public' : 'common:notPublic')
+
   const isOpen = Boolean(anchorEl)
   const popoverId = `question-${questionId}-publicity-settings`
   const labelId = `question-${questionId}-publicity-settings-label`
@@ -61,26 +63,31 @@ const QuestionPublicityToggle = ({
 
   return (
     <>
-      <Tooltip title={tooltipText} describeChild>
-        <Chip
-          component="button"
-          type="button"
-          icon={!disabled ? <Edit /> : undefined}
-          label={t(checked ? 'common:public' : 'common:notPublic')}
-          clickable
-          onClick={handleOpen}
-          variant="outlined"
-          color={disabled ? 'default' : 'primary'}
-          aria-haspopup="true"
-          aria-expanded={isOpen}
-          aria-controls={popoverId}
-          sx={{
-            ...styles.interactive,
-            '&:hover': {
-              borderRadius: disabled ? undefined : '3px',
-            },
-          }}
-        />
+      <Tooltip title={tooltipText}>
+        {/* The Chip is wrapped so that the Tooltip does not override the aria-label of the button */}
+        <Box component="span" sx={{ display: 'inline-flex' }}>
+          <Chip
+            component="button"
+            type="button"
+            icon={!disabled ? <Edit /> : undefined}
+            label={label}
+            clickable
+            onClick={handleOpen}
+            variant="outlined"
+            color={disabled ? 'default' : 'primary'}
+            aria-label={label}
+            aria-description={tooltipText}
+            aria-haspopup="true"
+            aria-expanded={isOpen}
+            aria-controls={popoverId}
+            sx={{
+              ...styles.interactive,
+              '&:hover': {
+                borderRadius: disabled ? undefined : '3px',
+              },
+            }}
+          />
+        </Box>
       </Tooltip>
       <Popover
         id={popoverId}

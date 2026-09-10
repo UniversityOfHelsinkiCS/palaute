@@ -3,26 +3,28 @@ import UpIcon from '@mui/icons-material/KeyboardArrowUp'
 import { IconButton, Tooltip, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
+
 const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled }) => {
   const { t } = useTranslation()
 
   return (
     <Box display="inline-flex">
-      <Tooltip title={t('questionEditor:moveUp')}>
-        <div>
-          <IconButton disabled={moveUpDisabled} onClick={onMoveUp} size="large">
+      {!moveUpDisabled && (
+        <Tooltip title={t('questionEditor:moveUp')}>
+          <IconButton onClick={onMoveUp} size="large" sx={focusIndicatorStyle()} disableFocusRipple>
             <UpIcon />
           </IconButton>
-        </div>
-      </Tooltip>
+        </Tooltip>
+      )}
 
-      <Tooltip title={t('questionEditor:moveDown')}>
-        <div>
-          <IconButton disabled={moveDownDisabled} onClick={onMoveDown} size="large">
+      {!moveDownDisabled && (
+        <Tooltip title={t('questionEditor:moveDown')}>
+          <IconButton onClick={onMoveDown} size="large" sx={focusIndicatorStyle()} disableFocusRipple>
             <DownIcon />
           </IconButton>
-        </div>
-      </Tooltip>
+        </Tooltip>
+      )}
     </Box>
   )
 }
