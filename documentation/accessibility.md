@@ -1,6 +1,6 @@
 # Accessibility statement of the course feedback system Norppa of the University of Helsinki
 
-This accessibility statement applies to the accessibility of Norppa course feedback system, available at [norppa.helsinki.fi](norppa.helsinki.fi). The document was created on 11 October 2021 and last updated on 2 May 2026. The accessibility analysis of the software was done by the developers using both automated tools ([WAVE Evaluation Tool](https://chrome.google.com/webstore/detail/wave-evaluation-tool/jbbplnpkjmmeebjpijfedlgcdilocofh) and [Lighthouse](https://developers.google.com/web/tools/lighthouse)) and manual testing methods, including keyboard and screen reader testing.
+This accessibility statement applies to the accessibility of Norppa course feedback system, available at [norppa.helsinki.fi](norppa.helsinki.fi). The document was created on 11 October 2021 and last updated on 11 September 2026. The accessibility analysis of the software was done by the developers using both automated tools ([WAVE Evaluation Tool](https://chrome.google.com/webstore/detail/wave-evaluation-tool/jbbplnpkjmmeebjpijfedlgcdilocofh) and [Lighthouse](https://developers.google.com/web/tools/lighthouse)) and manual testing methods, including keyboard and screen reader testing.
 
 ## Accessibility status
 
@@ -8,15 +8,16 @@ The system meets most of the A and AA level accessibility requirements of the We
 
 ## Accessibility issues
 
-This list includes the issues that have been identified in the accessibility evaluation in spring 2026. The evaluation is still in progress and the developers are actively working towards remediating the issues.
+This list includes the issues that have been identified in the accessibility evaluation in 2026. The evaluation is still in progress and the developers are actively working towards remediating the issues.
 
 ### Perceivability issues
 
 - **Non-text content**: Not all non-text content has text alternatives. Most notably, feedback results are presented with visual charts that have no textual description or data table alternative. Although teachers can download the feedack as a table in XLSX format, text alternatives should be added to the website, too. (WCAG 1.1.1)
   - Update: Table alternatives were added for all feedback result charts. The user can change between chart and table view by pressing a button or using keyboard shortcut Alt + T.
-- **Info and relationships**: A couple of pages skip heading levels making the structure of the page confusing. Also, document landmark roles are mostly missing, and form labels and validation errors are not always correctly connected with the inputs. (WCAG 1.3.1)
-  - Update: Heading hierarchy was fixed and document landmark roles were added. Validation errors were connected with the inputs through aria-describedby attribute.
+- **Info and relationships**: A couple of pages skip heading levels making the structure of the page confusing. Also, document landmark roles are mostly missing, and form labels and validation errors are not always correctly connected with the inputs. In summary views, the rown and columns cannot be programmatically determined. (WCAG 1.3.1)
+  - Update: Heading hierarchy was fixed and document landmark roles were added. Validation errors were connected with the inputs through aria-describedby attribute. An alternative table view was added to summaries to give them clear structure.
 - **Contrast**: Some content has too low contrast between text and background colors, especially in Course summary page. (WCAG 1.4.3)
+  - Update: Contrast violations were fixed to pass AA level requirements.
 - **Reflow**: Some information can be lost with large zoom. This is true for at least the student table on feedback target's Respondents tab and the chips that inform the user that the teacher has responded to the given feedback. (WCAG 1.4.10)
 
 ### Operability issues
