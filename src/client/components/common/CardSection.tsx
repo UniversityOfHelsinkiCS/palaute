@@ -12,8 +12,8 @@ type CardSectionProps = {
 const CardSection = ({ title, children, sx }: CardSectionProps) => (
   <Card sx={sx}>
     <CardContent>
-      <Box mb={4}>
-        <Typography component="h2" variant="h6">
+      <Box sx={{ mb: 4 }}>
+        <Typography component="h3" variant="h6">
           {title}
         </Typography>
       </Box>

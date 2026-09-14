@@ -42,6 +42,9 @@ const TeacherList = ({ teachers, title, open, ...rest }) => {
           display: 'none', // remove the default divider line
         },
       }}
+      slotProps={{
+        heading: { component: 'div' },
+      }}
     >
       <AccordionSummary
         expandIcon={<ExpandMore />}

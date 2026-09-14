@@ -10,10 +10,13 @@ import {
   TableCell,
   TableHead,
   TableRow,
+  Chip,
+  Typography,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
+import { focusIndicatorStyle } from '../../util/accessibility'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
 import Instructions from '../common/Instructions'
@@ -28,8 +31,10 @@ const GroupInformation = ({ groups }) => {
 
   return (
     <Box>
-      <Accordion elevation={0}>
-        <AccordionSummary expandIcon={<ExpandMore />}>{t('groups:groupInformation')}</AccordionSummary>
+      <Accordion elevation={0} slotProps={{ heading: { component: 'div' } }}>
+        <AccordionSummary expandIcon={<ExpandMore />} sx={focusIndicatorStyle()}>
+          <Typography>{t('groups:groupInformation')}</Typography>
+        </AccordionSummary>
         <AccordionDetails>
           <Table size="small">
             <TableHead>
@@ -95,9 +100,9 @@ const GroupingQuestionSettings = ({
     <Box mb={2}>
       <Paper>
         <Box>
-          <Accordion elevation={0}>
-            <AccordionSummary sx={{ fontWeight: 'bold' }} expandIcon={<ExpandMore />}>
-              {t('groups:groupingSettings')}
+          <Accordion elevation={0} slotProps={{ heading: { component: 'div' } }}>
+            <AccordionSummary expandIcon={<ExpandMore />} sx={focusIndicatorStyle()}>
+              <Chip label={t('groups:groupingSettings')} variant="outlined" />
             </AccordionSummary>
             <AccordionDetails>
               <Box mb="2rem" display="flex" flexDirection="column">
