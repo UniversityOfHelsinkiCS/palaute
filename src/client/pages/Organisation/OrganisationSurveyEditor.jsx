@@ -92,20 +92,7 @@ const StudenNumberInputInfo = () => {
   const { t } = useTranslation()
 
   return (
-    <Instructions
-      title={t('organisationSurveys:studentNumberInformation')}
-      alertProps={{
-        'data-cy': 'formik-student-number-input-alert',
-        severity: 'info',
-        message: t('organisationSurveys:studentNumberInformation'),
-      }}
-      iconButtonProps={{
-        'data-cy': 'formik-student-number-input-expand-icon',
-      }}
-      collapseProps={{
-        'data-cy': 'formik-student-number-input-delimeter-list',
-      }}
-    >
+    <Instructions title={t('organisationSurveys:studentNumberInformation')} dataCyPrefix="formik-student-number-input">
       <ul>
         <li>{t('organisationSurveys:studentNumberDelimeters:comma')}</li>
         <li>{t('organisationSurveys:studentNumberDelimeters:semicolon')}</li>

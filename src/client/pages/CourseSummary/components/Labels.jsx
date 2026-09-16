@@ -158,7 +158,7 @@ export const QuestionFullLabels = ({ questions }) => {
   if (shortenedQuestions.length === 0) return null
 
   return (
-    <Instructions title={t('courseSummary:fullQuestions')} sx={{ width: 'fit-content' }}>
+    <Instructions title={t('courseSummary:fullQuestions')} sx={{ width: 'fit-content', ml: '0.2rem' }}>
       <Box component="dl" sx={{ m: 0, display: 'flex', flexDirection: 'column', gap: 1 }}>
         {shortenedQuestions.map(q => (
           <Box key={q.id} sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>

@@ -39,7 +39,6 @@ const VisibilityInfoBox = ({ isPublic }) => {
     <Instructions
       title={t('feedbackTargetResults:hidingFeatureInfoTitle')}
       sx={{ mt: 0, ml: 1, maxWidth: '70%', '@media print': { display: 'none' } }}
-      collapseProps={{ enter: false, exit: false }}
     >
       {content}
     </Instructions>

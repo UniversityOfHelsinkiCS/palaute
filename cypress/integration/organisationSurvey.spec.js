@@ -48,12 +48,12 @@ describe('Feedback Correspondents', () => {
     cy.get('[data-cy="formik-responsible-teacher-input-field"]').should('be.visible')
 
     cy.get('[data-cy="formik-student-number-input-alert"]').should('be.visible')
-    cy.get('[data-cy="formik-student-number-input-expand-icon"]').should('be.visible')
+    cy.get('[data-cy="formik-student-number-input-expand-button"]').should('be.visible')
     cy.get('[data-cy="formik-student-number-input-delimeter-list"]').should('not.exist')
     cy.get('[data-cy="formik-student-number-input-example"]').should('not.exist')
     cy.get('[data-cy="formik-student-number-input-field"]').should('be.visible')
 
-    cy.get('[data-cy="formik-student-number-input-expand-icon"]').click()
+    cy.get('[data-cy="formik-student-number-input-expand-button"]').click()
     cy.get('[data-cy="formik-student-number-input-delimeter-list"]').should('exist')
     cy.get('[data-cy="formik-student-number-input-delimeter-list"]').should('be.visible')
 
