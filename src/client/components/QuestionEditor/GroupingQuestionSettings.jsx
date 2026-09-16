@@ -147,65 +147,63 @@ const GroupingQuestionSettings = ({
   }
 
   return (
-    <Box sx={{ mb: 2 }}>
-      <Paper>
-        <Box>
-          <GroupingQuestionChips questionId={groupingQuestion?.id} />
-          <Accordion
-            elevation={0}
-            slotProps={{ heading: { component: 'div' } }}
-            sx={{ m: '0.5rem', p: '0.5rem', '&:before': { display: 'none' } }}
+    <Paper>
+      <Box>
+        <GroupingQuestionChips questionId={groupingQuestion?.id} />
+        <Accordion
+          elevation={0}
+          slotProps={{ heading: { component: 'div' } }}
+          sx={{ m: '0.5rem', p: '0.5rem', '&:before': { display: 'none' } }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMore />}
+            sx={{
+              '&:hover': { backgroundColor: '#e5f6fd' },
+              borderRadius: '0.5rem',
+              ...focusIndicatorStyle({ backgroundColor: 'white' }),
+            }}
+            id="grouping-question-settings-header"
+            aria-controls="grouping-question-settings-content"
           >
-            <AccordionSummary
-              expandIcon={<ExpandMore />}
-              sx={{
-                '&:hover': { backgroundColor: '#e5f6fd' },
-                borderRadius: '0.5rem',
-                ...focusIndicatorStyle({ backgroundColor: 'white' }),
-              }}
-              id="grouping-question-settings-header"
-              aria-controls="grouping-question-settings-content"
-            >
-              <InfoOutlined sx={{ mr: '0.5rem', color: '#0288d1' }} aria-hidden="true" />
-              <Typography sx={{ color: '#014361' }}>{t('groups:groupingInfo')}</Typography>
-            </AccordionSummary>
-            <AccordionDetails sx={{ px: '2rem' }}>
-              <GroupingInfo />
-              {groups.length > 0 && <GroupInformation groups={groups} />}
-            </AccordionDetails>
-          </Accordion>
-          <Box>
-            {!groupingQuestion && (
-              <Box sx={{ p: '1.5rem' }}>
-                <Typography>{`${t('groups:noGroupingQuestion')}${automaticGroupingInfo}`}</Typography>
-                <Box sx={{ mt: '0.5rem' }}>
-                  <NorButton onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
-                    {t('groups:addGroupingQuestion')}
-                  </NorButton>
-                </Box>
+            <InfoOutlined sx={{ mr: '0.5rem', color: '#0288d1' }} aria-hidden="true" />
+            <Typography sx={{ color: '#014361' }}>{t('groups:groupingInfo')}</Typography>
+          </AccordionSummary>
+          <AccordionDetails sx={{ px: '2rem' }}>
+            <GroupingInfo />
+            {groups.length > 0 && <GroupInformation groups={groups} />}
+          </AccordionDetails>
+        </Accordion>
+        <Box>
+          {!groupingQuestion && (
+            <Box sx={{ p: '1.5rem' }}>
+              <Typography>{`${t('groups:noGroupingQuestion')}${automaticGroupingInfo}`}</Typography>
+              <Box sx={{ mt: '0.5rem' }}>
+                <NorButton onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
+                  {t('groups:addGroupingQuestion')}
+                </NorButton>
               </Box>
-            )}
-          </Box>
-          {groupingQuestion && (
-            <QuestionCard
-              name="groupingQuestion" // Used to access the value from formik context.
-              onRemove={onRemove}
-              moveUpDisabled
-              moveDownDisabled
-              language={language}
-              isEditing={isEditing}
-              onStopEditing={onStopEditing}
-              onStartEditing={onStartEditing}
-              editable
-              showMoveButtons={false}
-              showRequiredToggle={false}
-              onPublicityToggle={() => {}} // should never get called because of the above
-              elevation={0} // Because this component is already inside a paper
-            />
+            </Box>
           )}
         </Box>
-      </Paper>
-    </Box>
+        {groupingQuestion && (
+          <QuestionCard
+            name="groupingQuestion" // Used to access the value from formik context.
+            onRemove={onRemove}
+            moveUpDisabled
+            moveDownDisabled
+            language={language}
+            isEditing={isEditing}
+            onStopEditing={onStopEditing}
+            onStartEditing={onStartEditing}
+            editable
+            showMoveButtons={false}
+            showRequiredToggle={false}
+            onPublicityToggle={() => {}} // should never get called because of the above
+            elevation={0} // Because this component is already inside a paper
+          />
+        )}
+      </Box>
+    </Paper>
   )
 }
 
