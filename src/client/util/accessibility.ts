@@ -1,12 +1,16 @@
 import type { Theme } from '@mui/material'
 import type { SystemStyleObject } from '@mui/system'
 
-export const focusIndicatorStyle = ({ color }: { color?: string } = {}): SystemStyleObject<Theme> => {
+export const focusIndicatorStyle = ({
+  color,
+  backgroundColor,
+}: { color?: string; backgroundColor?: string } = {}): SystemStyleObject<Theme> => {
   const focusIndicatorStyle: SystemStyleObject<Theme> = {
     '&.Mui-focusVisible': {
       outline: '3px solid',
       outlineColor: theme => color ?? theme.palette.primary.main,
       outlineOffset: '3px',
+      backgroundColor: backgroundColor,
     },
   }
 

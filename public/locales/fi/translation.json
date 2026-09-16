@@ -358,21 +358,18 @@
     "questionAriaDescription": "Kysymys: {{question}}"
   },
   "groups": {
-    "groupingSettings": "Ryhmittely",
+    "groupingInfo": "Tietoa ryhmittelystä",
     "groupingQuestion": "Ryhmittelykysymys",
-    "groupingQuestionDefaultLabel": "Valitse mihin ryhmiin osallistuit",
-    "groupingInfoTextTitle": "Lue, miten ryhmittely toimii",
-    "onlyOneGroup": "Sisussa on määritelty vain yksi ryhmä, joten automaattinen ryhmittely ei ole käytössä.",
-    "groupingInfoText": "Kurssille voidaan määritellä SISU:ssa ryhmät joihin opiskelijat ilmoittautuvat. Tämä ilmoittautumis/ryhmätieto periytyy automaattisesti Norppaan ja sen avulla opettaja voi tarkastella palautetietoja ryhmäkohtaisesti. \n\nJos kurssille ei ole SISU:ssa määritelty ryhmiä, määritellyt ryhmät eivät vastaa tarpeitasi, haluat että opiskelijat valitsevat manuaalisesti ryhmänsä tai haluat määritellä omat kriteerit, voit lisätä alla olevasta napista ryhmittelykysymyksen, joka lisätään kyselyn alkuun.\n\nRyhmäkohtainen tarkastelu on käytettävissä vain jos jokaisessa ryhmässä on vähintään 5 vastannutta, jotta opiskelijoita ei voi tunnistaa vastauksista. Ryhmittelykysymyksen vaihtoehtoja kannattaa olla vähän tai ne kannattaa valita siten, että vastanneita on todennäköisesti 5 tai enemmän jokaisessa vaihtoehdossa.",
+    "groupingQuestionDefaultLabel": "Valitse, mihin ryhmiin osallistuit",
+    "onlyOneGroup": " Sisussa on määritelty vain yksi ryhmä, joten automaattinen ryhmittely ei ole käytössä.",
+    "automaticGroupingInfo": " Automaattinen ryhmittely Sisun ryhmiin on käytössä.",
+    "groupingInfoText": "Kurssille voidaan määritellä Sisussa ryhmät, joihin opiskelijat ilmoittautuvat. Tiedot ryhmistä periytyvät automaattisesti Norppaan, ja niiden avulla opettaja voi tarkastella palautetietoja ryhmäkohtaisesti.\n\nVoit lisätä oman ryhmittelykysymyksen, jos kurssille ei ole Sisussa määritelty ryhmiä, määritellyt ryhmät eivät vastaa tarpeitasi tai haluat, että opiskelijat valitsevat ryhmänsä manuaalisesti. Ryhmittelykysymys lisätään kyselyn alkuun.\n\nRyhmäkohtainen tarkastelu on käytettävissä vain, jos jokaisessa ryhmässä on vähintään 5 vastannutta, jotta opiskelijoita ei voi tunnistaa vastauksista. Ryhmittelykysymyksen vaihtoehtoja kannattaa siis olla vähän tai ne kannattaa valita siten, että vastanneita on todennäköisesti 5 tai enemmän jokaisessa vaihtoehdossa.\n\nAlla voit tarkastella Sisussa määriteltyjä ryhmiä. Jos kyselyyn on jo lisätty oma ryhmittelykysymys ja haluatkin käyttää automaattista ryhmittelyä Sisun ryhmiin, poista lisätty ryhmittelykysymys \"Poista kysymys\" -painikkeella.",
     "groupInformation": "Sisun ryhmien tiedot",
     "teachersOfGroup": "Ryhmän opettajat",
     "groupName": "Ryhmän nimi",
     "noGroupingQuestion": "Kyselyllä ei ole ryhmittelykysymystä.",
-    "automaticGrouping": "Opiskelijoiden vastaukset ryhmitellään automaattisesti ryhmiin, joihin he ovat ilmoittautuneet.",
-    "hasGroupingQuestion": "Kyselyllä on ryhmittelykysymys \"{{ name }}\". Voit poistaa sen alta kysymyksen muokkausvalikosta, jos haluat käyttää automaattista ryhmittelyä Sisun ryhmiin.",
     "chooseGroup": "Valitse tarkasteltava ryhmä",
     "groupsNotAvailableInfo": "Ryhmäluokittelu ei ole saatavilla. Yksittäisten ryhmien palautetta ei voida näyttää, koska ainakin yhdessä ryhmässä on 1-4 palautetta.",
-    "groupingQuestionAddSuccess": "Ryhmittelykysymys luotu olemassa olevien Sisun ryhmien pohjalta. Voit muokata kysymystä halusi mukaan.",
     "addGroupingQuestion": "Lisää ryhmittelykysymys"
   },
   "navBar": {

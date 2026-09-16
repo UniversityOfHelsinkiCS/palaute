@@ -1,10 +1,11 @@
-import { Add, ExpandMore } from '@mui/icons-material'
+import { Add, ExpandMore, InfoOutlined } from '@mui/icons-material'
 import {
   Accordion,
   AccordionDetails,
   AccordionSummary,
   Box,
   Paper,
+  TableContainer,
   Table,
   TableBody,
   TableCell,
@@ -12,6 +13,8 @@ import {
   TableRow,
   Chip,
   Typography,
+  Alert,
+  Grid2 as Grid,
 } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
@@ -19,47 +22,87 @@ import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTar
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
-import Instructions from '../common/Instructions'
 import { NorButton } from '../common/NorButton'
+import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
 import TeacherChip from '../common/TeacherChip'
 import QuestionCard from './QuestionCard'
 import { createQuestion } from './utils'
 
-const GroupInformation = ({ groups }) => {
+const GroupingInfo = () => {
   const { t } = useTranslation()
-  const language = useQuestionLanguage()
 
   return (
-    <Box>
-      <Accordion elevation={0} slotProps={{ heading: { component: 'div' } }}>
-        <AccordionSummary expandIcon={<ExpandMore />} sx={focusIndicatorStyle()}>
-          <Typography>{t('groups:groupInformation')}</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>{t('groups:groupName')}</TableCell>
-                <TableCell>{t('common:studentCount')}</TableCell>
-                <TableCell>{t('groups:teachersOfGroup')}</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {groups.map(group => (
-                <TableRow key={group.id}>
-                  <TableCell>{getLanguageValue(group.name, language)}</TableCell>
-                  <TableCell>{group.studentCount}</TableCell>
-                  <TableCell>
-                    {group.teachers?.map(teacher => (
-                      <TeacherChip key={teacher.id} user={teacher} />
-                    ))}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </AccordionDetails>
-      </Accordion>
+    <Alert severity="info" role="presentation" sx={{ mb: 2, mt: 1 }}>
+      {t('groups:groupingInfoText')
+        .split('\n\n')
+        .map(paragraph => (
+          <Typography key={paragraph} variant="body2" sx={{ mb: 1 }}>
+            {paragraph}
+          </Typography>
+        ))}
+    </Alert>
+  )
+}
+
+const GroupInformation = ({ groups }) => {
+  const { t, i18n } = useTranslation()
+
+  return (
+    <TableContainer sx={{ px: '1rem' }}>
+      <Table size="small">
+        <caption
+          style={{ fontWeight: 'bold', fontSize: '1rem', captionSide: 'top', color: '#000000de', paddingLeft: 0 }}
+        >
+          {t('groups:groupInformation')}
+        </caption>
+        <TableHead>
+          <TableRow>
+            <TableCell>{t('groups:groupName')}</TableCell>
+            <TableCell>{t('common:studentCount')}</TableCell>
+            <TableCell>{t('groups:teachersOfGroup')}</TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {groups.map(group => (
+            <TableRow key={group.id}>
+              <TableCell>{getLanguageValue(group.name, i18n.language)}</TableCell>
+              <TableCell>{group.studentCount}</TableCell>
+              <TableCell>
+                {group.teachers?.map(teacher => (
+                  <TeacherChip key={teacher.id} user={teacher} />
+                ))}
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
+  )
+}
+
+const GroupingQuestionChips = ({ questionId }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Box sx={{ pl: '1rem', pt: '1.5rem' }}>
+      <Grid
+        container
+        direction="row"
+        spacing="0.5rem"
+        sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '1.5rem' }}
+      >
+        <Grid size={{ xs: 12, sm: 4 }}>
+          <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+            <Chip label={t('groups:groupingQuestion')} variant="outlined" />
+          </Box>
+        </Grid>
+        <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'center' } }}>
+          {questionId && (
+            <QuestionPublicityToggle questionId={questionId} checked={false} disabled={true} onChange={() => {}} />
+          )}
+        </Grid>
+        <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'end' } }}></Grid>
+      </Grid>
     </Box>
   )
 }
@@ -96,39 +139,53 @@ const GroupingQuestionSettings = ({
     onAddQuestion(question)
   }
 
+  let automaticGroupingInfo = ''
+  if (groups.length === 1) {
+    automaticGroupingInfo = t('groups:onlyOneGroup')
+  } else if (groups.length > 1) {
+    automaticGroupingInfo = t('groups:automaticGroupingInfo')
+  }
+
   return (
-    <Box mb={2}>
+    <Box sx={{ mb: 2 }}>
       <Paper>
         <Box>
-          <Accordion elevation={0} slotProps={{ heading: { component: 'div' } }}>
-            <AccordionSummary expandIcon={<ExpandMore />} sx={focusIndicatorStyle()}>
-              <Chip label={t('groups:groupingSettings')} variant="outlined" />
+          <GroupingQuestionChips questionId={groupingQuestion?.id} />
+          <Accordion
+            elevation={0}
+            slotProps={{ heading: { component: 'div' } }}
+            sx={{ m: '0.5rem', p: '0.5rem', '&:before': { display: 'none' } }}
+          >
+            <AccordionSummary
+              expandIcon={<ExpandMore />}
+              sx={{
+                '&:hover': { backgroundColor: '#e5f6fd' },
+                borderRadius: '0.5rem',
+                ...focusIndicatorStyle({ backgroundColor: 'white' }),
+              }}
+              id="grouping-question-settings-header"
+              aria-controls="grouping-question-settings-content"
+            >
+              <InfoOutlined sx={{ mr: '0.5rem', color: '#0288d1' }} aria-hidden="true" />
+              <Typography sx={{ color: '#014361' }}>{t('groups:groupingInfo')}</Typography>
             </AccordionSummary>
-            <AccordionDetails>
-              <Box mb="2rem" display="flex" flexDirection="column">
-                <Instructions title={t('groups:groupingInfoTextTitle')}>{t('groups:groupingInfoText')}</Instructions>
-
-                {groups.length > 0 && <GroupInformation groups={groups} />}
-              </Box>
-
-              <Box mb="1rem">
-                {groupingQuestion ? (
-                  t('groups:hasGroupingQuestion', {
-                    name: getLanguageValue(groupingQuestion.data.label, language),
-                  })
-                ) : (
-                  <Box>
-                    {t('groups:noGroupingQuestion')} {groups.length === 1 && t('groups:onlyOneGroup')}
-                    <Box mt="0.5rem">
-                      <NorButton onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
-                        {t('groups:addGroupingQuestion')}
-                      </NorButton>
-                    </Box>
-                  </Box>
-                )}
-              </Box>
+            <AccordionDetails sx={{ px: '2rem' }}>
+              <GroupingInfo />
+              {groups.length > 0 && <GroupInformation groups={groups} />}
             </AccordionDetails>
           </Accordion>
+          <Box>
+            {!groupingQuestion && (
+              <Box sx={{ p: '1.5rem' }}>
+                <Typography>{`${t('groups:noGroupingQuestion')}${automaticGroupingInfo}`}</Typography>
+                <Box sx={{ mt: '0.5rem' }}>
+                  <NorButton onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
+                    {t('groups:addGroupingQuestion')}
+                  </NorButton>
+                </Box>
+              </Box>
+            )}
+          </Box>
           {groupingQuestion && (
             <QuestionCard
               name="groupingQuestion" // Used to access the value from formik context.

@@ -353,17 +353,16 @@
     "questionAriaDescription": "Fråga: {{question}}"
   },
   "groups": {
-    "groupingSettings": "Gruppering",
+    "groupingInfo": "Grupperingsinformation",
     "groupingQuestion": "Grupperingsfråga",
     "groupingQuestionDefaultLabel": "Välj den grupp som du deltog i",
-    "groupingInfoTextTitle": "Bekanta dig med hur gruppering fungerar",
-    "onlyOneGroup": "I Sisu är endast en grupp definierad, så automatisk gruppering är inte bruk.",
-    "groupingInfoText": "Kurser kan bilda grupper i SISU som studerande kan anmäla sig till. Denna registrerings-/gruppinformation skickas automatiskt till Norppa och med den kan läraren se feedbackinformation gruppvis. \n\nOm det inte finns några definierade grupper för kursen i SISU, de definierade grupperna inte uppfyller dina behov, du vill att studenterna manuellt ska välja sina grupper, eller om du vill definiera dina egna kriterier, kan du använda knappen nedan för att lägg till en grupperingsfråga, som kommer att läggas till i början av enkäten.\n\nGruppspecifik granskning är endast tillgänglig om det finns minst 5 respondenter i varje grupp, så att eleverna inte kan identifieras utifrån svaren. Det bör finnas få alternativ för grupperingsfrågan eller så bör du välja dem på ett sådant sätt att det förmodligen finns 5 eller fler respondenter för varje alternativ.",
+    "onlyOneGroup": " I Sisu är endast en grupp definierad, så automatisk gruppering är inte i bruk.",
+    "automaticGroupingInfo": " Automatisk gruppering i Sisu-grupper är i bruk.",
+    "groupingInfoText": "För kursen kan det definieras grupper som studerande anmäler sig till i Sisu. Uppgifterna om grupperna överförs automatiskt till Norppa, så att läraren kan granska feedbacken gruppvis.\n\nDu kan lägga till en egen grupperingsfråga om det inte har definierats några grupper för kursen i Sisu, om de definierade grupperna inte motsvarar dina behov, eller om du vill att studerande väljer sin grupp manuellt. Grupperingsfrågan läggs till i början av enkäten.\n\nGruppspecifik granskning är endast tillgänglig om det finns minst 5 respondenter i varje grupp, så att studerande inte kan identifieras utifrån svaren. Grupperingsfrågan bör därför ha få alternativ, eller så bör alternativen väljas så att det sannolikt finns 5 eller fler respondenter för vart och ett av dem.\n\nNedan kan du granska de grupper som definierats i Sisu. Om en egen grupperingsfråga redan har lagts till i enkäten och du ändå vill använda automatisk gruppering i Sisu-grupper, radera den tillagda grupperingsfrågan med \"Radera frågan\"-knappen.",
     "groupInformation": "Sisu gruppernas information",
     "teachersOfGroup": "Gruppens lärare",
     "groupName": "Gruppens namn",
     "noGroupingQuestion": "Enkäten har inte en grupperingsfråga.",
-    "hasGroupingQuestion": "Enkäten har en grupperingsfråga \"{{ namn }}\". Du kan ta bort den från redigeringsmenyn under frågan om du vill använda automatisk gruppering i Sisu-grupper.",
     "chooseGroup": "Välj grupp att visas",
     "groupsNotAvailableInfo": "Gruppklassificering är inte tillgängligt. Återkoppling från enskilda grupper kan inte visas eftersom minst en grupp har 1-4 återkopplingar.",
     "addGroupingQuestion": "Lägg till grupperingsfråga"

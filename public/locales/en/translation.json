@@ -364,21 +364,18 @@
     "questionAriaDescription": "Question: {{question}}"
   },
   "groups": {
-    "groupingSettings": "Grouping",
+    "groupingInfo": "Grouping information",
     "groupingQuestion": "Grouping question",
     "groupingQuestionDefaultLabel": "Choose the group(s) you attended to",
-    "groupingInfoTextTitle": "Read how grouping works",
-    "onlyOneGroup": "Only one group from SISU is available, so automatic grouping cannot be used.",
-    "groupingInfoText": "Grouping allows you to see and compare answers of single SISU groups in the feedback results. Norppa automatically groups students' answers based on their confirmed study sub group. If your course does not have any meaningful study sub groups in SISU or you want the students to manually choose their group, you may create a multiple choice question and mark it as a grouping question, to have students' answers be grouped based on it. A survey may have only one grouping question and it is always the first question in the form. \n\nAn important detail about grouping is that should any single group have 1-4 feedbacks, the grouping of results won't be available. If you create your own grouping question, try not to ask too specific things or add options that might get less than 5 answers.",
+    "onlyOneGroup": " Only one Sisu group is available, so automatic grouping cannot be used.",
+    "automaticGroupingInfo": " Automatic grouping based on Sisu groups is in use.",
+    "groupingInfoText": "Groups that students enrol in can be defined for the course in Sisu. The group information is inherited automatically by Norppa, so that the teacher can view the feedback by group.\n\nYou can add your own grouping question if no groups have been defined for the course in Sisu, the defined groups do not meet your needs, or you want the students to choose their group manually. The grouping question is added to the beginning of the survey.\n\nViewing feedback by group is only available if each group has at least 5 respondents, so that students cannot be identified from the answers. The grouping question should therefore have few options, or the options should be chosen so that each of them is likely to have 5 or more respondents.\n\nBelow you can view the groups defined in Sisu. If a grouping question of your own has already been added to the survey and you want to use automatic grouping based on Sisu groups instead, delete the added grouping question with the \"Remove question\" button.",
     "groupInformation": "Group information from Sisu",
     "teachersOfGroup": "Teachers of this group",
     "groupName": "Group name",
     "noGroupingQuestion": "The survey has no grouping question.",
-    "automaticGrouping": "Students' answers are automatically grouped based on their confirmed study sub group from SISU.",
-    "hasGroupingQuestion": "The survey has a grouping question '{{ name }}'. If you want to use automatic grouping based on SISU groups, you can delete it from below from the question's edit menu.",
     "chooseGroup": "Choose the group to show",
     "groupsNotAvailableInfo": "Groups are not available. The feedbacks of any single group cannot be shown separately because some group(s) have between 1 and 4 feedbacks.",
-    "groupingQuestionAddSuccess": "Grouping question added with existing groups as options. You may edit it as you wish.",
     "addGroupingQuestion": "Add grouping question"
   },
   "navBar": {

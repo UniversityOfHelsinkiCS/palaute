@@ -175,31 +175,33 @@ const QuestionCard = ({
   return (
     <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
       <CardContent>
-        <Grid
-          container
-          direction="row"
-          spacing="0.5rem"
-          sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '1.5rem' }}
-        >
-          <Grid size={{ xs: 12, sm: 4 }}>
-            <Box sx={{ display: 'flex', gap: '0.5rem' }}>
-              <Chip label={title} variant="outlined" />
-            </Box>
+        {!isGrouping && (
+          <Grid
+            container
+            direction="row"
+            spacing="0.5rem"
+            sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '1.5rem' }}
+          >
+            <Grid size={{ xs: 12, sm: 4 }}>
+              <Box sx={{ display: 'flex', gap: '0.5rem' }}>
+                <Chip label={title} variant="outlined" />
+              </Box>
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'center' } }}>
+              {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
+                <QuestionPublicityToggle
+                  questionId={question.id}
+                  checked={question.public}
+                  disabled={!question.publicityConfigurable}
+                  onChange={() => handlePublicityToggle(!question.public)}
+                />
+              )}
+            </Grid>
+            <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'end' } }}>
+              {question.chip && <Chip label={t(question.chip)} variant="outlined" />}
+            </Grid>
           </Grid>
-          <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'center' } }}>
-            {question.type !== 'TEXT' && question.type !== 'OPEN' && !isEditing && (
-              <QuestionPublicityToggle
-                questionId={question.id}
-                checked={question.public}
-                disabled={!question.publicityConfigurable}
-                onChange={() => handlePublicityToggle(!question.public)}
-              />
-            )}
-          </Grid>
-          <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'end' } }}>
-            {question.chip && <Chip label={t(question.chip)} variant="outlined" />}
-          </Grid>
-        </Grid>
+        )}
         {isEditing ? (
           <>
             <Box sx={{ mb: 2 }}>
