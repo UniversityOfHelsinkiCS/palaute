@@ -1,5 +1,5 @@
 import { SettingsOutlined } from '@mui/icons-material'
-import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { Dialog, DialogTitle } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,6 +12,8 @@ const EditFeedbackTargetDates = () => {
   const { isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
   const titleId = React.useId()
+
+  const closeDialog = () => setDialogOpen(false)
 
   const showEditButton = isAdmin || isOrganisationAdmin || isResponsibleTeacher
 
@@ -31,11 +33,9 @@ const EditFeedbackTargetDates = () => {
         {t('common:edit')}
       </NorButton>
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} aria-labelledby={titleId}>
+      <Dialog open={dialogOpen} onClose={closeDialog} aria-labelledby={titleId}>
         <DialogTitle id={titleId}>{t('feedbackTargetSettings:editPeriodTitle')}</DialogTitle>
-        <DialogContent>
-          <FeedbackPeriodForm />
-        </DialogContent>
+        <FeedbackPeriodForm onClose={closeDialog} />
       </Dialog>
     </>
   )

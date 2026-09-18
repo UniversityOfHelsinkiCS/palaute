@@ -252,7 +252,7 @@
     "showPreview": "Esikatsele kyselyä",
     "showPreviewConfirmation": "Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.",
     "translationLanguage": "Kyselyn esikatselun kieli",
-    "warningAboutOpeningCourse": "HUOM! Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua.\n      Palautteen tulee olla auki vähintään yhden vuorokauden ajan.\n      Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo> mikäli ongelmia ilmenee.",
+    "warningAboutOpeningCourse": "HUOM! {{openStateNote}}Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua.\n      Palautteen tulee olla auki vähintään yhden vuorokauden ajan.\n      Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo>, mikäli ongelmia ilmenee.",
     "noUnsavedChanges": "Ei tallentamattomia muutoksia",
     "openImmediately": "Avaa palaute heti",
     "copyFromCourseDialogTitle": "Kopioi kysymykset toisesta kyselystä",
@@ -440,7 +440,7 @@
     "editPeriodTitle": "Muokkaa palautteen käynnissäoloaikaa",
     "cannotCloseImmediately": "Palaute ei vielä ole käynnissä",
     "cannotCloseImmediatelyWhenOpen": "Palaute on sulkeutunut tai sulkeutuu päivän kuluttua",
-    "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut"
+    "cannotOpenImmediately": "Palaute on jo käynnissä tai loppunut."
   },
   "organisationSurveys": {
     "emptySurveys": "Koulutusohjelmalla ei ole vielä yhtään kyselyä, voit luoda uuden koulutusohjelman kyselyn täällä",

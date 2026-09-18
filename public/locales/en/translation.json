@@ -257,7 +257,7 @@
     "showPreview": "Show survey preview",
     "showPreviewConfirmation": "Are you sure you want to preview? Unsaved changes will be lost.",
     "translationLanguage": "Survey preview language",
-    "warningAboutOpeningCourse": "NB! The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run in to trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>.",
+    "warningAboutOpeningCourse": "NB! {{openStateNote}}The opening date cannot be edited after the feedback opens, and the closing date cannot be edited after the feedback period is over. The feedback must be open at least for a day. If you run into trouble, please contact support at <mailTo>{{supportEmail}}</mailTo>.",
     "noUnsavedChanges": "No unsaved changes",
     "openImmediately": "Open feedback now",
     "openImmediatelyConfirm": "When feedback is open the survey can no longer be edited, do you still want to open the feedback?",
@@ -445,7 +445,7 @@
     "editPeriodTitle": "Edit feedback period",
     "cannotCloseImmediately": "Feedback is not yet open",
     "cannotCloseImmediatelyWhenOpen": "Feedback either closes within a day or has already ended",
-    "cannotOpenImmediately": "Feedback is already open or has ended"
+    "cannotOpenImmediately": "Feedback is already open or has ended."
   },
   "organisationSurveys": {
     "emptySurveys": "There are no surveys for this programme yet; you can create a new survey for the programme here.",

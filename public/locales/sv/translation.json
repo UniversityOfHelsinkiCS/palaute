@@ -236,7 +236,7 @@
     "showPreview": "Visa enkätens förhandsvisning",
     "showPreviewConfirmation": "Är du säker på att du vill förhandsvisa? Osparade ändringar kommer förloras.",
     "translationLanguage": "Förhandsgranskningsspråk för enkäten",
-    "warningAboutOpeningCourse": "OBS! Öppningsdatumet kan inte redigeras efter att responsen har öppnats, och slutdatumet kan inte redigeras efter att responsperioden har slutat. Responsen måste vara öppen åtminstone en dag. Om du får problem, kontakta supporten: <mailTo>{{supportEmail}}</mailTo>.",
+    "warningAboutOpeningCourse": "OBS! {{openStateNote}}Öppningsdatumet kan inte redigeras efter att responsen har öppnats, och slutdatumet kan inte redigeras efter att responsperioden har slutat. Responsen måste vara öppen åtminstone en dag. Om du får problem, kontakta supporten: <mailTo>{{supportEmail}}</mailTo>.",
     "opensAtIsNow": "Enkäten är inställd att öppnas genast! När enkäten öppnas kan den inte längre redigeras.",
     "checkbox": "Jag förstår",
     "noUnsavedChanges": "Inga osparade ändringar",
@@ -435,7 +435,7 @@
     "editPeriodTitle": "Redigera responsperiod",
     "cannotCloseImmediately": "Responsen är ännu inte igång",
     "cannotCloseImmediatelyWhenOpen": "Responsen har stängts eller kommer att stängas om en dag",
-    "cannotOpenImmediately": "Responsen är igång eller har redan slutat"
+    "cannotOpenImmediately": "Responsen är igång eller har redan slutat."
   },
   "organisationSurveys": {
     "startDate": "Från och med",

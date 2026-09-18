@@ -19,11 +19,13 @@ const useInteractiveMutation = <TArgs>(
       try {
         await mutation(args)
         enqueueSnackbar(options.success ?? t('common:saveSuccess'), { variant: 'success' })
+        return true
       } catch (error) {
         enqueueSnackbar(
           typeof options.error === 'function' ? options.error(error) : (options.error ?? t('common:unknownError')),
           { variant: 'error' }
         )
+        return false
       }
     },
     [mutation, options]

@@ -1,4 +1,4 @@
-import { isAfter, differenceInDays, startOfDay } from 'date-fns'
+import { isAfter, differenceInDays, startOfDay, isSameDay } from 'date-fns'
 import { isNaN } from 'lodash-es'
 
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
@@ -48,7 +48,11 @@ const opensAtIsImmediately = values => {
   return startOfDay(opensAt).getTime() === startOfDay(new Date()).getTime()
 }
 
-export const requiresSubmitConfirmation = values => opensAtIsImmediately(values)
+// The confirmation warns that the feedback is about to open. That only applies when this save
+// is what opens it: if opensAt was already today, the user is editing something else (the end
+// date, say) and nothing new gets opened, so asking again would be noise.
+export const requiresSubmitConfirmation = (values, initialValues) =>
+  opensAtIsImmediately(values) && !isSameDay(values.opensAt, initialValues.opensAt)
 
 export const getFeedbackPeriodInitialValues = feedbackTarget => {
   const { closesAt, opensAt } = feedbackTarget
