@@ -26,22 +26,22 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
 
   return (
     <Stack direction="column" spacing={2}>
-      <Box component="dl" data-cy={`${dataCyPrefix}feedback-target-feedback-dates`}>
+      <Box data-cy={`${dataCyPrefix}feedback-target-feedback-dates`}>
         {!userCreated && (
           <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: '1rem', rowGap: '0.3rem', mb: 2 }}>
-            <Typography component="dt">{t('feedbackTargetView:coursePeriod')}:</Typography>
-            <Typography component="dd">{coursePeriod}</Typography>
+            <Typography>{t('feedbackTargetView:coursePeriod')}:</Typography>
+            <Typography>{coursePeriod}</Typography>
           </Box>
         )}
         <Box sx={{ display: 'flex', flexWrap: 'wrap', columnGap: '1rem', rowGap: '0.3rem', alignItems: 'center' }}>
-          <Typography component="dt">{t('feedbackTargetView:feedbackPeriod')}:</Typography>
-          <Typography component="dd">{feedbackPeriod}</Typography>
+          <Typography>{t('feedbackTargetView:feedbackPeriod')}:</Typography>
+          <Typography>{feedbackPeriod}</Typography>
           {isTeacher && isCourseFeedback && <EditFeedbackTargetDates />}
         </Box>
         {isStudent && continuousFeedbackEnabled && (
           <Box sx={{ mt: 2, display: 'flex', flexWrap: 'wrap', columnGap: '1rem', rowGap: '0.3rem' }}>
-            <Typography component="dt">{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
-            <Typography component="dd">{coursePeriod}</Typography>
+            <Typography>{t('feedbackTargetView:continuousFeedbackTab')}:</Typography>
+            <Typography>{coursePeriod}</Typography>
           </Box>
         )}
       </Box>

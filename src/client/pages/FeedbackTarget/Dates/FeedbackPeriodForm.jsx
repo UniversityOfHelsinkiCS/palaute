@@ -4,7 +4,6 @@ import { Formik, Form } from 'formik'
 import { useState, useRef } from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 
-import CardSection from '../../../components/common/CardSection'
 import FormikDatePicker from '../../../components/common/FormikDatePicker'
 import { NorButton } from '../../../components/common/NorButton'
 import { TooltipButton } from '../../../components/common/TooltipButton'
@@ -80,7 +79,7 @@ const FeedbackPeriodForm = () => {
   const submitButtonTooltip = errors => Object.values(errors).map(t).join('\n')
 
   return (
-    <CardSection title={t('feedbackTargetSettings:editPeriodTitle')}>
+    <>
       <OpenFeedbackImmediatelyDialog
         open={warningDialogOpen}
         onClose={closeWarningDialog}
@@ -147,7 +146,7 @@ const FeedbackPeriodForm = () => {
           </Form>
         )}
       </Formik>
-    </CardSection>
+    </>
   )
 }
 

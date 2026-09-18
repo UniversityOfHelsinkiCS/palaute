@@ -1,5 +1,5 @@
 import { SettingsOutlined } from '@mui/icons-material'
-import { Dialog } from '@mui/material'
+import { Dialog, DialogContent, DialogTitle } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -11,6 +11,7 @@ const EditFeedbackTargetDates = () => {
   const { t } = useTranslation()
   const { isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
+  const titleId = React.useId()
 
   const showEditButton = isAdmin || isOrganisationAdmin || isResponsibleTeacher
 
@@ -21,6 +22,8 @@ const EditFeedbackTargetDates = () => {
       <NorButton
         sx={{ textAlign: 'center', justifyContent: 'center', maxWidth: 'fit-content' }}
         data-cy="feedback-target-edit-period"
+        aria-label={t('feedbackTargetSettings:editPeriodTitle')}
+        aria-haspopup="dialog"
         onClick={() => setDialogOpen(true)}
         color="primary"
         icon={<SettingsOutlined />}
@@ -28,8 +31,11 @@ const EditFeedbackTargetDates = () => {
         {t('common:edit')}
       </NorButton>
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)}>
-        <FeedbackPeriodForm />
+      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} aria-labelledby={titleId}>
+        <DialogTitle id={titleId}>{t('feedbackTargetSettings:editPeriodTitle')}</DialogTitle>
+        <DialogContent>
+          <FeedbackPeriodForm />
+        </DialogContent>
       </Dialog>
     </>
   )
