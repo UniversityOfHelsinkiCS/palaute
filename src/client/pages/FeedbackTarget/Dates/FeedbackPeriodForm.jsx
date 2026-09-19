@@ -93,7 +93,7 @@ const FeedbackPeriodForm = ({ onClose }) => {
         onConfirm={handleConfirmWarning}
       />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validateFeedbackPeriod(isOpen, isOver)}>
-        {({ dirty, isValid, values }) => (
+        {({ dirty, isValid, values, submitForm }) => (
           <Form>
             <DialogContent sx={{ pb: 1.5 }}>
               <Alert severity="warning" sx={{ mb: 2 }}>
@@ -142,9 +142,13 @@ const FeedbackPeriodForm = ({ onClose }) => {
                   data-cy="feedback-target-open-feedback-immediately"
                   sx={{ mr: { sm: 'auto' } }}
                   color="secondary"
-                  type="submit"
+                  // Deliberately not type="submit": as the first submit button in the form it
+                  // would be the one activated by pressing Enter in a date field. It stays first
+                  // in DOM order so that screen reader users still find it before Save.
+                  type="button"
                   onClick={() => {
                     warningOriginRef.current = 'openImmediately'
+                    void submitForm()
                   }}
                   icon={<WarningAmber />}
                 >
