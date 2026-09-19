@@ -1,9 +1,13 @@
+import type { Theme } from '@mui/material'
+import type { SystemStyleObject } from '@mui/system'
 import type { DatePickerProps } from '@mui/x-date-pickers/DatePicker'
 
 import { TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import { useField, useFormikContext } from 'formik'
 import { useTranslation } from 'react-i18next'
+
+import { focusIndicatorStyle } from '../../util/accessibility'
 
 type FormikDatePickerProps = Omit<
   DatePickerProps<Date>,
@@ -13,6 +17,16 @@ type FormikDatePickerProps = Omit<
 }
 
 type DatePickerSlotProps = DatePickerProps<Date>['slotProps']
+
+const calendarFocusRing: SystemStyleObject<Theme> = {
+  boxShadow: theme => `inset 0 0 0 3px ${theme.palette.primary.main}`,
+}
+
+const calendarFocusIndicatorStyle: SystemStyleObject<Theme> = {
+  '& .MuiPickersDay-root.Mui-focusVisible, & .MuiPickersCalendarHeader-switchViewButton.Mui-focusVisible, & .MuiPickersArrowSwitcher-button.Mui-focusVisible':
+    calendarFocusRing,
+  '& .MuiPickersYear-yearButton:focus-visible, & .MuiPickersMonth-monthButton:focus-visible': calendarFocusRing,
+}
 
 const FormikDatePicker = ({ name, ...props }: FormikDatePickerProps) => {
   const [field, meta] = useField(name)
@@ -59,7 +73,28 @@ const FormikDatePicker = ({ name, ...props }: FormikDatePickerProps) => {
         } as DatePickerSlotProps['inputAdornment'],
         openPickerButton: {
           'data-cy': `formik-date-picker-field-${name}-popper`,
+          disableFocusRipple: true,
+          sx: focusIndicatorStyle(),
         } as DatePickerSlotProps['openPickerButton'],
+        desktopPaper: {
+          sx: calendarFocusIndicatorStyle,
+        },
+        mobilePaper: {
+          sx: calendarFocusIndicatorStyle,
+        },
+        calendarHeader: {
+          slotProps: {
+            switchViewButton: {
+              disableFocusRipple: true,
+            },
+            previousIconButton: {
+              disableFocusRipple: true,
+            },
+            nextIconButton: {
+              disableFocusRipple: true,
+            },
+          },
+        },
       }}
       maxDate={new Date('2300-01-01')}
       {...props}
