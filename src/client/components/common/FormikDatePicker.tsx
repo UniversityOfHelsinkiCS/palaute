@@ -69,7 +69,6 @@ const FormikDatePicker = ({ name, ...props }: FormikDatePickerProps) => {
         } as DatePickerSlotProps['field'],
         inputAdornment: {
           'data-cy': `formik-date-picker-keyboard-field-${name}`,
-          'aria-label': 'change date',
         } as DatePickerSlotProps['inputAdornment'],
         openPickerButton: {
           'data-cy': `formik-date-picker-field-${name}-popper`,
