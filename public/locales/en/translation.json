@@ -88,7 +88,8 @@
       "en": "Select language: English"
     },
     "skipToContent": "Skip to content",
-    "contactEmailDescription": "Contact: {{email}}. Email application will open in a new window."
+    "contactEmailDescription": "Contact: {{email}}. Email application will open in a new window.",
+    "emailOpensInNewWindow": "Email application will open in a new window."
   },
   "validationErrors": {
     "required": "This field is required",

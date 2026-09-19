@@ -83,7 +83,8 @@
     "endDate": "Lopetuspvm",
     "opensInNewTab": ", avautuu uudelle välilehdelle",
     "skipToContent": "Siirry sisältöön",
-    "contactEmailDescription": "Ota yhteyttä: {{email}}. Sähköpostiohjelma avautuu uuteen ikkunaan."
+    "contactEmailDescription": "Ota yhteyttä: {{email}}. Sähköpostiohjelma avautuu uuteen ikkunaan.",
+    "emailOpensInNewWindow": "Sähköpostiohjelma avautuu uuteen ikkunaan."
   },
   "validationErrors": {
     "required": "Tämä kenttä vaaditaan",
@@ -252,7 +253,7 @@
     "showPreview": "Esikatsele kyselyä",
     "showPreviewConfirmation": "Haluatko varmasti esikatsella? Tallentamattomat muutokset menetetään.",
     "translationLanguage": "Kyselyn esikatselun kieli",
-    "warningAboutOpeningCourse": "HUOM! {{openStateNote}}Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua.\n      Palautteen tulee olla auki vähintään yhden vuorokauden ajan.\n      Ota yhteyttä tukeen <mailTo>{{supportEmail}}</mailTo>, mikäli ongelmia ilmenee.",
+    "warningAboutOpeningCourse": "HUOM! {{openStateNote}}Kyselyn alkamispäivämäärää ei voi muokata palautteen avautumisen jälkeen, ja sulkeutumispäivämäärää ei voi muokata palautteen sulkeuduttua. Palautteen tulee olla auki vähintään yhden vuorokauden ajan. Jos ongelmia ilmenee, ota yhteyttä tukeen: <mailTo>{{supportEmail}}</mailTo>.",
     "noUnsavedChanges": "Ei tallentamattomia muutoksia",
     "openImmediately": "Avaa palaute heti",
     "copyFromCourseDialogTitle": "Kopioi kysymykset toisesta kyselystä",

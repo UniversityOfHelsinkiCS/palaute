@@ -78,7 +78,8 @@
     "additional": "Ytterligare",
     "opensInNewTab": ", öppnas i en ny flik",
     "skipToContent": "Gå till innehållet",
-    "contactEmailDescription": "Kontakt: {{email}}. E-postprogram öppnas i ett nytt fönster."
+    "contactEmailDescription": "Kontakt: {{email}}. E-postprogram öppnas i ett nytt fönster.",
+    "emailOpensInNewWindow": "E-postprogram öppnas i ett nytt fönster."
   },
   "validationErrors": {
     "required": "Fältet krävs",

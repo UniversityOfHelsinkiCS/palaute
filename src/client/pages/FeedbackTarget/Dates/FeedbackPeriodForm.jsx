@@ -101,7 +101,14 @@ const FeedbackPeriodForm = ({ onClose }) => {
                   i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
                   values={{ supportEmail: t('links:supportEmail'), openStateNote }}
                   components={{
-                    mailTo: <Link key="mailTo" href={`mailto:${t('links:supportEmail')}`} underline="hover" />,
+                    mailTo: (
+                      <Link
+                        key="mailTo"
+                        href={`mailto:${t('links:supportEmail')}`}
+                        underline="hover"
+                        aria-description={t('common:emailOpensInNewWindow')}
+                      />
+                    ),
                   }}
                 />
               </Alert>
