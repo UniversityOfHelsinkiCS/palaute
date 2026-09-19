@@ -4,6 +4,7 @@ import { IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
 import { FieldArray, useField } from 'formik'
 import { useTranslation } from 'react-i18next'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
 import FormikTextField from '../common/FormikTextField'
 import { NorButton } from '../common/NorButton'
 import { createOption } from './utils'
@@ -54,7 +55,7 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
 
       <Box ml={2} flexGrow={0}>
         <Tooltip title={t('questionEditor:removeOption')}>
-          <IconButton onClick={handleRemove} size="large">
+          <IconButton onClick={handleRemove} size="large" sx={focusIndicatorStyle()} disableFocusRipple>
             <CloseIcon />
           </IconButton>
         </Tooltip>
