@@ -40,11 +40,23 @@ const getUsernameFromToken = (req: UnauthenticatedRequest) => {
     throw ApplicationError.Forbidden('Token must be a string')
   }
 
-  const { username } = jwt.verify(token, JWT_KEY) as { username: string }
+  let payload: { username: string }
+
+  try {
+    payload = jwt.verify(token, JWT_KEY) as { username: string }
+  } catch (error) {
+    // An expired no-AD link is a normal end of life, not a server error:
+    // without this the TokenExpiredError would become a 500 and a Sentry report.
+    if (error instanceof jwt.TokenExpiredError) {
+      throw ApplicationError.Forbidden('Token expired')
+    }
+    throw ApplicationError.Forbidden('Token is invalid')
+  }
+
+  const { username } = payload
 
   if (!username) {
-    logger.info('Token broken', { token })
-    logger.info('Token user', { tokenuser })
+    logger.info('Token broken', { tokenuser })
     throw ApplicationError.Forbidden('Token is missing username')
   }
 
