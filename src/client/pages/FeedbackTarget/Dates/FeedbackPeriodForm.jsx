@@ -13,7 +13,7 @@ import { useOpenImmediately, useUpdateDates } from './api'
 import OpenFeedbackImmediatelyDialog from './OpenFeedbackImmediatelyDialog'
 import { validateFeedbackPeriod, requiresSubmitConfirmation, getFeedbackPeriodInitialValues } from './utils'
 
-const FeedbackPeriodForm = ({ onClose }) => {
+const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
   const { t } = useTranslation()
   const { feedbackTarget, isResponsibleTeacher, isOrganisationAdmin, isAdmin } = useFeedbackTargetContext()
   const updateDates = useUpdateDates(feedbackTarget)
@@ -32,6 +32,13 @@ const FeedbackPeriodForm = ({ onClose }) => {
   const handleSubmitFeedbackPeriod = useInteractiveMutation(dates => updateDates.mutateAsync(dates))
 
   const openImmediatelyEnabled = !(isOpen || isOver)
+
+  const opensAtDisabled = (!formEnabled || isOpen || isOver) && !isAdmin
+  const closesAtDisabled = !formEnabled
+
+  // Land initial focus on the first date the user can acually edit. If no such date exists, focus Cancel button.
+  const initialFocus = !opensAtDisabled ? 'opensAt' : !closesAtDisabled ? 'closesAt' : 'cancel'
+  const refFor = target => (initialFocus === target ? initialFocusRef : undefined)
 
   const openStateNote = openImmediatelyEnabled ? '' : `${t('feedbackTargetSettings:cannotOpenImmediately')} `
 
@@ -96,7 +103,7 @@ const FeedbackPeriodForm = ({ onClose }) => {
         {({ dirty, isValid, values, submitForm }) => (
           <Form>
             <DialogContent sx={{ pb: 1.5 }}>
-              <Alert severity="warning" sx={{ mb: 2 }}>
+              <Alert severity="warning" sx={{ mb: 2 }} role="presentation">
                 <Trans
                   i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
                   values={{ supportEmail: t('links:supportEmail'), openStateNote }}
@@ -116,13 +123,15 @@ const FeedbackPeriodForm = ({ onClose }) => {
                 name="opensAt"
                 label={t('editFeedbackTarget:opensAt')}
                 disablePast={!isAdmin}
-                disabled={(!formEnabled || isOpen || isOver) && !isAdmin}
+                disabled={opensAtDisabled}
+                inputRef={refFor('opensAt')}
               />
               <FormikDatePicker
                 name="closesAt"
                 label={t('editFeedbackTarget:closesAt')}
                 disablePast={!isAdmin}
-                disabled={!formEnabled}
+                disabled={closesAtDisabled}
+                inputRef={refFor('closesAt')}
               />
             </DialogContent>
             <DialogActions
@@ -156,7 +165,13 @@ const FeedbackPeriodForm = ({ onClose }) => {
                 </NorButton>
               )}
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1 }}>
-                <NorButton data-cy="feedback-target-edit-period-cancel" color="cancel" type="button" onClick={onClose}>
+                <NorButton
+                  data-cy="feedback-target-edit-period-cancel"
+                  color="cancel"
+                  type="button"
+                  onClick={onClose}
+                  ref={refFor('cancel')}
+                >
                   {t('common:cancel')}
                 </NorButton>
                 {formEnabled && (

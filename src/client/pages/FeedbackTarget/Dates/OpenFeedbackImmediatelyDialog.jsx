@@ -13,7 +13,14 @@ const OpenFeedbackImmediatelyDialog = ({ open = false, onClose, onConfirm }) => 
       <DialogTitle id={titleId}>{t('editFeedbackTarget:openFeedbackImmediatelyDialogTitle')}</DialogTitle>
       <DialogContent>{t('editFeedbackTarget:openFeedbackImmediatelyDialogContent')}</DialogContent>
       <DialogActions sx={{ p: 3, pt: 1 }}>
-        <NorButton data-cy="feedback-target-open-feedback-immediately-cancel" color="cancel" onClick={onClose}>
+        <NorButton
+          data-cy="feedback-target-open-feedback-immediately-cancel"
+          color="cancel"
+          onClick={onClose}
+          // Focus a real control inside the dialog rather than leaving MUI's default focus on the
+          // presentational transition wrapper, which never gets the dialog's name announced.
+          autoFocus
+        >
           {t('editFeedbackTarget:openFeedbackImmediatelyDialogCancel')}
         </NorButton>
         <NorButton data-cy="feedback-target-open-feedback-immediately-confirm" color="primary" onClick={onConfirm}>
