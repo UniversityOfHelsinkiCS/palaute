@@ -34,7 +34,7 @@ jobs:
           extra-args: |
             --ulimit nofile=4096:4096
 
-      - name: Push to quay.io
+      - name: Push to version
         uses: redhat-actions/push-to-registry@v2
         with:
           image: ${{ steps.build-image.outputs.image }}
@@ -49,9 +49,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v7
+      - name: Log in to the registry
+        uses: docker/login-action@v3
+        with:
+          registry: registry.version.helsinki.fi
+          username: kontit
+          password: ${{ secrets.VERSION_PUSH_SECRET }}
 
       - name: Pull image and create a container
-        run: docker create --name palaute quay.io/toska/norppa:production
+        run: docker create --name palaute registry.version.helsinki.fi/toska/openshift/kontit/norppa:production
 
       - name: Copy assets from the container
         run: docker cp palaute:/opt/app-root/src/build ./build
