@@ -1,8 +1,8 @@
 import { Box, Typography } from '@mui/material'
-import { React } from 'react'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import useFeedbackTargetUsers from '../../../../hooks/useFeedbackTargetUsers'
+import { basePath } from '../../../../util/common'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
 const Links = () => {
@@ -30,7 +30,7 @@ const Links = () => {
             data-cy={`noad-token-${user.studentNumber}`}
             sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}
           >
-            http://{window.location.host}/noad/token/{user.token}
+            {`${window.location.origin}${basePath}/noad/token/${user.token}`}
           </Typography>
         </Box>
       ))}
