@@ -11,7 +11,6 @@ const EditFeedbackTargetDates = () => {
   const { t } = useTranslation()
   const { isAdmin, isOrganisationAdmin, isResponsibleTeacher } = useFeedbackTargetContext()
   const [dialogOpen, setDialogOpen] = React.useState(false)
-  const titleId = React.useId()
   const editButtonRef = React.useRef(null)
   const initialFocusRef = React.useRef(null)
 
@@ -45,7 +44,8 @@ const EditFeedbackTargetDates = () => {
       <Dialog
         open={dialogOpen}
         onClose={closeDialog}
-        aria-labelledby={titleId}
+        aria-labelledby="edit-feedback-period-title"
+        aria-describedby="edit-feedback-period-warning"
         disableRestoreFocus
         slotProps={{
           transition: {
@@ -54,7 +54,7 @@ const EditFeedbackTargetDates = () => {
           },
         }}
       >
-        <DialogTitle id={titleId}>{t('feedbackTargetSettings:editPeriodTitle')}</DialogTitle>
+        <DialogTitle id="edit-feedback-period-title">{t('feedbackTargetSettings:editPeriodTitle')}</DialogTitle>
         <FeedbackPeriodForm onClose={closeDialog} initialFocusRef={initialFocusRef} />
       </Dialog>
     </>

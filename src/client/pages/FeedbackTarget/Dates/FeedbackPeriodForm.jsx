@@ -103,7 +103,7 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
         {({ dirty, isValid, values, submitForm }) => (
           <Form>
             <DialogContent sx={{ pb: 1.5 }}>
-              <Alert severity="warning" sx={{ mb: 2 }} role="presentation">
+              <Alert id="edit-feedback-period-warning" severity="warning" sx={{ mb: 2 }} role="presentation">
                 <Trans
                   i18nKey="editFeedbackTarget:warningAboutOpeningCourse"
                   values={{ supportEmail: t('links:supportEmail'), openStateNote }}
