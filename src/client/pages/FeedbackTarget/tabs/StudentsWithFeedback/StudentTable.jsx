@@ -1,7 +1,20 @@
 import { Download } from '@mui/icons-material'
-import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box, TableContainer } from '@mui/material'
+import CopyIcon from '@mui/icons-material/FileCopyOutlined'
+import {
+  Table,
+  TableRow,
+  TableCell,
+  TableBody,
+  TableHead,
+  TableSortLabel,
+  Box,
+  TableContainer,
+  IconButton,
+  Tooltip,
+} from '@mui/material'
 import { parseISO, format } from 'date-fns'
 import { orderBy } from 'lodash-es'
+import { useSnackbar } from 'notistack'
 import { useMemo, useState } from 'react'
 import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
@@ -125,6 +138,22 @@ const StudentTable = ({ students, feedbackTarget }) => {
   const [order, setOrder] = useState('desc')
   const [orderByKey, setOrderByKey] = useState('lastName')
   const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+
+  const sortedStudents = sortTable(students, order, orderByKey)
+
+  const handleCopyStudentNumbers = async () => {
+    const studentNumbers = sortedStudents.flatMap(student =>
+      typeof student.studentNumber === 'string' && student.studentNumber ? [student.studentNumber] : []
+    )
+
+    try {
+      await navigator.clipboard.writeText(studentNumbers.join(' '))
+      enqueueSnackbar(t('feedbackTargetView:studentNumbersCopied'), { variant: 'info' })
+    } catch {
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    }
+  }
 
   const handleRequestSort = (e, property) => {
     const isAsc = orderByKey === property && order === 'asc'
@@ -220,6 +249,20 @@ const StudentTable = ({ students, feedbackTarget }) => {
                 order={order}
                 orderBy={orderByKey}
                 onRequestSort={handleRequestSort}
+                action={
+                  <Tooltip title={t('feedbackTargetView:copyStudentNumbers')}>
+                    <IconButton
+                      size="small"
+                      aria-label={t('feedbackTargetView:copyStudentNumbers')}
+                      data-cy="students-with-feedback-copy-student-numbers"
+                      onClick={handleCopyStudentNumbers}
+                      sx={focusIndicatorStyle()}
+                      disableFocusRipple
+                    >
+                      <CopyIcon fontSize="small" sx={{ color: 'primary.main' }} />
+                    </IconButton>
+                  </Tooltip>
+                }
               />
               <TableHeadCell
                 id="email"
@@ -238,17 +281,15 @@ const StudentTable = ({ students, feedbackTarget }) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {sortTable(students, order, orderByKey).map(
-              ({ id, firstName, lastName, studentNumber, email, feedbackGiven }) => (
-                <TableRow key={id}>
-                  <TableCell>{firstName}</TableCell>
-                  <TableCell>{lastName}</TableCell>
-                  <TableCell>{studentNumber}</TableCell>
-                  <TableCell>{email}</TableCell>
-                  <TableCell>{getFeedbackText(feedbackStatusAvailable, feedbackGiven, t)}</TableCell>
-                </TableRow>
-              )
-            )}
+            {sortedStudents.map(({ id, firstName, lastName, studentNumber, email, feedbackGiven }) => (
+              <TableRow key={id}>
+                <TableCell>{firstName}</TableCell>
+                <TableCell>{lastName}</TableCell>
+                <TableCell>{studentNumber}</TableCell>
+                <TableCell>{email}</TableCell>
+                <TableCell>{getFeedbackText(feedbackStatusAvailable, feedbackGiven, t)}</TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </TableContainer>
@@ -256,21 +297,24 @@ const StudentTable = ({ students, feedbackTarget }) => {
   )
 }
 
-const TableHeadCell = ({ id, name, order, orderBy, onRequestSort }) => {
+const TableHeadCell = ({ id, name, order, orderBy, onRequestSort, action = null }) => {
   const createSortHandler = property => e => {
     onRequestSort(e, property)
   }
 
   return (
     <TableCell align="left" sortDirection={orderBy === id ? order : false}>
-      <TableSortLabel
-        active={orderBy === id}
-        direction={orderBy === id ? order : 'asc'}
-        onClick={createSortHandler(id)}
-        sx={{ p: '2px', ...focusIndicatorStyle() }}
-      >
-        {name}
-      </TableSortLabel>
+      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+        <TableSortLabel
+          active={orderBy === id}
+          direction={orderBy === id ? order : 'asc'}
+          onClick={createSortHandler(id)}
+          sx={{ p: '2px', ...focusIndicatorStyle() }}
+        >
+          {name}
+        </TableSortLabel>
+        {action}
+      </Box>
     </TableCell>
   )
 }

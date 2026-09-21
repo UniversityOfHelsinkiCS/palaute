@@ -689,6 +689,8 @@
     "editFeedbackResponseTab": "Edit counter feedback",
     "studentsWithFeedbackTab": "Respondents",
     "linkCopied": "A link to the feedback has been copied to clipboard",
+    "copyStudentNumbers": "Copy student numbers",
+    "studentNumbersCopied": "The student numbers have been copied to clipboard",
     "copyLink": "Copy student's feedback link",
     "editFeedbackTab": "Edit feedback",
     "coursePeriod": "Course ongoing",
