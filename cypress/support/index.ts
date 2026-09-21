@@ -53,7 +53,12 @@ declare global {
   namespace Cypress {
     interface Chainable {
       loginAs(headers: any): Chainable
-      createFeedbackTarget(options: { extraStudents?: number }): Chainable
+      createFeedbackTarget(options?: {
+        enrolledStudent?: any
+        extraStudents?: number
+        opensAt?: Date | string
+        closesAt?: Date | string
+      }): Chainable
       setFeedbackActive(): Chainable
       setFeedbackInactive(): Chainable
       getTestFbtId(): Chainable
