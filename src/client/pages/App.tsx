@@ -9,6 +9,7 @@ import CustomUiConfigProvider from '../components/CustomUiConfigProvider'
 import LocalizationProvider from '../components/LocalizationProvider'
 import EscSnackbarCloser from '../components/SnackBar/EscSnackbarCloser'
 import SnackbarCloseButton from '../components/SnackBar/SnackbarCloseButton'
+import SnackbarLiveRegion from '../components/SnackBar/SnackbarLiveRegion'
 import usePinger from '../hooks/pinger/usePinger'
 import useCustomUiConfig from '../hooks/useCustomUiConfig'
 import useTheme from '../theme'
@@ -64,6 +65,7 @@ const App = () => {
                 TransitionComponent={Zoom}
               >
                 <EscSnackbarCloser />
+                <SnackbarLiveRegion />
                 <Routes>
                   <Route path="/noad/*" element={<GuestUser />} />
                   <Route path="/*" element={<AdUser />} />
