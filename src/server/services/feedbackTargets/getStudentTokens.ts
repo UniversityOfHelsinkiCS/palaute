@@ -1,9 +1,7 @@
-import jwt from 'jsonwebtoken'
-
 import { UserFeedbackTarget, User } from '../../models'
 import { User as UserType } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
-import { JWT_KEY } from '../../util/config'
+import { getNoAdTokenExpirationDate, signNoAdToken } from '../../util/noAdToken'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 type GetStudentTokensParams = {
@@ -12,7 +10,7 @@ type GetStudentTokensParams = {
 }
 
 const getStudentTokens = async ({ feedbackTargetId, user }: GetStudentTokensParams) => {
-  const { access } = await getFeedbackTargetContext({ feedbackTargetId, user })
+  const { feedbackTarget, access } = await getFeedbackTargetContext({ feedbackTargetId, user })
 
   if (!access?.canSeeTokens()) throw ApplicationError.Forbidden()
 
@@ -29,12 +27,13 @@ const getStudentTokens = async ({ feedbackTargetId, user }: GetStudentTokensPara
     ],
   })
 
+  const expiresAt = getNoAdTokenExpirationDate(feedbackTarget.closesAt)
+
   const users = userFeedbackTargets.map(({ user: student }) => ({
     firstName: student?.firstName,
     lastName: student?.lastName,
     studentNumber: student?.studentNumber,
-    // TODO: should we throw if no JWT_KEY? investigate
-    token: jwt.sign({ username: student?.username }, JWT_KEY),
+    token: signNoAdToken(student?.username, expiresAt),
   }))
 
   return users
