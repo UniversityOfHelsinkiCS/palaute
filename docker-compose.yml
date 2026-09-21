@@ -43,7 +43,7 @@ services:
     ports:
       - 8080:8080
   jami:
-    image: quay.io/toska/jami:production
+    image: registry.version.helsinki.fi/toska/openshift/kontit/jami:production
     environment:
       - PORT=3003
       - NODE_ENV=dev
