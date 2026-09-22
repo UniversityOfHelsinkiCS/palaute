@@ -33,6 +33,14 @@ $ npm start
 $ docker compose up
 ```
 
+After installing new dependencies:
+
+```bash
+$ docker compose down
+# and then
+$ docker compose up --build
+```
+
 To run tests, you can use these commands:
 
 ```bash
@@ -42,13 +50,19 @@ $ npm run test:run # Run all Cypress specs in headless mode
 $ npm test # CI, build test app and run all specs. Slow!
 ```
 
-To populate the Norppa and Jami databases from a backup in a remote server, use
+To populate the Norppa and Jami databases from a backup in a remote server, use:
 
 ```bash
 ./scripts/get_prod_db.sh
 ```
 
 (If you're not in Toska, you can still use the script for reference)
+
+Once in a while to remove useless unnamed volumes:
+
+```bash
+docker volume prune
+```
 
 ### Environment configuration
 
