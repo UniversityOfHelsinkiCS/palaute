@@ -38,7 +38,7 @@ export const NorButton = forwardRef<HTMLButtonElement, NorButtonProps>(
         {...mappedProps}
         disabled={disabled}
         startIcon={icon}
-        disableRipple
+        disableFocusRipple
         sx={mergeSx(sx, focusIndicatorStyle())}
         {...props}
       >

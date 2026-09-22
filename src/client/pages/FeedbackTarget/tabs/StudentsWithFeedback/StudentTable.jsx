@@ -1,17 +1,6 @@
 import { Download } from '@mui/icons-material'
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
-import {
-  Table,
-  TableRow,
-  TableCell,
-  TableBody,
-  TableHead,
-  TableSortLabel,
-  Box,
-  TableContainer,
-  IconButton,
-  Tooltip,
-} from '@mui/material'
+import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box, TableContainer } from '@mui/material'
 import { parseISO, format } from 'date-fns'
 import { orderBy } from 'lodash-es'
 import { useSnackbar } from 'notistack'
@@ -34,11 +23,12 @@ const SISU_FEEDBACK_FT_CR_NAME_FI = 'Palaute'
 const styles = {
   box: {
     display: 'flex',
+    flexDirection: { xs: 'column', md: 'row' },
+    alignItems: 'flex-start',
+    gap: '0.5rem',
   },
   button: {
-    ml: '1rem',
-    width: '170px',
-    ...focusIndicatorStyle(),
+    minWidth: '170px',
   },
   link: {
     textDecoration: 'none',
@@ -79,7 +69,6 @@ const ExportXLSX = ({ students, fileName }) => {
   return (
     <NorButton
       sx={styles.button}
-      disableRipple
       color="primary"
       disabled={!students.length}
       onClick={() => writeFileXLSX(workbook, `${fileName}.xlsx`)}
@@ -213,7 +202,14 @@ const StudentTable = ({ students, feedbackTarget }) => {
       title={
         <Box sx={styles.box}>
           {t('feedbackTargetView:studentsWithFeedbackTab')}
-          <Box mr="auto" />
+          <NorButton
+            color="secondary"
+            icon={<CopyIcon />}
+            onClick={handleCopyStudentNumbers}
+            sx={{ ...styles.button, ml: { xs: 0, md: 'auto' } }}
+          >
+            {t('feedbackTargetView:copyStudentNumbers')}
+          </NorButton>
           <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
           {SHOW_BUTTON_DOWNLOAD_SISU_CSV && courseRealisationNameFi === SISU_FEEDBACK_FT_CR_NAME_FI && (
             <ExportSisuAttainmentCSV
@@ -249,20 +245,6 @@ const StudentTable = ({ students, feedbackTarget }) => {
                 order={order}
                 orderBy={orderByKey}
                 onRequestSort={handleRequestSort}
-                action={
-                  <Tooltip title={t('feedbackTargetView:copyStudentNumbers')}>
-                    <IconButton
-                      size="small"
-                      aria-label={t('feedbackTargetView:copyStudentNumbers')}
-                      data-cy="students-with-feedback-copy-student-numbers"
-                      onClick={handleCopyStudentNumbers}
-                      sx={focusIndicatorStyle()}
-                      disableFocusRipple
-                    >
-                      <CopyIcon fontSize="small" sx={{ color: 'primary.main' }} />
-                    </IconButton>
-                  </Tooltip>
-                }
               />
               <TableHeadCell
                 id="email"
@@ -297,24 +279,21 @@ const StudentTable = ({ students, feedbackTarget }) => {
   )
 }
 
-const TableHeadCell = ({ id, name, order, orderBy, onRequestSort, action = null }) => {
+const TableHeadCell = ({ id, name, order, orderBy, onRequestSort }) => {
   const createSortHandler = property => e => {
     onRequestSort(e, property)
   }
 
   return (
     <TableCell align="left" sortDirection={orderBy === id ? order : false}>
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
-        <TableSortLabel
-          active={orderBy === id}
-          direction={orderBy === id ? order : 'asc'}
-          onClick={createSortHandler(id)}
-          sx={{ p: '2px', ...focusIndicatorStyle() }}
-        >
-          {name}
-        </TableSortLabel>
-        {action}
-      </Box>
+      <TableSortLabel
+        active={orderBy === id}
+        direction={orderBy === id ? order : 'asc'}
+        onClick={createSortHandler(id)}
+        sx={{ p: '2px', ...focusIndicatorStyle() }}
+      >
+        {name}
+      </TableSortLabel>
     </TableCell>
   )
 }
