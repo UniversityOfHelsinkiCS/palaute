@@ -8,6 +8,7 @@ services:
     image: palaute_dev
     volumes:
       - ./:/usr/src/app
+      - /usr/src/app/node_modules
     environment:
       - DATABASE_URL=postgres://postgres:postgres@db:5432/postgres?targetServerType=primary
       - REDIS_HOST=redis
@@ -50,17 +51,17 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@jami-db:5432/postgres
     ports:
       - 3003:3003
-    container_name: jami
+    container_name: palaute_jami
   jami-db:
     image: postgres:15.8
     environment:
       - PGDATA=/data
       - POSTGRES_PASSWORD=postgres
-    container_name: jami-db
+    container_name: palaute_jami_db
     ports:
       - 5433:5432
     volumes:
-      - jami_data:/data
+      - palaute_jami_data:/data
 #   updater:
 #    build:
 #      context: ../norppa-updater
@@ -84,4 +85,4 @@ services:
 #     external: true
 volumes:
   pg_data:
-  jami_data:
+  palaute_jami_data:

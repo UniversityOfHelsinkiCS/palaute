@@ -47,10 +47,10 @@ services:
       - DATABASE_URL=postgres://postgres:postgres@jami-db:5432/postgres
     ports:
       - 3003:3003
-    container_name: jami
+    container_name: palaute_test_jami
 
   jami-db:
     image: postgres:13.16
     environment:
       - POSTGRES_PASSWORD=postgres
-    container_name: jami-db
+    container_name: palaute_test_jami_db
