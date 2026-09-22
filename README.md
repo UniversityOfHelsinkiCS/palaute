@@ -23,6 +23,8 @@ Clone the repo, and install docker to get started!
 
 Before starting the project for the first time run `npm i` to install development dependencies.
 
+The [Jami](github.com/UniversityOfHelsinkiCS/jami) image is pulled from `registry.version.helsinki.fi`, so you need to be logged in to that registry with `docker login` before starting the project.
+
 Start frontend, backend and [Jami](github.com/UniversityOfHelsinkiCS/jami) in development mode:
 
 ```bash
