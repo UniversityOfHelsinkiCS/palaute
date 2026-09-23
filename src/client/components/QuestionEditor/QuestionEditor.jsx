@@ -95,38 +95,54 @@ const QuestionEditorForm = ({
           name="questions"
           render={arrayHelpers => (
             <>
-              {questionsField.value.map((question, index) => (
-                <QuestionCard
-                  key={getQuestionId(question)}
-                  name={`questions.${index}`}
-                  onRemove={() => {
-                    arrayHelpers.remove(index)
-                    handleStopEditing()
-                    saveChanges()
+              {questionsField.value.length > 0 && (
+                <Box
+                  component="ul"
+                  role="list"
+                  sx={{
+                    listStyle: 'none',
+                    p: 0,
+                    m: 0,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '1.5rem',
                   }}
-                  onMoveUp={() => {
-                    arrayHelpers.swap(index - 1, index)
-                    saveChanges()
-                  }}
-                  onMoveDown={() => {
-                    arrayHelpers.swap(index + 1, index)
-                    saveChanges()
-                  }}
-                  onCopy={() => {
-                    arrayHelpers.insert(index + 1, copyQuestion(question))
-                    saveChanges()
-                  }}
-                  moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
-                  moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
-                  language={questionLanguage}
-                  isEditing={editingQuestionId === getQuestionId(question)}
-                  onStopEditing={() => handleStopEditing()}
-                  onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
-                  editable={editable}
-                  onPublicityToggle={makePublicityToggle(question)}
-                  editorLevel={editorLevel}
-                />
-              ))}
+                >
+                  {questionsField.value.map((question, index) => (
+                    <Box component="li" key={getQuestionId(question)}>
+                      <QuestionCard
+                        name={`questions.${index}`}
+                        onRemove={() => {
+                          arrayHelpers.remove(index)
+                          handleStopEditing()
+                          saveChanges()
+                        }}
+                        onMoveUp={() => {
+                          arrayHelpers.swap(index - 1, index)
+                          saveChanges()
+                        }}
+                        onMoveDown={() => {
+                          arrayHelpers.swap(index + 1, index)
+                          saveChanges()
+                        }}
+                        onCopy={() => {
+                          arrayHelpers.insert(index + 1, copyQuestion(question))
+                          saveChanges()
+                        }}
+                        moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
+                        moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
+                        language={questionLanguage}
+                        isEditing={editingQuestionId === getQuestionId(question)}
+                        onStopEditing={() => handleStopEditing()}
+                        onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
+                        editable={editable}
+                        onPublicityToggle={makePublicityToggle(question)}
+                        editorLevel={editorLevel}
+                      />
+                    </Box>
+                  ))}
+                </Box>
+              )}
 
               <TypeMenu
                 open={menuOpen}
