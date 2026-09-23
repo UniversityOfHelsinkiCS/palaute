@@ -207,6 +207,11 @@
     "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year"
   },
   "questionEditor": {
+    "duplicateQuestionLabel": "Duplicate question {{label}}",
+    "editQuestionLabel": "Edit question {{label}}",
+    "removeQuestionLabel": "Remove question {{label}}",
+    "moveQuestionUpLabel": "Move question {{label}} upwards",
+    "moveQuestionDownLabel": "Move question {{label}} downwards",
     "addQuestion": "Add question",
     "addTextualContent": "Add textual content",
     "likertQuestion": "Scale of values",
@@ -221,6 +226,7 @@
     "option": "Option",
     "addOption": "Add option",
     "removeOption": "Remove option",
+    "removeOptionLabel": "Remove option {{number}}",
     "label": "Question",
     "content": "Content",
     "removeQuestionConfirmation": "Are you sure you want to remove this question?",

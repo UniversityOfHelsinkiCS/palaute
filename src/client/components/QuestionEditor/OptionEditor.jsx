@@ -55,7 +55,13 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
 
       <Box ml={2} flexGrow={0}>
         <Tooltip title={t('questionEditor:removeOption')}>
-          <IconButton onClick={handleRemove} size="large" sx={focusIndicatorStyle()} disableFocusRipple>
+          <IconButton
+            onClick={handleRemove}
+            size="large"
+            sx={focusIndicatorStyle()}
+            disableFocusRipple
+            aria-label={t('questionEditor:removeOptionLabel', { number: index + 1 })}
+          >
             <CloseIcon />
           </IconButton>
         </Tooltip>

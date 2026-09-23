@@ -202,6 +202,11 @@
     "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä"
   },
   "questionEditor": {
+    "duplicateQuestionLabel": "Duplikoi kysymys {{label}}",
+    "editQuestionLabel": "Muokkaa kysymystä {{label}}",
+    "removeQuestionLabel": "Poista kysymys {{label}}",
+    "moveQuestionUpLabel": "Siirrä kysymystä {{label}} ylöspäin",
+    "moveQuestionDownLabel": "Siirrä kysymystä {{label}} alaspäin",
     "addQuestion": "Lisää kysymys",
     "addTextualContent": "Lisää tekstiosio",
     "likertQuestion": "Arvoasteikkokysymys",
@@ -216,6 +221,7 @@
     "option": "Vaihtoehto",
     "addOption": "Lisää vaihtoehto",
     "removeOption": "Poista vaihtoehto",
+    "removeOptionLabel": "Poista vaihtoehto {{number}}",
     "label": "Kysymys",
     "content": "Sisältö",
     "removeQuestionConfirmation": "Haluatko varmasti poistaa tämän kysymyksen?",

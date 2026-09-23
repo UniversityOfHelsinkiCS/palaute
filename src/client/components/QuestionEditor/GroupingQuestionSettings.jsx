@@ -26,7 +26,7 @@ import { NorButton } from '../common/NorButton'
 import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
 import TeacherChip from '../common/TeacherChip'
 import QuestionCard from './QuestionCard'
-import { createQuestion } from './utils'
+import { createQuestion, getQuestionLabel } from './utils'
 
 const GroupingInfo = () => {
   const { t } = useTranslation()
@@ -80,7 +80,7 @@ const GroupInformation = ({ groups }) => {
   )
 }
 
-const GroupingQuestionChips = ({ questionId }) => {
+const GroupingQuestionChips = ({ questionId, questionLabel }) => {
   const { t } = useTranslation()
 
   return (
@@ -98,7 +98,13 @@ const GroupingQuestionChips = ({ questionId }) => {
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'center' } }}>
           {questionId && (
-            <QuestionPublicityToggle questionId={questionId} checked={false} disabled={true} onChange={() => {}} />
+            <QuestionPublicityToggle
+              questionId={questionId}
+              checked={false}
+              disabled={true}
+              onChange={() => {}}
+              questionLabel={questionLabel}
+            />
           )}
         </Grid>
         <Grid size={{ xs: 12, sm: 4 }} sx={{ display: 'flex', justifyContent: { xs: 'start', sm: 'end' } }}></Grid>
@@ -149,7 +155,10 @@ const GroupingQuestionSettings = ({
   return (
     <Paper>
       <Box>
-        <GroupingQuestionChips questionId={groupingQuestion?.id} />
+        <GroupingQuestionChips
+          questionId={groupingQuestion?.id}
+          questionLabel={getQuestionLabel(groupingQuestion, language)}
+        />
         <Accordion
           elevation={0}
           slotProps={{ heading: { component: 'div' } }}

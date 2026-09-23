@@ -26,22 +26,28 @@ const QuestionPublicityToggle = ({
   checked,
   disabled,
   onChange,
+  questionLabel,
 }: {
   questionId: string | number
   checked: boolean
   disabled: boolean
   onChange: (value: boolean) => void
+  questionLabel?: string
 }) => {
   const { t } = useTranslation()
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
 
-  const notEditableInfo = checked ? t('common:notEditable') : ''
-
   const tooltipText = `${checked ? t('common:publicInfo') : t('common:notPublicInfo')}. ${
-    !disabled ? t('common:editable') : notEditableInfo
+    !disabled ? t('common:editable') : t('common:notEditable')
   }`
 
   const label = t(checked ? 'common:public' : 'common:notPublic')
+
+  // The visible label is the same on every question, so name the question as well when it is
+  // known. The visible text stays first so that it can still be used to activate the button.
+  const accessibleLabel = questionLabel ? `${label}: ${questionLabel}` : label
+
+  const popoverLabel = questionLabel ? `${t('common:changePublicity')}: ${questionLabel}` : t('common:changePublicity')
 
   const isOpen = Boolean(anchorEl)
   const popoverId = `question-${questionId}-publicity-settings`
@@ -75,7 +81,7 @@ const QuestionPublicityToggle = ({
             onClick={handleOpen}
             variant="outlined"
             color={disabled ? 'default' : 'primary'}
-            aria-label={label}
+            aria-label={accessibleLabel}
             aria-description={tooltipText}
             aria-haspopup="true"
             aria-expanded={isOpen}
@@ -108,7 +114,7 @@ const QuestionPublicityToggle = ({
         <Box sx={{ p: '0.7rem', width: '100%', maxWidth: '30rem', minWidth: '280px' }}>
           <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1.5 }}>
             <FormLabel id={labelId} sx={{ m: 0 }}>
-              {t('common:changePublicity')}
+              {popoverLabel}
             </FormLabel>
             <IconButton
               size="small"

@@ -5,7 +5,6 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LANGUAGES } from '../../util/common'
-import { getLanguageValue } from '../../util/languageUtils'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import FormikSwitch from '../common/FormikSwitch'
 import { NorButton } from '../common/NorButton'
@@ -20,6 +19,7 @@ import OrderButtons from './OrderButtons'
 import SingleChoicePreview from './SingleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
+import { getQuestionLabel } from './utils'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -132,11 +132,16 @@ const QuestionCard = ({
   const requiredConfigurable = showRequiredToggle && question.type !== 'TEXT'
   const publicityConfigurable = question.publicityConfigurable && question.type !== 'TEXT' && question.type !== 'OPEN'
 
+  const questionLabel = getQuestionLabel(question, language)
+
+  const actionLabel = key => (questionLabel ? t(key, { label: questionLabel }) : undefined)
+
   const orderButtonsProps = {
     onMoveUp,
     onMoveDown,
     moveUpDisabled: moveUpDisabled || isGrouping,
     moveDownDisabled: moveDownDisabled || isGrouping,
+    questionLabel,
   }
 
   const handlePublicityToggle = isPublic => {
@@ -148,12 +153,9 @@ const QuestionCard = ({
   }
 
   const handleRemove = () => {
-    const value = getLanguageValue(question.data?.label ?? question.data?.content, language)
-    const label = value && value.length > 60 ? `${value.slice(0, 60).trim()}…` : value
-
     const hasConfirmed = window.confirm(
-      label
-        ? t('questionEditor:removeQuestionLabelConfirmation', { label })
+      questionLabel
+        ? t('questionEditor:removeQuestionLabelConfirmation', { label: questionLabel })
         : t('questionEditor:removeQuestionConfirmation')
     )
 
@@ -194,6 +196,7 @@ const QuestionCard = ({
                   checked={question.public}
                   disabled={!question.publicityConfigurable}
                   onChange={() => handlePublicityToggle(!question.public)}
+                  questionLabel={questionLabel}
                 />
               )}
             </Grid>
@@ -248,14 +251,31 @@ const QuestionCard = ({
                   }}
                 >
                   {canDuplicate && (
-                    <NorButton icon={<FileCopyOutlined />} onClick={onCopy} color="secondary">
+                    <NorButton
+                      icon={<FileCopyOutlined />}
+                      onClick={onCopy}
+                      color="secondary"
+                      aria-label={actionLabel('questionEditor:duplicateQuestionLabel')}
+                    >
                       {t('questionEditor:duplicate')}
                     </NorButton>
                   )}
-                  <NorButton color="secondary" onClick={onStartEditing} data-cy="editQuestion" icon={<EditOutlined />}>
+                  <NorButton
+                    color="secondary"
+                    onClick={onStartEditing}
+                    data-cy="editQuestion"
+                    icon={<EditOutlined />}
+                    aria-label={actionLabel('questionEditor:editQuestionLabel')}
+                  >
                     {t('common:edit')}
                   </NorButton>
-                  <NorButton color="cancel" onClick={handleRemove} data-cy="removeQuestion" icon={<DeleteOutlined />}>
+                  <NorButton
+                    color="cancel"
+                    onClick={handleRemove}
+                    data-cy="removeQuestion"
+                    icon={<DeleteOutlined />}
+                    aria-label={actionLabel('questionEditor:removeQuestionLabel')}
+                  >
                     {t('questionEditor:removeQuestion')}
                   </NorButton>
                 </Box>

@@ -133,6 +133,7 @@ const QuestionItem = ({
                 checked={isPublic}
                 disabled={disabled}
                 onChange={() => handlePublicityToggle(isPublic)}
+                questionLabel={label}
               />
             )}
             <Typography id={`question-${question.id}-label`} component="h3" variant="body1">

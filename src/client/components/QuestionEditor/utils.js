@@ -47,6 +47,24 @@ const createQuestionData = type => {
 
 export const getQuestionId = question => (question ? (question.id ?? question[TEMP_ID]) : undefined)
 
+// Shortens a question label without cutting in the middle of a word, unless the first word
+// is already longer than the maximum length.
+const truncateAtWordBoundary = (value, maxLength = 60) => {
+  if (!value || value.length <= maxLength) return value
+
+  const cut = value.slice(0, maxLength)
+  const lastSpace = cut.lastIndexOf(' ')
+
+  return `${(lastSpace > 0 ? cut.slice(0, lastSpace) : cut).trim()}…`
+}
+
+/**
+ * The label shown to the user, shortened so that it can be used in confirmations and in the
+ * accessible names of the buttons that act on the question.
+ */
+export const getQuestionLabel = (question, language) =>
+  truncateAtWordBoundary(getLanguageValue(question?.data?.label ?? question?.data?.content, language))
+
 /**
  *
  * @returns question data
