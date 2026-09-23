@@ -208,7 +208,7 @@ describe('Teacher view', () => {
   it('Teacher can add questions to a survey', () => {
     cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/edit`))
     cy.contains('Add question').click()
-    cy.get('li').contains('Scale of values').click()
+    cy.get('[data-cy=question-editor-type-menu-select-likert]').click()
     cy.get('input[id^=likert-label-en-questions]').type('Test question')
     cy.get('input[id^=likert-description-en-questions]').type('Test description')
 
@@ -221,7 +221,7 @@ describe('Teacher view', () => {
   it('Teacher can edit a question', () => {
     cy.get('@fbtId').then((/** @type {number} */ id) => cy.visit(`/targets/${id}/edit`))
     cy.contains('Add question').click()
-    cy.get('li').contains('Scale of values').click()
+    cy.get('[data-cy=question-editor-type-menu-select-likert]').click()
     cy.get('input[id^=likert-label-en-questions]').type('Test question')
     cy.get('input[id^=likert-description-en-questions]').type('Test description')
     cy.get('[data-cy=question-card-save-edit]').click()

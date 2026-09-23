@@ -39,12 +39,12 @@ describe('Admin email stats view', () => {
 
     // Add two custom questions
     cy.contains('Add question').click()
-    cy.get('li').contains('Scale of values').click()
+    cy.get('[data-cy=question-editor-type-menu-select-likert]').click()
     cy.get('input[id^=likert-label-en-questions]').type('Minthu custom question')
     cy.get('[data-cy=question-card-save-edit]').click()
 
     cy.contains('Add question').click()
-    cy.get('li').contains('Scale of values').click()
+    cy.get('[data-cy=question-editor-type-menu-select-likert]').click()
     cy.get('input[id^=likert-label-en-questions]').type('Soju custom question')
     cy.get('[data-cy=question-card-save-edit]').click()
 

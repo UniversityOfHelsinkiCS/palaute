@@ -64,7 +64,7 @@ describe('Organisation settings', () => {
 
     it('New likert question appears in programmesummary', () => {
       cy.contains('Add question').click()
-      cy.get('li').contains('Scale of values').click()
+      cy.get('[data-cy=question-editor-type-menu-select-likert]').click()
       cy.get('input[id^=likert-label-en-questions]').type('LIKERT TEST')
       cy.get('[data-cy=question-card-save-edit]').click()
 
