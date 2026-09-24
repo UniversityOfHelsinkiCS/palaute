@@ -1,6 +1,7 @@
 import type { KeyboardEvent } from 'react'
 
 import { Box } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -12,6 +13,8 @@ import { BOX_BORDER, DEFAULT_PILL_WIDTH, anchorSx, getLayout, widgetZIndex } fro
 import MenuView from './MenuView'
 import PillView from './PillView'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
+import useAnnouncer from './useAnnouncer'
+import useConversation from './useConversation'
 import useGuideUrl from './useGuideUrl'
 import WidgetSeal from './WidgetSeal'
 
@@ -23,6 +26,8 @@ const HelpChatbot = () => {
   const [view, setView] = useState<WidgetView>('closed')
   const [pillWidth, setPillWidth] = useState(DEFAULT_PILL_WIDTH)
   const [draft, setDraft] = useState('')
+  const { entries, pending, send, startNew } = useConversation()
+  const { message: announcement, announce } = useAnnouncer()
 
   const pillRef = useRef<HTMLButtonElement>(null)
   const askRef = useRef<HTMLButtonElement>(null)
@@ -43,6 +48,19 @@ const HelpChatbot = () => {
   }, [view])
 
   const close = () => goTo('closed')
+
+  const sendDraft = () => {
+    const question = draft.trim()
+    if (!question) return
+    send(question)
+    setDraft('')
+  }
+
+  const startNewConversation = () => {
+    startNew()
+    inputRef.current?.focus()
+    announce(t('helpChatbot:newConversationStarted'))
+  }
 
   // Handled here and stopped, so EscSnackbarCloser doesn't also close every snackbar
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
@@ -93,11 +111,25 @@ const HelpChatbot = () => {
             <MenuView guideUrl={guideUrl} askRef={askRef} onAsk={() => goTo('chat')} onClose={close} />
           )}
           {view === 'chat' && (
-            <ChatPanel guideUrl={guideUrl} inputRef={inputRef} draft={draft} onDraftChange={setDraft} onClose={close} />
+            <ChatPanel
+              guideUrl={guideUrl}
+              inputRef={inputRef}
+              entries={entries}
+              pending={pending}
+              draft={draft}
+              onDraftChange={setDraft}
+              onSend={sendDraft}
+              onReply={announce}
+              onNewConversation={startNewConversation}
+              onClose={close}
+            />
           )}
         </Box>
       </Box>
       <WidgetSeal placement={layout.seal} />
+      <Box role="status" sx={visuallyHidden}>
+        {announcement}
+      </Box>
     </Box>
   )
 }

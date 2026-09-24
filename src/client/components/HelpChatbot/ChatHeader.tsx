@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material'
+import { Close, RestartAlt } from '@mui/icons-material'
 import { Box, IconButton, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
@@ -6,10 +6,11 @@ import { focusIndicatorStyle } from '../../util/accessibility'
 
 type ChatHeaderProps = {
   titleId: string
+  onNewConversation: () => void
   onClose: () => void
 }
 
-const ChatHeader = ({ titleId, onClose }: ChatHeaderProps) => {
+const ChatHeader = ({ titleId, onNewConversation, onClose }: ChatHeaderProps) => {
   const { t } = useTranslation()
 
   return (
@@ -31,16 +32,28 @@ const ChatHeader = ({ titleId, onClose }: ChatHeaderProps) => {
       <Box component="h2" id={titleId} sx={{ flex: '1 1 auto', m: 0, fontSize: '16px', fontWeight: 700 }}>
         {t('helpChatbot:askNorppai')}
       </Box>
-      <Tooltip title={t('helpChatbot:closeChat')}>
-        <IconButton
-          aria-label={t('helpChatbot:closeChat')}
-          onClick={onClose}
-          disableFocusRipple
-          sx={focusIndicatorStyle()}
-        >
-          <Close fontSize="small" />
-        </IconButton>
-      </Tooltip>
+      <Box sx={{ display: 'flex' }}>
+        <Tooltip title={t('helpChatbot:newConversation')}>
+          <IconButton
+            aria-label={t('helpChatbot:newConversation')}
+            onClick={onNewConversation}
+            disableFocusRipple
+            sx={focusIndicatorStyle()}
+          >
+            <RestartAlt fontSize="small" />
+          </IconButton>
+        </Tooltip>
+        <Tooltip title={t('helpChatbot:closeChat')}>
+          <IconButton
+            aria-label={t('helpChatbot:closeChat')}
+            onClick={onClose}
+            disableFocusRipple
+            sx={focusIndicatorStyle()}
+          >
+            <Close fontSize="small" />
+          </IconButton>
+        </Tooltip>
+      </Box>
     </Box>
   )
 }
