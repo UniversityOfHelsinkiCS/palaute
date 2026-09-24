@@ -256,6 +256,12 @@ const config = {
   PUBLIC_COURSE_BROWSER_ENABLED: false,
 
   /**
+   * Whether the help chatbot (NorppAI) is shown. Currently shown to admins only.
+   * See documentation/help_chatbot.md.
+   */
+  HELP_CHATBOT_ENABLED: false,
+
+  /**
    * Alway show list of students in feedback target view
    * value: false = Only show list of students when studentListVisible is set at course or organisation level
    * value: true  = Always show list of students, hide feedback given status if studentListVisible is not set
