@@ -2,7 +2,7 @@ import type { KeyboardEvent } from 'react'
 
 import { Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import { useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { WidgetView } from './layout'
@@ -26,7 +26,7 @@ const HelpChatbot = () => {
   const [view, setView] = useState<WidgetView>('closed')
   const [pillWidth, setPillWidth] = useState(DEFAULT_PILL_WIDTH)
   const [draft, setDraft] = useState('')
-  const { entries, pending, send, startNew } = useConversation()
+  const { entries, pending, retryableId, send, retry, startNew } = useConversation()
   const { message: announcement, announce } = useAnnouncer()
 
   const pillRef = useRef<HTMLButtonElement>(null)
@@ -55,6 +55,14 @@ const HelpChatbot = () => {
     send(question)
     setDraft('')
   }
+
+  // The Retry button disappears, so focus goes where the user will type next
+  const retryQuestion = () => {
+    retry()
+    inputRef.current?.focus()
+  }
+
+  const announceFailure = useCallback(() => announce(t('helpChatbot:failedAnnouncement')), [announce, t])
 
   const startNewConversation = () => {
     startNew()
@@ -116,10 +124,13 @@ const HelpChatbot = () => {
               inputRef={inputRef}
               entries={entries}
               pending={pending}
+              retryableId={retryableId}
               draft={draft}
               onDraftChange={setDraft}
               onSend={sendDraft}
               onReply={announce}
+              onFailure={announceFailure}
+              onRetry={retryQuestion}
               onNewConversation={startNewConversation}
               onClose={close}
             />
