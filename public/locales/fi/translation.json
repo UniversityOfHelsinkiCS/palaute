@@ -825,6 +825,13 @@
     "disclaimerGuide": "Jos olet epävarma, tarkista käyttöohjeesta.",
     "inputLabel": "Kysymyksesi",
     "inputPlaceholder": "Kysy jotain Norpasta",
-    "send": "Lähetä"
+    "send": "Lähetä",
+    "newConversation": "Aloita uusi keskustelu",
+    "newConversationStarted": "Uusi keskustelu aloitettu",
+    "youPrefix": "Sinä:",
+    "norppaiPrefix": "NorppAI:",
+    "thinking": "NorppAI miettii…",
+    "inputHint": "Enter lähettää, Shift+Enter lisää rivinvaihdon",
+    "characterCount": "{{length}}/{{max}} merkkiä"
   }
 }

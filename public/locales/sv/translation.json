@@ -815,6 +815,13 @@
     "disclaimerGuide": "Om du är osäker, kontrollera användarinstruktionerna.",
     "inputLabel": "Din fråga",
     "inputPlaceholder": "Ställ en fråga om Norppa",
-    "send": "Skicka"
+    "send": "Skicka",
+    "newConversation": "Starta en ny konversation",
+    "newConversationStarted": "Ny konversation startad",
+    "youPrefix": "Du:",
+    "norppaiPrefix": "NorppAI:",
+    "thinking": "NorppAI tänker…",
+    "inputHint": "Enter skickar, Shift+Enter ger en ny rad",
+    "characterCount": "{{length}} av {{max}} tecken"
   }
 }

@@ -830,6 +830,13 @@
     "disclaimerGuide": "When in doubt, check the user guide.",
     "inputLabel": "Your question",
     "inputPlaceholder": "Ask a question about Norppa",
-    "send": "Send"
+    "send": "Send",
+    "newConversation": "Start a new conversation",
+    "newConversationStarted": "New conversation started",
+    "youPrefix": "You:",
+    "norppaiPrefix": "NorppAI:",
+    "thinking": "NorppAI is thinking…",
+    "inputHint": "Enter to send, Shift+Enter for a new line",
+    "characterCount": "{{length}} of {{max}} characters"
   }
 }
