@@ -4,7 +4,7 @@ CONTAINER=palaute_db
 SERVICE_NAME=db
 DB_NAME=postgres
 
-JAMI_CONTAINER=jami-db
+JAMI_CONTAINER=palaute_jami_db
 JAMI_SERVICE_NAME=jami-db
 JAMI_DB_NAME=postgres
 
