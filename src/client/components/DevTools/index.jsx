@@ -12,7 +12,7 @@ const DevTools = () => {
 
   return (
     <>
-      {!inProduction && <ReactQueryDevtools />}
+      {!inProduction && <ReactQueryDevtools buttonPosition="bottom-left" />}
       <AdminLoggedInAsBanner isLoggedInAs={isLoggedInAs} exitLoggedInAs={exitLoggedInAs} />
       {(authorizedUser?.isAdmin || isLoggedInAs) && <SuperSpeedLoginAs />}
     </>
