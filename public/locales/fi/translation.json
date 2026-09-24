@@ -835,6 +835,8 @@
     "characterCount": "{{length}}/{{max}} merkkiä",
     "noAnswer": "Vastausta ei saatu.",
     "failedAnnouncement": "Vastausta ei saatu. Voit yrittää uudelleen.",
-    "retry": "Yritä uudelleen"
+    "retry": "Yritä uudelleen",
+    "expandChat": "Suurenna keskustelu",
+    "shrinkChat": "Pienennä keskustelu"
   }
 }

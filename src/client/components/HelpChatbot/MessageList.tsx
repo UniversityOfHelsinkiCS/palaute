@@ -12,6 +12,7 @@ import type { ChatEntry } from './types'
 import { NorButton } from '../common/NorButton'
 import AssistantMarkdown from './AssistantMarkdown'
 import EmptyState from './EmptyState'
+import { CHAT_HEADER_HEIGHT } from './layout'
 import { userBubbleColor } from './tokens'
 
 const REPLY_SCROLL_MARGIN = 12
@@ -28,13 +29,23 @@ type MessageListProps = {
   entries: ChatEntry[]
   pending: boolean
   retryableId: string | null
+  compact: boolean
   hasGuide: boolean
   onReply: (text: string) => void
   onFailure: () => void
   onRetry: () => void
 }
 
-const MessageList = ({ entries, pending, retryableId, hasGuide, onReply, onFailure, onRetry }: MessageListProps) => {
+const MessageList = ({
+  entries,
+  pending,
+  retryableId,
+  compact,
+  hasGuide,
+  onReply,
+  onFailure,
+  onRetry,
+}: MessageListProps) => {
   const { t } = useTranslation()
   const bodyRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
@@ -43,7 +54,9 @@ const MessageList = ({ entries, pending, retryableId, hasGuide, onReply, onFailu
 
   useEffect(() => {
     const body = bodyRef.current
-    if (!body) return
+    // In compact mode the whole dialog scrolls instead of the list
+    const scroller = compact ? body?.closest<HTMLElement>('[role="dialog"]') : body
+    if (!body || !scroller) return
     const last = entries.at(-1)
     const failed = last?.role === 'user' && last.status === 'failed'
     const before = previous.current
@@ -51,10 +64,14 @@ const MessageList = ({ entries, pending, retryableId, hasGuide, onReply, onFailu
 
     const lastItem = last ? body.querySelector<HTMLElement>(`[data-entry-id="${last.id}"]`) : null
     const behavior = before && !reduceMotion ? 'smooth' : 'auto'
-    const scrollToBottom = () => body.scrollTo({ top: body.scrollHeight, behavior })
+    const scrollToBottom = () => scroller.scrollTo({ top: scroller.scrollHeight, behavior })
     // A long reply is shown from its start, not from its last line
-    const scrollToLastItem = () =>
-      lastItem && body.scrollTo({ top: lastItem.offsetTop - REPLY_SCROLL_MARGIN, behavior })
+    const scrollToLastItem = () => {
+      if (!lastItem) return
+      const offset = lastItem.getBoundingClientRect().top - scroller.getBoundingClientRect().top
+      const stickyHeader = compact ? CHAT_HEADER_HEIGHT : 0
+      scroller.scrollTo({ top: scroller.scrollTop + offset - stickyHeader - REPLY_SCROLL_MARGIN, behavior })
+    }
 
     if (!before) {
       if (last?.role === 'assistant') scrollToLastItem()
@@ -67,10 +84,19 @@ const MessageList = ({ entries, pending, retryableId, hasGuide, onReply, onFailu
     } else if (failed && !before.failed) {
       onFailure()
     }
-  }, [entries, pending, reduceMotion, onReply, onFailure])
+  }, [entries, pending, compact, reduceMotion, onReply, onFailure])
 
   return (
-    <Box ref={bodyRef} sx={{ position: 'relative', flex: '1 1 auto', minHeight: 0, overflowY: 'auto', p: '16px 14px' }}>
+    <Box
+      ref={bodyRef}
+      sx={{
+        flex: compact ? 'none' : '1 1 auto',
+        minHeight: 0,
+        overflowY: compact ? 'visible' : 'auto',
+        overscrollBehavior: 'contain',
+        p: '16px 14px',
+      }}
+    >
       {entries.length === 0 && <EmptyState hasGuide={hasGuide} />}
       {entries.length > 0 && (
         <Box

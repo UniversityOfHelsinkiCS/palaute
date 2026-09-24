@@ -825,6 +825,8 @@
     "characterCount": "{{length}} av {{max}} tecken",
     "noAnswer": "Inget svar mottogs.",
     "failedAnnouncement": "Inget svar mottogs. Du kan försöka igen.",
-    "retry": "Försök igen"
+    "retry": "Försök igen",
+    "expandChat": "Förstora chatten",
+    "shrinkChat": "Förminska chatten"
   }
 }

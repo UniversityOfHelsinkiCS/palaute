@@ -840,6 +840,8 @@
     "characterCount": "{{length}} of {{max}} characters",
     "noAnswer": "No answer received.",
     "failedAnnouncement": "No answer received. You can retry.",
-    "retry": "Retry"
+    "retry": "Retry",
+    "expandChat": "Expand chat",
+    "shrinkChat": "Shrink chat"
   }
 }

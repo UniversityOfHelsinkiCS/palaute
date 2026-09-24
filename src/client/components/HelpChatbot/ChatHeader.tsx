@@ -1,16 +1,29 @@
-import { Close, RestartAlt } from '@mui/icons-material'
+import { Close, CloseFullscreen, OpenInFull, RestartAlt } from '@mui/icons-material'
 import { Box, IconButton, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { CHAT_HEADER_HEIGHT } from './layout'
 
 type ChatHeaderProps = {
   titleId: string
+  expanded: boolean
+  canExpand: boolean
+  sticky: boolean
+  onToggleExpand: () => void
   onNewConversation: () => void
   onClose: () => void
 }
 
-const ChatHeader = ({ titleId, onNewConversation, onClose }: ChatHeaderProps) => {
+const ChatHeader = ({
+  titleId,
+  expanded,
+  canExpand,
+  sticky,
+  onToggleExpand,
+  onNewConversation,
+  onClose,
+}: ChatHeaderProps) => {
   const { t } = useTranslation()
 
   return (
@@ -20,11 +33,13 @@ const ChatHeader = ({ titleId, onNewConversation, onClose }: ChatHeaderProps) =>
         alignItems: 'center',
         gap: '10px',
         flex: 'none',
-        height: 60,
+        height: CHAT_HEADER_HEIGHT,
         boxSizing: 'border-box',
         p: '0 8px 0 14px',
         borderBottom: '1px solid',
         borderColor: 'divider',
+        // When the whole panel scrolls, the header stays put, as the seal in it is fixed to the viewport
+        ...(sticky && { position: 'sticky', top: 0, zIndex: 1, bgcolor: 'background.paper' }),
       }}
     >
       {/* The seal slides into this slot */}
@@ -43,6 +58,21 @@ const ChatHeader = ({ titleId, onNewConversation, onClose }: ChatHeaderProps) =>
             <RestartAlt fontSize="small" />
           </IconButton>
         </Tooltip>
+        {canExpand && (
+          // A constant name with a pressed state: screen readers announce a state change reliably,
+          // but often miss a changed name on the focused button
+          <Tooltip title={t(expanded ? 'helpChatbot:shrinkChat' : 'helpChatbot:expandChat')}>
+            <IconButton
+              aria-label={t('helpChatbot:expandChat')}
+              aria-pressed={expanded}
+              onClick={onToggleExpand}
+              disableFocusRipple
+              sx={focusIndicatorStyle()}
+            >
+              {expanded ? <CloseFullscreen fontSize="small" /> : <OpenInFull fontSize="small" />}
+            </IconButton>
+          </Tooltip>
+        )}
         <Tooltip title={t('helpChatbot:closeChat')}>
           <IconButton
             aria-label={t('helpChatbot:closeChat')}
