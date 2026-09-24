@@ -837,6 +837,9 @@
     "norppaiPrefix": "NorppAI:",
     "thinking": "NorppAI is thinking…",
     "inputHint": "Enter to send, Shift+Enter for a new line",
-    "characterCount": "{{length}} of {{max}} characters"
+    "characterCount": "{{length}} of {{max}} characters",
+    "noAnswer": "No answer received.",
+    "failedAnnouncement": "No answer received. You can retry.",
+    "retry": "Retry"
   }
 }

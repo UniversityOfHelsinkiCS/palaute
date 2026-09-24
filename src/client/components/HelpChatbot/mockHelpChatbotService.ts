@@ -1,6 +1,7 @@
 import type { PostHelpChatbotMessageBody, PostHelpChatbotMessageResponse } from '@common/types/helpChatbot'
 
-// Placeholder backend. Test triggers in the question: #long for a long answer, #slow for an 8 s reply.
+// Placeholder backend. Test triggers in the question: #long for a long answer, #slow for an 8 s reply,
+// #fail to always fail and #failonce to fail only the first attempt.
 
 const GUIDE = 'https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/'
 const TEACHER_GUIDE = `${GUIDE}3.%20Teacher%27s%20guide/`
@@ -56,6 +57,22 @@ const replyTo = (question: string) => {
   return DEFAULT_REPLY
 }
 
+const FAILURE_RATE = 0.15
+
+// Conversation and question pairs that have already failed once with #failonce
+const failedOnce = new Set<string>()
+
+const shouldFail = (conversationId: string, question: string) => {
+  if (question.includes('#fail') && !question.includes('#failonce')) return true
+  if (question.includes('#failonce')) {
+    const key = `${conversationId}:${question}`
+    if (failedOnce.has(key)) return false
+    failedOnce.add(key)
+    return true
+  }
+  return Math.random() < FAILURE_RATE
+}
+
 // Mostly 0.7–2.5 s, sometimes 6–8 s
 const randomLatency = () => (Math.random() < 0.1 ? 6000 + Math.random() * 2000 : 700 + Math.random() * 1800)
 
@@ -74,10 +91,11 @@ const wait = (ms: number, signal?: AbortSignal) =>
   })
 
 export const mockSendHelpChatbotMessage = async (
-  { messages }: PostHelpChatbotMessageBody,
+  { conversationId, messages }: PostHelpChatbotMessageBody,
   options?: { signal?: AbortSignal }
 ): Promise<PostHelpChatbotMessageResponse> => {
   const question = messages.at(-1)?.content ?? ''
   await wait(question.includes('#slow') ? 8000 : randomLatency(), options?.signal)
+  if (shouldFail(conversationId, question)) throw new Error('Mock failure')
   return { message: { id: crypto.randomUUID(), role: 'assistant', content: replyTo(question) } }
 }

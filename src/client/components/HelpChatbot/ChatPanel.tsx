@@ -17,10 +17,13 @@ type ChatPanelProps = {
   inputRef: RefObject<HTMLTextAreaElement | null>
   entries: ChatEntry[]
   pending: boolean
+  retryableId: string | null
   draft: string
   onDraftChange: (draft: string) => void
   onSend: () => void
   onReply: (text: string) => void
+  onFailure: () => void
+  onRetry: () => void
   onNewConversation: () => void
   onClose: () => void
 }
@@ -31,10 +34,13 @@ const ChatPanel = ({
   inputRef,
   entries,
   pending,
+  retryableId,
   draft,
   onDraftChange,
   onSend,
   onReply,
+  onFailure,
+  onRetry,
   onNewConversation,
   onClose,
 }: ChatPanelProps) => {
@@ -62,7 +68,15 @@ const ChatPanel = ({
           </ExternalLink>
         </Box>
       )}
-      <MessageList entries={entries} pending={pending} hasGuide={guideUrl !== null} onReply={onReply} />
+      <MessageList
+        entries={entries}
+        pending={pending}
+        retryableId={retryableId}
+        hasGuide={guideUrl !== null}
+        onReply={onReply}
+        onFailure={onFailure}
+        onRetry={onRetry}
+      />
       <Composer
         inputRef={inputRef}
         draft={draft}

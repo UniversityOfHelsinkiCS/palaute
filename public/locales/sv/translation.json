@@ -822,6 +822,9 @@
     "norppaiPrefix": "NorppAI:",
     "thinking": "NorppAI tänker…",
     "inputHint": "Enter skickar, Shift+Enter ger en ny rad",
-    "characterCount": "{{length}} av {{max}} tecken"
+    "characterCount": "{{length}} av {{max}} tecken",
+    "noAnswer": "Inget svar mottogs.",
+    "failedAnnouncement": "Inget svar mottogs. Du kan försöka igen.",
+    "retry": "Försök igen"
   }
 }

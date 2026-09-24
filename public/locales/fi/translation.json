@@ -832,6 +832,9 @@
     "norppaiPrefix": "NorppAI:",
     "thinking": "NorppAI miettii…",
     "inputHint": "Enter lähettää, Shift+Enter lisää rivinvaihdon",
-    "characterCount": "{{length}}/{{max}} merkkiä"
+    "characterCount": "{{length}}/{{max}} merkkiä",
+    "noAnswer": "Vastausta ei saatu.",
+    "failedAnnouncement": "Vastausta ei saatu. Voit yrittää uudelleen.",
+    "retry": "Yritä uudelleen"
   }
 }

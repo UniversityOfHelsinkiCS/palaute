@@ -44,19 +44,25 @@ const useConversation = () => {
 
   const pending = conversation.entries.some(entry => entry.role === 'user' && entry.status === 'waiting')
 
+  // Only the latest question can be retried, and only if nothing has been asked after it
+  const last = conversation.entries.at(-1)
+  const retryableId = last?.role === 'user' && last.status === 'failed' ? last.id : null
+
+  const request = (entries: ChatEntry[], userEntryId: string) => {
+    setConversation({ ...conversation, entries })
+    abortController.current = new AbortController()
+    mutation.mutate({ conversationId: conversation.id, entries, userEntryId, signal: abortController.current.signal })
+  }
+
   const send = (text: string) => {
     if (pending) return
     const userEntry: UserEntry = { id: crypto.randomUUID(), role: 'user', text, status: 'waiting' }
-    const entries = [...conversation.entries, userEntry]
-    setConversation({ ...conversation, entries })
+    request([...conversation.entries, userEntry], userEntry.id)
+  }
 
-    abortController.current = new AbortController()
-    mutation.mutate({
-      conversationId: conversation.id,
-      entries,
-      userEntryId: userEntry.id,
-      signal: abortController.current.signal,
-    })
+  const retry = () => {
+    if (pending || !retryableId) return
+    request(setUserStatus(conversation.entries, retryableId, 'waiting'), retryableId)
   }
 
   const startNew = () => {
@@ -64,7 +70,7 @@ const useConversation = () => {
     setConversation(createConversation())
   }
 
-  return { entries: conversation.entries, pending, send, startNew }
+  return { entries: conversation.entries, pending, retryableId, send, retry, startNew }
 }
 
 export default useConversation
