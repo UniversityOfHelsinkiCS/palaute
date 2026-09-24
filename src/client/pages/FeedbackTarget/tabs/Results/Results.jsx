@@ -173,6 +173,12 @@ const Results = () => {
 
   useEffect(() => {
     const handleKeyDown = event => {
+      const { target } = event
+      const isEditable =
+        target instanceof HTMLElement &&
+        (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
+      if (isEditable) return
+
       // Alt + T to toggle between chart and table
       if (event.altKey && event.key === 't') {
         event.preventDefault()
