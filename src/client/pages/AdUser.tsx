@@ -5,8 +5,10 @@ import { useTranslation } from 'react-i18next'
 
 import DevTools from '../components/DevTools'
 import Footer from '../components/Footer'
+import HelpChatbot from '../components/HelpChatbot'
 import NavBar from '../components/NavBar'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
+import { HELP_CHATBOT_ENABLED } from '../util/common'
 import Router from './Router'
 
 const AdUser = () => {
@@ -43,6 +45,7 @@ const AdUser = () => {
         <Router />
       </Box>
       <DevTools />
+      {HELP_CHATBOT_ENABLED && authorizedUser?.isAdmin === true && <HelpChatbot />}
       <Footer user={authorizedUser} />
     </Box>
   )
