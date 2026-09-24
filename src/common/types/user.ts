@@ -23,6 +23,7 @@ export type GetLoginResponse = User & {
   preferences: UserPreferences
   serverVersion?: string
   organisationAccess?: Record<string, OrganisationAccess>
+  isAdmin?: boolean
 }
 
 export type UserPreferences = {

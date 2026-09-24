@@ -797,5 +797,24 @@
       "newUniversityQuestionsInfo": "I samband med den nya undervisningsplansperioden har nya frågor på universitetsnivå tagits i bruk i Norppa. Mer information: <a href=\"https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/\">https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/</a>"
     },
     "instructionsAndSupport": "Kontakta stödet."
+  },
+  "helpChatbot": {
+    "regionLabel": "Hjälp",
+    "pillLabel": "Behöver du hjälp?",
+    "menuTitle": "Hur vill du få hjälp?",
+    "closeMenu": "Stäng hjälpmenyn",
+    "guideOption": "Användarinstruktioner",
+    "guideOptionDescription": "Öppnar wikin i en ny flik",
+    "askNorppai": "Fråga NorppAI",
+    "closeChat": "Stäng chatten",
+    "guideStripPrefix": "Vill du hellre läsa?",
+    "guideStripLink": "Öppna användarinstruktionerna",
+    "greetingTitle": "Hej, jag är NorppAI!",
+    "greetingBody": "Fråga mig hur du gör saker i Norppa, till exempel hur du redigerar din responsenkät eller var du hittar svaren. Jag kan förklara, men jag kan inte göra ändringar åt dig.",
+    "disclaimer": "Svaren genereras av AI och kan vara felaktiga.",
+    "disclaimerGuide": "Om du är osäker, kontrollera användarinstruktionerna.",
+    "inputLabel": "Din fråga",
+    "inputPlaceholder": "Ställ en fråga om Norppa",
+    "send": "Skicka"
   }
 }

@@ -807,5 +807,24 @@
   },
   "test": {
     "testValue": "vakio testi"
+  },
+  "helpChatbot": {
+    "regionLabel": "Ohje",
+    "pillLabel": "Tarvitsetko apua?",
+    "menuTitle": "Miten haluat saada apua?",
+    "closeMenu": "Sulje ohjevalikko",
+    "guideOption": "Lue käyttöohje",
+    "guideOptionDescription": "Avaa wikin uudelle välilehdelle",
+    "askNorppai": "Kysy NorppAI:lta",
+    "closeChat": "Sulje keskustelu",
+    "guideStripPrefix": "Haluatko mieluummin lukea?",
+    "guideStripLink": "Avaa käyttöohje",
+    "greetingTitle": "Hei, olen NorppAI!",
+    "greetingBody": "Kysy minulta, miten Norpassa tehdään asioita, esimerkiksi miten muokkaat palautekyselyä tai mistä löydät vastaukset. Voin neuvoa, mutta en voi tehdä muutoksia puolestasi.",
+    "disclaimer": "Vastaukset ovat tekoälyn tuottamia ja voivat olla virheellisiä.",
+    "disclaimerGuide": "Jos olet epävarma, tarkista käyttöohjeesta.",
+    "inputLabel": "Kysymyksesi",
+    "inputPlaceholder": "Kysy jotain Norpasta",
+    "send": "Lähetä"
   }
 }
