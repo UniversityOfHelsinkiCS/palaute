@@ -40,7 +40,7 @@ const BgWhite = '\x1b[47m'
 const ROOT_PATH = './src'
 const LOCALES_DIR_NAME = 'locales'
 const LOCALES_PATH = './public/locales'
-const EXTENSION_MATCHER = /.+\.js/
+const EXTENSION_MATCHER = /.+\.(js|ts)/
 // matches 'asd:asd'
 const TRANSLATION_KEY_REFERENCE_MATCHER = new RegExp(/['"`]\w+(?::\w+)+['"`]/, 'g')
 // matches t('asd'
