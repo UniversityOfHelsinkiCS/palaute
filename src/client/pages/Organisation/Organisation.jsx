@@ -63,7 +63,7 @@ const Organisation = () => {
     return <Navigate to="/" />
   }
 
-  const isAdmin = !!authorizedUser?.isAdmin
+  const isAdmin = authorizedUser?.isAdmin
 
   const name = getLanguageValue(organisation.name, i18n.language)
 

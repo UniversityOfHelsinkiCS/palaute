@@ -42,7 +42,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
   const feedbackCount = summary?.data?.feedbackCount || 0
   const studentCount = summary?.data?.studentCount || 0
 
-  const isAdmin = !!authorizedUser?.isAdmin
+  const isAdmin = authorizedUser?.isAdmin
   const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(interimFeedback)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)

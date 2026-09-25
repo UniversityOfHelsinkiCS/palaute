@@ -36,7 +36,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const feedbackCount = summary?.data?.feedbackCount || 0
 
-  const isAdmin = !!authorizedUser?.isAdmin
+  const isAdmin = authorizedUser?.isAdmin
   const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(organisationSurvey)
   const [startDate, endDate] = getStartAndEndString(opensAt, closesAt)
