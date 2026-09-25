@@ -11,6 +11,8 @@ import { mergeSx } from '../../util/sx'
 
 export const MAX_QUESTION_LENGTH = 500
 const COUNTER_FROM_LENGTH = 400
+const SEND_BUTTON_SIZE = 40
+const LINE_HEIGHT = 1.45
 
 type ComposerProps = {
   inputRef: RefObject<HTMLTextAreaElement | null>
@@ -68,8 +70,8 @@ const Composer = ({ inputRef, draft, canSend, onDraftChange, onSend }: ComposerP
               disableFocusRipple
               sx={mergeSx(
                 {
-                  width: 40,
-                  height: 40,
+                  width: SEND_BUTTON_SIZE,
+                  height: SEND_BUTTON_SIZE,
                   borderRadius: '10px',
                   bgcolor: 'primary.main',
                   color: 'primary.contrastText',
@@ -88,7 +90,8 @@ const Composer = ({ inputRef, draft, canSend, onDraftChange, onSend }: ComposerP
           p: '5px 5px 5px 12px',
           borderRadius: '12px',
           fontSize: 'inherit',
-          '& textarea': { py: '7px', lineHeight: 1.45 },
+          // A single line is as tall as the send button, so the text is vertically centred beside it
+          '& textarea': { py: `calc((${SEND_BUTTON_SIZE}px - ${LINE_HEIGHT}em) / 2)`, lineHeight: LINE_HEIGHT },
           // Windows high-contrast mode drops the border colour change, but shows outlines
           '&.Mui-focused': { outline: '2px solid transparent' },
         }}
