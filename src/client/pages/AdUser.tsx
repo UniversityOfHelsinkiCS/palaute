@@ -41,7 +41,8 @@ const AdUser = () => {
   return (
     <Box display="flex" flexDirection="column" minHeight="100vh" sx={{ overflowX: 'clip' }}>
       <NavBar />
-      <Box component="main" role="main" id="main-content">
+      {/* Grows, so the help chatbot's sticky root sits right above the footer on short pages too */}
+      <Box component="main" role="main" id="main-content" flexGrow={1}>
         <Router />
       </Box>
       <DevTools />

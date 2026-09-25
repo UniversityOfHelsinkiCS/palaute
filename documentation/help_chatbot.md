@@ -184,7 +184,8 @@ Findings from the prototype. They keep the animation simple to build and maintai
 
 - **One component, one view state** (`closed | menu | chat`, plus expanded/full-screen) and a table of **fixed box sizes** per view. Plain CSS transitions on width, height and border radius animate between them. There's no DOM measuring and no animation library.
 - Each view's content fades in after the resize. The chat content is laid out at its final size, so it's clipped during the growth instead of reflowing.
-- **The seal is a single element outside the resizing box**, positioned from the fixed bottom-right corner with a `transform`. Positioning it relative to the box made it jump ahead of the box's resize animation.
+- **The widget sits in a zero-height sticky root** just above the page footer, so it rides along the viewport's bottom edge and stops above the footer, without scroll listeners (updating the position from a scroll listener stuttered while smooth scrolling). The root's sticky `top` keeps an open box from being pushed past the top of the viewport. The full-screen chat is `position: fixed` and covers the footer.
+- **The seal is a single element outside the resizing box**, positioned from the widget's bottom-right corner with a `transform`. Positioning it relative to the box made it jump ahead of the box's resize animation.
 - **The seal animation is a sprite sheet** of all 77 GIF frames, played with a CSS `steps(77)` animation over 2.31s: once on the pill click, looped while waiting for a reply. JavaScript only toggles a class; driving frames from React state stuttered.
   - The source is `public/seal.gif` (77 frames of 30 ms each, so `steps(77)` over 2.31s matches its timing).
   - The sheet is a committed WebP in the module's `assets/` folder, generated once with ImageMagick (`-coalesce` is required because the GIF's frames are partial). The command is kept in a comment next to its import.

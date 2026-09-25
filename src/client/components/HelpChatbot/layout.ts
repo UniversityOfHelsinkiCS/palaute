@@ -102,10 +102,29 @@ export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }:
 // Above the sticky NavBar and FixedContainer toolbars, below modals, skip links, snackbars and tooltips
 export const widgetZIndex = (theme: Theme) => theme.zIndex.appBar + 1
 
+// The widget's root: a zero-height sticky element just above the page footer. It rides along the viewport's
+// bottom edge and stops above the footer when it scrolls into view, without scroll listeners.
+export const stickyRootSx =
+  ({ fullScreen, height }: BoxLayout): SxProps<Theme> =>
+  theme => ({
+    position: 'sticky',
+    bottom: 0,
+    zIndex: widgetZIndex(theme),
+    height: 0,
+    // Stops the footer from pushing the box past the top of the viewport
+    top: fullScreen ? 'auto' : `calc(${height} + 2 * ${theme.spacing(2)})`,
+    [theme.breakpoints.up('sm')]: {
+      top: fullScreen ? 'auto' : `calc(${height} + 2 * ${theme.spacing(3)})`,
+    },
+    transition: `top ${TRANSITION}`,
+    '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
+  })
+
+// Inside the sticky root, except full-screen, which covers the viewport and the footer
 export const anchorSx =
   (fullScreen: boolean): SxProps<Theme> =>
   theme => ({
-    position: 'fixed',
+    position: fullScreen ? 'fixed' : 'absolute',
     right: fullScreen ? 0 : theme.spacing(2),
     bottom: fullScreen ? 0 : theme.spacing(2),
     [theme.breakpoints.up('sm')]: {

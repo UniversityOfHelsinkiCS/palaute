@@ -17,6 +17,7 @@ import {
   TRANSITION,
   anchorSx,
   getLayout,
+  stickyRootSx,
   widgetZIndex,
 } from './layout'
 import MenuView from './MenuView'
@@ -132,7 +133,12 @@ const HelpChatbot = () => {
   }
 
   return (
-    <Box component="aside" aria-label={t('helpChatbot:regionLabel')} onKeyDown={handleKeyDown}>
+    <Box
+      component="aside"
+      aria-label={t('helpChatbot:regionLabel')}
+      onKeyDown={handleKeyDown}
+      sx={stickyRootSx(layout)}
+    >
       <Box
         sx={mergeSx(anchorSx(fullScreen), {
           zIndex: widgetZIndex,
