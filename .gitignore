@@ -75,8 +75,6 @@
 *.conf
 *.ini
 **/toska_login
-cypress.env.json
-# /cypress/
 
 # disallow secrects
 .env
@@ -109,9 +107,9 @@ scripts/my_username
 *.mp4
 tools/benchmark.mjs
 t.js
-cypress/screenshots
-cypress/videos
-cypress/downloads
+test-results/
+playwright-report/
+blob-report/
 
 # exclusions here
 !.env.template

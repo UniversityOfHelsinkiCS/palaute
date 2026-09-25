@@ -33,30 +33,13 @@ jobs:
       - name: Analyse translations
         run: npm run translations -- --lang fi,en
 
-  cypress:
+  playwright:
     strategy:
       fail-fast: false
       matrix:
-        spec:
-          [
-            common.spec.js,
-            continuousFeedback.spec.js,
-            courseSummary.spec.js,
-            emailStatsView.spec.js,
-            feedbackResults.spec.js,
-            interimFeedback.spec.js,
-            noad.spec.ts,
-            organisationSurvey.spec.js,
-            programme.spec.js,
-            search.spec.ts,
-            smallCourseFeedback.spec.ts,
-            teacherview.spec.js,
-            universitySurvey.spec.js,
-            userfeedbacks.spec.js,
-            versionedUniversitySurvey.spec.js,
-            accessibility.spec.js,
-          ]
+        shard: [1, 2, 3, 4]
     runs-on: ubuntu-latest
+    timeout-minutes: 30
 
     steps:
       - uses: actions/checkout@v7
@@ -69,14 +52,8 @@ jobs:
       - name: npm ci
         run: npm ci --no-audit --no-fund
 
-      - name: Cache Cypress binary
-        uses: actions/cache@v6
-        with:
-          path: ~/.cache/Cypress
-          key: cypress-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
-
-      - name: Install cypress
-        run: npx cypress install
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps chromium
 
       - name: Log in to the registry
         uses: docker/login-action@v4
@@ -92,12 +69,13 @@ jobs:
           max_attempts: 3
           command: docker compose -f docker-compose.ci.yml up -d
 
-      - name: Run cypress tests with retry
-        uses: nick-fields/retry@v4
-        with:
-          timeout_minutes: 6
-          max_attempts: 2
-          command: ./node_modules/.bin/cypress run -C cypress.config.ci.js --headless --browser chrome --spec "cypress/integration/${{ matrix.spec }}"
+      - name: Wait for the application
+        run: timeout 180 bash -c 'until curl -sf http://localhost:8000/api/ping; do sleep 2; done'
+
+      - name: Run Playwright tests
+        run: npx playwright test --shard=${{ matrix.shard }}/4
+        env:
+          BASE_URL: http://localhost:8000
 
       - name: Check logs
         run: docker compose -f docker-compose.ci.yml logs

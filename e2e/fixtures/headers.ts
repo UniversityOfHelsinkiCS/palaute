@@ -1,4 +1,16 @@
-const admin = {
+export type TestUser = {
+  uid: string
+  givenname: string
+  sn: string
+  mail: string
+  preferredLanguage?: string
+  preferredlanguage?: string
+  hyPersonSisuId: string
+  hygroupcn?: string[]
+  studentNumber?: string
+}
+
+export const admin: TestUser = {
   uid: 'mluukkai',
   givenname: 'Matti',
   mail: 'grp-toska+mockadmin@helsinki.fi',
@@ -8,7 +20,7 @@ const admin = {
   hygroupcn: ['hy-employees'],
 }
 
-const teacher = {
+export const teacher: TestUser = {
   uid: 'testiman',
   givenname: 'Tommi',
   sn: 'Testaaja',
@@ -18,7 +30,7 @@ const teacher = {
   hygroupcn: ['hy-employees'],
 }
 
-const student = {
+export const student: TestUser = {
   uid: 'oppilasolli',
   givenname: 'Olli',
   sn: 'Oppilas',
@@ -28,7 +40,7 @@ const student = {
   studentNumber: '010000001',
 }
 
-const studentHenri = {
+export const studentHenri: TestUser = {
   uid: 'studhenri',
   givenname: 'Henri',
   sn: 'Testaaja',
@@ -38,7 +50,7 @@ const studentHenri = {
   studentNumber: '010000002',
 }
 
-const studentMiko = {
+export const studentMiko: TestUser = {
   uid: 'studkemi',
   givenname: 'Miko',
   sn: 'Testaaja',
@@ -48,7 +60,7 @@ const studentMiko = {
   studentNumber: '010000003',
 }
 
-const studentVeikko = {
+export const studentVeikko: TestUser = {
   uid: 'studvesu',
   givenname: 'Veikko',
   sn: 'Testaaja',
@@ -58,7 +70,7 @@ const studentVeikko = {
   studentNumber: '010000004',
 }
 
-const studentRandom = {
+export const studentRandom: TestUser = {
   uid: 'studrandom',
   givenname: 'Random',
   sn: 'Testaaja',
@@ -68,7 +80,7 @@ const studentRandom = {
   studentNumber: '010000005',
 }
 
-const organisationCorrespondent = {
+export const organisationCorrespondent: TestUser = {
   uid: 'orgcscorrespondent',
   givenname: 'Correspondent',
   sn: 'Tester',
@@ -79,7 +91,7 @@ const organisationCorrespondent = {
   studentNumber: '010000006',
 }
 
-const summaryUser = {
+export const summaryUser: TestUser = {
   uid: 'summary-user',
   givenname: 'Summary',
   sn: 'mc Summaryface',
@@ -89,9 +101,9 @@ const summaryUser = {
   hygroupcn: ['hy-employees'],
 }
 
-const getFullName = user => `${user.givenname} ${user.sn}`
+export const getFullName = (user: TestUser) => `${user.givenname} ${user.sn}`
 
-const testUsers = [
+export const testUsers = [
   admin,
   teacher,
   student,
@@ -102,17 +114,3 @@ const testUsers = [
   organisationCorrespondent,
   summaryUser,
 ]
-
-module.exports = {
-  admin,
-  teacher,
-  student,
-  studentHenri,
-  studentMiko,
-  studentVeikko,
-  studentRandom,
-  organisationCorrespondent,
-  summaryUser,
-  testUsers,
-  getFullName,
-}

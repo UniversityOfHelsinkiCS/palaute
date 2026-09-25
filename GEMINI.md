@@ -11,6 +11,6 @@ The project is structured as a monorepo with the frontend and backend code locat
 - **Frontend:** React, TypeScript, Vite, Material-UI
 - **Backend:** Node.js, Express, TypeScript, Sequelize
 - **Database:** PostgreSQL
-- **Testing:** Cypress (end-to-end)
+- **Testing:** Playwright (end-to-end, in `e2e/`)
 - **Build Tool:** Vite
 - **Containerization:** Docker

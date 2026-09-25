@@ -83,8 +83,10 @@ gitignored/
 **/*.conf
 **/*.ini
 **/toska_login
-**/cypress.env.json
-cypress/
+e2e/
+playwright.config.ts
+playwright-report/
+test-results/
 **/*Dockerfile
 **/*docker-compose.yml
 **/*.husky

@@ -61,7 +61,7 @@ const FormikDatePicker = ({ name, ...props }: FormikDatePickerProps) => {
             'data-cy': `formik-date-picker-field-${name}-input`,
           },
         },
-        // These three slots' MUI prop types don't include `data-cy` (only used for Cypress
+        // These three slots' MUI prop types don't include `data-cy` (only used for e2e test
         // selectors, has no runtime meaning to MUI), so a cast to the real slot prop type is
         // needed to attach it.
         field: {
