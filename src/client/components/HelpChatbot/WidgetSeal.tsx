@@ -1,25 +1,11 @@
 import { Box } from '@mui/material'
-import { keyframes } from '@mui/material/styles'
 import { useState } from 'react'
 
 import type { SealPlacement } from './layout'
 
 import { mergeSx } from '../../util/sx'
-// All 77 frames of public/seal.gif at 80px (2x), made with ImageMagick 6. -coalesce is required
-// because the GIF's frames are partial:
-//   convert public/seal.gif -coalesce -resize 80x80 +append -quality 80 \
-//     src/client/components/HelpChatbot/assets/seal-sprite.webp
-import sealSprite from './assets/seal-sprite.webp'
 import { SEAL_SIZE, TRANSITION, anchorSx, widgetZIndex } from './layout'
-
-const FRAME_COUNT = 77
-// The GIF's frames are 30 ms each
-const CYCLE = '2.31s'
-
-const flip = keyframes`
-  from { transform: translateX(0); }
-  to { transform: translateX(-${SEAL_SIZE * FRAME_COUNT}px); }
-`
+import { CYCLE, FRAME_COUNT, flip, sealSprite } from './sealSprite'
 
 type WidgetSealProps = {
   placement: SealPlacement
