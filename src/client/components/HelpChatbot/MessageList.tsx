@@ -3,6 +3,7 @@ import type { SystemStyleObject } from '@mui/system'
 
 import { ErrorOutline } from '@mui/icons-material'
 import { Box, useMediaQuery } from '@mui/material'
+import { keyframes } from '@mui/material/styles'
 import { visuallyHidden } from '@mui/utils'
 import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -16,6 +17,10 @@ import { CHAT_HEADER_HEIGHT } from './layout'
 import { userBubbleColor } from './tokens'
 
 const REPLY_SCROLL_MARGIN = 12
+
+const pulse = keyframes`
+  50% { opacity: 0.4; }
+`
 
 const bubbleSx: SystemStyleObject<Theme> = {
   boxSizing: 'border-box',
@@ -171,7 +176,17 @@ const MessageList = ({
         </Box>
       )}
       {pending && (
-        <Box sx={{ mt: '14px', fontSize: '13.5px', color: 'text.secondary' }}>{t('helpChatbot:thinking')}</Box>
+        <Box
+          sx={{
+            mt: '14px',
+            fontSize: '13.5px',
+            color: 'text.secondary',
+            animation: `${pulse} 1.6s ease-in-out infinite`,
+            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+          }}
+        >
+          {t('helpChatbot:thinking')}
+        </Box>
       )}
     </Box>
   )
