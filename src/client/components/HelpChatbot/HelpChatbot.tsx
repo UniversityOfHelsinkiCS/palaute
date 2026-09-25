@@ -137,7 +137,7 @@ const HelpChatbot = () => {
       component="aside"
       aria-label={t('helpChatbot:regionLabel')}
       onKeyDown={handleKeyDown}
-      sx={stickyRootSx(layout)}
+      sx={stickyRootSx(view, layout)}
     >
       <Box
         sx={mergeSx(anchorSx(fullScreen), {
