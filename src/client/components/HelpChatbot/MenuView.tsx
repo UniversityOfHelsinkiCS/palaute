@@ -3,19 +3,20 @@ import type { Ref } from 'react'
 
 import { Close, MenuBookOutlined } from '@mui/icons-material'
 import { Box, IconButton, Link, Tooltip } from '@mui/material'
-import { useId } from 'react'
+import { useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
-import { SEAL_SIZE } from './layout'
+import { SEAL_SIZE, getMenuHeight } from './layout'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
+import useElementSize from './useElementSize'
 
 const optionSx: SxProps<Theme> = {
   display: 'flex',
   alignItems: 'center',
   gap: '12px',
   width: '100%',
-  height: 60,
+  minHeight: 60,
   boxSizing: 'border-box',
   p: '8px 12px',
   border: '1px solid',
@@ -46,19 +47,24 @@ const descriptionSx: SxProps<Theme> = { display: 'block', fontSize: '12.5px', fo
 type MenuViewProps = {
   guideUrl: string
   askRef: Ref<HTMLButtonElement>
+  onHeightChange: (height: number) => void
   onAsk: () => void
   onClose: () => void
 }
 
-const MenuView = ({ guideUrl, askRef, onAsk, onClose }: MenuViewProps) => {
+const MenuView = ({ guideUrl, askRef, onHeightChange, onAsk, onClose }: MenuViewProps) => {
   const { t } = useTranslation()
   const titleId = useId()
   const guideLabelId = useId()
   const guideDescriptionId = useId()
+  const groupRef = useRef<HTMLDivElement>(null)
+
+  // The menu grows to fit longer translations and user text-spacing overrides instead of clipping them
+  useElementSize(groupRef, ({ height }) => onHeightChange(getMenuHeight(height)))
 
   return (
-    <Box role="group" aria-labelledby={titleId} sx={{ height: '100%', boxSizing: 'border-box', p: '8px 12px 12px' }}>
-      <Box sx={{ display: 'flex', alignItems: 'center', height: 36, mb: '6px' }}>
+    <Box ref={groupRef} role="group" aria-labelledby={titleId} sx={{ boxSizing: 'border-box', p: '8px 12px 12px' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', minHeight: 36, mb: '6px' }}>
         <Box
           component="p"
           id={titleId}

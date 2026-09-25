@@ -10,7 +10,15 @@ import type { ChatSize, WidgetView } from './layout'
 
 import { mergeSx } from '../../util/sx'
 import ChatPanel from './ChatPanel'
-import { DEFAULT_PILL_WIDTH, FULL_SCREEN_QUERY, TRANSITION, anchorSx, getLayout, widgetZIndex } from './layout'
+import {
+  DEFAULT_MENU_HEIGHT,
+  DEFAULT_PILL_WIDTH,
+  FULL_SCREEN_QUERY,
+  TRANSITION,
+  anchorSx,
+  getLayout,
+  widgetZIndex,
+} from './layout'
 import MenuView from './MenuView'
 import PillView from './PillView'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
@@ -36,6 +44,7 @@ const HelpChatbot = () => {
 
   const [view, setView] = useState<WidgetView>('closed')
   const [pillWidth, setPillWidth] = useState(DEFAULT_PILL_WIDTH)
+  const [menuHeight, setMenuHeight] = useState(DEFAULT_MENU_HEIGHT)
   const [draft, setDraft] = useState('')
   const [chatSize, setChatSize] = useState<ChatSize>('normal')
   const [sealOnce, setSealOnce] = useState(false)
@@ -116,7 +125,7 @@ const HelpChatbot = () => {
     close()
   }
 
-  const layout = getLayout(view, pillWidth, chatSize, fullScreen)
+  const layout = getLayout({ view, pillWidth, menuHeight, chatSize, fullScreen })
   const contentSize = {
     width: `calc(${layout.width} - ${2 * layout.border}px)`,
     height: `calc(${layout.height} - ${2 * layout.border}px)`,
@@ -162,7 +171,13 @@ const HelpChatbot = () => {
         >
           {view === 'closed' && <PillView buttonRef={pillRef} onOpen={openFromPill} onWidthChange={setPillWidth} />}
           {view === 'menu' && guideUrl && (
-            <MenuView guideUrl={guideUrl} askRef={askRef} onAsk={() => goTo('chat')} onClose={close} />
+            <MenuView
+              guideUrl={guideUrl}
+              askRef={askRef}
+              onHeightChange={setMenuHeight}
+              onAsk={() => goTo('chat')}
+              onClose={close}
+            />
           )}
           {view === 'chat' && (
             <ChatPanel
