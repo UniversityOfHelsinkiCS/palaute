@@ -128,7 +128,7 @@ Only if the backend's model differs from the one above does anything else change
 - New assistant replies are announced in full through a **polite live region** (WCAG 4.1.3 Status Messages), but only while the chat is open. Errors are announced as well.
 - The Expand toggle keeps one accessible name ("Expand chat") and exposes its state with `aria-pressed`; screen readers announce a state change reliably but often miss a name change on the focused button. The icon and tooltip switch between expand and shrink.
 - Icon buttons have a tooltip with the same text as their accessible name.
-- The waiting indicator is text ("NorppAI is thinking…"); the seal animation is decorative.
+- The waiting indicator is text ("NorppAI is thinking…"); the seal animation is decorative. The text pulses between `text.secondary` and `text.primary`: fading it out would drop it below 4.5:1 contrast.
 - With `prefers-reduced-motion`, the resize transitions, the seal's slide and all seal animations are switched off (WCAG 2.2.2).
 - The pill, menu, panel controls and message links are fully keyboard operable, with unique accessible names.
 - The input's focus style also shows in Windows high-contrast mode (a transparent outline as a fallback for the box-shadow).
