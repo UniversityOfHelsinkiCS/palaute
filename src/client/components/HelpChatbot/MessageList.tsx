@@ -18,8 +18,9 @@ import { userBubbleColor } from './tokens'
 
 const REPLY_SCROLL_MARGIN = 12
 
-const pulse = keyframes`
-  50% { opacity: 0.4; }
+// Fading the text out would drop it below 4.5:1 contrast, so it pulses between two text colours that both pass
+const pulse = (theme: Theme) => keyframes`
+  50% { color: ${theme.palette.text.primary}; }
 `
 
 const bubbleSx: SystemStyleObject<Theme> = {
@@ -177,13 +178,13 @@ const MessageList = ({
       )}
       {pending && (
         <Box
-          sx={{
+          sx={theme => ({
             mt: '14px',
             fontSize: '13.5px',
             color: 'text.secondary',
-            animation: `${pulse} 1.6s ease-in-out infinite`,
+            animation: `${pulse(theme)} 1.6s ease-in-out infinite`,
             '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
-          }}
+          })}
         >
           {t('helpChatbot:thinking')}
         </Box>
