@@ -18,7 +18,7 @@ jobs:
 
       - name: Build image
         id: build-image
-        uses: redhat-actions/buildah-build@v2
+        uses: redhat-actions/buildah-build@v3
         with:
           image: norppa
           tags: production ${{ github.sha }}
@@ -35,7 +35,7 @@ jobs:
             --ulimit nofile=4096:4096
 
       - name: Push to registry.version.helsinki.fi
-        uses: redhat-actions/push-to-registry@v2
+        uses: redhat-actions/push-to-registry@v3
         with:
           image: ${{ steps.build-image.outputs.image }}
           tags: ${{ steps.build-image.outputs.tags }}
