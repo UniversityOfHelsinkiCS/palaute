@@ -4,7 +4,7 @@ import { keyframes } from '@mui/material/styles'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { CYCLE, FRAME_COUNT, flip, largeSealSprite } from './sealSprite'
+import { CYCLE, FRAME_COUNT, flip, largeSealSprite, largeSealStill } from './sealSprite'
 
 const SEAL_IMAGE_SIZE = 72
 
@@ -21,7 +21,11 @@ type EmptyStateProps = {
 const EmptyState = ({ hasGuide }: EmptyStateProps) => {
   const { t } = useTranslation()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
+  // The sprite is 60 times the size of the still image, so it's only loaded when someone reaches for the seal
+  const [spriteRequested, setSpriteRequested] = useState(false)
+  const [spriteLoaded, setSpriteLoaded] = useState(false)
   const [sealPlaying, setSealPlaying] = useState(false)
+  const flipping = sealPlaying && spriteLoaded
 
   return (
     <Box
@@ -41,7 +45,14 @@ const EmptyState = ({ hasGuide }: EmptyStateProps) => {
         type="button"
         tabIndex={-1}
         aria-hidden="true"
-        onClick={() => !reduceMotion && setSealPlaying(true)}
+        // Keeps focus where it was, e.g. in the question input
+        onMouseDown={event => event.preventDefault()}
+        onPointerEnter={() => !reduceMotion && setSpriteRequested(true)}
+        onClick={() => {
+          if (reduceMotion) return
+          setSpriteRequested(true)
+          setSealPlaying(true)
+        }}
         sx={{
           position: 'relative',
           width: SEAL_IMAGE_SIZE,
@@ -56,22 +67,31 @@ const EmptyState = ({ hasGuide }: EmptyStateProps) => {
           animation: sealPlaying ? `${bounce} .5s ease` : 'none',
         }}
       >
-        {/* The first frame doubles as the still image */}
         <Box
           component="img"
-          src={largeSealSprite}
+          src={largeSealStill}
           alt=""
-          onAnimationEnd={() => setSealPlaying(false)}
-          sx={{
-            position: 'absolute',
-            left: 0,
-            top: 0,
-            width: SEAL_IMAGE_SIZE * FRAME_COUNT,
-            height: SEAL_IMAGE_SIZE,
-            maxWidth: 'none',
-            animation: sealPlaying ? `${flip} ${CYCLE} steps(${FRAME_COUNT}) 1` : 'none',
-          }}
+          sx={{ display: 'block', width: SEAL_IMAGE_SIZE, height: SEAL_IMAGE_SIZE, opacity: flipping ? 0 : 1 }}
         />
+        {spriteRequested && (
+          <Box
+            component="img"
+            src={largeSealSprite}
+            alt=""
+            onLoad={() => setSpriteLoaded(true)}
+            onAnimationEnd={() => setSealPlaying(false)}
+            sx={{
+              position: 'absolute',
+              left: 0,
+              top: 0,
+              width: SEAL_IMAGE_SIZE * FRAME_COUNT,
+              height: SEAL_IMAGE_SIZE,
+              maxWidth: 'none',
+              opacity: flipping ? 1 : 0,
+              animation: flipping ? `${flip} ${CYCLE} steps(${FRAME_COUNT}) 1` : 'none',
+            }}
+          />
+        )}
       </Box>
       <Box component="h3" sx={{ m: 0, fontSize: '17px', fontWeight: 700 }}>
         {t('helpChatbot:greetingTitle')}
