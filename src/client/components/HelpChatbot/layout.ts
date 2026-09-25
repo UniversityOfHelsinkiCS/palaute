@@ -105,26 +105,28 @@ export const widgetZIndex = (theme: Theme) => theme.zIndex.appBar + 1
 // The widget's root: a zero-height sticky element just above the page footer. It rides along the viewport's
 // bottom edge and stops above the footer when it scrolls into view, without scroll listeners.
 export const stickyRootSx =
-  ({ fullScreen, height }: BoxLayout): SxProps<Theme> =>
-  theme => ({
-    position: 'sticky',
-    bottom: 0,
-    zIndex: widgetZIndex(theme),
-    height: 0,
-    // Stops the footer from pushing the box past the top of the viewport
-    top: fullScreen ? 'auto' : `calc(${height} + 2 * ${theme.spacing(2)})`,
-    [theme.breakpoints.up('sm')]: {
-      top: fullScreen ? 'auto' : `calc(${height} + 2 * ${theme.spacing(3)})`,
-    },
-    transition: `top ${TRANSITION}`,
-    '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
-  })
+  (view: WidgetView, { height }: BoxLayout): SxProps<Theme> =>
+  theme => {
+    // The pill and the menu are never pushed past the top of the viewport. The chat stays at the viewport's
+    // bottom, so it covers the footer instead of the NavBar.
+    const top = (margin: string) => (view === 'chat' ? '100dvh' : `calc(${height} + 2 * ${margin})`)
+    return {
+      position: 'sticky',
+      bottom: 0,
+      zIndex: widgetZIndex(theme),
+      height: 0,
+      top: top(theme.spacing(2)),
+      [theme.breakpoints.up('sm')]: { top: top(theme.spacing(3)) },
+      transition: `top ${TRANSITION}`,
+      '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
+    }
+  }
 
-// Inside the sticky root, except full-screen, which covers the viewport and the footer
+// Inside the sticky root, also when full-screen, so switching to full-screen doesn't make the box jump
 export const anchorSx =
   (fullScreen: boolean): SxProps<Theme> =>
   theme => ({
-    position: fullScreen ? 'fixed' : 'absolute',
+    position: 'absolute',
     right: fullScreen ? 0 : theme.spacing(2),
     bottom: fullScreen ? 0 : theme.spacing(2),
     [theme.breakpoints.up('sm')]: {
