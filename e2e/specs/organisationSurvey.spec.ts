@@ -113,6 +113,8 @@ const expectNoFeedbackItem = async (page: Page, surveyId: number, tab: string) =
 
 test.describe('Feedback Correspondents', () => {
   test.beforeEach(async ({ api, loginAs }) => {
+    // The teacher search only lists users whose IAM groups Jami knows
+    await api.login(teacher)
     await api.seedTestOrgCorrespondent(organisationCorrespondent)
     await loginAs(organisationCorrespondent)
   })
