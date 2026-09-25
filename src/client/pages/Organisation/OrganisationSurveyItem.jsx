@@ -36,7 +36,7 @@ const OrganisationSurveyItem = ({ organisationSurvey }) => {
 
   const feedbackCount = summary?.data?.feedbackCount || 0
 
-  const isAdmin = !!authorizedUser?.isAdmin
+  const isAdmin = authorizedUser?.isAdmin
   const studentCount = students.length
   const allowDelete = feedbackCount === 0
   const isOpen = feedbackTargetIsOpen(organisationSurvey)
