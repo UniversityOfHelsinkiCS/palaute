@@ -1,10 +1,11 @@
 import type { Ref } from 'react'
 
 import { Box } from '@mui/material'
-import { useLayoutEffect, useRef } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { PILL_PADDING_LEFT, PILL_PADDING_RIGHT, getPillWidth } from './layout'
+import useElementSize from './useElementSize'
 
 type PillViewProps = {
   buttonRef: Ref<HTMLButtonElement>
@@ -16,18 +17,8 @@ const PillView = ({ buttonRef, onOpen, onWidthChange }: PillViewProps) => {
   const { t } = useTranslation()
   const labelRef = useRef<HTMLSpanElement>(null)
 
-  // Measured rather than fixed per language: translations can be overridden per deployment,
-  // and font loading and user text-spacing overrides change the width too
-  useLayoutEffect(() => {
-    const label = labelRef.current
-    if (!label) return undefined
-
-    const report = () => onWidthChange(getPillWidth(label.getBoundingClientRect().width))
-    report()
-    const observer = new ResizeObserver(report)
-    observer.observe(label)
-    return () => observer.disconnect()
-  }, [onWidthChange])
+  // Measured rather than fixed per language, as translations can be overridden per deployment
+  useElementSize(labelRef, ({ width }) => onWidthChange(getPillWidth(width)))
 
   return (
     <Box
