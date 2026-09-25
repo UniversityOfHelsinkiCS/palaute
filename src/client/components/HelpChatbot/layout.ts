@@ -25,8 +25,13 @@ export const CHAT_HEADER_HEIGHT = 60
 export const PILL_HEIGHT = 56
 export const PILL_PADDING_LEFT = 54
 export const PILL_PADDING_RIGHT = 18
-// Used only until the label has been measured, which happens before the first paint
+// Used only until the pill's label and the menu's content have been measured, before the first paint
 export const DEFAULT_PILL_WIDTH = 172
+export const DEFAULT_MENU_HEIGHT = 192
+const MENU_WIDTH = 300
+// The seal sits in the bottom option's icon slot
+const MENU_SEAL_LEFT = 26
+const MENU_SEAL_BOTTOM = 23
 
 // The chat doesn't fit next to the page below these (WCAG 1.4.10 Reflow). Theme breakpoints are width-only.
 export const FULL_SCREEN_QUERY = '(max-height: 639.95px)'
@@ -39,6 +44,8 @@ const px = (value: number) => `${value}px`
 
 export const getPillWidth = (labelWidth: number) =>
   Math.ceil(labelWidth) + PILL_PADDING_LEFT + PILL_PADDING_RIGHT + 2 * BOX_BORDER
+
+export const getMenuHeight = (contentHeight: number) => Math.ceil(contentHeight) + 2 * BOX_BORDER
 
 // Offsets from the fixed bottom-right corner, which stays put while the box resizes. Positioning the seal
 // relative to the box made it jump ahead of the resize. `left`/`top` place its corner inside the box.
@@ -57,10 +64,22 @@ const fixedBox = (width: string, height: string, radius: number, seal: [number, 
   seal: sealAt(width, height, ...seal),
 })
 
-// Sizes are CSS lengths rather than measurements, so plain CSS transitions can animate between views
-export const getLayout = (view: WidgetView, pillWidth: number, chatSize: ChatSize, fullScreen: boolean): BoxLayout => {
+type LayoutInput = {
+  view: WidgetView
+  pillWidth: number
+  menuHeight: number
+  chatSize: ChatSize
+  fullScreen: boolean
+}
+
+// Sizes are CSS lengths, so plain CSS transitions can animate between views. Only the pill's and the menu's
+// content is measured, because their text length varies.
+export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }: LayoutInput): BoxLayout => {
   if (view === 'closed') return fixedBox(px(pillWidth), px(PILL_HEIGHT), PILL_HEIGHT / 2, [9, 8, 1])
-  if (view === 'menu') return fixedBox(px(300), px(192), 16, [26, 129, 1])
+  if (view === 'menu') {
+    const sealTop = menuHeight - MENU_SEAL_BOTTOM - SEAL_SIZE
+    return fixedBox(px(MENU_WIDTH), px(menuHeight), 16, [MENU_SEAL_LEFT, sealTop, 1])
+  }
   if (fullScreen) {
     // 100vw includes the page's scrollbar, so the page doesn't scroll while the chat is full-screen
     return {
