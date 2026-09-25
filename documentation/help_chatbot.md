@@ -26,7 +26,7 @@ The agreed look and behaviour are in the [prototype canvas](https://claude.ai/ar
 
 - The assistant is called **NorppAI**, with the Norppa seal as its mascot. Text that refers to the app itself still says "Norppa".
 - **The small seal is one continuous character.** It travels with the widget: in the pill, then on the "Ask NorppAI" option, then in the chat header. It is never duplicated: there's no avatar next to replies.
-- The only other seal is a **large static seal in the empty state's greeting**. It disappears once the conversation starts.
+- The only other seal is a **large seal in the empty state's greeting**. It disappears once the conversation starts.
 
 ### One widget, three views
 
@@ -189,7 +189,7 @@ Findings from the prototype. They keep the animation simple to build and maintai
   - The source is `public/seal.gif` (77 frames of 30 ms each, so `steps(77)` over 2.31s matches its timing).
   - The sheet is a committed WebP in the module's `assets/` folder, generated once with ImageMagick (`-coalesce` is required because the GIF's frames are partial). The command is kept in a comment next to its import.
   - It is a 6160×80 strip (80px frames for sharpness at 2× DPR), about 86 KB against the prototype PNG's 450 KB.
-  - The large static seal is a copy of `public/seal.png` in the same folder.
+  - The large greeting seal uses a second 11088×144 strip (144px frames, about 157 KB). Its first frame is the still image. Clicking it is an easter egg: the seal bounces and plays the animation once. It's hidden from keyboard and screen reader users, and does nothing with `prefers-reduced-motion`.
 - **The pill's width must be a number** so it can animate, but the label's length varies by language, and translations can be overridden per deployment. The label is measured with a `ResizeObserver`, which also follows font loading and user text-spacing overrides (WCAG 1.4.12). A fixed width per language would silently break when the copy changes.
 - **The menu's height is measured the same way.** Its width is fixed, but a fixed height clipped the title and the guide option's description under WCAG 1.4.12 text spacing. The seal's slot is in the bottom option, so its position doesn't depend on the height.
 - The expanded and full-screen sizes are CSS expressions (`min(680px, 100dvh - 48px)`, `100vw`), so the size table stays declarative and fits smaller viewports without measuring.
