@@ -34,6 +34,9 @@ export const createApi = (request: APIRequestContext) => {
 
     seedUsers: (users: TestUser[]) => send('POST', '/test/seed-users', { data: users }),
 
+    // Logging in sends the user's IAM groups to Jami
+    login: (user: TestUser) => send('GET', '/api/login', { headers: user }),
+
     buildSummaries: () =>
       send('POST', '/api/admin/build-summaries', {
         headers: admin,

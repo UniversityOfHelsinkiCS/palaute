@@ -70,7 +70,7 @@ jobs:
           command: docker compose -f docker-compose.ci.yml up -d
 
       - name: Wait for the application
-        run: timeout 180 bash -c 'until curl -sf http://localhost:8000/api/ping; do sleep 2; done'
+        run: timeout 180 bash -c 'until curl -sf http://localhost:8000/api/ping && curl -sf http://localhost:3003/ping; do sleep 2; done'
 
       - name: Run Playwright tests
         run: npx playwright test --shard=${{ matrix.shard }}/4
