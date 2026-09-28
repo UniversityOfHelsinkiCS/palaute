@@ -134,6 +134,7 @@ const GroupingQuestionSettings = ({
   isEditing,
   onStartEditing,
   onStopEditing,
+  onCancelEditing,
 }) => {
   const { t } = useTranslation()
   const language = useQuestionLanguage()
@@ -203,6 +204,7 @@ const GroupingQuestionSettings = ({
             language={language}
             isEditing={isEditing}
             onStopEditing={onStopEditing}
+            onCancelEditing={onCancelEditing}
             onStartEditing={onStartEditing}
             editable
             showMoveButtons={false}

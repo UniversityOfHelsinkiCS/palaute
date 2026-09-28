@@ -89,6 +89,10 @@ const QuestionEditorForm = ({
             isEditing={editingQuestionId === getQuestionId(groupingQuestionField.value)}
             onStartEditing={() => setEditingQuestionId(getQuestionId(groupingQuestionField.value))}
             onStopEditing={handleStopEditing}
+            onCancelEditing={isNew => {
+              if (isNew) groupingQuestionHelpers.setValue(null)
+              setEditingQuestionId(null)
+            }}
           />
         )}
         <FieldArray
@@ -134,6 +138,10 @@ const QuestionEditorForm = ({
                         language={questionLanguage}
                         isEditing={editingQuestionId === getQuestionId(question)}
                         onStopEditing={() => handleStopEditing()}
+                        onCancelEditing={isNew => {
+                          if (isNew) arrayHelpers.remove(index)
+                          setEditingQuestionId(null)
+                        }}
                         onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
                         editable={editable}
                         onPublicityToggle={makePublicityToggle(question)}

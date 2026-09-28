@@ -106,6 +106,7 @@ const QuestionCard = ({
   isEditing = false,
   onStartEditing,
   onStopEditing,
+  onCancelEditing,
   moveUpDisabled = false,
   moveDownDisabled = false,
   editable,
@@ -116,7 +117,7 @@ const QuestionCard = ({
   editorLevel,
 }) => {
   const { t } = useTranslation()
-  const [field, , helpers] = useField(name)
+  const [field, meta, helpers] = useField(name)
   const { value: question } = field
 
   const EditorComponent = editorComponentByType[question.type]
@@ -162,6 +163,14 @@ const QuestionCard = ({
     if (hasConfirmed) {
       onRemove()
     }
+  }
+
+  const handleCancelEditing = () => {
+    const isNew = meta.initialValue === undefined
+    if (!isNew) {
+      helpers.setValue(meta.initialValue)
+    }
+    onCancelEditing(isNew)
   }
 
   const editorRef = useRef(null)
@@ -226,7 +235,10 @@ const QuestionCard = ({
                   showRequiredToggle={requiredConfigurable}
                   name={name}
                 />
-                <Box sx={{ ml: { xs: 0, sm: 'auto' } }}>
+                <Box sx={{ ml: { xs: 0, sm: 'auto' }, display: 'flex', gap: '1rem' }}>
+                  <NorButton data-cy="question-card-cancel-edit" color="cancel" onClick={handleCancelEditing}>
+                    {t('common:cancel')}
+                  </NorButton>
                   <NorButton data-cy="question-card-save-edit" color="primary" onClick={onStopEditing}>
                     {t('questionEditor:done')}
                   </NorButton>
