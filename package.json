@@ -28,7 +28,8 @@
     "lint:quiet": "oxlint --type-check --quiet .",
     "prepare": "husky",
     "translations": "node ./tools/analyzeTranslations.js",
-    "ndc": "npx no-dead-code@latest --ignore config"
+    "ndc": "npx no-dead-code@latest --ignore config",
+    "manual:record": "playwright test -c playwright.manual.config.ts"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,cjs,mjs}": "oxlint --quiet",

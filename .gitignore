@@ -110,6 +110,7 @@ t.js
 test-results/
 playwright-report/
 blob-report/
+e2e/manual/videos/
 
 # exclusions here
 !.env.template
