@@ -1,3 +1,4 @@
+import type { LanguageId } from '@common/types/common'
 import type {
   HelpChatbotTurn,
   PostHelpChatbotMessageBody,
@@ -6,6 +7,7 @@ import type {
 
 import { trimHistory } from '@common/helpChatbot'
 import { isCancel } from 'axios'
+import i18n from 'i18next'
 
 import type { ChatEntry } from './types'
 
@@ -23,6 +25,11 @@ const toTurns = (entries: ChatEntry[]): HelpChatbotTurn[] =>
     return entry.status === 'failed' ? [] : [{ role: 'user', content: entry.text }]
   })
 
+const UI_LANGUAGES: LanguageId[] = ['fi', 'sv', 'en']
+
+// The language the UI is shown in, which i18next falls back to English for
+const getUiLanguage = (): LanguageId => UI_LANGUAGES.find(language => language === i18n.resolvedLanguage) ?? 'en'
+
 // `entries` ends with the question being asked. Only the history the server uses is sent, so a long
 // conversation stays within the request size limit. Any rejection is shown as "No answer received",
 // except a cancellation (see isCancelled).
@@ -31,7 +38,11 @@ export const askNorppai = async (
   entries: ChatEntry[],
   signal: AbortSignal
 ): Promise<AssistantReply> => {
-  const body: PostHelpChatbotMessageBody = { conversationId, messages: trimHistory(toTurns(entries)) }
+  const body: PostHelpChatbotMessageBody = {
+    conversationId,
+    language: getUiLanguage(),
+    messages: trimHistory(toTurns(entries)),
+  }
   const { data } = await apiClient.post<PostHelpChatbotMessageResponse>('/help-chatbot/messages', body, { signal })
   return { id: data.message.id, markdown: data.message.content }
 }

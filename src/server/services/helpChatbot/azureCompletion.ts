@@ -1,11 +1,11 @@
-import type { HelpChatbotTurn } from '@common/types/helpChatbot'
-
 import axios, { isAxiosError, isCancel } from 'axios'
+
+import type { HelpChatbotRequest } from './parseRequest'
 
 import { ApplicationError } from '../../util/ApplicationError'
 import { AZURE_API_KEY, AZURE_RESOURCE, HELP_CHATBOT_MODEL } from '../../util/config'
 import { logger } from '../../util/logger'
-import { SYSTEM_PROMPT } from './systemPrompt'
+import { SYSTEM_PROMPTS } from './systemPrompt'
 
 // The API version gptwrapper uses; it accepts reasoning_effort for the GPT-5 models
 const API_VERSION = '2024-10-21'
@@ -62,12 +62,15 @@ const describeError = (error: unknown) => {
 const noAnswer = () => new ApplicationError('No answer from the language model', 502)
 
 // A cancellation through signal is rethrown as is
-export const getAzureCompletion = async (turns: HelpChatbotTurn[], signal: AbortSignal): Promise<Completion> => {
+export const getAzureCompletion = async (
+  { language, turns }: HelpChatbotRequest,
+  signal: AbortSignal
+): Promise<Completion> => {
   const url = `https://${AZURE_RESOURCE}.openai.azure.com/openai/deployments/${HELP_CHATBOT_MODEL}/chat/completions`
 
   // GPT-5 models are reasoning models: they take max_completion_tokens and reject a non-default temperature
   const body = {
-    messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...turns],
+    messages: [{ role: 'system', content: SYSTEM_PROMPTS[language] }, ...turns],
     max_completion_tokens: MAX_COMPLETION_TOKENS,
     reasoning_effort: 'low',
   }

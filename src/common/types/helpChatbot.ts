@@ -1,3 +1,5 @@
+import type { LanguageId } from './common'
+
 // Wire format of the help chatbot's backend. Used by the client's HelpChatbot/helpChatbotService.ts
 // and the server's routes/helpChatbot. See "Backend" in documentation/help_chatbot.md.
 
@@ -11,6 +13,8 @@ export type HelpChatbotTurn = {
 // POST /help-chatbot/messages
 export type PostHelpChatbotMessageBody = {
   conversationId: string
+  // The UI language, so the answers quote the labels the user sees
+  language: LanguageId
   // Answered history, with the new question last
   messages: HelpChatbotTurn[]
 }
