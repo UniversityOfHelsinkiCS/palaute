@@ -20,6 +20,7 @@ const client = {
   get: (key: string) => redisClient.get(key),
   set: (key: string, value: string, options = {}) => redisClient.set(key, value, options),
   expire: (key: string, seconds: number) => redisClient.expire(key, seconds),
+  incr: (key: string) => redisClient.incr(key),
   delete: (key: string | string[]) => redisClient.del(key),
   keys: (pattern: string) => redisClient.keys(pattern),
   mGet: (keys: string[]) => redisClient.mGet(keys),
@@ -40,6 +41,7 @@ const client = {
       client.get = () => Promise.resolve(null)
       client.set = () => Promise.resolve(null)
       client.expire = () => Promise.resolve(false)
+      client.incr = () => Promise.resolve(0)
       client.delete = () => Promise.resolve(0)
       client.keys = () => Promise.resolve([])
       client.mGet = () => Promise.resolve([])

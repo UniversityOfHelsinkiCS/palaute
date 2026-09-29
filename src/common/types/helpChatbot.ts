@@ -1,5 +1,5 @@
-// Placeholder wire format, expected to change with the real backend. Used only by the client's
-// HelpChatbot/helpChatbotService.ts and its mock.
+// Wire format of the help chatbot's backend. Used by the client's HelpChatbot/helpChatbotService.ts
+// and the server's routes/helpChatbot. See "Backend" in documentation/help_chatbot.md.
 
 export type HelpChatbotRole = 'user' | 'assistant'
 

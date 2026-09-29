@@ -6,6 +6,7 @@ import { currentUserMiddleware } from '../middleware/currentUserMiddleware'
 import { errorMiddleware } from '../middleware/errorMiddleware'
 import { iamGroupsMiddleware } from '../middleware/iamGroupsMiddleware'
 import { shibbolethCharsetMiddleware } from '../middleware/shibbolethCharsetMiddleware'
+import { HELP_CHATBOT_ENABLED } from '../util/config'
 import { initializeSentry } from '../util/sentry'
 import { adminRouter } from './admin'
 import { continuousFeedbackController } from './continuousFeedback'
@@ -13,6 +14,7 @@ import { courseSummaryRouter } from './courseSummary'
 import { courseUnitsRouter } from './courseUnits'
 import { feedbacksRouter } from './feedbacks'
 import { feedbackTargetRouter } from './feedbackTargets'
+import { helpChatbotRouter } from './helpChatbot'
 import { redirectFromCoursesPage } from './misc/coursesPageController'
 import { myTeachingRouter } from './myTeaching'
 import { noadRouter } from './noad'
@@ -49,6 +51,7 @@ router.use('/my-teaching', myTeachingRouter)
 router.use('/tags', tagsRouter)
 router.use('/norppa-feedback', norppaFeedbackRouter)
 router.use('/continuous-feedback', continuousFeedbackController)
+if (HELP_CHATBOT_ENABLED) router.use('/help-chatbot', helpChatbotRouter)
 router.use('/admin', adminRouter)
 
 // Link from courses-page

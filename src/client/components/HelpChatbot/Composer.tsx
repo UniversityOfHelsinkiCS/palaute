@@ -1,5 +1,6 @@
 import type { KeyboardEvent, RefObject } from 'react'
 
+import { MAX_QUESTION_LENGTH } from '@common/helpChatbot'
 import { ArrowUpward } from '@mui/icons-material'
 import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
@@ -9,7 +10,6 @@ import { useTranslation } from 'react-i18next'
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { mergeSx } from '../../util/sx'
 
-export const MAX_QUESTION_LENGTH = 500
 const COUNTER_FROM_LENGTH = 400
 const SEND_BUTTON_SIZE = 40
 const LINE_HEIGHT = 1.45
