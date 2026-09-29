@@ -18,7 +18,7 @@ import {
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { uniq } from 'lodash-es'
-import { useRef, useState } from 'react'
+import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, useLocation, matchPath } from 'react-router-dom'
 
@@ -36,6 +36,7 @@ import useWaitingFeedbackCount from './useWaitingFeedbackCount'
 import { handleLogout } from './utils'
 
 const whiteFocusIndicatorStyle = focusIndicatorStyle({ color: 'white' })
+const menuItemFocusIndicatorStyle = focusIndicatorStyle()
 
 const styles = {
   toolbar: {
@@ -151,6 +152,7 @@ const NavBar = ({ guest = false }) => {
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids', [])
 
   const [menuOpen, setMenuOpen] = useState(false)
+  const menuButtonId = useId()
   const [permissionsWindowOpen, setPermissionsWindowOpen] = useState(false)
 
   const isStudent = Boolean(
@@ -199,8 +201,10 @@ const NavBar = ({ guest = false }) => {
   const menuButtonProps = {
     onClick: handleOpenMenu,
     ref: menuButtonRef,
+    id: menuButtonId,
     'aria-controls': 'navBarMenu',
     'aria-haspopup': 'true',
+    'aria-expanded': menuOpen,
   }
 
   const desktopMenuButton = (
@@ -297,7 +301,7 @@ const NavBar = ({ guest = false }) => {
   )
 
   const mobileMenuLinks = links.map(({ label, to }, index) => (
-    <MenuItem key={index} component={Link} to={to}>
+    <MenuItem key={index} component={Link} to={to} sx={menuItemFocusIndicatorStyle}>
       {label}
     </MenuItem>
   ))
@@ -308,18 +312,37 @@ const NavBar = ({ guest = false }) => {
   }
 
   const menu = (
-    <Menu id="navBarMenu" anchorEl={() => menuButtonRef.current} keepMounted open={menuOpen} onClose={handleCloseMenu}>
+    <Menu
+      id="navBarMenu"
+      anchorEl={() => menuButtonRef.current}
+      keepMounted
+      open={menuOpen}
+      onClose={handleCloseMenu}
+      slotProps={{ paper: { sx: { p: 1 } }, list: { 'aria-labelledby': menuButtonId, sx: { padding: '4px 0' } } }}
+    >
       {LANGUAGES.map(l => (
-        <MenuItem key={l} sx={i18n.language === l && styles.activeItem} onClick={() => changeLanguage(l)}>
+        <MenuItem
+          key={l}
+          sx={[menuItemFocusIndicatorStyle, i18n.language === l && styles.activeItem]}
+          onClick={() => changeLanguage(l)}
+        >
           <span aria-hidden="true">{l.toUpperCase()}</span>
           <span style={{ ...visuallyHidden, width: '0px', height: '0px' }}>{t(`common:languageMenu:${l}`)}</span>
         </MenuItem>
       ))}
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
       {!guest && isMobile && mobileMenuLinks}
-      {!guest && <MenuItem onClick={() => setPermissionsWindowOpen(true)}>{t('navBar:userInformation')}</MenuItem>}
+      {!guest && (
+        <MenuItem onClick={() => setPermissionsWindowOpen(true)} sx={menuItemFocusIndicatorStyle}>
+          {t('navBar:userInformation')}
+        </MenuItem>
+      )}
       {!guest && <Divider component="li" sx={styles.languageMenuDivider} />}
-      {!guest && <MenuItem onClick={handleLogout}>{t('navBar:logOut')}</MenuItem>}
+      {!guest && (
+        <MenuItem onClick={handleLogout} sx={menuItemFocusIndicatorStyle}>
+          {t('navBar:logOut')}
+        </MenuItem>
+      )}
     </Menu>
   )
 

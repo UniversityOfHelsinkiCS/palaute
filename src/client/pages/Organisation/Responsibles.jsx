@@ -27,6 +27,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { NorButton } from '../../components/common/NorButton'
 import { YearSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
+import { focusIndicatorStyle } from '../../util/accessibility'
 import { getYearRange, useAcademicYears } from '../../util/yearUtils'
 import {
   useOrganisationFeedbackTargets,
@@ -109,6 +110,9 @@ const Responsibles = ({ organisation }) => {
 
   const [expandedTeacherId, setExpandedTeacherId] = React.useState(null)
   const [exportMenuAnchor, setExportMenuAnchor] = React.useState(null)
+  const exportButtonId = React.useId()
+  const exportMenuId = React.useId()
+  const exportMenuOpen = Boolean(exportMenuAnchor)
 
   const handleRowClick = teacherId => {
     setExpandedTeacherId(expandedTeacherId === teacherId ? null : teacherId)
@@ -190,6 +194,10 @@ const Responsibles = ({ organisation }) => {
       <Filters selectedYear={selectedYear} handleYearChange={handleYearChange} academicYears={academicYears} />
       <Box display="flex" gap={1} mb={2}>
         <NorButton
+          id={exportButtonId}
+          aria-haspopup="true"
+          aria-expanded={exportMenuOpen}
+          aria-controls={exportMenuOpen ? exportMenuId : undefined}
           color="primary"
           onClick={handleOpenExportMenu}
           disabled={teacherStats.length === 0}
@@ -197,9 +205,19 @@ const Responsibles = ({ organisation }) => {
         >
           {t('common:exportXLSX')}
         </NorButton>
-        <Menu anchorEl={exportMenuAnchor} open={Boolean(exportMenuAnchor)} onClose={handleCloseExportMenu}>
-          <MenuItem onClick={exportSummary}>{t('organisationSettings:summary')}</MenuItem>
-          <MenuItem onClick={exportDetailed}>{t('organisationSettings:detailed')}</MenuItem>
+        <Menu
+          id={exportMenuId}
+          anchorEl={exportMenuAnchor}
+          open={exportMenuOpen}
+          onClose={handleCloseExportMenu}
+          slotProps={{ paper: { sx: { p: 1 } }, list: { 'aria-labelledby': exportButtonId, sx: { padding: '4px 0' } } }}
+        >
+          <MenuItem onClick={exportSummary} sx={focusIndicatorStyle()}>
+            {t('organisationSettings:summary')}
+          </MenuItem>
+          <MenuItem onClick={exportDetailed} sx={focusIndicatorStyle()}>
+            {t('organisationSettings:detailed')}
+          </MenuItem>
         </Menu>
       </Box>
 
