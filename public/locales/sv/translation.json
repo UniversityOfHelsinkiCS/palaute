@@ -217,6 +217,7 @@
     "content": "Innehåll",
     "removeQuestionConfirmation": "Är du säker på att du vill radera frågan?",
     "removeQuestionLabelConfirmation": "Är du säker på att du vill radera frågan \"{{label}}\"?",
+    "removeQuestionConfirmationTitle": "Bekräfta raderingen",
     "removeOptionConfirmation": "Är du säker på att du vill radera alternativet?",
     "description": "Beskrivning",
     "done": "Spara",

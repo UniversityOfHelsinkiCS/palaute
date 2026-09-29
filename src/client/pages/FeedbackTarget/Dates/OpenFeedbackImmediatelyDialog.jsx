@@ -1,34 +1,22 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
-import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { NorButton } from '../../../components/common/NorButton'
+import ConfirmDialog from '../../../components/common/ConfirmDialog'
 
-const OpenFeedbackImmediatelyDialog = ({ open = false, onClose, onConfirm }) => {
+const OpenFeedbackImmediatelyDialog = ({ open = false, onClose, onConfirm, disableRestoreFocus }) => {
   const { t } = useTranslation()
-  const titleId = useId()
-  const descriptionId = useId()
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth aria-labelledby={titleId} aria-describedby={descriptionId}>
-      <DialogTitle id={titleId}>{t('editFeedbackTarget:openFeedbackImmediatelyDialogTitle')}</DialogTitle>
-      <DialogContent id={descriptionId}>{t('editFeedbackTarget:openFeedbackImmediatelyDialogContent')}</DialogContent>
-      <DialogActions sx={{ p: 3, pt: 1 }}>
-        <NorButton
-          data-cy="feedback-target-open-feedback-immediately-cancel"
-          color="cancel"
-          onClick={onClose}
-          // Focus a real control inside the dialog rather than leaving MUI's default focus on the
-          // presentational transition wrapper, which never gets the dialog's name announced.
-          autoFocus
-        >
-          {t('editFeedbackTarget:openFeedbackImmediatelyDialogCancel')}
-        </NorButton>
-        <NorButton data-cy="feedback-target-open-feedback-immediately-confirm" color="primary" onClick={onConfirm}>
-          {t('editFeedbackTarget:openFeedbackImmediatelyDialogConfirm')}
-        </NorButton>
-      </DialogActions>
-    </Dialog>
+    <ConfirmDialog
+      open={open}
+      onClose={onClose}
+      onConfirm={onConfirm}
+      disableRestoreFocus={disableRestoreFocus}
+      title={t('editFeedbackTarget:openFeedbackImmediatelyDialogTitle')}
+      content={t('editFeedbackTarget:openFeedbackImmediatelyDialogContent')}
+      cancelLabel={t('editFeedbackTarget:openFeedbackImmediatelyDialogCancel')}
+      confirmLabel={t('editFeedbackTarget:openFeedbackImmediatelyDialogConfirm')}
+      dataCy="feedback-target-open-feedback-immediately"
+    />
   )
 }
 

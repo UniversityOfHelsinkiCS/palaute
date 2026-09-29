@@ -200,7 +200,11 @@ const GroupingQuestionSettings = ({
         {groupingQuestion && (
           <QuestionCard
             name="groupingQuestion" // Used to access the value from formik context.
-            onRemove={onRemove}
+            onRemove={() => {
+              onRemove()
+              // The add button only appears once the question is removed, see onCancelEditing below
+              setTimeout(() => addButtonRef.current?.focus(), 100)
+            }}
             isEditing={isEditing}
             onStopEditing={onStopEditing}
             onCancelEditing={isNew => {

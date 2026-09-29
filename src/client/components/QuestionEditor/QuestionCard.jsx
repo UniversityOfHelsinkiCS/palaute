@@ -13,11 +13,12 @@ import {
   Typography,
 } from '@mui/material'
 import { useField } from 'formik'
-import { useId, useRef } from 'react'
+import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LANGUAGES } from '../../util/common'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
+import ConfirmDialog from '../common/ConfirmDialog'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import FormikSwitch from '../common/FormikSwitch'
 import { NorButton } from '../common/NorButton'
@@ -162,16 +163,18 @@ const QuestionCard = ({
     onPublicityToggle(isPublic)
   }
 
-  const handleRemove = () => {
-    const hasConfirmed = window.confirm(
-      questionLabel
-        ? t('questionEditor:removeQuestionLabelConfirmation', { label: questionLabel })
-        : t('questionEditor:removeQuestionConfirmation')
-    )
+  const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
+  const [removeConfirmed, setRemoveConfirmed] = useState(false)
 
-    if (hasConfirmed) {
-      onRemove()
-    }
+  const handleConfirmRemove = () => {
+    setRemoveConfirmed(true)
+    setRemoveDialogOpen(false)
+  }
+
+  // Remove only after the transition: while the dialog is open the rest of the page is
+  // aria-hidden, and Firefox does not announce focus moved into hidden content
+  const handleRemoveDialogExited = () => {
+    if (removeConfirmed) onRemove()
   }
 
   const editorRef = useRef(null)
@@ -286,6 +289,23 @@ const QuestionCard = ({
             </Box>
           </DialogActions>
         </Dialog>
+        <ConfirmDialog
+          open={removeDialogOpen}
+          onClose={() => setRemoveDialogOpen(false)}
+          onConfirm={handleConfirmRemove}
+          // The remove button disappears with the card, so focus is moved elsewhere by onRemove
+          disableRestoreFocus={removeConfirmed}
+          onExited={handleRemoveDialogExited}
+          title={t('questionEditor:removeQuestionConfirmationTitle')}
+          content={
+            questionLabel
+              ? t('questionEditor:removeQuestionLabelConfirmation', { label: questionLabel })
+              : t('questionEditor:removeQuestionConfirmation')
+          }
+          confirmLabel={t('questionEditor:removeQuestion')}
+          confirmColor="error"
+          dataCy="question-card-remove"
+        />
         <Box sx={{ mb: canEdit ? 2 : 0 }}>
           <PreviewComponent question={question} language={language} />
         </Box>
@@ -322,7 +342,7 @@ const QuestionCard = ({
               </NorButton>
               <NorButton
                 color="cancel"
-                onClick={handleRemove}
+                onClick={() => setRemoveDialogOpen(true)}
                 data-cy="removeQuestion"
                 icon={<DeleteOutlined />}
                 aria-label={actionLabel('questionEditor:removeQuestionLabel')}

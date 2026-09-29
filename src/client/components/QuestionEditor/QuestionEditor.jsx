@@ -132,6 +132,9 @@ const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, group
                       <QuestionCard
                         name={`questions.${index}`}
                         onRemove={() => {
+                          // Move focus out of the card before removing it, otherwise Firefox does not
+                          // announce the newly focused button
+                          getAddButtonRef(question.type).current?.focus()
                           arrayHelpers.remove(index)
                           handleStopEditing()
                           saveChanges()

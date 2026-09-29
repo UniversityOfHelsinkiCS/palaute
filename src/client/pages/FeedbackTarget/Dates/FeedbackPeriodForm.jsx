@@ -19,6 +19,7 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
   const updateDates = useUpdateDates(feedbackTarget)
   const openImmediately = useOpenImmediately(feedbackTarget)
   const [warningDialogOpen, setWarningDialogOpen] = useState(false)
+  const [warningDone, setWarningDone] = useState(false)
   const submitPayloadRef = useRef()
   const warningOriginRef = useRef()
 
@@ -42,7 +43,10 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
 
   const openStateNote = openImmediatelyEnabled ? '' : `${t('feedbackTargetSettings:cannotOpenImmediately')} `
 
-  const handleOpenWarningDialog = () => setWarningDialogOpen(true)
+  const handleOpenWarningDialog = () => {
+    setWarningDone(false)
+    setWarningDialogOpen(true)
+  }
 
   const closeWarningDialog = () => setWarningDialogOpen(false)
 
@@ -57,11 +61,14 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
 
     warningOriginRef.current = undefined
 
-    closeWarningDialog()
-
     // Only dismiss the dialog once everything went through, so that a failed save leaves the
     // user's edits on screen next to the error snackbar.
-    if (saved && opened) onClose?.()
+    const done = saved && opened
+    setWarningDone(done)
+
+    closeWarningDialog()
+
+    if (done) onClose?.()
   }
 
   const handleSubmit = async (values, actions) => {
@@ -98,6 +105,8 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
         open={warningDialogOpen}
         onClose={closeWarningDialog}
         onConfirm={handleConfirmWarning}
+        // The whole dates dialog closes after a successful confirm and restores focus itself
+        disableRestoreFocus={warningDone}
       />
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validateFeedbackPeriod(isOpen, isOver)}>
         {({ dirty, isValid, values, submitForm }) => (
