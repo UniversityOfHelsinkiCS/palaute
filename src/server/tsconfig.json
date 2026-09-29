@@ -18,6 +18,8 @@
     }
   },
   "include": ["./"],
+  // Unit tests run with vitest; they are still type checked by lint
+  "exclude": ["**/*.test.ts"],
   "extends": "../../tsconfig.json",
   "composite": true
 }
