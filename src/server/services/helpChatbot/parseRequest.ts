@@ -5,6 +5,9 @@ import z from 'zod/v4'
 import { MAX_QUESTION_LENGTH, trimHistory } from '../../../common/helpChatbot'
 import { ApplicationError } from '../../util/ApplicationError'
 
+// The client sends the whole history, so a user can forge assistant turns. That only affects their own chat:
+// the model has no tools or data, the system prompt isn't secret and the budget and rate limits cap the cost.
+// If that changes, sign the replies (an HMAC over user, conversation and content) and verify them here.
 const TurnSchema = z.discriminatedUnion('role', [
   z.object({ role: z.literal('user'), content: z.string().min(1).max(MAX_QUESTION_LENGTH) }),
   // Bounded by the history budget
