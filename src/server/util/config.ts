@@ -26,6 +26,10 @@ export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
 export const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_JWT, FEEDBACK_SYSTEM } = process.env
 
+// Azure OpenAI for the help chatbot. Same key and resource as gptwrapper; the deployment is named after the model
+export const { AZURE_API_KEY, AZURE_RESOURCE } = process.env
+export const HELP_CHATBOT_MODEL = process.env.HELP_CHATBOT_MODEL || 'gpt-5-mini'
+
 export const CRON_DISABLED = process.env.CRON_DISABLED === 'true'
 
 export const REDIS_CONFIG = {
@@ -64,6 +68,7 @@ export const SUMMARY_SKIP_ORG_IDS = config.get<string[]>('SUMMARY_SKIP_ORG_IDS')
 export const FEEDBACK_RESPONSE_EMAILS_SINCE_DATE = new Date(config.get('FEEDBACK_RESPONSE_EMAILS_SINCE_DATE'))
 export const ORGANISATION_SURVEYS_ENABLED = config.get('ORGANISATION_SURVEYS_ENABLED')
 export const PUBLIC_COURSE_BROWSER_ENABLED = config.get('PUBLIC_COURSE_BROWSER_ENABLED')
+export const HELP_CHATBOT_ENABLED = config.get('HELP_CHATBOT_ENABLED')
 export const ALWAYS_SHOW_STUDENT_LIST = config.get('ALWAYS_SHOW_STUDENT_LIST')
 export const IAM_GROUPS_HEADER = config.get<string>('IAM_GROUPS_HEADER')
 export const TRANSLATION_NAMESPACE = config.get<string>('TRANSLATION_NAMESPACE')

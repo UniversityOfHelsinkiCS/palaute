@@ -1,8 +1,6 @@
-/* eslint-disable import/first */
-/* eslint-disable import/newline-after-import */
-import dotenv from 'dotenv'
-dotenv.config()
-
+// Must stay the first import: imports are evaluated before the module body, so a dotenv.config() call here
+// would run after modules that read process.env at load time (e.g. util/config)
+import 'dotenv/config'
 import compression from 'compression'
 import express, { Request, Response } from 'express'
 import path from 'path'
