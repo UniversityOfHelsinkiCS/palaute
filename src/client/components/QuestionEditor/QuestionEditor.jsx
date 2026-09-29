@@ -1,16 +1,17 @@
 import { Add } from '@mui/icons-material'
 import { Menu, MenuItem, Box } from '@mui/material'
 import { FieldArray, Form, Formik, useField } from 'formik'
-import React, { useState, useRef } from 'react'
+import React, { useState, useRef, useId } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { focusIndicatorStyle } from '../../util/accessibility'
 import { NorButton } from '../common/NorButton'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
 import QuestionCard from './QuestionCard'
 import QuestionEditorActions from './QuestionEditorActions'
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 
-const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
+const TypeMenu = ({ id, labelledBy, anchorEl, open, onClose, onChooseType, language }) => {
   const { i18n } = useTranslation()
   const t = i18n.getFixedT(language)
 
@@ -20,22 +21,40 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   }
 
   return (
-    <Menu data-cy="question-editor-type-menu" anchorEl={anchorEl} keepMounted open={open} onClose={onClose}>
-      <MenuItem data-cy="question-editor-type-menu-select-likert" onClick={() => handleChooseType('LIKERT')}>
+    <Menu
+      data-cy="question-editor-type-menu"
+      id={id}
+      anchorEl={anchorEl}
+      keepMounted
+      open={open}
+      onClose={onClose}
+      slotProps={{ paper: { sx: { p: 1 } }, list: { 'aria-labelledby': labelledBy, sx: { padding: '4px 0' } } }}
+    >
+      <MenuItem
+        data-cy="question-editor-type-menu-select-likert"
+        onClick={() => handleChooseType('LIKERT')}
+        sx={focusIndicatorStyle()}
+      >
         {t('questionEditor:likertQuestion')}
       </MenuItem>
-      <MenuItem data-cy="question-editor-type-menu-select-open-question" onClick={() => handleChooseType('OPEN')}>
+      <MenuItem
+        data-cy="question-editor-type-menu-select-open-question"
+        onClick={() => handleChooseType('OPEN')}
+        sx={focusIndicatorStyle()}
+      >
         {t('questionEditor:openQuestion')}
       </MenuItem>
       <MenuItem
         data-cy="question-editor-type-menu-select-single-choice"
         onClick={() => handleChooseType('SINGLE_CHOICE')}
+        sx={focusIndicatorStyle()}
       >
         {t('questionEditor:singleChoiceQuestion')}
       </MenuItem>
       <MenuItem
         data-cy="question-editor-type-menu-select-multiple-choice"
         onClick={() => handleChooseType('MULTIPLE_CHOICE')}
+        sx={focusIndicatorStyle()}
       >
         {t('questionEditor:multipleChoiceQuestion')}
       </MenuItem>
@@ -50,6 +69,8 @@ const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, group
   const [questionsField] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const [menuOpen, setMenuOpen] = useState(false)
+  const addButtonId = useId()
+  const typeMenuId = useId()
   const [editingQuestionId, setEditingQuestionId] = useState(null)
 
   const handleStopEditing = async () => {
@@ -151,6 +172,8 @@ const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, group
               )}
 
               <TypeMenu
+                id={typeMenuId}
+                labelledBy={addButtonId}
                 open={menuOpen}
                 anchorEl={addButtonRef.current}
                 onClose={() => setMenuOpen(false)}
@@ -166,6 +189,10 @@ const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, group
                 <Box sx={{ display: 'flex' }}>
                   <NorButton
                     data-cy="question-editor-add-question"
+                    id={addButtonId}
+                    aria-haspopup="true"
+                    aria-expanded={menuOpen}
+                    aria-controls={menuOpen ? typeMenuId : undefined}
                     icon={<Add />}
                     color="primary"
                     onClick={() => {
