@@ -38,8 +38,6 @@ const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
     `)
   }
 
-  const allQuestions = universitySurvey.questions
-  const allQuestionIds = allQuestions.map(({ id }) => id)
   const { publicQuestionIds } = universitySurvey
 
   const initialValues = getFormInitialValues({
@@ -55,8 +53,6 @@ const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
         initialValues={initialValues}
         handleSubmit={handleSubmit}
         handlePublicityToggle={onPublicityToggle}
-        publicQuestionIds={publicQuestionIds}
-        publicityConfigurableQuestionIds={allQuestionIds}
         editorLevel="university"
       />
       {onCreateVersionClick && (

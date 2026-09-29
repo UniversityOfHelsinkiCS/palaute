@@ -16,6 +16,7 @@ import {
   Alert,
   Grid2 as Grid,
 } from '@mui/material'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
@@ -140,6 +141,7 @@ const GroupingQuestionSettings = ({
   const language = useQuestionLanguage()
   const { feedbackTarget } = useFeedbackTargetContext()
   const { groups } = feedbackTarget
+  const addButtonRef = useRef(null)
 
   const handleAddGroupingQuestion = async () => {
     const question = createGroupingQuestion(groups)
@@ -188,7 +190,7 @@ const GroupingQuestionSettings = ({
             <Box sx={{ p: '1.5rem' }}>
               <Typography>{`${t('groups:noGroupingQuestion')}${automaticGroupingInfo}`}</Typography>
               <Box sx={{ mt: '0.5rem' }}>
-                <NorButton onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
+                <NorButton ref={addButtonRef} onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
                   {t('groups:addGroupingQuestion')}
                 </NorButton>
               </Box>
@@ -199,18 +201,15 @@ const GroupingQuestionSettings = ({
           <QuestionCard
             name="groupingQuestion" // Used to access the value from formik context.
             onRemove={onRemove}
-            moveUpDisabled
-            moveDownDisabled
-            language={language}
             isEditing={isEditing}
             onStopEditing={onStopEditing}
-            onCancelEditing={onCancelEditing}
+            onCancelEditing={isNew => {
+              onCancelEditing(isNew)
+              // The add button only appears once the question is removed, and Firefox does not
+              // announce it if focused immediately, so give the accessibility tree time to update
+              if (isNew) setTimeout(() => addButtonRef.current?.focus(), 100)
+            }}
             onStartEditing={onStartEditing}
-            editable
-            showMoveButtons={false}
-            showRequiredToggle={false}
-            onPublicityToggle={() => {}} // should never get called because of the above
-            elevation={0} // Because this component is already inside a paper
           />
         )}
       </Box>

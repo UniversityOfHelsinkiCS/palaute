@@ -4,7 +4,6 @@ import { FieldArray, Form, Formik, useField } from 'formik'
 import React, { useState, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useQuestionLanguage } from '../../util/questionLanguageContext'
 import { NorButton } from '../common/NorButton'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
 import QuestionCard from './QuestionCard'
@@ -44,17 +43,10 @@ const TypeMenu = ({ anchorEl, open, onClose, onChooseType, language }) => {
   )
 }
 
-const QuestionEditorForm = ({
-  saveChanges,
-  editable,
-  handlePublicityToggle,
-  actions,
-  groupingQuestionSettings,
-  editorLevel,
-}) => {
+const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, groupingQuestionSettings, editorLevel }) => {
   const addButtonRef = useRef()
+  const textContentButtonRef = useRef()
   const { t, i18n } = useTranslation()
-  const questionLanguage = useQuestionLanguage()
   const [questionsField] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -66,6 +58,8 @@ const QuestionEditorForm = ({
       saveChanges()
     }
   }
+
+  const getAddButtonRef = type => (type === 'TEXT' ? textContentButtonRef : addButtonRef)
 
   const makePublicityToggle = question => isPublic => {
     handlePublicityToggle(question, isPublic)
@@ -135,15 +129,19 @@ const QuestionEditorForm = ({
                         }}
                         moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
                         moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
-                        language={questionLanguage}
                         isEditing={editingQuestionId === getQuestionId(question)}
-                        onStopEditing={() => handleStopEditing()}
-                        onCancelEditing={isNew => {
-                          if (isNew) arrayHelpers.remove(index)
-                          setEditingQuestionId(null)
+                        onStopEditing={isNew => {
+                          handleStopEditing()
+                          if (isNew) requestAnimationFrame(() => getAddButtonRef(question.type).current?.focus())
+                        }}
+                        onCancelEditing={() => setEditingQuestionId(null)}
+                        onCancelledNewExited={() => {
+                          // Move focus out of the closed dialog before removing its card, otherwise
+                          // Firefox does not announce the newly focused button
+                          getAddButtonRef(question.type).current?.focus()
+                          arrayHelpers.remove(index)
                         }}
                         onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
-                        editable={editable}
                         onPublicityToggle={makePublicityToggle(question)}
                         editorLevel={editorLevel}
                       />
@@ -165,37 +163,34 @@ const QuestionEditorForm = ({
               />
 
               <Box sx={{ display: 'flex' }}>
-                {editable && (
-                  <Box sx={{ display: 'flex' }}>
-                    <NorButton
-                      data-cy="question-editor-add-question"
-                      icon={<Add />}
-                      color="primary"
-                      onClick={() => {
-                        setMenuOpen(true)
-                        handleStopEditing()
-                      }}
-                      ref={addButtonRef}
-                      disabled={Boolean(editingQuestionId)}
-                      sx={{ mr: 2 }}
-                    >
-                      {t('questionEditor:addQuestion')}
-                    </NorButton>
-                    <NorButton
-                      icon={<Add />}
-                      color="primary"
-                      onClick={() => {
-                        const textContent = createQuestion({ type: 'TEXT' })
-                        arrayHelpers.push(textContent)
-                        setEditingQuestionId(getQuestionId(textContent))
-                      }}
-                      disabled={Boolean(editingQuestionId)}
-                      sx={{ mr: 2 }}
-                    >
-                      {t('questionEditor:addTextualContent')}
-                    </NorButton>
-                  </Box>
-                )}
+                <Box sx={{ display: 'flex' }}>
+                  <NorButton
+                    data-cy="question-editor-add-question"
+                    icon={<Add />}
+                    color="primary"
+                    onClick={() => {
+                      setMenuOpen(true)
+                      handleStopEditing()
+                    }}
+                    ref={addButtonRef}
+                    sx={{ mr: 2 }}
+                  >
+                    {t('questionEditor:addQuestion')}
+                  </NorButton>
+                  <NorButton
+                    icon={<Add />}
+                    color="primary"
+                    onClick={() => {
+                      const textContent = createQuestion({ type: 'TEXT' })
+                      arrayHelpers.push(textContent)
+                      setEditingQuestionId(getQuestionId(textContent))
+                    }}
+                    ref={textContentButtonRef}
+                    sx={{ mr: 2 }}
+                  >
+                    {t('questionEditor:addTextualContent')}
+                  </NorButton>
+                </Box>
                 {actions && <Box>{React.cloneElement(actions, { disabled: Boolean(editingQuestionId) })}</Box>}
               </Box>
             </>
@@ -208,9 +203,6 @@ const QuestionEditorForm = ({
 
 const QuestionEditor = ({
   initialValues,
-  editable = true,
-  publicQuestionIds,
-  publicityConfigurableQuestionIds,
   teacherQuestionIds,
   handleSubmit,
   handlePublicityToggle,
@@ -224,9 +216,6 @@ const QuestionEditor = ({
     {({ handleSubmit }) => (
       <QuestionEditorForm
         saveChanges={handleSubmit}
-        editable={editable}
-        publicQuestionIds={publicQuestionIds}
-        publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
         handlePublicityToggle={handlePublicityToggle}
         actions={
           copyFromCourseDialog && (

@@ -82,8 +82,6 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
       initialValues={initialValues}
       handleSubmit={handleSubmit}
       handlePublicityToggle={onPublicityToggle}
-      publicQuestionIds={publicQuestionIds}
-      publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
       editorLevel="programme"
     />
   )

@@ -1,10 +1,23 @@
 import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@mui/icons-material'
-import { Card, CardContent, Box, Chip, Divider, Grid2 as Grid, Typography } from '@mui/material'
+import {
+  Card,
+  CardContent,
+  Box,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid2 as Grid,
+  Typography,
+} from '@mui/material'
 import { useField } from 'formik'
-import { useEffect, useRef } from 'react'
+import { useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { LANGUAGES } from '../../util/common'
+import { useQuestionLanguage } from '../../util/questionLanguageContext'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import FormikSwitch from '../common/FormikSwitch'
 import { NorButton } from '../common/NorButton'
@@ -99,7 +112,6 @@ const EditActions = ({ showRequiredToggle, name, publicityConfigurable, isPublic
 const QuestionCard = ({
   name,
   onRemove,
-  language,
   onMoveUp,
   onMoveDown,
   onCopy,
@@ -109,14 +121,12 @@ const QuestionCard = ({
   onCancelEditing,
   moveUpDisabled = false,
   moveDownDisabled = false,
-  editable,
   onPublicityToggle,
-  showMoveButtons = true,
-  showRequiredToggle = true,
-  elevation = 2,
   editorLevel,
+  onCancelledNewExited,
 }) => {
   const { t } = useTranslation()
+  const language = useQuestionLanguage()
   const [field, meta, helpers] = useField(name)
   const { value: question } = field
 
@@ -125,12 +135,11 @@ const QuestionCard = ({
 
   const title = getTitleByType(question, t)
 
-  const questionIsEditable = question.editable ?? true
-  const canEdit = questionIsEditable && editable
+  const canEdit = question.editable === true
   const isGrouping = question.secondaryType === 'GROUPING'
   const canDuplicate = !isGrouping
 
-  const requiredConfigurable = showRequiredToggle && question.type !== 'TEXT'
+  const requiredConfigurable = question.type !== 'TEXT' && !isGrouping
   const publicityConfigurable = question.publicityConfigurable && question.type !== 'TEXT' && question.type !== 'OPEN'
 
   const questionLabel = getQuestionLabel(question, language)
@@ -140,8 +149,8 @@ const QuestionCard = ({
   const orderButtonsProps = {
     onMoveUp,
     onMoveDown,
-    moveUpDisabled: moveUpDisabled || isGrouping,
-    moveDownDisabled: moveDownDisabled || isGrouping,
+    moveUpDisabled,
+    moveDownDisabled,
     questionLabel,
   }
 
@@ -165,26 +174,42 @@ const QuestionCard = ({
     }
   }
 
+  const editorRef = useRef(null)
+  const editButtonRef = useRef(null)
+  const skipEditButtonFocusRef = useRef(false)
+  const cancelledNewRef = useRef(false)
+
   const handleCancelEditing = () => {
     const isNew = meta.initialValue === undefined
     if (!isNew) {
       helpers.setValue(meta.initialValue)
     }
+    skipEditButtonFocusRef.current = false
+    cancelledNewRef.current = isNew
     onCancelEditing(isNew)
   }
 
-  const editorRef = useRef(null)
+  const handleStopEditing = () => {
+    const isNew = meta.initialValue === undefined
+    // A saved new question's card may be remounted, so QuestionEditor moves focus instead.
+    // The grouping question card stays mounted, so its edit button can be focused
+    skipEditButtonFocusRef.current = isNew && !isGrouping
+    cancelledNewRef.current = false
+    onStopEditing(isNew)
+  }
 
-  useEffect(() => {
-    if (isEditing) {
-      const id = requestAnimationFrame(() => editorRef.current?.focusFirst?.())
-      return () => cancelAnimationFrame(id)
+  const handleDialogExited = () => {
+    if (cancelledNewRef.current) {
+      onCancelledNewExited?.()
+    } else if (!skipEditButtonFocusRef.current) {
+      editButtonRef.current?.focus()
     }
-    return undefined
-  }, [isEditing])
+  }
+
+  const dialogTitleId = useId()
 
   return (
-    <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={elevation}>
+    <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={isGrouping ? 0 : 2}>
       <CardContent>
         {!isGrouping && (
           <Grid
@@ -214,87 +239,99 @@ const QuestionCard = ({
             </Grid>
           </Grid>
         )}
-        {isEditing ? (
-          <>
-            <Box sx={{ mb: 2 }}>
-              <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} editorLevel={editorLevel} />
-            </Box>
-            <ActionsContainer>
-              <Box
-                sx={{
-                  display: 'flex',
-                  flexDirection: { xs: 'column', sm: 'row' },
-                  alignItems: { xs: 'stretch', sm: 'end' },
-                  gap: '1rem',
-                  width: '100%',
-                }}
-              >
-                <EditActions
-                  publicityConfigurable={publicityConfigurable}
-                  isPublic={question.public}
-                  showRequiredToggle={requiredConfigurable}
-                  name={name}
-                />
-                <Box sx={{ ml: { xs: 0, sm: 'auto' }, display: 'flex', gap: '1rem' }}>
-                  <NorButton data-cy="question-card-cancel-edit" color="cancel" onClick={handleCancelEditing}>
-                    {t('common:cancel')}
-                  </NorButton>
-                  <NorButton data-cy="question-card-save-edit" color="primary" onClick={onStopEditing}>
-                    {t('questionEditor:done')}
-                  </NorButton>
-                </Box>
+        <Dialog
+          open={isEditing}
+          onClose={handleCancelEditing}
+          maxWidth={false}
+          aria-labelledby={dialogTitleId}
+          // Move focus only after the transitions: while the dialog is open the rest of the page
+          // is aria-hidden, and Firefox does not announce focus moved into hidden content
+          slotProps={{
+            transition: {
+              onEntered: () => editorRef.current?.focusFirst?.(),
+              onExited: handleDialogExited,
+            },
+          }}
+        >
+          <DialogTitle id={dialogTitleId}>
+            {questionLabel ? actionLabel('questionEditor:editQuestionLabel') : title}
+          </DialogTitle>
+          <DialogContent>
+            <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} editorLevel={editorLevel} />
+          </DialogContent>
+          <DialogActions sx={{ p: '1.5rem' }}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'stretch', sm: 'end' },
+                gap: '1rem',
+                width: '100%',
+              }}
+            >
+              <EditActions
+                publicityConfigurable={publicityConfigurable}
+                isPublic={question.public}
+                showRequiredToggle={requiredConfigurable}
+                name={name}
+              />
+              <Box sx={{ ml: { xs: 0, sm: 'auto' }, display: 'flex', gap: '1rem' }}>
+                <NorButton data-cy="question-card-cancel-edit" color="cancel" onClick={handleCancelEditing}>
+                  {t('common:cancel')}
+                </NorButton>
+                <NorButton data-cy="question-card-save-edit" color="primary" onClick={handleStopEditing}>
+                  {t('questionEditor:done')}
+                </NorButton>
               </Box>
-            </ActionsContainer>
-          </>
-        ) : (
-          <>
-            <Box sx={{ mb: canEdit ? 2 : 0 }}>
-              <PreviewComponent question={question} language={language} />
             </Box>
-            {canEdit && (
-              <ActionsContainer>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    flexDirection: { xs: 'column', sm: 'row' },
-                    alignItems: { xs: 'stretch', sm: 'center' },
-                    flexWrap: 'wrap',
-                    gap: '16px',
-                  }}
+          </DialogActions>
+        </Dialog>
+        <Box sx={{ mb: canEdit ? 2 : 0 }}>
+          <PreviewComponent question={question} language={language} />
+        </Box>
+        {canEdit && (
+          <ActionsContainer>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: { xs: 'column', sm: 'row' },
+                alignItems: { xs: 'stretch', sm: 'center' },
+                flexWrap: 'wrap',
+                gap: '16px',
+              }}
+            >
+              {canDuplicate && (
+                <NorButton
+                  icon={<FileCopyOutlined />}
+                  onClick={onCopy}
+                  color="secondary"
+                  aria-label={actionLabel('questionEditor:duplicateQuestionLabel')}
                 >
-                  {canDuplicate && (
-                    <NorButton
-                      icon={<FileCopyOutlined />}
-                      onClick={onCopy}
-                      color="secondary"
-                      aria-label={actionLabel('questionEditor:duplicateQuestionLabel')}
-                    >
-                      {t('questionEditor:duplicate')}
-                    </NorButton>
-                  )}
-                  <NorButton
-                    color="secondary"
-                    onClick={onStartEditing}
-                    data-cy="editQuestion"
-                    icon={<EditOutlined />}
-                    aria-label={actionLabel('questionEditor:editQuestionLabel')}
-                  >
-                    {t('common:edit')}
-                  </NorButton>
-                  <NorButton
-                    color="cancel"
-                    onClick={handleRemove}
-                    data-cy="removeQuestion"
-                    icon={<DeleteOutlined />}
-                    aria-label={actionLabel('questionEditor:removeQuestionLabel')}
-                  >
-                    {t('questionEditor:removeQuestion')}
-                  </NorButton>
-                </Box>
-                {showMoveButtons && !isGrouping && <OrderButtons {...orderButtonsProps} />}
-              </ActionsContainer>
-            )}
-          </>
+                  {t('questionEditor:duplicate')}
+                </NorButton>
+              )}
+              <NorButton
+                color="secondary"
+                onClick={onStartEditing}
+                data-cy="editQuestion"
+                ref={editButtonRef}
+                icon={<EditOutlined />}
+                aria-label={actionLabel('questionEditor:editQuestionLabel')}
+              >
+                {t('common:edit')}
+              </NorButton>
+              <NorButton
+                color="cancel"
+                onClick={handleRemove}
+                data-cy="removeQuestion"
+                icon={<DeleteOutlined />}
+                aria-label={actionLabel('questionEditor:removeQuestionLabel')}
+              >
+                {t('questionEditor:removeQuestion')}
+              </NorButton>
+            </Box>
+            {!isGrouping && <OrderButtons {...orderButtonsProps} />}
+          </ActionsContainer>
         )}
       </CardContent>
     </Card>

@@ -60,8 +60,6 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       initialValues={initialValues}
       handleSubmit={handleSubmit}
       handlePublicityToggle={onPublicityToggle}
-      publicQuestionIds={publicQuestionIds}
-      publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
       teacherQuestionIds={surveys.teacherSurvey.questionIds}
       copyFromCourseDialog
       groupingQuestionSettings
