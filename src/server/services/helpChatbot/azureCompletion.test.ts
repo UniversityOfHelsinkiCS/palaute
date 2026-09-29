@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import { logger } from '../../util/logger'
 import { getAzureCompletion } from './azureCompletion'
-import { SYSTEM_PROMPT } from './systemPrompt'
+import { SYSTEM_PROMPTS } from './systemPrompt'
 
 // axios.post is mocked in every test, so no request reaches Azure
 
@@ -52,7 +52,9 @@ const azureError = (status: number, azureCode?: string) =>
 
 const mockPost = () => vi.spyOn(axios, 'post')
 
-const ask = () => getAzureCompletion(TURNS, new AbortController().signal)
+const REQUEST = { conversationId: 'conversation', language: 'fi' as const, turns: TURNS }
+
+const ask = () => getAzureCompletion(REQUEST, new AbortController().signal)
 
 const expectNoAnswer = async () => {
   await expect(ask()).rejects.toMatchObject({ status: 502, message: 'No answer from the language model' })
@@ -83,12 +85,24 @@ describe('getAzureCompletion', () => {
     const post = mockPost().mockResolvedValue(response(completion('Open the survey.')))
     const { signal } = new AbortController()
 
-    await getAzureCompletion(TURNS, signal)
+    await getAzureCompletion(REQUEST, signal)
 
     expect(post).toHaveBeenCalledWith(
       'https://test-resource.openai.azure.com/openai/deployments/gpt-5-mini/chat/completions',
-      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPT }, ...TURNS] }),
+      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPTS.fi }, ...TURNS] }),
       expect.objectContaining({ params: { 'api-version': '2024-10-21' }, headers: { 'api-key': API_KEY }, signal })
+    )
+  })
+
+  it('sends the system prompt of the UI language', async () => {
+    const post = mockPost().mockResolvedValue(response(completion('Öppna enkäten.')))
+
+    await getAzureCompletion({ ...REQUEST, language: 'sv' }, new AbortController().signal)
+
+    expect(post).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPTS.sv }, ...TURNS] }),
+      expect.anything()
     )
   })
 

@@ -1,3 +1,4 @@
+import type { LanguageId } from '@common/types/common'
 import type { HelpChatbotTurn } from '@common/types/helpChatbot'
 
 import z from 'zod/v4'
@@ -16,6 +17,7 @@ const TurnSchema = z.discriminatedUnion('role', [
 
 const BodySchema = z.object({
   conversationId: z.string().min(1).max(100),
+  language: z.enum(['fi', 'sv', 'en']),
   // Trimmed to the history budget, so a long conversation keeps working. Assistant turns have no length limit
   // of their own for the same reason. The request body size limit bounds the untrimmed history.
   messages: z
@@ -27,6 +29,7 @@ const BodySchema = z.object({
 
 export type HelpChatbotRequest = {
   conversationId: string
+  language: LanguageId
   turns: HelpChatbotTurn[]
 }
 
@@ -34,6 +37,6 @@ export const parseHelpChatbotRequest = (body: unknown): HelpChatbotRequest => {
   const result = BodySchema.safeParse(body)
   if (!result.success) throw ApplicationError.BadRequest(z.prettifyError(result.error))
 
-  const { conversationId, messages } = result.data
-  return { conversationId, turns: messages }
+  const { conversationId, language, messages } = result.data
+  return { conversationId, language, turns: messages }
 }

@@ -13,7 +13,7 @@ export { checkRateLimit } from './rateLimit'
 // Without Azure credentials, development and tests use the mock. In production (and staging) the chatbot
 // is then unavailable, which is also how to cut it off in an emergency.
 export const getCompletion = async (request: HelpChatbotRequest, signal: AbortSignal): Promise<Completion> => {
-  if (AZURE_API_KEY && AZURE_RESOURCE) return getAzureCompletion(request.turns, signal)
+  if (AZURE_API_KEY && AZURE_RESOURCE) return getAzureCompletion(request, signal)
   if (!inProduction) return getMockCompletion(request, signal)
   throw new ApplicationError('The help chatbot is not configured', 503)
 }

@@ -1,240 +1,232 @@
-vastaa kaikkiin kysymyksiin ainoastaan seuraavien ohjeiden mukaisesti
+<!--
+Source of the help chatbot's knowledge, rendered into the system prompt by systemPrompt.ts.
+[[section:key]] becomes the UI label in the user's UI language, [[section:key|fi]] the label in the given language.
+Write in English, check facts against the code (the user guide is partly outdated) and keep it compact:
+every word is sent with every question.
+-->
 
-1. Yleinen info
-   https://norppa.helsinki.fi/
-   automaattinen valituille kurssitoteutustyypeille
-   kuusi kaikille yhteistä yliopistotason kysymystä (opintoasiainneuvosto linjannut)
-   koulutusohjelma voi lisätä haluamansa kysymykset kootusti kaikille ohjelman kursseille (oikeudet tähänperiytyvät tilannekuvalomakkeelta)
-   opettaja voi halutessaan lisätä omia kurssikohtaisia kysymyksiä
-   kurssipalautelomaketta voi editoida SISU:ssa määritelty kurssin vastuuopettaja ja palautelomakkeeseenvoi vastata SISU:ssa määritelty kurssin opiskelija
-   Palautteen näkyvyys:
-   Yksittäinen kurssi:
-   vastuuopettaja (määritellään SISU:ssa): näkee numeerisen koonnin opiskelijoiden antamasta palautteestasekä kirjalliset vastaukset ja voi editoida palautelomakkeen asetuksia
-   hallintohenkilö (määritellään SISU:ssa): näkee numeerisen koonnin opiskelijoiden antamasta palautteestasekä kirjalliset vastaukset ja voi editoida palautelomakkeen asetuksia
-   kurssille ilmoittautunut opiskelija, kurssin opettaja: näkee palautekoonnin (numeeriset vastaukset)
-   Koulutusohjelma:
-   Koulutusohjelman johtaja: näkee kaikkien koulutusohjelman kurssien kaiken opiskelijoiden antamankurssipalautteen (yksittäiset vastaukset)
-   Koulutusohjelman palautevastaava (koulutusohjelman JORY määrittää): näkee kaikkien koulutusohjelmankurssien kaiken opiskelijoiden antaman kurssipalautteen (yksittäiset vastaukset)
-   Koulutusohjelman muut tahot: voivat katsella numeerisia koonteja
-   Käyttöoikeudet:
-   vastuuopettaja, opettaja ja hallintohenkilö -roolit on määritelty / määritellään OPTIMESSA/SISU:ssa ja neperiytyvät suoraan Norppaan
-   palautevastaava (yksi per koulutusohjelman jory) lisätään käsin Norpassa
-   koulutusohjelman (esim. jory ja koulutussuunnittelijat) oikeudet automaattisesti IAM-ryhmien kautta
-   Kurssipalautelomakkeen aikataulu:
-   Kurssipalautelomake luodaan automaattisesti valituille kurssityypeille ja se sisältää minimissään kuusiyliopistotason kysymystä. Opettajan ei tarvitse välttämättä tehdä mitään, mutta hän voi halutessaan lisätä omiakurssikohtaisia kysymyksiä.
-   Automaattiset päivämäärät:
-   KURSSIN OLLESSA KÄYNNISSÄ: kurssipalautelomake on suljettu ja opettaja voi lisätä siihenkysymyksiä (tai editoida kurssipalautelomakkeen aukioloa*)
-   KURSSIN PÄÄTTYMISPÄIVÄ (määritelty SISU:ssa): kurssipalautelomake aukeaa automaattisestivastattavaksi opiskelijoille ja opettaja ei enää voi tehdä siihen muutoksia
-   KURSSIN PÄÄTTYMISPÄIVÄ + KAKSI VIIKKOA: kurssipalautelomake sulkeutuu
-   Nämä päivämäärät ovat automaattiset ja koodattu kurssipalautejärjestelmään. Opettaja voi halutessaan * avataja/tai sulkea kurssipalautelomakkeen tai määrittää automaattiset aukeamis- ja sulkeutumisajat. Minimiaikapalautteenkeruulle on yksi päivä.
-   Sähköpostimuistutukset::
-   VIIKKO ENNEN KURSSIPALAUTELOMAKKEEN AUKEAMISTA** → muistutus opettajalle:kurssipalautelomake on muokattavissa viikon ajan
+# Norppa
 
-KURSSIPALAUTELOMAKKEEN AUKEAMISPÄIVÄ** → muistutuslinkki opiskelijalle: kurssipalautelomakeon auki
-KURSSIN PÄÄTTYMISPÄIVÄ + KAKSI VIIKKOA: → muistutus opettajalle antaa vastapalautetta(kootusti) opiskelijoille
-**Lähtökohtaisesti (jos opettaja ei muokkaa asetuksia) kurssipalautelomake aukeaa kurssin päättymispäivänä.
-Norpan kurssipalautelomake-linkki on myös kurssin omilla sivuilla @ https://studies.helsinki.fi/courses ja näkyykurssin opettajalle sekä opiskelijoille.
-Kaikki palaute on anonyymia, eli opettaja ei voi yhdistää annettua palautetta vastaajaan. Käyttökieli on samakuin SISU:ssa asetettu asiointikieli.
-Norppa-kurssipalautetta kehitetään Helsingin yliopiston Tietojenkäsittelytieteen osastonsovelluskehitysakatemiassa (TOSKA).
-Kaikki palaute on tervetullutta!
+Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer course feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes follow feedback of their courses. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student.
 
-Norpan kurssitoteutustyypit
-Kurssitoteutustyypit (SISU:sta), joista muodostuu automaattisesti kurssipalautelomakeNorppaan
-(voit ottaa yhteyttä norppa@helsinki.fijos tarvitset palautelomakkeen muuntoteutustyypin kurssiin):FI
-SV
-EN
-SISU code
-Laboratorio‐työsken‐tely
-Laboratorioner
-Laboratorywork
-course-unit-re‐alisation-type:teaching-participation-lab
-Verkko-opetus
-Nätundervisning
-Onlineteaching
-course-unit-re‐alisation-type:teaching-participation-online
-Kenttäkurssi
-Fältkurs
-Fieldcourse
-course-unit-re‐alisation-type:teaching-participation-field-course
-Projekti
-Projekt
-Project
-course-unit-re‐alisation-type:teaching-participation-project
-Luento-opetus
-Närundervisning
-Lectures
-course-unit-re‐alisation-type:teaching-participation-lectures
-Pienryhmäope‐tus
-Smågruppsun‐dervis‐ning
-Smallgroupteaching
-course-unit-re‐alisation-type:teaching-participation-small-group
+## Roles on a course
 
-2. HY yhteiset kysymykset / joint questions
-   Jokaisen kurssin kurssipalautelomake sisältää allaolevat kuusi "yliopistotason kysymystä". Nämä kysymyksetlinjattiin opintoasianneuvoston kokouksessa 17.6.2021. Kysymyksiä ei voi muokata tai poistaa, mutta opettajatvoivat itse lisätä omia kurssikohtaisia kysymyksiään.
-   For every course, feedback form contains six "University level" questions specified by Academic Affairs Councilon June 17th, 2021. These questions are fixed and cannot be removed nor changed. Teachers are able to addtheir own questions aswell.Vastaa seu‐raaviin väit‐tämiin asteikol‐la 1 = täysin erimieltä, 2 =osin eri mieltä, 3 = ei samaaeikä eri mieltä,4 = osinsamaa mieltä, 5 = täysinsamaa mieltä,eos = en osaasanoa
-   Besvara föl‐jande påståen‐den medskalan1 = helt av an‐nan åsikt, 2 =dels av annanåsikt,3 = varken avsamma ellerannan åsikt, 4= dels av sam‐ma åsikt5 = helt avsamma åsikt,n/a = ingenuppgift
-   Answer the fol‐lowing questionusing the scale 1 = Completelydisagree, 2 =Partly disagree, 3 = Neither dis‐agree nor agree,4 = Partly agree,5 = Completelyagree, N/A =Cannot answer
-   1)Osaamistavoitteet olivatselvät
-   1)Kunskapsmålen var tydliga
+Roles come from the course realisation in Sisu and are updated every night. They can't be changed in Norppa; a wrong role must be fixed in Sisu (by whoever maintains the course there, often the programme's study affairs staff).
 
-1) The learningobjectives wereclear to me
-   2)Toteutustapatukioppimistani
-   2)Lärmetodernastödde mittlärande
-2) The courseactivies support‐ed my learning
-3) Materiaalittukivatoppimistani
-4) Materialetstödde mittlärande
-5) The materialused in thecourse supportedmy learning
-6) Kurssillakäytettävätarvioin‐timenetelmätmittaavatoppimistani.
-   4)Bedömningsmetoderna somanvänds ikursen, mätermitt lärande
-7) The methodsused to assesthe course mea‐sure my learning.
+- [[courseSummary:responsibleTeacher]]: Sisu roles responsible teacher and contact person. Can edit the survey and the feedback period, see all answers, write counter feedback, use continuous and interim feedback, send reminders and hide answers.
+- [[courseSummary:administrativePerson]]: Sisu role administrative person. Same rights as a responsible teacher, listed separately.
+- [[courseSummary:teacher]]: any other Sisu teaching role. Sees only the answers to public questions (see Visibility) and can share the survey link. If they need more, they must ask for the responsible teacher role in Sisu.
+- The course page lists the course's [[feedbackTargetView:responsibleTeachers]], [[feedbackTargetView:teachers]] and [[feedbackTargetView:administrativePersons]]; that's where a user can check their role.
+- On courses that started before 2023, everyone listed in Sisu is a responsible teacher.
+- A guest lecturer who shows up as responsible teacher (and gets the reminder emails) has been added in Sisu as responsible teacher, contact person or administrative person. Changing their role to teacher in Sisu fixes it the next night.
 
-8) Työmääräsuhteessaopintopisteisiinoli:
-   turhan raskas -melko raskas -sopiva -melko kevyt -turhan kevyt
-   5)Arbetsmängden på studieavs‐nittet var:
-   för stort - rättstort - passlig -rätt liten - förliten
-9) The workloadrelative to coursecredits was:
-   too heavy -somewhat tooheavy - appropri‐ate - somewhattoo light - toolight
-   Avoinkysymys:
-10) Muitahuomioita
-    Öppen fråga:
-11) Övrigaobservationer
-    Open question:
-12) Othercomments
+## Navigation
 
-3. Opettajan ohje
-   VASTUUOPETTAJA- ja OPETTAJAROOLI (SISU/NORPPA)
-   Norppa perii suoraan SISU:sta vastuuopettaja ja opettajaroolit, jotka antavat erilaiset oikeudet Norpassakurssipalautteen käsittelyyn ja katsomiseen:
-   vastuuopettaja: näkee numeerisen koonnin opiskelijoiden antamasta palautteesta sekä kirjallisetvastaukset ja voi editoida palautelomakkeen asetuksia (aukioloaikaa, kysymyksiä yms.) sekä avatakurssille jatkuvan palautteen tai välipalautelomakkeen
-   opettaja: näkee numeerisen koonnin opiskelijoiden antamasta palautteesta
-   Huom.! SISUSSA määritelty kurssin ”hallintohenkilö” saa samat oikeudet kuin vastuuopettaja.
-   Norppa-palautelomake muodostuu Onen linjausten mukaisesti automaattisesti kaikille (tässä taulukossamääritellyille) HY:n kursseille. Koulutusohjelma voi halutessaan määritellä tarkemmin miltä kursseiltapalautetta kerätään. (Jos tarvitset palautelomakkeen muun toteutustyypin kurssiin, voit ottaa yhteyttä:norppa@helsinki.fi)
-   (A) KYSELY: aikataulu & omat kysymykset
-   (B) KYSELY: vastapalaute
-   (C) TULOKSET: vastaukset & vastaajat
-   (D) TÄYDENTÄVÄT: jatkuva palaute & välipalaute
-   Katso myös yleinen ohje.
-   https://norppa.helsinki.fi/norppa@helsinki.fi
+Top menu items (each shown only to users it concerns):
 
-(D) TÄYDENTÄVÄT: jatkuva palaute & välipalaute
-JATKUVA PALAUTE
-Jatkuvan palautteen avulla opettaja voi kerätä opiskelijoilta palautetta kurssin ollessa käynnissä:
-vapaaehtoinen, opettaja voi aktivoida käyttöön (ensimmäinen "kahva" yllä)
-opiskelijalle aukeaa Norppaan kurssin alle vapaatekstikenttä ”nopeaan palautteenantoon” kurssin ollessakäynnissä
-opettaja voi halutessaan saada sähköpostiinsa ilmoituksen annetusta jatkuvasta palautteesta (toinen"kahva" yllä)
-jatkuva palaute on käytössä kurssin aikana ja sulkeutuu kun kurssin varsinainen kurssipalautelomakeaukeaa
-"Annettu jatkuva palaute" kerää yhteen kaiken kurssin aikana kertyneen jatkuvan palautteen.VÄLIPALAUTE
-Välipalaute aktivoidaan ylläolevan kuvan mukaisesti kohdasta: TÄYDENTÄVÄT -> VÄLIPALAUTTEET -> LUOUUSI VÄLIPALAUTE
-Välipalaute on kurssin ollessa käynnissä kerättävä palautelomake. Sen toiminnallisuus, näkymä opettajalle japeriaate on sama kuin kurssin päättyessä aktivoituvassa palautelomakkeessa, mutta se ei sisällä (HY-tason)pakollisia kysymyksiä. Välipalaute on täydentävä palautteen muoto ja sitä voidaan käyttää vapaavalintaisestikurssin ollessa käynnissä. Välipalaute kertyy saman TAB:n (TÄYDENTÄVÄT -> VÄLIPALAUTTEET) alle.
+- [[navBar:myCourses]]: the user's course surveys as a teacher, in tabs [[teacherView:activeSurveys]], [[teacherView:upcomingSurveys]] and [[teacherView:endedSurveys]], grouped into [[teacherView:courseSurveys]] and [[teacherView:organisationSurveys]]. Chips show the state, e.g. [[teacherView:feedbackResponseMissing]].
+- [[navBar:courseSummary]]: feedback statistics of the user's own courses and of organisations they have rights to.
+- [[navBar:myProgrammes]] (or [[navBar:myOrganisations]]): the degree programmes or other organisations the user has rights to, each with its own page (see Degree programmes).
+- [[navBar:browseCourses]]: lists the courses of chosen degree programmes by start date for a year, semester or period, each with a [[search:coursePageLink]] link to the course's page on studies.helsinki.fi. It's separate from feedback: it shows no feedback or survey information and doesn't link to Norppa's course pages.
+- [[navBar:feedback]]: feedback about Norppa itself to its developers.
+- [[navBar:myFeedbacks]]: surveys the user can answer as a student. Staff see this when they are enrolled as a student on some course or were added as a respondent to a programme survey.
+- The user menu (the user's name, top right) has [[navBar:userInformation]], which lists the user's IAM groups and organisation access rights (not course roles), and the UI language selection (FI/SV/EN).
 
-(A) KYSELY: aikataulu & omat kysymykset
-Opettaja voi editoida kurssipalautelomaketta valitsemalla 'Kyselyni' osiosta haluamansa kurssin.Kurssipalautelomakkeen muokkaus on mahdollista kun lomake on kiinni (/ei vastattavissa). Lähtökohtaisestikurssipalautelomake aukeaa vastattavaksi kurssin päättymispäivänä (määritelty SISU:ssa), mutta opettaja voimuuttaa lomakkeen avautumis- ja sulkeutumispäivämääriä.
+## Which courses get a survey
 
-1. Kyselyni TAB:
-   Valitse "Aktiiviset kyselyt" tai "Tulevat kyselyt" ja valitse haluamasi kurssi (omia kysymyksiä voi lisätä kursseille,joiden kurssipalautelomake ei ole vielä auennut opiskelijoille):
-2. Kurssin asetukset ja tiedot:
-   Kyselyn aukeamis- ja päättymispäivämääriä voi muokata kohdasta "MUOKKAA PALAUTTEENKÄYNNISSÄOLOAIKAA":
-   ennen kuin palautelomake auennut: molempia
-   palautteenkeruun ollessa käynnissä: päättymispäivämäärää
-   palautelomakkeen sulkeuduttua: norppa@helsinki.fi
-3. Kyselyn muokkaus: omat kysymykset ja tekstiosioKlikkaa TAB:ia "MUOKKAUS" ja sivun alalaidassa, yliopisto-tason kysymysten jälkeen valikko: ?
+A survey is created automatically for each course realisation of these Sisu types: lab work, online teaching, field course, project, lectures, small group teaching, seminar, blended teaching, contact teaching and distance teaching (Sisu codes teaching-participation-lab, -online, -field-course, -project, -lectures, -small-group, -seminar, -blended, -contact, -distance). Language Centre independent-work projects are also included.
 
-Klikkaa "LISÄÄ KYSYMYS" ja valitse haluamasi kysymyksen muoto viidestä eri vaihtoehdosta:
-Arvoasteikkokysymys
-Avoin kysymys
-Monivalintakysymys - valitse yksi
-Monivalintakysymys - valitse monta
-Voit myös lisätä kyselyyn tekstiä kohdasta "LISÄÄ TEKSTIOSIO".
-Kurssirealisaatiotyypit (SISU:sta), jotka ovat mukana automaattisessapalautteenkeruussa:FI
-SV
-EN
-SISU code
-Laboratorio‐työsken‐tely
-Laboratorioner
-Laboratorywork
-course-unit-realisa‐tion-type:teaching-participation-lab
-Verkko-opetus
-Nätundervisning
-Onlineteach‐ing
-course-unit-realisa‐tion-type:teaching-participation-online
-Kenttäkurssi
-Fältkurs
-Fieldcourse
-course-unit-realisa‐tion-type:teaching-participation-field-course
-Projekti
-Projekt
-Project
-course-unit-realisa‐tion-type:teaching-participation-project
-Luento-opetus
-Närundervisning
-Lectures
-course-unit-realisa‐tion-type:teaching-participation-lectures
+- Other types, such as exams, theses, essays, independent work and training, get no survey. Credits don't matter. Support (norppa@helsinki.fi) can enable a survey for some of these types (independent work, essays, training, master's theses) but not for exams.
+- Also no survey: the realisation is cancelled, archived or a draft in Sisu, has no end date, or isn't linked to a course unit.
+- A degree programme can switch feedback off per course unit (Course settings, see Degree programmes). The teacher then sees [[teacherView:disabledCourseWarning]], students can't answer and no emails are sent.
+- One realisation has one survey. Several course units sharing a realisation still share one survey.
+- If there's no suitable survey, e.g. for an exam or for feedback across several courses, a degree programme can create a programme survey instead.
 
-(C) TULOKSET: vastaukset & vastaajat
-Vastaukset - TAB sisältää opetustapahtuman kaikki kertyneet palautteet ja niitä voi tarkastella reaali-aikaisesti.Opettajan antama vastapalaute näkyy tämän sivun alussa.1 . Monivalintakysymysten kertymät näkyvät automaattisesti kaikille: 2. Avoimien kysymysten vastaukset näkyvät oletusarvoisesti vain opettajalle:
-"Ei julkinen" kohdasta vastaukset voi muuttaa julkisiksi, jolloin ne näkyvät myös opiskelijoille.Oikeassa reunassa:
-silmä-ikoni: piilottaa/näyttää yksittäisen vastauksen
-roskakori-ikoni: voi poistaa yksittäisen vastauksen
+## Sisu updates
 
-(B) KYSELY: vastapalaute
-Käytyään läpi opiskelijoilta saamansa kurssipalautteen, opettajalla on mahdollisuus lähettää opiskelijoille yksikurssipalautteita kokoavasti kommentoiva vastaus. Tämä vastapalaute on vapaamuotoinen ja yhteinen kaikillekurssin opiskelijoille.
-Opettajan vastapalaute kurssista on oleellista, jotta voimme kehittää Helsingin yliopiston palautekulttuuria: seosoittaa opiskelijoille, että opettaja on lukenut heiltä saamansa palautteen. Tämä taas kannustaa opiskelijoitajatkossakin antamaan rakentavaa palautetta kursseista.
-Opettajan vastapalautteen pituus voi vaihdella. Vastapalautteessa voi kiittää opiskelijoita kurssilleosallistumisesta ja palautteen antamisesta, koostaa yhteenvedon annetusta palautteesta ja nostaa esilletärkeäksi kokemiaan yksittäisiä palautteita ja kommentoida/vastata niihin. Opiskelijoille erityisen arvokasta jamotivoivaa vastapalautetta on kertoa konkreettisia keinoja tai suunnitelmia, miten opettaja aikoo muokataopetustaan saamansa palautteen perusteella.
-Vastapalaute kirjoitetaan NORPPA:an, josta opiskelijat voivat sen helposti nähdä ja sen voi myös halutessaanlähettää sähköpostitse kurssin opiskelijoille:
+- Courses, teachers, roles and the course dates are updated every night. Changes made in Sisu show in Norppa the next morning.
+- New student enrolments are usually added within 1-2 hours. Only confirmed enrolments (status enrolled) count; if Sisu confirms an enrolment later than that, the student appears the next morning.
+- Answer counts are shown as answers/enrolled students, e.g. 3/20. 0/0 means Norppa has no enrolled students for the course yet: enrolments aren't confirmed in Sisu, or the counts haven't updated yet (they update overnight and when answers come in).
+- A student whose enrolment is cancelled is removed the next night, unless they have already been emailed the survey link or have answered. After that they stay on the survey even if they drop out, and count in the enrolled total.
+- Groups defined in Sisu (study sub-groups) are shown as groups in the same survey, not as separate surveys.
 
-4. Koulutusohjelman ohje
+## Feedback period
 
-koulutusohjelman kysely
-Koulutusohjelma voi luoda omia kyselyitä koulutusohjelman asetuksissa. Tänne on lähtökohtaisesti pääsykoulutusohjelman johtajallaja palautevastaavalla (jos hänet on lisätty Norppaan).
+Default: the survey opens at 00:00 on the day after the course's last day in Sisu and closes at 23:59 (Finnish time) 14 days later, so it's open for about 15 days. Only the course dates in Sisu count, not individual teaching events. If the course's dates in Sisu run past the teaching (e.g. to include the exam), the survey opens later accordingly.
 
-1. Koulutusohjelmakysely luodaan kohdassa "KOULUTUSOHJELMAN KYSELYT", josta klikkaamalla aukeaapop-up ikkuna:
-2. Kyselyn perustiedot syötetään ylläolevaa vastaavassa pop-up ikkunassa "Luo uusi koulutusohjelman kysely".Kyselylle pitää määritelläaikataulu (myös esim. kokonainen luku- tai kalenterivuosi), halutut kysymykset ja vastaajat (opiskelijanumerot).Tällainen organisaatio-tasonpalautekysely toimii hyvin esim. lukukausipalautteena. Huomioitavaa on, että "vastuuhenkilö" saa tässätapauksessa oikeuden muokata kyselyä sekäpääsyn kaikkeen kyselydataan. Tämä oikeus on voimassa vain tässä nimenomaisessa kyselyssä. Vain neopiskelijat, joiden opiskelijanumeroon listassa pääsevät vastaamaan kyselyyn. Lopuksi klikataan "TALLENNA" ja päästään tekemään itse kysely:
+The course page shows [[feedbackTargetView:coursePeriod]] and [[feedbackTargetView:feedbackPeriod]]. A responsible teacher changes the dates with the [[common:edit]] button next to the feedback period, which opens [[feedbackTargetSettings:editPeriodTitle]] with [[editFeedbackTarget:opensAt]] and [[editFeedbackTarget:closesAt]]:
 
-3. Kyselylomakkeen muokkaus tehdään kuten tavallisessa Norppa-kurssipalautteessa ylläolevan näkymäntab:ilta "muokkaus". Koulutusohjelmakyselyei sisällä yhtään valmista (/pakollista) kysymystä vaan kaikki kysymykset määritellään itse. Kun palauteaika onpäättynyt, vastaukset nähdään kohdasta"tulokset".
-4. Koulutusohjelman omat kyselyt näkyvät asetuksissa, kohdassa "KOULUTUSOHJELMAN KYSELYT". Tässäsamassa näkymässä onnistuu myöskyselyn poistaminen:
+- Before the survey opens, both dates can be changed. [[editFeedbackTarget:openImmediately]] opens it right away and emails the students.
+- While it's open, only the closing date can be changed, e.g. extended past grading. There is no maximum length.
+- The survey must be open at least one day. Dates can't be in the past. Opening happens at 00:00 and closing at 23:59 of the chosen days.
+- After it has closed, the dates can't be changed; only support can reopen a survey.
+- Dates saved in Norppa are never overwritten by Sisu. Dates that were never edited in Norppa follow the course dates in Sisu every night, which is why changing the course dates in Sisu can move the feedback period.
 
-SISU: hallintohenkilö
-SISU:ssa kurssille on määritelty:
-vastuuopettaja
-opettaja
-hallintohenkilö
-Norppa saa nämä tiedot automaattisesti SISU:sta ja generoi heille pääsyn omiin kursseihinsa. Hallintohenkilönoikeudet ovat vastaavat kuin vastuuopettajan, eli hän pystyy editoimaan kurssikohtaisia-asetuksia ja lukemaanpalautteita. Opettaja-rooli antaa näkyvyyden vastauksien numeerisiin koonteihin.
+## Emails
 
-asetukset
-Pääsy
+- One week before the survey opens, responsible teachers get a reminder with the dates and the survey's own questions. It's sent only once.
+- At 11:15 on the opening day, students get an email with the link. Students who enrol later get it at 11:15 on a later day.
+- The day after the survey closes, responsible teachers get a reminder to write counter feedback, if there was at least one answer and no counter feedback yet.
+- There are no automatic reminders to students during the period. Teachers can send one themselves (see Getting students to answer).
+- Continuous feedback digest: see Continuous feedback.
 
-1. Yleiset asetukset
-2. Koulutusohjelman kysely
-   Koulutusohjelmalla (koulutusohjelman johtajalla tai palautevastaavalla) on erillinen pääsy ja näkymä ohjelmanasetuksiin, joita on neljä.
-   Pääsy:
-   Valitse ylävalikosta "Kurssiyhteenveto" ja klikkaa hammasratasta "Koulutusohjelman asetukset".
-   Koulutusohjelman Norppa-oikeudet luodaan automaattisesti IAM-ryhmien kautta:
-   koulutusohjelman johtaja: näkee kaikkien koulutusohjelman kurssien kaiken opiskelijoiden antamankurssipalautteen (yksittäiset vastaukset)
-   koulutusohjelman palautevastaava (koulutusohjelman JORY määrittää): näkee kaikkienkoulutusohjelman kurssien kaiken opiskelijoiden antaman kurssipalautteen (yksittäiset vastaukset) (eiIAM, lisätään Norpassa)
-   koulutusohjelman muut tahot: voivat katsella numeerisia koonteja (ei pääsyä ohjelman asetuksiin)
-   1: 'Asetukset' TAB
+## Editing the survey
 
-yleiset asetukset: Koulutusohjelma voi valita, näytetäänkö vastanneet opiskelijat opettajalle, jos vastanneita onenemmän kuin viisi. Vastannutta ei yhdistetä vastauksiin ja palaute on aina nimetöntä. Tämän asetuksen voitehdä yksittäisille opintojaksolle tai kaikille koulutusohjelman opintojaksoille kerralla.
-palautevastaava: yksi per koulutusohjelman jory
-kurssikohtaiset asetukset: koulutusohjelma voi määritellä mitkä kurssit ovat mukana palautteenkeruussa.
-2: 'Koulutusohjelman kysymykset' TAB
-Koulutusohjelma
+The survey can be edited until it opens. It's edited on the course page's [[feedbackTargetView:surveyQuestionsTab]] tab (or [[feedbackView:editSurvey]] in the [[common:preview]] tab); once feedback opens, the tab is locked and the questions can no longer be changed.
 
-palautevastaava
-Koulutusohjelman palautevastaava: näkee kaikkien koulutusohjelman kurssien kaiken opiskelijoiden antamankurssipalautteen (yksittäiset vastaukset).
-Palautevastaavan lisääminen Norppaan
-Koulutusohjelman kurssien kurssipalautteen katseleminen 2.
+- Every survey has the university level questions and possibly the degree programme's questions, which can't be edited or removed. Students see the university and programme scale and choice questions first, then the teacher's own questions, then the programme and university open questions (so the university's "additional comments" is last). A grouping question is always first.
+- [[questionEditor:addQuestion]] adds a question: [[questionEditor:likertQuestion]] (scale 1-5), [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] or [[questionEditor:multipleChoiceQuestion]]. [[questionEditor:addTextualContent]] adds a text section. Each question is saved with its own [[questionEditor:done]] button. Questions can be marked [[common:required]], duplicated, moved and removed.
+- Language versions: the editor has Finnish, Swedish and English fields side by side; fill in the languages you want. Students see the survey in their own UI language; a missing translation falls back to another language. [[editFeedbackTarget:showPreview]] and [[editFeedbackTarget:translationLanguage]] show how it looks.
+- Carry-over: when a new realisation's survey is first opened in Norppa (or its reminder email is sent), it copies the own questions of the latest earlier realisation of the same course unit that shares a teacher with it. After that the surveys are independent. A new version of the course unit in Sisu breaks the chain.
+- [[editFeedbackTarget:copyFromCourseButton]] copies questions from any course where the user is a teacher. Copied questions are added after the existing ones.
+- Groups: if the course has two or more groups in Sisu, answers can be viewed by group automatically. [[groups:addGroupingQuestion]] adds a question where students choose their group instead (one per survey; it replaces the Sisu grouping). Answers per group are shown only if each group has either no answers or at least 5.
+- Open answers have no practical length limit.
 
-1. PALAUTEVASTAAVAN LISÄÄMINEN NORPPAAN:
-   Palautevastaava -rooli on kovakoodattu Norppaan. Rooli pitää asettaa koulutusohjelman (koulutusohjelmanjohtajan) toimesta Norpassa, kohdassa "Koulutusohjelman asetukset". Katso myös: Koulutusohjelman ohje1.1 Klikkaa "Kurssiyhteenveto" ja sen jälkeen hammasrataskuvaketta päästäksesi koulutusohjelmanasetuksiinpalautevastaava1.
+## University level questions
 
-1.2 Asetukset -tab:lla on kenttä otsikolla "Lisää uusi palautevastaava"
+Set by the university for all course surveys. The version in use depends on when the survey opens. Surveys opening from August 2026 have these (Finnish / Swedish / English):
 
-2. KOULUTUSOHJELMAN KURSSIEN KURSSIPALAUTTEEN KATSELEMINEN:2.1 Klikkaa "Kurssiyhteenveto" ja sen jälkeen hammasrataskuvaketta päästäksesi koulutusohjelmanasetuksiin
+1. Kurssin rakenne ja aikataulu olivat selkeät / Kursens struktur och tidtabell var tydliga / The course structure and schedule were clear
+2. Kurssilla oli selvästi esitetty se, mitä meidän tulisi oppia / Det framgick tydligt på kursen vad vi förväntades lära oss / The intended learning outcomes of the course were clearly communicated
+3. Opetustilanteissa opiskelijoita kannustettiin keskustelemaan ajatuksistaan ja näkökulmistaan / Under undervisningstillfällena uppmuntrades studenterna att diskutera sina tankar och perspektiv / Students were encouraged to discuss their ideas and perspectives during teachings
+4. Oppimisen arvioinnin vaatimukset (tentti, harjoitus, kurssisuoritus) olivat minulle selvät / Bedömningsgrunderna (tentamen, övning, kursprestation) var tydliga för mig / The requirements for assessment (examination, assignment, course performance) were clear to me
+5. Kurssilla käytetyt menetelmät auttoivat minua luomaan yhteyksiä opiskeltavien asioiden ja aikaisempien tietojeni välillä / De metoder som användes på kursen hjälpte mig att skapa kopplingar mellan det studerade innehållet och mina tidigare kunskaper / The methods used in the course helped me make connections between the course content and my prior knowledge
+6. Työmäärä suhteessa opintopisteisiin oli (raskas ... kevyt) / Arbetsmängden i förhållande till studiepoängen var (tung ... lätt) / The workload in relation to the credits awarded was (heavy ... light), five options
+7. Muita huomioita (avoin kysymys) / Övriga kommentarer (öppen fråga) / Additional comments (open question)
 
-2.2 Klikkaa "yhteenveto" TAB:ia ja sen jälkeen haluamaasi kurssia ("avoimet kysymykset" TAB:ltalöytyvät kaikki avoimien kysymysten vastaukset kootusti)
+Questions 1-5 use the scale 1 = completely disagree ... 5 = completely agree, and "cannot answer".
 
-2.3 Kurssisivulla klikkaa haluamaasi kurssitoteutusta, nähdäksesi palautteen
+Surveys that opened earlier (from autumn 2021) had: the learning objectives were clear; the course activities supported my learning; the course materials supported my learning; the assessment methods measured my learning; the same workload question as now; other comments.
 
-5. Tietosuoja / Data protection notice
-   Me Helsingin yliopistolla arvostamme yksityisyyttäsi ja oikeutta henkilötietojen suojaan. Jokaisella on oikeustietää, mitä tietoja hänestä on tallennettu ja miten tietoja käsitellään. Alla linkatuille web-sivuille kokoammetietosuojailmoituksia koskien henkilötietojen käsittelyä Helsingin yliopistolla:
-   https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja
+## Getting students to answer
+
+The [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentLinkTitle]] with a copy button and a [[feedbackTargetView:studentLinkQRTitle]] (a screenshot is the easiest way to share it). Both are always there, also before the survey opens. The course page also has [[feedbackTargetView:copyLink]]. Students also find the survey in Norppa and in the email they get when it opens.
+
+While the survey is open, a responsible teacher can use [[feedbackTargetResults:sendReminder]] on the [[feedbackTargetView:shareTab]] tab: they can add a message, and the email (with the link) goes to enrolled students who haven't answered or said they won't answer. It can be sent once every 24 hours.
+
+Answering is anonymous, so teachers can't tell which students answered with what, and can't reward individual answers.
+
+## Visibility of answers
+
+The [[feedbackTargetView:feedbacksTab]] tab shows the answers as soon as they come in (reload the page to see new ones).
+
+- Responsible teachers, administrative persons, programme admins and feedback liaisons see all answers.
+- Teachers, other programme staff and students see only questions marked [[common:public]]. Students see the answers after they've answered themselves or after the survey closes.
+- Scale and choice questions are public by default; open questions and copied or carried-over questions are [[common:notPublic]]. University level scale and choice questions, and programme questions the programme has made public, are always public.
+- A responsible teacher sets a question's publicity on the [[feedbackTargetView:feedbacksTab]] tab (scale and choice questions also in the survey editor). An open question can be made public only after the survey has closed, after confirming that its answers contain no personal data.
+- [[feedbackTargetResults:setHidden]] (eye icon) hides an open answer from those who see only public answers. All identical answers to the question are hidden together.
+- Small courses: if fewer than 5 students are enrolled, results are shown only to the responsible teachers, and only the answers of students who agreed, when answering, that the teacher may see their answers. Others see a note that results aren't shown. The limit counts enrolled students in Norppa, not answers.
+- Answers are shown in random order per question, so one student's answers can't be linked together.
+
+## Respondents
+
+The [[feedbackTargetView:studentsWithFeedbackTab]] tab (responsible teachers and programme admins) lists the enrolled students. Whether each has answered is shown only after the survey has closed, if at least 5 students answered and the degree programme's setting allows it. It never shows who answered what.
+
+## Counter feedback
+
+Counter feedback is the teacher's reply to the whole course about the feedback: e.g. a summary of what came up and what will change. It shows students their feedback was read.
+
+- A responsible teacher writes it on the [[feedbackTargetView:giveFeedbackResponseTab]] tab after the survey has closed, up to 12 months later. There's one shared text per course; any responsible teacher can edit it.
+- The text supports Markdown (formatting and links). There's no image upload.
+- [[feedbackResponse:checkboxSendEmail]] emails it to all enrolled students, not only those who answered. The email can be sent only once; the text can be edited afterwards on [[feedbackTargetView:editFeedbackResponseTab]] without a new email.
+- It was sent when the checkbox says [[feedbackResponse:emailSent]] and [[navBar:myCourses]] shows [[teacherView:feedbackResponseGiven]]. [[teacherView:feedbackResponseNotSent]] means it was saved without sending the email.
+- [[teacherView:feedbackResponseMissing]] is shown for ended realisations that got answers but no counter feedback, for 12 months after closing; the latest one is also flagged on the course unit's row. In [[navBar:courseSummary]] the realisation's figure updates at once, course unit and programme totals overnight.
+
+## Continuous feedback
+
+Lets students give free-form feedback while the course is running.
+
+- A responsible teacher turns it on in the [[feedbackTargetView:continuousFeedbackTab]] tab with [[feedbackTargetView:activateContinuousFeedback]]. It's off by default. An optional text can be shown to students on the form.
+- [[feedbackTargetView:activateContinuousFeedbackDigest]]: new continuous feedback is emailed to responsible teachers each morning.
+- Students can give it until the actual survey opens (if feedback is switched off for the course, until the survey's closing date).
+- The teacher can reply to each item with [[feedbackTargetView:respondContinuousFeedback]]; the student gets the reply by email.
+
+## Interim feedback
+
+A separate mid-course survey.
+
+- A responsible teacher creates it in the [[feedbackTargetView:interimFeedbackTab]] tab with [[interimFeedback:addSurvey]]: name, dates, then the questions.
+- It has the course's students and teachers but no university or programme questions ([[editFeedbackTarget:copyUniversityQuestions]] can add the university ones). Students get no automatic email about it, so share its link.
+- Results work like the main survey. It can be removed while it has no answers.
+
+## Downloading results
+
+- The [[feedbackTargetView:feedbacksTab]] tab's [[feedbackTargetResults:export]] offers [[common:exportXLSX]] (one sheet, a column per question, answers shuffled per question, no timestamps or student information) and [[common:exportPdf]]. Responsible teachers and programme staff can download them; those who see only public answers get only those.
+- [[navBar:courseSummary]] has [[common:exportXLSX]] with sheets for organisations, course units and course realisations: averages of the summary questions, student and feedback counts and counter feedback percentage.
+
+## Course summary
+
+[[navBar:courseSummary]] shows averages of the university (and programme) level scale questions, [[courseSummary:feedbackCount]], [[courseSummary:feedbackPercentage]] and [[courseSummary:feedbackResponsePercentage]], by academic year, semester or period, from 2020 onwards.
+
+- [[courseSummary:myCourses]] shows the user's own courses as teacher. [[courseSummary:myOrganisations]] shows the organisations the user has rights to.
+- A course is missing if its survey hasn't opened yet, it has no students, or it belongs to another organisation in Sisu. Courses of the programme via their realisation only are marked partially responsible. The figures are recalculated overnight.
+- A teacher's older surveys are in [[navBar:myCourses]] > [[teacherView:endedSurveys]].
+
+## Degree programmes
+
+Programme rights come from the university's IAM groups: e.g. the programme director gets admin rights and steering group members read rights. [[navBar:userInformation]] shows the user's rights per organisation (Admin or Read, always in English).
+
+- Read rights: the programme's statistics and public answers.
+- Admin rights (programme director, feedback liaison): all answers of the programme's courses, and the programme's settings.
+
+The programme's page ([[navBar:myProgrammes]], or [[navBar:myOrganisations]] for e.g. faculty staff, > the programme) has these tabs:
+
+- [[organisationSettings:summaryTab]]: the programme's course summary.
+- [[organisationSettings:openQuestionsTab]] (admins): all answers to the university and programme level open questions of the programme's courses.
+- [[organisationSettings:courseRealisationsTab]]: the programme's course realisations.
+- [[organisationSettings:surveyTab]] (admins): questions added to all course surveys of the programme. In the survey, the programme's scale and choice questions come after the university ones, and its open questions after the teacher's own questions.
+- [[organisationSettings:organisationSurveysTab]] (admins): the programme's own surveys.
+- [[organisationSettings:responsiblesTab]]: the programme's teachers and their course counts.
+- [[organisationSettings:settingsTab]] (admins):
+  - [[organisationSettings:feedbackCorrespondents]]: see below.
+  - [[organisationSettings:studentListVisibility]]: whether responsible teachers see who has answered (see Respondents), for all courses or per course.
+  - [[organisationSettings:courseSettings]]: [[organisationSettings:feedbackEnabled]] switches feedback on or off per course unit.
+
+### Feedback liaison
+
+The feedback liaison (palautevastaava) gets admin rights to the programme. To add one: [[navBar:myProgrammes]] > the programme > [[organisationSettings:settingsTab]] > [[organisationSettings:newCorrespondent]], search by email or name, then [[organisationSettings:setAsCorrespondent]]. Type at least 5 characters; the person must be university staff and have logged in to Norppa once. Liaisons can also come from an IAM group; removing one of those in Norppa lasts only until their next login, so remove them from the IAM group instead.
+
+### Programme surveys
+
+For feedback outside course surveys, e.g. semester or year feedback. Created by programme admins in [[organisationSettings:organisationSurveysTab]] with [[organisationSurveys:addSurvey]]:
+
+- Name, dates, [[organisationSurveys:responsibleTeachers]] (university staff who can edit it and see all its answers) and the respondents: pasted student numbers or [[organisationSurveys:addCourses]]. Only those students can answer, and the list isn't updated automatically.
+- Then write the questions; there are no university or programme level questions. Results are on its [[feedbackTargetView:feedbacksTab]] tab.
+- It can be removed while it has no answers.
+
+## When to contact support
+
+Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu, e.g.: reopening or changing the dates of a closed survey, a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, or an error that persists.
+
+## Glossary
+
+Terms in Finnish / Swedish / English:
+
+- survey: [[teacherView:survey|fi]] / [[teacherView:survey|sv]] / [[teacherView:survey|en]]
+- counter feedback: [[feedbackResponse:responseLabel|fi]] / motrespons (the Swedish UI also says [[feedbackResponse:responseLabel|sv]]) / [[feedbackResponse:responseLabel|en]]
+- continuous feedback: [[teacherView:continuousFeedback|fi]] / [[teacherView:continuousFeedback|sv]] / [[teacherView:continuousFeedback|en]]
+- interim feedback: [[interimFeedback:interimFeedback|fi]] / [[interimFeedback:interimFeedback|sv]] / [[interimFeedback:interimFeedback|en]]
+- responsible teacher: [[courseSummary:responsibleTeacher|fi]] / [[courseSummary:responsibleTeacher|sv]] / [[courseSummary:responsibleTeacher|en]]
+- teacher: [[courseSummary:teacher|fi]] / [[courseSummary:teacher|sv]] / [[courseSummary:teacher|en]]
+- administrative person: [[courseSummary:administrativePerson|fi]] / [[courseSummary:administrativePerson|sv]] / [[courseSummary:administrativePerson|en]]
+- feedback liaison: [[organisationSettings:feedbackCorrespondent|fi]] / [[organisationSettings:feedbackCorrespondent|sv]] / [[organisationSettings:feedbackCorrespondent|en]]
+- programme surveys: [[organisationSettings:organisationSurveysTab|fi]] / [[organisationSettings:organisationSurveysTab|sv]] / [[organisationSettings:organisationSurveysTab|en]]
+- programme questions: [[organisationSettings:surveyTab|fi]] / [[organisationSettings:surveyTab|sv]] / [[organisationSettings:surveyTab|en]]
+- university level questions: [[courseSummary:universityLevelQuestions|fi]] / [[courseSummary:universityLevelQuestions|sv]] / [[courseSummary:universityLevelQuestions|en]]
+- course unit: [[courseSummary:courseUnit|fi]] / [[courseSummary:courseUnit|sv]] / [[courseSummary:courseUnit|en]]
+- course realisation: [[courseSummary:courseRealisation|fi]] / [[courseSummary:courseRealisation|sv]] / [[courseSummary:courseRealisation|en]]
+- study programme: [[navBar:myProgrammes|fi]] / [[navBar:myProgrammes|sv]] / [[navBar:myProgrammes|en]]
+- respondents: [[feedbackTargetView:respondents|fi]] / [[feedbackTargetView:respondents|sv]] / [[feedbackTargetView:respondents|en]] (the tab listing them: [[feedbackTargetView:studentsWithFeedbackTab|fi]] / [[feedbackTargetView:studentsWithFeedbackTab|sv]] / [[feedbackTargetView:studentsWithFeedbackTab|en]])
+
+## User guide pages
+
+The user guide is partly outdated; where it differs from this documentation, this documentation is right. Link a page only when it adds to the answer.
+
+- Course realisation types: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/1.%20General%20info/Norppa%20course%20realisation%20types/
+- University level questions: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/
+- Teacher's guide: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Teacher%27s%20guide/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/)
+- Counter feedback: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Teacher%27s%20guide/counter%20feedback/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/vastapalaute/)
+- Continuous and interim feedback (in Finnish): https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/jatkuva%20palaute/
+- Degree programme's guide: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Degree%20programme%27s%20guide/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Koulutusohjelman%20ohje/)
+- Programme surveys: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Degree%20programme%27s%20guide/organisation%20survey/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Koulutusohjelman%20ohje/Koulutusohjelman%20kysely/)
+- Data protection: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/5.%20Tietosuoja%20%20Data%20protection%20notice/
