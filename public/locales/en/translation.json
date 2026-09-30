@@ -239,6 +239,11 @@
     "descriptionHelper": "Optional description that provides additional information about the question. The field supports Markdown content.",
     "shortLabel": "Short label",
     "shortLabelHelper": "Optional shortened version of the question, used as the header in the course summary table. If left empty, the full question is used.",
+    "inLanguage": {
+      "fi": "in Finnish",
+      "sv": "in Swedish",
+      "en": "in English"
+    },
     "universityQuestion": "University level",
     "programmeQuestion": "Programme level",
     "duplicate": "Duplicate",

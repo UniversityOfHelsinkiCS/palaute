@@ -40,11 +40,8 @@ const OptionItem = ({ name, index, languages, onRemove }) => {
                 <FormikTextField
                   data-cy={`option-editor-new-option-${language}-name.${index}`}
                   name={`${name}.label.${language}`}
-                  label={
-                    <>
-                      {languageT('questionEditor:option')} {index + 1}
-                    </>
-                  }
+                  label={`${languageT('questionEditor:option')} ${index + 1}`}
+                  accessibleLabel={`${t('questionEditor:option')} ${index + 1} ${t(`questionEditor:inLanguage:${language}`)}`}
                   fullWidth
                 />
               </Grid>

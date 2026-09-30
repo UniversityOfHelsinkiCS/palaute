@@ -225,6 +225,11 @@
     "descriptionHelper": "Frivillig beskrivning som förser frågan med tilläggsinformation. Fältet stöder Markdown-innehåll.",
     "shortLabel": "Kort namn",
     "shortLabelHelper": "Frivillig förkortad version av frågan som används som rubrik i kurssammandragets tabell. Om fältet lämnas tomt används hela frågan.",
+    "inLanguage": {
+      "fi": "på finska",
+      "sv": "på svenska",
+      "en": "på engelska"
+    },
     "universityQuestion": "Universitetsnivå",
     "programmeQuestion": "Utbildningsprogramsnivå",
     "duplicate": "Duplicera",

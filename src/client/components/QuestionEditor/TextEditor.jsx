@@ -6,14 +6,15 @@ import AlertLink from '../common/AlertLink'
 import FormikTextField from '../common/FormikTextField'
 
 const LanguageTextEditor = ({ name, language, inputRef }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+  const { t, i18n } = useTranslation()
+  const languageT = i18n.getFixedT(language)
 
   return (
     <FormikTextField
       id={`textual-context-text-${language}-${name}`}
       name={`${name}.data.content.${language}`}
-      label={t('questionEditor:content')}
+      label={languageT('questionEditor:content')}
+      accessibleLabel={`${t('questionEditor:content')} ${t(`questionEditor:inLanguage:${language}`)}`}
       fullWidth
       multiline
       inputRef={inputRef}
@@ -36,7 +37,7 @@ const TextEditor = forwardRef((props, ref) => {
     <Grid spacing={4} container>
       {languages.map((language, idx) => (
         <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-          <Box mb={2}>
+          <Box sx={{ mb: 2 }}>
             <Typography variant="h6" component="h2">
               {language.toUpperCase()}
             </Typography>

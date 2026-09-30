@@ -6,15 +6,17 @@ import FormikTextField from '../common/FormikTextField'
 import LinkButton from '../common/LinkButton'
 
 const LikertField = ({ name, language, fieldName, labelKey, helperKey, inputRef }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+  const { t, i18n } = useTranslation()
+  const languageT = i18n.getFixedT(language)
 
   return (
     <FormikTextField
       id={`likert-${fieldName}-${language}-${name}`}
       name={`${name}.data.${fieldName}.${language}`}
-      label={t(`questionEditor:${labelKey}`)}
-      helperText={helperKey ? t(`questionEditor:${helperKey}`) : undefined}
+      label={languageT(`questionEditor:${labelKey}`)}
+      helperText={helperKey ? languageT(`questionEditor:${helperKey}`) : undefined}
+      accessibleLabel={`${t(`questionEditor:${labelKey}`)} ${t(`questionEditor:inLanguage:${language}`)}`}
+      accessibleHelperText={helperKey ? t(`questionEditor:${helperKey}`) : undefined}
       fullWidth
       inputRef={inputRef}
     />

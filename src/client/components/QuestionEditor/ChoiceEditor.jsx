@@ -16,16 +16,18 @@ const styles = {
 }
 
 const InfoEditor = ({ name, language, inputRef }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+  const { t, i18n } = useTranslation()
+  const languageT = i18n.getFixedT(language)
+  const inLanguage = t(`questionEditor:inLanguage:${language}`)
 
   return (
     <>
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <FormikTextField
           id={`choice-question-${language}-${name}`}
           name={`${name}.data.label.${language}`}
-          label={t('questionEditor:label')}
+          label={languageT('questionEditor:label')}
+          accessibleLabel={`${t('questionEditor:label')} ${inLanguage}`}
           fullWidth
           inputRef={inputRef}
         />
@@ -35,8 +37,10 @@ const InfoEditor = ({ name, language, inputRef }) => {
         <FormikTextField
           id={`choice-description-${language}-${name}`}
           name={`${name}.data.description.${language}`}
-          label={t('questionEditor:description')}
-          helperText={t('questionEditor:descriptionHelper')}
+          label={languageT('questionEditor:description')}
+          helperText={languageT('questionEditor:descriptionHelper')}
+          accessibleLabel={`${t('questionEditor:description')} ${inLanguage}`}
+          accessibleHelperText={t('questionEditor:descriptionHelper')}
           fullWidth
         />
       </Box>

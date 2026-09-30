@@ -6,8 +6,9 @@ import FormikTextField from '../common/FormikTextField'
 import LinkButton from '../common/LinkButton'
 
 const LanguageOpenEditor = ({ name, language, inputRef }) => {
-  const { i18n } = useTranslation()
-  const t = i18n.getFixedT(language)
+  const { t, i18n } = useTranslation()
+  const languageT = i18n.getFixedT(language)
+  const inLanguage = t(`questionEditor:inLanguage:${language}`)
 
   return (
     <>
@@ -15,7 +16,8 @@ const LanguageOpenEditor = ({ name, language, inputRef }) => {
         <FormikTextField
           id={`open-question-${language}-${name}`}
           name={`${name}.data.label.${language}`}
-          label={t('questionEditor:label')}
+          label={languageT('questionEditor:label')}
+          accessibleLabel={`${t('questionEditor:label')} ${inLanguage}`}
           fullWidth
           multiline
           inputRef={inputRef}
@@ -25,8 +27,10 @@ const LanguageOpenEditor = ({ name, language, inputRef }) => {
       <FormikTextField
         id={`open-description-${language}-${name}`}
         name={`${name}.data.description.${language}`}
-        label={t('questionEditor:description')}
-        helperText={t('questionEditor:descriptionHelper')}
+        label={languageT('questionEditor:description')}
+        helperText={languageT('questionEditor:descriptionHelper')}
+        accessibleLabel={`${t('questionEditor:description')} ${inLanguage}`}
+        accessibleHelperText={t('questionEditor:descriptionHelper')}
         fullWidth
         multiline
       />
@@ -49,7 +53,7 @@ const OpenEditor = forwardRef((props, ref) => {
     <Grid spacing={4} container>
       {languages.map((language, idx) => (
         <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-          <Box mb={2}>
+          <Box sx={{ mb: 2 }}>
             <Typography variant="h6" component="h2">
               {language.toUpperCase()}
             </Typography>

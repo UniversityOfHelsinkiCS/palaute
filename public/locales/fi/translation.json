@@ -234,6 +234,11 @@
     "descriptionHelper": "Vapaaehtoinen kysymystä kuvaileva tai tarkentava tekstikappale. Kenttä tukee Markdown-sisältöä.",
     "shortLabel": "Lyhyt nimi",
     "shortLabelHelper": "Vapaaehtoinen lyhennetty versio kysymyksestä, jota käytetään kurssiyhteenvedon taulukon otsikkona. Jos kenttä on tyhjä, käytetään koko kysymystä.",
+    "inLanguage": {
+      "fi": "suomeksi",
+      "sv": "ruotsiksi",
+      "en": "englanniksi"
+    },
     "universityQuestion": "Yliopistotaso",
     "programmeQuestion": "Koulutusohjelmataso",
     "duplicate": "Duplikoi",
