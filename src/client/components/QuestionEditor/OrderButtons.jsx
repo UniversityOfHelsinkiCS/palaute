@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
 
-const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled, questionLabel }) => {
+const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled, questionLabel, isText }) => {
   const { t } = useTranslation()
 
   const moveLabel = (labelKey, fallbackKey) => (questionLabel ? t(labelKey, { label: questionLabel }) : t(fallbackKey))
@@ -19,7 +19,10 @@ const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled, 
             size="large"
             sx={focusIndicatorStyle()}
             disableFocusRipple
-            aria-label={moveLabel('questionEditor:moveQuestionUpLabel', 'questionEditor:moveUp')}
+            aria-label={moveLabel(
+              isText ? 'questionEditor:moveTextualContentUpLabel' : 'questionEditor:moveQuestionUpLabel',
+              'questionEditor:moveUp'
+            )}
           >
             <UpIcon />
           </IconButton>
@@ -33,7 +36,10 @@ const OrderButtons = ({ onMoveUp, onMoveDown, moveUpDisabled, moveDownDisabled, 
             size="large"
             sx={focusIndicatorStyle()}
             disableFocusRipple
-            aria-label={moveLabel('questionEditor:moveQuestionDownLabel', 'questionEditor:moveDown')}
+            aria-label={moveLabel(
+              isText ? 'questionEditor:moveTextualContentDownLabel' : 'questionEditor:moveQuestionDownLabel',
+              'questionEditor:moveDown'
+            )}
           >
             <DownIcon />
           </IconButton>

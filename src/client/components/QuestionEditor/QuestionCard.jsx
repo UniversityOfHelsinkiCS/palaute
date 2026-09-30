@@ -138,6 +138,7 @@ const QuestionCard = ({
 
   const canEdit = question.editable === true
   const isGrouping = question.secondaryType === 'GROUPING'
+  const isText = question.type === 'TEXT'
   const canDuplicate = !isGrouping
 
   const requiredConfigurable = question.type !== 'TEXT' && !isGrouping
@@ -153,7 +154,10 @@ const QuestionCard = ({
     moveUpDisabled,
     moveDownDisabled,
     questionLabel,
+    isText,
   }
+
+  const removeLabel = isText ? t('questionEditor:removeTextualContent') : t('questionEditor:removeQuestion')
 
   const handlePublicityToggle = isPublic => {
     helpers.setValue({
@@ -210,6 +214,9 @@ const QuestionCard = ({
   }
 
   const dialogTitleId = useId()
+  const editTitle = question.type === 'TEXT' ? t('questionEditor:editTextualContent') : t('questionEditor:editQuestion')
+  const dialogTitle =
+    meta.initialValue === undefined ? t('questionEditor:addQuestionType', { type: title.toLowerCase() }) : editTitle
 
   return (
     <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={isGrouping ? 0 : 2}>
@@ -256,9 +263,7 @@ const QuestionCard = ({
             },
           }}
         >
-          <DialogTitle id={dialogTitleId}>
-            {questionLabel ? actionLabel('questionEditor:editQuestionLabel') : title}
-          </DialogTitle>
+          <DialogTitle id={dialogTitleId}>{dialogTitle}</DialogTitle>
           <DialogContent>
             <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} editorLevel={editorLevel} />
           </DialogContent>
@@ -299,10 +304,19 @@ const QuestionCard = ({
           title={t('questionEditor:removeQuestionConfirmationTitle')}
           content={
             questionLabel
-              ? t('questionEditor:removeQuestionLabelConfirmation', { label: questionLabel })
-              : t('questionEditor:removeQuestionConfirmation')
+              ? t(
+                  isText
+                    ? 'questionEditor:removeTextualContentLabelConfirmation'
+                    : 'questionEditor:removeQuestionLabelConfirmation',
+                  { label: questionLabel }
+                )
+              : t(
+                  isText
+                    ? 'questionEditor:removeTextualContentConfirmation'
+                    : 'questionEditor:removeQuestionConfirmation'
+                )
           }
-          confirmLabel={t('questionEditor:removeQuestion')}
+          confirmLabel={removeLabel}
           confirmColor="error"
           dataCy="question-card-remove"
         />
@@ -325,7 +339,9 @@ const QuestionCard = ({
                   icon={<FileCopyOutlined />}
                   onClick={onCopy}
                   color="secondary"
-                  aria-label={actionLabel('questionEditor:duplicateQuestionLabel')}
+                  aria-label={actionLabel(
+                    isText ? 'questionEditor:duplicateTextualContentLabel' : 'questionEditor:duplicateQuestionLabel'
+                  )}
                 >
                   {t('questionEditor:duplicate')}
                 </NorButton>
@@ -336,7 +352,9 @@ const QuestionCard = ({
                 data-cy="editQuestion"
                 ref={editButtonRef}
                 icon={<EditOutlined />}
-                aria-label={actionLabel('questionEditor:editQuestionLabel')}
+                aria-label={actionLabel(
+                  isText ? 'questionEditor:editTextualContentLabel' : 'questionEditor:editQuestionLabel'
+                )}
               >
                 {t('common:edit')}
               </NorButton>
@@ -345,9 +363,11 @@ const QuestionCard = ({
                 onClick={() => setRemoveDialogOpen(true)}
                 data-cy="removeQuestion"
                 icon={<DeleteOutlined />}
-                aria-label={actionLabel('questionEditor:removeQuestionLabel')}
+                aria-label={actionLabel(
+                  isText ? 'questionEditor:removeTextualContentLabel' : 'questionEditor:removeQuestionLabel'
+                )}
               >
-                {t('questionEditor:removeQuestion')}
+                {removeLabel}
               </NorButton>
             </Box>
             {!isGrouping && <OrderButtons {...orderButtonsProps} />}
