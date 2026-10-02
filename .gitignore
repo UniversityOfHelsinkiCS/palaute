@@ -111,6 +111,7 @@ test-results/
 playwright-report/
 blob-report/
 e2e/manual/videos/
+e2e/manual/.narration-cache/
 
 # exclusions here
 !.env.template
@@ -118,3 +119,5 @@ e2e/manual/videos/
 !.env.example
 !tools/queries/*.sql
 !Tietosuojaseloste.pdf
+!e2e/manual/tts/pyproject.toml
+!e2e/manual/tts/uv.lock

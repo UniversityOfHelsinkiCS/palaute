@@ -1,0 +1,23 @@
+[project]
+name = "manual-tts"
+version = "0"
+requires-python = "==3.14.*"
+dependencies = ["torch==2.11.0", "torchaudio==2.11.0", "chatterbox-tts==0.1.7", "soundfile==0.14.0"]
+
+[dependency-groups]
+# Builds antlr4, which has no wheel
+build = ["setuptools"]
+
+[tool.uv]
+package = false
+# The image is Linux x86-64, so the lock only needs that
+environments = ["sys_platform == 'linux' and platform_machine == 'x86_64'"]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true

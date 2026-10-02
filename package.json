@@ -29,7 +29,8 @@
     "prepare": "husky",
     "translations": "node ./tools/analyzeTranslations.js",
     "ndc": "npx no-dead-code@latest --ignore config",
-    "manual:record": "playwright test -c playwright.manual.config.ts"
+    "manual:setup": "docker compose -f docker-compose.test.yml --profile manual up --build",
+    "manual:record": "tsx e2e/manual/record.ts"
   },
   "lint-staged": {
     "**/*.{js,jsx,ts,tsx,cjs,mjs}": "oxlint --quiet",

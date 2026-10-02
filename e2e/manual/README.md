@@ -1,21 +1,20 @@
 # User manual videos
 
-Records short videos of real user flows for the user manual. The videos show a visible cursor and a caption bar, and each one comes with a WebVTT subtitle file. Scenarios are regular Playwright tests built on the e2e fixtures (`e2e/support/test.ts`), so they reset and seed the database the same way the e2e tests do.
+Records user flows as videos with a cursor, captions, an AI-generated voice and a WebVTT subtitle file. Scenarios are Playwright tests on the e2e fixtures, so they reset and seed the database like the e2e tests.
 
 ## Running
 
-Start the app in e2e mode (`npm run test:setuplocal`, port 3000), then:
-
 ```bash
+npm run manual:setup               # the e2e app (port 3000) and the voice service
 npm run manual:record              # every scenario
 npm run manual:record -- opiskelija # scenarios whose file name matches
 ```
 
-The output goes to `videos/<lang>/<scenario>.mp4` + `.vtt` and is gitignored. `ffmpeg` is needed for mp4; without it you get the `.webm`. Recording is headless, so you can keep working while it runs. A failed scenario writes nothing here, and Playwright's own video and trace go to `test-results/manual/`.
+Videos go to `videos/<lang>/<scenario>.mp4` + `.vtt` (gitignored). Without `ffmpeg` you get `.webm`. Failed scenarios write nothing there, see `test-results/manual/`.
 
 ## Writing a scenario
 
-Add `scenarios/<name>.manual.ts`. One file is one video, named after the file.
+Add `scenarios/<name>.manual.ts`. One file is one video.
 
 ```ts
 manualTest('Otsikko', async ({ page, api, loginAs, caption, click, fill }) => {
@@ -28,20 +27,26 @@ manualTest('Otsikko', async ({ page, api, loginAs, caption, click, fill }) => {
 })
 ```
 
-- `caption(text, minMs?)` shows the text, adds a subtitle cue and waits long enough to read it. The caption stays visible across page loads.
-- `click` / `fill` move the cursor to the element before acting. `fill` types character by character.
-- `pause(ms?)` waits without changing the caption.
-- Prefer `data-cy` selectors. Visible texts and some `data-cy` values (e.g. `navbar-link-*`) change with the UI language.
-- End with an `expect` on the final state, so a broken scenario fails instead of recording a wrong video.
+- `caption(text, minMs?)` shows the text, adds a subtitle cue and plays its narration.
+- `click` / `fill` move the cursor to the element first, `fill` types character by character.
+- `scrollTo(locator)` scrolls smoothly, `pause(ms?)` waits.
+- `steps.ts` has shared steps. Seed the course so it is on the My surveys tab a user would expect.
+- End with an `expect`, so a broken scenario fails instead of recording a wrong video.
 
 ## Languages
 
-Captions are `{ fi, sv?, en? }`. Each language is a project in `playwright.manual.config.ts`. The `lang` option seeds the users with that language, so the UI follows it. Only `fi` is enabled for now. To add another language, write its captions and add a project. Missing captions fall back to Finnish with a warning. The seed data's Swedish names are placeholders, so fix those before recording in Swedish.
+Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.manual.config.ts`. Only `fi` is enabled. Missing captions fall back to Finnish.
 
-## Voice-over (not yet implemented)
+## Narration
 
-The subtitle cues already hold the narration script with timestamps. To add voice-over:
+The voice is [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox) (MIT), running on CPU in `tts/` with pinned weights baked into the image. It watermarks every clip inaudibly.
 
-- Generate a clip per caption before recording, with Piper or a trained voice.
-- Use each clip's length as that caption's wait instead of `captionDuration` in `fixtures.ts`.
-- Mix the clips into the mp4 with ffmpeg (`adelay` + `amix`).
+- `manual:record` first runs the scenarios without video to generate the clips, then records, so generation never freezes the video.
+- Clips are cached in `.narration-cache/` by model, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
+- The voice is set in `GENERATE_OPTIONS` in `tts/server.py`.
+- Without the service (`MANUAL_TTS_URL`) videos are recorded silently with a warning.
+- `MANUAL_VOICE=<name>` uses `tts/voices/<name>.wav`, see `tts/voices/README.md` for consent.
+
+### Updating the packages
+
+To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies are pinned to exact versions in `tts/pyproject.toml`.
