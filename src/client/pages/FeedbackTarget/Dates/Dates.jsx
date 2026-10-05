@@ -15,7 +15,7 @@ const FeedbackTargetDatesAndCounts = ({ isCourseFeedback, dataCyPrefix = '' }) =
     useFeedbackTargetContext()
   const { id, courseRealisation, opensAt, closesAt, userCreated, continuousFeedbackEnabled, summary } = feedbackTarget
 
-  const hookIsEnabled = isStudent || isTeacher || isAdmin || isResponsibleTeacher || isOrganisationAdmin
+  const hookIsEnabled = isStudent || isResponsibleTeacher || isOrganisationAdmin || isAdmin
   const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id, hookIsEnabled)
 
   const feedbackCount = summary?.data?.feedbackCount ?? 0
