@@ -59,6 +59,35 @@ The language menu only calls `i18n.changeLanguage`. On every page load `AdUser` 
 
 Fix: save the choice on the user, or apply the Sisu language only when the user hasn't chosen one.
 
+### Feedback liaisons from IAM are never created
+
+`../jami/src/auth/IAMConfig.ts:507`, `src/server/services/users/updateFeedbackCorrespondent.ts:32-41`
+
+Jami grants the `feedbackLiaison` special group from the IAM group `hy-palautevastaavat`. No user has that group; 110 have `grp-palautevastaavat`, so the group seems to have been renamed. All feedback liaisons in Norppa are ones added by hand.
+
+Fix: check the current group name with IAM and update Jami.
+
+### Carry-over can copy questions from interim feedback
+
+`src/server/models/feedbackTarget.ts:270-295` (`getPrevious`) picks the previous realisation's feedback target by course unit and feedback type only. Interim feedback has the same course unit and feedback type, so a new course survey can get its questions from an earlier interim feedback instead of the course survey.
+
+Fix: exclude `userCreated` feedback targets.
+
+### The MOOC chip never shows
+
+`src/client/pages/Organisation/SemesterOverview.jsx:204` reads `feedbackTarget.isMoocCourse`, but the server returns it under `courseRealisation` (`getByOrganisation.ts:49`), so it's always undefined.
+
+### Copying questions into interim feedback only offers organisation surveys
+
+`src/client/components/QuestionEditor/CopyFromCourseDialog.jsx:130-199` treats every user-created survey as an organisation survey, but interim feedback is user-created too. Teachers who aren't organisation admins get nothing to copy from in interim feedback.
+
+## Dead code and data
+
+- `feedback_targets.feedback_visibility` has had no UI since commit 493aaab9, but the server still accepts and reads it (`update.ts:22`, `getFeedbacks.ts:148`). 47 surveys still have `ALL`.
+- Token enrolment (`services/feedbackTargets/enrollByToken.ts`) isn't wired to any route.
+- The "not giving feedback" button needs `course_units_organisations.no_feedback_allowed`, which nothing sets and which is never true in production.
+- `feedbackTargetResults:useLegacyVersion`, `STUDENT_FEEDBACK_SHOW_REALISATION_NAME`, `FEEDBACK_RESPONSE_EMAILS_SINCE_DATE` and `organisations.responsible_user_id` aren't used.
+
 ## UI shows actions the server forbids
 
 Each of these gives the user an error when they try the action.
