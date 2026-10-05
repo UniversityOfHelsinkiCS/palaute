@@ -1,4 +1,4 @@
-import type { Locator } from '@playwright/test'
+import type { Locator, Page } from '@playwright/test'
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -47,6 +47,29 @@ const INTRO_MS = 500
 const OUTRO_MS = 1200
 const SETTLE_MS = 1500
 const SCROLL_MS = 900
+// Share of the screen height at the top and bottom where an action is scrolled to the middle first
+const SCREEN_EDGE = 0.25
+
+// The browser would only scroll an element just inside the edge of the screen, away from the viewer's focus
+const centerOnScreen = async (page: Page, locator: Locator) => {
+  await locator.waitFor()
+  const box = await locator.boundingBox()
+  const height = page.viewportSize()?.height
+  if (!box || !height) return
+  const center = box.y + box.height / 2
+  if (center > height * SCREEN_EDGE && center < height * (1 - SCREEN_EDGE)) return
+
+  await locator.evaluate(element => element.scrollIntoView({ behavior: 'smooth', block: 'center' }))
+  // Elements that cannot scroll, like the navbar, stay put and need no wait
+  let previous = box
+  for (let waited = 0; waited < SCROLL_MS * 2; waited += 100) {
+    await page.waitForTimeout(100)
+    const current = await locator.boundingBox()
+    if (!current || current.y === previous.y) break
+    previous = current
+  }
+}
+
 
 const readingTime = (text: string) => Math.max(MIN_CAPTION_MS, text.length * CAPTION_MS_PER_CHAR)
 
@@ -139,7 +162,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
     })
 
     async function moveTo(locator: Locator) {
-      await locator.scrollIntoViewIfNeeded()
+      await centerOnScreen(page, locator)
       const box = await locator.boundingBox()
       if (!box) throw new Error('Element has no bounding box, is it visible?')
       const target = { x: box.x + box.width / 2, y: box.y + box.height / 2 }
