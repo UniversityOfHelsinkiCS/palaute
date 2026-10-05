@@ -73,6 +73,8 @@ const centerOnScreen = async (page: Page, locator: Locator) => {
 }
 
 const CURTAIN_MIN_MS = 2000
+// Lets the viewer see what changed before the video continues
+const AFTER_CURTAIN_MS = 500
 
 const readingTime = (text: string) => Math.max(MIN_CAPTION_MS, text.length * CAPTION_MS_PER_CHAR)
 
@@ -196,16 +198,20 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
     })
   },
 
-  curtain: async ({ page, lang }, use) => {
+  curtain: async ({ page, lang, recording }, use) => {
     await use(async (text, change) => {
       if (narrationPass) return change()
+      // A quiet pause between the scenes, so the caption before it is finished and removed first
+      await page.waitForTimeout(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now()))
+      recording.cues.push({ startMs: Date.now() - recording.startedAt, text: '' })
+      await showCaption(page, '')
       const shownAt = Date.now()
       await showCurtain(page, text[lang] ?? text.fi)
       await page.waitForTimeout(CURTAIN_FADE_MS)
       await change()
       await page.waitForTimeout(Math.max(STEP_DELAY, shownAt + CURTAIN_MIN_MS - Date.now()))
       await showCurtain(page, null)
-      await page.waitForTimeout(CURTAIN_FADE_MS)
+      await page.waitForTimeout(CURTAIN_FADE_MS + AFTER_CURTAIN_MS)
     })
   },
 

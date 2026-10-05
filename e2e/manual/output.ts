@@ -10,10 +10,11 @@ export type PlacedClip = { path: string; offsetMs: number }
 const timestamp = (ms: number) => new Date(ms).toISOString().slice(11, 23)
 
 export const writeVtt = async (path: string, cues: Cue[], endMs: number) => {
-  const blocks = cues.map((cue, i) => {
-    const cueEnd = cues[i + 1]?.startMs ?? endMs
-    return `${i + 1}\n${timestamp(cue.startMs)} --> ${timestamp(cueEnd)}\n${cue.text}`
-  })
+  // An empty cue only ends the one before it
+  const blocks = cues
+    .map((cue, i) => ({ ...cue, endMs: cues[i + 1]?.startMs ?? endMs }))
+    .filter(cue => cue.text)
+    .map((cue, i) => `${i + 1}\n${timestamp(cue.startMs)} --> ${timestamp(cue.endMs)}\n${cue.text}`)
   await fs.writeFile(path, `WEBVTT\n\n${blocks.join('\n\n')}\n`)
 }
 
