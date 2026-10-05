@@ -7,7 +7,7 @@ import { testUsers } from '../fixtures/headers'
 import { test } from '../support/test'
 import { getNarrator } from './narration'
 import { encodeVideo, writeVtt, type Cue, type PlacedClip } from './output'
-import { installOverlay, showCaption } from './overlay'
+import { CURTAIN_FADE_MS, installOverlay, showCaption, showCurtain } from './overlay'
 
 export type Language = 'fi' | 'sv' | 'en'
 export type Caption = { fi: string; sv?: string; en?: string }
@@ -28,6 +28,8 @@ type ManualFixtures = {
   fill: (locator: Locator, text: string) => Promise<void>
   scrollTo: (locator: Locator) => Promise<void>
   pause: (ms?: number) => Promise<void>
+  // Covers changes the viewer should not see, like seeding data, with a card telling what happens meanwhile.
+  curtain: (text: Caption, change: () => Promise<void>) => Promise<void>
 }
 
 // The narration pass only generates the voice clips, so the record pass never waits on them
@@ -70,6 +72,7 @@ const centerOnScreen = async (page: Page, locator: Locator) => {
   }
 }
 
+const CURTAIN_MIN_MS = 2000
 
 const readingTime = (text: string) => Math.max(MIN_CAPTION_MS, text.length * CAPTION_MS_PER_CHAR)
 
@@ -190,6 +193,19 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       if (narrationPass) return locator.scrollIntoViewIfNeeded()
       await locator.evaluate(element => element.scrollIntoView({ behavior: 'smooth', block: 'center' }))
       await page.waitForTimeout(SCROLL_MS)
+    })
+  },
+
+  curtain: async ({ page, lang }, use) => {
+    await use(async (text, change) => {
+      if (narrationPass) return change()
+      const shownAt = Date.now()
+      await showCurtain(page, text[lang] ?? text.fi)
+      await page.waitForTimeout(CURTAIN_FADE_MS)
+      await change()
+      await page.waitForTimeout(Math.max(STEP_DELAY, shownAt + CURTAIN_MIN_MS - Date.now()))
+      await showCurtain(page, null)
+      await page.waitForTimeout(CURTAIN_FADE_MS)
     })
   },
 
