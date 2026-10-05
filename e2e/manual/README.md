@@ -43,6 +43,7 @@ The voice is [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox
 
 - `manual:record` first runs the scenarios without video to generate the clips, then records, so generation never freezes the video.
 - Clips are cached in `.narration-cache/` by model, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
+- A full run without filters deletes clips that have not been used for a week.
 - The voice is set in `GENERATE_OPTIONS` in `tts/server.py`.
 - Without the service (`MANUAL_TTS_URL`) videos are recorded silently with a warning.
 - `MANUAL_VOICE=<name>` uses `tts/voices/<name>.wav`, see `tts/voices/README.md` for consent.

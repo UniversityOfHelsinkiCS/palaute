@@ -77,6 +77,9 @@ const createNarrator = async (): Promise<Narrator | null> => {
         // Write via a temp file so an interrupted run never leaves a broken clip in the cache
         await fs.writeFile(`${clipPath}.tmp`, Buffer.from(await response.arrayBuffer()))
         await fs.rename(`${clipPath}.tmp`, clipPath)
+      } else {
+        // Marks the clip as in use, so pruning keeps it
+        await fs.utimes(clipPath, new Date(), new Date())
       }
 
       return { path: clipPath, durationMs: await clipDurationMs(clipPath), cached }
@@ -87,3 +90,16 @@ const createNarrator = async (): Promise<Narrator | null> => {
 let narrator: Promise<Narrator | null> | undefined
 
 export const getNarrator = () => (narrator ??= createNarrator())
+
+// Deletes the clips that no narration has used since the given time
+export const pruneCache = async (sinceMs: number) => {
+  const files = await fs.readdir(CACHE_DIR).catch(() => [])
+  let pruned = 0
+  for (const file of files) {
+    const filePath = path.join(CACHE_DIR, file)
+    if ((await fs.stat(filePath)).mtimeMs >= sinceMs) continue
+    await fs.rm(filePath)
+    pruned++
+  }
+  if (pruned > 0) console.log(`Pruned ${pruned} unused narration clips`)
+}
