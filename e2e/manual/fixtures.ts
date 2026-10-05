@@ -33,18 +33,18 @@ type ManualFixtures = {
 // The narration pass only generates the voice clips, so the record pass never waits on them
 const narrationPass = process.env.MANUAL_PASS === 'narrate'
 
-const STEP_DELAY = 400
-const TYPE_DELAY = 45
-const CURSOR_MOVE_MS = 350
+const STEP_DELAY = 600
+const TYPE_DELAY = 60
+const CURSOR_MOVE_MS = 500
 const CURSOR_STEPS = 18
 const MIN_CAPTION_MS = 1600
 const CAPTION_MS_PER_CHAR = 60
-const NARRATION_GAP_MS = 300
+const NARRATION_GAP_MS = 600
 // How far into a caption the action starts, so the viewer hears what is about to happen first
-const CAPTION_LEAD_MS = 800
+const CAPTION_LEAD_MS = 1000
 // Kept before the first caption when the page load at the start is cut off
 const INTRO_MS = 500
-const OUTRO_MS = 800
+const OUTRO_MS = 1200
 const SETTLE_MS = 1500
 const SCROLL_MS = 900
 

@@ -19,12 +19,12 @@ MODEL_ID = hashlib.sha256(
 ).hexdigest()[:16]
 LANGUAGES = ["fi", "sv", "en"]
 # A plain, steady tutorial voice. Near-zero temperature always picks the most likely sound (0 divides by zero).
-GENERATE_OPTIONS = {"repetition_penalty": 1.2, "temperature": 0.01, "exaggeration": 0.1, "cfg_weight": 0.4}
+GENERATE_OPTIONS = {"repetition_penalty": 1.2, "temperature": 0.01, "exaggeration": 0.1, "cfg_weight": 0.3}
 
 SAMPLES_PER_TOKEN = 960  # 25 speech tokens per second at 24 kHz
 # The last syllable is still being spoken when the model reaches the end of the text
 TAIL_TOKENS = 12
-SENTENCE_PAUSE_S = 0.35
+SENTENCE_PAUSE_S = 0.5
 
 model = ChatterboxMultilingualTTS.from_local(MODEL_DIR, "cpu")
 default_conds = model.conds
