@@ -15,6 +15,23 @@ const jamiClient = axios.create({
   },
 })
 
+// Logging the whole axios error would include the circular http agent and the API token in config.params
+const formatJamiError = (error: unknown) => {
+  if (axios.isAxiosError(error)) {
+    return {
+      message: error.message,
+      code: error.code,
+      method: error.config?.method,
+      status: error.response?.status,
+      url: error.config?.url,
+    }
+  }
+  if (error instanceof Error) {
+    return { message: error.message, stack: error.stack }
+  }
+  return { message: typeof error === 'string' ? error : 'Unknown error' }
+}
+
 export const getUserIamAccess = async (
   user: User,
   attempt = 1
@@ -34,7 +51,7 @@ export const getUserIamAccess = async (
     return iamAccess
   } catch (error) {
     if (attempt > 3) {
-      logger.error('[Jami] error: ', error)
+      logger.error('[Jami] error: ', formatJamiError(error))
       Sentry.captureException(error)
 
       return {}
@@ -64,7 +81,7 @@ export const getUserIams = async (userId: string) => {
     return data.iamGroups
   } catch (error: any) {
     if (error.response && error.response.status !== 404) {
-      logger.error('[Jami] error: ', error)
+      logger.error('[Jami] error: ', formatJamiError(error))
       Sentry.captureException(error)
     }
 
@@ -87,7 +104,7 @@ export const getUsersIamsById = async (userIds: string[]): Promise<Map<string, s
 
   results.forEach(result => {
     if (result.status === 'rejected') {
-      logger.error('[Jami] error: ', result.reason)
+      logger.error('[Jami] error: ', formatJamiError(result.reason))
       Sentry.captureException(result.reason)
       return
     }
@@ -107,7 +124,7 @@ const testJami = async () => {
     await jamiClient.get('/ping', { timeout: 4000 })
     logger.info('JAMI connected')
   } catch (error) {
-    logger.error(error)
+    logger.error('[Jami] ping failed: ', formatJamiError(error))
     logger.warn('JAMI not responding :(')
     logger.info('Are you sure you are using the latest JAMI image?')
   }

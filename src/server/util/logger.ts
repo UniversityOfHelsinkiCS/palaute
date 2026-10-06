@@ -49,12 +49,21 @@ if (inProduction) {
     silly: 6,
   }
 
-  const prodFormat = winston.format.printf(({ level, ...rest }) =>
-    JSON.stringify({
-      level: levels[level],
-      ...rest,
-    })
-  )
+  const prodFormat = winston.format.printf(({ level, ...rest }) => {
+    try {
+      return JSON.stringify({
+        level: levels[level],
+        ...rest,
+      })
+    } catch {
+      // Logged values may contain circular references (e.g. axios errors), never let logging crash the caller
+      return JSON.stringify({
+        level: levels[level],
+        message: rest.message,
+        logError: 'Failed to stringify log entry',
+      })
+    }
+  })
 
   transports.push(new winston.transports.Console({ format: prodFormat }))
 

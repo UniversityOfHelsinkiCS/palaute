@@ -55,7 +55,7 @@ const create = async (req: AuthenticatedRequest, res: Response) => {
     await updateSummaryAfterFeedbackCreated(feedbackTargetId, newFeedback)
   } catch (err) {
     Sentry.captureException(err)
-    logger.error('Failed to update summary after feedback created', err)
+    logger.error('Failed to update summary after feedback created', { message: err.message, stack: err.stack })
   }
 
   res.send(newFeedback)
@@ -143,7 +143,7 @@ const destroy = async (req: AuthenticatedRequest, res: Response) => {
     await updateSummaryAfterFeedbackDestroyed(userFeedbackTarget.feedbackTargetId, feedback)
   } catch (err) {
     Sentry.captureException(err)
-    logger.error('Failed to update summary after feedback destroyed', err)
+    logger.error('Failed to update summary after feedback destroyed', { message: err.message, stack: err.stack })
   }
 
   res.sendStatus(200)
