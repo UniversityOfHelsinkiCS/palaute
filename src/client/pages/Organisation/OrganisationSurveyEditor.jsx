@@ -175,6 +175,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
               })
             setValue(studentNumbers)
             formikProps.setFieldValue('studentNumbers', studentNumbers)
+            setInputValue('')
           } else {
             setInputValue(newInputValue)
           }
