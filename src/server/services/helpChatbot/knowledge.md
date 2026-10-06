@@ -83,6 +83,8 @@ Top menu (each item is shown only to users it concerns):
 - [[navBar:myFeedbacks]]: surveys the user can answer as a student. Staff see it when they're enrolled as a student on a course or added as a respondent to a programme survey.
 - The user menu (the user's name, top right) has [[navBar:userInformation]] and the UI language (FI/SV/EN).
 
+To find a survey's page: teachers open it from [[navBar:myCourses]]; programme staff also from the programme page's [[organisationSettings:courseRealisationsTab]] tab or from a course unit in [[navBar:courseSummary]]. [[navBar:browseCourses]] doesn't lead there.
+
 A survey's page shows its tabs according to the user's role and the survey's state:
 
 - Teachers see the survey as [[common:preview]] and can't answer it themselves; before opening, responsible teachers get [[feedbackView:editSurvey]] there.
@@ -130,8 +132,8 @@ For all survey types, until the survey opens: the [[feedbackTargetView:surveyQue
 - Course surveys start with the university level questions and possibly the programme's questions, which can't be edited or removed. Students see the university and programme scale and choice questions first, then the teacher's own questions, then the programme and university open questions (so the university's "additional comments" is last). A grouping question is always first.
 - [[questionEditor:addQuestion]] adds a question: [[questionEditor:likertQuestion]] (scale 1-5), [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] or [[questionEditor:multipleChoiceQuestion]]. [[questionEditor:addTextualContent]] adds a text section. Each question is saved with its own [[questionEditor:done]]. Each question can have a [[questionEditor:description]]. Questions can be marked [[common:required]], duplicated, moved and removed.
 - Language versions: the editor has Finnish, Swedish and English fields side by side. Students see the survey in their own UI language; a missing translation is shown in Finnish, or else English, or else Swedish. [[editFeedbackTarget:showPreview]] with [[editFeedbackTarget:translationLanguage]] shows each language.
-- Carry-over (course surveys): when a new realisation's survey is first opened in Norppa (or its reminder email is sent), it copies the own questions of the latest earlier realisation of the same course unit that shares a teacher with it. After that the surveys are independent. A new version of the course unit in Sisu breaks the chain.
-- [[editFeedbackTarget:copyFromCourseButton]] copies questions and adds them after the existing ones: in course surveys from the user's other courses, in interim feedback and programme surveys from programme surveys. In interim feedback and programme surveys, [[editFeedbackTarget:copyUniversityQuestions]] adds the university level questions.
+- Carry-over (course surveys): the first time anyone views a new realisation's survey page in Norppa (or its reminder email is sent), well before the survey opens, it copies the own questions of the latest earlier realisation of the same course unit that shares a teacher with it. After that the surveys are independent. A new version of the course unit in Sisu breaks the chain.
+- [[editFeedbackTarget:copyFromCourseButton]] copies questions and adds them after the existing ones: in course surveys from the user's other courses, in programme surveys from other programme surveys. In interim feedback and programme surveys, [[editFeedbackTarget:copyUniversityQuestions]] adds the university level questions.
 - Groups: in course surveys with two or more Sisu groups, answers can be viewed by group automatically. In any survey, [[groups:addGroupingQuestion]] adds a question where students choose their group (one per survey; it replaces the Sisu grouping). Answers per group are shown only if each group has either no answers or at least 5.
 - Open answers have no practical length limit.
 
