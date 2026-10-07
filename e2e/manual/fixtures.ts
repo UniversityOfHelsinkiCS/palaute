@@ -6,7 +6,7 @@ import path from 'node:path'
 import { expect, test } from '../support/test'
 import { createDemo, type Demo } from './demo'
 import { getNarrator } from './narration'
-import { encodeVideo, writeVtt, type Cue, type PlacedClip } from './output'
+import { encodeVideo, type PlacedClip } from './output'
 import { CURTAIN_FADE_MS, installOverlay, showCaption, showCurtain } from './overlay'
 
 export type Language = 'fi' | 'sv' | 'en'
@@ -17,7 +17,8 @@ export type ManualOptions = { lang: Language }
 type Recording = {
   startedAt: number
   speakingUntil: number
-  cues: Cue[]
+  // Ms from the start, null before the first caption
+  firstCaptionMs: number | null
   clips: PlacedClip[]
 }
 
@@ -117,7 +118,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       const recording: Recording = {
         startedAt: Date.now(),
         speakingUntil: 0,
-        cues: [],
+        firstCaptionMs: null,
         clips: [],
       }
 
@@ -126,15 +127,10 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       if (!narrationPass) await page.waitForTimeout(Math.max(0, recording.speakingUntil - Date.now()) + OUTRO_MS)
       const video = page.video()
       // Cut the blank page and loading before the first caption
-      const trimMs = Math.max(0, (recording.cues[0]?.startMs ?? 0) - INTRO_MS)
-      const durationMs = Date.now() - recording.startedAt - trimMs
+      const trimMs = Math.max(0, (recording.firstCaptionMs ?? 0) - INTRO_MS)
       await page.close()
       if (narrationPass || !video || testInfo.status !== testInfo.expectedStatus) return
 
-      const cues = recording.cues.map(cue => ({
-        ...cue,
-        startMs: cue.startMs - trimMs,
-      }))
       const clips = recording.clips.map(clip => ({
         ...clip,
         offsetMs: clip.offsetMs - trimMs,
@@ -145,7 +141,6 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       await fs.mkdir(dir, { recursive: true })
       const webmPath = path.join(dir, `${slug}.webm`)
       await video.saveAs(webmPath)
-      await writeVtt(path.join(dir, `${slug}.vtt`), cues, durationMs)
       const videoPath = await encodeVideo(webmPath, clips, trimMs)
       console.log(`Saved ${path.relative(process.cwd(), videoPath)}`)
     },
@@ -164,14 +159,14 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
 
       // The video starts just before the first caption, so the page must have finished rendering by then.
       // This wait is cut out of the video.
-      if (recording.cues.length === 0) {
+      if (recording.firstCaptionMs === null) {
         await page.waitForLoadState('networkidle')
         await page.waitForTimeout(SETTLE_MS)
       }
       // Actions run while a caption is spoken, but the next caption waits for the previous one to finish
       await page.waitForTimeout(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now()))
       const startMs = Date.now() - recording.startedAt
-      recording.cues.push({ startMs, text })
+      recording.firstCaptionMs ??= startMs
       if (clip) recording.clips.push({ path: clip.path, offsetMs: startMs })
       await showCaption(page, text)
       recording.speakingUntil = Date.now() + (clip ? clip.durationMs : readingTime(text))
@@ -226,7 +221,6 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       if (narrationPass) return change()
       // A quiet pause between the scenes, so the caption before it is finished and removed first
       await page.waitForTimeout(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now()))
-      recording.cues.push({ startMs: Date.now() - recording.startedAt, text: '' })
       await showCaption(page, '')
       const shownAt = Date.now()
       await showCurtain(page, text[lang] ?? text.fi)

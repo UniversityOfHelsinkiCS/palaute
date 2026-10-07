@@ -10,7 +10,7 @@ npm run manual:record              # every scenario
 npm run manual:record -- opiskelija # scenarios whose file name matches
 ```
 
-Videos go to `videos/<lang>/<scenario>.mp4` + `.vtt` (gitignored). Without `ffmpeg` you get `.webm`. Failed scenarios write nothing there, see `test-results/manual/`.
+Videos go to `videos/<lang>/<scenario>.mp4` (gitignored). Without `ffmpeg` you get `.webm`. Failed scenarios write nothing there, see `test-results/manual/`.
 
 The app is a production build, so it looks like production, but its server is not in production mode: mail is only logged and nothing connects to production services. The test fails if the browser requests anything outside the app, except the font.
 
