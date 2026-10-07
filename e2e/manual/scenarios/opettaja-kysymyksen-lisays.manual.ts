@@ -1,31 +1,30 @@
-import { teacher } from '../../fixtures/headers'
 import { byDataCy } from '../../support/test'
 import { expect, manualTest } from '../fixtures'
+import { openFromMyTeaching } from '../steps'
+import { teacher } from '../users'
 
-manualTest('Opettaja lisää kyselyyn oman kysymyksen', async ({ page, api, lang, loginAs, caption, click, fill }) => {
-  await api.createFeedbackTarget({ extraStudents: 5 })
-  const fbtId = await api.getTestFbtId()
+manualTest('Opettaja lisää kyselyyn oman kysymyksen', async ({ page, demo, lang, loginAs, caption, click, fill }) => {
+  await demo.seed('ongoing')
+  const fbtId = demo.fbtId
   await loginAs(teacher)
 
   await caption({ fi: 'Tässä videossa lisätään kurssin palautekyselyyn opettajan oma kysymys.' })
 
-  await caption({ fi: 'Kurssi löytyy Kyselyni-sivulta päättyneiden kurssien alta.' })
-  await click(byDataCy(page, 'navbar-links').locator('a[href="/courses"]'))
-  await click(byDataCy(page, 'my-teaching-ended-tab'))
-  await click(byDataCy(page, 'my-teaching-course-unit-accordion-TEST_COURSE'))
-
-  await caption({ fi: 'Avataan kurssin palautekysely.' })
-  await click(page.locator(`a[href*="/targets/${fbtId}"]`).first())
+  await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
   await caption({ fi: 'Kysymyksiä muokataan Kysymykset-välilehdellä.' })
   await click(byDataCy(page, 'feedback-target-settings-tab'))
 
-  await caption({ fi: 'Lisätään uusi kysymys ja valitaan tyypiksi asteikkokysymys.' })
+  await caption({ fi: 'Lisätään uusi kysymys.' })
   await click(byDataCy(page, 'question-editor-add-question'))
+
+  await caption({ fi: 'Valitaan kysymyksen tyypiksi asteikkokysymys.' })
   await click(byDataCy(page, 'question-editor-type-menu-select-likert'))
 
-  await caption({ fi: 'Kirjoitetaan kysymys ja sen kuvaus.' })
+  await caption({ fi: 'Kirjoitetaan kysymys.' })
   await fill(page.locator(`input[id^=likert-label-${lang}-questions]`), 'Kuinka hyödyllisiä harjoitustehtävät olivat?')
+
+  await caption({ fi: 'Kirjoitetaan kysymykselle kuvaus.' })
   await fill(
     page.locator(`input[id^=likert-description-${lang}-questions]`),
     'Arvioi harjoitustehtävien hyötyä oppimisellesi.'

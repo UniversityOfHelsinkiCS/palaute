@@ -29,7 +29,7 @@
     "prepare": "husky",
     "translations": "node ./tools/analyzeTranslations.js",
     "ndc": "npx no-dead-code@latest --ignore config",
-    "manual:setup": "docker compose -f docker-compose.test.yml --profile manual up --build",
+    "manual:setup": "docker compose -f docker-compose.ci.yml -f docker-compose.manual.yml --profile manual up --build",
     "manual:record": "tsx e2e/manual/record.ts"
   },
   "lint-staged": {

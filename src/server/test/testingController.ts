@@ -7,6 +7,7 @@ import { getUniversitySurvey } from '../services/surveys'
 import { AuthenticatedRequest } from '../types'
 import { ApplicationError } from '../util/ApplicationError'
 import { inProduction } from '../util/config'
+import { seedManual } from './manual/seed'
 import { seedDb, seedUsers, seedOrganisationCorrespondent } from './seed'
 import { seedFeedbacks } from './seedFeedbacks'
 import { seedFeedbackTargetsForTeacher } from './seedFeedbackTargets'
@@ -67,6 +68,18 @@ const resetDb = async (req: AuthenticatedRequest, res: Response) => {
   res.sendStatus(204)
 }
 
+const seedManualHandler = async (req: AuthenticatedRequest, res: Response) => {
+  const { users, teacherId, studentIds, feedbackFromIds, course } = req.body
+  const fbt = await seedManual({
+    users: users.map(userHeadersToUser),
+    teacherId,
+    studentIds,
+    feedbackFromIds,
+    course,
+  })
+  res.send({ id: fbt.id })
+}
+
 const seedFeedbacksHandler = async (req: AuthenticatedRequest, res: Response) => {
   const { feedbackDatas } = req.body
   await seedFeedbacks(feedbackDatas)
@@ -108,6 +121,7 @@ router.post('/seed-feedback-targets', seedFeedbackTargets)
 router.post('/seed-feedbacks', seedFeedbacksHandler)
 router.post('/seed-organisation-correspondent', seedOrganisationCorrespondentHandler)
 router.post('/reset-db', resetDb)
+router.post('/seed-manual', seedManualHandler)
 
 router.get('/test-fbt-id', getTestFbtId)
 router.get('/university-questions', getUniversityQuestions)

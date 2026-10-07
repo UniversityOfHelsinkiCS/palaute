@@ -1,13 +1,13 @@
-import { student, teacher } from '../../fixtures/headers'
 import { byDataCy, contains, textField } from '../../support/test'
 import { expect, manualTest } from '../fixtures'
-import { closeNotification, ongoingCourse, openFromMyTeaching } from '../steps'
+import { closeNotification, openFromMyTeaching } from '../steps'
+import { student, teacher } from '../users'
 
 manualTest(
   'Opettaja ottaa käyttöön jatkuvan palautteen',
-  async ({ page, api, loginAs, caption, click, fill, curtain }) => {
-    await api.createFeedbackTarget({ extraStudents: 5, ...ongoingCourse() })
-    const fbtId = await api.getTestFbtId()
+  async ({ page, demo, loginAs, caption, click, fill, curtain }) => {
+    await demo.seed('ongoing')
+    const fbtId = demo.fbtId
     await loginAs(teacher)
 
     await caption({
@@ -55,7 +55,7 @@ manualTest(
     })
     const feedback = contains(page, 'Luennoilla voisi olla enemmän esimerkkejä.')
     await curtain({ fi: 'Opiskelija antaa palautetta…' }, async () => {
-      await api.giveContinuousFeedback(student, 'Luennoilla voisi olla enemmän esimerkkejä.')
+      await demo.giveContinuousFeedback(student, 'Luennoilla voisi olla enemmän esimerkkejä.')
       // Reopening the tab fetches the new feedback faster than reloading the page
       const settingsTab = byDataCy(page, 'feedback-target-settings-tab')
       // Dispatched, so the cursor stays where the viewer last saw it

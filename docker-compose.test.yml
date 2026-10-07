@@ -54,18 +54,3 @@ services:
     environment:
       - POSTGRES_PASSWORD=postgres
     container_name: palaute_test_jami_db
-
-  # Narration for the user manual videos, see e2e/manual/README.md
-  tts:
-    build: ./e2e/manual/tts
-    image: palaute_manual_tts
-    profiles: [manual]
-    volumes:
-      - ./e2e/manual/tts/voices:/voices:ro
-    read_only: true
-    tmpfs: [/tmp]
-    cap_drop: [ALL]
-    security_opt: [no-new-privileges:true]
-    ports:
-      - 127.0.0.1:5005:5005
-    container_name: palaute_manual_tts

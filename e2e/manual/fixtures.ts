@@ -3,8 +3,8 @@ import type { Locator, Page } from '@playwright/test'
 import fs from 'node:fs/promises'
 import path from 'node:path'
 
-import { testUsers } from '../fixtures/headers'
-import { test } from '../support/test'
+import { expect, test } from '../support/test'
+import { createDemo, type Demo } from './demo'
 import { getNarrator } from './narration'
 import { encodeVideo, writeVtt, type Cue, type PlacedClip } from './output'
 import { CURTAIN_FADE_MS, installOverlay, showCaption, showCurtain } from './overlay'
@@ -22,6 +22,7 @@ type Recording = {
 }
 
 type ManualFixtures = {
+  demo: Demo
   recording: Recording
   caption: (text: Caption, minMs?: number) => Promise<void>
   click: (locator: Locator) => Promise<void>
@@ -76,16 +77,38 @@ const CURTAIN_MIN_MS = 2000
 // Lets the viewer see what changed before the video continues
 const AFTER_CURTAIN_MS = 500
 
+// index.html loads Open Sans from Google Fonts, without it the videos would show a fallback font
+const FONT_ORIGINS = ['https://fonts.googleapis.com', 'https://fonts.gstatic.com']
+
 const readingTime = (text: string) => Math.max(MIN_CAPTION_MS, text.length * CAPTION_MS_PER_CHAR)
 
 export const manualTest = test.extend<ManualOptions & ManualFixtures>({
   lang: ['fi', { option: true }],
 
-  // The UI language comes from the seeded user, which is only created once per reset
-  resetDb: async ({ api, lang }, use) => {
-    await api.resetDb()
-    await api.seedUsers(testUsers.map(user => ({ ...user, preferredLanguage: lang })))
+  // Each scenario seeds the demo data itself
+  // eslint-disable-next-line no-empty-pattern -- Playwright requires the destructuring
+  resetDb: async ({}, use) => {
     await use()
+  },
+
+  // The UI language comes from the seeded users
+  demo: async ({ request, lang }, use) => {
+    await use(createDemo(request, lang))
+  },
+
+  // Fails the video if the browser talks to anything but the local app, like Sentry or another real service
+  page: async ({ page, baseURL }, use) => {
+    const appOrigin = new URL(baseURL!).origin
+    const blocked: string[] = []
+    await page.route('**/*', route => {
+      const request = route.request()
+      const { origin } = new URL(request.url())
+      if (origin === appOrigin || (request.method() === 'GET' && FONT_ORIGINS.includes(origin))) return route.continue()
+      blocked.push(`${request.method()} ${request.url()}`)
+      return route.abort('blockedbyclient')
+    })
+    await use(page)
+    expect(blocked).toEqual([])
   },
 
   recording: [

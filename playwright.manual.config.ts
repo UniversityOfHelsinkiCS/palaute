@@ -16,7 +16,7 @@ export default defineConfig<ManualOptions>({
   timeout: narrationPass ? 0 : 180_000,
   reporter: 'list',
   use: {
-    baseURL: process.env.BASE_URL ?? 'http://localhost:3000',
+    baseURL: process.env.BASE_URL ?? 'http://localhost:8000',
     actionTimeout: 15_000,
     navigationTimeout: 60_000,
     video: narrationPass ? 'off' : { mode: 'retain-on-failure', size: viewport },

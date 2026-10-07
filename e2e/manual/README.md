@@ -1,24 +1,26 @@
 # User manual videos
 
-Records user flows as videos with a cursor, captions, an AI-generated voice and a WebVTT subtitle file. Scenarios are Playwright tests on the e2e fixtures, so they reset and seed the database like the e2e tests.
+Records user flows as videos with a cursor, captions, and an AI-generated voice. Scenarios are Playwright tests that seed made-up demo data (`demo.ts`, `users.ts`, `src/server/test/manual/`).
 
 ## Running
 
 ```bash
-npm run manual:setup               # the e2e app (port 3000) and the voice service
+npm run manual:setup               # the app (port 8000) and the voice service
 npm run manual:record              # every scenario
 npm run manual:record -- opiskelija # scenarios whose file name matches
 ```
 
 Videos go to `videos/<lang>/<scenario>.mp4` + `.vtt` (gitignored). Without `ffmpeg` you get `.webm`. Failed scenarios write nothing there, see `test-results/manual/`.
 
+The app is a production build, so it looks like production, but its server is not in production mode: mail is only logged and nothing connects to production services. The test fails if the browser requests anything outside the app, except the font.
+
 ## Writing a scenario
 
 Add `scenarios/<name>.manual.ts`. One file is one video.
 
 ```ts
-manualTest('Otsikko', async ({ page, api, loginAs, caption, click, fill }) => {
-  await api.createFeedbackTarget()
+manualTest('Otsikko', async ({ page, demo, loginAs, caption, click, fill }) => {
+  await demo.seed('ongoing')
   await loginAs(teacher)
 
   await caption({ fi: 'Mitä seuraavaksi tapahtuu.' })
@@ -27,10 +29,11 @@ manualTest('Otsikko', async ({ page, api, loginAs, caption, click, fill }) => {
 })
 ```
 
-- `caption(text, minMs?)` shows the text, adds a subtitle cue and plays its narration.
+- `caption(text, minMs?)` shows the text and plays its narration.
 - `click` / `fill` move the cursor to the element first, `fill` types character by character.
 - `scrollTo(locator)` scrolls smoothly, `pause(ms?)` waits.
-- `steps.ts` has shared steps. Seed the course so it is on the My surveys tab a user would expect.
+- `demo.seed(stage, { feedback })` replaces all data with the demo course at that stage. Pick the stage where a user would meet the feature.
+- `steps.ts` has shared steps.
 - End with an `expect`, so a broken scenario fails instead of recording a wrong video.
 
 ## Languages
