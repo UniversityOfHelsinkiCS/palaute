@@ -21,7 +21,6 @@ import {
   TEST_ORGANISATION_ID,
   TEST_ORGANISATION_CODE,
   TEST_COURSE_UNIT_ID,
-  TEST_COURSE_UNIT_GROUP_ID,
   TEST_COURSE_CODE,
   TEST_COURSE_REALISATION_ID,
 } from './testIds'
@@ -137,7 +136,6 @@ export const seedDb = async () => {
 
   await createTestObject(CourseUnit, {
     id: TEST_COURSE_UNIT_ID,
-    groupId: TEST_COURSE_UNIT_GROUP_ID,
     name: {
       fi: 'Testauskurssi',
       en: 'Testauskurssi',

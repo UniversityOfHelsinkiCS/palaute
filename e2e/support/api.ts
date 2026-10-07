@@ -48,15 +48,11 @@ export const createApi = (request: APIRequestContext) => {
       extraStudents = 0,
       opensAt,
       closesAt,
-      courseStartDate,
-      courseEndDate,
     }: {
       enrolledStudent?: TestUser
       extraStudents?: number
       opensAt?: Date | string
       closesAt?: Date | string
-      courseStartDate?: Date | string
-      courseEndDate?: Date | string
     } = {}): Promise<FeedbackTarget[]> => {
       const feedbackTargets = await send('POST', '/test/seed-feedback-targets', {
         data: {
@@ -65,8 +61,6 @@ export const createApi = (request: APIRequestContext) => {
           opensAt: opensAt ?? addDays(new Date(), 1),
           closesAt: closesAt ?? addDays(new Date(), 2),
           extraStudents,
-          courseStartDate,
-          courseEndDate,
         },
         headers: admin,
       })
@@ -78,35 +72,23 @@ export const createApi = (request: APIRequestContext) => {
 
     getUniversityQuestions: (): Promise<Question[]> => send('GET', '/test/university-questions'),
 
-    giveFeedback: async (headers: TestUser, answer: (question: Question) => string = () => '3') => {
+    giveFeedback: async (headers: TestUser) => {
       const id = await api.getTestFbtId()
       const questions = await api.getUniversityQuestions()
       return send('POST', '/api/feedbacks', {
         headers,
         data: {
           feedbackTargetId: id,
-          data: questions.map(q => ({ questionId: q.id, data: answer(q) })),
+          data: questions.map(q => ({ questionId: q.id, data: '3' })),
         },
       })
     },
 
-    giveContinuousFeedback: async (headers: TestUser, feedback: string) =>
-      send('POST', `/api/continuous-feedback/${await api.getTestFbtId()}`, {
-        headers,
-        data: { feedback },
-      }),
-
     createOrganisationSurvey: (orgCode: string, body: unknown): Promise<FeedbackTarget> =>
-      send('POST', `/api/organisations/${orgCode}/surveys`, {
-        headers: admin,
-        data: body,
-      }),
+      send('POST', `/api/organisations/${orgCode}/surveys`, { headers: admin, data: body }),
 
     giveOrganisationSurveyFeedback: async (survey: FeedbackTarget, headers: TestUser) => {
-      const options = {
-        headers,
-        data: { feedbackTargetId: survey.id, data: [] },
-      }
+      const options = { headers, data: { feedbackTargetId: survey.id, data: [] } }
       for (let attempt = 0; ; attempt++) {
         try {
           return await send('POST', '/api/feedbacks', options)
@@ -117,10 +99,7 @@ export const createApi = (request: APIRequestContext) => {
     },
 
     createInterimFeedback: (parentId: number, body: unknown): Promise<FeedbackTarget> =>
-      send('POST', `/api/feedback-targets/${parentId}/interimFeedbacks`, {
-        headers: admin,
-        data: body,
-      }),
+      send('POST', `/api/feedback-targets/${parentId}/interimFeedbacks`, { headers: admin, data: body }),
 
     giveInterimFeedback: (interimFeedback: FeedbackTarget, headers: TestUser) =>
       send('POST', '/api/feedbacks', {
@@ -147,10 +126,7 @@ export const createApi = (request: APIRequestContext) => {
     initSummary: (user: TestUser) => send('POST', '/test/init-summary', { data: user }),
 
     initVersionedSummary: (user: TestUser) =>
-      send('POST', '/test/init-versioned-summary', {
-        data: user,
-        timeout: 120_000,
-      }),
+      send('POST', '/test/init-versioned-summary', { data: user, timeout: 120_000 }),
   }
 
   const setFeedbackDatesFromNow = async (open: number, close: number) => {

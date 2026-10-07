@@ -1,4 +1,4 @@
-import { CourseRealisation, FeedbackTarget, UserFeedbackTarget, User } from '../models'
+import { FeedbackTarget, UserFeedbackTarget, User } from '../models'
 import { TEST_COURSE_UNIT_ID, TEST_COURSE_REALISATION_ID } from './testIds'
 import { createTestObject } from './utils'
 
@@ -8,27 +8,13 @@ export const seedFeedbackTargetsForTeacher = async ({
   opensAt,
   closesAt,
   extraStudents = 0,
-  courseStartDate,
-  courseEndDate,
 }: {
   teacher: any
   student: any
   opensAt: string
   closesAt: string
   extraStudents?: number
-  courseStartDate?: string
-  courseEndDate?: string
 }) => {
-  if (courseStartDate || courseEndDate) {
-    await CourseRealisation.update(
-      {
-        ...(courseStartDate && { startDate: new Date(courseStartDate) }),
-        ...(courseEndDate && { endDate: new Date(courseEndDate) }),
-      },
-      { where: { id: TEST_COURSE_REALISATION_ID } }
-    )
-  }
-
   const fbt = await createTestObject(FeedbackTarget, {
     name: {
       fi: 'Palautekohde',
