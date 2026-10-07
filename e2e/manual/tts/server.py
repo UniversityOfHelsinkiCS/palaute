@@ -9,7 +9,13 @@ from pathlib import Path
 
 import soundfile
 import torch
+from chatterbox.models.t3.inference.alignment_stream_analyzer import AlignmentStreamAnalyzer
 from chatterbox.mtl_tts import ChatterboxMultilingualTTS
+
+# Its check for a token repeated twice ends the speech mid-word on long Finnish sounds.
+# Without the tokens the check never fires, the cut in speak() still stops any babbling.
+analyzer_step = AlignmentStreamAnalyzer.step
+AlignmentStreamAnalyzer.step = lambda self, logits, next_token=None: analyzer_step(self, logits)
 
 MODEL_DIR = Path(os.environ["MODEL_DIR"])
 VOICE_DIR = Path(os.environ["VOICE_DIR"])
