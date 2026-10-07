@@ -124,7 +124,7 @@
     "minimist": "1.2.8",
     "oxfmt": "0.59.0",
     "oxlint": "1.74.0",
-    "oxlint-tsgolint": "0.24.0",
+    "oxlint-tsgolint": "7.0.2003",
     "rimraf": "6.1.2",
     "tsx": "4.23.1",
     "typescript": "7.0.2"
