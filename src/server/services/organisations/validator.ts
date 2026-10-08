@@ -12,9 +12,8 @@ export const validateStudentNumbers = async (studentNumbers: string[]) => {
     })
   ).map(({ studentNumber }) => studentNumber)
 
-  const nonExistingStudentNumbers = studentNumbers.filter(
-    studentNumber => !existingStudentNumbers.includes(studentNumber)
-  )
+  const existingStudentNumberSet = new Set(existingStudentNumbers)
+  const nonExistingStudentNumbers = studentNumbers.filter(studentNumber => !existingStudentNumberSet.has(studentNumber))
 
   return {
     validStudentNumbers: existingStudentNumbers,
