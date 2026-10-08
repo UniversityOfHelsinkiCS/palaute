@@ -26,7 +26,7 @@ export const router = express()
 
 initializeSentry()
 
-router.use(json())
+router.use(json({ limit: '1mb' }))
 router.use(shibbolethCharsetMiddleware)
 router.use(accessLogger)
 
