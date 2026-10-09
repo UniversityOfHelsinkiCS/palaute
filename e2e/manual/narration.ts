@@ -34,11 +34,14 @@ const clipDurationMs = async (clipPath: string) => {
   return Math.round(parseFloat(stdout) * 1000)
 }
 
-const exists = (file: string) =>
-  fs.access(file).then(
-    () => true,
-    () => false
-  )
+const exists = async (file: string) => {
+  try {
+    await fs.access(file)
+    return true
+  } catch {
+    return false
+  }
+}
 
 const getHealth = async (): Promise<{
   languages: string[]
@@ -112,7 +115,13 @@ export const getNarrator = () => (narrator ??= createNarrator())
 
 // Deletes the clips that no narration has used since the given time
 export const pruneCache = async (sinceMs: number) => {
-  const files = await fs.readdir(CACHE_DIR).catch(() => [])
+  let files: string[]
+  try {
+    files = await fs.readdir(CACHE_DIR)
+  } catch {
+    // No cache yet
+    return
+  }
   let pruned = 0
   for (const file of files) {
     const filePath = path.join(CACHE_DIR, file)
