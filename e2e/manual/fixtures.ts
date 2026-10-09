@@ -6,7 +6,7 @@ import path from 'node:path'
 import { expect, test } from '../support/test'
 import { createDemo, type Demo } from './demo'
 import { getNarrator } from './narration'
-import { encodeVideo, type PlacedClip } from './output'
+import { encodeVideo, type PlacedClip, updateIndex } from './output'
 import { CURTAIN_FADE_MS, installOverlay, showCaption, showCurtain } from './overlay'
 
 export type Language = 'fi' | 'sv' | 'en'
@@ -20,6 +20,7 @@ type Recording = {
   // Ms from the start, null before the first caption
   firstCaptionMs: number | null
   clips: PlacedClip[]
+  captions: string[]
 }
 
 type ManualFixtures = {
@@ -128,6 +129,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
         speakingUntil: 0,
         firstCaptionMs: null,
         clips: [],
+        captions: [],
       }
 
       await use(recording)
@@ -136,6 +138,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       const video = page.video()
       // Cut the blank page and loading before the first caption
       const trimMs = Math.max(0, (recording.firstCaptionMs ?? 0) - INTRO_MS)
+      const durationMs = Date.now() - recording.startedAt - trimMs
       await page.close()
       if (narrationPass || !video || testInfo.status !== testInfo.expectedStatus) return
 
@@ -151,6 +154,13 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       const webmPath = path.join(dir, `${slug}.webm`)
       await video.saveAs(webmPath)
       const videoPath = await encodeVideo(webmPath, clips, trimMs)
+      await updateIndex(dir, {
+        slug,
+        title: testInfo.title,
+        url: `/manual/${lang}/${path.basename(videoPath)}`,
+        durationMs,
+        captions: recording.captions,
+      })
       console.log(`Saved ${path.relative(process.cwd(), videoPath)}`)
     },
     { auto: true },
@@ -177,6 +187,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       await page.waitForTimeout(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now()))
       const startMs = Date.now() - recording.startedAt
       recording.firstCaptionMs ??= startMs
+      recording.captions.push(text)
       if (clip) recording.clips.push({ path: clip.path, offsetMs: startMs })
       await showCaption(page, text)
       recording.speakingUntil = Date.now() + (clip ? clip.durationMs : readingTime(text))
@@ -233,6 +244,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       await page.waitForTimeout(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now()))
       await showCaption(page, '')
       const shownAt = Date.now()
+      recording.captions.push(text[lang] ?? text.fi)
       await showCurtain(page, text[lang] ?? text.fi)
       await page.waitForTimeout(CURTAIN_FADE_MS)
       await change()
