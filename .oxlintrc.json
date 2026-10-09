@@ -55,5 +55,13 @@
     "typescript/no-unnecessary-type-assertion": "off",
     // very expensive rule for some reason, costs >50% of lint budget. not worth it.
     "typescript/no-unnecessary-type-arguments": "off"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["e2e/manual/**"],
+      "rules": {
+        "no-console": "off"
+      }
+    }
+  ]
 }
