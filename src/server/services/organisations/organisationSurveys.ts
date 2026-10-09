@@ -26,7 +26,6 @@ import { LANGUAGES } from '../../util/config'
 import { i18n } from '../../util/i18n'
 import { logger } from '../../util/logger'
 import cache from '../feedbackTargets/feedbackTargetCache'
-import { getFeedbackTargetSurveys } from '../surveys/getFeedbackTargetSurveys'
 
 const getOrganisationCourseUnit = async (organisationId: string) => {
   const organisationCourseUnit = await CourseUnit.findOne({
@@ -400,8 +399,6 @@ export const getSurveysForOrganisation = async (organisationId: string) => {
   const studentCountById = new Map(studentCounts.map(({ feedbackTargetId, count }) => [feedbackTargetId, count]))
 
   for (const target of organisationSurveys) {
-    const surveys = await getFeedbackTargetSurveys(target)
-    target.populateSurveys(surveys)
     target.setDataValue('studentCount', studentCountById.get(target.id) ?? 0)
   }
 
