@@ -373,20 +373,6 @@ export const getSurveysForOrganisation = async (organisationId: string) => {
       },
       {
         model: UserFeedbackTarget,
-        attributes: ['id'],
-        as: 'students',
-        required: false,
-        where: { accessStatus: 'STUDENT' },
-        include: [
-          {
-            model: User,
-            attributes: ['studentNumber'],
-            as: 'user',
-          },
-        ],
-      },
-      {
-        model: UserFeedbackTarget,
         attributes: ['id', 'userId', 'accessStatus'],
         as: 'userFeedbackTargets',
         required: false,
@@ -404,9 +390,19 @@ export const getSurveysForOrganisation = async (organisationId: string) => {
     order: [['courseRealisation', 'endDate', 'DESC']],
   })
 
+  const studentCounts = await UserFeedbackTarget.count({
+    where: {
+      feedbackTargetId: organisationSurveys.map(({ id }) => id),
+      accessStatus: 'STUDENT',
+    },
+    group: ['feedbackTargetId'],
+  })
+  const studentCountById = new Map(studentCounts.map(({ feedbackTargetId, count }) => [feedbackTargetId, count]))
+
   for (const target of organisationSurveys) {
     const surveys = await getFeedbackTargetSurveys(target)
     target.populateSurveys(surveys)
+    target.setDataValue('studentCount', studentCountById.get(target.id) ?? 0)
   }
 
   return organisationSurveys
