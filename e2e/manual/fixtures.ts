@@ -144,7 +144,8 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
         offsetMs: clip.offsetMs - trimMs,
       }))
 
-      const dir = path.resolve(testInfo.project.testDir, '../videos', lang)
+      // Served by the app, also by the dev server
+      const dir = path.resolve(__dirname, '../../public/manual', lang)
       const slug = path.basename(testInfo.file, '.manual.ts')
       await fs.mkdir(dir, { recursive: true })
       const webmPath = path.join(dir, `${slug}.webm`)
