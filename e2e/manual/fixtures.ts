@@ -54,6 +54,14 @@ const SCROLL_MS = 900
 // Share of the screen height at the top and bottom where an action is scrolled to the middle first
 const SCREEN_EDGE = 0.25
 
+// CI lists the scenarios to generate narration for, and fails a recording without it
+const missingNarration = async (file: string, text: string) => {
+  const listFile = process.env.MANUAL_MISSING_FILE
+  if (listFile) return fs.appendFile(listFile, `${path.basename(file)}\n`)
+  if (process.env.CI) throw new Error(`No narration for: ${text}`)
+  console.warn(`No narration for: ${text}`)
+}
+
 // The browser would only scroll an element just inside the edge of the screen, away from the viewer's focus
 const centerOnScreen = async (page: Page, locator: Locator) => {
   await locator.waitFor()
@@ -147,13 +155,14 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
     { auto: true },
   ],
 
-  caption: async ({ page, lang, recording }, use) => {
+  caption: async ({ page, lang, recording }, use, testInfo) => {
     await use(async (caption, minMs = 0) => {
       const text = caption[lang] ?? caption.fi
       if (!caption[lang]) console.warn(`No ${lang} caption, using fi: ${caption.fi}`)
 
       const narrator = await getNarrator()
-      const clip = await narrator?.narrate(text, lang)
+      const clip = await narrator.narrate(text, lang)
+      if (!clip && !narrator.online) await missingNarration(testInfo.file, text)
       if (narrationPass) return
       if (clip && !clip.cached) console.warn(`Narration was not pre-generated, the video freezes here: ${text}`)
 

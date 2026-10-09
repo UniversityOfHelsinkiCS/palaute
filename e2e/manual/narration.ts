@@ -9,11 +9,15 @@ const execFileAsync = promisify(execFile)
 const TTS_URL = process.env.MANUAL_TTS_URL ?? 'http://localhost:5005'
 const VOICE = process.env.MANUAL_VOICE ?? 'default'
 const CACHE_DIR = path.resolve(__dirname, '.narration-cache')
+// A change to the service generates the clips again
+const TTS_FILES = ['Dockerfile', 'pyproject.toml', 'uv.lock', 'server.py']
 
 type Clip = { path: string; durationMs: number }
 
 type Narrator = {
-  // Null when the voice service does not speak the language
+  // Without the voice service only cached clips are available
+  online: boolean
+  // Null when the clip is not cached and the service is not available or does not speak the language
   narrate: (text: string, lang: string) => Promise<(Clip & { cached: boolean }) | null>
 }
 
@@ -36,20 +40,29 @@ const exists = (file: string) =>
     () => false
   )
 
-const createNarrator = async (): Promise<Narrator | null> => {
-  let health: { model: string; languages: string[]; voices: string[] }
+const getHealth = async (): Promise<{
+  languages: string[]
+  voices: string[]
+} | null> => {
   try {
     const response = await fetch(`${TTS_URL}/health`)
     if (!response.ok) throw new Error(`Status ${response.status}`)
-    health = await response.json()
+    return await response.json()
   } catch {
-    console.warn(`No voice service at ${TTS_URL}, recording without narration`)
     return null
   }
-  if (!health.voices.includes(VOICE))
+}
+
+const createNarrator = async (): Promise<Narrator> => {
+  const health = await getHealth()
+  if (!health) console.warn(`No voice service at ${TTS_URL}, using only cached narration`)
+  if (health && !health.voices.includes(VOICE))
     throw new Error(`Voice ${VOICE} not found, available: ${health.voices.join(', ')}`)
 
   await fs.mkdir(CACHE_DIR, { recursive: true })
+  const modelHash = createHash('sha256')
+  for (const file of TTS_FILES) modelHash.update(await fs.readFile(path.resolve(__dirname, 'tts', file)))
+  const model = modelHash.digest('hex').slice(0, 16)
   // A replaced voice clip must not reuse the narration made with the old one
   const voiceAudio =
     VOICE === 'default'
@@ -59,15 +72,17 @@ const createNarrator = async (): Promise<Narrator | null> => {
           .digest('hex')
 
   return {
+    online: Boolean(health),
     narrate: async (text, lang) => {
-      if (!health.languages.includes(lang)) return null
+      if (health && !health.languages.includes(lang)) return null
       const key = createHash('sha256')
-        .update(JSON.stringify({ model: health.model, voice: VOICE, voiceAudio, lang, text }))
+        .update(JSON.stringify({ model, voice: VOICE, voiceAudio, lang, text }))
         .digest('hex')
       const clipPath = path.join(CACHE_DIR, `${key}.wav`)
       const cached = await exists(clipPath)
 
       if (!cached) {
+        if (!health) return null
         const response = await fetch(`${TTS_URL}/synthesize`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -82,12 +97,16 @@ const createNarrator = async (): Promise<Narrator | null> => {
         await fs.utimes(clipPath, new Date(), new Date())
       }
 
-      return { path: clipPath, durationMs: await clipDurationMs(clipPath), cached }
+      return {
+        path: clipPath,
+        durationMs: await clipDurationMs(clipPath),
+        cached,
+      }
     },
   }
 }
 
-let narrator: Promise<Narrator | null> | undefined
+let narrator: Promise<Narrator> | undefined
 
 export const getNarrator = () => (narrator ??= createNarrator())
 

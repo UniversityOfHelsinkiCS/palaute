@@ -19,10 +19,6 @@ AlignmentStreamAnalyzer.step = lambda self, logits, next_token=None: analyzer_st
 
 MODEL_DIR = Path(os.environ["MODEL_DIR"])
 VOICE_DIR = Path(os.environ["VOICE_DIR"])
-# Part of the client's cache key, so a change to the packages, this file or the weights generates the clips again
-MODEL_ID = hashlib.sha256(
-    Path("uv.lock").read_bytes() + Path(__file__).read_bytes() + os.environ["MODEL_REVISION"].encode()
-).hexdigest()[:16]
 LANGUAGES = ["fi", "sv", "en"]
 # A plain, steady tutorial voice. Near-zero temperature always picks the most likely sound (0 divides by zero).
 GENERATE_OPTIONS = {"repetition_penalty": 1.2, "temperature": 0.01, "exaggeration": 0.1, "cfg_weight": 0.3}
@@ -94,7 +90,7 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         if self.path != "/health":
             return self.send(404, b"{}")
-        self.send(200, json.dumps({"model": MODEL_ID, "languages": LANGUAGES, "voices": voices()}).encode())
+        self.send(200, json.dumps({"languages": LANGUAGES, "voices": voices()}).encode())
 
     def do_POST(self):
         if self.path != "/synthesize":
@@ -110,5 +106,5 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    print(f"Serving {MODEL_ID} on port {os.environ['PORT']}", flush=True)
+    print(f"Serving on port {os.environ['PORT']}", flush=True)
     ThreadingHTTPServer(("", int(os.environ["PORT"])), Handler).serve_forever()
