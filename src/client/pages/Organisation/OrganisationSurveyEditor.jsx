@@ -126,6 +126,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const hasError = formikProps.errors[name]
   const errorText = formikProps.errors[name]?.text
   const errorData = formikProps.errors[name]?.data
+  const errorStudentNumbers = React.useMemo(() => new Set(errorData), [errorData])
 
   return (
     <Box>
@@ -140,6 +141,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         id={name}
         name={name}
         multiple
+        limitTags={500}
         fullWidth
         clearOnBlur
         options={[]}
@@ -188,7 +190,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
               key={`${option}-${index}`}
               variant="outlined"
               label={option}
-              color={formikProps.errors[name] && errorData.includes(option) ? 'error' : 'primary'}
+              color={errorStudentNumbers.has(option) ? 'error' : 'primary'}
             />
           ))
         }
