@@ -49,7 +49,7 @@ const HelpChatbot = () => {
   const [draft, setDraft] = useState('')
   const [chatSize, setChatSize] = useState<ChatSize>('normal')
   const [sealOnce, setSealOnce] = useState(false)
-  const { entries, pending, retryableId, send, retry, startNew } = useConversation()
+  const { entries, pending, retryableId, send, retry, startNew, feedback } = useConversation()
   const { message: announcement, announce } = useAnnouncer()
 
   const pillRef = useRef<HTMLButtonElement>(null)
@@ -200,6 +200,8 @@ const HelpChatbot = () => {
               onReply={announce}
               onFailure={announceFailure}
               onRetry={retryQuestion}
+              feedbackActions={feedback}
+              onAnnounce={announce}
               onToggleExpand={() => setChatSize(chatSize === 'expanded' ? 'normal' : 'expanded')}
               onNewConversation={startNewConversation}
               onClose={close}

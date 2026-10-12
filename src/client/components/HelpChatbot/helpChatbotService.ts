@@ -1,15 +1,14 @@
 import type { LanguageId } from '@common/types/common'
 import type {
-  HelpChatbotTurn,
   PostHelpChatbotMessageBody,
   PostHelpChatbotMessageResponse,
+  PutHelpChatbotFeedbackBody,
 } from '@common/types/helpChatbot'
 
-import { trimHistory } from '@common/helpChatbot'
 import { isCancel } from 'axios'
 import i18n from 'i18next'
 
-import type { ChatEntry } from './types'
+import type { Rating } from './types'
 
 import apiClient from '../../util/apiClient'
 
@@ -18,33 +17,33 @@ import apiClient from '../../util/apiClient'
 
 export type AssistantReply = { id: string; markdown: string }
 
-// Failed questions are left out of the history
-const toTurns = (entries: ChatEntry[]): HelpChatbotTurn[] =>
-  entries.flatMap((entry): HelpChatbotTurn[] => {
-    if (entry.role === 'assistant') return [{ role: 'assistant', content: entry.markdown }]
-    return entry.status === 'failed' ? [] : [{ role: 'user', content: entry.text }]
-  })
-
 const UI_LANGUAGES: LanguageId[] = ['fi', 'sv', 'en']
 
 // The language the UI is shown in, which i18next falls back to English for
 const getUiLanguage = (): LanguageId => UI_LANGUAGES.find(language => language === i18n.resolvedLanguage) ?? 'en'
 
-// `entries` ends with the question being asked. Only the history the server uses is sent, so a long
-// conversation stays within the request size limit. Any rejection is shown as "No answer received",
-// except a cancellation (see isCancelled).
+// previousAnswerId is the latest answer shown in the conversation, null before the first one; the server
+// keeps the history. Any rejection is shown as "No answer received", except a cancellation (see isCancelled).
 export const askNorppai = async (
   conversationId: string,
-  entries: ChatEntry[],
+  previousAnswerId: string | null,
+  question: string,
   signal: AbortSignal
 ): Promise<AssistantReply> => {
   const body: PostHelpChatbotMessageBody = {
     conversationId,
+    previousTurnId: previousAnswerId,
     language: getUiLanguage(),
-    messages: trimHistory(toTurns(entries)),
+    question,
   }
   const { data } = await apiClient.post<PostHelpChatbotMessageResponse>('/help-chatbot/messages', body, { signal })
   return { id: data.message.id, markdown: data.message.content }
+}
+
+// Replaces any earlier feedback on the answer; a null rating removes it. Only a thumbs down takes a comment.
+export const sendFeedback = async (answerId: string, rating: Rating | null, comment?: string) => {
+  const body: PutHelpChatbotFeedbackBody = { rating, comment }
+  await apiClient.put(`/help-chatbot/messages/${answerId}/feedback`, body)
 }
 
 // A request aborted through its signal

@@ -14,11 +14,7 @@ const bounce = keyframes`
   80% { transform: scale(0.97); }
 `
 
-type EmptyStateProps = {
-  hasGuide: boolean
-}
-
-const EmptyState = ({ hasGuide }: EmptyStateProps) => {
+const EmptyState = () => {
   const { t } = useTranslation()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   // The sprite is 60 times the size of the still image, so it's only loaded when someone reaches for the seal
@@ -111,7 +107,7 @@ const EmptyState = ({ hasGuide }: EmptyStateProps) => {
         <InfoOutlined aria-hidden="true" sx={{ flex: 'none', fontSize: 15, mt: '2px' }} />
         <span>
           {t('helpChatbot:disclaimer')}
-          {hasGuide && ` ${t('helpChatbot:disclaimerGuide')}`}
+          {` ${t('helpChatbot:disclaimerSaved')}`}
         </span>
       </Box>
     </Box>

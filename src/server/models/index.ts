@@ -10,6 +10,7 @@ import Feedback from './feedback'
 import { FeedbackTarget } from './feedbackTarget'
 import { FeedbackTargetLog } from './feedbackTargetLog'
 import { Group } from './group'
+import { HelpChatbotTurn } from './helpChatbotTurn'
 import { InactiveCourseRealisation } from './inactiveCourseRealisation'
 import { NorppaFeedback } from './norppaFeedback'
 import { Organisation } from './organisation'
@@ -298,4 +299,5 @@ export {
   Group,
   Summary,
   OrganisationSurveyCourse,
+  HelpChatbotTurn,
 }

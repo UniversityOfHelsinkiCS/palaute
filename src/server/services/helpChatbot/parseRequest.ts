@@ -1,42 +1,47 @@
 import type { LanguageId } from '@common/types/common'
-import type { HelpChatbotTurn } from '@common/types/helpChatbot'
+import type { HelpChatbotRating } from '@common/types/helpChatbot'
 
 import z from 'zod/v4'
 
-import { MAX_QUESTION_LENGTH, trimHistory } from '../../../common/helpChatbot'
+import { MAX_FEEDBACK_COMMENT_LENGTH, MAX_QUESTION_LENGTH } from '../../../common/helpChatbot'
 import { ApplicationError } from '../../util/ApplicationError'
 
-// The client sends the whole history, so a user can forge assistant turns. That only affects their own chat:
-// the model has no tools or data, the system prompt isn't secret and the budget and rate limits cap the cost.
-// If that changes, sign the replies (an HMAC over user, conversation and content) and verify them here.
-const TurnSchema = z.discriminatedUnion('role', [
-  z.object({ role: z.literal('user'), content: z.string().min(1).max(MAX_QUESTION_LENGTH) }),
-  // Bounded by the history budget
-  z.object({ role: z.literal('assistant'), content: z.string().min(1) }),
-])
-
-const BodySchema = z.object({
-  conversationId: z.string().min(1).max(100),
-  language: z.enum(['fi', 'sv', 'en']),
-  // Trimmed to the history budget, so a long conversation keeps working. Assistant turns have no length limit
-  // of their own for the same reason. The request body size limit bounds the untrimmed history.
-  messages: z
-    .array(TurnSchema)
-    .min(1)
-    .refine(messages => messages.at(-1)?.role === 'user', 'The last message must be from the user')
-    .transform(trimHistory),
-})
-
-export type HelpChatbotRequest = {
-  conversationId: string
-  language: LanguageId
-  turns: HelpChatbotTurn[]
+const parse = <T extends z.ZodType>(schema: T, body: unknown): z.output<T> => {
+  const result = schema.safeParse(body)
+  if (!result.success) throw ApplicationError.BadRequest(z.prettifyError(result.error))
+  return result.data
 }
 
-export const parseHelpChatbotRequest = (body: unknown): HelpChatbotRequest => {
-  const result = BodySchema.safeParse(body)
-  if (!result.success) throw ApplicationError.BadRequest(z.prettifyError(result.error))
+const MessageBodySchema = z.object({
+  conversationId: z.string().min(1).max(100),
+  previousTurnId: z.uuid().nullable(),
+  language: z.enum(['fi', 'sv', 'en']),
+  question: z.string().min(1).max(MAX_QUESTION_LENGTH),
+})
 
-  const { conversationId, language, messages } = result.data
-  return { conversationId, language, turns: messages }
+export type HelpChatbotMessageRequest = {
+  conversationId: string
+  previousTurnId: string | null
+  language: LanguageId
+  question: string
+}
+
+export const parseHelpChatbotRequest = (body: unknown): HelpChatbotMessageRequest => {
+  // Spelled out because the server isn't strict, so zod types a nullable field as optional
+  const { conversationId, previousTurnId, language, question } = parse(MessageBodySchema, body)
+  return { conversationId, previousTurnId: previousTurnId ?? null, language, question }
+}
+
+const FeedbackBodySchema = z
+  .object({
+    rating: z.enum(['up', 'down']).nullable(),
+    comment: z.string().trim().min(1).max(MAX_FEEDBACK_COMMENT_LENGTH).optional(),
+  })
+  .refine(({ rating, comment }) => comment === undefined || rating === 'down', 'Only a thumbs down takes a comment')
+
+export type HelpChatbotFeedback = { rating: HelpChatbotRating | null; comment: string | null }
+
+export const parseHelpChatbotFeedback = (body: unknown): HelpChatbotFeedback => {
+  const { rating, comment } = parse(FeedbackBodySchema, body)
+  return { rating, comment: comment ?? null }
 }

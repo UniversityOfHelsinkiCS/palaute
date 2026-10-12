@@ -1,21 +1,43 @@
+import type { LanguageId } from '@common/types/common'
 import type { PostHelpChatbotMessageResponse } from '@common/types/helpChatbot'
+import type { HelpChatbotTurnMetadata } from '@common/types/helpChatbotAdmin'
 
-import { randomUUID } from 'crypto'
+import * as Sentry from '@sentry/node'
 import { Router, type Response } from 'express'
 
 import type { Completion } from '../../services/helpChatbot'
 import type { AuthenticatedRequest } from '../../types'
 
 import { adminAccess } from '../../middleware/adminAccess'
-import { checkRateLimit, getCompletion, parseHelpChatbotRequest } from '../../services/helpChatbot'
+import {
+  checkRateLimit,
+  createTurn,
+  getCompletion,
+  getDeployment,
+  loadHistory,
+  noAnswer,
+  parseHelpChatbotFeedback,
+  parseHelpChatbotRequest,
+  saveCompletion,
+  saveFeedback,
+  setTurnStatus,
+  trimHistory,
+} from '../../services/helpChatbot'
 import { logger } from '../../util/logger'
 
-// Only metadata is logged, never what the user asked
+// The admin behind a "login as" asks, so impersonating doesn't get around the limits
+const getUserId = (req: AuthenticatedRequest) => req.user.mockedBy?.id ?? req.user.id
+
+// Context saved with the turn for the admin viewer
+const getMetadata = (req: AuthenticatedRequest, uiLanguage: LanguageId): HelpChatbotTurnMetadata => ({
+  uiLanguage,
+  ...(req.user.mockedBy && { impersonatedUserId: req.user.id }),
+})
+
+// The conversation is saved in help_chatbot_turns; only metadata is logged
 const postMessage = async (req: AuthenticatedRequest, res: Response<PostHelpChatbotMessageResponse>) => {
-  const request = parseHelpChatbotRequest(req.body)
-  const { conversationId } = request
-  // The admin behind a "login as", so impersonating doesn't get around the limits
-  const userId = req.user.mockedBy?.id ?? req.user.id
+  const { conversationId, previousTurnId, language, question } = parseHelpChatbotRequest(req.body)
+  const userId = getUserId(req)
 
   // Stop the model when the client goes away, e.g. on New conversation. Listening before the rate limit
   // check means a client that leaves during it gets an already aborted signal, which fails immediately.
@@ -26,27 +48,64 @@ const postMessage = async (req: AuthenticatedRequest, res: Response<PostHelpChat
 
   await checkRateLimit(userId)
 
+  const history = await loadHistory(userId, conversationId, previousTurnId)
+  const messages = trimHistory([...history, { role: 'user', content: question }])
+  // If saving fails, the model isn't called: an answer that can't be saved can't be part of the history
+  const turn = await createTurn({
+    userId,
+    metadata: getMetadata(req, language),
+    deployment: getDeployment(),
+    conversationId,
+    previousTurnId,
+    question,
+  })
+
   const startedAt = Date.now()
   let completion: Completion
   try {
-    completion = await getCompletion(request, abortController.signal)
+    completion = await getCompletion({ conversationId, language, messages }, abortController.signal)
   } catch (error) {
-    if (!abortController.signal.aborted) throw error
-    logger.info('[HelpChatbot] Request aborted by the client', { userId, conversationId })
+    const aborted = abortController.signal.aborted
+    // Reported on its own, so a database failure here doesn't replace the model's error
+    try {
+      await setTurnStatus(turn, aborted ? 'aborted' : 'failed')
+    } catch (statusError) {
+      logger.error('[HelpChatbot] Turn status not saved', { turnId: turn.id })
+      Sentry.captureException(statusError)
+    }
+    if (!aborted) throw error
+    logger.info('[HelpChatbot] Request aborted by the client', { userId, conversationId, turnId: turn.id })
     return
   }
+  const durationMs = Date.now() - startedAt
 
-  const { model, content, finishReason, usage } = completion
+  const status = await saveCompletion(turn, completion, durationMs)
+
+  const { deployment, model, finishReason, usage } = completion
   logger.info('[HelpChatbot] Reply', {
     userId,
     conversationId,
+    turnId: turn.id,
+    status,
+    deployment,
     model,
     finishReason,
-    durationMs: Date.now() - startedAt,
+    durationMs,
     ...usage,
   })
 
-  res.send({ message: { id: randomUUID(), role: 'assistant', content } })
+  if (status === 'empty') throw noAnswer()
+  res.send({ message: { id: turn.id, role: 'assistant', content: completion.content } })
+}
+
+const putFeedback = async (req: AuthenticatedRequest, res: Response) => {
+  const feedback = parseHelpChatbotFeedback(req.body)
+  const userId = getUserId(req)
+
+  await saveFeedback(req.params.id, userId, feedback)
+
+  logger.info('[HelpChatbot] Feedback', { userId, turnId: req.params.id, rating: feedback.rating })
+  res.sendStatus(204)
 }
 
 export const router = Router()
@@ -55,3 +114,4 @@ export const router = Router()
 router.use(adminAccess)
 
 router.post('/messages', postMessage)
+router.put('/messages/:id/feedback', putFeedback)

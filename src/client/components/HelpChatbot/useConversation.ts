@@ -1,23 +1,42 @@
 import { useMutation } from '@tanstack/react-query'
 import { useRef, useState } from 'react'
 
-import type { ChatEntry, UserEntry } from './types'
+import type { ChatEntry, Feedback, Rating, UserEntry } from './types'
 
-import { askNorppai, isCancelled } from './helpChatbotService'
+import { askNorppai, isCancelled, sendFeedback } from './helpChatbotService'
 
 type Conversation = { id: string; entries: ChatEntry[] }
 
 type RequestVariables = {
   conversationId: string
-  entries: ChatEntry[]
+  previousAnswerId: string | null
+  question: string
   userEntryId: string
   signal: AbortSignal
 }
+
+// rate and sendComment reject if saving fails, leaving the feedback as it was
+export type FeedbackActions = {
+  rate: (answerId: string, rating: Rating | null) => Promise<void>
+  setCommentDraft: (answerId: string, draft: string) => void
+  sendComment: (answerId: string, comment: string) => Promise<void>
+  skipComment: (answerId: string) => void
+}
+
+const NO_FEEDBACK: Feedback = { rating: null, comment: null, commentDraft: '' }
 
 const createConversation = (): Conversation => ({ id: crypto.randomUUID(), entries: [] })
 
 const setUserStatus = (entries: ChatEntry[], id: string, status: UserEntry['status']): ChatEntry[] =>
   entries.map(entry => (entry.role === 'user' && entry.id === id ? { ...entry, status } : entry))
+
+const updateFeedback = (entries: ChatEntry[], id: string, update: (feedback: Feedback) => Feedback): ChatEntry[] =>
+  entries.map(entry =>
+    entry.role === 'assistant' && entry.id === id ? { ...entry, feedback: update(entry.feedback) } : entry
+  )
+
+// The answer the next question follows. Failed questions in between aren't part of the history.
+const getPreviousAnswerId = (entries: ChatEntry[]) => entries.findLast(entry => entry.role === 'assistant')?.id ?? null
 
 const useConversation = () => {
   const [conversation, setConversation] = useState(createConversation)
@@ -30,11 +49,12 @@ const useConversation = () => {
     )
 
   const mutation = useMutation({
-    mutationFn: ({ conversationId, entries, signal }: RequestVariables) => askNorppai(conversationId, entries, signal),
+    mutationFn: ({ conversationId, previousAnswerId, question, signal }: RequestVariables) =>
+      askNorppai(conversationId, previousAnswerId, question, signal),
     onSuccess: (reply, { conversationId, userEntryId }) =>
       updateIfCurrent(conversationId, entries => [
         ...setUserStatus(entries, userEntryId, 'answered'),
-        { id: reply.id, role: 'assistant', markdown: reply.markdown },
+        { id: reply.id, role: 'assistant', markdown: reply.markdown, feedback: NO_FEEDBACK },
       ]),
     onError: (error, { conversationId, userEntryId }) => {
       if (isCancelled(error)) return
@@ -48,21 +68,27 @@ const useConversation = () => {
   const last = conversation.entries.at(-1)
   const retryableId = last?.role === 'user' && last.status === 'failed' ? last.id : null
 
-  const request = (entries: ChatEntry[], userEntryId: string) => {
+  const request = (entries: ChatEntry[], userEntry: UserEntry) => {
     setConversation({ ...conversation, entries })
     abortController.current = new AbortController()
-    mutation.mutate({ conversationId: conversation.id, entries, userEntryId, signal: abortController.current.signal })
+    mutation.mutate({
+      conversationId: conversation.id,
+      previousAnswerId: getPreviousAnswerId(entries),
+      question: userEntry.text,
+      userEntryId: userEntry.id,
+      signal: abortController.current.signal,
+    })
   }
 
   const send = (text: string) => {
     if (pending) return
     const userEntry: UserEntry = { id: crypto.randomUUID(), role: 'user', text, status: 'waiting' }
-    request([...conversation.entries, userEntry], userEntry.id)
+    request([...conversation.entries, userEntry], userEntry)
   }
 
   const retry = () => {
-    if (pending || !retryableId) return
-    request(setUserStatus(conversation.entries, retryableId, 'waiting'), retryableId)
+    if (pending || last?.role !== 'user' || last.id !== retryableId) return
+    request(setUserStatus(conversation.entries, retryableId, 'waiting'), last)
   }
 
   const startNew = () => {
@@ -70,7 +96,31 @@ const useConversation = () => {
     setConversation(createConversation())
   }
 
-  return { entries: conversation.entries, pending, retryableId, send, retry, startNew }
+  const setFeedback = (conversationId: string, answerId: string, update: (feedback: Feedback) => Feedback) =>
+    updateIfCurrent(conversationId, entries => updateFeedback(entries, answerId, update))
+
+  const feedback: FeedbackActions = {
+    rate: async (answerId, rating) => {
+      const conversationId = conversation.id
+      await sendFeedback(answerId, rating)
+      setFeedback(conversationId, answerId, () => ({
+        rating,
+        comment: rating === 'down' ? 'asking' : null,
+        commentDraft: '',
+      }))
+    },
+    setCommentDraft: (answerId, draft) =>
+      setFeedback(conversation.id, answerId, current => ({ ...current, commentDraft: draft })),
+    sendComment: async (answerId, comment) => {
+      const conversationId = conversation.id
+      await sendFeedback(answerId, 'down', comment)
+      setFeedback(conversationId, answerId, current => ({ ...current, comment: 'sent', commentDraft: '' }))
+    },
+    skipComment: answerId =>
+      setFeedback(conversation.id, answerId, current => ({ ...current, comment: null, commentDraft: '' })),
+  }
+
+  return { entries: conversation.entries, pending, retryableId, send, retry, startNew, feedback }
 }
 
 export default useConversation
