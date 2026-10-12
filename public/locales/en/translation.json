@@ -489,6 +489,9 @@
     "studentNumberInputLabel": "Paste student numbers here",
     "showAllStudents": "Show all {{count}} students (may be slow)",
     "showFewerStudents": "Show fewer students",
+    "expandingStudentList": "Expanding student list",
+    "collapsingStudentList": "Collapsing student list",
+    "allStudentsShown": "All {{count}} students are shown",
     "studentNumberInformation": "Student numbers can be separated by the following characters",
     "studentNumberDelimeters": {
       "comma": "Comma",

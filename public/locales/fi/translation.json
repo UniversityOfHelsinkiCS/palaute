@@ -484,6 +484,9 @@
     "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
     "showAllStudents": "Näytä kaikki {{count}} opiskelijaa (voi hidastaa sivun toimintaa)",
     "showFewerStudents": "Näytä vähemmän opiskelijoita",
+    "expandingStudentList": "Opiskelijalistaa laajennetaan",
+    "collapsingStudentList": "Opiskelijalistaa tiivistetään",
+    "allStudentsShown": "Kaikki {{count}} opiskelijaa näkyvissä",
     "studentNumberInformation": "Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä",
     "studentNumberDelimeters": {
       "comma": "Pilkulla",

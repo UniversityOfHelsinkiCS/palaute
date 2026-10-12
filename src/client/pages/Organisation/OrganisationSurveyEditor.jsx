@@ -1,5 +1,15 @@
 import { WarningAmber } from '@mui/icons-material'
-import { Autocomplete, Chip, Box, Dialog, Grid2 as Grid, Typography, TextField, DialogTitle } from '@mui/material'
+import {
+  Autocomplete,
+  Chip,
+  Box,
+  CircularProgress,
+  Dialog,
+  Grid2 as Grid,
+  Typography,
+  TextField,
+  DialogTitle,
+} from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { debounce } from 'lodash-es'
 import React, { useState } from 'react'
@@ -121,6 +131,48 @@ const StudenNumberInputInfo = () => {
 const VISIBLE_STUDENT_NUMBERS_AT_START = 250
 const VISIBLE_STUDENT_NUMBERS_AT_END = 250
 
+// Kept separate from StudentNumberInput so that the pending state renders without re-rendering all the chips
+const ShowAllStudentsToggle = ({ count, showAll, onShowAllChange }) => {
+  const { t } = useTranslation()
+  const [isPending, startTransition] = React.useTransition()
+  const [nextShowAll, setNextShowAll] = React.useState(showAll)
+
+  return (
+    <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', columnGap: 2, rowGap: 1, mt: 1 }}>
+      <NorButton
+        data-cy="formik-student-number-input-show-all"
+        color={nextShowAll ? 'secondary' : 'warning'}
+        icon={!nextShowAll && <WarningAmber />}
+        type="button"
+        onClick={() => {
+          const next = !nextShowAll
+          setNextShowAll(next)
+          startTransition(() => onShowAllChange(next))
+        }}
+      >
+        {nextShowAll ? t('organisationSurveys:showFewerStudents') : t('organisationSurveys:showAllStudents', { count })}
+      </NorButton>
+
+      {/* Always rendered so that screen readers announce changes to its content */}
+      <Box role="status" sx={{ display: 'flex', alignItems: 'center', gap: 1, minHeight: 24 }}>
+        {isPending && (
+          <>
+            <CircularProgress size={16} aria-hidden />
+            <Typography variant="body2">
+              {nextShowAll
+                ? t('organisationSurveys:expandingStudentList')
+                : t('organisationSurveys:collapsingStudentList')}
+            </Typography>
+          </>
+        )}
+        {!isPending && showAll && (
+          <Typography variant="body2">{t('organisationSurveys:allStudentsShown', { count })}</Typography>
+        )}
+      </Box>
+    </Box>
+  )
+}
+
 const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
@@ -202,7 +254,6 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
             )
           const hasHidden = visible.length < value.length
 
-          // The Show all button tells screen reader users that students are hidden
           const ellipsis = hasHidden && (
             <Typography key="ellipsis" component="span" variant="body2" aria-hidden sx={{ mx: 1 }}>
               …
@@ -238,18 +289,11 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
       />
 
       {canHideStudentNumbers && (
-        <NorButton
-          data-cy="formik-student-number-input-show-all"
-          color={showAllStudentNumbers ? 'secondary' : 'warning'}
-          icon={!showAllStudentNumbers && <WarningAmber />}
-          type="button"
-          onClick={() => setShowAllStudentNumbers(!showAllStudentNumbers)}
-          sx={{ mt: 1 }}
-        >
-          {showAllStudentNumbers
-            ? t('organisationSurveys:showFewerStudents')
-            : t('organisationSurveys:showAllStudents', { count: value.length })}
-        </NorButton>
+        <ShowAllStudentsToggle
+          count={value.length}
+          showAll={showAllStudentNumbers}
+          onShowAllChange={setShowAllStudentNumbers}
+        />
       )}
     </Box>
   )

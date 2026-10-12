@@ -479,6 +479,9 @@
     "studentNumberInputLabel": "Lägg in studentnummer här",
     "showAllStudents": "Visa alla {{count}} studenter (kan vara långsamt)",
     "showFewerStudents": "Visa färre studenter",
+    "expandingStudentList": "Studentlistan expanderas",
+    "collapsingStudentList": "Studentlistan fälls ihop",
+    "allStudentsShown": "Alla {{count}} studenter visas",
     "studentNumberInformation": "Studentnummren kan separeras från varandra med följande tecken",
     "studentNumberDelimeters": {
       "comma": "Kommatecken",
