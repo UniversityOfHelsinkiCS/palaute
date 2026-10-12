@@ -1,3 +1,4 @@
+import { WarningAmber } from '@mui/icons-material'
 import { Autocomplete, Chip, Box, Dialog, Grid2 as Grid, Typography, TextField, DialogTitle } from '@mui/material'
 import { useFormikContext, Form, Formik } from 'formik'
 import { debounce } from 'lodash-es'
@@ -117,11 +118,16 @@ const StudenNumberInputInfo = () => {
   )
 }
 
+const VISIBLE_STUDENT_NUMBERS_AT_START = 250
+const VISIBLE_STUDENT_NUMBERS_AT_END = 250
+
 const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
   const [inputValue, setInputValue] = React.useState('')
+  const [showAllStudentNumbers, setShowAllStudentNumbers] = React.useState(false)
+  const canHideStudentNumbers = value.length > VISIBLE_STUDENT_NUMBERS_AT_START + VISIBLE_STUDENT_NUMBERS_AT_END
 
   const hasError = formikProps.errors[name]
   const errorText = formikProps.errors[name]?.text
@@ -141,7 +147,6 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         id={name}
         name={name}
         multiple
-        limitTags={500}
         fullWidth
         clearOnBlur
         options={[]}
@@ -182,8 +187,30 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
             setInputValue(newInputValue)
           }
         }}
-        renderTags={(value, getTagProps) =>
-          value.map((option, index) => (
+        renderTags={(value, getTagProps) => {
+          // Show the first and the last chips (the last ones so that Backspace removes a visible one),
+          // and always show the erroneous ones
+          const firstEndIndex = value.length - VISIBLE_STUDENT_NUMBERS_AT_END
+          const visible = value
+            .map((option, index) => ({ option, index }))
+            .filter(
+              ({ option, index }) =>
+                showAllStudentNumbers ||
+                index < VISIBLE_STUDENT_NUMBERS_AT_START ||
+                index >= firstEndIndex ||
+                errorStudentNumbers.has(option)
+            )
+          const hasHidden = visible.length < value.length
+
+          // The Show all button tells screen reader users that students are hidden
+          const ellipsis = hasHidden && (
+            <Typography key="ellipsis" component="span" variant="body2" aria-hidden sx={{ mx: 1 }}>
+              …
+            </Typography>
+          )
+
+          return visible.flatMap(({ option, index }) => [
+            index === firstEndIndex && ellipsis,
             <Chip
               {...getTagProps({ index })}
               data-cy={`formik-student-number-input-field-chip-${option}`}
@@ -191,9 +218,9 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
               variant="outlined"
               label={option}
               color={errorStudentNumbers.has(option) ? 'error' : 'primary'}
-            />
-          ))
-        }
+            />,
+          ])
+        }}
         renderInput={params => (
           <TextField
             label={t('organisationSurveys:students')}
@@ -209,6 +236,21 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         )}
         {...props}
       />
+
+      {canHideStudentNumbers && (
+        <NorButton
+          data-cy="formik-student-number-input-show-all"
+          color={showAllStudentNumbers ? 'secondary' : 'warning'}
+          icon={!showAllStudentNumbers && <WarningAmber />}
+          type="button"
+          onClick={() => setShowAllStudentNumbers(!showAllStudentNumbers)}
+          sx={{ mt: 1 }}
+        >
+          {showAllStudentNumbers
+            ? t('organisationSurveys:showFewerStudents')
+            : t('organisationSurveys:showAllStudents', { count: value.length })}
+        </NorButton>
+      )}
     </Box>
   )
 }

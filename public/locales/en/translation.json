@@ -487,6 +487,8 @@
     "studentNumberTitle": "Add students to this survey",
     "editStudentNumberTitle": "Edit survey's students",
     "studentNumberInputLabel": "Paste student numbers here",
+    "showAllStudents": "Show all {{count}} students (may be slow)",
+    "showFewerStudents": "Show fewer students",
     "studentNumberInformation": "Student numbers can be separated by the following characters",
     "studentNumberDelimeters": {
       "comma": "Comma",

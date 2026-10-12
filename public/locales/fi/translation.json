@@ -482,6 +482,8 @@
     "studentNumberTitle": "Lisää kyselylle opiskelijoita",
     "editStudentNumberTitle": "Muokkaa kyselyn opiskelijoita",
     "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
+    "showAllStudents": "Näytä kaikki {{count}} opiskelijaa (voi hidastaa sivun toimintaa)",
+    "showFewerStudents": "Näytä vähemmän opiskelijoita",
     "studentNumberInformation": "Opiskelijanumerot voidaan erotella toisistaan seuraavilla merkeillä",
     "studentNumberDelimeters": {
       "comma": "Pilkulla",
