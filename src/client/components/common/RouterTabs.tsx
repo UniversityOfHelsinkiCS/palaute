@@ -16,9 +16,10 @@ type RouterTabsProps = TabsProps & {
 export const RouterTabs = ({ children, ...props }: RouterTabsProps) => {
   const { pathname } = useLocation()
 
+  // A tab with sub-pages gives the pattern to match in data-active-path, e.g. "/admin/norppai/*"
   const activeIndex = React.Children.toArray(children)
-    .filter((c): c is React.ReactElement<{ to?: string }> => React.isValidElement(c))
-    .findIndex(c => !!matchPath({ path: stripSearch(c.props.to ?? '') }, pathname))
+    .filter((c): c is React.ReactElement<{ to?: string; 'data-active-path'?: string }> => React.isValidElement(c))
+    .findIndex(c => !!matchPath({ path: c.props['data-active-path'] ?? stripSearch(c.props.to ?? '') }, pathname))
 
   return (
     <Tabs

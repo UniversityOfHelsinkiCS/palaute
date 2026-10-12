@@ -103,13 +103,13 @@ export const saveCompletion = async (
   return status
 }
 
-// Replaces any earlier feedback. A 404 unless the turn is an answer to this user.
+// Replaces any earlier feedback, which makes it unreviewed again. A 404 unless the turn is an answer to this user.
 export const saveFeedback = async (turnId: string, userId: string, { rating, comment }: HelpChatbotFeedback) => {
   // Anything else would make the query fail on the uuid column
   if (!z.uuid().safeParse(turnId).success) throw ApplicationError.NotFound()
 
   const [count] = await HelpChatbotTurn.update(
-    { rating, feedbackComment: comment },
+    { rating, feedbackComment: comment, feedbackReviewedAt: null },
     { where: { id: turnId, userId, status: 'answered' } }
   )
   if (count === 0) throw ApplicationError.NotFound()

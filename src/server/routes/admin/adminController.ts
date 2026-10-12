@@ -35,6 +35,7 @@ import { getLanguageValue } from '../../util/languageUtils'
 import { logger } from '../../util/logger'
 import { redis } from '../../util/redisClient'
 import updaterClient from '../../util/updaterClient'
+import { helpChatbotAdminRouter } from '../helpChatbot'
 
 const runUpdater = async (req: AuthenticatedRequest, res: Response) => {
   logger.info('Running updater on demand')
@@ -743,3 +744,4 @@ router.post('/build-summaries', updateSummariesTable)
 router.get('/banners', getBanners)
 router.get('/cache-stats', getCacheStats)
 router.post('/cache/invalidate/:cacheName', invalidateCache)
+router.use('/norppai', helpChatbotAdminRouter)

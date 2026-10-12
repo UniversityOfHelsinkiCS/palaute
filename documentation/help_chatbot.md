@@ -133,9 +133,26 @@ Every question is saved in `help_chatbot_turns`, one row per question, together 
 - **An answer that can't be saved isn't sent.** If inserting the row fails, the model isn't called; if saving the answer fails, the user gets "No answer received". Either way the error reaches Sentry.
 - **Who asked.** `user_id` is the person typing, saved for every user: during "login as" the admin. It's what the history and the feedback check ownership against, and deleting a user deletes their turns.
 - **Metadata.** `metadata` is a JSON object of context saved with each turn and only shown in the viewer: today `uiLanguage` and, during "login as", `impersonatedUserId`. Later it can hold more of what's sent to the model, e.g. the user's role and the page they were on. The code writes the keys typed in `HelpChatbotTurnMetadata`; the database takes any object, `{}` included. Keys are camelCase, as the object is written and read only by our TypeScript code. Anything the viewer filters or totals on (status, model, tokens, version) stays a column.
-- **Costs.** `prompt_tokens`, `cached_tokens`, `completion_tokens` and `reasoning_tokens` come from Azure. Cached tokens are part of the prompt tokens and reasoning tokens part of the completion tokens, so don't add them up. Price by `model`, the model version Azure reports (`deployment` is our deployment's name). Aborted requests are probably billed in part, but Azure doesn't report their usage. Turns answered by the mock in development have `deployment = 'mock'` (saved before the call, so failed ones too) and no usage.
+- **Costs.** `prompt_tokens`, `cached_tokens`, `completion_tokens` and `reasoning_tokens` come from Azure. Cached tokens are part of the prompt tokens and reasoning tokens part of the completion tokens, so don't add them up. Price by `model`, the model version Azure reports (`deployment` is our deployment's name). Aborted requests are probably billed in part, but Azure doesn't report their usage. Turns answered by the mock in development have `deployment = 'mock'` (saved before the call, so failed ones too) and no usage. The viewer shows them outside production and leaves them out in production, where there shouldn't be any.
 - **Versions.** `git_sha` is the commit that was deployed, which pins the system prompt and the knowledge. It's empty in development.
 - **Privacy.** The empty state tells users that conversations are saved. Only metadata goes to the logs, and Sentry drops the chatbot's request bodies, so the content stays in this table. Retention isn't decided yet: the content columns (`user_id`, `question`, `answer`, `feedback_comment`) are nullable, so old rows can be cleared and their usage data kept; so can `metadata`, which may hold user ids.
+- **Feedback review.** `feedback_reviewed_at` is set by an admin in the viewer and cleared whenever the user changes their feedback, so changed feedback counts as new again.
+
+### Viewer
+
+The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) reads the saved conversations. The client is `src/client/pages/Admin/tabs/Norppai/`, the API `GET`/`PUT /admin/norppai/…` in `routes/helpChatbot/adminController.ts` (mounted in the admin router, so admins only even once teachers can chat), the queries `services/helpChatbotAdmin/`. Filters live in the URL, so a link opens the same view.
+
+- **Conversations**: a list filtered by date, search, feedback, problems and user, and the full conversation, each turn with its status, tokens, cost and feedback. The conversation's header shows its first turn's metadata, and a turn shows only the metadata that differs from it; keys the viewer doesn't know are shown as they are. Turns that aren't on the history chain (failed, retried, never shown) are marked and can be hidden. "Copy as Markdown" copies the conversation for a review. A conversation is identified by `conversation_id` and `user_id` together, as the client makes up the id.
+- **Feedback**: rated answers, newest first (by when the answer was given), with a Reviewed checkbox. Unreviewed thumbs downs are the "new" count on the tab.
+- **Usage**: questions, problems, feedback, tokens and cost per day, week or month (in Helsinki time) and per deployed commit, with a CSV download.
+- **Prices** are in `services/helpChatbotAdmin/prices.ts`, in € per million tokens for each model family (uncached input, cached input and output; reasoning is billed as output, but shown as its own row), with the date each price is valid from. Each turn is priced with the price valid when it was asked; to change a price, add an entry rather than editing the old one. A model with no price shows up as "unpriced turns" and isn't in the sums.
+
+**Performance**, measured with 200 000 turns (about three months at the global rate limit) on a development database: lists and usage over 30 days take 0.3–0.5 s, over 90 days about 1–1.5 s; a single conversation and the feedback list well under 0.1 s. Searching is the slow part: `ILIKE '%…%'` reads every question and answer in the date range, about 1.6 s for 30 days and 6–7 s for 90. If that becomes a problem, add a `pg_trgm` GIN index on `question` and `answer`. The queries were shaped by these measurements; keep them so:
+
+- The price join matches the model with `LIKE`, not a regular expression, and costs are floats: both made the sums several times slower.
+- The conversation list picks its page from the aggregates first and only then looks up the first question and the usernames for those rows.
+- Conversations are counted in a query of their own; a `count(DISTINCT …)` per period was the slowest part of the usage queries.
+- `previous_turn_id` and `user_id` are indexed so that deleting turns (retention, a deleted user) doesn't scan the table once per row.
 
 ## Accessibility requirements
 
@@ -162,8 +179,8 @@ Every question is saved in `help_chatbot_turns`, one row per question, together 
 ## Later (out of scope for the MVP)
 
 - Links from answers to places in the app (e.g. directly to a survey's results).
-- A view for reviewing the saved conversations, their feedback and costs.
 - A retention period for the saved conversations.
+- Faster search in the viewer (`pg_trgm`), if the data grows.
 - Sending the user's current page as context with each message. This needs a routing rework (e.g. a data router with `useMatches`); a hand-maintained route table is not worth it.
 - An in-app help page, possibly sharing a source with the assistant's knowledge document.
 - Streaming replies and a "stop generating" control.
