@@ -41,6 +41,8 @@ const ROOT_PATH = './src'
 const LOCALES_DIR_NAME = 'locales'
 const LOCALES_PATH = './public/locales'
 const EXTENSION_MATCHER = /.+\.(js|ts)/
+// Unit tests aren't UI, and their strings (e.g. Redis keys like 'user:user') look like translation keys
+const TEST_FILE_MATCHER = /\.test\.(js|ts)x?$/
 // matches 'asd:asd'
 const TRANSLATION_KEY_REFERENCE_MATCHER = new RegExp(/['"`]\w+(?::\w+)+['"`]/, 'g')
 // matches t('asd'
@@ -365,7 +367,7 @@ async function* walk(dir) {
   for await (const d of await fs.opendir(dir)) {
     const entry = path.join(dir, d.name)
     if (d.isDirectory() && d.name !== LOCALES_DIR_NAME) yield* walk(entry)
-    else if (d.isFile() && EXTENSION_MATCHER.test(d.name)) yield entry
+    else if (d.isFile() && EXTENSION_MATCHER.test(d.name) && !TEST_FILE_MATCHER.test(d.name)) yield entry
   }
 }
 

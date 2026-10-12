@@ -15,7 +15,8 @@ export const formatPercent = (part: number, whole: number) =>
 
 export const formatDateTime = (iso: string) => format(new Date(iso), 'd MMM yyyy HH:mm')
 
-export const formatTime = (iso: string) => format(new Date(iso), 'HH:mm:ss')
+// Not a date-fns pattern: the translations check reads a quoted HH:mm:ss pattern as a translation key
+export const formatTime = (iso: string) => new Date(iso).toLocaleTimeString('en-GB')
 
 export const formatDate = (iso: string) => format(new Date(iso), 'd MMM yyyy')
 
