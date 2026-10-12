@@ -1,0 +1,117 @@
+name: Manual videos
+
+# Records the user manual videos, see e2e/manual/README.md
+on:
+  workflow_dispatch:
+  workflow_call:
+
+# Runs started by a push queue
+concurrency:
+  group: manual-videos-${{ github.event_name == 'push' && github.ref || github.run_id }}
+  cancel-in-progress: false
+
+env:
+  # Pulled and pushed with ORAS, installed by manual-videos-setup
+  NARRATION_CACHE: registry.version.helsinki.fi/toska/openshift/kontit/norppa-manual-narration:latest
+
+jobs:
+  find-missing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    outputs:
+      scenarios: ${{ steps.missing.outputs.scenarios }}
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/manual-videos-setup
+        with:
+          registry-password: ${{ secrets.VERSION_PUSH_SECRET }}
+
+      - name: Find scenarios without narration
+        id: missing
+        run: |
+          touch "$MANUAL_MISSING_FILE"
+          npx playwright test -c playwright.manual.config.ts
+          echo "scenarios=$(sort -u "$MANUAL_MISSING_FILE" | jq -Rnc '[inputs]')" >> "$GITHUB_OUTPUT"
+        env:
+          MANUAL_PASS: narrate
+          MANUAL_MISSING_FILE: ${{ runner.temp }}/missing.txt
+
+  generate:
+    needs: find-missing
+    if: ${{ needs.find-missing.outputs.scenarios != '[]' }}
+    strategy:
+      fail-fast: false
+      matrix:
+        scenario: ${{ fromJSON(needs.find-missing.outputs.scenarios) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/manual-videos-setup
+        with:
+          registry-password: ${{ secrets.VERSION_PUSH_SECRET }}
+          tts: true
+
+      - name: Generate narration
+        run: npx playwright test -c playwright.manual.config.ts "$SCENARIO"
+        env:
+          MANUAL_PASS: narrate
+          SCENARIO: ${{ matrix.scenario }}
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ !cancelled() }}
+        with:
+          name: narration-${{ strategy.job-index }}
+          path: e2e/manual/.narration-cache
+          include-hidden-files: true
+          if-no-files-found: ignore
+
+  record:
+    needs: [find-missing, generate]
+    if: ${{ !cancelled() && needs.find-missing.result == 'success' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/manual-videos-setup
+        with:
+          registry-password: ${{ secrets.VERSION_PUSH_SECRET }}
+
+      - uses: actions/download-artifact@v8
+        with:
+          pattern: narration-*
+          path: e2e/manual/.narration-cache
+          merge-multiple: true
+
+      # Pruning after the recording drops the clips it did not touch
+      - name: Mark the clips unused
+        run: find e2e/manual/.narration-cache -type f -exec touch -d @0 {} +
+
+      - name: Record
+        run: npm run manual:record
+
+      - name: Save the narration cache
+        if: ${{ !cancelled() }}
+        working-directory: e2e/manual
+        run: |
+          if [ "$(ls .narration-cache | sha256sum)" = "$CACHE_BEFORE" ]; then
+            echo "Narration cache unchanged"
+          else
+            oras push "$NARRATION_CACHE" .narration-cache
+          fi
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: manual-videos
+          path: public/manual
+          if-no-files-found: error
+
+      - name: Check logs
+        if: failure()
+        run: docker compose -f docker-compose.ci.yml -f docker-compose.manual.yml logs

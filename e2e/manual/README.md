@@ -56,3 +56,11 @@ The voice is [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox
 ### Updating the packages
 
 To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies are pinned to exact versions in `tts/pyproject.toml`.
+
+## CI
+
+`.github/workflows/manual-videos.yml` records the videos on CI.
+
+- The clips are kept in the registry as `norppa-manual-narration:latest` (ORAS).
+- Missing clips are generated in parallel, one runner per scenario. A change in `tts/` generates them all again.
+- A caption without a clip fails the recording.
