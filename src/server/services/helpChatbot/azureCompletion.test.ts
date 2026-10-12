@@ -18,7 +18,7 @@ vi.mock('../../util/config', async importOriginal => ({
   HELP_CHATBOT_MODEL: 'gpt-5-mini',
 }))
 
-const TURNS = [{ role: 'user' as const, content: 'How do I add a question?' }]
+const MESSAGES = [{ role: 'user' as const, content: 'How do I add a question?' }]
 
 const requestConfig = (): InternalAxiosRequestConfig => ({ headers: new AxiosHeaders({ 'api-key': API_KEY }) })
 
@@ -31,6 +31,7 @@ const response = <T>(data: T, status = 200): AxiosResponse<T> => ({
 })
 
 const completion = (content: string | null, finishReason = 'stop') => ({
+  model: 'gpt-5-mini-2025-08-07',
   choices: [{ message: { content }, finish_reason: finishReason }],
   usage: {
     prompt_tokens: 6000,
@@ -52,7 +53,7 @@ const azureError = (status: number, azureCode?: string) =>
 
 const mockPost = () => vi.spyOn(axios, 'post')
 
-const REQUEST = { conversationId: 'conversation', language: 'fi' as const, turns: TURNS }
+const REQUEST = { conversationId: 'conversation', language: 'fi' as const, messages: MESSAGES }
 
 const ask = () => getAzureCompletion(REQUEST, new AbortController().signal)
 
@@ -70,11 +71,12 @@ describe('getAzureCompletion', () => {
     vi.restoreAllMocks()
   })
 
-  it('returns the reply, finish reason and usage', async () => {
+  it('returns the reply, model, finish reason and usage', async () => {
     mockPost().mockResolvedValue(response(completion('Open the survey.')))
 
     await expect(ask()).resolves.toEqual({
-      model: 'gpt-5-mini',
+      deployment: 'gpt-5-mini',
+      model: 'gpt-5-mini-2025-08-07',
       content: 'Open the survey.',
       finishReason: 'stop',
       usage: { promptTokens: 6000, cachedTokens: 5000, completionTokens: 200, reasoningTokens: 64 },
@@ -89,7 +91,7 @@ describe('getAzureCompletion', () => {
 
     expect(post).toHaveBeenCalledWith(
       'https://test-resource.openai.azure.com/openai/deployments/gpt-5-mini/chat/completions',
-      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPTS.fi }, ...TURNS] }),
+      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPTS.fi }, ...MESSAGES] }),
       expect.objectContaining({ params: { 'api-version': '2024-10-21' }, headers: { 'api-key': API_KEY }, signal })
     )
   })
@@ -101,7 +103,7 @@ describe('getAzureCompletion', () => {
 
     expect(post).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPTS.sv }, ...TURNS] }),
+      expect.objectContaining({ messages: [{ role: 'system', content: SYSTEM_PROMPTS.sv }, ...MESSAGES] }),
       expect.anything()
     )
   })
@@ -128,16 +130,19 @@ describe('getAzureCompletion', () => {
     ['empty', ''],
     ['whitespace only', '  \n'],
     ['missing', null],
-  ])('fails when the reply is %s', async (_, content) => {
+  ])('returns an empty reply when it is %s, with an error', async (_, content) => {
     mockPost().mockResolvedValue(response(completion(content, 'length')))
 
-    await expectNoAnswer()
+    await expect(ask()).resolves.toMatchObject({
+      finishReason: 'length',
+      usage: expect.objectContaining({ completionTokens: 200 }),
+    })
     expect(logger.error).toHaveBeenCalledWith('[HelpChatbot] Empty reply from Azure', expect.anything())
   })
 
-  it('fails when the response has no choices', async () => {
+  it('returns an empty reply when the response has no choices', async () => {
     mockPost().mockResolvedValue(response({}))
-    await expectNoAnswer()
+    await expect(ask()).resolves.toMatchObject({ model: null, content: '', finishReason: null, usage: null })
   })
 
   it.each([

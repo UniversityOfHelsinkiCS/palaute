@@ -9,10 +9,12 @@ import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { ChatEntry } from './types'
+import type { FeedbackActions } from './useConversation'
 
 import { NorButton } from '../common/NorButton'
 import AssistantMarkdown from './AssistantMarkdown'
 import EmptyState from './EmptyState'
+import FeedbackBar from './FeedbackBar'
 import { CHAT_HEADER_HEIGHT } from './layout'
 import { userBubbleColor } from './tokens'
 
@@ -36,10 +38,11 @@ type MessageListProps = {
   pending: boolean
   retryableId: string | null
   compact: boolean
-  hasGuide: boolean
   onReply: (text: string) => void
   onFailure: () => void
   onRetry: () => void
+  feedbackActions: FeedbackActions
+  onAnnounce: (text: string) => void
 }
 
 const MessageList = ({
@@ -47,16 +50,18 @@ const MessageList = ({
   pending,
   retryableId,
   compact,
-  hasGuide,
   onReply,
   onFailure,
   onRetry,
+  feedbackActions,
+  onAnnounce,
 }: MessageListProps) => {
   const { t } = useTranslation()
   const bodyRef = useRef<HTMLDivElement>(null)
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   // null until the first render after the chat opens
   const previous = useRef<{ count: number; pending: boolean; failed: boolean } | null>(null)
+  const answerIds = entries.flatMap(entry => (entry.role === 'assistant' ? [entry.id] : []))
 
   useEffect(() => {
     const body = bodyRef.current
@@ -103,7 +108,7 @@ const MessageList = ({
         p: '16px 14px',
       }}
     >
-      {entries.length === 0 && <EmptyState hasGuide={hasGuide} />}
+      {entries.length === 0 && <EmptyState />}
       {entries.length > 0 && (
         <Box
           component="ul"
@@ -154,7 +159,12 @@ const MessageList = ({
                 )}
               </Box>
             ) : (
-              <Box component="li" key={entry.id} data-entry-id={entry.id} sx={{ display: 'flex' }}>
+              <Box
+                component="li"
+                key={entry.id}
+                data-entry-id={entry.id}
+                sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}
+              >
                 <Box
                   sx={{
                     ...bubbleSx,
@@ -171,6 +181,13 @@ const MessageList = ({
                   </Box>
                   <AssistantMarkdown markdown={entry.markdown} />
                 </Box>
+                <FeedbackBar
+                  answerId={entry.id}
+                  answerNumber={answerIds.indexOf(entry.id) + 1}
+                  feedback={entry.feedback}
+                  actions={feedbackActions}
+                  onAnnounce={onAnnounce}
+                />
               </Box>
             )
           )}

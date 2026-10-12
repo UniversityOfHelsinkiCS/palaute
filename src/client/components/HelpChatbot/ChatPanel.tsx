@@ -6,6 +6,7 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import type { ChatEntry } from './types'
+import type { FeedbackActions } from './useConversation'
 
 import ExternalLink from '../common/ExternalLink'
 import ChatHeader from './ChatHeader'
@@ -28,6 +29,8 @@ type ChatPanelProps = {
   onReply: (text: string) => void
   onFailure: () => void
   onRetry: () => void
+  feedbackActions: FeedbackActions
+  onAnnounce: (text: string) => void
   onToggleExpand: () => void
   onNewConversation: () => void
   onClose: () => void
@@ -48,6 +51,8 @@ const ChatPanel = ({
   onReply,
   onFailure,
   onRetry,
+  feedbackActions,
+  onAnnounce,
   onToggleExpand,
   onNewConversation,
   onClose,
@@ -105,10 +110,11 @@ const ChatPanel = ({
           pending={pending}
           retryableId={retryableId}
           compact={compact}
-          hasGuide={guideUrl !== null}
           onReply={onReply}
           onFailure={onFailure}
           onRetry={onRetry}
+          feedbackActions={feedbackActions}
+          onAnnounce={onAnnounce}
         />
         <Composer
           inputRef={inputRef}

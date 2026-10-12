@@ -829,7 +829,7 @@
     "greetingTitle": "Hej, jag är NorppAI!",
     "greetingBody": "Fråga mig hur du gör saker i Norppa, till exempel hur du redigerar din responsenkät eller var du hittar svaren. Jag kan förklara, men jag kan inte göra ändringar åt dig.",
     "disclaimer": "Svaren genereras av AI och kan vara felaktiga.",
-    "disclaimerGuide": "Om du är osäker, kontrollera användarinstruktionerna.",
+    "disclaimerSaved": "Samtalen sparas för att förbättra Norppa.",
     "inputLabel": "Din fråga",
     "inputPlaceholder": "Ställ en fråga om Norppa",
     "send": "Skicka",
@@ -844,6 +844,14 @@
     "failedAnnouncement": "Inget svar mottogs. Du kan försöka igen.",
     "retry": "Försök igen",
     "expandChat": "Förstora chatten",
-    "shrinkChat": "Förminska chatten"
+    "shrinkChat": "Förminska chatten",
+    "helpful": "Hjälpsamt",
+    "notHelpful": "Inte hjälpsamt",
+    "feedbackGroupLabel": "Respons på svar {{number}}",
+    "feedbackCommentLabel": "Vad gick fel? (valfritt)",
+    "feedbackSend": "Skicka",
+    "feedbackSkip": "Hoppa över",
+    "feedbackThanks": "Tack för din respons!",
+    "feedbackFailed": "Din respons kunde inte sparas. Försök igen."
   }
 }

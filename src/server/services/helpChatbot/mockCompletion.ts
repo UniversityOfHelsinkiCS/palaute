@@ -1,7 +1,6 @@
 import { setTimeout as sleep } from 'node:timers/promises'
 
-import type { Completion } from './azureCompletion'
-import type { HelpChatbotRequest } from './parseRequest'
+import type { Completion, CompletionRequest } from './azureCompletion'
 
 import { ApplicationError } from '../../util/ApplicationError'
 import { inDevelopment } from '../../util/config'
@@ -85,11 +84,11 @@ const randomLatency = () => (Math.random() < 0.1 ? 6000 + Math.random() * 2000 :
 
 // Rejects with an AbortError when signal aborts, like a cancelled Azure request
 export const getMockCompletion = async (
-  { conversationId, turns }: HelpChatbotRequest,
+  { conversationId, messages }: CompletionRequest,
   signal: AbortSignal
 ): Promise<Completion> => {
-  const question = turns.at(-1)?.content ?? ''
+  const question = messages.at(-1)?.content ?? ''
   await sleep(question.includes('#slow') ? 8000 : randomLatency(), undefined, { signal })
   if (shouldFail(conversationId, question)) throw new ApplicationError('Mock failure', 502)
-  return { model: 'mock', content: replyTo(question), finishReason: 'stop', usage: null }
+  return { deployment: 'mock', model: 'mock', content: replyTo(question), finishReason: 'stop', usage: null }
 }

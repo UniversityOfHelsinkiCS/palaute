@@ -1,6 +1,8 @@
+import type { LanguageId } from '@common/types/common'
+
 import axios, { isAxiosError, isCancel } from 'axios'
 
-import type { HelpChatbotRequest } from './parseRequest'
+import type { ChatMessage } from './history'
 
 import { ApplicationError } from '../../util/ApplicationError'
 import { AZURE_API_KEY, AZURE_RESOURCE, HELP_CHATBOT_MODEL } from '../../util/config'
@@ -20,14 +22,26 @@ export type CompletionUsage = {
   reasoningTokens: number
 }
 
+export type CompletionRequest = {
+  conversationId: string
+  language: LanguageId
+  // The trimmed history, ending with the question
+  messages: ChatMessage[]
+}
+
+// content is empty when the model returned nothing, e.g. when reasoning used up the token limit or the
+// content filter stopped the reply. The tokens are billed all the same.
 export type Completion = {
-  model: string
+  deployment: string
+  // The model version Azure reports
+  model: string | null
   content: string
   finishReason: string | null
   usage: CompletionUsage | null
 }
 
 type AzureChatCompletion = {
+  model?: string
   choices?: { message?: { content?: string | null }; finish_reason?: string | null }[]
   usage?: {
     prompt_tokens: number
@@ -59,18 +73,18 @@ const describeError = (error: unknown) => {
   }
 }
 
-const noAnswer = () => new ApplicationError('No answer from the language model', 502)
+export const noAnswer = () => new ApplicationError('No answer from the language model', 502)
 
 // A cancellation through signal is rethrown as is
 export const getAzureCompletion = async (
-  { language, turns }: HelpChatbotRequest,
+  { language, messages }: CompletionRequest,
   signal: AbortSignal
 ): Promise<Completion> => {
   const url = `https://${AZURE_RESOURCE}.openai.azure.com/openai/deployments/${HELP_CHATBOT_MODEL}/chat/completions`
 
   // GPT-5 models are reasoning models: they take max_completion_tokens and reject a non-default temperature
   const body = {
-    messages: [{ role: 'system', content: SYSTEM_PROMPTS[language] }, ...turns],
+    messages: [{ role: 'system', content: SYSTEM_PROMPTS[language] }, ...messages],
     max_completion_tokens: MAX_COMPLETION_TOKENS,
     reasoning_effort: 'low',
   }
@@ -94,12 +108,8 @@ export const getAzureCompletion = async (
   const finishReason = choice?.finish_reason ?? null
   const usage = toUsage(data.usage)
 
-  // E.g. the token limit was used up by reasoning, or the content filter stopped the reply
-  if (content.trim() === '') {
-    logger.error('[HelpChatbot] Empty reply from Azure', { finishReason, usage })
-    throw noAnswer()
-  }
-  if (finishReason === 'length') logger.warn('[HelpChatbot] Reply was cut off at the token limit', { usage })
+  if (content.trim() === '') logger.error('[HelpChatbot] Empty reply from Azure', { finishReason, usage })
+  else if (finishReason === 'length') logger.warn('[HelpChatbot] Reply was cut off at the token limit', { usage })
 
-  return { model: HELP_CHATBOT_MODEL, content, finishReason, usage }
+  return { deployment: HELP_CHATBOT_MODEL, model: data.model ?? null, content, finishReason, usage }
 }

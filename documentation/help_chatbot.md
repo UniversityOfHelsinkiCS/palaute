@@ -55,7 +55,7 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 ### Empty state
 
 - A large seal (72px, decorative) above a short greeting ("Hi, I'm NorppAI!") explaining what the assistant can and cannot help with.
-- A one-line disclaimer: answers are AI-generated and may be wrong; check the user guide when in doubt.
+- A one-line disclaimer: answers are AI-generated and may be wrong, and conversations are saved to improve Norppa.
 
 ### Messages
 
@@ -75,6 +75,13 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
   - Reopening the chat scrolls to the latest message.
   - Smooth scrolling, except with `prefers-reduced-motion`.
 
+### Feedback
+
+- Every answer has thumbs up and thumbs down buttons under it. Pressing the pressed one again removes the rating, and a rating can be changed at any time.
+- A thumbs down opens an optional "What went wrong?" field with Send and Skip. Thumbs up takes no comment.
+- Nothing changes until the backend has saved the feedback. If saving fails, an inline error says so and the buttons stay as they were.
+- The feedback, and an unsent comment, are kept when the chat is closed, like the rest of the conversation.
+
 ### Input
 
 - Enter sends, Shift+Enter inserts a newline. The field grows with its content up to a maximum height.
@@ -92,28 +99,43 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 - It is a different service, so links open in a **new tab**, with the usual "opens in a new tab" indication.
   - The menu's "Read the user guide" option already says "Opens the wiki in a new tab" in its visible description, so it gets no extra icon or hidden text. Everywhere else, use `ExternalLink`.
 - The assistant's replies may link to specific pages of the guide.
-- **Deployments without a user guide** (`links:wikiRoot` is not an http(s) URL, e.g. `-`): all guide links are hidden, the pill opens the chat directly (a menu with one option is pointless), and the disclaimer drops its "check the user guide" sentence.
-
-### Placeholder backend
-
-- A fake service behind the same interface the real backend will use.
-- Should fake realistic behaviour, not just the happy path: variable latency, occasional failures, replies containing markdown and links to the user guide.
-- The request/response contract is a placeholder until the real backend is designed. It is confined to `src/common/types/helpChatbot.ts` and the service module, so changing it doesn't ripple through the UI.
+- **Deployments without a user guide** (`links:wikiRoot` is not an http(s) URL, e.g. `-`): all guide links are hidden and the pill opens the chat directly (a menu with one option is pointless).
 
 ### Backend integration
 
 Everything backend-specific is behind one seam, `src/client/components/HelpChatbot/helpChatbotService.ts`. The rest of the module only uses its exports:
 
-- `askNorppai(conversationId, entries, signal)` → `{ id, markdown }`. `entries` is the chat's own model (`HelpChatbot/types.ts`) and ends with the question being asked; the service turns it into whatever the backend wants. Any rejection shows "No answer received".
-- `isCancelled(error)`: recognises a request aborted through `signal` (New conversation aborts it). It already handles axios cancellation.
+- `askNorppai(conversationId, previousAnswerId, question, signal)` → `{ id, markdown }`. `previousAnswerId` is the latest answer in the conversation (null before the first one); the server keeps the history. Any rejection shows "No answer received".
+- `sendFeedback(answerId, rating, comment?)`: saves a rating, replacing any earlier one. A null rating removes it.
+- `isCancelled(error)`: recognises a request aborted through `signal` (New conversation aborts it).
 
-To plug in the real backend:
+The wire format is in `src/common/types/helpChatbot.ts`; nothing outside the service depends on it.
 
-1. Replace the mock call in `askNorppai` with an `apiClient` request, passing `signal`. Map the request and response there.
-2. Change `src/common/types/helpChatbot.ts` to the real contract. The current shape is a placeholder; nothing outside the service depends on it.
-3. Delete `mockHelpChatbotService.ts`.
+## Backend
 
-Only if the backend's model differs from the one above does anything else change, and then only `useConversation.ts`: for example, a server-issued conversation id (today the client generates one per conversation) or streaming replies (the assistant entry's `markdown` would grow while a new `'streaming'` status is shown).
+`src/server/routes/helpChatbot` and `src/server/services/helpChatbot`. Every route is for admins only (`adminAccess`).
+
+- `POST /help-chatbot/messages` with `{ conversationId, previousTurnId, language, question }` → `{ message: { id, role, content } }`.
+- `PUT /help-chatbot/messages/:id/feedback` with `{ rating, comment? }` → 204. `rating` is `up`, `down` or null; only `down` takes a comment. A 404 unless the turn is an answer to the same user.
+
+### The model
+
+Azure OpenAI, deployment `HELP_CHATBOT_MODEL` (default `gpt-5-mini`) on `AZURE_RESOURCE`, with the system prompt and `knowledge.md` in `systemPrompt.ts`. Without `AZURE_API_KEY` and `AZURE_RESOURCE`, development and tests use `mockCompletion.ts`, while production and staging answer 503.
+
+**To cut the chatbot off** in an emergency, remove `AZURE_API_KEY` from the deployment. `HELP_CHATBOT_ENABLED` hides the whole feature, but needs a redeploy. Rate limits (`rateLimit.ts`, in Redis) cap each user per minute and per day, and everyone together per day.
+
+### Saved conversations
+
+Every question is saved in `help_chatbot_turns`, one row per question, together with its answer, token usage and feedback. `turns.ts` is the only module that writes it.
+
+- **The server keeps the history.** The client sends `previousTurnId`, the last answer it showed. The server follows `previous_turn_id` back from it through the conversation's answered turns. Failed questions, retries and answers the user never saw (e.g. the response was lost on the way) aren't on that chain, so they never reach the model, and the chain shows exactly what the model saw (before trimming to `MAX_HISTORY_LENGTH`). A `previousTurnId` that isn't an answered turn of the same user's conversation is a 400.
+- **Statuses.** A row is inserted as `pending` before the model is called, then becomes `answered`, `empty` (the model returned no content: the token limit was used up by reasoning, or the content filter stopped the reply; the tokens are billed all the same), `failed` (the request to Azure failed) or `aborted` (the client went away). A `pending` row that stays so means the server stopped mid-request, or the answer couldn't be saved (see below), in which case its tokens were billed but aren't recorded.
+- **An answer that can't be saved isn't sent.** If inserting the row fails, the model isn't called; if saving the answer fails, the user gets "No answer received". Either way the error reaches Sentry.
+- **Who asked.** `user_id` is the person typing, saved for every user: during "login as" the admin. It's what the history and the feedback check ownership against, and deleting a user deletes their turns.
+- **Metadata.** `metadata` is a JSON object of context saved with each turn and only shown in the viewer: today `uiLanguage` and, during "login as", `impersonatedUserId`. Later it can hold more of what's sent to the model, e.g. the user's role and the page they were on. The code writes the keys typed in `HelpChatbotTurnMetadata`; the database takes any object, `{}` included. Keys are camelCase, as the object is written and read only by our TypeScript code. Anything the viewer filters or totals on (status, model, tokens, version) stays a column.
+- **Costs.** `prompt_tokens`, `cached_tokens`, `completion_tokens` and `reasoning_tokens` come from Azure. Cached tokens are part of the prompt tokens and reasoning tokens part of the completion tokens, so don't add them up. Price by `model`, the model version Azure reports (`deployment` is our deployment's name). Aborted requests are probably billed in part, but Azure doesn't report their usage. Turns answered by the mock in development have `deployment = 'mock'` (saved before the call, so failed ones too) and no usage.
+- **Versions.** `git_sha` is the commit that was deployed, which pins the system prompt and the knowledge. It's empty in development.
+- **Privacy.** The empty state tells users that conversations are saved. Only metadata goes to the logs, and Sentry drops the chatbot's request bodies, so the content stays in this table. Retention isn't decided yet: the content columns (`user_id`, `question`, `answer`, `feedback_comment`) are nullable, so old rows can be cleared and their usage data kept; so can `metadata`, which may hold user ids.
 
 ## Accessibility requirements
 
@@ -128,6 +150,7 @@ Only if the backend's model differs from the one above does anything else change
 - New assistant replies are announced in full through a **polite live region** (WCAG 4.1.3 Status Messages), but only while the chat is open. Errors are announced as well.
 - The Expand toggle keeps one accessible name ("Expand chat") and exposes its state with `aria-pressed`; screen readers announce a state change reliably but often miss a name change on the focused button. The icon and tooltip switch between expand and shrink.
 - Icon buttons have a tooltip with the same text as their accessible name.
+- Each answer's feedback buttons are a group named "Feedback on answer N", so the many "Helpful" buttons can be told apart. They expose the rating with `aria-pressed`. A thumbs down moves focus to the comment field; sending or skipping moves it back to the thumbs down. Saved feedback and errors are announced through the live region.
 - The waiting indicator is text ("NorppAI is thinking…"); the seal animation is decorative. The text pulses between `text.secondary` and `text.primary`: fading it out would drop it below 4.5:1 contrast.
 - With `prefers-reduced-motion`, the resize transitions, the seal's slide and all seal animations are switched off (WCAG 2.2.2).
 - The pill, menu, panel controls and message links are fully keyboard operable, with unique accessible names.
@@ -139,8 +162,8 @@ Only if the backend's model differs from the one above does anything else change
 ## Later (out of scope for the MVP)
 
 - Links from answers to places in the app (e.g. directly to a survey's results).
-- Thumbs up/down feedback on answers.
-- Recording/reviewing conversations to evaluate usefulness.
+- A view for reviewing the saved conversations, their feedback and costs.
+- A retention period for the saved conversations.
 - Sending the user's current page as context with each message. This needs a routing rework (e.g. a data router with `useMatches`); a hand-maintained route table is not worth it.
 - An in-app help page, possibly sharing a source with the assistant's knowledge document.
 - Streaming replies and a "stop generating" control.

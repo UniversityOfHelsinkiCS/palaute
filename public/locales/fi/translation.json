@@ -839,7 +839,7 @@
     "greetingTitle": "Hei, olen NorppAI!",
     "greetingBody": "Kysy minulta, miten Norpassa tehdään asioita, esimerkiksi miten muokkaat palautekyselyä tai mistä löydät vastaukset. Voin neuvoa, mutta en voi tehdä muutoksia puolestasi.",
     "disclaimer": "Vastaukset ovat tekoälyn tuottamia ja voivat olla virheellisiä.",
-    "disclaimerGuide": "Jos olet epävarma, tarkista käyttöohjeesta.",
+    "disclaimerSaved": "Keskustelut tallennetaan Norpan kehittämiseksi.",
     "inputLabel": "Kysymyksesi",
     "inputPlaceholder": "Kysy jotain Norpasta",
     "send": "Lähetä",
@@ -854,6 +854,14 @@
     "failedAnnouncement": "Vastausta ei saatu. Voit yrittää uudelleen.",
     "retry": "Yritä uudelleen",
     "expandChat": "Suurenna keskustelu",
-    "shrinkChat": "Pienennä keskustelu"
+    "shrinkChat": "Pienennä keskustelu",
+    "helpful": "Hyödyllinen",
+    "notHelpful": "Ei hyödyllinen",
+    "feedbackGroupLabel": "Palaute vastauksesta {{number}}",
+    "feedbackCommentLabel": "Mikä meni pieleen? (valinnainen)",
+    "feedbackSend": "Lähetä",
+    "feedbackSkip": "Ohita",
+    "feedbackThanks": "Kiitos palautteestasi!",
+    "feedbackFailed": "Palautettasi ei voitu tallentaa. Yritä uudelleen."
   }
 }
