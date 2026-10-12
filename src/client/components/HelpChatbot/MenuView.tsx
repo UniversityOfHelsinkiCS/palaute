@@ -5,6 +5,9 @@ import { Close, MenuBookOutlined } from '@mui/icons-material'
 import { Box, IconButton, Link, Tooltip } from '@mui/material'
 import { useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
+
+import type { GuideLink } from './useGuideLink'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { SEAL_SIZE, getMenuHeight } from './layout'
@@ -45,14 +48,14 @@ const labelSx: SxProps<Theme> = { display: 'block', fontSize: '14px', fontWeight
 const descriptionSx: SxProps<Theme> = { display: 'block', fontSize: '12.5px', fontWeight: 500, color: 'text.secondary' }
 
 type MenuViewProps = {
-  guideUrl: string
+  guide: GuideLink
   askRef: Ref<HTMLButtonElement>
   onHeightChange: (height: number) => void
   onAsk: () => void
   onClose: () => void
 }
 
-const MenuView = ({ guideUrl, askRef, onHeightChange, onAsk, onClose }: MenuViewProps) => {
+const MenuView = ({ guide, askRef, onHeightChange, onAsk, onClose }: MenuViewProps) => {
   const { t } = useTranslation()
   const titleId = useId()
   const guideLabelId = useId()
@@ -84,11 +87,12 @@ const MenuView = ({ guideUrl, askRef, onHeightChange, onAsk, onClose }: MenuView
         </Tooltip>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {/* The visible description is the new-tab indication, so no ExternalLink icon or hidden text here */}
+        {/* The in-app guide opens in the same tab, keeping the conversation. For the wiki, the visible description
+            is the new-tab indication, so no ExternalLink icon or hidden text here. */}
         <Link
-          href={guideUrl}
-          target="_blank"
-          rel="noopener noreferrer"
+          {...(guide.inApp
+            ? { component: RouterLink, to: guide.href }
+            : { href: guide.href, target: '_blank', rel: 'noopener noreferrer' })}
           underline="none"
           aria-labelledby={guideLabelId}
           aria-describedby={guideDescriptionId}
@@ -103,7 +107,7 @@ const MenuView = ({ guideUrl, askRef, onHeightChange, onAsk, onClose }: MenuView
               {t('helpChatbot:guideOption')}
             </Box>
             <Box component="span" id={guideDescriptionId} sx={descriptionSx}>
-              {t('helpChatbot:guideOptionDescription')}
+              {t(guide.inApp ? 'helpChatbot:guideOptionDescriptionInApp' : 'helpChatbot:guideOptionDescription')}
             </Box>
           </span>
         </Link>

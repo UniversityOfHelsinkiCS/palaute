@@ -95,11 +95,12 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 
 ### User guide link
 
-- There is no in-app help page. All help links point to the **existing user guide on the wiki**, the same one the footer links to ("Käyttöohje").
-- It is a different service, so links open in a **new tab**, with the usual "opens in a new tab" indication.
+- Users who can see the **in-app user guide** ([user_guide.md](user_guide.md)) get it: the menu option and the strip open `/guide` in the same tab, so the conversation is kept. The menu option's description then says "Instructions for using Norppa". The full-screen chat closes when its strip link is followed, as it would cover the guide.
+- Everyone else gets the **user guide on the wiki**, the same one the footer links to ("Käyttöohje"). It is a different service, so links open in a **new tab**, with the usual "opens in a new tab" indication.
   - The menu's "Read the user guide" option already says "Opens the wiki in a new tab" in its visible description, so it gets no extra icon or hidden text. Everywhere else, use `ExternalLink`.
+- `useGuideLink` picks the link.
 - The assistant's replies may link to specific pages of the guide.
-- **Deployments without a user guide** (`links:wikiRoot` is not an http(s) URL, e.g. `-`): all guide links are hidden and the pill opens the chat directly (a menu with one option is pointless).
+- **Deployments without a user guide** (no in-app guide, and `links:wikiRoot` is not an http(s) URL, e.g. `-`): all guide links are hidden and the pill opens the chat directly (a menu with one option is pointless).
 
 ### Backend integration
 
@@ -182,7 +183,7 @@ The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) 
 - A retention period for the saved conversations.
 - Faster search in the viewer (`pg_trgm`), if the data grows.
 - Sending the user's current page as context with each message. This needs a routing rework (e.g. a data router with `useMatches`); a hand-maintained route table is not worth it.
-- An in-app help page, possibly sharing a source with the assistant's knowledge document.
+- Linking answers to pages of the in-app user guide instead of the wiki.
 - Streaming replies and a "stop generating" control.
 - Suggested starter questions, possibly varying by the current page.
 - Copy-answer button.

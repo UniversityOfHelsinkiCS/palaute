@@ -843,6 +843,7 @@
     "closeMenu": "Close help menu",
     "guideOption": "Read the user guide",
     "guideOptionDescription": "Opens the wiki in a new tab",
+    "guideOptionDescriptionInApp": "Instructions for using Norppa",
     "askNorppai": "Ask NorppAI",
     "closeChat": "Close chat",
     "guideStripPrefix": "Prefer to read?",
@@ -874,5 +875,12 @@
     "feedbackSkip": "Skip",
     "feedbackThanks": "Thanks for your feedback!",
     "feedbackFailed": "Your feedback couldn't be saved. Try again."
+  },
+  "userGuide": {
+    "title": "User guide",
+    "contents": "Contents",
+    "previous": "Previous",
+    "next": "Next",
+    "pageNavigation": "Previous and next page"
   }
 }

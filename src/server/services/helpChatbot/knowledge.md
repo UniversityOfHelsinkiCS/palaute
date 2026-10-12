@@ -9,6 +9,7 @@ Rules for editing:
 - Say which survey types and roles a fact applies to. Unqualified facts are read as applying to all.
 - When a label depends on the user or the situation, give every variant.
 - Keep it compact: every word is sent with every question.
+- When a fact changes, update the in-app user guide too (src/client/pages/UserGuide/content).
 -->
 
 # Norppa
@@ -156,8 +157,8 @@ The same for all survey types. The [[feedbackTargetView:feedbacksTab]] tab shows
 - A responsible teacher sets a question's publicity on the [[feedbackTargetView:feedbacksTab]] tab (scale and choice questions also in the question editor). An open question can be made public only after the survey has closed, after confirming its answers contain no personal data.
 - [[feedbackTargetResults:setHidden]] (eye icon; responsible teachers and programme admins) hides an open answer from those who see only public answers. All identical answers to the question are hidden together.
 - Small courses: if fewer than 5 students are enrolled, students must tick [[feedbackView:allowSubmitCheckbox]] to submit, and results are shown only to the responsible teachers. Others see a note that results aren't shown. The limit counts enrolled students in Norppa, not answers.
-- Answers are shown in random order per question, so one student's answers can't be linked together.
-- The tab shows each question's distribution, mean and median, with chart and table views, and the daily number of answers.
+- Open answers are listed in alphabetical order, and each question's answers are shuffled separately in the download, so one student's answers can't be linked together.
+- The tab shows each question's distribution, with chart and table views, the mean of scale questions and the workload question, and the daily number of answers.
 
 ### Who has answered
 

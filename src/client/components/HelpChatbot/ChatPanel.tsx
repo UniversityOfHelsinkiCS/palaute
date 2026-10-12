@@ -1,12 +1,14 @@
 import type { RefObject } from 'react'
 
-import { Box, useMediaQuery } from '@mui/material'
+import { Box, Link, useMediaQuery } from '@mui/material'
 import FocusTrap from '@mui/material/Unstable_TrapFocus'
 import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
 
 import type { ChatEntry } from './types'
 import type { FeedbackActions } from './useConversation'
+import type { GuideLink } from './useGuideLink'
 
 import ExternalLink from '../common/ExternalLink'
 import ChatHeader from './ChatHeader'
@@ -16,7 +18,7 @@ import MessageList from './MessageList'
 import { primaryTint } from './tokens'
 
 type ChatPanelProps = {
-  guideUrl: string | null
+  guide: GuideLink | null
   inputRef: RefObject<HTMLTextAreaElement | null>
   entries: ChatEntry[]
   pending: boolean
@@ -38,7 +40,7 @@ type ChatPanelProps = {
 
 // Not an MUI Dialog, which is always modal
 const ChatPanel = ({
-  guideUrl,
+  guide,
   inputRef,
   entries,
   pending,
@@ -87,7 +89,7 @@ const ChatPanel = ({
           onNewConversation={onNewConversation}
           onClose={onClose}
         />
-        {guideUrl && (
+        {guide && (
           <Box
             sx={{
               flex: 'none',
@@ -100,9 +102,22 @@ const ChatPanel = ({
             }}
           >
             {t('helpChatbot:guideStripPrefix')}{' '}
-            <ExternalLink href={guideUrl} sx={{ fontWeight: 600 }}>
-              {t('helpChatbot:guideStripLink')}
-            </ExternalLink>
+            {guide.inApp ? (
+              // The full-screen chat covers the page, so it closes to show the guide
+              <Link
+                component={RouterLink}
+                to={guide.href}
+                underline="always"
+                onClick={fullScreen ? onClose : undefined}
+                sx={{ fontWeight: 600 }}
+              >
+                {t('helpChatbot:guideStripLink')}
+              </Link>
+            ) : (
+              <ExternalLink href={guide.href} sx={{ fontWeight: 600 }}>
+                {t('helpChatbot:guideStripLink')}
+              </ExternalLink>
+            )}
           </Box>
         )}
         <MessageList

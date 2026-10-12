@@ -1,0 +1,158 @@
+import type { ComponentProps, ReactNode } from 'react'
+import type { Components, ExtraProps } from 'react-markdown'
+
+import { Box, Link, Typography } from '@mui/material'
+import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
+
+import ExternalLink from '../../components/common/ExternalLink'
+import Markdown from '../../components/common/Markdown'
+
+// [[section:key]] is the UI label in the user's language and [[section:key|fi]] in the given one, as in the help
+// chatbot's knowledge.md, so the guide always quotes what the user sees on the screen
+const LABEL = /\[\[([\w:-]+)(?:\|(fi|sv|en))?\]\]/g
+
+export const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
+  markdown.replace(LABEL, (_, key: string, pinned?: string) => `**${translate(key, pinned).replace(/<[^>]*>/g, '')}**`)
+
+// The parts of a hast tree the heading ids need; the hast types are only a transitive dependency
+type HastNode = {
+  type: string
+  tagName?: string
+  value?: string
+  properties?: Record<string, unknown>
+  children?: HastNode[]
+}
+
+const HEADING_ID = /\s*\{#([\w-]+)\}\s*$/
+
+// "## Heading {#id}" gives the heading a stable id to link to. It's written by hand, so it's the same in every
+// language and doesn't change when the heading's text or a label in it does.
+export const rehypeHeadingIds = () => (tree: HastNode) => {
+  const visit = (node: HastNode) => {
+    if (node.type === 'element' && /^h[1-6]$/.test(node.tagName ?? '')) {
+      const last = node.children?.at(-1)
+      const match = last?.type === 'text' ? HEADING_ID.exec(last.value ?? '') : null
+      if (last && match) {
+        last.value = last.value?.replace(HEADING_ID, '')
+        node.properties = { ...node.properties, id: match[1] }
+      }
+    }
+    node.children?.forEach(visit)
+  }
+  visit(tree)
+}
+
+type HeadingProps = ComponentProps<'h1'> & ExtraProps
+
+// The page's h1 takes focus after navigating to it, so screen reader users start from the new page's title
+const H1 = ({ id, children }: HeadingProps) => (
+  <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ mb: 3, '&:focus': { outline: 'none' } }}>
+    {children}
+  </Typography>
+)
+
+const H2 = ({ id, children }: HeadingProps) => (
+  <Typography variant="h5" component="h2" id={id} sx={{ mt: 4, mb: 1.5, scrollMarginTop: '1rem' }}>
+    {children}
+  </Typography>
+)
+
+const H3 = ({ id, children }: HeadingProps) => (
+  <Typography
+    variant="h6"
+    component="h3"
+    id={id}
+    sx={{ mt: 3, mb: 1, fontSize: '1.1rem', fontWeight: 600, scrollMarginTop: '1rem' }}
+  >
+    {children}
+  </Typography>
+)
+
+const H4 = ({ id, children }: HeadingProps) => (
+  <Typography variant="body1" component="h4" id={id} sx={{ mt: 2, mb: 1, fontWeight: 600, scrollMarginTop: '1rem' }}>
+    {children}
+  </Typography>
+)
+
+const P = ({ children }: ComponentProps<'p'> & ExtraProps) => (
+  <Typography variant="body1" component="p" sx={{ mb: 1.5 }}>
+    {children}
+  </Typography>
+)
+
+const List = ({ component, children }: { component: 'ul' | 'ol'; children?: ReactNode }) => (
+  <Box component={component} sx={{ mt: 0, mb: 1.5, pl: 3, '& li': { mb: 0.5 }, '& li > p': { mb: 0.5 } }}>
+    {children}
+  </Box>
+)
+
+// Notes and warnings, written as "> **Note:** ..."
+const Blockquote = ({ children }: ComponentProps<'blockquote'> & ExtraProps) => (
+  <Box
+    component="aside"
+    sx={{
+      my: 2,
+      px: 2,
+      py: 1.5,
+      borderLeft: '4px solid',
+      borderColor: 'primary.main',
+      bgcolor: 'action.hover',
+      borderRadius: 1,
+      '& p:last-child': { mb: 0 },
+    }}
+  >
+    {children}
+  </Box>
+)
+
+// Links to other guide pages and to places in Norppa go through the router, which keeps e.g. the help chatbot's
+// conversation. Other sites open in a new tab.
+const GuideLink = ({ href = '', children }: ComponentProps<'a'> & ExtraProps) => {
+  if (/^https?:\/\//.test(href)) return <ExternalLink href={href}>{children}</ExternalLink>
+  if (href.startsWith('mailto:') || href.startsWith('#')) {
+    return (
+      <Link href={href} underline="always">
+        {children}
+      </Link>
+    )
+  }
+  return (
+    <Link component={RouterLink} to={href} underline="always">
+      {children}
+    </Link>
+  )
+}
+
+// Passing components replaces all of Markdown's defaults, so this is the full set
+const components: Components = {
+  h1: H1,
+  h2: H2,
+  h3: H3,
+  h4: H4,
+  h5: H4,
+  h6: H4,
+  p: P,
+  ul: ({ children }) => <List component="ul">{children}</List>,
+  ol: ({ children }) => <List component="ol">{children}</List>,
+  blockquote: Blockquote,
+  a: GuideLink,
+}
+
+type GuideMarkdownProps = {
+  markdown: string
+}
+
+// HTML comments are notes for editors. Images are left out: screenshots would go out of date with every UI change.
+const GuideMarkdown = ({ markdown }: GuideMarkdownProps) => {
+  const { t, i18n } = useTranslation()
+  const translate = (key: string, language?: string) => (language ? i18n.getFixedT(language)(key) : t(key))
+
+  return (
+    <Markdown components={components} rehypePlugins={[rehypeHeadingIds]} disallowedElements={['img']}>
+      {renderLabels(markdown.replace(/<!--[\s\S]*?-->/g, ''), translate)}
+    </Markdown>
+  )
+}
+
+export default GuideMarkdown

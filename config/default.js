@@ -262,6 +262,12 @@ const config = {
   HELP_CHATBOT_ENABLED: false,
 
   /**
+   * Whether the in-app user guide (/guide) is shown. Currently shown to admins only.
+   * Its content is written for HY. See documentation/user_guide.md.
+   */
+  USER_GUIDE_ENABLED: false,
+
+  /**
    * Alway show list of students in feedback target view
    * value: false = Only show list of students when studentListVisible is set at course or organisation level
    * value: true  = Always show list of students, hide feedback given status if studentListVisible is not set

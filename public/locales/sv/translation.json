@@ -828,6 +828,7 @@
     "closeMenu": "Stäng hjälpmenyn",
     "guideOption": "Användarinstruktioner",
     "guideOptionDescription": "Öppnar wikin i en ny flik",
+    "guideOptionDescriptionInApp": "Instruktioner för att använda Norppa",
     "askNorppai": "Fråga NorppAI",
     "closeChat": "Stäng chatten",
     "guideStripPrefix": "Vill du hellre läsa?",
@@ -859,5 +860,12 @@
     "feedbackSkip": "Hoppa över",
     "feedbackThanks": "Tack för din respons!",
     "feedbackFailed": "Din respons kunde inte sparas. Försök igen."
+  },
+  "userGuide": {
+    "title": "Användarinstruktioner",
+    "contents": "Innehåll",
+    "previous": "Föregående",
+    "next": "Nästa",
+    "pageNavigation": "Föregående och nästa sida"
   }
 }

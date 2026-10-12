@@ -25,7 +25,7 @@ import PillView from './PillView'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
 import useAnnouncer from './useAnnouncer'
 import useConversation from './useConversation'
-import useGuideUrl from './useGuideUrl'
+import useGuideLink from './useGuideLink'
 import WidgetSeal from './WidgetSeal'
 
 const fadeIn = keyframes`
@@ -41,7 +41,7 @@ const boxTransition = [
 // Stays mounted across in-app navigation, which is what persists the conversation
 const HelpChatbot = () => {
   const { t } = useTranslation()
-  const guideUrl = useGuideUrl()
+  const guide = useGuideLink()
 
   const [view, setView] = useState<WidgetView>('closed')
   const [pillWidth, setPillWidth] = useState(DEFAULT_PILL_WIDTH)
@@ -93,7 +93,7 @@ const HelpChatbot = () => {
 
   const openFromPill = () => {
     if (!reduceMotion) setSealOnce(true)
-    goTo(guideUrl ? 'menu' : 'chat')
+    goTo(guide ? 'menu' : 'chat')
   }
 
   const close = () => goTo('closed')
@@ -176,9 +176,9 @@ const HelpChatbot = () => {
           }}
         >
           {view === 'closed' && <PillView buttonRef={pillRef} onOpen={openFromPill} onWidthChange={setPillWidth} />}
-          {view === 'menu' && guideUrl && (
+          {view === 'menu' && guide && (
             <MenuView
-              guideUrl={guideUrl}
+              guide={guide}
               askRef={askRef}
               onHeightChange={setMenuHeight}
               onAsk={() => goTo('chat')}
@@ -187,7 +187,7 @@ const HelpChatbot = () => {
           )}
           {view === 'chat' && (
             <ChatPanel
-              guideUrl={guideUrl}
+              guide={guide}
               inputRef={inputRef}
               entries={entries}
               pending={pending}

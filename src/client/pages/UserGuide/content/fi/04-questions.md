@@ -1,0 +1,135 @@
+# Kyselyn kysymykset
+
+Kurssin kyselyssä on aina yliopistotason kysymykset ja mahdollisesti koulutusohjelman omia kysymyksiä. Niitä ei voi muuttaa. Omia kysymyksiä voit lisätä siihen asti, kun kysely aukeaa.
+
+## Kysymysten muokkaaminen {#edit-questions}
+
+Kysymyksiä voivat muokata:
+
+- kurssin kysely: kurssin vastuuopettajat ja hallintohenkilöt sekä kurssin koulutusohjelman hallinnoijat (ks. [Roolit ja oikeudet](/guide/roles#course-roles))
+- välipalaute: kurssin vastuuopettajat
+- koulutusohjelman kysely: sen vastuuhenkilöt ja koulutusohjelman hallinnoijat.
+
+Kysymyksiä voi muokata vain siihen asti, kun kysely aukeaa. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, jotta kaikki opiskelijat vastaavat samoihin kysymyksiin. Kun kysely on sulkeutunut, välilehteä ei enää näy.
+
+Kysymyksen lisääminen:
+
+1. Avaa kysely [[navBar:myCourses]]-sivulta.
+2. Avaa [[feedbackTargetView:surveyQuestionsTab]]-välilehti.
+3. Valitse kysymysten alta [[questionEditor:addQuestion]] ja valitse [kysymyksen tyyppi](#question-types).
+4. Kirjoita kysymys suomeksi, ruotsiksi ja englanniksi. Voit myös lisätä kysymykselle [[questionEditor:description]]-tekstin, esimerkiksi tarkennukseksi.
+5. Jos kysymykseen on pakko vastata, kytke päälle [[common:required]].
+6. Valitse [[questionEditor:done]].
+
+Kysymys tallentuu heti. Mitään muuta ei tarvitse tallentaa tai julkaista: opiskelijat saavat ne kysymykset, jotka kyselyssä on sen auetessa.
+
+Jokaisessa omassa kysymyksessä on seuraavat painikkeet, ja jokainen muutos tallentuu heti:
+
+- [[common:edit]] avaa kysymyksen uudelleen muokattavaksi. Ikkunan [[common:cancel]] hylkää muutokset.
+- [[questionEditor:duplicate]] lisää kysymyksestä kopion heti sen perään.
+- Nuolet ([[questionEditor:moveUp]] ja [[questionEditor:moveDown]]) siirtävät kysymystä omien kysymystesi joukossa.
+- [[questionEditor:removeQuestion]] poistaa kysymyksen, kun vahvistat poiston. Useamman kysymyksen voit poistaa kerralla kysymysten alla olevalla [[questionEditor:removeMany]]-painikkeella.
+
+[[questionEditor:addTextualContent]] lisää kysymyksen sijaan _tekstiosion_, esimerkiksi ohjeen tai väliotsikon sitä seuraaville kysymyksille. Tekstiosioissa ja kysymysten kuvauksissa voi käyttää Markdownia, esimerkiksi linkkejä ja luetteloita.
+
+Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovatko sen vastaukset julkisia. Katso [Kuka näkee vastaukset](/guide/results#public-answers).
+
+## Kysymystyypit {#question-types}
+
+- [[questionEditor:likertQuestion]]: väittämä, johon vastataan asteikolla 1–5 tai vaihtoehdolla _eos_ (en osaa sanoa). Numeroilla ei ole selitteitä, joten kerro kysymyksessä tai sen kuvauksessa, mitä 1 ja 5 tarkoittavat, esimerkiksi 1 = täysin eri mieltä, 5 = täysin samaa mieltä.
+- [[questionEditor:openQuestion]]: opiskelija kirjoittaa vastauksensa itse.
+- [[questionEditor:singleChoiceQuestion]]: opiskelija valitsee yhden vaihtoehdoista. Vaihtoehdot lisätään [[questionEditor:addOption]]-painikkeella. Monivalintakysymyksessä on oltava vähintään yksi vaihtoehto.
+- [[questionEditor:multipleChoiceQuestion]]: opiskelija voi valita vaihtoehdoista niin monta kuin haluaa.
+
+Norpassa ei ole ehdollisia kysymyksiä, jotka näkyisivät aiempien vastausten mukaan, eikä tiedostojen lataamista.
+
+## Yliopistotason kysymykset {#university-questions}
+
+Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta niihin voi [lisätä niistä kopiot](#copy-questions).
+
+Kurssien kyselyt, jotka aukeavat 2.8.2026 tai myöhemmin, alkavat asteikon selittävällä tekstillä, jota seuraavat nämä kysymykset (suomeksi, ruotsiksi ja englanniksi):
+
+1. Kurssin rakenne ja aikataulu olivat selkeät. _Kursens struktur och tidtabell var tydliga. / The course structure and schedule were clear._
+2. Kurssilla oli selvästi esitetty se, mitä meidän tulisi oppia. _Det framgick tydligt på kursen vad vi förväntades lära oss. / The intended learning outcomes of the course were clearly communicated._
+3. Opetustilanteissa opiskelijoita kannustettiin keskustelemaan ajatuksistaan ja näkökulmistaan. _Under undervisningstillfällena uppmuntrades studenterna att diskutera sina tankar och perspektiv. / Students were encouraged to discuss their ideas and perspectives during teachings._
+4. Oppimisen arvioinnin vaatimukset (tentti, harjoitus, kurssisuoritus) olivat minulle selvät. _Bedömningsgrunderna (tentamen, övning, kursprestation) var tydliga för mig. / The requirements for assessment (examination, assignment, course performance) were clear to me._
+5. Kurssilla käytetyt menetelmät auttoivat minua luomaan yhteyksiä opiskeltavien asioiden ja aikaisempien tietojeni välillä. _De metoder som användes på kursen hjälpte mig att skapa kopplingar mellan det studerade innehållet och mina tidigare kunskaper. / The methods used in the course helped me make connections between the course content and my prior knowledge._
+6. Työmäärä suhteessa opintopisteisiin oli: raskas, melko raskas, sopiva, melko kevyt, kevyt. _Arbetsmängden i förhållande till studiepoängen var: tung, ganska tung, lämplig, ganska lätt, lätt. / The workload in relation to the credits awarded was: heavy, fairly heavy, appropriate, fairly light, light._
+7. Muita huomioita (avoin kysymys). _Övriga kommentarer (öppen fråga). / Additional comments (open-ended question)._
+
+Kysymyksiin 1–5 vastataan asteikolla 1 = täysin eri mieltä ... 5 = täysin samaa mieltä tai eos.
+
+Se, mitkä kysymykset kyselyssä on, riippuu kyselyn avautumispäivästä. Aiemmin, syksystä 2021 alkaen, avautuneissa kyselyissä oli eri kysymykset: neljä väittämää (osaamistavoitteet olivat selvät, toteutustapa tuki oppimistani, materiaalit tukivat oppimistani, arviointimenetelmät mittasivat oppimistani), työmääräkysymys ja avoin kysymys _Muita huomioita_.
+
+Yliopistotason asteikkokysymysten keskiarvot näkyvät [kurssiyhteenvedossa](/guide/course-summary#figures).
+
+## Koulutusohjelman kysymykset {#programme-questions}
+
+Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiään kaikkien opintojaksojensa kyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunan laatikko kertoo, montako niitä on ja mikä organisaatio ne on lisännyt.
+
+Opettaja ei voi muokata tai poistaa koulutusohjelman kysymyksiä. Jos jokin niistä ei sovi kurssillesi, ota yhteyttä koulutusohjelmaan. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä.
+
+Koulutusohjelman henkilöstö lisää ja muokkaa näitä kysymyksiä koulutusohjelman sivulla, ks. [Koulutusohjelman kysymykset](/guide/programmes#programme-questions).
+
+## Kysymysten järjestys opiskelijalle {#question-order}
+
+Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman kysymykset ja lopuksi omat kysymyksesi. Opiskelija näkee ne tässä järjestyksessä:
+
+1. Ryhmittelykysymys, jos kyselyssä on sellainen (ks. [Ryhmät](#groups)).
+2. Yliopistotason asteikko- ja monivalintakysymykset.
+3. Koulutusohjelman asteikko- ja monivalintakysymykset.
+4. Omat kysymyksesi ja tekstiosiosi siinä järjestyksessä, johon olet ne laittanut.
+5. Koulutusohjelman avoimet kysymykset.
+6. Yliopistotason avoin kysymys, joten _Muita huomioita_ on aina viimeisenä.
+
+Lopputuloksen näet [[editFeedbackTarget:showPreview]]-painikkeella (ks. [Kieliversiot ja esikatselu](#languages)).
+
+## Kysymykset edelliseltä toteutukselta {#carry-over}
+
+Koskee vain kurssien kyselyjä. Kun uuden kurssitoteutuksen kysely avataan Norpassa ensimmäisen kerran, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta. Tämä tapahtuu viimeistään viikkoa ennen kyselyn aukeamista, kun vastuuopettajat saavat muistutusviestinsä.
+
+- Edellinen toteutus on viimeisin tätä toteutusta aiemmin alkanut toteutus, jolla on tämän kanssa ainakin yksi yhteinen opettaja missä tahansa opettajaroolissa.
+- Kopio tehdään vain kerran. Sen jälkeen kummankaan kyselyn muutokset eivät vaikuta toiseen.
+- Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
+- Myös ryhmittelykysymys kopioituu. Tarkista, että sen vaihtoehdot vastaavat tämän toteutuksen ryhmiä.
+- Poista tarpeettomat kysymykset tavalliseen tapaan.
+
+Mitään ei kopioidu, jos millään aiemmalla toteutuksella ei ole yhteistä opettajaa tämän kanssa tai jos opintojaksosta on Sisussa uusi versio, esimerkiksi uudelle opetussuunnitelmakaudelle. [Kopioi kysymykset silloin itse](#copy-questions).
+
+## Kysymysten kopioiminen toisesta kyselystä {#copy-questions}
+
+Omien kysymysten kopioiminen toisen kurssin kyselystä kurssin kyselyyn:
+
+1. Valitse [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä [[editFeedbackTarget:copyFromCourseButton]].
+2. Valitse kurssi kurssikentästä. Siinä ovat kurssit, joita opetat.
+3. Näkyviin tulevat kurssin toteutukset, joita olet opettanut ja joilla on omia kysymyksiä, sekä niiden kysymysten määrät. Näet toteutuksen kysymykset viemällä hiiren sen päälle.
+4. Valitse toteutuksen kohdalta [[editFeedbackTarget:copyQuestionsButton]].
+
+Kysymykset lisätään omien kysymystesi perään ja tallennetaan heti. Vain opettajan omat kysymykset kopioituvat, eivät yliopistotason tai koulutusohjelman kysymykset. Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
+
+Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelmien kyselyt: niiden koulutusohjelmien ja tiedekuntien, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, joka lisää yliopistotason kysymykset omiksi kysymyksiksesi, joten voit muokata tai poistaa niitä.
+
+## Kieliversiot ja esikatselu {#languages}
+
+Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin ne kielet, joita opiskelijasi käyttävät. Jos kenttä on tyhjä, sitä kieltä käyttävät opiskelijat näkevät kysymyksen suomeksi tai, jos sekin puuttuu, englanniksi tai ruotsiksi.
+
+Kyselyn näkeminen opiskelijan silmin:
+
+1. Valitse kieli [[feedbackTargetView:surveyQuestionsTab]]-välilehden alareunan [[editFeedbackTarget:translationLanguage]]-valikosta. Kysymyseditorin kysymykset vaihtuvat tälle kielelle.
+2. Valitse [[editFeedbackTarget:showPreview]].
+
+[[common:preview]]-välilehdellä näkyy koko kysely siinä järjestyksessä kuin opiskelija sen näkee. Opettaja ei voi lähettää sitä. Vastuuopettaja pääsee takaisin muokkaamaan [[feedbackView:editSurvey]]-painikkeella.
+
+## Ryhmät {#groups}
+
+Jos kurssille on Sisussa määritelty opetusryhmiä, esimerkiksi harjoitusryhmiä, Norppa tietää, mihin ryhmään kukin opiskelija kuuluu. Jos kurssin kyselyllä on vähintään kaksi Sisun ryhmää, vastauksia voi tarkastella ryhmittäin [[feedbackTargetView:feedbacksTab]]-välilehdellä ilman, että sinun tarvitsee tehdä mitään. Ryhmät, niiden opiskelijamäärät ja opettajat näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunassa kohdassa [[groups:groupingInfo]].
+
+Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ryhmittelykysymys_. Sen voi lisätä minkä tahansa tyyppiseen kyselyyn:
+
+1. Valitse [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä [[groups:addGroupingQuestion]].
+2. Muokkaa kysymystä ja sen vaihtoehtoja. Jos kurssilla on ryhmiä Sisussa, ne ovat valmiina vaihtoehtoina.
+3. Valitse [[questionEditor:done]].
+
+Ryhmittelykysymys on pakollinen, se on aina opiskelijan ensimmäinen kysymys, eivätkä sen vastaukset ole julkisia. Kyselyssä voi olla vain yksi ryhmittelykysymys, ja se korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
+
+Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa ryhmässä on joko nolla tai vähintään viisi vastausta. Pidä siis vaihtoehtoja vähän.

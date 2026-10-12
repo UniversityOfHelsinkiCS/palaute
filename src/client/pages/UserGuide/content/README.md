@@ -1,0 +1,31 @@
+# User guide content
+
+The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in `fi/` and in English in `en/`. Swedish users get the English text with the UI labels in Swedish. See `documentation/user_guide.md` for how the guide works.
+
+`npm run test:unit` checks the content: run it after editing.
+
+## Files
+
+- Name files `<order>-<slug>.md`, e.g. `07-counter-feedback.md`. The order sets the page's place in the menu, the slug its address (`/guide/counter-feedback`). Use the same file name in both languages.
+- Each page starts with one `# Title`, which is also its name in the menu. Don't put labels in the title.
+- Write the same pages, sections and section ids in both languages. The texts don't have to be word-for-word translations.
+
+## Writing
+
+- Write for teachers and degree programme staff at the University of Helsinki, not for developers.
+- Check every fact against the code. The old user guide on the wiki is partly outdated; the help chatbot's knowledge base (`src/server/services/helpChatbot/knowledge.md`) has been checked against the code, so if the two differ, fix it there as well.
+- Only describe what users at HY can acually reach: check the config (`config/hy.js`) and the role that gates a feature, not just that the code exists.
+- Say which survey types and roles a fact applies to.
+- Start with what the user wants to do, then the steps. Use a numbered list for steps taken one after another, one action per step. Write a path through the UI as **A** > **B** > **C**.
+- Keep it short. One way to do a thing is enough.
+
+## Syntax
+
+Plain Markdown: headings, paragraphs, lists, bold, italics and links. No images (screenshots go out of date with every UI change) and no tables.
+
+- **UI labels**: `[[section:key]]` shows the label with that translation key in the user's language, in bold, e.g. `[[navBar:myCourses]]`. `[[section:key|fi]]` shows it in the given language. Use these for every button, tab and menu item, so the guide always matches the screen. Find keys in `public/locales/en/translation.json` (HY's own wording is in `hy.json`).
+- **Section ids**: `## Heading {#some-id}` gives a section an id to link to. Use the same id in both languages.
+- **Links** to guide pages: `[counter feedback](/guide/counter-feedback)`, or to a section: `(/guide/counter-feedback#send-email)`. Other links to Norppa start with `/` too, e.g. `/courses`. Links to other sites open in a new tab.
+- **Bold** is for UI labels only, so the reader can tell what's on the screen. Use _italics_ for terms and emphasis.
+- **Notes**: `> **Note:** ...` shows a highlighted box.
+- **Comments**: `<!-- ... -->` are notes for editors and aren't shown.

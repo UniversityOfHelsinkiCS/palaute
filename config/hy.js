@@ -267,6 +267,8 @@ const config = {
 
   HELP_CHATBOT_ENABLED: true,
 
+  USER_GUIDE_ENABLED: true,
+
   INTERIM_FEEDBACKS_ENABLED: true,
 
   ALWAYS_SHOW_STUDENT_LIST: true,

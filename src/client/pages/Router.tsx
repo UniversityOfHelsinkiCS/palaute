@@ -1,10 +1,10 @@
 import { Container, type SxProps, type Theme } from '@mui/material'
-import { Suspense } from 'react'
+import { Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
-import { PUBLIC_COURSE_BROWSER_ENABLED } from '../util/common'
+import { PUBLIC_COURSE_BROWSER_ENABLED, USER_GUIDE_ENABLED } from '../util/common'
 import Admin from './Admin'
 import CourseRealisation from './CourseRealisation'
 import Summary from './CourseSummary/Summary'
@@ -15,6 +15,9 @@ import MyTeaching from './MyTeaching/MyTeaching'
 import NorppaFeedback from './NorppaFeedback'
 import Organisation from './Organisation'
 import Search from './Search/Search'
+
+// Lazy, so the guide's text is loaded only by those who open it
+const UserGuide = lazy(() => import('./UserGuide'))
 
 const containerStyle: SxProps<Theme> = theme => ({
   padding: '2rem',
@@ -55,6 +58,7 @@ const Router = () => (
         {PUBLIC_COURSE_BROWSER_ENABLED && <Route path="/search" element={<Search />} />}
         <Route path="/cur/:id/*" element={<CourseRealisation />} />
         <Route path="/norppa-feedback" element={<NorppaFeedback />} />
+        {USER_GUIDE_ENABLED && <Route path="/guide/:slug?" element={<UserGuide />} />}
         <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<Home />} />
       </Routes>

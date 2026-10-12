@@ -838,6 +838,7 @@
     "closeMenu": "Sulje ohjevalikko",
     "guideOption": "Lue käyttöohje",
     "guideOptionDescription": "Avaa wikin uudelle välilehdelle",
+    "guideOptionDescriptionInApp": "Norpan käyttöohjeet",
     "askNorppai": "Kysy NorppAI:lta",
     "closeChat": "Sulje keskustelu",
     "guideStripPrefix": "Haluatko mieluummin lukea?",
@@ -869,5 +870,12 @@
     "feedbackSkip": "Ohita",
     "feedbackThanks": "Kiitos palautteestasi!",
     "feedbackFailed": "Palautettasi ei voitu tallentaa. Yritä uudelleen."
+  },
+  "userGuide": {
+    "title": "Käyttöohje",
+    "contents": "Sisällys",
+    "previous": "Edellinen",
+    "next": "Seuraava",
+    "pageNavigation": "Edellinen ja seuraava sivu"
   }
 }
