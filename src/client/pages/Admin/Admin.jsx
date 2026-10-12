@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { RouterTabs } from '../../components/common/RouterTabs'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { CONFIG_TEST_VALUE, PRIVATE_TEST } from '../../util/common'
+import { CONFIG_TEST_VALUE, HELP_CHATBOT_ENABLED, PRIVATE_TEST } from '../../util/common'
 import CrashDebug from './CrashDebug'
 import BannerView from './tabs/Banners/BannersView'
 import CacheTab from './tabs/Cache/CacheTab'
@@ -15,6 +15,7 @@ import FeedbackCorrespondents from './tabs/FeedbackCorrescpondents/FeedbackCorre
 import FeedbackTargetInspector from './tabs/FeedbackTargetInspector/FeedbackTargetInspector'
 import MiscTab from './tabs/Misc/MiscTab'
 import NorppaFeedbackView from './tabs/NorppaFeedback/NorppaFeedbackView'
+import NorppaiView from './tabs/Norppai/NorppaiView'
 import NorppaStatisticView from './tabs/NorppaStatistics/NorppaStatisticsView'
 import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/OrganisationSurveyInspector'
 import UpdaterView from './tabs/Updater/UpdaterView'
@@ -67,6 +68,16 @@ const AdminView = () => {
           <Tab label="Enable courses" component={Link} to="/admin/enable" sx={tabStyle} disableRipple />
           <Tab label="Norppa feedback" component={Link} to="/admin/feedback" sx={tabStyle} disableRipple />
           <Tab label="Norppa statistics" component={Link} to="/admin/statistics" sx={tabStyle} disableRipple />
+          {HELP_CHATBOT_ENABLED && (
+            <Tab
+              label="NorppAI"
+              component={Link}
+              to="/admin/norppai"
+              data-active-path="/admin/norppai/*"
+              sx={tabStyle}
+              disableRipple
+            />
+          )}
           <Tab
             label="Search feedback targets"
             component={Link}
@@ -99,6 +110,7 @@ const AdminView = () => {
         <Route path="/enable" element={<EnableCourses />} />
         <Route path="/feedback" element={<NorppaFeedbackView />} />
         <Route path="/statistics" element={<NorppaStatisticView />} />
+        {HELP_CHATBOT_ENABLED && <Route path="/norppai/*" element={<NorppaiView />} />}
         <Route path="/feedback-targets" element={<FeedbackTargetInspector />} />
         <Route path="/organisation-surveys" element={<OrganisationSurveyInspector />} />
         <Route path="/feedback-correspondents" element={<FeedbackCorrespondents />} />
