@@ -24,7 +24,7 @@ runs:
       shell: bash
       run: |
         npx playwright install --with-deps chromium
-        sudo apt-get update && sudo apt-get install -y ffmpeg
+        sudo apt-get install -y --no-install-recommends ffmpeg
 
     - uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
 
