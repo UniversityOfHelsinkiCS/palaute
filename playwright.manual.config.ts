@@ -29,6 +29,7 @@ export default defineConfig<ManualOptions>({
         viewport,
         lang: 'fi',
         locale: 'fi-FI',
+        timezoneId: 'Europe/Helsinki',
       },
     },
   ],
