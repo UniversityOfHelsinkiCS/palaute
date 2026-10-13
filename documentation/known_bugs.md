@@ -1,6 +1,50 @@
 # Known bugs
 
-Found while writing the help chatbot's knowledge document (September 2026) and checked against the code. Paths starting with `updater/` are in the [norppa-updater](https://github.com/UniversityOfHelsinkiCS/norppa-updater) repository, the rest in this one. Remove an entry once it's fixed. This doc has been written up by an AI agent, not manually checked, so take it with a grain of salt.
+Found while writing the help chatbot's knowledge document (September 2026) and the in-app user guide (October 2026), and checked against the code. Paths starting with `updater/` are in the [norppa-updater](https://github.com/UniversityOfHelsinkiCS/norppa-updater) repository, the rest in this one. Remove an entry once it's fixed.
+
+**This doc has been written up by an AI agent, not manually checked, so take it with a grain of salt. Use it as a list of likely bugs that should be checked, and either fixed or removed from the list.**
+
+## Privacy and access
+
+### Small courses' answers are protected only in the UI
+
+`src/server/services/feedbackTargets/getFeedbacks.ts:160-178`
+
+On courses with fewer than five students, only the Results tab limits the answers to responsible teachers (`Results.jsx:172`). The server returns them to anyone with normal access (teachers, programme staff with read rights and students get the public ones) as soon as any student's user feedback target was updated after 10 June 2025, which is taken as consent. But `updatedAt` also changes for unrelated writes, e.g. when `feedbackOpenEmailSent` is set (`sendEmailToStudentsWhenOpeningImmediately.ts:61`), so it doesn't show consent.
+
+Fix: store the consent with the answer, and check the role on the server.
+
+### Continuous feedback can be linked to students
+
+`src/server/routes/continuousFeedback/continuousFeedbackController.ts:48-54`
+
+Teachers and programme admins get the whole `ContinuousFeedback` rows, including `userId`. The UI shows no names, but the ids link one student's feedback together, and the student list (shown always at HY) returns user ids too.
+
+Fix: leave `userId` out of the response.
+
+### A teacher can reply to any course's continuous feedback
+
+`src/server/routes/continuousFeedback/continuousFeedbackController.ts:88-115`
+
+`respondToFeedback` checks the user's rights to `:id`, then loads the feedback by `continuousFeedbackId` alone. A responsible teacher of any course can reply to any continuous feedback, and the reply is emailed to that student.
+
+Fix: check that the feedback's `feedbackTargetId` is `:id`.
+
+### Read rights get every open answer of an organisation
+
+`src/server/routes/organisations/organisationController.ts:205-220`, `src/server/services/organisations/getOpenFeedbackByOrganisation.ts`
+
+The Open questions tab is for admins only in the UI, but the endpoint accepts any organisation access. It returns all answers to the university and programme open questions, whether public or hidden.
+
+Fix: require admin access, as the UI does.
+
+### Readers see the hidden answer count in the course summary
+
+`src/server/services/summary/getTeacherSummary.ts:14-41`
+
+`hiddenCount` is removed only from the My courses data, for organisations where the user isn't an admin. The My organisations view, the programme's Summary tab and the course unit page return it to everyone with read access.
+
+Fix: filter it in all summary endpoints.
 
 ## Behaviour
 
@@ -28,6 +72,14 @@ Only the client locks the Questions tab once feedback opens (`FeedbackTargetCont
 
 Fix: reject `questions` for non-admins once `opensAt` has passed.
 
+### Survey dates can be changed after the survey has opened or closed
+
+`src/server/services/feedbackTargets/update.ts:154-158`
+
+Only the client limits the dates (`Dates/utils.js:27-40`, `FeedbackPeriodForm.jsx:30-38`). The server checks only that the closing date isn't before the opening date, so an open survey's opening date can be moved and a closed survey reopened.
+
+Fix: for non-admins, reject `opensAt` once the survey has opened and both dates once it has closed.
+
 ### Organisation surveys with answers can be deleted
 
 `src/server/routes/organisations/organisationSurveyController.ts:165-185`
@@ -35,6 +87,22 @@ Fix: reject `questions` for non-admins once `opensAt` has passed.
 The handler already throws when the user isn't an organisation admin, so the later check `!hasAdminAccess && !allowDelete` is always false. Deleting a survey that has answers is never blocked on the server; only the UI hides the Remove button.
 
 Fix: `if (!allowDelete && !user.isAdmin) throw Forbidden`.
+
+### Interim feedback with answers can be deleted
+
+`src/server/services/feedbackTargets/interimFeedbacks.ts:214-245`
+
+The UI hides the Remove button once interim feedback has answers (`InterimFeedbackItem.jsx`), but the server only checks the user's rights, then deletes the user feedback targets and the survey.
+
+Fix: refuse when the interim feedback has answers, unless the user is an admin.
+
+### Counter feedback has no time limit on the server
+
+`src/server/services/feedbackTargets/updateFeedbackResponse.ts:24-40`
+
+The counter feedback tab is hidden 12 months after the survey closes, but the server checks neither the age nor whether the survey has closed. The client's check `differenceInMonths(now, closesAt) > 12` (`util/feedbackTargetIsOld.ts`) also keeps the tab until 13 full months have passed.
+
+Fix: check both on the server, and use `>= 12` in the client.
 
 ### Saving an empty counter feedback fails, and the email is sent before saving
 
@@ -58,6 +126,70 @@ Fix: render the Markdown to sanitised HTML first.
 The language menu only calls `i18n.changeLanguage`. On every page load `AdUser` applies the user's language from Sisu, which overrides the choice.
 
 Fix: save the choice on the user, or apply the Sisu language only when the user hasn't chosen one.
+
+### "Open feedback now" emails the teachers too
+
+`src/server/mailer/mails/sendEmailToStudentsWhenOpeningImmediately.ts:35-53`
+
+The query includes all users of the survey, and nothing filters out the teachers, so they get the students' opening email. The daily opening email filters on `accessStatus: 'STUDENT'` (`sendEmailAboutSurveyOpeningToStudents.ts:49`). The query also fetches `disabledCourseCodes` but never uses it, so the email goes out for courses where feedback is switched off.
+
+Fix: filter on `accessStatus: 'STUDENT'` and skip disabled course codes, as the daily email does.
+
+### Saving a programme survey again removes students who have answered
+
+`src/server/services/organisations/organisationSurveys.ts:523-541`
+
+Saving recalculates the students from the chosen courses and the student numbers, and `updateUserFeedbackTargets` deletes the user feedback targets of everyone else. Students who have left a chosen course lose theirs even if they have answered, and the answer drops out of the results, which are read through the user feedback targets.
+
+Fix: keep the user feedback targets that have feedback.
+
+### The grouping question is carried over with the old groups
+
+`src/server/services/surveys/teacherSurvey.ts:10-27`
+
+Carry-over clones the previous realisation's own questions with their `data`, and a grouping question's options are the previous realisation's Sisu groups (`GroupingQuestionSettings.jsx:117-128`). The new survey asks students to choose between last time's groups, and the results page finds no teachers for them (`Results.jsx:66-75`).
+
+Fix: rebuild the options from the new realisation's groups, or leave the grouping question out of the carry-over.
+
+### Interim feedback that starts today can't get any questions
+
+`src/client/pages/FeedbackTarget/tabs/InterimFeedback/utils.js:44`, `InterimFeedback.jsx:58`
+
+The start date can be today or in the past. The interim feedback then opens as soon as it's saved, and Norppa takes the teacher to its Questions tab, which is disabled once a survey is open (`FeedbackTargetContent.jsx:175`). The survey is open to students with no questions, and the only way out is to move the start date forward, add the questions and move it back.
+
+Fix: don't allow a start date before tomorrow, or warn that the survey opens at once.
+
+### The spreadsheet download includes hidden answers
+
+`src/client/pages/FeedbackTarget/tabs/Results/ExportFeedbacksMenu.jsx:56-81`
+
+Hidden answers are left out of the PDF (`OpenFeedback.jsx:23-26`), but the XLSX doesn't filter them, so responsible teachers and programme admins get them in the spreadsheet. Answers are usually hidden because they contain personal data.
+
+Fix: leave out answers marked `hidden`.
+
+### The spreadsheet's columns don't match for those who see only public answers
+
+`src/client/pages/FeedbackTarget/tabs/Results/ExportFeedbacksMenu.jsx:14-25`
+
+The headers are made from all the survey's labelled questions, sorted by their place in the first answer row. Programme staff with read rights get only public, unhidden answers (`getFeedbacks.ts:111-115`), so the non-public questions aren't in the first row, `indexOf` gives -1 and their headers are sorted first. Every column then has the wrong header. A hidden answer also moves the rest of its row one column to the left.
+
+Fix: build the headers from the questions in the answers, and fill a row by question id instead of by position.
+
+### The live summary update gets the mean wrong
+
+`src/server/services/summary/utils.ts:181-250`
+
+After each answer, `addFeedbackDataToSummary` updates the realisation's summary. It counts "N/A" (option 0) as the value 0, which the nightly rebuild leaves out (`utils.ts:29`), and it divides by the survey's answer count instead of the question's, so skipped optional questions lower the mean too. `removeFeedbackDataFromSummary` divides by zero when the last answer is deleted. The nightly rebuild corrects the figures.
+
+Fix: keep a count per question and leave option 0 out.
+
+### The answer chart shows the latest reminder a day early
+
+`src/client/pages/FeedbackTarget/tabs/Results/QuestionResults/FeedbackChart.jsx:107-110`
+
+The marker is drawn at `subDays(feedbackReminderLastSentAt, 1)`. The closing date marker had the same offset when the chart was made (commit 70d825b0), and it has since been removed.
+
+Fix: drop the `subDays`.
 
 ### Feedback liaisons from IAM are never created
 
@@ -92,19 +224,15 @@ Fix: exclude `userCreated` feedback targets.
 
 Each of these gives the user an error when they try the action.
 
-| What                            | Shown to                         | Allowed for                      | Where                                                           |
-| ------------------------------- | -------------------------------- | -------------------------------- | --------------------------------------------------------------- |
-| Send reminder email (Share tab) | all teachers                     | responsible teachers, org admins | `tabs/Share/Share.jsx:72-84`, `Access.ts:77`                    |
-| Hide an open answer (eye icon)  | all teachers                     | responsible teachers, org admins | `useUpdateOpenFeedbackVisibility.js:39`, `hideFeedback.ts:58`   |
-| Give counter feedback tab       | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:116`, `updateFeedbackResponse.ts:24` |
+| What                                 | Shown to                         | Allowed for                      | Where                                                           |
+| ------------------------------------ | -------------------------------- | -------------------------------- | --------------------------------------------------------------- |
+| Send reminder email (Share tab)      | all teachers                     | responsible teachers, org admins | `tabs/Share/Share.jsx:72-84`, `Access.ts:77`                    |
+| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `useUpdateOpenFeedbackVisibility.js:39`, `hideFeedback.ts:58`   |
+| Give counter feedback tab            | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:116`, `updateFeedbackResponse.ts:24` |
+| Create interim feedback              | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:121-122`, `interimFeedbacks.ts:169`  |
+| Edit interim feedback name and dates | all teachers                     | responsible teachers             | `FeedbackTargetInformation.jsx:34`, `interimFeedbacks.ts:199`   |
 
 The reverse also happens: organisation admins who don't teach the course can change the feedback period on the server, but the Edit button is only shown to teachers of the course (`Dates/Dates.jsx:39`).
-
-### Surveys opening on 1 August 2026 got the old university questions
-
-The university survey valid from 1 August 2026 (id 47905 in production) has `valid_from` 2026-08-01 00:00 UTC. Surveys open at 00:00 Helsinki time, which is 21:00 UTC the day before, so a survey opening on 1 August picked the previous version (`src/server/services/surveys/universitySurvey.ts:17-24`).
-
-Fix: set `valid_from` to 2026-07-31 21:00 UTC. Check whether any surveys opening that day are affected before changing it.
 
 ## Texts
 
@@ -113,6 +241,7 @@ Fix: set `valid_from` to 2026-07-31 21:00 UTC. Check whether any surveys opening
 - **A search field label is hard-coded in Finnish.** The course field in `CopyFromCourseDialog.jsx:138` says "Kurssi"; the key `editFeedbackTarget:copyFromCourseSearchLabel` exists but isn't used.
 - **Swedish uses three terms for counter feedback:** "Svar på respons" (`feedbackResponse:responseLabel`), "Ge motrespons" (`feedbackTargetView:giveFeedbackResponseTab`) and "Redigera återkopplingsfeedback" (`editFeedbackResponseTab`). `feedbackTargetView:feedbackResponseTab` has no Swedish text at all.
 - **A Swedish translation is missing.** `teacherView:disabledCourseWarning` has no Swedish text, so Swedish users see it in English.
+- **Counter feedback emails for interim feedback and programme surveys get the translation key as their subject in English and Swedish.** For user-created surveys, `sendFeedbackSummaryReminderToStudents.ts:29` uses `mails:counterFeedbackNotificationToStudents:customSubject`, which exists only in Finnish; the fallback is English, which doesn't have it either. Swedish also lacks `customText` there and both custom texts of `mails:counterFeedbackReminder`, so Swedish users get those in English.
 
 ## Configuration
 
