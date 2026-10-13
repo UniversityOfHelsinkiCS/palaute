@@ -37,7 +37,7 @@ Norppa lähettää kyselyjä koskevat automaattiset sähköpostinsa kerran päiv
 
 Kurssin kysely:
 
-- Noin viikkoa ennen kyselyn aukeamista vastuuopettajat ja hallintohenkilöt saavat muistutuksen, jossa ovat kyselyn päivämäärät, linkki sen muokkaamiseen ja siihen mennessä lisätyt kysymykset, jotta he ehtivät vielä lisätä omiaan.
+- Noin viikkoa ennen kyselyn aukeamista vastuuopettajat ja hallintohenkilöt saavat muistutuksen, jossa ovat kyselyn päivämäärät, linkki sen muokkaamiseen ja opettajien siihen mennessä lisäämät kysymykset, jotta he ehtivät vielä lisätä omiaan.
 - Avautumispäivänä opiskelijat saavat sähköpostin, jossa on linkki kyselyyn ja sen sulkeutumispäivä. Myöhemmin ilmoittautuneet saavat viestin myöhempänä päivänä kyselyn ollessa auki. Jos vastuuopettaja avaa kyselyn [[editFeedbackTarget:openImmediately]]-painikkeella, viesti lähtee heti (ks. [Kurssien kyselyt](/guide/course-surveys#change-dates)).
 - Kyselyn sulkeutumista seuraavana päivänä vastuuopettajat ja hallintohenkilöt saavat muistutuksen vastapalautteen kirjoittamisesta, jos kyselyyn on vastattu eikä vastapalautetta ole vielä kirjoitettu.
 
