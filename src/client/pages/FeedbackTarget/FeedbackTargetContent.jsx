@@ -113,7 +113,7 @@ const FeedbackTargetContent = () => {
   const showContinuousFeedbackTab =
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const hideSurveyTab = isStudent && isOngoing && continuousFeedbackEnabled
-  const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && isEnded && !isOld
+  const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && !isOld
   const showStudentsWithFeedbackTab =
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
@@ -186,6 +186,7 @@ const FeedbackTargetContent = () => {
                 ? t('feedbackTargetView:giveFeedbackResponseTab')
                 : t('feedbackTargetView:editFeedbackResponseTab')
             }
+            tooltip={!isEnded ? t('feedbackTargetView:feedbackResponseTabTooltip') : undefined}
             to={`${pathnameBase}/edit-feedback-response`}
             icon={<EditOutlined />}
             id={generateTabId('edit-feedback-response')}

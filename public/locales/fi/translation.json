@@ -727,6 +727,7 @@
     "results": "Tulokset",
     "surveyQuestionsTab": "Kysymykset",
     "surveyTabDisabledTooltip": "Kysymykset-välilehti ei käytössä: Kyselyä ei voi enää muokata palautteen aukeamisen jälkeen.",
+    "feedbackResponseTabTooltip": "Voit antaa vastapalautetta, kun palautejakso on päättynyt",
     "continuousFeedbackInfo": "Jatkuva palaute mahdollistaa vapaamuotoisen tekstuaalisen palautteen antamisen kesken kurssin. Jatkuva palaute on käytössä kurssin aikana, ennen kuin varsinainen kurssipalaute aukeaa kurssin päättymispäivänä.",
     "continuousFeedbackPreambleLabel": "Jatkuvan palautteen johdanto",
     "continuousFeedbackPreambleHelp": "Näytetään opiskelijoille jatkuvan palautteen lomakkeella.",

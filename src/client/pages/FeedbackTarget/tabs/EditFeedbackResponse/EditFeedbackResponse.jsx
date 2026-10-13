@@ -101,7 +101,7 @@ const EditFeedbackResponse = () => {
                         data-cy="feedback-response-send-email-checkbox"
                         color="primary"
                         checked={sendEmail || isSent}
-                        disabled={isSent}
+                        disabled={isSent || feedbackResponseFormDisabled}
                         onChange={({ target }) => setSendEmail(target.checked)}
                         disableFocusRipple
                       />

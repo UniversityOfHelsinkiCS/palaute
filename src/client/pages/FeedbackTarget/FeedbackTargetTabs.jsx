@@ -6,7 +6,7 @@ import { handleTabKeyDown } from '../../components/common/utils'
 
 const stripSearch = path => path.split('?')[0]
 
-export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTooltip, id, ...props }) => {
+export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTooltip, tooltip, id, ...props }) => {
   const content = icon ? (
     <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
       {icon}
@@ -46,9 +46,11 @@ export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTo
     />
   )
 
-  if (disabled && disabledTooltip) {
+  const tooltipTitle = disabled ? disabledTooltip : tooltip
+
+  if (tooltipTitle) {
     return (
-      <Tooltip title={disabledTooltip} placement="top" disableFocusListener={false}>
+      <Tooltip title={tooltipTitle} placement="top" disableFocusListener={false} describeChild>
         {tab}
       </Tooltip>
     )

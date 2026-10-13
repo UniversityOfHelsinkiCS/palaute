@@ -732,6 +732,7 @@
     "shareTab": "Share",
     "surveyQuestionsTab": "Questions",
     "surveyTabDisabledTooltip": "Questions tab disabled: Survey can no longer be edited after the feedback has opened.",
+    "feedbackResponseTabTooltip": "You can give counter feedback once the feedback period has ended",
     "results": "Results",
     "continuousFeedbackInfo": "Continuous feedback makes it possible to give free form textual feedback while the course is ongoing. Continuous feedback is active during the course, before the actual course feedback starts on the course end date.",
     "continuousFeedbackPreambleLabel": "Continuous feedback preamble",
