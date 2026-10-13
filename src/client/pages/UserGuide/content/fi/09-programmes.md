@@ -40,6 +40,8 @@ Opiskelija näkee kyselyssä koulutusohjelman asteikko- ja valintakysymykset het
 
 Uusi koulutusohjelman kysymys on [[common:notPublic]]: sen vastaukset näkevät vain kurssin vastuuopettajat ja koulutusohjelman hallinnoijat. Jos haluat asteikko- tai valintakysymyksen vastausten näkyvän myös kurssin opiskelijoille ja opettajille:
 
+<!-- Remove the reload step once a new programme question's publicity works without it (until a reload, its card shows Public and has no id). -->
+
 1. Lataa sivu uudelleen kysymyksen tallentamisen jälkeen.
 2. Valitse kysymyksen [[common:notPublic]]-painike.
 3. Valitse [[common:publicInfo]].
@@ -70,7 +72,7 @@ Kyselyn [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä kurssin va
 - [[organisationSettings:studentListHidden]]: ei näy millään kurssilla.
 - [[organisationSettings:studentListByCourse]]: kohtaan [[organisationSettings:courseSettings]] tulee jokaiselle opintojaksolle kytkin [[organisationSettings:courseStudentListVisible]]. Kytke se päälle niillä kursseilla, joilla tieto näytetään.
 
-Silloinkin kun näyttäminen on sallittu, tieto näkyy vasta kyselyn päätyttyä ja vain, jos vähintään viisi opiskelijaa on vastannut. Kukaan ei näe, mitä kukin opiskelija vastasi. Katso [Ketkä ovat vastanneet](/guide/results#who-answered).
+Silloinkin kun näyttäminen on sallittu, tieto näkyy vain tietyin ehdoin; katso [Ketkä ovat vastanneet](/guide/results#who-answered).
 
 ### Palautteen poistaminen käytöstä kurssilta {#disable-feedback}
 

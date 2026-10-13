@@ -23,12 +23,7 @@ To add a question:
 
 The question is saved right away. There's nothing else to save or publish: the questions in the editor when the survey opens are the ones students get.
 
-Each of your own questions has these buttons, and each change is saved at once:
-
-- [[common:edit]] opens the question again. [[common:cancel]] in the dialog discards your changes.
-- [[questionEditor:duplicate]] adds a copy right after it.
-- The arrows ([[questionEditor:moveUp]] and [[questionEditor:moveDown]]) move it among your own questions.
-- [[questionEditor:removeQuestion]] removes it after you confirm. To remove several questions at once, use [[questionEditor:removeMany]] below the questions.
+To change a question, click its [[common:edit]] button. To remove several questions at once, use [[questionEditor:removeMany]] below the questions.
 
 [[questionEditor:addTextualContent]] adds a _text section_ instead of a question, e.g. instructions or a heading for the questions after it. Text sections and question descriptions support Markdown, e.g. links and lists.
 
@@ -36,30 +31,13 @@ The editing dialog of a scale or choice question also lets you choose whether it
 
 ## Question types {#question-types}
 
-- [[questionEditor:likertQuestion]]: a statement answered on a scale from 1 to 5, with a separate option for "can't answer" (_N/A_, in Finnish _eos_). The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
-- [[questionEditor:openQuestion]]: the student writes their answer.
-- [[questionEditor:singleChoiceQuestion]]: the student picks one of the options. Add the options with [[questionEditor:addOption]]. A choice question needs at least one option.
-- [[questionEditor:multipleChoiceQuestion]]: the student picks any number of the options.
-
-There are no conditional questions that appear depending on earlier answers, and no file uploads.
+There are four question types: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] and [[questionEditor:multipleChoiceQuestion]]. Scale questions are answered from 1 to 5, or "can't answer". The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
 
 ## University level questions {#university-questions}
 
 The university sets these questions for all course surveys. They're the same for every course and can't be edited or removed. In the editor they're marked [[questionEditor:universityQuestion]]. Interim feedback and programme surveys don't have them, but you can [add copies of them](#copy-questions).
 
-Course surveys that open on 2 August 2026 or later start with a text explaining the scale, followed by these questions (in English, Finnish and Swedish):
-
-1. The course structure and schedule were clear. _Kurssin rakenne ja aikataulu olivat selkeät. / Kursens struktur och tidtabell var tydliga._
-2. The intended learning outcomes of the course were clearly communicated. _Kurssilla oli selvästi esitetty se, mitä meidän tulisi oppia. / Det framgick tydligt på kursen vad vi förväntades lära oss._
-3. Students were encouraged to discuss their ideas and perspectives during teachings. _Opetustilanteissa opiskelijoita kannustettiin keskustelemaan ajatuksistaan ja näkökulmistaan. / Under undervisningstillfällena uppmuntrades studenterna att diskutera sina tankar och perspektiv._
-4. The requirements for assessment (examination, assignment, course performance) were clear to me. _Oppimisen arvioinnin vaatimukset (tentti, harjoitus, kurssisuoritus) olivat minulle selvät. / Bedömningsgrunderna (tentamen, övning, kursprestation) var tydliga för mig._
-5. The methods used in the course helped me make connections between the course content and my prior knowledge. _Kurssilla käytetyt menetelmät auttoivat minua luomaan yhteyksiä opiskeltavien asioiden ja aikaisempien tietojeni välillä. / De metoder som användes på kursen hjälpte mig att skapa kopplingar mellan det studerade innehållet och mina tidigare kunskaper._
-6. The workload in relation to the credits awarded was: heavy, fairly heavy, appropriate, fairly light, light. _Työmäärä suhteessa opintopisteisiin oli: raskas, melko raskas, sopiva, melko kevyt, kevyt. / Arbetsmängden i förhållande till studiepoängen var: tung, ganska tung, lämplig, ganska lätt, lätt._
-7. Additional comments (open-ended question). _Muita huomioita (avoin kysymys). / Övriga kommentarer (öppen fråga)._
-
-Questions 1–5 are answered on the scale 1 = completely disagree ... 5 = completely agree, or N/A.
-
-Which set a survey gets depends on its opening date. Surveys that opened earlier, from autumn 2021, had a different set: four statements (the learning objectives were clear, the course activities supported my learning, the materials supported my learning, the assessment methods measured my learning), a workload question and the open question _Other comments_.
+They're shown at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab. Which set a survey gets depends on when it opens: a new set is used in surveys that open on 2 August 2026 or later.
 
 The averages of the university level scale questions are what [Course summary](/guide/course-summary#figures) shows.
 
@@ -111,7 +89,7 @@ In interim feedback and programme surveys, [[editFeedbackTarget:copyFromCourseBu
 
 ## Languages and preview {#languages}
 
-Students see the survey in the language they use Norppa in: Finnish, Swedish or English. That's why the editor has a field for each language side by side. Fill in at least the languages your students use. If a field is empty, students using that language see the question in Finnish, or if that's empty too, in English, or else in Swedish.
+Students see the survey in the language they use Norppa in: Finnish, Swedish or English. That's why the editor has a field for each language side by side. Fill in at least the languages your students use. If a field is empty, students using that language see the question in another language.
 
 To see the survey as students will:
 

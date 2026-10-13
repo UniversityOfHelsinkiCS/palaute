@@ -25,7 +25,7 @@ Other types, such as exams, theses, essays, independent work and training, get n
 There's also no survey if the realisation is cancelled, archived or still a draft in Sisu, or if it isn't linked to a course unit.
 
 - A realisation that belongs to several course units still has only one survey.
-- A course survey can't be deleted, but a degree programme can switch off feedback for a course unit, for all its realisations. Teachers then see [[teacherView:disabledCourseWarning]] in [[navBar:myCourses]] and [[feedbackTargetView:feedbackDisabled]] on the course's page, students can't open the survey and no emails are sent. See [Switching off feedback](/guide/programmes#disable-feedback).
+- A course survey can't be deleted, but a degree programme can [switch off feedback](/guide/programmes#disable-feedback) for a course unit.
 - For feedback on something without a course survey, such as an exam or several courses together, a degree programme can create a [programme survey](/guide/programme-surveys).
 
 ## Updates from Sisu {#sisu-updates}

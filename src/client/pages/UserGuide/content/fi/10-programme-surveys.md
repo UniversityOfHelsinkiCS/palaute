@@ -23,12 +23,10 @@ Muuta ei tarvita: kysely avautuu itsestään alkamispäivänään. Siihen asti v
 
 Kyselyyn voivat vastata vain siihen lisätyt opiskelijat. He näkevät sen [[navBar:myFeedbacks]]-sivulla, kun se on auki. Opiskelijoita voi lisätä kahdella tavalla, joita voi myös yhdistää:
 
-- _Opiskelijanumerot_: liitä tai kirjoita ne kenttään [[organisationSurveys:studentNumberInputLabel]] pilkuilla, puolipisteillä, välilyönneillä tai rivinvaihdoilla eroteltuina (esimerkiksi Excelistä kopioitu sarake). Puuttuva etunolla lisätään. Kun tallennat, Norppa merkitsee punaisella opiskelijanumerot, joita se ei tunnista, eikä tallenna ennen kuin korjaat tai poistat ne.
+- _Opiskelijanumerot_: liitä tai kirjoita ne kenttään [[organisationSurveys:studentNumberInputLabel]] pilkuilla, puolipisteillä, välilyönneillä tai rivinvaihdoilla eroteltuina (esimerkiksi Excelistä kopioitu sarake). Kun tallennat, Norppa merkitsee punaisella opiskelijanumerot, joita se ei tunnista, eikä tallenna ennen kuin korjaat tai poistat ne.
 - _Kurssien opiskelijat_: valitse kohdan [[organisationSurveys:addCourses]] vierestä ajanjakso, hae koulutusohjelman kurssitoteutuksia nimellä tai koodilla ja valitse ne. Jokaisen kohdalla näkyy sen opiskelijamäärä.
 
 Kurssien opiskelijat kopioidaan kyselyyn tallennettaessa; lista ei seuraa myöhempiä muutoksia ilmoittautumisissa. Jos haluat lisätä myöhemmin ilmoittautuneet, avaa [[organisationSurveys:editSurvey]] ja tallenna uudelleen: valittujen kurssien nykyiset opiskelijat kopioidaan silloin.
-
-Useaan kertaan lisätty opiskelija lasketaan kerran. Vastuuhenkilö ei voi olla saman kyselyn vastaaja.
 
 ## Vastuuhenkilöt {#responsible-persons}
 
@@ -49,13 +47,7 @@ Jos haluat avata kyselyn heti, aseta sen alkamispäiväksi tämä päivä: kysel
 
 ### Muistutusviestin lähettäminen {#reminders}
 
-Norppa ei itse lähetä opiskelijoille sähköpostia koulutusohjelman kyselystä. Kun kysely on auki, vastuuhenkilö tai koulutusohjelman hallinnoija voi lähettää viestin opiskelijoille, jotka eivät ole vielä vastanneet:
-
-1. Avaa kyselyn [[feedbackTargetView:shareTab]]-välilehti.
-2. Valitse [[feedbackTargetResults:sendReminder]].
-3. Kirjoita halutessasi viesti kohtaan [[feedbackTargetResults:writeAMessage]] ja valitse [[feedbackTargetResults:sendReminderButton]].
-
-Viestissä on linkki kyselyyn. Sen voi lähettää kerran vuorokaudessa. Katso [Muistutusviestin lähettäminen](/guide/collecting-answers#send-reminder).
+Norppa ei itse lähetä opiskelijoille sähköpostia koulutusohjelman kyselystä. Kun kysely on auki, vastuuhenkilö tai koulutusohjelman hallinnoija voi [lähettää muistutusviestin](/guide/collecting-answers#send-reminder) kyselyn [[feedbackTargetView:shareTab]]-välilehdeltä opiskelijoille, jotka eivät ole vielä vastanneet.
 
 ## Tulokset {#results}
 

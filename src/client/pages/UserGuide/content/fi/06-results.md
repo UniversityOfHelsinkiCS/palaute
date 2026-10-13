@@ -21,7 +21,7 @@ Jos kurssille on ilmoittautunut alle 5 opiskelijaa, tulokset näkyvät vain kurs
 
 ## Kuka näkee mitkäkin vastaukset {#public-answers}
 
-Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]]. Muita näkyvyysasetuksia ei ole.
+Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]].
 
 - Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet, näkevät kaikkien kysymysten vastaukset.
 - Opettajat, koulutusohjelman henkilöt, joilla on lukuoikeudet, ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.

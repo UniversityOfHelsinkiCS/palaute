@@ -25,7 +25,7 @@ Muille toteutustyypeille, kuten tenteille, opinnäytteille, esseille, itsenäise
 Kyselyä ei tule myöskään, jos toteutus on Sisussa peruttu, arkistoitu tai vielä luonnos tai jos sitä ei ole liitetty opintojaksoon.
 
 - Toteutuksella on vain yksi kysely, vaikka se kuuluisi useaan opintojaksoon.
-- Kurssikyselyä ei voi poistaa, mutta koulutusohjelma voi poistaa palautteen käytöstä opintojaksolta, jolloin se koskee kaikkia opintojakson toteutuksia. Opettajat näkevät silloin [[navBar:myCourses]]-sivulla ilmoituksen [[teacherView:disabledCourseWarning]] ja kurssin sivulla ilmoituksen [[feedbackTargetView:feedbackDisabled]], opiskelijat eivät pääse kyselyyn eikä sähköposteja lähetetä. Katso [Palautteen poistaminen käytöstä](/guide/programmes#disable-feedback).
+- Kurssikyselyä ei voi poistaa, mutta koulutusohjelma voi [poistaa palautteen käytöstä](/guide/programmes#disable-feedback) opintojaksolta.
 - Jos haluat palautetta jostain, jolla ei ole kurssikyselyä, kuten tentistä tai useasta kurssista yhdessä, koulutusohjelma voi luoda [koulutusohjelman kyselyn](/guide/programme-surveys).
 
 ## Päivitykset Sisusta {#sisu-updates}

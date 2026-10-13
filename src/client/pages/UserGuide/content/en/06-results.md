@@ -21,7 +21,7 @@ If fewer than 5 students are enrolled on the course, the results are shown only 
 
 ## Who sees which answers {#public-answers}
 
-Each question is either [[common:public]] or [[common:notPublic]]. There's no other visibility setting.
+Each question is either [[common:public]] or [[common:notPublic]].
 
 - Responsible teachers, administrative persons and degree programme staff with admin rights see the answers to all questions.
 - Teachers, programme staff with read rights and students see only the answers to public questions. Students see them once they have answered themselves, or after the survey has closed.

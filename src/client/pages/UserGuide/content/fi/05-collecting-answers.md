@@ -29,10 +29,7 @@ Viesti lähtee kaikille kyselyn opiskelijoille, jotka eivät ole vielä vastanne
 
 - Viestikenttään on valmiiksi kirjoitettu viesti kurssin opetuskielellä. Jos lähetät sen sellaisenaan, jokainen opiskelija saa Norpan vakiomuistutuksen omalla kielellään. Jos muokkaat sitä, kaikki opiskelijat saavat tekstisi sellaisenaan, joten kirjoita se kaikilla kielillä, joita opiskelijasi tarvitsevat.
 - Muistutuksen voi lähettää kerran vuorokaudessa kyselyä kohden, lähetti sen kuka tahansa. Lähettämisen jälkeen välilehdellä näkyy, milloin muistutus on viimeksi lähetetty, eikä painike ole käytössä 24 tuntiin.
-- Muistutuksen voivat lähettää kurssin vastuuopettajat ja hallintohenkilöt, koulutusohjelman hallinnoijat sekä koulutusohjelman kyselyn vastuuhenkilöt. Kurssin muut opettajat näkevät painikkeen, mutta heiltä lähettäminen epäonnistuu.
-- Painike näkyy vain kyselyn ollessa auki.
-
-Norppa ei muistuta opiskelijoita automaattisesti palautejakson aikana: muistutuksia lähtee vain silloin, kun joku lähettää ne.
+- Muistutuksen voivat lähettää kurssin vastuuopettajat ja hallintohenkilöt, koulutusohjelman hallinnoijat sekä koulutusohjelman kyselyn vastuuhenkilöt.
 
 ## Norpan lähettämät sähköpostit {#emails}
 
@@ -40,22 +37,19 @@ Norppa lähettää automaattiset sähköpostinsa kerran päivässä kello 11.15.
 
 Kurssin kysely:
 
-- Noin viikkoa ennen kyselyn aukeamista vastuuopettajat ja hallintohenkilöt saavat muistutuksen, jossa ovat kyselyn päivämäärät, linkki sen muokkaamiseen ja siihen mennessä lisätyt kysymykset, jotta he ehtivät vielä lisätä omiaan. Muistutus lähetetään vain kerran, vaikka päivämäärät muuttuisivat sen jälkeen.
-- Avautumispäivänä opiskelijat saavat sähköpostin, jossa on linkki kyselyyn ja sen sulkeutumispäivä. Jos opiskelijalla aukeaa samana päivänä useampi kysely, hän saa yhden viestin, jossa ne kaikki ovat. Myöhemmin ilmoittautuneet saavat viestin myöhempänä päivänä kyselyn ollessa auki. Jos vastuuopettaja avaa kyselyn [[editFeedbackTarget:openImmediately]]-painikkeella, viesti lähtee heti (ks. [Kurssien kyselyt](/guide/course-surveys#change-dates)).
+- Noin viikkoa ennen kyselyn aukeamista vastuuopettajat ja hallintohenkilöt saavat muistutuksen, jossa ovat kyselyn päivämäärät, linkki sen muokkaamiseen ja siihen mennessä lisätyt kysymykset, jotta he ehtivät vielä lisätä omiaan.
+- Avautumispäivänä opiskelijat saavat sähköpostin, jossa on linkki kyselyyn ja sen sulkeutumispäivä. Myöhemmin ilmoittautuneet saavat viestin myöhempänä päivänä kyselyn ollessa auki. Jos vastuuopettaja avaa kyselyn [[editFeedbackTarget:openImmediately]]-painikkeella, viesti lähtee heti (ks. [Kurssien kyselyt](/guide/course-surveys#change-dates)).
 - Kyselyn sulkeutumista seuraavana päivänä vastuuopettajat ja hallintohenkilöt saavat muistutuksen vastapalautteen kirjoittamisesta, jos kyselyyn on vastattu eikä vastapalautetta ole vielä kirjoitettu.
 
 Koulutusohjelman kysely: vain vastapalautemuistutus kyselyn vastuuhenkilöille sulkeutumista seuraavana päivänä. Opiskelijat eivät saa viestiä kyselyn auetessa.
 
 Välipalaute: ei lainkaan automaattisia sähköposteja.
 
-Kursseille, joilta koulutusohjelma on ottanut palautteen pois käytöstä, ei lähetetä mitään näistä viesteistä.
-
 Näiden lisäksi Norppa lähettää viestit, jotka käyttäjät lähettävät sen kautta: muistutuksesi, [vastapalautteen](/guide/counter-feedback#send-email), jos päätät lähettää sen sähköpostilla, sekä [jatkuvan palautteen](/guide/continuous-and-interim-feedback#continuous-feedback) koosteet ja vastaukset.
 
 ## Mitä opiskelija näkee {#student-view}
 
 - Opiskelija näkee kyselynsä Norpassa kohdassa [[navBar:myFeedbacks]]. Avoimet kyselyt, joihin hän ei ole vastannut, ovat välilehdellä [[userFeedbacks:waitingForFeedbackTab]], ja niissä on [[userFeedbacks:giveFeedbackButton]]-painike.
-- Kyselyssä kysymykset ovat opiskelijan kielellä, pakolliset kysymykset on merkitty tähdellä (*), ja opiskelijalle kerrotaan, ettei hänen nimensä näy opettajalle.
 - Vastattuaan opiskelija näkee yhteenvedon julkisten kysymysten siihen mennessä annetuista vastauksista. Katso [Kuka näkee vastaukset](/guide/results#public-answers).
 - Kyselyn ollessa auki opiskelija voi muokata tai poistaa vastauksensa kohdassa [[navBar:myFeedbacks]].
 - Vastaaminen on nimetöntä. Et näe, kuka vastasi mitä, joten et voi palkita yksittäisiä opiskelijoita vastaamisesta. Mitä voit nähdä, kerrotaan kohdassa [Ketkä ovat vastanneet](/guide/results#who-answered).

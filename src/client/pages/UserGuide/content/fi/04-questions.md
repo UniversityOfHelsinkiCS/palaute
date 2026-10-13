@@ -23,12 +23,7 @@ Kysymyksen lisääminen:
 
 Kysymys tallentuu heti. Mitään muuta ei tarvitse tallentaa tai julkaista: opiskelijat saavat ne kysymykset, jotka kyselyssä on sen auetessa.
 
-Jokaisessa omassa kysymyksessä on seuraavat painikkeet, ja jokainen muutos tallentuu heti:
-
-- [[common:edit]] avaa kysymyksen uudelleen muokattavaksi. Ikkunan [[common:cancel]] hylkää muutokset.
-- [[questionEditor:duplicate]] lisää kysymyksestä kopion heti sen perään.
-- Nuolet ([[questionEditor:moveUp]] ja [[questionEditor:moveDown]]) siirtävät kysymystä omien kysymystesi joukossa.
-- [[questionEditor:removeQuestion]] poistaa kysymyksen, kun vahvistat poiston. Useamman kysymyksen voit poistaa kerralla kysymysten alla olevalla [[questionEditor:removeMany]]-painikkeella.
+Kysymystä muokataan sen [[common:edit]]-painikkeella. Useamman kysymyksen voit poistaa kerralla kysymysten alla olevalla [[questionEditor:removeMany]]-painikkeella.
 
 [[questionEditor:addTextualContent]] lisää kysymyksen sijaan _tekstiosion_, esimerkiksi ohjeen tai väliotsikon sitä seuraaville kysymyksille. Tekstiosioissa ja kysymysten kuvauksissa voi käyttää Markdownia, esimerkiksi linkkejä ja luetteloita.
 
@@ -36,30 +31,13 @@ Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovat
 
 ## Kysymystyypit {#question-types}
 
-- [[questionEditor:likertQuestion]]: väittämä, johon vastataan asteikolla 1–5 tai vaihtoehdolla _eos_ (en osaa sanoa). Numeroilla ei ole selitteitä, joten kerro kysymyksessä tai sen kuvauksessa, mitä 1 ja 5 tarkoittavat, esimerkiksi 1 = täysin eri mieltä, 5 = täysin samaa mieltä.
-- [[questionEditor:openQuestion]]: opiskelija kirjoittaa vastauksensa itse.
-- [[questionEditor:singleChoiceQuestion]]: opiskelija valitsee yhden vaihtoehdoista. Vaihtoehdot lisätään [[questionEditor:addOption]]-painikkeella. Monivalintakysymyksessä on oltava vähintään yksi vaihtoehto.
-- [[questionEditor:multipleChoiceQuestion]]: opiskelija voi valita vaihtoehdoista niin monta kuin haluaa.
-
-Norpassa ei ole ehdollisia kysymyksiä, jotka näkyisivät aiempien vastausten mukaan, eikä tiedostojen lataamista.
+Kysymystyyppejä on neljä: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] ja [[questionEditor:multipleChoiceQuestion]]. Asteikkokysymyksiin vastataan asteikolla 1–5 tai vaihtoehdolla _eos_ (en osaa sanoa). Numeroilla ei ole selitteitä, joten kerro kysymyksessä tai sen kuvauksessa, mitä 1 ja 5 tarkoittavat, esimerkiksi 1 = täysin eri mieltä, 5 = täysin samaa mieltä.
 
 ## Yliopistotason kysymykset {#university-questions}
 
 Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta niihin voi [lisätä niistä kopiot](#copy-questions).
 
-Kurssien kyselyt, jotka aukeavat 2.8.2026 tai myöhemmin, alkavat asteikon selittävällä tekstillä, jota seuraavat nämä kysymykset (suomeksi, ruotsiksi ja englanniksi):
-
-1. Kurssin rakenne ja aikataulu olivat selkeät. _Kursens struktur och tidtabell var tydliga. / The course structure and schedule were clear._
-2. Kurssilla oli selvästi esitetty se, mitä meidän tulisi oppia. _Det framgick tydligt på kursen vad vi förväntades lära oss. / The intended learning outcomes of the course were clearly communicated._
-3. Opetustilanteissa opiskelijoita kannustettiin keskustelemaan ajatuksistaan ja näkökulmistaan. _Under undervisningstillfällena uppmuntrades studenterna att diskutera sina tankar och perspektiv. / Students were encouraged to discuss their ideas and perspectives during teachings._
-4. Oppimisen arvioinnin vaatimukset (tentti, harjoitus, kurssisuoritus) olivat minulle selvät. _Bedömningsgrunderna (tentamen, övning, kursprestation) var tydliga för mig. / The requirements for assessment (examination, assignment, course performance) were clear to me._
-5. Kurssilla käytetyt menetelmät auttoivat minua luomaan yhteyksiä opiskeltavien asioiden ja aikaisempien tietojeni välillä. _De metoder som användes på kursen hjälpte mig att skapa kopplingar mellan det studerade innehållet och mina tidigare kunskaper. / The methods used in the course helped me make connections between the course content and my prior knowledge._
-6. Työmäärä suhteessa opintopisteisiin oli: raskas, melko raskas, sopiva, melko kevyt, kevyt. _Arbetsmängden i förhållande till studiepoängen var: tung, ganska tung, lämplig, ganska lätt, lätt. / The workload in relation to the credits awarded was: heavy, fairly heavy, appropriate, fairly light, light._
-7. Muita huomioita (avoin kysymys). _Övriga kommentarer (öppen fråga). / Additional comments (open-ended question)._
-
-Kysymyksiin 1–5 vastataan asteikolla 1 = täysin eri mieltä ... 5 = täysin samaa mieltä tai eos.
-
-Se, mitkä kysymykset kyselyssä on, riippuu kyselyn avautumispäivästä. Aiemmin, syksystä 2021 alkaen, avautuneissa kyselyissä oli eri kysymykset: neljä väittämää (osaamistavoitteet olivat selvät, toteutustapa tuki oppimistani, materiaalit tukivat oppimistani, arviointimenetelmät mittasivat oppimistani), työmääräkysymys ja avoin kysymys _Muita huomioita_.
+Ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa. Kyselyn kysymykset riippuvat sen avautumispäivästä: 2.8.2026 tai myöhemmin aukeavissa kyselyissä on uudet kysymykset.
 
 Yliopistotason asteikkokysymysten keskiarvot näkyvät [kurssiyhteenvedossa](/guide/course-summary#figures).
 
@@ -111,7 +89,7 @@ Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCo
 
 ## Kieliversiot ja esikatselu {#languages}
 
-Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin ne kielet, joita opiskelijasi käyttävät. Jos kenttä on tyhjä, sitä kieltä käyttävät opiskelijat näkevät kysymyksen suomeksi tai, jos sekin puuttuu, englanniksi tai ruotsiksi.
+Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin ne kielet, joita opiskelijasi käyttävät. Jos kenttä on tyhjä, sitä kieltä käyttävät opiskelijat näkevät kysymyksen jollain toisella kielellä.
 
 Kyselyn näkeminen opiskelijan silmin:
 

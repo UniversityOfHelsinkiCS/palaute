@@ -40,6 +40,8 @@ In the survey, students see the programme's scale and choice questions right aft
 
 A new programme question is [[common:notPublic]]: only the course's responsible teachers and the programme's admins see its answers. To show the answers of a scale or choice question to the course's students and teachers as well:
 
+<!-- Remove the reload step once a new programme question's publicity works without it (until a reload, its card shows Public and has no id). -->
+
 1. Reload the page after saving the question.
 2. Click the question's [[common:notPublic]] button.
 3. Choose [[common:publicInfo]].
@@ -70,7 +72,7 @@ On a survey's [[feedbackTargetView:studentsWithFeedbackTab]] tab, the course's r
 - [[organisationSettings:studentListHidden]]: shown on none of them.
 - [[organisationSettings:studentListByCourse]]: a [[organisationSettings:courseStudentListVisible]] switch appears for each course unit under [[organisationSettings:courseSettings]]. Turn it on for the courses where it's shown.
 
-Even when it's allowed, it's shown only after the survey has closed and only if at least five students answered. Nobody can see which answers a student gave. See [Who has answered](/guide/results#who-answered).
+Even when it's allowed, it's shown only in some cases; see [Who has answered](/guide/results#who-answered).
 
 ### Switching feedback off for a course {#disable-feedback}
 
