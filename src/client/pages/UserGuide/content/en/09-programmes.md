@@ -58,7 +58,9 @@ A feedback liaison gets admin rights to the programme in Norppa: they see all an
 
 Only university staff can be found. If someone isn't found, ask them to log in to Norppa once and try again.
 
-The [[organisationSettings:feedbackCorrespondents]] list shows each liaison and how they were added. [[organisationSettings:remove]] removes one. A liaison marked [[organisationSettings:addedInNorppa]] was added on this page. One marked [[organisationSettings:basedOnIam]] comes from an IAM group: removing them in Norppa lasts only until they log in again, so ask for them to be removed from the IAM group instead.
+The [[organisationSettings:feedbackCorrespondents]] list shows the programme's liaisons. [[organisationSettings:remove]] removes one.
+
+<!-- Explain IAM-based liaisons once Jami actually creates them; see documentation/known_bugs.md. -->
 
 ## Settings {#settings}
 

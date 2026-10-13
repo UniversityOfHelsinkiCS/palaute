@@ -58,7 +58,7 @@ Palautevastaava saa koulutusohjelman hallinnointioikeudet Norpassa: hän näkee 
 
 Haku löytää vain yliopiston henkilökuntaa. Jos henkilöä ei löydy, pyydä häntä kirjautumaan kerran Norppaan ja yritä uudelleen.
 
-[[organisationSettings:feedbackCorrespondents]]-listassa näkyy jokainen palautevastaava ja se, miten hänet on lisätty. [[organisationSettings:remove]] poistaa palautevastaavan. Merkintä [[organisationSettings:addedInNorppa]] tarkoittaa, että hänet on lisätty tällä sivulla. Merkintä [[organisationSettings:basedOnIam]] tarkoittaa, että hän on palautevastaava IAM-ryhmän perusteella: Norpassa poisto on voimassa vain siihen asti, kun hän kirjautuu seuraavan kerran, joten pyydä poistamaan hänet IAM-ryhmästä.
+[[organisationSettings:feedbackCorrespondents]]-listassa näkyvät koulutusohjelman palautevastaavat. [[organisationSettings:remove]] poistaa palautevastaavan.
 
 ## Asetukset {#settings}
 
