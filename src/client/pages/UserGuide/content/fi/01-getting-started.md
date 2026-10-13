@@ -9,7 +9,7 @@ Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan 
 Jokainen kysely on tuleva, auki tai sulkeutunut, ja sen ratkaisevat vain kyselyn päivämäärät. Erillistä julkaisua tai lähettämistä ei ole:
 
 1. Ennen kuin kysely avautuu, sen vastuuopettajat voivat muuttaa sen kysymyksiä ja päivämääriä.
-2. Kysely avautuu itsestään avautumispäivänä klo 00.00. Siitä lähtien kysymykset ovat lukittuja. Opiskelijat voivat vastata ja muuttaa tai poistaa vastauksiaan, kunnes kysely sulkeutuu.
+2. Kysely avautuu itsestään avautumispäivänä klo 00.00. Siitä lähtien kysymykset ovat lukittuja, ja vain sulkeutumispäivää voi vielä muuttaa. Opiskelijat voivat vastata ja muuttaa tai poistaa vastauksiaan, kunnes kysely sulkeutuu.
 3. Kysely sulkeutuu itsestään sulkeutumispäivänä klo 23.59 (Suomen aikaa).
 4. Sulkeutumisen jälkeen vastaukset säilyvät. Vastuuopettajat voivat kirjoittaa opiskelijoille [vastapalautteen](/guide/counter-feedback) 12 kuukauden ajan.
 
@@ -27,8 +27,9 @@ Yläreunan valikossa näkyvät vain sinua koskevat kohdat:
 
 - [[navBar:myCourses]]: kurssiesi kyselyt sekä koulutusohjelman kyselyt, joiden vastuuhenkilö olet.
 - [[navBar:courseSummary]]: kurssiesi palautetilastot sekä niiden koulutusohjelmien ja tiedekuntien tilastot, joihin sinulla on oikeudet.
-- [[navBar:myProgrammes]] tai [[navBar:myOrganisations]]: koulutusohjelmat ja tiedekunnat, joihin sinulla on oikeudet. Kohdan nimi on [[navBar:myProgrammes]], jos ne kaikki ovat koulutusohjelmia.
+- [[navBar:myProgrammes]] tai [[navBar:myOrganisations]]: koulutusohjelmat ja tiedekunnat, joihin sinulla on oikeudet. Kohdan nimi on [[navBar:myProgrammes]], jos ne kaikki ovat kandidaatti- tai maisteriohjelmia.
 - [[navBar:myFeedbacks]]: kyselyt, joihin voit itse vastata opiskelijana.
+- [[navBar:browseCourses]]: koulutusohjelman kurssit alkamispäivän mukaan ja linkit niiden sivuille Opintopalveluissa.
 - [[navBar:feedback]]: palaute itse Norpasta sen kehittäjille.
 - Nimesi oikeassa yläkulmassa: [[navBar:userInformation]] ja käyttöliittymän kieli.
 

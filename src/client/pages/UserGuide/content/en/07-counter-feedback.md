@@ -10,7 +10,7 @@ Responsible teachers can write counter feedback after the survey has closed, for
 
 1. Go to [[navBar:myCourses]] and choose the course. The [[teacherView:feedbackResponseMissing]] chip next to the course takes you straight to step 3.
 2. Open the [[feedbackTargetView:giveFeedbackResponseTab]] tab.
-3. Write the text in the [[feedbackResponse:responseLabel]] field. It supports Markdown, e.g. headings, lists, bold and links, but no images. The [[feedbackResponse:previewLabel]] below shows how it will look.
+3. Write the text in the [[feedbackResponse:responseLabel]] field. It supports Markdown, e.g. headings, lists, bold and links. The [[feedbackResponse:previewLabel]] below shows how it will look.
 4. Leave [[feedbackResponse:checkboxSendEmail]] ticked if you want to email it to the students, or untick it to only save it.
 5. Click [[feedbackResponse:dialogSendEmailSubmit]] and confirm, or [[feedbackResponse:dialogSaveSubmit]] if you unticked the checkbox.
 
@@ -34,7 +34,7 @@ In [[navBar:myCourses]], a chip next to an ended survey shows the state of its c
 - [[teacherView:feedbackResponseNotSent]]: the counter feedback is saved, but the email hasn't been sent.
 - [[teacherView:feedbackResponseGiven]]: the counter feedback is saved and emailed.
 
-The number on the [[teacherView:endedSurveys]] tab tells how many of your ended courses are missing counter feedback. Interim feedback has no such chip.
+The number on the [[teacherView:endedSurveys]] tab tells how many of your ended courses are missing counter feedback.
 
 ## How students see it {#students-see}
 

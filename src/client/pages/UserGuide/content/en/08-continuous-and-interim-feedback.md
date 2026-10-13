@@ -4,9 +4,7 @@ The course survey opens only after the course has ended. To hear from students w
 
 ## Continuous feedback {#continuous-feedback}
 
-With continuous feedback, students can write free-form feedback on the course at any time before the course survey opens. It's off by default.
-
-To turn it on:
+With continuous feedback, students can write free-form feedback on the course at any time before the course survey opens. It's off until a responsible teacher or a programme admin turns it on:
 
 1. Go to [[navBar:myCourses]] and choose the course.
 2. Open the [[feedbackTargetView:continuousFeedbackTab]] tab.

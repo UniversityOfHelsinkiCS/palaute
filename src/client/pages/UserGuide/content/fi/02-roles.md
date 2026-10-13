@@ -35,7 +35,7 @@ _Palautevastaavat_ saavat koulutusohjelmaansa admin-oikeudet. Koulutusohjelman a
 
 ## Omien oikeuksien tarkistaminen {#check-your-rights}
 
-- Roolit kurssilla: avaa kurssin sivu ja katso, minkä otsikon alla nimesi on. Löydät kurssin valitsemalla [[navBar:myCourses]] ja sieltä kurssin.
+- Roolit kurssilla: avaa kurssin sivu ja katso, minkä otsikon alla nimesi on. Koulutusohjelman kyselyn vastuuhenkilöt ovat otsikon [[feedbackTargetView:administrativePersons]] alla. Löydät kurssin valitsemalla [[navBar:myCourses]] ja sieltä kurssin.
 - Oikeudet koulutusohjelmiin ja tiedekuntiin: napsauta nimeäsi oikeassa yläkulmassa ja valitse [[navBar:userInformation]]. Siinä näkyvät Norppaan vaikuttavat [[userInformation:iamGroups]] ja kohdassa [[userInformation:organisationAccess]] kunkin organisaation koodi ja oikeutesi, _Admin_ tai _Read_ (aina englanniksi). Organisaation nimi näkyy, kun viet hiiren koodin päälle. Ikkuna ei näytä rooleja kursseilla.
 
 ## Jos roolisi on väärä {#wrong-role}

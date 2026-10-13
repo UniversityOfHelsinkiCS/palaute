@@ -33,7 +33,7 @@ Viesti lähtee kaikille kyselyn opiskelijoille, jotka eivät ole vielä vastanne
 
 ## Norpan lähettämät sähköpostit {#emails}
 
-Norppa lähettää automaattiset sähköpostinsa kerran päivässä kello 11.15.
+Norppa lähettää kyselyjä koskevat automaattiset sähköpostinsa kerran päivässä kello 11.15.
 
 Kurssin kysely:
 
@@ -45,7 +45,7 @@ Koulutusohjelman kysely: vain vastapalautemuistutus kyselyn vastuuhenkilöille s
 
 Välipalaute: ei lainkaan automaattisia sähköposteja.
 
-Näiden lisäksi Norppa lähettää viestit, jotka käyttäjät lähettävät sen kautta: muistutuksesi, [vastapalautteen](/guide/counter-feedback#send-email), jos päätät lähettää sen sähköpostilla, sekä [jatkuvan palautteen](/guide/continuous-and-interim-feedback#continuous-feedback) koosteet ja vastaukset.
+Näiden lisäksi [jatkuvan palautteen](/guide/continuous-and-interim-feedback#continuous-feedback) kooste lähtee klo 8 niiltä kursseilta, joilla se on kytketty päälle, ja Norppa lähettää viestit, jotka käyttäjät lähettävät sen kautta: muistutuksesi, [vastapalautteen](/guide/counter-feedback#send-email), jos päätät lähettää sen sähköpostilla, sekä vastaukset jatkuvaan palautteeseen.
 
 ## Mitä opiskelija näkee {#student-view}
 

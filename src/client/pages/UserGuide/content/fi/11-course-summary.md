@@ -9,7 +9,7 @@ Avaa ylävalikosta [[navBar:courseSummary]]. Siinä on kaksi näkymää:
 
 Koulutusohjelman oma yhteenveto on myös sen sivulla [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelmat ja tiedekunnat](/guide/programmes#programme-page).
 
-Avaamalla organisaation tai opintojakson näet sen alla olevat rivit. Opintojakson nimestä pääset sen sivulle, jossa on rivi jokaiselle toteutukselle; toteutuksesta pääset sen kyselyn vastauksiin.
+Avaamalla organisaation näet sen alla olevat rivit. Opintojakson nimestä pääset sen sivulle, jossa on rivi jokaiselle toteutukselle; toteutuksesta pääset sen kyselyn vastauksiin.
 
 ## Mitä luvut kertovat {#figures}
 
@@ -57,7 +57,7 @@ Yksittäisen kyselyn vastaukset ladataan sen [[feedbackTargetView:feedbacksTab]]
 
 Kurssiyhteenvedossa ovat _vain kurssikyselyt_: välipalautteet ja koulutusohjelman kyselyt eivät ole mukana. Kurssi voi puuttua, koska:
 
-- _Lukuja ei ole vielä päivitetty._ Opintojaksojen, koulutusohjelmien ja tiedekuntien luvut lasketaan uudelleen joka yö, joten tänään avautunut kysely, uudet vastaukset ja uusi vastapalaute näkyvät niissä seuraavana päivänä.
+- _Lukuja ei ole vielä päivitetty._ Opintojaksojen, koulutusohjelmien ja tiedekuntien luvut lasketaan uudelleen joka yö, joten uudet vastaukset ja uusi vastapalaute näkyvät niissä seuraavana päivänä.
 - _Sen kysely ei ole vielä avautunut._ Avautumattomia kyselyitä ei lasketa mukaan.
 - _Sillä ei ole Norpassa opiskelijoita._
 - _Se on eri ajanjaksolla._ Ajanjakso määräytyy kurssin Sisussa olevien päivämäärien mukaan, ei kyselyn aukioloajan.

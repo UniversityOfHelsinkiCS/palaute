@@ -35,7 +35,7 @@ _Feedback liaisons_ get admin rights to their programme. A programme's admins ad
 
 ## Checking your rights {#check-your-rights}
 
-- Course roles: open the course's page and see under which heading your name is listed. To see the list, go to [[navBar:myCourses]] and choose the course.
+- Course roles: open the course's page and see under which heading your name is listed. The responsible persons of a programme survey are listed under [[feedbackTargetView:administrativePersons]]. To see the list, go to [[navBar:myCourses]] and choose the course.
 - Programme and faculty rights: click your name in the top right corner and choose [[navBar:userInformation]]. It lists your Norppa-related [[userInformation:iamGroups]] and, under [[userInformation:organisationAccess]], each organisation's code with your access level, _Admin_ or _Read_ (always in English). Hover over a code to see the organisation's name. This window doesn't show course roles.
 
 ## If your role is wrong {#wrong-role}

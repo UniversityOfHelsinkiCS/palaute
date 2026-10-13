@@ -33,7 +33,7 @@ The email goes to every student of the survey who hasn't answered yet, and it al
 
 ## Emails Norppa sends {#emails}
 
-Norppa sends its automatic emails once a day, at 11:15 Finnish time.
+Norppa sends its automatic emails about surveys once a day, at 11:15 Finnish time.
 
 Course surveys:
 
@@ -45,7 +45,7 @@ Programme surveys: only the counter feedback reminder to the survey's responsibl
 
 Interim feedback: no automatic emails at all.
 
-Besides these, Norppa sends the emails people send through it: your reminders, the [counter feedback](/guide/counter-feedback#send-email) if you choose to email it, and the [continuous feedback](/guide/continuous-and-interim-feedback#continuous-feedback) digests and replies.
+Besides these, the [continuous feedback](/guide/continuous-and-interim-feedback#continuous-feedback) digest goes out at 8:00 to the courses that have it switched on, and Norppa sends the emails people send through it: your reminders, the [counter feedback](/guide/counter-feedback#send-email) if you choose to email it, and replies to continuous feedback.
 
 ## What students see {#student-view}
 

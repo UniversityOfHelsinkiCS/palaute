@@ -23,7 +23,7 @@ That's all: the survey opens by itself on its opening date. Until then, you can 
 
 Only the students added to the survey can answer it. They see it in [[navBar:myFeedbacks]] while it's open. You can add them in two ways, and combine them:
 
-- _Student numbers_: paste or type them in the [[organisationSurveys:studentNumberInputLabel]] field, separated by commas, semicolons, spaces or line breaks (e.g. a column copied from Excel). When you save, Norppa marks the numbers it doesn't recognise in red and doesn't save until you fix or remove them.
+- _Student numbers_: paste or type them in the [[organisationSurveys:students]] field, separated by commas, semicolons, spaces or line breaks (e.g. a column copied from Excel). When you save, Norppa marks the numbers it doesn't recognise in red and doesn't save until you fix or remove them.
 - _Students of courses_: under [[organisationSurveys:addCourses]], choose the period next to the field, search for the programme's course realisations by name or code and choose them. Each one shows its number of students.
 
 The courses' students are copied to the survey when you save; the list doesn't follow later changes in enrolments. To add students who enrolled later, open [[organisationSurveys:editSurvey]] and save again: the chosen courses' current students are copied in then.

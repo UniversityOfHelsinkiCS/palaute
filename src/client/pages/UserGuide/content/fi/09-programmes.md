@@ -72,6 +72,8 @@ Kyselyn [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä kurssin va
 - [[organisationSettings:studentListHidden]]: ei näy millään kurssilla.
 - [[organisationSettings:studentListByCourse]]: kohtaan [[organisationSettings:courseSettings]] tulee jokaiselle opintojaksolle kytkin [[organisationSettings:courseStudentListVisible]]. Kytke se päälle niillä kursseilla, joilla tieto näytetään.
 
+Asetus koskee opintojaksoja, joiden ensisijainen organisaatio koulutusohjelma on. Jos opintojakso kuuluu useaan koulutusohjelmaan, ratkaisee ensisijaisen koulutusohjelman asetus.
+
 Silloinkin kun näyttäminen on sallittu, tieto näkyy vain tietyin ehdoin; katso [Ketkä ovat vastanneet](/guide/results#who-answered).
 
 ### Palautteen poistaminen käytöstä kurssilta {#disable-feedback}

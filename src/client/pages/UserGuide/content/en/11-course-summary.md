@@ -9,7 +9,7 @@ Open [[navBar:courseSummary]] in the top menu. It has two views:
 
 A programme's own summary is also on its page, on the [[organisationSettings:summaryTab]] tab; there the programme's own scale questions are included too. See [Degree programmes and faculties](/guide/programmes#programme-page).
 
-Open an organisation or course unit to see the rows under it. Clicking a course unit opens its page, with a row for each realisation; from a realisation you get to its survey's answers.
+Open an organisation to see the rows under it. Clicking a course unit opens its page, with a row for each realisation; from a realisation you get to its survey's answers.
 
 ## What the figures show {#figures}
 
@@ -57,7 +57,7 @@ To download the answers of a single survey, use its [[feedbackTargetView:feedbac
 
 The course summary covers _course surveys only_: interim feedback and programme surveys aren't in it. A course may be missing because:
 
-- _The figures haven't been updated yet._ Course unit, programme and faculty figures are recalculated every night, so a survey that opened today, new answers and new counter feedback show there the next day.
+- _The figures haven't been updated yet._ Course unit, programme and faculty figures are recalculated every night, so new answers and new counter feedback show there the next day.
 - _Its survey hasn't opened yet._ Surveys that haven't opened aren't counted.
 - _It has no students_ in Norppa.
 - _It's in another period._ The period goes by the course's dates in Sisu, not by when its survey was open.

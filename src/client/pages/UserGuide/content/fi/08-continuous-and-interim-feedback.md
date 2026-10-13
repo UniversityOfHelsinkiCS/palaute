@@ -4,9 +4,7 @@ Kurssipalautekysely avautuu vasta kurssin päätyttyä. Jos haluat kuulla opiske
 
 ## Jatkuva palaute {#continuous-feedback}
 
-Jatkuvan palautteen avulla opiskelijat voivat kirjoittaa kurssista vapaamuotoista palautetta milloin tahansa ennen kurssipalautteen avautumista. Se on oletuksena pois päältä.
-
-Jatkuvan palautteen ottaminen käyttöön:
+Jatkuvan palautteen avulla opiskelijat voivat kirjoittaa kurssista vapaamuotoista palautetta milloin tahansa ennen kurssipalautteen avautumista. Se on pois päältä, kunnes vastuuopettaja tai koulutusohjelman admin ottaa sen käyttöön:
 
 1. Valitse kurssi [[navBar:myCourses]]-sivulta.
 2. Avaa [[feedbackTargetView:continuousFeedbackTab]]-välilehti.

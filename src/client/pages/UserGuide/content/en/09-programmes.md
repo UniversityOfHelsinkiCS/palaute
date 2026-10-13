@@ -72,6 +72,8 @@ On a survey's [[feedbackTargetView:studentsWithFeedbackTab]] tab, the course's r
 - [[organisationSettings:studentListHidden]]: shown on none of them.
 - [[organisationSettings:studentListByCourse]]: a [[organisationSettings:courseStudentListVisible]] switch appears for each course unit under [[organisationSettings:courseSettings]]. Turn it on for the courses where it's shown.
 
+The setting applies to the course units of which the programme is the primary organisation. On a course unit shared by several programmes, the primary programme's setting decides.
+
 Even when it's allowed, it's shown only in some cases; see [Who has answered](/guide/results#who-answered).
 
 ### Switching feedback off for a course {#disable-feedback}

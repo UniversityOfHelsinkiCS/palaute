@@ -9,7 +9,7 @@ Course, teacher and student data comes from Sisu. All feedback is anonymous: tea
 Every survey is upcoming, open or closed, and only its dates decide which. There's no publish or send step:
 
 1. Before it opens, the survey's responsible teachers can change its questions and its dates.
-2. It opens by itself at 00:00 on its opening date. From then on, the questions are locked. Students can answer, and change or delete their answers, until it closes.
+2. It opens by itself at 00:00 on its opening date. From then on, the questions are locked, and only the closing date can still be changed. Students can answer, and change or delete their answers, until it closes.
 3. It closes by itself at 23:59 on its closing date (Finnish time).
 4. After it has closed, the answers stay available. For 12 months, the responsible teachers can write [counter feedback](/guide/counter-feedback) to the students.
 
@@ -27,8 +27,9 @@ The menu at the top shows only the items that concern you:
 
 - [[navBar:myCourses]]: the surveys of your courses, and programme surveys you're responsible for.
 - [[navBar:courseSummary]]: feedback statistics of your courses, and of the degree programmes and faculties you have rights to.
-- [[navBar:myProgrammes]] or [[navBar:myOrganisations]]: the degree programmes and faculties you have rights to. The item is called [[navBar:myProgrammes]] if all of them are degree programmes.
+- [[navBar:myProgrammes]] or [[navBar:myOrganisations]]: the degree programmes and faculties you have rights to. The item is called [[navBar:myProgrammes]] if all of them are bachelor's or master's programmes.
 - [[navBar:myFeedbacks]]: surveys you can answer yourself as a student.
+- [[navBar:browseCourses]]: a degree programme's courses by start date, with links to their pages in the Studies Service.
 - [[navBar:feedback]]: feedback about Norppa itself to its developers.
 - Your name, top right: [[navBar:userInformation]] and the language of the user interface.
 

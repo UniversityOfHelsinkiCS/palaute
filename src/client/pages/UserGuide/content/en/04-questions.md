@@ -31,7 +31,7 @@ The editing dialog of a scale or choice question also lets you choose whether it
 
 ## Question types {#question-types}
 
-There are four question types: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] and [[questionEditor:multipleChoiceQuestion]]. Scale questions are answered from 1 to 5, or "can't answer". The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
+There are four question types: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] and [[questionEditor:multipleChoiceQuestion]]. Scale questions are answered from 1 to 5, or _N/A_. The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
 
 ## University level questions {#university-questions}
 
@@ -100,7 +100,7 @@ The [[common:preview]] tab shows the whole survey in the order students see it. 
 
 ## Groups {#groups}
 
-If a course has study groups in Sisu, e.g. exercise groups, Norppa knows which students belong to which group. In a course survey with two or more Sisu groups, the answers can be viewed by group on the [[feedbackTargetView:feedbacksTab]] tab without you doing anything. The groups and their students and teachers are listed under [[groups:groupingInfo]] at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab.
+If a course has study groups in Sisu, e.g. exercise groups, Norppa knows which students belong to which group. In a course survey with two or more Sisu groups, the answers can be viewed by group on the [[feedbackTargetView:feedbacksTab]] tab without you doing anything. The groups, their numbers of students and their teachers are listed under [[groups:groupingInfo]] at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab.
 
 If the course has no groups in Sisu, or they don't suit you, add a _grouping question_, in any type of survey:
 

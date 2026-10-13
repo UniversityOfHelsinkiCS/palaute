@@ -9,8 +9,8 @@ A survey's answers are on its [[feedbackTargetView:feedbacksTab]] tab from the f
 
 The tab shows:
 
-- The number of answers day by day, as a share of the survey's students. The opening and closing dates and the last reminder email are marked on the chart.
-- Under [[questionResults:multipleChoiceQuestions]], how the answers to each scale and choice question are distributed. Scale questions and the workload question also show their mean, in which [[feedbackView:dontKnowOption]] answers aren't counted.
+- How the number of answers has grown day by day, as a share of the survey's students. The opening and closing dates and the last reminder email are marked on the chart.
+- Under [[questionResults:multipleChoiceQuestions]], how the answers to each scale and choice question are distributed. Scale questions also show their mean, in which [[feedbackView:dontKnowOption]] answers aren't counted. The workload question shows an arrow pointing to the side its answers lean to.
 - Under [[questionResults:openQuestions]], the answers to the open questions, in alphabetical order.
 
 New answers appear when you reload the page. [[feedbackTargetResults:tableView]] shows the charts as tables, and [[feedbackTargetResults:chartView]] switches back.

@@ -10,7 +10,7 @@ Kyselyn vastaukset näkyvät sen [[feedbackTargetView:feedbacksTab]]-välilehdel
 Välilehdellä näet:
 
 - Vastausten kertymän päivittäin osuutena kyselyn opiskelijoista. Kaavioon on merkitty kyselyn avautumis- ja sulkeutumispäivä sekä viimeisin muistutusviesti.
-- Otsikon [[questionResults:multipleChoiceQuestions]] alla kunkin asteikko- ja valintakysymyksen vastausjakauman. Asteikkokysymyksistä ja työmääräkysymyksestä näytetään myös keskiarvo, johon [[feedbackView:dontKnowOption]]-vastauksia ei lasketa.
+- Otsikon [[questionResults:multipleChoiceQuestions]] alla kunkin asteikko- ja valintakysymyksen vastausjakauman. Asteikkokysymyksistä näytetään myös keskiarvo, johon [[feedbackView:dontKnowOption]]-vastauksia ei lasketa. Työmääräkysymyksessä nuoli osoittaa, kumpaan suuntaan vastaukset painottuvat.
 - Otsikon [[questionResults:openQuestions]] alla avointen kysymysten vastaukset aakkosjärjestyksessä.
 
 Uudet vastaukset tulevat näkyviin, kun lataat sivun uudelleen. [[feedbackTargetResults:tableView]] näyttää kaaviot taulukkoina ja [[feedbackTargetResults:chartView]] palauttaa kaaviot.

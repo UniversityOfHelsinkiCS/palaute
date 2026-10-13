@@ -10,7 +10,7 @@ Vastuuopettajat voivat kirjoittaa vastapalautteen kyselyn sulkeuduttua 12 kuukau
 
 1. Valitse kurssi [[navBar:myCourses]]-sivulta. Kurssin vieressä oleva [[teacherView:feedbackResponseMissing]]-merkki vie suoraan kohtaan 3.
 2. Avaa [[feedbackTargetView:giveFeedbackResponseTab]]-välilehti.
-3. Kirjoita teksti [[feedbackResponse:responseLabel]]-kenttään. Kenttä tukee Markdownia, esimerkiksi otsikoita, luetteloita, lihavointia ja linkkejä, mutta ei kuvia. Alla oleva [[feedbackResponse:previewLabel]] näyttää, miltä teksti näyttää.
+3. Kirjoita teksti [[feedbackResponse:responseLabel]]-kenttään. Kenttä tukee Markdownia, esimerkiksi otsikoita, luetteloita, lihavointia ja linkkejä. Alla oleva [[feedbackResponse:previewLabel]] näyttää, miltä teksti näyttää.
 4. Jätä [[feedbackResponse:checkboxSendEmail]] valituksi, jos haluat lähettää vastapalautteen opiskelijoille sähköpostilla, tai poista valinta, jos haluat vain tallentaa sen.
 5. Klikkaa [[feedbackResponse:dialogSendEmailSubmit]] ja vahvista, tai [[feedbackResponse:dialogSaveSubmit]], jos poistit valinnan.
 
@@ -34,7 +34,7 @@ Jos tallensit vastapalautteen ilman sähköpostia, voit lähettää sen myöhemm
 - [[teacherView:feedbackResponseNotSent]]: vastapalaute on tallennettu, mutta sähköpostia ei ole lähetetty.
 - [[teacherView:feedbackResponseGiven]]: vastapalaute on tallennettu ja lähetetty sähköpostilla.
 
-[[teacherView:endedSurveys]]-välilehden numero kertoo, monestako päättyneestä kurssistasi puuttuu vastapalaute. Välipalautteessa tällaista merkkiä ei ole.
+[[teacherView:endedSurveys]]-välilehden numero kertoo, monestako päättyneestä kurssistasi puuttuu vastapalaute.
 
 ## Miten opiskelijat näkevät sen {#students-see}
 
