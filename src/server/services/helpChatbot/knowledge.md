@@ -204,7 +204,7 @@ Open [[navBar:myProgrammes]] or [[navBar:myOrganisations]] and choose the progra
 - [[organisationSettings:summaryTab]]: its course summary.
 - [[organisationSettings:openQuestionsTab]] (admins): all answers to the university and programme level open questions of its courses.
 - [[organisationSettings:courseRealisationsTab]]: its course realisations.
-- [[organisationSettings:surveyTab]] (faculties: [[organisationSettings:surveyFacultyTab]]) (admins): questions added to all its course surveys. In the survey, its scale and choice questions come after the university ones and its open questions after the teacher's own questions.
+- [[organisationSettings:surveyTab]] (faculties: [[organisationSettings:surveyFacultyTab]]) (admins): questions added to all its course surveys. In the survey, its scale and choice questions come after the university ones and its open questions after the teacher's own questions. They're read live, so adding, changing or removing one changes the survey of every course in the programme at once, including surveys that are already open or closed.
 - [[organisationSettings:organisationSurveysTab]] (faculties: [[organisationSettings:organisationFacultySurveysTab]]) (admins): its programme surveys.
 - [[organisationSettings:responsiblesTab]]: its teachers and their course counts.
 - [[organisationSettings:settingsTab]] (admins): [[organisationSettings:feedbackCorrespondents]], [[organisationSettings:studentListVisibility]] (whether responsible teachers see who has answered, for all courses or per course) and [[organisationSettings:courseSettings]] ([[organisationSettings:feedbackEnabled]] per course unit).
