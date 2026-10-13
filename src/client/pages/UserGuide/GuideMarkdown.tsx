@@ -53,7 +53,7 @@ const H1 = ({ id, children }: HeadingProps) => (
 )
 
 const H2 = ({ id, children }: HeadingProps) => (
-  <Typography variant="h5" component="h2" id={id} sx={{ mt: 4, mb: 1.5, scrollMarginTop: '1rem' }}>
+  <Typography variant="h5" component="h2" id={id} sx={{ mt: 4, mb: 1.5, scrollMarginTop: 'var(--guide-top, 0px)' }}>
     {children}
   </Typography>
 )
@@ -63,14 +63,19 @@ const H3 = ({ id, children }: HeadingProps) => (
     variant="h6"
     component="h3"
     id={id}
-    sx={{ mt: 3, mb: 1, fontSize: '1.1rem', fontWeight: 600, scrollMarginTop: '1rem' }}
+    sx={{ mt: 3, mb: 1, fontSize: '1.1rem', fontWeight: 600, scrollMarginTop: 'var(--guide-top, 0px)' }}
   >
     {children}
   </Typography>
 )
 
 const H4 = ({ id, children }: HeadingProps) => (
-  <Typography variant="body1" component="h4" id={id} sx={{ mt: 2, mb: 1, fontWeight: 600, scrollMarginTop: '1rem' }}>
+  <Typography
+    variant="body1"
+    component="h4"
+    id={id}
+    sx={{ mt: 2, mb: 1, fontWeight: 600, scrollMarginTop: 'var(--guide-top, 0px)' }}
+  >
     {children}
   </Typography>
 )

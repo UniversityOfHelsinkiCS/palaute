@@ -3,7 +3,7 @@ import type { Theme } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { Box, Link, Typography, useMediaQuery } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Link as RouterLink, useLocation, useParams } from 'react-router-dom'
 
@@ -12,6 +12,7 @@ import type { GuidePage } from './guidePages'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { NorButton } from '../../components/common/NorButton'
 import Title from '../../components/common/Title'
+import useElementSize from '../../components/HelpChatbot/useElementSize'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { focusIndicatorStyle } from '../../util/accessibility'
 import canSeeUserGuide from './canSeeUserGuide'
@@ -114,6 +115,17 @@ const UserGuide = () => {
   const navTitleId = useId()
   const contentRef = useRef<HTMLDivElement>(null)
   const firstRender = useRef(true)
+  const rootRef = useRef<HTMLDivElement>(null)
+  const headerRef = useRef(document.getElementById('header'))
+
+  // The menu sticks where it already is at the top of the page, below the app's sticky header, and links to a section
+  // stop at the same height. Set before the scroll effect below, and again if the header changes size
+  const updateGuideTop = () => {
+    const root = rootRef.current
+    if (root) root.style.setProperty('--guide-top', `${root.getBoundingClientRect().top + window.scrollY}px`)
+  }
+  useLayoutEffect(updateGuideTop)
+  useElementSize(headerRef, updateGuideTop)
 
   const pages = GUIDE_PAGES[getGuideLanguage(i18n.language)]
   const index = slug ? pages.findIndex(candidate => candidate.slug === slug) : 0
@@ -138,6 +150,7 @@ const UserGuide = () => {
 
   return (
     <Box
+      ref={rootRef}
       sx={{
         display: 'grid',
         gap: { xs: 2, md: 6 },
@@ -146,7 +159,19 @@ const UserGuide = () => {
       }}
     >
       <Title>{`${page.title} – ${t('userGuide:title')}`}</Title>
-      <Box component="nav" aria-labelledby={navTitleId} sx={{ position: { md: 'sticky' }, top: '1rem' }}>
+      <Box
+        component="nav"
+        aria-labelledby={navTitleId}
+        sx={{
+          position: { md: 'sticky' },
+          // Minus the padding, which keeps the focus indicator from being cut off when the menu scrolls on its own
+          top: { md: 'calc(var(--guide-top) - 6px)' },
+          maxHeight: { md: 'calc(100vh - var(--guide-top) - 1rem)' },
+          overflowY: { md: 'auto' },
+          p: { md: '6px' },
+          m: { md: '-6px' },
+        }}
+      >
         <Typography
           id={navTitleId}
           component="h2"
