@@ -29,7 +29,7 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 Plain Markdown: headings, paragraphs, lists, bold, italics and links. No images (screenshots go out of date with every UI change) and no tables.
 
 - **UI labels**: `[[section:key]]` shows the label with that translation key in the user's language, in bold, e.g. `[[navBar:myCourses]]`. `[[section:key|fi]]` shows it in the given language. Use these for every button, tab and menu item, so the guide always matches the screen. Find keys in `public/locales/en/translation.json` (HY's own wording is in `hy.json`).
-- **Section ids**: `## Heading {#some-id}` gives a section an id to link to. Use the same id in both languages.
+- **Section ids**: `## Heading {#some-id}` gives a section an id to link to. Use the same id in both languages. Every `##` section needs one, as the menu lists them under the open page; keep their titles plain text.
 - **Links** to guide pages: `[counter feedback](/guide/counter-feedback)`, or to a section: `(/guide/counter-feedback#send-email)`. Other links to Norppa start with `/` too, e.g. `/courses`. Links to other sites open in a new tab.
 - **Bold** is for UI labels only, so the reader can tell what's on the screen. Use _italics_ for terms and emphasis.
 - **Notes**: `> **Note:** ...` shows a highlighted box.

@@ -7,7 +7,7 @@ import fi from '../../../../public/locales/fi/translation.json'
 import svHy from '../../../../public/locales/sv/hy.json'
 import sv from '../../../../public/locales/sv/translation.json'
 import PAGES from './content'
-import { getGuideLanguage } from './guidePages'
+import { getGuideLanguage, stripComments } from './guidePages'
 
 type Translations = { [key: string]: Translations | string }
 
@@ -24,8 +24,6 @@ const lookup = (translations: Translations, key: string) =>
 // Like the client: the HY namespace before the common one, falling back to English
 const hasLabel = (key: string, language: string) =>
   [...TRANSLATIONS[language], ...TRANSLATIONS.en].some(translations => typeof lookup(translations, key) === 'string')
-
-const withoutComments = (markdown: string) => markdown.replace(/<!--[\s\S]*?-->/g, '')
 
 const anchorsOf = (markdown: string) => [...markdown.matchAll(/^#{1,6} .*\{#([\w-]+)\}\s*$/gm)].map(match => match[1])
 
@@ -44,12 +42,23 @@ describe('user guide content', () => {
   })
 
   it.each(allPages)('$language/$slug has one title, without labels', ({ title, markdown }) => {
-    expect(withoutComments(markdown).match(/^# /gm)).toHaveLength(1)
+    expect(stripComments(markdown).match(/^# /gm)).toHaveLength(1)
     expect(title).not.toContain('[[')
   })
 
+  // The menu shows the titles as they're written, so they can't have labels, formatting or escapes
+  it.each(allPages)('$language/$slug gives each section an id and a plain title, for the menu', ({ markdown }) => {
+    const headings = stripComments(markdown).match(/^## .*$/gm) ?? []
+    expect(headings.filter(heading => !/^## [^[*_`\\]+ \{#[\w-]+\}\s*$/.test(heading))).toEqual([])
+  })
+
+  it.each(allPages)('$language/$slug has no section id twice', ({ markdown }) => {
+    const anchors = anchorsOf(markdown)
+    expect(anchors.filter((anchor, index) => anchors.indexOf(anchor) !== index)).toEqual([])
+  })
+
   it.each(allPages)('$language/$slug quotes only labels that exist', ({ markdown }) => {
-    const keys = [...withoutComments(markdown).matchAll(/\[\[([\w:-]+)(?:\|(fi|sv|en))?\]\]/g)]
+    const keys = [...stripComments(markdown).matchAll(/\[\[([\w:-]+)(?:\|(fi|sv|en))?\]\]/g)]
     const missing = keys.flatMap(([, key, pinned]) =>
       (pinned ? [pinned] : ['fi', 'sv', 'en']).filter(language => !hasLabel(key, language)).map(() => key)
     )
@@ -58,7 +67,7 @@ describe('user guide content', () => {
 
   it.each(allPages)('$language/$slug links only to guide pages and sections that exist', ({ language, markdown }) => {
     const pages = PAGES[language]
-    const links = [...withoutComments(markdown).matchAll(/\]\((\/guide[^)\s]*)\)/g)].map(match => match[1])
+    const links = [...stripComments(markdown).matchAll(/\]\((\/guide[^)\s]*)\)/g)].map(match => match[1])
     const broken = links.filter(link => {
       const [, slug, anchor] = /^\/guide(?:\/([a-z0-9-]+))?(?:#([\w-]+))?$/.exec(link) ?? []
       const target = slug ? pages.find(page => page.slug === slug) : pages[0]
@@ -68,7 +77,7 @@ describe('user guide content', () => {
   })
 
   it.each(allPages)('$language/$slug has no images or tables', ({ markdown }) => {
-    expect(withoutComments(markdown)).not.toMatch(/!\[|^\s*\|/m)
+    expect(stripComments(markdown)).not.toMatch(/!\[|^\s*\|/m)
   })
 })
 

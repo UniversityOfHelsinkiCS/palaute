@@ -27,15 +27,45 @@ type PageListProps = {
   onNavigate?: () => void
 }
 
+const listStyle = { listStyle: 'none', m: 0, p: 0 }
+
+// Only the open page lists its sections, so the menu stays short enough to fit the window
+const SectionList = ({ page, onNavigate }: { page: GuidePage; onNavigate?: () => void }) => (
+  <Box component="ul" sx={{ ...listStyle, borderLeft: '3px solid', borderColor: 'divider' }}>
+    {page.sections.map(({ id, title }) => (
+      <li key={id}>
+        <Link
+          component={RouterLink}
+          to={`/guide/${page.slug}#${id}`}
+          underline="hover"
+          onClick={onNavigate}
+          sx={{
+            display: 'block',
+            py: 0.5,
+            pl: 3,
+            pr: 1.5,
+            fontSize: '0.875rem',
+            fontWeight: 400,
+            color: 'text.primary',
+            ...focusIndicatorStyle(),
+          }}
+        >
+          {title}
+        </Link>
+      </li>
+    ))}
+  </Box>
+)
+
 const PageList = ({ id, pages, current, onNavigate }: PageListProps) => (
-  <Box component="ul" id={id} sx={{ listStyle: 'none', m: 0, p: 0 }}>
-    {pages.map(({ slug, title }) => {
-      const isCurrent = slug === current.slug
+  <Box component="ul" id={id} sx={listStyle}>
+    {pages.map(page => {
+      const isCurrent = page.slug === current.slug
       return (
-        <li key={slug}>
+        <li key={page.slug}>
           <Link
             component={RouterLink}
-            to={`/guide/${slug}`}
+            to={`/guide/${page.slug}`}
             aria-current={isCurrent ? 'page' : undefined}
             underline="hover"
             onClick={onNavigate}
@@ -50,8 +80,9 @@ const PageList = ({ id, pages, current, onNavigate }: PageListProps) => (
               ...focusIndicatorStyle(),
             }}
           >
-            {title}
+            {page.title}
           </Link>
+          {isCurrent && page.sections.length > 0 && <SectionList page={page} onNavigate={onNavigate} />}
         </li>
       )
     })}
@@ -104,11 +135,34 @@ const PageNavigation = ({ previous, next }: PageNavigationProps) => {
   )
 }
 
+// The menu's padding, which keeps the focus indicator from being cut off when the menu scrolls on its own
+const MENU_PADDING = 6
+
+// A sticky element can't reach below its container, so at the end of a long page the menu would be pushed up under the
+// header. There it gets shorter instead, and scrolls on its own if it no longer fits
+const updateMenuHeight = (root: HTMLElement) => {
+  const top = parseFloat(root.style.getPropertyValue('--guide-top'))
+  if (Number.isNaN(top)) return
+  const bottom = Math.min(window.innerHeight - 16, root.getBoundingClientRect().bottom + 2 * MENU_PADDING)
+  const height = `${Math.max(bottom - top, 160)}px`
+  if (root.style.getPropertyValue('--guide-menu-height') !== height)
+    root.style.setProperty('--guide-menu-height', height)
+}
+
+// The section a link leads to. A malformed address, e.g. a broken percent-encoding, leads to none
+const findSection = (hash: string) => {
+  try {
+    return hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null
+  } catch {
+    return null
+  }
+}
+
 const UserGuide = () => {
   const { t, i18n } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
   const { slug } = useParams()
-  const { hash } = useLocation()
+  const { hash, key } = useLocation()
   const compact = useMediaQuery((theme: Theme) => theme.breakpoints.down('md'))
   const [menuOpen, setMenuOpen] = useState(false)
   const listId = useId()
@@ -118,31 +172,71 @@ const UserGuide = () => {
   const rootRef = useRef<HTMLDivElement>(null)
   const headerRef = useRef(document.getElementById('header'))
 
-  // The menu sticks where it already is at the top of the page, below the app's sticky header, and links to a section
-  // stop at the same height. Set before the scroll effect below, and again if the header changes size
-  const updateGuideTop = () => {
+  // The menu sticks where it already is at the top of the page, below the app's sticky header. Whatever the page
+  // scrolls to, a linked section or an element focused with the keyboard, stops at the same height instead of under
+  // the header (WCAG 2.4.11). Set before the scroll effect below, and again if the header changes size
+  const updateLayout = () => {
     const root = rootRef.current
-    if (root) root.style.setProperty('--guide-top', `${root.getBoundingClientRect().top + window.scrollY}px`)
+    if (!root) return
+    const top = `${root.getBoundingClientRect().top + window.scrollY}px`
+    if (root.style.getPropertyValue('--guide-top') !== top) root.style.setProperty('--guide-top', top)
+    const { style } = document.documentElement
+    if (style.scrollPaddingTop !== top) style.scrollPaddingTop = top
+    if (!compact) updateMenuHeight(root)
   }
-  useLayoutEffect(updateGuideTop)
-  useElementSize(headerRef, updateGuideTop)
+  useLayoutEffect(updateLayout)
+  useElementSize(headerRef, updateLayout)
+  useEffect(
+    () => () => {
+      document.documentElement.style.scrollPaddingTop = ''
+    },
+    []
+  )
+
+  // The menu's height follows the scroll position, the window's height and the page's height (e.g. when the text
+  // rewraps). Not on small screens, where the menu doesn't stick
+  useEffect(() => {
+    if (compact) return undefined
+    let frame = 0
+    const update = () => {
+      frame ||= requestAnimationFrame(() => {
+        frame = 0
+        if (rootRef.current) updateMenuHeight(rootRef.current)
+      })
+    }
+    const observer = new ResizeObserver(update)
+    observer.observe(document.body)
+    window.addEventListener('scroll', update, { passive: true })
+    window.addEventListener('resize', update)
+    return () => {
+      observer.disconnect()
+      window.removeEventListener('scroll', update)
+      window.removeEventListener('resize', update)
+      cancelAnimationFrame(frame)
+    }
+  }, [compact])
 
   const pages = GUIDE_PAGES[getGuideLanguage(i18n.language)]
   const index = slug ? pages.findIndex(candidate => candidate.slug === slug) : 0
   const page = index >= 0 ? pages[index] : undefined
+  const shown = !isLoading && canSeeUserGuide(authorizedUser) && page !== undefined
 
-  // Like a page load: start from the given section or the top. After moving to another page, focus its title,
-  // as the link that was activated may be gone
+  // Like a page load: start from the given section or the top. After following a link, also move focus to the section
+  // or the page's title, so keyboard and screen reader users go on from there. The key reruns this when the same
+  // link is followed again
   useEffect(() => {
-    const target = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null
-    if (target) {
-      target.scrollIntoView()
+    if (!shown) return
+    const section = findSection(hash)
+    if (section) {
+      section.scrollIntoView()
     } else if (!firstRender.current) {
       window.scrollTo(0, 0)
     }
-    if (!firstRender.current) contentRef.current?.querySelector<HTMLElement>('h1')?.focus({ preventScroll: true })
+    if (!firstRender.current) {
+      ;(section ?? contentRef.current?.querySelector<HTMLElement>('h1'))?.focus({ preventScroll: true })
+    }
     firstRender.current = false
-  }, [page?.slug, hash])
+  }, [shown, page?.slug, hash, key])
 
   if (isLoading) return <LoadingProgress />
   if (!canSeeUserGuide(authorizedUser)) return <Navigate to="/" replace />
@@ -164,12 +258,11 @@ const UserGuide = () => {
         aria-labelledby={navTitleId}
         sx={{
           position: { md: 'sticky' },
-          // Minus the padding, which keeps the focus indicator from being cut off when the menu scrolls on its own
-          top: { md: 'calc(var(--guide-top) - 6px)' },
-          maxHeight: { md: 'calc(100vh - var(--guide-top) - 1rem)' },
+          top: { md: `calc(var(--guide-top) - ${MENU_PADDING}px)` },
+          maxHeight: { md: 'var(--guide-menu-height)' },
           overflowY: { md: 'auto' },
-          p: { md: '6px' },
-          m: { md: '-6px' },
+          p: { md: `${MENU_PADDING}px` },
+          m: { md: `-${MENU_PADDING}px` },
         }}
       >
         <Typography

@@ -14,18 +14,18 @@ The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`. *
 
 - One file per page, `<order>-<slug>.md`, in both languages. Swedish users get the English text.
 - `[[section:key]]` renders a UI label in the user's language, as in the chatbot's `knowledge.md`, so the guide quotes what the user sees even when the labels change.
-- `## Heading {#id}` gives a section a stable id to link to, the same in both languages.
+- `## Heading {#id}` gives a section a stable id to link to, the same in both languages. The menu lists the open page's `##` sections.
 - No images or tables.
 
 The content was written from the wiki, the chatbot's `knowledge.md`, the code and the e2e tests, and checked against the code. The guide and `knowledge.md` are separate texts: the guide is for people and the knowledge base is compressed for the model. When a fact changes, update both.
 
-`src/client/pages/UserGuide/guidePages.test.ts` (in `npm run test:unit`) checks that every page exists in both languages with the same section ids, every label key exists, and every link to the guide points to a page and section that exist.
+`src/client/pages/UserGuide/guidePages.test.ts` (in `npm run test:unit`) checks that every page exists in both languages with the same section ids, every `##` section has an id and a plain title, every label key exists, and every link to the guide points to a page and section that exist.
 
 ## Implementation
 
 - `src/client/pages/UserGuide/`: the page is loaded lazily (`React.lazy` in `Router.tsx`), so the text, bundled with `import.meta.glob` in `content.ts`, is downloaded only by those who open the guide.
 - `GuideMarkdown.tsx` renders a page with the common `Markdown` component: labels, heading ids (a small rehype plugin), router links for links within Norppa, `ExternalLink` for other sites.
-- Moving to another page focuses its title, so screen reader users start from the new page. A link with a `#section` scrolls to that section.
+- Moving to another page focuses its title, so screen reader users start from the new page. A link with a `#section` scrolls to that section and focuses its heading.
 
 ## Later
 

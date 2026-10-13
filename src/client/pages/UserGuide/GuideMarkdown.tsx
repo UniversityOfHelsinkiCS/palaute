@@ -1,12 +1,16 @@
+import type { Theme } from '@mui/material'
+import type { SystemStyleObject } from '@mui/system'
 import type { ComponentProps, ReactNode } from 'react'
 import type { Components, ExtraProps } from 'react-markdown'
 
 import { Box, Link, Typography } from '@mui/material'
+import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
 import ExternalLink from '../../components/common/ExternalLink'
 import Markdown from '../../components/common/Markdown'
+import { stripComments } from './guidePages'
 
 // [[section:key]] is the UI label in the user's language and [[section:key|fi]] in the given one, as in the help
 // chatbot's knowledge.md, so the guide always quotes what the user sees on the screen
@@ -52,30 +56,27 @@ const H1 = ({ id, children }: HeadingProps) => (
   </Typography>
 )
 
+// A section takes focus when a link leads to it, so keyboard and screen reader users go on from there
+const sectionProps = (id: string | undefined, sx: SystemStyleObject<Theme>) => ({
+  id,
+  tabIndex: id ? -1 : undefined,
+  sx: { ...sx, '&:focus': { outline: 'none' } },
+})
+
 const H2 = ({ id, children }: HeadingProps) => (
-  <Typography variant="h5" component="h2" id={id} sx={{ mt: 4, mb: 1.5, scrollMarginTop: 'var(--guide-top, 0px)' }}>
+  <Typography variant="h5" component="h2" {...sectionProps(id, { mt: 4, mb: 1.5 })}>
     {children}
   </Typography>
 )
 
 const H3 = ({ id, children }: HeadingProps) => (
-  <Typography
-    variant="h6"
-    component="h3"
-    id={id}
-    sx={{ mt: 3, mb: 1, fontSize: '1.1rem', fontWeight: 600, scrollMarginTop: 'var(--guide-top, 0px)' }}
-  >
+  <Typography variant="h6" component="h3" {...sectionProps(id, { mt: 3, mb: 1, fontSize: '1.1rem', fontWeight: 600 })}>
     {children}
   </Typography>
 )
 
 const H4 = ({ id, children }: HeadingProps) => (
-  <Typography
-    variant="body1"
-    component="h4"
-    id={id}
-    sx={{ mt: 2, mb: 1, fontWeight: 600, scrollMarginTop: 'var(--guide-top, 0px)' }}
-  >
+  <Typography variant="body1" component="h4" {...sectionProps(id, { mt: 2, mb: 1, fontWeight: 600 })}>
     {children}
   </Typography>
 )
@@ -155,9 +156,10 @@ const GuideMarkdown = ({ markdown }: GuideMarkdownProps) => {
 
   return (
     <Markdown components={components} rehypePlugins={[rehypeHeadingIds]} disallowedElements={['img']}>
-      {renderLabels(markdown.replace(/<!--[\s\S]*?-->/g, ''), translate)}
+      {renderLabels(stripComments(markdown), translate)}
     </Markdown>
   )
 }
 
-export default GuideMarkdown
+// Memoised, so opening the menu on a small screen doesn't parse the whole page again
+export default memo(GuideMarkdown)
