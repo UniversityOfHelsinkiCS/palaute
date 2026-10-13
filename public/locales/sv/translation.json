@@ -310,11 +310,7 @@
     "publicQuestionConfirmation": "Jag har kontrollerat att svaren på denna fråga inte innehåller personuppgifter eller annan känslig information som inte får publiceras."
   },
   "feedbackSummary": {
-    "question": "Fråga",
-    "average": "Medeltal",
-    "standardDeviation": "Standardavvikelse",
-    "median": "Median",
-    "answers": "Svar"
+    "average": "Medeltal"
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Enkätresultaten visas inte eftersom ingen återkoppling har lämnats ännu.",

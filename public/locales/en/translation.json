@@ -321,11 +321,7 @@
     "publicQuestionConfirmation": "I have checked that the open answers to this question do not contain personal data or other sensitive information that cannot be published."
   },
   "feedbackSummary": {
-    "question": "Question",
-    "average": "Average",
-    "standardDeviation": "Standard Deviation",
-    "median": "Median",
-    "answers": "Answers"
+    "average": "Average"
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Survey results are not shown because no feedback has been given yet.",

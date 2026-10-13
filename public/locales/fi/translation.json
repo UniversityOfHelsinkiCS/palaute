@@ -315,11 +315,7 @@
     "publicQuestionConfirmation": "Olen tarkistanut, ettei tämän kysymyksen avoimissa vastauksissa ole henkilötietoja tai muita arkaluontoisia tietoja, joita ei voida julkaista."
   },
   "feedbackSummary": {
-    "question": "Kysymys",
-    "average": "Keskiarvo",
-    "standardDeviation": "Keskihajonta",
-    "median": "Mediaani",
-    "answers": "Vastanneita"
+    "average": "Keskiarvo"
   },
   "feedbackTargetResults": {
     "notEnoughFeedbacksInfo": "Tuloksia ei näytetä koska palautteita ei vielä ole annettu.",
