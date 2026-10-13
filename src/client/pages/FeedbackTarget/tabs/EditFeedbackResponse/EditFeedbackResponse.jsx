@@ -70,7 +70,7 @@ const EditFeedbackResponse = () => {
           </Box>
         </Instructions>
         <Box sx={{ mb: 2 }}>
-          <Alert severity="info">
+          <Alert severity="info" role="presentation">
             {t('feedbackResponse:responseInfo')}{' '}
             <AlertLink href={t('links:markdownHelp')} target="_blank">
               {t('feedbackResponse:markdownLink')}

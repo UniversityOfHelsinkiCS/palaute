@@ -28,7 +28,13 @@ const Instructions = ({ title, sx, dataCyPrefix, children }: InstructionsProps) 
 
   return (
     <Box sx={mergeSx(sx, { my: 2 })}>
-      <Alert severity="info" icon={false} sx={{ p: 0 }} data-cy={dataCyPrefix ? `${dataCyPrefix}-alert` : undefined}>
+      <Alert
+        severity="info"
+        icon={false}
+        sx={{ p: 0 }}
+        data-cy={dataCyPrefix ? `${dataCyPrefix}-alert` : undefined}
+        role="presentation"
+      >
         <Button
           sx={{
             display: 'flex',
