@@ -29,6 +29,7 @@ In `src/client/pages/UserGuide/`, loaded lazily (`React.lazy` in `Router.tsx`), 
 - Page: `UserGuide.tsx` checks access and finds the page, and lays out `GuideMenu.tsx` (pages and the open page's sections) beside the page and `PageNavigation.tsx` (previous and next).
 - The menu sticks below the app's sticky header, and the page's scroll padding keeps linked sections and keyboard focus below it. Both use the header's height as a constant in `GuideMenu.tsx`, a stopgap until the app handles its sticky header itself.
 - `useScrollToSection.ts`: moving to another page starts from its top and focuses its title, so screen reader users start from the new page. A link with a `#section` scrolls to that section and focuses its heading.
+- `useActiveSection.ts`: the menu highlights the section being read, i.e. the last one whose heading has scrolled up to the header, or the last one at the end of the page.
 
 ## Later
 

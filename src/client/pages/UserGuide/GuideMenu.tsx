@@ -8,6 +8,7 @@ import type { GuidePage } from './content'
 
 import { NorButton } from '../../components/common/NorButton'
 import { focusIndicatorStyle } from '../../util/accessibility'
+import useActiveSection from './useActiveSection'
 
 const list = { listStyle: 'none', m: 0, p: 0 }
 
@@ -15,6 +16,40 @@ const TOP = 'calc(64px + 3rem)'
 
 // Keeps the focus indicator from being cut off when the menu scrolls on its own
 const PADDING = 6
+
+const SectionList = ({ page }: { page: GuidePage }) => {
+  const activeSection = useActiveSection(page.sections)
+
+  return (
+    <Box component="ul" sx={{ ...list, borderLeft: '3px solid', borderColor: 'divider' }}>
+      {page.sections.map(section => (
+        <li key={section.id}>
+          <Link
+            component={RouterLink}
+            to={`/guide/${page.slug}#${section.id}`}
+            underline="hover"
+            sx={{
+              display: 'block',
+              py: 0.5,
+              pl: 3,
+              pr: 1.5,
+              // Over the list's border
+              ml: '-3px',
+              borderLeft: '3px solid',
+              borderColor: section.id === activeSection ? 'primary.main' : 'transparent',
+              fontSize: '0.875rem',
+              fontWeight: 400,
+              color: section.id === activeSection ? 'primary.main' : 'text.primary',
+              ...focusIndicatorStyle(),
+            }}
+          >
+            {section.title}
+          </Link>
+        </li>
+      ))}
+    </Box>
+  )
+}
 
 const PageItem = ({ page, current }: { page: GuidePage; current: boolean }) => (
   <li>
@@ -36,31 +71,7 @@ const PageItem = ({ page, current }: { page: GuidePage; current: boolean }) => (
     >
       {page.title}
     </Link>
-    {current && page.sections.length > 0 && (
-      <Box component="ul" sx={{ ...list, borderLeft: '3px solid', borderColor: 'divider' }}>
-        {page.sections.map(section => (
-          <li key={section.id}>
-            <Link
-              component={RouterLink}
-              to={`/guide/${page.slug}#${section.id}`}
-              underline="hover"
-              sx={{
-                display: 'block',
-                py: 0.5,
-                pl: 3,
-                pr: 1.5,
-                fontSize: '0.875rem',
-                fontWeight: 400,
-                color: 'text.primary',
-                ...focusIndicatorStyle(),
-              }}
-            >
-              {section.title}
-            </Link>
-          </li>
-        ))}
-      </Box>
-    )}
+    {current && page.sections.length > 0 && <SectionList page={page} />}
   </li>
 )
 
