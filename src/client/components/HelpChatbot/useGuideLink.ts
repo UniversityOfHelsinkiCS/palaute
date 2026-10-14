@@ -8,8 +8,7 @@ export type GuideLink = {
   inApp: boolean
 }
 
-// The in-app user guide when the user can see it, else the wiki, or null when the deployment has neither
-// (links:wikiRoot is '-' by default)
+// null when the deployment has neither the guide nor a wiki (links:wikiRoot is '-' by default)
 const useGuideLink = (): GuideLink | null => {
   const { t } = useTranslation()
   const { authorizedUser } = useAuthorizedUser()

@@ -19,13 +19,16 @@ The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`. *
 
 The content was written from the wiki, the chatbot's `knowledge.md`, the code and the e2e tests, and checked against the code. The guide and `knowledge.md` are separate texts: the guide is for people and the knowledge base is compressed for the model. When a fact changes, update both.
 
-`src/client/pages/UserGuide/guidePages.test.ts` (in `npm run test:unit`) checks that every page exists in both languages with the same section ids, every `##` section has an id and a plain title, every label key exists, and every link to the guide points to a page and section that exist.
+`src/client/pages/UserGuide/content.test.ts` (in `npm run test:unit`) checks that every page exists in both languages with the same section ids, titles and `##` sections are plain text and sections have unique ids, every label key exists, and every link to the guide points to a page and section that exist.
 
 ## Implementation
 
-- `src/client/pages/UserGuide/`: the page is loaded lazily (`React.lazy` in `Router.tsx`), so the text, bundled with `import.meta.glob` in `content.ts`, is downloaded only by those who open the guide.
-- `GuideMarkdown.tsx` renders a page with the common `Markdown` component: labels, heading ids (a small rehype plugin), router links for links within Norppa, `ExternalLink` for other sites.
-- Moving to another page focuses its title, so screen reader users start from the new page. A link with a `#section` scrolls to that section and focuses its heading.
+In `src/client/pages/UserGuide/`, loaded lazily (`React.lazy` in `Router.tsx`), so the text is downloaded only by those who open the guide:
+
+- Content: `content.ts` reads the Markdown files with `import.meta.glob` and parses them into pages with titles and sections; it also defines the guide's additions to Markdown (labels, heading ids). `GuideMarkdown.tsx` renders a page with the common `Markdown` component: labels, heading ids (a small rehype plugin), router links within Norppa, `ExternalLink` for other sites.
+- Page: `UserGuide.tsx` checks access and finds the page, and lays out `GuideMenu.tsx` (pages and the open page's sections) beside the page and `PageNavigation.tsx` (previous and next).
+- The menu sticks below the app's sticky header, and the page's scroll padding keeps linked sections and keyboard focus below it. Both use the header's height as a constant in `GuideMenu.tsx`, a stopgap until the app handles its sticky header itself.
+- `useScrollToSection.ts`: moving to another page starts from its top and focuses its title, so screen reader users start from the new page. A link with a `#section` scrolls to that section and focuses its heading.
 
 ## Later
 

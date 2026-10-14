@@ -10,13 +10,9 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import ExternalLink from '../../components/common/ExternalLink'
 import Markdown from '../../components/common/Markdown'
-import { stripComments } from './guidePages'
+import { HEADING_ID, LABEL } from './content'
 
-// [[section:key]] is the UI label in the user's language and [[section:key|fi]] in the given one, as in the help
-// chatbot's knowledge.md, so the guide always quotes what the user sees on the screen
-const LABEL = /\[\[([\w:-]+)(?:\|(fi|sv|en))?\]\]/g
-
-export const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
+const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
   markdown.replace(LABEL, (_, key: string, pinned?: string) => `**${translate(key, pinned).replace(/<[^>]*>/g, '')}**`)
 
 // The parts of a hast tree the heading ids need; the hast types are only a transitive dependency
@@ -28,11 +24,7 @@ type HastNode = {
   children?: HastNode[]
 }
 
-const HEADING_ID = /\s*\{#([\w-]+)\}\s*$/
-
-// "## Heading {#id}" gives the heading a stable id to link to. It's written by hand, so it's the same in every
-// language and doesn't change when the heading's text or a label in it does.
-export const rehypeHeadingIds = () => (tree: HastNode) => {
+const rehypeHeadingIds = () => (tree: HastNode) => {
   const visit = (node: HastNode) => {
     if (node.type === 'element' && /^h[1-6]$/.test(node.tagName ?? '')) {
       const last = node.children?.at(-1)
@@ -49,14 +41,14 @@ export const rehypeHeadingIds = () => (tree: HastNode) => {
 
 type HeadingProps = ComponentProps<'h1'> & ExtraProps
 
-// The page's h1 takes focus after navigating to it, so screen reader users start from the new page's title
+// Focused after moving to the page (useScrollToSection)
 const H1 = ({ id, children }: HeadingProps) => (
   <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ mb: 3, '&:focus': { outline: 'none' } }}>
     {children}
   </Typography>
 )
 
-// A section takes focus when a link leads to it, so keyboard and screen reader users go on from there
+// Focused when a link leads to the section (useScrollToSection)
 const sectionProps = (id: string | undefined, sx: SystemStyleObject<Theme>) => ({
   id,
   tabIndex: id ? -1 : undefined,
@@ -93,7 +85,6 @@ const List = ({ component, children }: { component: 'ul' | 'ol'; children?: Reac
   </Box>
 )
 
-// Notes and warnings, written as "> **Note:** ..."
 const Blockquote = ({ children }: ComponentProps<'blockquote'> & ExtraProps) => (
   <Box
     component="aside"
@@ -149,14 +140,13 @@ type GuideMarkdownProps = {
   markdown: string
 }
 
-// HTML comments are notes for editors. Images are left out: screenshots would go out of date with every UI change.
 const GuideMarkdown = ({ markdown }: GuideMarkdownProps) => {
   const { t, i18n } = useTranslation()
   const translate = (key: string, language?: string) => (language ? i18n.getFixedT(language)(key) : t(key))
 
   return (
     <Markdown components={components} rehypePlugins={[rehypeHeadingIds]} disallowedElements={['img']}>
-      {renderLabels(stripComments(markdown), translate)}
+      {renderLabels(markdown, translate)}
     </Markdown>
   )
 }
