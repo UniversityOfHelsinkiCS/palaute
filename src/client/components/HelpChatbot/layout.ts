@@ -102,6 +102,9 @@ export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }:
 // Above modals, below snackbars and tooltips
 export const widgetZIndex = (theme: Theme) => theme.zIndex.modal + 1
 
+// The footer's padding above its divider, which the box should be as far from as from the viewport's edge
+const FOOTER_PADDING = '1rem'
+
 // The widget's root: a zero-height sticky element just above the page footer. It rides along the viewport's
 // bottom edge and stops above the footer when it scrolls into view, without scroll listeners.
 export const stickyRootSx =
@@ -109,10 +112,11 @@ export const stickyRootSx =
   theme => {
     // The pill and the menu are never pushed past the top of the viewport. The chat stays at the viewport's
     // bottom, so it covers the footer instead of the NavBar.
-    const top = (margin: string) => (view === 'chat' ? '100dvh' : `calc(${height} + 2 * ${margin})`)
+    const top = (margin: string) =>
+      view === 'chat' ? `calc(100dvh - ${FOOTER_PADDING})` : `calc(${height} + 2 * ${margin} - ${FOOTER_PADDING})`
     return {
       position: 'sticky',
-      bottom: 0,
+      bottom: FOOTER_PADDING,
       zIndex: widgetZIndex(theme),
       height: 0,
       top: top(theme.spacing(2)),
@@ -125,12 +129,15 @@ export const stickyRootSx =
 // Inside the sticky root, also when full-screen, so switching to full-screen doesn't make the box jump
 export const anchorSx =
   (fullScreen: boolean): SxProps<Theme> =>
-  theme => ({
-    position: 'absolute',
-    right: fullScreen ? 0 : theme.spacing(2),
-    bottom: fullScreen ? 0 : theme.spacing(2),
-    [theme.breakpoints.up('sm')]: {
-      right: fullScreen ? 0 : theme.spacing(3),
-      bottom: fullScreen ? 0 : theme.spacing(3),
-    },
-  })
+  theme => {
+    const bottom = (margin: string) => `calc(${fullScreen ? '0px' : margin} - ${FOOTER_PADDING})`
+    return {
+      position: 'absolute',
+      right: fullScreen ? 0 : theme.spacing(2),
+      bottom: bottom(theme.spacing(2)),
+      [theme.breakpoints.up('sm')]: {
+        right: fullScreen ? 0 : theme.spacing(3),
+        bottom: bottom(theme.spacing(3)),
+      },
+    }
+  }
