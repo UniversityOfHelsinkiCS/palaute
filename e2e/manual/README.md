@@ -62,5 +62,7 @@ To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies a
 `.github/workflows/manual-videos.yml` records the videos on CI.
 
 - The clips are kept in the registry as `norppa-manual-narration:latest` (ORAS).
-- Missing clips are generated in parallel, one runner per scenario. A change in `tts/` generates them all again.
+- Each scenario is recorded on its own runner, which starts the voice service only if clips are missing. A change in `tts/` generates them all again.
+- The clips are saved after every run. Unused ones are dropped only when every scenario passed.
+- When every scenario passes, the videos and their `index.json` files are merged.
 - A caption without a clip fails the recording.

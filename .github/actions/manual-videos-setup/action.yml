@@ -4,9 +4,6 @@ description: Node, Playwright, ffmpeg, ORAS, the narration cache and the app for
 inputs:
   registry-password:
     required: true
-  tts:
-    description: Also start the voice service
-    default: 'false'
 
 runs:
   using: composite
@@ -35,31 +32,22 @@ runs:
         username: kontit
         password: ${{ inputs.registry-password }}
 
-    # CACHE_BEFORE tells the save step whether the clips changed
     - name: Pull the narration cache
       shell: bash
       working-directory: e2e/manual
       run: |
         oras pull "$NARRATION_CACHE" || echo "No narration cache yet"
         mkdir -p .narration-cache
-        echo "CACHE_BEFORE=$(ls .narration-cache | sha256sum)" >> "$GITHUB_ENV"
 
     - name: Start the application
       uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
       env:
         VERSION: ${{ github.ref_name }}
       with:
-        # Building the voice service downloads its weights
-        timeout_minutes: ${{ inputs.tts == 'true' && 30 || 5 }}
+        timeout_minutes: 5
         max_attempts: 3
-        command: docker compose -f docker-compose.ci.yml -f docker-compose.manual.yml ${{ inputs.tts == 'true' && '--profile manual' || '' }} up -d
+        command: docker compose -f docker-compose.ci.yml -f docker-compose.manual.yml up -d
 
     - name: Wait for the application
       shell: bash
-      env:
-        TTS: ${{ inputs.tts }}
-      run: |
-        timeout 180 bash -c 'until curl -sf http://localhost:8000/api/ping && curl -sf http://localhost:3003/ping; do sleep 2; done'
-        if [ "$TTS" = true ]; then
-          timeout 900 bash -c 'until curl -sf http://localhost:5005/health; do sleep 5; done'
-        fi
+      run: timeout 180 bash -c 'until curl -sf http://localhost:8000/api/ping && curl -sf http://localhost:3003/ping; do sleep 2; done'

@@ -17,12 +17,13 @@ const playwright = (pass: 'narrate' | 'record') => {
 const UNUSED_CLIP_KEEP_MS = 7 * 24 * 60 * 60 * 1000
 
 const main = async () => {
-  const keepSince = Date.now() - UNUSED_CLIP_KEEP_MS
+  const start = Date.now()
   // Synthesizing during the recording would freeze the video, so generate all narration first
   if ((await getNarrator()).online) playwright('narrate')
   playwright('record')
-  // A filtered run only uses some of the clips, so only a full run knows which are unused
-  if (filters.length === 0) await pruneCache(keepSince)
+  // CI keeps only the clips this run used, locally only a full run prunes
+  if (process.env.CI) await pruneCache(start)
+  else if (filters.length === 0) await pruneCache(start - UNUSED_CLIP_KEEP_MS)
 }
 
 void main()
