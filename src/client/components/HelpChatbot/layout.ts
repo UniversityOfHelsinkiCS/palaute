@@ -99,8 +99,8 @@ export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }:
   return fixedBox(px(380), px(560), 12, [15, 15, 0.8])
 }
 
-// Above the sticky NavBar and FixedContainer toolbars, below modals, skip links, snackbars and tooltips
-export const widgetZIndex = (theme: Theme) => theme.zIndex.appBar + 1
+// Above modals, below snackbars and tooltips
+export const widgetZIndex = (theme: Theme) => theme.zIndex.modal + 1
 
 // The widget's root: a zero-height sticky element just above the page footer. It rides along the viewport's
 // bottom edge and stops above the footer when it scrolls into view, without scroll listeners.

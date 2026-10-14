@@ -52,6 +52,7 @@ const HelpChatbot = () => {
   const { entries, pending, retryableId, send, retry, startNew, feedback } = useConversation()
   const { message: announcement, announce } = useAnnouncer()
 
+  const rootRef = useRef<HTMLElement>(null)
   const pillRef = useRef<HTMLButtonElement>(null)
   const askRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -74,6 +75,15 @@ const HelpChatbot = () => {
     const target = { closed: pillRef, menu: askRef, chat: inputRef }[view]
     target.current?.focus()
   }, [view])
+
+  // Keeps an open MUI modal's focus trap, which listens on the document, from pulling focus out of the chatbot
+  useEffect(() => {
+    const keepFocus = (event: FocusEvent) => {
+      if (rootRef.current?.contains(event.target as Node)) event.stopPropagation()
+    }
+    document.body.addEventListener('focusin', keepFocus)
+    return () => document.body.removeEventListener('focusin', keepFocus)
+  }, [])
 
   // The expand toggle disappears when the chat goes full-screen
   useEffect(() => {
@@ -134,6 +144,7 @@ const HelpChatbot = () => {
 
   return (
     <Box
+      ref={rootRef}
       component="aside"
       aria-label={t('helpChatbot:regionLabel')}
       onKeyDown={handleKeyDown}
