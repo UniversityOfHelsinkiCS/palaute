@@ -105,6 +105,22 @@ export const widgetZIndex = (theme: Theme) => theme.zIndex.modal + 1
 // The footer's padding above its divider, which the box should be as far from as from the viewport's edge
 const FOOTER_PADDING = '1rem'
 
+const pillClearance = (margin: string) => `calc(${PILL_HEIGHT}px + 2 * ${margin})`
+
+// So the pill never covers the end of the page
+export const restingSpaceSx: SxProps<Theme> = theme => ({
+  height: `calc(${pillClearance(theme.spacing(2))} - ${FOOTER_PADDING})`,
+  [theme.breakpoints.up('sm')]: { height: `calc(${pillClearance(theme.spacing(3))} - ${FOOTER_PADDING})` },
+})
+
+// So focusing an element doesn't scroll it under the pill
+export const scrollPaddingStyles = (theme: Theme) => ({
+  html: {
+    scrollPaddingBottom: pillClearance(theme.spacing(2)),
+    [theme.breakpoints.up('sm')]: { scrollPaddingBottom: pillClearance(theme.spacing(3)) },
+  },
+})
+
 // The widget's root: a zero-height sticky element just above the page footer. It rides along the viewport's
 // bottom edge and stops above the footer when it scrolls into view, without scroll listeners.
 export const stickyRootSx =

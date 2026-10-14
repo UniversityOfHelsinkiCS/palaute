@@ -1,6 +1,6 @@
 import type { KeyboardEvent } from 'react'
 
-import { Box, useMediaQuery } from '@mui/material'
+import { Box, GlobalStyles, useMediaQuery } from '@mui/material'
 import { keyframes } from '@mui/material/styles'
 import { visuallyHidden } from '@mui/utils'
 import { useCallback, useEffect, useRef, useState } from 'react'
@@ -17,6 +17,8 @@ import {
   TRANSITION,
   anchorSx,
   getLayout,
+  restingSpaceSx,
+  scrollPaddingStyles,
   stickyRootSx,
   widgetZIndex,
 } from './layout'
@@ -143,94 +145,98 @@ const HelpChatbot = () => {
   }
 
   return (
-    <Box
-      ref={rootRef}
-      component="aside"
-      aria-label={t('helpChatbot:regionLabel')}
-      onKeyDown={handleKeyDown}
-      sx={stickyRootSx(view, layout)}
-    >
+    <>
+      <GlobalStyles styles={scrollPaddingStyles} />
+      <Box sx={restingSpaceSx} />
       <Box
-        sx={mergeSx(anchorSx(fullScreen), {
-          zIndex: widgetZIndex,
-          boxSizing: 'border-box',
-          width: layout.width,
-          height: layout.height,
-          borderRadius: layout.radius,
-          overflow: 'hidden',
-          bgcolor: 'background.paper',
-          border: `${layout.border}px solid`,
-          borderColor: 'divider',
-          boxShadow: fullScreen ? 'none' : view === 'closed' ? 2 : 8,
-          color: 'text.primary',
-          fontSize: '14.5px',
-          lineHeight: 1.5,
-          transition: boxTransition,
-          '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
-          ...(view === 'closed' && {
-            '&:hover': { bgcolor: primaryTint, borderColor: primaryTintBorder },
-            '&:has(:focus-visible)': focusRing,
-          }),
-        })}
+        ref={rootRef}
+        component="aside"
+        aria-label={t('helpChatbot:regionLabel')}
+        onKeyDown={handleKeyDown}
+        sx={stickyRootSx(view, layout)}
       >
-        {/* Each view is laid out at its final size, so a resizing box clips it instead of reflowing it.
-            It fades in once the box has mostly finished resizing. */}
         <Box
-          key={view}
-          sx={{
-            position: 'absolute',
-            right: 0,
-            bottom: 0,
-            ...contentSize,
-            animation: `${fadeIn} .2s ease .24s both`,
-            '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
-          }}
+          sx={mergeSx(anchorSx(fullScreen), {
+            zIndex: widgetZIndex,
+            boxSizing: 'border-box',
+            width: layout.width,
+            height: layout.height,
+            borderRadius: layout.radius,
+            overflow: 'hidden',
+            bgcolor: 'background.paper',
+            border: `${layout.border}px solid`,
+            borderColor: 'divider',
+            boxShadow: fullScreen ? 'none' : view === 'closed' ? 2 : 8,
+            color: 'text.primary',
+            fontSize: '14.5px',
+            lineHeight: 1.5,
+            transition: boxTransition,
+            '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
+            ...(view === 'closed' && {
+              '&:hover': { bgcolor: primaryTint, borderColor: primaryTintBorder },
+              '&:has(:focus-visible)': focusRing,
+            }),
+          })}
         >
-          {view === 'closed' && <PillView buttonRef={pillRef} onOpen={openFromPill} onWidthChange={setPillWidth} />}
-          {view === 'menu' && guide && (
-            <MenuView
-              guide={guide}
-              askRef={askRef}
-              onHeightChange={setMenuHeight}
-              onAsk={() => goTo('chat')}
-              onClose={close}
-            />
-          )}
-          {view === 'chat' && (
-            <ChatPanel
-              guide={guide}
-              inputRef={inputRef}
-              entries={entries}
-              pending={pending}
-              retryableId={retryableId}
-              expanded={chatSize === 'expanded'}
-              fullScreen={fullScreen}
-              draft={draft}
-              onDraftChange={setDraft}
-              onSend={sendDraft}
-              onReply={announce}
-              onFailure={announceFailure}
-              onRetry={retryQuestion}
-              feedbackActions={feedback}
-              onAnnounce={announce}
-              onToggleExpand={() => setChatSize(chatSize === 'expanded' ? 'normal' : 'expanded')}
-              onNewConversation={startNewConversation}
-              onClose={close}
-            />
-          )}
+          {/* Each view is laid out at its final size, so a resizing box clips it instead of reflowing it.
+            It fades in once the box has mostly finished resizing. */}
+          <Box
+            key={view}
+            sx={{
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              ...contentSize,
+              animation: `${fadeIn} .2s ease .24s both`,
+              '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
+            }}
+          >
+            {view === 'closed' && <PillView buttonRef={pillRef} onOpen={openFromPill} onWidthChange={setPillWidth} />}
+            {view === 'menu' && guide && (
+              <MenuView
+                guide={guide}
+                askRef={askRef}
+                onHeightChange={setMenuHeight}
+                onAsk={() => goTo('chat')}
+                onClose={close}
+              />
+            )}
+            {view === 'chat' && (
+              <ChatPanel
+                guide={guide}
+                inputRef={inputRef}
+                entries={entries}
+                pending={pending}
+                retryableId={retryableId}
+                expanded={chatSize === 'expanded'}
+                fullScreen={fullScreen}
+                draft={draft}
+                onDraftChange={setDraft}
+                onSend={sendDraft}
+                onReply={announce}
+                onFailure={announceFailure}
+                onRetry={retryQuestion}
+                feedbackActions={feedback}
+                onAnnounce={announce}
+                onToggleExpand={() => setChatSize(chatSize === 'expanded' ? 'normal' : 'expanded')}
+                onNewConversation={startNewConversation}
+                onClose={close}
+              />
+            )}
+          </Box>
+        </Box>
+        <WidgetSeal
+          placement={layout.seal}
+          fullScreen={fullScreen}
+          once={sealOnce}
+          loop={pending && view === 'chat' && !reduceMotion}
+          onOnceEnd={() => setSealOnce(false)}
+        />
+        <Box role="status" sx={visuallyHidden}>
+          {announcement}
         </Box>
       </Box>
-      <WidgetSeal
-        placement={layout.seal}
-        fullScreen={fullScreen}
-        once={sealOnce}
-        loop={pending && view === 'chat' && !reduceMotion}
-        onOnceEnd={() => setSealOnce(false)}
-      />
-      <Box role="status" sx={visuallyHidden}>
-        {announcement}
-      </Box>
-    </Box>
+    </>
   )
 }
 
