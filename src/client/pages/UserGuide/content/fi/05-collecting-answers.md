@@ -61,7 +61,7 @@ Opettaja ei voi vastata oman kurssinsa kyselyyn, vaan näkee sen [[common:previe
 Pienellä kurssilla opiskelijan vastaukset voisi tunnistaa ilman nimeäkin. Siksi kysely toimii toisin, jos kurssille on ilmoittautunut alle viisi opiskelijaa:
 
 - Kun opiskelija avaa kyselyn, häntä varoitetaan, että vastaukset voi olla mahdollista yhdistää häneen. Hän voi perua tai jatkaa.
-- Lähettääkseen vastauksensa opiskelijan on rastitettava kohta [[feedbackView:allowSubmitCheckbox]]
+- Lähettääkseen vastauksensa opiskelijan on rastitettava kohta, jolla hän hyväksyy, että opettaja näkee vastaukset, vaikka ilmoittautuneita on vähän.
 - Vastaukset näkevät vain kurssin vastuuopettajat ja hallintohenkilöt. Opiskelijat, muut opettajat ja koulutusohjelman henkilöstö näkevät ilmoituksen, ettei tuloksia näytetä.
 - Viikkoa ennen aukeamista lähetettävä muistutus kertoo vastuuopettajille, että kurssi on pieni.
 

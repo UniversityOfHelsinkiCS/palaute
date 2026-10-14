@@ -61,7 +61,7 @@ Teachers can't answer their own course's survey: they see it as a [[common:previ
 On a small course, a student's answers could be recognised even without a name. So if fewer than 5 students are enrolled, the survey works differently:
 
 - When a student opens the survey, a warning tells them that their answers could be linked to them. They can cancel or continue.
-- To submit, the student must tick the box [[feedbackView:allowSubmitCheckbox]]
+- To submit, the student must tick a box agreeing that the teacher can see their answers even though few students are enrolled.
 - Only the course's responsible teachers and administrative persons see the answers. Students, other teachers and programme staff see a note that the results aren't shown.
 - The reminder email a week before opening tells the responsible teachers that the course is small.
 

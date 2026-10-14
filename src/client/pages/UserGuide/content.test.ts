@@ -23,8 +23,10 @@ const lookup = (translations: Translations, key: string) =>
     )
 
 // Like the client: the HY namespace before the common one, falling back to English
-const hasLabel = (key: string, language: string) =>
-  [...TRANSLATIONS[language], ...TRANSLATIONS.en].some(translations => typeof lookup(translations, key) === 'string')
+const findLabel = (key: string, language: string) =>
+  [...TRANSLATIONS[language], ...TRANSLATIONS.en]
+    .map(translations => lookup(translations, key))
+    .find(label => typeof label === 'string')
 
 // The ids of all headings, which links can point to
 const anchorsOf = (markdown: string) => [...markdown.matchAll(/^#{1,6} .*\{#([\w-]+)\}\s*$/gm)].map(match => match[1])
@@ -49,23 +51,33 @@ describe('user guide content', () => {
     expect(anchors.filter((anchor, index) => anchors.indexOf(anchor) !== index)).toEqual([])
   })
 
-  it.each(allPages)('$language/$slug quotes only labels that exist', ({ markdown }) => {
-    const missing = [...markdown.matchAll(LABEL)].flatMap(([, key, pinned]) =>
-      (pinned ? [pinned] : ['fi', 'sv', 'en']).filter(language => !hasLabel(key, language)).map(() => key)
+  // A {{placeholder}} would show as is, as the guide has no value for it
+  it.each(allPages)('$language/$slug quotes only labels that exist and have no placeholders', ({ markdown }) => {
+    const unusable = [...markdown.matchAll(LABEL)].flatMap(([, key, pinned]) =>
+      (pinned ? [pinned] : ['fi', 'sv', 'en'])
+        .filter(language => {
+          const label = findLabel(key, language)
+          return typeof label !== 'string' || label.includes('{{')
+        })
+        .map(language => `${key} (${language})`)
     )
-    expect(missing).toEqual([])
+    expect(unusable).toEqual([])
   })
 
-  it.each(allPages)('$language/$slug links only to guide pages and sections that exist', ({ language, markdown }) => {
-    const pages = GUIDE_PAGES[language]
-    const links = [...markdown.matchAll(/\]\((\/guide[^)\s]*)\)/g)].map(match => match[1])
-    const broken = links.filter(link => {
-      const [, slug, anchor] = /^\/guide(?:\/([a-z0-9-]+))?(?:#([\w-]+))?$/.exec(link) ?? []
-      const target = slug ? pages.find(page => page.slug === slug) : pages[0]
-      return !target || (anchor !== undefined && !anchorsOf(target.markdown).includes(anchor))
-    })
-    expect(broken).toEqual([])
-  })
+  it.each(allPages)(
+    '$language/$slug links only to guide pages and sections that exist, also on the same page',
+    ({ language, markdown }) => {
+      const pages = GUIDE_PAGES[language]
+      const links = [...markdown.matchAll(/\]\(((?:\/guide|#)[^)\s]*)\)/g)].map(match => match[1])
+      const broken = links.filter(link => {
+        if (link.startsWith('#')) return !anchorsOf(markdown).includes(link.slice(1))
+        const [, slug, anchor] = /^\/guide(?:\/([a-z0-9-]+))?(?:#([\w-]+))?$/.exec(link) ?? []
+        const target = slug ? pages.find(page => page.slug === slug) : pages[0]
+        return !target || (anchor !== undefined && !anchorsOf(target.markdown).includes(anchor))
+      })
+      expect(broken).toEqual([])
+    }
+  )
 
   // Neither would show: images are left out, and tables aren't supported
   it.each(allPages)('$language/$slug has no images or tables', ({ markdown }) => {

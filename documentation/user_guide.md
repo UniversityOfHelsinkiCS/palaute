@@ -19,7 +19,7 @@ The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`. *
 
 The content was written from the wiki, the chatbot's `knowledge.md`, the code and the e2e tests, and checked against the code. The guide and `knowledge.md` are separate texts: the guide is for people and the knowledge base is compressed for the model. When a fact changes, update both.
 
-`src/client/pages/UserGuide/content.test.ts` (in `npm run test:unit`) checks that every page exists in both languages with the same section ids, titles and `##` sections are plain text and sections have unique ids, every label key exists, and every link to the guide points to a page and section that exist.
+`src/client/pages/UserGuide/content.test.ts` (in `npm run test:unit`) checks that every page exists in both languages with the same section ids, titles and `##` sections are plain text and sections have unique ids, every label key exists and has no `{{placeholder}}`, and every link to the guide, also within a page, points to a page and section that exist.
 
 ## Implementation
 

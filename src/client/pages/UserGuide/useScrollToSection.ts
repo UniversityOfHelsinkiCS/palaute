@@ -17,22 +17,24 @@ const findSection = (hash: string) => {
 const useScrollToSection = (articleRef: RefObject<HTMLElement | null>) => {
   const { hash, key } = useLocation()
   const navigationType = useNavigationType()
-  const followedLink = useRef(false)
+  const mounted = useRef(false)
 
   useEffect(() => {
+    // Loading the page, back and forward
+    const followedLink = navigationType !== NavigationType.Pop
     // Back and forward return to where the reader was, which the browser restores
-    if (followedLink.current && navigationType === NavigationType.Pop) return
+    if (mounted.current && !followedLink) return
+    mounted.current = true
     const section = findSection(hash)
     if (section) {
       section.scrollIntoView()
-    } else if (followedLink.current) {
+    } else if (followedLink) {
       window.scrollTo(0, 0)
     }
-    if (followedLink.current) {
+    if (followedLink) {
       const target = section ?? articleRef.current?.querySelector<HTMLElement>('h1')
       target?.focus({ preventScroll: true })
     }
-    followedLink.current = true
   }, [articleRef, hash, key, navigationType])
 }
 
