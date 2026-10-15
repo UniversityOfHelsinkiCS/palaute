@@ -112,7 +112,11 @@ const EditFeedbackResponse = () => {
                   <ResponseEmailButton
                     sendEmail={!isSent && sendEmail}
                     disabled={
-                      (!edited && !sendEmail) || (!edited && isSent) || isSubmitting || !values.feedbackResponse
+                      feedbackResponseFormDisabled ||
+                      (!edited && !sendEmail) ||
+                      (!edited && isSent) ||
+                      isSubmitting ||
+                      !values.feedbackResponse
                     }
                     onSubmit={() => handleSubmit(values)}
                   />

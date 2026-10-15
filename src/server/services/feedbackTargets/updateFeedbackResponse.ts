@@ -25,6 +25,10 @@ export const updateFeedbackResponse = async ({
     throw ApplicationError.Forbidden('No rights to update feedback response')
   }
 
+  if (!feedbackTarget.isEnded()) {
+    throw ApplicationError.BadRequest('Feedback response cannot be updated before the feedback period has ended')
+  }
+
   if (sendEmail && feedbackTarget.feedbackResponseEmailSent) {
     throw ApplicationError.BadRequest('Counter feedback email has already been sent')
   }
