@@ -133,9 +133,9 @@ const editOrganisationSurvey = async (req: AuthenticatedRequest, res: Response) 
 
   const updates = _.pick(body, ['name', 'startDate', 'endDate', 'teacherIds', 'studentNumbers', 'courseRealisationIds'])
 
-  updates.studentNumbers = [...new Set([...updates.studentNumbers])]
-
   if (updates.studentNumbers) {
+    updates.studentNumbers = [...new Set([...updates.studentNumbers])]
+
     const { invalidStudentNumbers } = await validateStudentNumbers(updates.studentNumbers)
     if (invalidStudentNumbers.length > 0) {
       res.status(400).send({ invalidStudentNumbers })
