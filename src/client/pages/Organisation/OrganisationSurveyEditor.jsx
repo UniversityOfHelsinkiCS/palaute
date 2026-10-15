@@ -185,6 +185,16 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const errorText = formikProps.errors[name]?.text
   const errorData = formikProps.errors[name]?.data
   const errorStudentNumbers = React.useMemo(() => new Set(errorData), [errorData])
+  const removeButtonLabel = formikProps.errors[name]?.removeButtonLabel
+  const inputRef = React.useRef(null)
+
+  const removeErrorStudentNumbers = () => {
+    const studentNumbers = value.filter(v => !errorStudentNumbers.has(v))
+    setValue(studentNumbers)
+    formikProps.setFieldValue('studentNumbers', studentNumbers)
+    formikProps.setFieldError(name, undefined)
+    inputRef.current?.focus()
+  }
 
   return (
     <Box>
@@ -276,6 +286,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           <TextField
             label={t('organisationSurveys:students')}
             {...params}
+            inputRef={inputRef}
             error={Boolean(hasError)}
             helperText={hasError ? errorText : ''}
             slotProps={{
@@ -287,6 +298,18 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         )}
         {...props}
       />
+
+      {removeButtonLabel && (
+        <NorButton
+          data-cy="formik-student-number-input-remove-erroneous"
+          color="cancel"
+          type="button"
+          onClick={removeErrorStudentNumbers}
+          sx={{ mt: 1 }}
+        >
+          {removeButtonLabel}
+        </NorButton>
+      )}
 
       {canHideStudentNumbers && (
         <ShowAllStudentsToggle

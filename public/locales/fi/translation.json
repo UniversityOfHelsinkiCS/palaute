@@ -91,6 +91,7 @@
     "wrongDate": "Kysely sulkeutuu ennen sen avautumista",
     "invalidDate": "Virheellinen päivämäärä",
     "invalidStudentNumbers": "Tarkistaisitko merkityt virheelliset opiskelijanumerot",
+    "moreInvalidStudentNumbers": "+ {{count}} virheellistä opiskelijanumeroa",
     "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla kurssin opiskelija"
   },
   "links": {
@@ -492,6 +493,8 @@
     },
     "studentNumberExampleInput": "Esimerkiksi seuraavanlaisesti",
     "confirmStudentDelete": "Haluatko varmasti poistaa opiskelijan {{ studentNumber }} tästä kyselystä?",
+    "removeInvalidStudentNumbers": "Poista virheelliset opiskelijanumerot",
+    "removeResponsiblePersonStudentNumbers": "Poista vastuuhenkilöiden opiskelijanumerot",
     "startDate": "Alkaen",
     "endDate": "Loppuen",
     "surveys": "kyselyt",

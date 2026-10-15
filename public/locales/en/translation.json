@@ -96,6 +96,7 @@
     "wrongDate": "Survey closing date is before opening date",
     "invalidDate": "Invalid date",
     "invalidStudentNumbers": "Please check the indicated invalid student numbers",
+    "moreInvalidStudentNumbers": "+ {{count}} invalid student numbers",
     "overlappingStudentTeacher": "Responsible person can not be a student at the same time"
   },
   "links": {
@@ -497,6 +498,8 @@
     },
     "studentNumberExampleInput": "For example, as follows",
     "confirmStudentDelete": "Are you sure you want to remove student {{ studentNumber }} from this survey?",
+    "removeInvalidStudentNumbers": "Remove invalid student numbers",
+    "removeResponsiblePersonStudentNumbers": "Remove responsible persons' student numbers",
     "startDate": "From",
     "endDate": "To",
     "surveys": "surveys",

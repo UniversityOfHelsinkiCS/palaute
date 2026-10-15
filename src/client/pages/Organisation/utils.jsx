@@ -94,6 +94,28 @@ export const getOverlappingStudentTeachers = data => {
   return overlappingStudentTeachers
 }
 
+export const getOverlappingStudentTeachersErrorText = (t, studentNumbers) =>
+  `${t('validationErrors:overlappingStudentTeacher')}: ${studentNumbers.join(', ')}`
+
+const LISTED_INVALID_STUDENT_NUMBERS = 10
+
+export const getInvalidStudentNumbersErrorText = (t, invalidStudentNumbers) => {
+  // A single remaining number is listed rather than summarised as "+ 1"
+  const listed =
+    invalidStudentNumbers.length > LISTED_INVALID_STUDENT_NUMBERS + 1
+      ? invalidStudentNumbers.slice(0, LISTED_INVALID_STUDENT_NUMBERS)
+      : invalidStudentNumbers
+  const restCount = invalidStudentNumbers.length - listed.length
+
+  let text = `${t('validationErrors:invalidStudentNumbers')}: ${listed.join(', ')}`
+
+  if (restCount > 0) {
+    text += ` ${t('validationErrors:moreInvalidStudentNumbers', { count: restCount })}`
+  }
+
+  return text
+}
+
 const getTotalStudentCountOfCourses = courses => {
   const courseStudentCounts = courses.map(course => course.studentCount)
   const totalStudentCount = courseStudentCounts.reduce((partialSum, currentVal) => partialSum + currentVal, 0) // counts all duplicates

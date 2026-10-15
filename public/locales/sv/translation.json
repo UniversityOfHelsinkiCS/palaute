@@ -86,6 +86,7 @@
     "wrongDate": "Enkätens slutdatum är före startdatumet",
     "invalidDate": "Ogiltigt datum",
     "invalidStudentNumbers": "Kontrollera de studentnumrena som är markerade som ogiltiga",
+    "moreInvalidStudentNumbers": "+ {{count}} ogiltiga studentnummer",
     "overlappingStudentTeacher": "Den ansvariga personen kan inte samtidigt vara student på kursen"
   },
   "links": {
@@ -490,6 +491,8 @@
     "givenFeedback": "Feedback har getts",
     "confirmRemoveSurvey": "Är du säker på att du vill ta bort programenkäten?",
     "confirmStudentDelete": "Är du säker på att du vill ta bort student {{ studentNumber }} från den här enkäten?",
+    "removeInvalidStudentNumbers": "Ta bort ogiltiga studentnummer",
+    "removeResponsiblePersonStudentNumbers": "Ta bort de ansvariga personernas studentnummer",
     "removeSuccess": "Programenkäten är borttagen",
     "responsibleTeachers": "Ansvariga personer",
     "remove": "Ta bort",
