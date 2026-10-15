@@ -24,22 +24,21 @@ import {
 } from '../../services/helpChatbot'
 import { logger } from '../../util/logger'
 
-// The admin behind a "login as" asks, so impersonating doesn't get around the limits
+// The admin during "login as", so impersonating doesn't get around the limits
 const getUserId = (req: AuthenticatedRequest) => req.user.mockedBy?.id ?? req.user.id
 
-// Context saved with the turn for the admin viewer
 const getMetadata = (req: AuthenticatedRequest, uiLanguage: LanguageId): HelpChatbotTurnMetadata => ({
   uiLanguage,
   ...(req.user.mockedBy && { impersonatedUserId: req.user.id }),
 })
 
-// The conversation is saved in help_chatbot_turns; only metadata is logged
+// Only metadata is logged; the content stays in help_chatbot_turns
 const postTurn = async (req: AuthenticatedRequest, res: Response<PostHelpChatbotTurnResponse>) => {
   const { conversationId, previousTurnId, language, question } = parseHelpChatbotRequest(req.body)
   const userId = getUserId(req)
 
-  // Stop the model when the client goes away, e.g. on New conversation. Listening before the rate limit
-  // check means a client that leaves during it gets an already aborted signal, which fails immediately.
+  // Stops the model when the client goes away. Set up before the rate limit check, so a client leaving during it
+  // isn't missed.
   const abortController = new AbortController()
   res.on('close', () => {
     if (!res.writableEnded) abortController.abort()
@@ -49,7 +48,7 @@ const postTurn = async (req: AuthenticatedRequest, res: Response<PostHelpChatbot
 
   const history = await loadHistory(userId, conversationId, previousTurnId)
   const messages = trimHistory([...history, { role: 'user', content: question }])
-  // If saving fails, the model isn't called: an answer that can't be saved can't be part of the history
+  // Saved before calling the model: an answer that can't be saved can't be part of the history
   const turn = await createTurn({
     userId,
     metadata: getMetadata(req, language),
@@ -109,7 +108,7 @@ const putFeedback = async (req: AuthenticatedRequest, res: Response) => {
 
 export const router = Router()
 
-// The single access check; teachers get access later
+// The server's only access check
 router.use(adminAccess)
 
 router.post('/turns', postTurn)

@@ -4,8 +4,7 @@ import { useLayoutEffect, useRef } from 'react'
 
 type Size = { width: number; height: number }
 
-// Reports the element's size before the first paint and whenever it changes, e.g. with translations,
-// font loading or user text-spacing overrides
+// Before the first paint and on every change, e.g. font loading or user text-spacing overrides
 const useElementSize = (ref: RefObject<HTMLElement | null>, onResize: (size: Size) => void) => {
   const latestOnResize = useRef(onResize)
   useLayoutEffect(() => {

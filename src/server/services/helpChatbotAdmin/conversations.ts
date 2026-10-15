@@ -26,8 +26,7 @@ type ConversationRow = Omit<
 
 type NumericKeys<T> = { [K in keyof T]: T[K] extends number ? K : never }[keyof T]
 
-// A conversation is identified by its id and user together: the client makes up the id, so two users' ids can
-// collide. The counts are of the turns within the date range.
+// A conversation is identified by its id and user together, as the client makes up the id
 export const getConversations = async (
   query: GetHelpChatbotConversationsQuery
 ): Promise<GetHelpChatbotConversationsResponse> => {
@@ -40,7 +39,7 @@ export const getConversations = async (
     conversationConditions.add('c.matches_search')
     replacements.search = containsPattern(query.search)
   }
-  // Looked up first, so the conversations needn't be joined with every user before they're filtered
+  // Looked up first, so conversations aren't joined with every user before filtering
   if (query.user) {
     const users = await select<{ id: string }>('SELECT id FROM users WHERE username ILIKE :user LIMIT 1000', {
       user: containsPattern(query.user),
@@ -66,8 +65,8 @@ export const getConversations = async (
   }[query.problems ?? 'any']
   if (problemCondition) conversationConditions.add(problemCondition)
 
-  // The page is picked from the aggregates alone. Only its rows get their first question and usernames,
-  // which kept a 90-day list over 200 000 turns from sorting every conversation's questions and joining every user.
+  // The page is picked from the aggregates alone: looking up first questions and usernames for every conversation
+  // made 90-day lists slow
   const rows = await select<ConversationRow>(
     `
     WITH ${turns.sql},
@@ -177,7 +176,7 @@ type TurnRow = Omit<
   username: string | null
 }
 
-// Every turn of one conversation, annotated with what the model saw. A 404 if there are none.
+// A 404 if the conversation has no turns
 export const getConversation = async (
   conversationId: string,
   userId: string | null

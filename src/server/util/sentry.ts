@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/node'
 
 import { inProduction, inE2EMode, GIT_SHA, SENTRY_DSN } from './config'
 
-// Questions to the help chatbot are saved in our own database only, so keep request bodies from its routes out of Sentry.
+// Chatbot questions stay in our own database only
 // Lowercased because Express matches routes case-insensitively
 const dropHelpChatbotRequestBody = <T extends Sentry.Event>(event: T): T => {
   if (event.request?.url?.toLowerCase().includes('/help-chatbot/')) delete event.request.data

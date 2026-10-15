@@ -53,7 +53,7 @@ export const getFeedback = async (query: GetHelpChatbotFeedbackQuery): Promise<G
   }
 }
 
-// Only rated turns can be reviewed. Changing the feedback clears the mark (see saveFeedback).
+// Only rated turns can be reviewed. saveFeedback clears the mark when the feedback changes.
 export const setReviewed = async (turnId: string, reviewed: boolean) => {
   // Anything else would make the query fail on the uuid column
   if (!z.uuid().safeParse(turnId).success) throw ApplicationError.NotFound()

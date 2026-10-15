@@ -1,10 +1,8 @@
 import type { HelpChatbotSavedMetadata } from '@common/types/helpChatbotAdmin'
 
-// A turn's metadata (HelpChatbotTurnMetadata) for display. The keys the code writes get a label; any other key
-// is shown as it is, so context saved later appears without changes here.
-
 export type MetadataEntry = { key: string; label: string; value: string }
 
+// Keys not listed here are shown as they are
 const LABELS: Record<string, string> = {
   uiLanguage: 'UI language',
   impersonatedUserId: 'Viewing as',
@@ -12,7 +10,7 @@ const LABELS: Record<string, string> = {
 
 const formatValue = (value: unknown) => (typeof value === 'string' ? value : JSON.stringify(value))
 
-// Known keys first, in LABELS' order, then the rest alphabetically. Postgres doesn't keep a JSON object's key order.
+// Known keys first, then the rest alphabetically: Postgres doesn't keep a JSON object's key order
 const keyOrder = (key: string) => {
   const known = Object.keys(LABELS).indexOf(key)
   return known === -1 ? Infinity : known
@@ -30,8 +28,7 @@ export const describeMetadata = (
       value: key === 'impersonatedUserId' && impersonatedUsername ? impersonatedUsername : formatValue(value),
     }))
 
-// The entries that differ from `base`, e.g. a turn's from the conversation's first one. A key only `base` has
-// shows as "none".
+// A key only `base` has shows as "none"
 export const metadataChanges = (entries: MetadataEntry[], base: MetadataEntry[]): MetadataEntry[] => {
   const baseValues = new Map(base.map(entry => [entry.key, entry.value]))
   const keys = new Set(entries.map(entry => entry.key))

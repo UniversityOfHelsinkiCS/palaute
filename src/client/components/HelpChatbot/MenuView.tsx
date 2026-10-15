@@ -87,8 +87,8 @@ const MenuView = ({ guide, askRef, onHeightChange, onAsk, onClose }: MenuViewPro
         </Tooltip>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-        {/* The in-app guide opens in the same tab, keeping the conversation. For the wiki, the visible description
-            is the new-tab indication, so no ExternalLink icon or hidden text here. */}
+        {/* The in-app guide opens in the same tab, keeping the conversation. For the wiki, the visible
+            description already says it opens a new tab. */}
         <Link
           {...(guide.inApp
             ? { component: RouterLink, to: guide.href }

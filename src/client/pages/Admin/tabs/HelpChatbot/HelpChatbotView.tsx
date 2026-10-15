@@ -7,8 +7,6 @@ import ConversationsView from './ConversationsView'
 import FeedbackView from './FeedbackView'
 import UsageView from './UsageView'
 
-// The NorppAI viewer: saved help chatbot conversations, their feedback and their cost.
-// See "Viewer" in documentation/help_chatbot.md.
 const HelpChatbotView = () => {
   const { data: meta } = useHelpChatbotMeta()
   const newFeedback = meta?.newFeedbackCount ?? 0

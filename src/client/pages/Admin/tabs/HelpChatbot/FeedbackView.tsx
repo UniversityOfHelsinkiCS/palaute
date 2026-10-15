@@ -42,7 +42,6 @@ const conversationLink = (conversationId: string, userId: string | null, turnId:
   return `/admin/norppai/conversations?${params.toString()}`
 }
 
-// Rated answers, newest first: the place to go through what users found wrong
 const FeedbackView = () => {
   const { get, set } = useUrlFilters()
 

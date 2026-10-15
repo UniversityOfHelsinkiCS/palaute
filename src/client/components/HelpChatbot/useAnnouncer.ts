@@ -2,8 +2,8 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 
 const CLEAR_AFTER_MS = 5000
 
-// Text for an always-mounted polite live region. Cleared afterwards, and emptied for a frame before
-// each message, so that repeating the same message is announced again.
+// For an always-mounted polite live region. Emptied for a frame before each message, so a repeated
+// message is announced again.
 const useAnnouncer = () => {
   const [message, setMessage] = useState('')
   const clearTimer = useRef<number | undefined>(undefined)

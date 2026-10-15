@@ -16,25 +16,20 @@ import {
 import { TURN_STATUSES } from '../../common/helpChatbot'
 import { sequelize } from '../db/dbConnection'
 
-// One question to the help chatbot and its answer, saved for analysing the answers and their cost.
-// See "Backend" in documentation/help_chatbot.md.
+// One question and its answer
 class HelpChatbotTurn extends Model<InferAttributes<HelpChatbotTurn>, InferCreationAttributes<HelpChatbotTurn>> {
   declare id: string
   declare conversationId: string
-  // The answered turn the question follows, null for the first question. Following these gives exactly the
-  // history the model saw, before trimming.
+  // The answered turn this question follows. The chain is the history the model saw, before trimming.
   declare previousTurnId: string | null
-  // The person who asked: during "login as", the admin. The content columns (userId, question, answer,
-  // feedbackComment) are nullable so they can be cleared once retention is decided, keeping the usage data.
+  // During "login as", the admin. The content columns are nullable so they can be cleared, keeping the usage data.
   declare userId: string | null
-  // Context for the admin viewer, e.g. the UI language and an impersonated user. Turns saved by older code may
-  // hold keys the type no longer lists.
   declare metadata: CreationOptional<HelpChatbotTurnMetadata>
   declare question: string | null
   declare answer: string | null
   declare status: HelpChatbotTurnStatus
   declare finishReason: string | null
-  // The Azure deployment we called, and the model version Azure reports, which is what pricing depends on
+  // Prices go by model, the version Azure reports, not by deployment
   declare deployment: string | null
   declare model: string | null
   declare gitSha: string | null
@@ -46,7 +41,7 @@ class HelpChatbotTurn extends Model<InferAttributes<HelpChatbotTurn>, InferCreat
   declare durationMs: number | null
   declare rating: HelpChatbotRating | null
   declare feedbackComment: string | null
-  // Set by an admin in the NorppAI viewer, cleared when the feedback changes
+  // Cleared when the feedback changes, so it counts as new again
   declare feedbackReviewedAt: Date | null
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>

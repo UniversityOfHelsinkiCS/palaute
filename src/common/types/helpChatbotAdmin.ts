@@ -1,15 +1,10 @@
 import type { HelpChatbotRating, HelpChatbotTurnStatus } from './helpChatbot'
 
-// Wire format of the NorppAI viewer, the admin tab for reading saved help chatbot conversations.
-// Served by the server's routes/helpChatbot/helpChatbotAdminController.ts under /admin/help-chatbot.
-// See "Viewer" in documentation/help_chatbot.md.
-
-// A turn's metadata as read back: anything the database holds, unlike HelpChatbotTurnMetadata, which is
-// what the code writes
+// Metadata as read back: older turns may hold keys HelpChatbotTurnMetadata no longer lists
 export type HelpChatbotSavedMetadata = Record<string, unknown>
 
-// € per million tokens, from validFrom (inclusive) to validTo (exclusive, null while current).
-// family is the model without Azure's version date, e.g. gpt-5-mini for gpt-5-mini-2025-08-07.
+// € per million tokens. validFrom is inclusive, validTo exclusive and null while current.
+// family is the model without Azure's version date, e.g. gpt-5-mini
 export type HelpChatbotPrice = {
   family: string
   validFrom: string
@@ -19,8 +14,8 @@ export type HelpChatbotPrice = {
   output: number
 }
 
-// In euros, by token type: uncached input, cached input, output without the reasoning, and reasoning (billed at
-// the output price). unpricedTurns counts turns with token usage but no price, which aren't in the sums.
+// In euros. output excludes the reasoning, which is billed at the output price. unpricedTurns have usage but
+// no price, and aren't in the sums.
 export type HelpChatbotCost = {
   input: number
   cachedInput: number
@@ -32,7 +27,7 @@ export type HelpChatbotCost = {
 
 // GET /admin/help-chatbot/meta
 export type GetHelpChatbotMetaResponse = {
-  // Thumbs downs no admin has marked reviewed
+  // Unreviewed thumbs downs
   newFeedbackCount: number
   prices: HelpChatbotPrice[]
 }
@@ -44,8 +39,7 @@ export type HelpChatbotFeedbackFilter = 'any' | 'down' | 'comment' | 'up' | 'non
 
 export type HelpChatbotProblemFilter = 'any' | 'empty' | 'failed' | 'aborted' | 'cutOff'
 
-// GET /admin/help-chatbot/conversations. Omitted fields don't filter. Outside production, turns answered by the
-// mock are included, as they are in the other views.
+// GET /admin/help-chatbot/conversations. Omitted fields don't filter.
 export type GetHelpChatbotConversationsQuery = HelpChatbotDateRange & {
   search?: string
   feedback?: HelpChatbotFeedbackFilter
@@ -60,7 +54,7 @@ export type HelpChatbotConversationSummary = {
   userId: string | null
   username: string | null
   startedAt: string
-  // Of the first turn, with the impersonated user's username looked up
+  // The first turn's
   metadata: HelpChatbotSavedMetadata
   impersonatedUsername: string | null
   firstQuestion: string | null
@@ -109,7 +103,7 @@ export type HelpChatbotTurnDetails = {
   feedbackReviewedAt: string | null
   // The number of the turn this question followed
   followsNumber: number | null
-  // Whether the turn is part of the conversation the user saw: answered and on the chain to the latest answer
+  // Answered and on the chain to the latest answer, i.e. part of what the user saw
   inHistory: boolean
   // For a question that got no answer, the turn that asked it again
   retriedAsNumber: number | null
@@ -151,7 +145,7 @@ export type HelpChatbotFeedbackItem = {
 
 export type GetHelpChatbotFeedbackResponse = {
   items: HelpChatbotFeedbackItem[]
-  // True when there were more than the newest items returned
+  // More items matched than were returned
   truncated: boolean
 }
 

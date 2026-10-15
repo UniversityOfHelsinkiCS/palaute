@@ -1,11 +1,10 @@
 export type ChatMessage = { role: 'user' | 'assistant'; content: string }
 
-// Characters of conversation sent to the model. Bounds the prompt, and so the cost, of a long conversation.
+// In characters. Bounds the cost of a long conversation.
 export const MAX_HISTORY_LENGTH = 30_000
 
-// The newest messages whose content fits in MAX_HISTORY_LENGTH. The latest message is always kept,
-// so a long conversation never fails. An answer whose question didn't fit is dropped too, so the history
-// starts with a question.
+// The newest messages that fit, always including the latest one so a long conversation never fails, and never
+// starting with an answer
 export const trimHistory = (messages: ChatMessage[]): ChatMessage[] => {
   let length = 0
   let start = messages.length
@@ -20,9 +19,8 @@ export const trimHistory = (messages: ChatMessage[]): ChatMessage[] => {
 
 export type AnsweredTurn = { id: string; previousTurnId: string | null; question: string; answer: string }
 
-// The conversation that leads up to previousTurnId, oldest first: follows previousTurnId through `turns`, a
-// conversation's answered turns. Turns that aren't on the way, such as an answer the user never saw, are left out.
-// Returns null if previousTurnId isn't one of `turns`.
+// Follows previousTurnId back through `turns`, so turns off the chain are left out. null if previousTurnId isn't
+// one of them.
 export const buildHistory = (turns: AnsweredTurn[], previousTurnId: string | null): ChatMessage[] | null => {
   if (previousTurnId === null) return []
   const byId = new Map(turns.map(turn => [turn.id, turn]))

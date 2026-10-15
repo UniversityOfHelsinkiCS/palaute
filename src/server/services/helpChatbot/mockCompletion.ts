@@ -5,8 +5,7 @@ import type { Completion, CompletionRequest } from './azureCompletion'
 import { ApplicationError } from '../../util/ApplicationError'
 import { inDevelopment } from '../../util/config'
 
-// Stand-in for Azure when no API key is configured outside production. Test triggers in the question:
-// #long for a long answer, #slow for an 8 s answer, #fail to always fail and #failonce to fail only the first attempt.
+// Triggers in a question: #long, #slow (8 s), #fail, and #failonce to fail only the first attempt
 
 const GUIDE = 'https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/'
 const TEACHER_GUIDE = `${GUIDE}3.%20Teacher%27s%20guide/`
@@ -65,7 +64,6 @@ const answerTo = (question: string) => {
 // Random failures only in development, so tests stay deterministic
 const FAILURE_RATE = inDevelopment ? 0.15 : 0
 
-// Conversation and question pairs that have already failed once with #failonce
 const failedOnce = new Set<string>()
 
 const shouldFail = (conversationId: string, question: string) => {
@@ -79,10 +77,9 @@ const shouldFail = (conversationId: string, question: string) => {
   return Math.random() < FAILURE_RATE
 }
 
-// Mostly 0.7–2.5 s, sometimes 6–8 s
 const randomLatency = () => (Math.random() < 0.1 ? 6000 + Math.random() * 2000 : 700 + Math.random() * 1800)
 
-// Rejects with an AbortError when signal aborts, like a cancelled Azure request
+// Aborts like a cancelled Azure request
 export const getMockCompletion = async (
   { conversationId, messages }: CompletionRequest,
   signal: AbortSignal

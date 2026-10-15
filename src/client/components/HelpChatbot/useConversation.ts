@@ -35,7 +35,7 @@ const updateFeedback = (entries: ChatEntry[], id: string, update: (feedback: Fee
     entry.role === 'assistant' && entry.id === id ? { ...entry, feedback: update(entry.feedback) } : entry
   )
 
-// The answer the next question follows. Failed questions in between aren't part of the history.
+// Failed questions after the latest answer aren't part of the history
 const getPreviousAnswerId = (entries: ChatEntry[]) => entries.findLast(entry => entry.role === 'assistant')?.id ?? null
 
 const useConversation = () => {
@@ -64,7 +64,6 @@ const useConversation = () => {
 
   const pending = conversation.entries.some(entry => entry.role === 'user' && entry.status === 'waiting')
 
-  // Only the latest question can be retried, and only if nothing has been asked after it
   const last = conversation.entries.at(-1)
   const retryableId = last?.role === 'user' && last.status === 'failed' ? last.id : null
 

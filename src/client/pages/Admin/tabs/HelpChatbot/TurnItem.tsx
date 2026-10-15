@@ -24,7 +24,6 @@ const STATUS_COLORS: Record<HelpChatbotTurnStatus, ChipProps['color']> = {
 type TurnItemProps = {
   turn: HelpChatbotTurnDetails
   highlighted: boolean
-  // Metadata that differs from the conversation's first turn
   metadataChanges: MetadataEntry[]
 }
 

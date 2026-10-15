@@ -13,11 +13,11 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { GIT_SHA } from '../../util/config'
 import { buildHistory } from './history'
 
-// The only module that writes help_chatbot_turns. Every turn is saved, and a turn the model answered is saved
-// even if the client has gone away, since its tokens were billed. See "Backend" in documentation/help_chatbot.md.
+// The only module that writes help_chatbot_turns. An answer is saved even if the client has gone away, since its
+// tokens were billed.
 
-// The history leading up to previousTurnId, not yet trimmed. A 400 if previousTurnId isn't an answered turn
-// of this user's conversation, so nobody can continue someone else's conversation.
+// A 400 unless previousTurnId is an answered turn of this user's conversation, so nobody can continue someone
+// else's
 export const loadHistory = async (
   userId: string,
   conversationId: string,
@@ -49,7 +49,6 @@ export const loadHistory = async (
 }
 
 type NewTurn = {
-  // The person who asked: during "login as", the admin
   userId: string
   metadata: HelpChatbotTurnMetadata
   deployment: string | null
@@ -81,7 +80,6 @@ export const createTurn = (turn: NewTurn) =>
 export const setTurnStatus = (turn: HelpChatbotTurn, status: Extract<HelpChatbotTurnStatus, 'failed' | 'aborted'>) =>
   turn.update({ status })
 
-// Returns 'empty' when the model returned no content
 export const saveCompletion = async (
   turn: HelpChatbotTurn,
   { deployment, model, content, finishReason, usage }: Completion,

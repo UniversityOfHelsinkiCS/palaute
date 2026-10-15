@@ -255,7 +255,6 @@ const VersionTable = ({ versions }: { versions: GetHelpChatbotUsageResponse['ver
   </TableContainer>
 )
 
-// Volume, problems, feedback and cost over a date range, by period and by deployed version
 const UsageView = () => {
   const { get, set } = useUrlFilters()
   const groupBy = get('groupBy')

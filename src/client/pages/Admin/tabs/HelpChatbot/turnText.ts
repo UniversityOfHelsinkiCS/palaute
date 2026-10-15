@@ -3,8 +3,6 @@ import type { GetHelpChatbotConversationResponse, HelpChatbotTurnDetails } from 
 import { formatDateTime, formatDuration, formatEuros, formatNumber, formatTime, shortSha } from './format'
 import { describeMetadata, formatEntries, metadataChanges } from './metadata'
 
-// Texts describing a turn, shared by the conversation view and its Markdown export
-
 // Why a turn isn't part of the conversation the user saw, or null if it is
 export const describeOutsideHistory = (turn: HelpChatbotTurnDetails): string | null => {
   if (turn.inHistory) return null
@@ -45,7 +43,6 @@ const quote = (text: string) =>
     .map(line => `> ${line}`)
     .join('\n')
 
-// For pasting a conversation into a review. Turns outside the history are included only if asked for.
 export const conversationToMarkdown = (
   conversation: GetHelpChatbotConversationResponse,
   { includeOutsideHistory }: { includeOutsideHistory: boolean }

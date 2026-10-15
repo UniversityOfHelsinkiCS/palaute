@@ -17,7 +17,7 @@ const bounce = keyframes`
 const EmptyState = () => {
   const { t } = useTranslation()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-  // The sprite is 60 times the size of the still image, so it's only loaded when someone reaches for the seal
+  // The sprite is 60 times the still image's size, so it's loaded only when the pointer reaches the seal
   const [spriteRequested, setSpriteRequested] = useState(false)
   const [spriteLoaded, setSpriteLoaded] = useState(false)
   const [sealPlaying, setSealPlaying] = useState(false)

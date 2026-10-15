@@ -17,7 +17,6 @@ const unique = <T,>(values: T[]) => [...new Set(values)]
 
 type ConversationDetailProps = {
   conversationKey: ConversationKey
-  // Opened from the feedback list: scrolled to and highlighted
   highlightedTurnId: string | null
 }
 

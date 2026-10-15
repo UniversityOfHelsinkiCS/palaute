@@ -256,8 +256,7 @@ const config = {
   PUBLIC_COURSE_BROWSER_ENABLED: false,
 
   /**
-   * Whether the help chatbot (NorppAI) is shown. Currently shown to admins only.
-   * See documentation/help_chatbot.md.
+   * Whether the help chatbot (NorppAI) is shown, to admins only for now.
    */
   HELP_CHATBOT_ENABLED: false,
 

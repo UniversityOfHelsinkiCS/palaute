@@ -9,9 +9,8 @@ export type TurnAnnotations = {
   retriedAsNumber: number | null
 }
 
-// Numbers a conversation's turns, given in the order asked, and tells which of them make up the conversation the
-// user saw: the chain of answers that leads to the latest one. A question that got no answer and was asked
-// again after the same turn is marked with the turn that retried it.
+// Numbers the turns (given in the order asked) and marks the chain of answers leading to the latest one, which is
+// what the user saw. An unanswered question asked again after the same turn gets the retry's number.
 export const annotateTurns = <T extends ChainTurn>(turns: T[]): (T & TurnAnnotations)[] => {
   const numbers = new Map(turns.map((turn, i) => [turn.id, i + 1]))
   const byId = new Map(turns.map(turn => [turn.id, turn]))

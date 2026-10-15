@@ -5,8 +5,7 @@ import path from 'path'
 
 import { TRANSLATION_NAMESPACE } from '../../util/config'
 
-// Read from the source tree relative to the working directory, like the client build in src/server/index.ts:
-// tsc doesn't copy .md files to build/, and the production image contains the whole repository.
+// Read from the source tree: tsc doesn't copy .md files to build/, and the production image has the whole repo
 const KNOWLEDGE = fs.readFileSync(path.resolve('src/server/services/helpChatbot/knowledge.md'), 'utf8')
 const LOCALES_PATH = path.resolve('public/locales')
 
@@ -31,8 +30,7 @@ const TRANSLATIONS = Object.fromEntries(
 const lookup = (translations: Translations, key: string) =>
   key.split(':').reduce<unknown>((node, part) => (node as Translations | undefined)?.[part], translations)
 
-// In the client's order: the deployment's namespace before the common one, falling back to English in each.
-// Throws on a missing key, so a typo in knowledge.md fails the tests instead of reaching the model.
+// Looked up like the client does. Throws on a missing key, so a typo in knowledge.md fails the tests.
 export const translate = (key: string, language: LanguageId) => {
   for (const namespace of ['deployment', 'common'] as const) {
     for (const code of [language, 'en'] as const) {
@@ -43,8 +41,7 @@ export const translate = (key: string, language: LanguageId) => {
   throw new Error(`[HelpChatbot] No translation for ${key} in knowledge.md`)
 }
 
-// [[section:key]] is the UI label in the user's language and [[section:key|fi]] in the given one,
-// so the model quotes what the user sees on the screen. HTML comments are notes for editors.
+// [[section:key]] becomes the UI label in the user's language, [[section:key|fi]] in the given one
 export const renderKnowledge = (template: string, language: LanguageId) =>
   template
     .replace(/<!--[\s\S]*?-->/g, '')
@@ -76,8 +73,7 @@ const instructions = (
 - The documentation gives the UI's labels in bold as they appear on the user's screen, which is in ${LANGUAGE_NAMES[language]}. Quote them exactly like that, in bold and unchanged: don't inflect them (in Finnish, attach endings with a hyphen, as in **Jaa**-välilehti). Use bold only for these labels, never for emphasis or other words.
 - Always write your answer in the language of the user's latest message. If they write in English, answer in English, while still quoting the labels in ${LANGUAGE_NAMES[language]}.`
 
-// Small models follow instructions best when they come both before and after a long context, so the formatting
-// rules are repeated briefly after the documentation
+// Small models follow instructions best when they come both before and after a long context
 const reminder = (language: LanguageId) => `Remember when answering:
 - Keep it short: answer only what was asked, give one way to do it (but every label a single button can have), don't list what the user sees on the screen, and offer more in one short question instead of covering everything.
 - Begin with the answer itself, without a summary that you then repeat. Begin with yes or no only for a yes or no question.
@@ -85,8 +81,7 @@ const reminder = (language: LanguageId) => `Remember when answering:
 - Quote UI labels in bold exactly as in the documentation, in ${LANGUAGE_NAMES[language]}, and use bold for nothing else.
 - Write in the language of the user's latest message.`
 
-// Shown to the model as examples of an answer's form. Written in English like the documentation; the model answers in
-// the user's language, and the labels are rendered in the UI language.
+// In English like the documentation; the model answers in the user's language
 const EXAMPLES = `
 User: How do I create my own survey?
 Answer: Course surveys are created automatically from Sisu, so you can't create one yourself. You can create two other kinds:

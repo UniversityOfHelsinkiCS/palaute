@@ -9,7 +9,7 @@ import { AZURE_API_KEY, AZURE_RESOURCE, HELP_CHATBOT_MODEL } from '../../util/co
 import { logger } from '../../util/logger'
 import { SYSTEM_PROMPTS } from './systemPrompt'
 
-// The API version gptwrapper uses; it accepts reasoning_effort for the GPT-5 models
+// Accepts reasoning_effort for the GPT-5 models
 const API_VERSION = '2024-10-21'
 // Includes the reasoning tokens
 const MAX_COMPLETION_TOKENS = 4000
@@ -29,8 +29,8 @@ export type CompletionRequest = {
   messages: ChatMessage[]
 }
 
-// content is empty when the model returned nothing, e.g. when reasoning used up the token limit or the
-// content filter stopped the answer. The tokens are billed all the same.
+// content is empty when reasoning used up the token limit or the content filter stopped the answer. The tokens
+// are billed all the same.
 export type Completion = {
   deployment: string
   // The model version Azure reports

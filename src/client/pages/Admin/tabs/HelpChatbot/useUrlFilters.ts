@@ -2,7 +2,7 @@ import { format, subDays } from 'date-fns'
 import { useCallback } from 'react'
 import { useSearchParams } from 'react-router-dom'
 
-// Filters live in the URL, so a link or a reload opens the same view, and Back undoes a selection.
+// Filters live in the URL, so a link or a reload opens the same view
 
 export const today = () => format(new Date(), 'yyyy-MM-dd')
 

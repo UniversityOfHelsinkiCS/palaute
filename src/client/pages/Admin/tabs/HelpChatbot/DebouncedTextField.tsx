@@ -10,7 +10,6 @@ type DebouncedTextFieldProps = Omit<TextFieldProps, 'value' | 'onChange'> & {
   onChange: (value: string) => void
 }
 
-// A text filter that applies after a pause in typing, so each keystroke doesn't start a query
 const DebouncedTextField = ({ value, onChange, ...props }: DebouncedTextFieldProps) => {
   const [draft, setDraft] = useState(value)
   const [applied, setApplied] = useState(value)

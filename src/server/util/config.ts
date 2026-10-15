@@ -26,7 +26,7 @@ export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
 
 export const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_JWT, FEEDBACK_SYSTEM } = process.env
 
-// Azure OpenAI for the help chatbot. Same key and resource as gptwrapper; the deployment is named after the model
+// Azure OpenAI for the help chatbot, shared with gptwrapper. The deployment is named after the model.
 export const { AZURE_API_KEY, AZURE_RESOURCE } = process.env
 export const HELP_CHATBOT_MODEL = process.env.HELP_CHATBOT_MODEL || 'gpt-5-mini'
 

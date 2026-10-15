@@ -15,15 +15,14 @@ import { NorButton } from '../common/NorButton'
 
 type FeedbackBarProps = {
   answerId: string
-  // The answer's position in the conversation, which tells the groups of buttons apart
+  // Tells the groups of buttons apart for screen readers
   answerNumber: number
   feedback: Feedback
   actions: FeedbackActions
   onAnnounce: (text: string) => void
 }
 
-// Thumbs up/down under an answer. Pressing the pressed thumb again removes the rating. A thumbs down asks for an
-// optional comment. Nothing changes until the backend has saved the feedback.
+// Nothing changes until the backend has saved the feedback
 const FeedbackBar = ({ answerId, answerNumber, feedback, actions, onAnnounce }: FeedbackBarProps) => {
   const { t } = useTranslation()
   const commentId = useId()

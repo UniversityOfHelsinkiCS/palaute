@@ -27,7 +27,6 @@ module.exports = {
             onDelete: 'CASCADE',
             allowNull: true,
           },
-          // Context shown in the admin viewer, e.g. the UI language; see HelpChatbotTurnMetadata
           metadata: {
             type: JSONB,
             allowNull: false,
@@ -107,8 +106,7 @@ module.exports = {
       await queryInterface.addIndex('help_chatbot_turns', ['conversation_id'], { transaction })
       // For the admin viewer's date ranges
       await queryInterface.addIndex('help_chatbot_turns', ['created_at'], { transaction })
-      // Deleting a turn, or a user with their turns, checks for turns that refer to it. Without these each check
-      // scans the whole table: deleting 200 000 turns didn't finish in minutes.
+      // Without these, deleting turns or a user scans the whole table once per deleted row
       await queryInterface.addIndex('help_chatbot_turns', ['previous_turn_id'], { transaction })
       await queryInterface.addIndex('help_chatbot_turns', ['user_id'], { transaction })
     })

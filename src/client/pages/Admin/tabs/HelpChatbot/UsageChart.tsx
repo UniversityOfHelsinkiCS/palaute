@@ -21,7 +21,7 @@ type UsageChartProps = {
   metric: UsageMetric
 }
 
-// Stacked bars per period. The same numbers are in the CSV download.
+// The per-period numbers aren't in any table; the CSV download is the chart's text alternative
 const UsageChart = ({ periods, groupBy, metric }: UsageChartProps) => {
   const theme = useTheme()
   const labels = periods.map(period => format(new Date(`${period.start}T00:00:00`), PERIOD_FORMATS[groupBy]))

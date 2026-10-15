@@ -82,7 +82,7 @@ const HelpChatbot = () => {
   }, [view])
 
   // Keeps an open MUI modal's focus trap, which listens on the document, from pulling focus out of the chat.
-  // Only the chat is above modals, so the trap takes focus back from the pill and the menu.
+  // Only while the chat is open, as the pill and the menu are below modals.
   useEffect(() => {
     if (view !== 'chat') return undefined
     const keepFocus = (event: FocusEvent) => {
@@ -190,8 +190,7 @@ const HelpChatbot = () => {
             }),
           })}
         >
-          {/* Each view is laid out at its final size, so a resizing box clips it instead of reflowing it.
-            It fades in once the box has mostly finished resizing. */}
+          {/* Laid out at its final size, so the resizing box clips it instead of reflowing it */}
           <Box
             key={view}
             sx={{

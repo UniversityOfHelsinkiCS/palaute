@@ -16,7 +16,6 @@ export const getUsage = async (query: GetHelpChatbotUsageQuery): Promise<GetHelp
   const turns = pricedTurns(conditions)
   const replacements = { ...turns.replacements, unit: groupBy, step: `1 ${groupBy}` }
 
-  // Independent queries, run side by side
   const [[totals], [{ conversations }], periods, versions] = await Promise.all([
     select<UsageRow>(`WITH ${turns.sql} SELECT ${USAGE_COLUMNS} FROM turns t`, replacements),
     select<{ conversations: string | number }>(

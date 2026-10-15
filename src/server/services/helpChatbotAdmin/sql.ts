@@ -6,7 +6,7 @@ import { sequelize } from '../../db/dbConnection'
 import { inProduction } from '../../util/config'
 import { PRICES } from './prices'
 
-// Raw SQL shared by the viewer's queries. User input only ever goes in as replacements.
+// User input only ever goes in as replacements
 
 export type Replacements = Record<string, unknown>
 
@@ -34,8 +34,7 @@ export class Conditions {
     return this
   }
 
-  // Turns answered by the mock only exist outside production, where every view shows them. In production there
-  // shouldn't be any; the condition makes sure.
+  // Mock turns are shown outside production. In production there shouldn't be any; this makes sure.
   withoutMockInProduction() {
     if (inProduction) this.add(`t.deployment IS DISTINCT FROM 'mock'`)
     return this
@@ -46,7 +45,6 @@ export class Conditions {
   }
 }
 
-// A LIKE pattern matching text that contains `text`
 export const containsPattern = (text: string) => `%${text.replace(/[\\%_]/g, '\\$&')}%`
 
 // The price table as rows, with the replacements it needs
@@ -67,11 +65,9 @@ const pricesValues = () => {
   return { sql: rows.join(',\n'), replacements }
 }
 
-// WITH clauses defining `turns`: the turns matching `conditions`, each with its cost in euros, split into
-// input_cost, cached_cost, output_cost and reasoning_cost (output_cost excludes the reasoning, which is billed at
-// the output price). Those are null for a turn without usage or a price; a turn with usage
-// but no price is `unpriced`. Costs are floats: exact decimals made the sums much slower, and fractions of a cent
-// don't need them.
+// WITH clauses defining `turns`: the turns matching `conditions` with their costs in euros, null without usage or
+// a price. output_cost excludes the reasoning, which is billed at the output price. Costs are floats: exact
+// decimals made the sums much slower.
 export const pricedTurns = (conditions: Conditions) => {
   const prices = pricesValues()
   const sql = `
@@ -98,9 +94,8 @@ export const pricedTurns = (conditions: Conditions) => {
   return { sql, replacements: { ...prices.replacements, ...conditions.replacements } }
 }
 
-// Aggregates of `turns` as t, for HelpChatbotUsage. count(t.id) rather than count(*), so a period without turns
-// counts zero when the turns are left joined. Conversations are counted separately: a count(DISTINCT) per group
-// was the slowest part of the usage queries.
+// Aggregates of `turns` as t. count(t.id), not count(*), so a left-joined period without turns counts zero.
+// Conversations are counted separately: a count(DISTINCT) per group was the slowest part of the usage queries.
 export const USAGE_COLUMNS = `
   count(t.id) AS "questions",
   count(t.id) FILTER (WHERE t.status = 'answered') AS "answered",

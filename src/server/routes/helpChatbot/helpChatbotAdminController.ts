@@ -25,7 +25,7 @@ import {
   setReviewed,
 } from '../../services/helpChatbotAdmin'
 
-// The NorppAI viewer, mounted under /admin/help-chatbot. Admins only, also once teachers can use the chatbot.
+// Admins only, even if the chat is opened to teachers
 
 const getMetaHandler = async (_req: AuthenticatedRequest, res: Response<GetHelpChatbotMetaResponse>) => {
   res.send(await getMeta())

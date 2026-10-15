@@ -14,8 +14,7 @@ import { keepPreviousData, useInfiniteQuery, useMutation, useQuery, useQueryClie
 
 import apiClient from '../../../../util/apiClient'
 
-// The NorppAI viewer's backend, /admin/help-chatbot. Every query key starts with 'helpChatbot', so marking feedback
-// reviewed can refresh them all.
+// Every query key starts with 'helpChatbot', so marking feedback reviewed can refresh them all
 
 const get = async <T>(path: string, params: object = {}) => {
   const { data } = await apiClient.get<T>(`/admin/help-chatbot${path}`, { params })
