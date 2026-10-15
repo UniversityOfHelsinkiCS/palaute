@@ -17,8 +17,6 @@ const bounce = keyframes`
 const EmptyState = () => {
   const { t } = useTranslation()
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
-  // The sprite is 60 times the still image's size, so it's loaded only when the pointer reaches the seal
-  const [spriteRequested, setSpriteRequested] = useState(false)
   const [spriteLoaded, setSpriteLoaded] = useState(false)
   const [sealPlaying, setSealPlaying] = useState(false)
   const flipping = sealPlaying && spriteLoaded
@@ -43,11 +41,8 @@ const EmptyState = () => {
         aria-hidden="true"
         // Keeps focus where it was, e.g. in the question input
         onMouseDown={event => event.preventDefault()}
-        onPointerEnter={() => !reduceMotion && setSpriteRequested(true)}
         onClick={() => {
-          if (reduceMotion) return
-          setSpriteRequested(true)
-          setSealPlaying(true)
+          if (!reduceMotion) setSealPlaying(true)
         }}
         sx={{
           position: 'relative',
@@ -58,7 +53,6 @@ const EmptyState = () => {
           border: 0,
           bgcolor: 'transparent',
           overflow: 'hidden',
-          // Nothing hints that it can be clicked
           cursor: 'default',
           animation: sealPlaying ? `${bounce} .5s ease` : 'none',
         }}
@@ -69,11 +63,12 @@ const EmptyState = () => {
           alt=""
           sx={{ display: 'block', width: SEAL_IMAGE_SIZE, height: SEAL_IMAGE_SIZE, opacity: flipping ? 0 : 1 }}
         />
-        {spriteRequested && (
+        {!reduceMotion && (
           <Box
             component="img"
             src={largeSealSprite}
             alt=""
+            fetchPriority="low"
             onLoad={() => setSpriteLoaded(true)}
             onAnimationEnd={() => setSealPlaying(false)}
             sx={{
