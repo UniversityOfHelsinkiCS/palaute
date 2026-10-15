@@ -8,7 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v7
+    - uses: actions/setup-node@v7.1.0
       with:
         node-version-file: package.json
         cache: npm
@@ -26,7 +26,7 @@ runs:
     - uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
 
     - name: Log in to the registry
-      uses: docker/login-action@v4
+      uses: docker/login-action@v4.6.0
       with:
         registry: registry.version.helsinki.fi
         username: kontit
