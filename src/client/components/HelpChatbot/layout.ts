@@ -99,8 +99,8 @@ export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }:
   return fixedBox(px(380), px(560), 12, [15, 15, 0.8])
 }
 
-// Above modals, below snackbars and tooltips
-export const widgetZIndex = (theme: Theme) => theme.zIndex.modal + 1
+// Above the sticky NavBar and FixedContainer toolbars, below modals, snackbars and tooltips
+export const widgetZIndex = (theme: Theme) => theme.zIndex.appBar + 1
 
 // The footer's padding above its divider, which the box should be as far from as from the viewport's edge
 const FOOTER_PADDING = '1rem'
@@ -133,7 +133,8 @@ export const stickyRootSx =
     return {
       position: 'sticky',
       bottom: FOOTER_PADDING,
-      zIndex: widgetZIndex(theme),
+      // The open chat stays usable when a dialog opens over the page
+      zIndex: view === 'chat' ? theme.zIndex.modal + 1 : widgetZIndex(theme),
       height: 0,
       top: top(theme.spacing(2)),
       [theme.breakpoints.up('sm')]: { top: top(theme.spacing(3)) },
