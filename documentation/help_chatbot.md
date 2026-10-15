@@ -4,6 +4,21 @@ An AI assistant that answers teachers' questions about using Norppa, e.g. "How d
 
 This is an experimental MVP. The goal is to learn what makes this kind of feature useful to our users. This draft covers the **frontend only**; the backend is a placeholder that fakes the agreed contract.
 
+## Terminology
+
+Use these words in code, comments and docs, and no others for the same things:
+
+- **NorppAI**: the assistant's name, for text users see (UI copy, the admin tab's label, its `/admin/norppai` page) and prose. Code identifiers, files, routes and config say **help chatbot** instead. `NorppaFeedback` is unrelated: feedback about Norppa itself.
+- **Widget**: the box in the bottom-right corner. It has three **views**: the **pill**, the **menu** and the **chat**.
+- **Conversation**: what the user sees between two New conversations. The client makes up its id.
+- **Turn**: one question and its answer, one row of `help_chatbot_turns`. Every id the chat and the viewer pass around is a turn id; there are no message ids.
+- **Question** and **answer**: the user's text and the model's text in a turn. Not "reply" or "response", and a question here is never a survey question.
+- **Entry**: an item in the chat's own list, on the client only. A question's entry exists before its turn does, and stays if the turn fails.
+- **History**: the chain of answered turns the model sees, built by the server.
+- **Completion**: one call to the model, which gives a turn its answer and token usage.
+- **Feedback**: a **rating** (thumbs up or down) on an answer, and for a thumbs down an optional **comment**. An admin marks it **reviewed**.
+- **Viewer**: the NorppAI admin tab, for reading saved conversations, feedback and usage.
+
 ## Principles
 
 - **A convenience, never a push.** The user guide must always be clearly reachable, both from the help button and from inside the chat. Nobody should feel forced to use the AI.
