@@ -98,11 +98,9 @@ const expectSurveyPage = async (page: Page, feedbackCount: string, hasOrganisati
 }
 
 const expectQuestionsTabDisabled = async (page: Page) => {
-  await expect(
-    page
-      .locator('[aria-label="Questions tab disabled: Survey can no longer be edited after the feedback has opened."]')
-      .first()
-  ).toBeAttached()
+  await expect(byDataCy(page, 'feedback-target-settings-tab')).toHaveAccessibleDescription(
+    'Questions tab disabled: Survey can no longer be edited after the feedback has opened.'
+  )
 }
 
 const expectNoFeedbackItem = async (page: Page, surveyId: number, tab: string) => {

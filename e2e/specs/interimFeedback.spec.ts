@@ -122,11 +122,9 @@ test.describe('Responsible Teachers', () => {
 
     // Tabs
     await byDataCy(page, 'interim-feedback-target-give-feedback-tab').click()
-    await expect(
-      page
-        .locator('[aria-label="Questions tab disabled: Survey can no longer be edited after the feedback has opened."]')
-        .first()
-    ).toBeAttached()
+    await expect(byDataCy(page, 'interim-feedback-target-settings-tab')).toHaveAccessibleDescription(
+      'Questions tab disabled: Survey can no longer be edited after the feedback has opened.'
+    )
     await byDataCy(page, 'interim-feedback-target-share-feedback-tab').click()
     await byDataCy(page, 'interim-feedback-target-results-tab').click()
     await byDataCy(page, 'interim-feedback-target-students-with-feedback-tab').click()
@@ -163,11 +161,9 @@ test.describe('Responsible Teachers', () => {
     await byDataCy(page, `interim-feedback-show-feedback-${interimFeedback.id}`).click()
 
     // The tab is not truly disabled so that its tooltip stays keyboard accessible
-    await expect(
-      page
-        .locator('[aria-label="Questions tab disabled: Survey can no longer be edited after the feedback has opened."]')
-        .first()
-    ).toBeAttached()
+    await expect(byDataCy(page, 'interim-feedback-target-settings-tab')).toHaveAccessibleDescription(
+      'Questions tab disabled: Survey can no longer be edited after the feedback has opened.'
+    )
 
     await expect(page.locator('[id="feedback-target-tabpanel-feedback"]')).toBeAttached()
     await byDataCy(page, 'interim-feedback-target-settings-tab').click()
