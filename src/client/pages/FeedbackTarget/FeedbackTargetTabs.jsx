@@ -1,12 +1,26 @@
 import { Tab, Tooltip, Box, Paper, Tabs } from '@mui/material'
-import React, { useMemo } from 'react'
+import React, { useId, useMemo } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 
 import { handleTabKeyDown } from '../../components/common/utils'
 
 const stripSearch = path => path.split('?')[0]
 
-export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTooltip, tooltip, id, ...props }) => {
+export const FeedbackTargetTab = ({
+  icon,
+  label,
+  to,
+  value,
+  disabled,
+  disabledTooltip,
+  tooltip,
+  id,
+  onFocus,
+  ...props
+}) => {
+  const descriptionId = useId()
+  const tooltipTitle = disabled ? disabledTooltip : tooltip
+
   const content = icon ? (
     <Box sx={{ display: 'flex', gap: '0.5rem', alignItems: 'center', flexShrink: 0 }}>
       {icon}
@@ -16,15 +30,36 @@ export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTo
     label
   )
 
+  // Hidden content is left out of the tab's name but can still be referenced by aria-describedby.
+  // It must stay inside the tab, because MUI Tabs locates tabs by their index among the tablist's DOM children.
+  const labelWithDescription = tooltipTitle ? (
+    <>
+      {content}
+      <span id={descriptionId} hidden>
+        {tooltipTitle}
+      </span>
+    </>
+  ) : (
+    content
+  )
+
   const tab = (
     <Tab
       id={id}
-      label={content}
+      label={labelWithDescription}
       component={disabled ? 'button' : Link}
       to={disabled ? undefined : to}
       value={value}
       onKeyDown={handleTabKeyDown}
       aria-controls={id ? id.replace('-tab-', '-tabpanel-') : undefined}
+      // Overrides the title and aria-describedby that Tooltip would toggle when it opens,
+      // so that the description is static and announced exactly once
+      title={undefined}
+      aria-describedby={tooltipTitle ? descriptionId : undefined}
+      onFocus={event => {
+        event.currentTarget.scrollIntoView({ block: 'nearest', inline: 'nearest' })
+        onFocus?.(event)
+      }}
       sx={theme => ({
         borderRadius: '0.6rem',
         transition: theme.transitions.create('background-color'),
@@ -46,11 +81,10 @@ export const FeedbackTargetTab = ({ icon, label, to, value, disabled, disabledTo
     />
   )
 
-  const tooltipTitle = disabled ? disabledTooltip : tooltip
-
   if (tooltipTitle) {
+    // The tooltip is only visual, screen readers get the same text through aria-describedby
     return (
-      <Tooltip title={tooltipTitle} placement="top" disableFocusListener={false} describeChild>
+      <Tooltip title={tooltipTitle} placement="top" describeChild slotProps={{ popper: { 'aria-hidden': true } }}>
         {tab}
       </Tooltip>
     )
@@ -88,10 +122,10 @@ export const FeedbackTargetTabsContainer = ({ children }) => {
         <Tabs
           value={currentValue}
           variant="scrollable"
-          scrollButtons
+          scrollButtons="auto"
           allowScrollButtonsMobile
           sx={{
-            px: 0.1,
+            px: 0.2,
             '& .MuiTabs-flexContainer': {
               alignItems: 'stretch',
               ml: 0,
@@ -109,13 +143,13 @@ export const FeedbackTargetTabsContainer = ({ children }) => {
               backgroundColor: 'transparent',
               transition: 'none',
             },
-            '& .MuiTabs-scrollButtons.Mui-disabled': {
-              display: 'none',
-              width: 0,
+            '& .MuiTabs-scrollButtons': {
+              width: '28px',
             },
           }}
           slotProps={{
             indicator: { children: <span className="MuiTabs-indicatorSpan" /> },
+            scroller: { tabIndex: -1 },
           }}
         >
           {childrenWithValue}
