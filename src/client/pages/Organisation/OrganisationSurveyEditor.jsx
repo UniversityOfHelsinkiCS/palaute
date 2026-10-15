@@ -186,18 +186,20 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const [showAllStudentNumbers, setShowAllStudentNumbers] = React.useState(false)
   const canHideStudentNumbers = value.length > VISIBLE_STUDENT_NUMBERS_AT_START + VISIBLE_STUDENT_NUMBERS_AT_END
 
-  const hasError = formikProps.errors[name]
-  const errorText = formikProps.errors[name]?.text
-  const errorData = formikProps.errors[name]?.data
+  // Submit errors are kept in status, because Formik's validation replaces the whole errors object
+  const error = formikProps.status?.[name]
+  const hasError = Boolean(error)
+  const errorText = error?.text
+  const errorData = error?.data
   const errorStudentNumbers = React.useMemo(() => new Set(errorData), [errorData])
-  const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[formikProps.errors[name]?.kind]
+  const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[error?.kind]
   const inputRef = React.useRef(null)
 
   const removeErrorStudentNumbers = () => {
     const studentNumbers = value.filter(v => !errorStudentNumbers.has(v))
     setValue(studentNumbers)
     formikProps.setFieldValue(name, studentNumbers)
-    formikProps.setFieldError(name, undefined)
+    formikProps.setStatus({ ...formikProps.status, [name]: undefined })
     inputRef.current?.focus()
   }
 
@@ -292,7 +294,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
             label={t('organisationSurveys:students')}
             {...params}
             inputRef={inputRef}
-            error={Boolean(hasError)}
+            error={hasError}
             helperText={hasError ? errorText : ''}
             slotProps={{
               formHelperText: {

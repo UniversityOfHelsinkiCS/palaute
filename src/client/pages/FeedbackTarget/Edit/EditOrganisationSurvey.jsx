@@ -44,13 +44,13 @@ const EditOrganisationSurvey = () => {
 
   const handleClose = () => setShowForm(!showForm)
 
-  const handleSubmit = async (data, { setErrors }) => {
+  const handleSubmit = async (data, { setStatus }) => {
     const overlappingStudentTeachers = getOverlappingStudentTeachers(data)
 
     if (overlappingStudentTeachers.length > 0) {
       const overlappingStudentNumbers = overlappingStudentTeachers.map(t => t.studentNumber)
 
-      setErrors({
+      setStatus({
         studentNumbers: getOverlappingStudentTeachersError(t, overlappingStudentNumbers),
       })
       return
@@ -88,7 +88,7 @@ const EditOrganisationSurvey = () => {
         if (error.isAxiosError && error.response && error.response.data && error.response.data.invalidStudentNumbers) {
           const { invalidStudentNumbers } = error.response.data
 
-          setErrors({
+          setStatus({
             studentNumbers: getInvalidStudentNumbersError(t, invalidStudentNumbers),
           })
         } else {
