@@ -81,14 +81,16 @@ const HelpChatbot = () => {
     target.current?.focus()
   }, [view])
 
-  // Keeps an open MUI modal's focus trap, which listens on the document, from pulling focus out of the chatbot
+  // Keeps an open MUI modal's focus trap, which listens on the document, from pulling focus out of the chat.
+  // Only the chat is above modals, so the trap takes focus back from the pill and the menu.
   useEffect(() => {
+    if (view !== 'chat') return undefined
     const keepFocus = (event: FocusEvent) => {
       if (rootRef.current?.contains(event.target as Node)) event.stopPropagation()
     }
     document.body.addEventListener('focusin', keepFocus)
     return () => document.body.removeEventListener('focusin', keepFocus)
-  }, [])
+  }, [view])
 
   // The expand toggle disappears when the chat goes full-screen
   useEffect(() => {
