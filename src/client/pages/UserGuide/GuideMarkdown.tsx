@@ -3,13 +3,12 @@ import type { SystemStyleObject } from '@mui/system'
 import type { ComponentProps, ReactNode } from 'react'
 import type { Components, ExtraProps } from 'react-markdown'
 
-import { Box, Link, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link as RouterLink } from 'react-router-dom'
 
-import ExternalLink from '../../components/common/ExternalLink'
 import Markdown from '../../components/common/Markdown'
+import MarkdownLink from '../../components/common/MarkdownLink'
 import { HEADING_ID, LABEL } from './content'
 
 const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
@@ -103,24 +102,6 @@ const Blockquote = ({ children }: ComponentProps<'blockquote'> & ExtraProps) => 
   </Box>
 )
 
-// Links to other guide pages and to places in Norppa go through the router, which keeps e.g. the help chatbot's
-// conversation. Other sites open in a new tab.
-const GuideLink = ({ href = '', children }: ComponentProps<'a'> & ExtraProps) => {
-  if (/^https?:\/\//.test(href)) return <ExternalLink href={href}>{children}</ExternalLink>
-  if (href.startsWith('mailto:') || href.startsWith('#')) {
-    return (
-      <Link href={href} underline="always">
-        {children}
-      </Link>
-    )
-  }
-  return (
-    <Link component={RouterLink} to={href} underline="always">
-      {children}
-    </Link>
-  )
-}
-
 // Passing components replaces all of Markdown's defaults, so this is the full set
 const components: Components = {
   h1: H1,
@@ -133,7 +114,7 @@ const components: Components = {
   ul: ({ children }) => <List component="ul">{children}</List>,
   ol: ({ children }) => <List component="ol">{children}</List>,
   blockquote: Blockquote,
-  a: GuideLink,
+  a: MarkdownLink,
 }
 
 type GuideMarkdownProps = {

@@ -1,11 +1,10 @@
 import type { ComponentProps } from 'react'
 import type { Components, ExtraProps } from 'react-markdown'
 
-import { Box, Link } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import { Box } from '@mui/material'
 
-import ExternalLink from '../common/ExternalLink'
 import Markdown from '../common/Markdown'
+import MarkdownLink from '../common/MarkdownLink'
 
 // The panel's title is an h2, so reply headings start at h3
 const SectionHeading = ({ children }: ExtraProps & { children?: ComponentProps<'h1'>['children'] }) => (
@@ -19,23 +18,6 @@ const SubHeading = ({ children }: ExtraProps & { children?: ComponentProps<'h3'>
     {children}
   </Box>
 )
-
-// Internal links go through the router: a plain href would reload the page, wiping the conversation
-const MarkdownLink = ({ href = '', children }: ComponentProps<'a'> & ExtraProps) => {
-  if (/^https?:\/\//.test(href)) return <ExternalLink href={href}>{children}</ExternalLink>
-  if (href.startsWith('/') && !href.startsWith('//')) {
-    return (
-      <Link component={RouterLink} to={href} underline="always">
-        {children}
-      </Link>
-    )
-  }
-  return (
-    <Link href={href} underline="always">
-      {children}
-    </Link>
-  )
-}
 
 const components: Components = {
   a: MarkdownLink,
