@@ -188,11 +188,26 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
 
   // Submit errors are kept in status, because Formik's validation replaces the whole errors object
   const error = formikProps.status?.[name]
-  const hasError = Boolean(error)
   const errorText = error?.text
   const errorData = error?.data
-  const errorStudentNumbers = React.useMemo(() => new Set(errorData), [errorData])
-  const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[error?.kind]
+  const errorKind = error?.kind
+  const { teachers } = formikProps.values
+
+  // Numbers the user has fixed some other way, by removing the chip or the responsible person, are no longer errors
+  const errorStudentNumbers = React.useMemo(() => {
+    const studentNumbers = new Set(value)
+    const teacherStudentNumbers = new Set(teachers.map(teacher => teacher.studentNumber))
+
+    return new Set(
+      errorData?.filter(
+        studentNumber =>
+          studentNumbers.has(studentNumber) && (errorKind !== 'overlap' || teacherStudentNumbers.has(studentNumber))
+      )
+    )
+  }, [errorData, errorKind, value, teachers])
+
+  const hasError = errorStudentNumbers.size > 0
+  const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[errorKind]
   const inputRef = React.useRef(null)
 
   const removeErrorStudentNumbers = () => {
@@ -306,7 +321,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         {...props}
       />
 
-      {removeButtonLabelKey && (
+      {hasError && removeButtonLabelKey && (
         <NorButton
           data-cy="formik-student-number-input-remove-erroneous"
           color="cancel"
