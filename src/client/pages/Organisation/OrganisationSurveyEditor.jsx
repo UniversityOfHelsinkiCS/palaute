@@ -176,7 +176,7 @@ const ShowAllStudentsToggle = ({ count, showAll, onShowAllChange }) => {
 const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
-  const [value, setValue] = React.useState(formikProps.initialValues.studentNumbers)
+  const [value, setValue] = React.useState(formikProps.initialValues[name])
   const [inputValue, setInputValue] = React.useState('')
   const [showAllStudentNumbers, setShowAllStudentNumbers] = React.useState(false)
   const canHideStudentNumbers = value.length > VISIBLE_STUDENT_NUMBERS_AT_START + VISIBLE_STUDENT_NUMBERS_AT_END
@@ -191,7 +191,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const removeErrorStudentNumbers = () => {
     const studentNumbers = value.filter(v => !errorStudentNumbers.has(v))
     setValue(studentNumbers)
-    formikProps.setFieldValue('studentNumbers', studentNumbers)
+    formikProps.setFieldValue(name, studentNumbers)
     formikProps.setFieldError(name, undefined)
     inputRef.current?.focus()
   }
@@ -228,7 +228,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
             return
 
           setValue(studentNumbers)
-          formikProps.setFieldValue('studentNumbers', studentNumbers)
+          formikProps.setFieldValue(name, studentNumbers)
         }}
         onInputChange={(_, newInputValue) => {
           const options = newInputValue.split(/[,\n; ]/)
@@ -243,7 +243,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
                 return v
               })
             setValue(studentNumbers)
-            formikProps.setFieldValue('studentNumbers', studentNumbers)
+            formikProps.setFieldValue(name, studentNumbers)
             setInputValue('')
           } else {
             setInputValue(newInputValue)
