@@ -16,6 +16,7 @@ import {
   FULL_SCREEN_QUERY,
   TRANSITION,
   anchorSx,
+  dialogsBesideChatStyles,
   getLayout,
   restingSpaceSx,
   scrollPaddingStyles,
@@ -155,6 +156,7 @@ const HelpChatbot = () => {
   return (
     <>
       <GlobalStyles styles={scrollPaddingStyles} />
+      {view === 'chat' && !fullScreen && <GlobalStyles styles={dialogsBesideChatStyles(layout.width)} />}
       <Box sx={restingSpaceSx} />
       <Box
         ref={rootRef}

@@ -1,5 +1,7 @@
 import type { SxProps, Theme } from '@mui/material'
 
+import { dialogClasses } from '@mui/material'
+
 export type WidgetView = 'closed' | 'menu' | 'chat'
 
 export type ChatSize = 'normal' | 'expanded'
@@ -118,6 +120,16 @@ export const scrollPaddingStyles = (theme: Theme) => ({
   html: {
     scrollPaddingBottom: pillClearance(theme.spacing(2)),
     [theme.breakpoints.up('sm')]: { scrollPaddingBottom: pillClearance(theme.spacing(3)) },
+  },
+})
+
+// MUI's default dialog width with the dialog's margins
+const MIN_DIALOG_SPACE = '664px'
+
+// Lays dialogs out beside the open chat, unless that would make them narrower than MUI's default
+export const dialogsBesideChatStyles = (chatWidth: string) => (theme: Theme) => ({
+  [`.${dialogClasses.container}`]: {
+    paddingRight: `clamp(0px, 100vw - ${MIN_DIALOG_SPACE}, ${chatWidth} + ${theme.spacing(3)})`,
   },
 })
 
