@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import type { ChatSize, WidgetView } from './layout'
 
 import { mergeSx } from '../../util/sx'
-import ChatPanel from './ChatPanel'
+import ChatView from './ChatView'
 import {
   DEFAULT_MENU_HEIGHT,
   DEFAULT_PILL_WIDTH,
@@ -48,7 +48,7 @@ const HelpChatbot = () => {
   const { t } = useTranslation()
   const guide = useGuideLink()
 
-  const [view, setView] = useState<WidgetView>('closed')
+  const [view, setView] = useState<WidgetView>('pill')
   const [pillWidth, setPillWidth] = useState(DEFAULT_PILL_WIDTH)
   const [menuHeight, setMenuHeight] = useState(DEFAULT_MENU_HEIGHT)
   const [draft, setDraft] = useState('')
@@ -77,7 +77,7 @@ const HelpChatbot = () => {
   useEffect(() => {
     if (!focusAfterViewChange.current) return
     focusAfterViewChange.current = false
-    const target = { closed: pillRef, menu: askRef, chat: inputRef }[view]
+    const target = { pill: pillRef, menu: askRef, chat: inputRef }[view]
     target.current?.focus()
   }, [view])
 
@@ -109,7 +109,7 @@ const HelpChatbot = () => {
   }, [fullScreen])
 
   useEffect(() => {
-    if (view !== 'closed' || reduceMotion) return undefined
+    if (view !== 'pill' || reduceMotion) return undefined
     const interval = setInterval(() => setSealOnce(true), IDLE_FLIP_INTERVAL_MS)
     return () => clearInterval(interval)
   }, [view, reduceMotion])
@@ -119,7 +119,7 @@ const HelpChatbot = () => {
     goTo(guide ? 'menu' : 'chat')
   }
 
-  const close = () => goTo('closed')
+  const close = () => goTo('pill')
 
   const sendDraft = () => {
     const question = draft.trim()
@@ -144,7 +144,7 @@ const HelpChatbot = () => {
 
   // Handled here and stopped, so EscSnackbarCloser doesn't also close every snackbar
   const handleKeyDown = (event: KeyboardEvent<HTMLElement>) => {
-    if (event.key !== 'Escape' || view === 'closed') return
+    if (event.key !== 'Escape' || view === 'pill') return
     event.stopPropagation()
     close()
   }
@@ -178,13 +178,13 @@ const HelpChatbot = () => {
             bgcolor: 'background.paper',
             border: `${layout.border}px solid`,
             borderColor: 'divider',
-            boxShadow: fullScreen ? 'none' : view === 'closed' ? 2 : 8,
+            boxShadow: fullScreen ? 'none' : view === 'pill' ? 2 : 8,
             color: 'text.primary',
             fontSize: '14.5px',
             lineHeight: 1.5,
             transition: boxTransition,
             '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
-            ...(view === 'closed' && {
+            ...(view === 'pill' && {
               '&:hover': { bgcolor: primaryTint, borderColor: primaryTintBorder },
               '&:has(:focus-visible)': focusRing,
             }),
@@ -203,7 +203,7 @@ const HelpChatbot = () => {
               '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
             }}
           >
-            {view === 'closed' && <PillView buttonRef={pillRef} onOpen={openFromPill} onWidthChange={setPillWidth} />}
+            {view === 'pill' && <PillView buttonRef={pillRef} onOpen={openFromPill} onWidthChange={setPillWidth} />}
             {view === 'menu' && guide && (
               <MenuView
                 guide={guide}
@@ -214,7 +214,7 @@ const HelpChatbot = () => {
               />
             )}
             {view === 'chat' && (
-              <ChatPanel
+              <ChatView
                 guide={guide}
                 inputRef={inputRef}
                 entries={entries}

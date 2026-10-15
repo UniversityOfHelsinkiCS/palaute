@@ -17,7 +17,7 @@ import { COMPACT_QUERY } from './layout'
 import MessageList from './MessageList'
 import { primaryTint } from './tokens'
 
-type ChatPanelProps = {
+type ChatViewProps = {
   guide: GuideLink | null
   inputRef: RefObject<HTMLTextAreaElement | null>
   entries: ChatEntry[]
@@ -39,7 +39,7 @@ type ChatPanelProps = {
 }
 
 // Not an MUI Dialog, which is always modal
-const ChatPanel = ({
+const ChatView = ({
   guide,
   inputRef,
   entries,
@@ -58,7 +58,7 @@ const ChatPanel = ({
   onToggleExpand,
   onNewConversation,
   onClose,
-}: ChatPanelProps) => {
+}: ChatViewProps) => {
   const { t } = useTranslation()
   const titleId = useId()
   const compact = useMediaQuery(COMPACT_QUERY)
@@ -143,4 +143,4 @@ const ChatPanel = ({
   )
 }
 
-export default ChatPanel
+export default ChatView

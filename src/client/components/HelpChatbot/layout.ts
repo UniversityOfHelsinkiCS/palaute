@@ -2,7 +2,7 @@ import type { SxProps, Theme } from '@mui/material'
 
 import { dialogClasses } from '@mui/material'
 
-export type WidgetView = 'closed' | 'menu' | 'chat'
+export type WidgetView = 'pill' | 'menu' | 'chat'
 
 export type ChatSize = 'normal' | 'expanded'
 
@@ -77,7 +77,7 @@ type LayoutInput = {
 // Sizes are CSS lengths, so plain CSS transitions can animate between views. Only the pill's and the menu's
 // content is measured, because their text length varies.
 export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }: LayoutInput): BoxLayout => {
-  if (view === 'closed') return fixedBox(px(pillWidth), px(PILL_HEIGHT), PILL_HEIGHT / 2, [9, 8, 1])
+  if (view === 'pill') return fixedBox(px(pillWidth), px(PILL_HEIGHT), PILL_HEIGHT / 2, [9, 8, 1])
   if (view === 'menu') {
     const sealTop = menuHeight - MENU_SEAL_BOTTOM - SEAL_SIZE
     return fixedBox(px(MENU_WIDTH), px(menuHeight), 16, [MENU_SEAL_LEFT, sealTop, 1])

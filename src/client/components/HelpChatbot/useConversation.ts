@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 
 import type { ChatEntry, Feedback, Rating, UserEntry } from './types'
 
-import { askQuestion, isCancelled, sendFeedback } from './helpChatbotService'
+import { askQuestion, isCancelled, sendFeedback } from './api'
 
 type Conversation = { id: string; entries: ChatEntry[] }
 

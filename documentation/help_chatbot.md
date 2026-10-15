@@ -119,7 +119,7 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 
 ### Backend integration
 
-Everything backend-specific is behind one seam, `src/client/components/HelpChatbot/helpChatbotService.ts`. The rest of the module only uses its exports:
+Everything backend-specific is behind one seam, `src/client/components/HelpChatbot/api.ts`. The rest of the module only uses its exports:
 
 - `askQuestion(conversationId, previousAnswerId, question, signal)` → `{ id, markdown }`. `previousAnswerId` is the latest answer in the conversation (null before the first one); the server keeps the history. Any rejection shows "No answer received".
 - `sendFeedback(answerId, rating, comment?)`: saves a rating, replacing any earlier one. A null rating removes it.
@@ -156,7 +156,7 @@ Every question is saved in `help_chatbot_turns`, one row per question, together 
 
 ### Viewer
 
-The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) reads the saved conversations. The client is `src/client/pages/Admin/tabs/HelpChatbot/`, the API `GET`/`PUT /admin/help-chatbot/…` in `routes/helpChatbot/adminController.ts` (mounted in the admin router, so admins only even once teachers can chat), the queries `services/helpChatbotAdmin/`. Filters live in the URL, so a link opens the same view.
+The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) reads the saved conversations. The client is `src/client/pages/Admin/tabs/HelpChatbot/`, the API `GET`/`PUT /admin/help-chatbot/…` in `routes/helpChatbot/helpChatbotAdminController.ts` (mounted in the admin router, so admins only even once teachers can chat), the queries `services/helpChatbotAdmin/`. Filters live in the URL, so a link opens the same view.
 
 - **Conversations**: a list filtered by date, search, feedback, problems and user, and the full conversation, each turn with its status, tokens, cost and feedback. The conversation's header shows its first turn's metadata, and a turn shows only the metadata that differs from it; keys the viewer doesn't know are shown as they are. Turns that aren't on the history chain (failed, retried, never shown) are marked and can be hidden. "Copy as Markdown" copies the conversation for a review. A conversation is identified by `conversation_id` and `user_id` together, as the client makes up the id.
 - **Feedback**: rated answers, newest first (by when the answer was given), with a Reviewed checkbox. Unreviewed thumbs downs are the "new" count on the tab.
@@ -238,7 +238,7 @@ The feature is built as a self-contained module (e.g. `src/client/components/Hel
 
 Findings from the prototype. They keep the animation simple to build and maintain:
 
-- **One component, one view state** (`closed | menu | chat`, plus expanded/full-screen) and a table of **fixed box sizes** per view. Plain CSS transitions on width, height and border radius animate between them. There's no DOM measuring and no animation library.
+- **One component, one view state** (`pill | menu | chat`, plus expanded/full-screen) and a table of **fixed box sizes** per view. Plain CSS transitions on width, height and border radius animate between them. There's no DOM measuring and no animation library.
 - Each view's content fades in after the resize. The chat content is laid out at its final size, so it's clipped during the growth instead of reflowing.
 - **The widget sits in a zero-height sticky root** just above the page footer, so it rides along the viewport's bottom edge and stops above the footer, without scroll listeners (updating the position from a scroll listener stuttered while smooth scrolling). The root's sticky `top` keeps the pill and the menu from being pushed past the top of the viewport. The chat pins the root to the viewport's bottom, so it covers the footer rather than the NavBar. The full-screen chat is positioned in the same root, so switching to it doesn't make the box jump.
 - **The seal is a single element outside the resizing box**, positioned from the widget's bottom-right corner with a `transform`. Positioning it relative to the box made it jump ahead of the box's resize animation.

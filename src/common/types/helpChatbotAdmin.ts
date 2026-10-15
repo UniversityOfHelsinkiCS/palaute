@@ -1,7 +1,7 @@
 import type { HelpChatbotRating, HelpChatbotTurnStatus } from './helpChatbot'
 
 // Wire format of the NorppAI viewer, the admin tab for reading saved help chatbot conversations.
-// Served by the server's routes/helpChatbot/adminController.ts under /admin/help-chatbot.
+// Served by the server's routes/helpChatbot/helpChatbotAdminController.ts under /admin/help-chatbot.
 // See "Viewer" in documentation/help_chatbot.md.
 
 // A turn's metadata as read back: anything the database holds, unlike HelpChatbotTurnMetadata, which is

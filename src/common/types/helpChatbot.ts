@@ -2,7 +2,7 @@ import type { TURN_STATUSES } from '../helpChatbot'
 import type { LanguageId } from './common'
 
 // Wire format of the help chatbot's backend, and a turn's status and metadata, which the admin viewer's
-// wire format uses too. Used by the client's HelpChatbot/helpChatbotService.ts and the server's
+// wire format uses too. Used by the client's HelpChatbot/api.ts and the server's
 // routes/helpChatbot. See "Backend" in documentation/help_chatbot.md.
 
 export type HelpChatbotRating = 'up' | 'down'

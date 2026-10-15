@@ -1,4 +1,4 @@
-// The chat's own model. Independent of the backend's wire format, which only helpChatbotService.ts knows.
+// The chat's own model. Independent of the backend's wire format, which only api.ts knows.
 
 export type UserEntry = { id: string; role: 'user'; text: string; status: 'waiting' | 'answered' | 'failed' }
 
