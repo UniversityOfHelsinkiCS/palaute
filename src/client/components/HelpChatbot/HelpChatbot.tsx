@@ -40,6 +40,8 @@ const boxTransition = [
   ...['background-color', 'border-color', 'box-shadow'].map(property => `${property} .18s`),
 ].join(', ')
 
+const IDLE_FLIP_INTERVAL_MS = 15_000
+
 // Stays mounted across in-app navigation, which is what persists the conversation
 const HelpChatbot = () => {
   const { t } = useTranslation()
@@ -102,6 +104,12 @@ const HelpChatbot = () => {
       style.overflow = previousOverflow
     }
   }, [fullScreen])
+
+  useEffect(() => {
+    if (view !== 'closed' || reduceMotion) return undefined
+    const interval = setInterval(() => setSealOnce(true), IDLE_FLIP_INTERVAL_MS)
+    return () => clearInterval(interval)
+  }, [view, reduceMotion])
 
   const openFromPill = () => {
     if (!reduceMotion) setSealOnce(true)
