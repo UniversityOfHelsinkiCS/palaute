@@ -1,15 +1,16 @@
 import type { HelpChatbotRating, HelpChatbotTurnStatus } from './helpChatbot'
 
 // Wire format of the NorppAI viewer, the admin tab for reading saved help chatbot conversations.
-// Served by the server's routes/helpChatbot/adminController.ts under /admin/norppai.
+// Served by the server's routes/helpChatbot/adminController.ts under /admin/help-chatbot.
 // See "Viewer" in documentation/help_chatbot.md.
 
-// A turn's metadata as read back: anything the database holds
-export type NorppaiMetadata = Record<string, unknown>
+// A turn's metadata as read back: anything the database holds, unlike HelpChatbotTurnMetadata, which is
+// what the code writes
+export type HelpChatbotSavedMetadata = Record<string, unknown>
 
 // € per million tokens, from validFrom (inclusive) to validTo (exclusive, null while current).
 // family is the model without Azure's version date, e.g. gpt-5-mini for gpt-5-mini-2025-08-07.
-export type NorppaiPrice = {
+export type HelpChatbotPrice = {
   family: string
   validFrom: string
   validTo: string | null
@@ -20,7 +21,7 @@ export type NorppaiPrice = {
 
 // In euros, by token type: uncached input, cached input, output without the reasoning, and reasoning (billed at
 // the output price). unpricedTurns counts turns with token usage but no price, which aren't in the sums.
-export type NorppaiCost = {
+export type HelpChatbotCost = {
   input: number
   cachedInput: number
   output: number
@@ -29,38 +30,38 @@ export type NorppaiCost = {
   unpricedTurns: number
 }
 
-// GET /admin/norppai/meta
-export type GetNorppaiMetaResponse = {
+// GET /admin/help-chatbot/meta
+export type GetHelpChatbotMetaResponse = {
   // Thumbs downs no admin has marked reviewed
   newFeedbackCount: number
-  prices: NorppaiPrice[]
+  prices: HelpChatbotPrice[]
 }
 
 // Dates are YYYY-MM-DD days in Helsinki time, both inclusive
-export type NorppaiDateRange = { from: string; to: string }
+export type HelpChatbotDateRange = { from: string; to: string }
 
-export type NorppaiFeedbackFilter = 'any' | 'down' | 'comment' | 'up' | 'none'
+export type HelpChatbotFeedbackFilter = 'any' | 'down' | 'comment' | 'up' | 'none'
 
-export type NorppaiProblemFilter = 'any' | 'empty' | 'failed' | 'aborted' | 'cutOff'
+export type HelpChatbotProblemFilter = 'any' | 'empty' | 'failed' | 'aborted' | 'cutOff'
 
-// GET /admin/norppai/conversations. Omitted fields don't filter. Outside production, turns answered by the
+// GET /admin/help-chatbot/conversations. Omitted fields don't filter. Outside production, turns answered by the
 // mock are included, as they are in the other views.
-export type GetNorppaiConversationsQuery = NorppaiDateRange & {
+export type GetHelpChatbotConversationsQuery = HelpChatbotDateRange & {
   search?: string
-  feedback?: NorppaiFeedbackFilter
-  problems?: NorppaiProblemFilter
+  feedback?: HelpChatbotFeedbackFilter
+  problems?: HelpChatbotProblemFilter
   user?: string
   offset?: number
 }
 
 // The counts are of the turns within the date range
-export type NorppaiConversationSummary = {
+export type HelpChatbotConversationSummary = {
   conversationId: string
   userId: string | null
   username: string | null
   startedAt: string
   // Of the first turn, with the impersonated user's username looked up
-  metadata: NorppaiMetadata
+  metadata: HelpChatbotSavedMetadata
   impersonatedUsername: string | null
   firstQuestion: string | null
   questions: number
@@ -75,14 +76,14 @@ export type NorppaiConversationSummary = {
   cost: number
 }
 
-export type GetNorppaiConversationsResponse = {
-  conversations: NorppaiConversationSummary[]
+export type GetHelpChatbotConversationsResponse = {
+  conversations: HelpChatbotConversationSummary[]
   // Of all pages
   total: number
   totalQuestions: number
 }
 
-export type NorppaiTurn = {
+export type HelpChatbotTurnDetails = {
   id: string
   // 1-based, in the order asked
   number: number
@@ -90,7 +91,7 @@ export type NorppaiTurn = {
   status: HelpChatbotTurnStatus
   question: string | null
   answer: string | null
-  metadata: NorppaiMetadata
+  metadata: HelpChatbotSavedMetadata
   impersonatedUsername: string | null
   finishReason: string | null
   deployment: string | null
@@ -114,30 +115,30 @@ export type NorppaiTurn = {
   retriedAsNumber: number | null
 }
 
-// GET /admin/norppai/conversation?conversationId=&userId= (no userId: a conversation whose user was cleared)
-export type GetNorppaiConversationResponse = {
+// GET /admin/help-chatbot/conversation?conversationId=&userId= (no userId: a conversation whose user was cleared)
+export type GetHelpChatbotConversationResponse = {
   conversationId: string
   userId: string | null
   username: string | null
-  turns: NorppaiTurn[]
+  turns: HelpChatbotTurnDetails[]
 }
 
-export type NorppaiRatingFilter = 'down' | 'up' | 'both'
+export type HelpChatbotRatingFilter = 'down' | 'up' | 'both'
 
-// GET /admin/norppai/feedback
-export type GetNorppaiFeedbackQuery = Partial<NorppaiDateRange> & {
-  rating?: NorppaiRatingFilter
+// GET /admin/help-chatbot/feedback
+export type GetHelpChatbotFeedbackQuery = Partial<HelpChatbotDateRange> & {
+  rating?: HelpChatbotRatingFilter
   withComment?: boolean
   hideReviewed?: boolean
 }
 
-export type NorppaiFeedbackItem = {
+export type HelpChatbotFeedbackItem = {
   turnId: string
   conversationId: string
   userId: string | null
   username: string | null
   createdAt: string
-  metadata: NorppaiMetadata
+  metadata: HelpChatbotSavedMetadata
   status: HelpChatbotTurnStatus
   finishReason: string | null
   rating: HelpChatbotRating
@@ -148,21 +149,21 @@ export type NorppaiFeedbackItem = {
   gitSha: string | null
 }
 
-export type GetNorppaiFeedbackResponse = {
-  items: NorppaiFeedbackItem[]
+export type GetHelpChatbotFeedbackResponse = {
+  items: HelpChatbotFeedbackItem[]
   // True when there were more than the newest items returned
   truncated: boolean
 }
 
-// PUT /admin/norppai/turns/:id/reviewed
-export type PutNorppaiReviewedBody = { reviewed: boolean }
+// PUT /admin/help-chatbot/turns/:id/reviewed
+export type PutHelpChatbotReviewedBody = { reviewed: boolean }
 
-export type NorppaiUsageGrouping = 'day' | 'week' | 'month'
+export type HelpChatbotUsageGrouping = 'day' | 'week' | 'month'
 
-// GET /admin/norppai/usage
-export type GetNorppaiUsageQuery = NorppaiDateRange & { groupBy?: NorppaiUsageGrouping }
+// GET /admin/help-chatbot/usage
+export type GetHelpChatbotUsageQuery = HelpChatbotDateRange & { groupBy?: HelpChatbotUsageGrouping }
 
-export type NorppaiUsage = {
+export type HelpChatbotUsage = {
   questions: number
   answered: number
   empty: number
@@ -179,14 +180,14 @@ export type NorppaiUsage = {
   reasoningTokens: number
   // Of the billed turns
   avgDurationMs: number | null
-  cost: NorppaiCost
+  cost: HelpChatbotCost
 }
 
-export type GetNorppaiUsageResponse = {
-  totals: NorppaiUsage & { conversations: number }
+export type GetHelpChatbotUsageResponse = {
+  totals: HelpChatbotUsage & { conversations: number }
   // Every period in the range, also empty ones. start is the period's first day.
-  periods: (NorppaiUsage & { start: string })[]
+  periods: (HelpChatbotUsage & { start: string })[]
   // Newest first
-  versions: (NorppaiUsage & { gitSha: string | null; models: string[]; firstAt: string; lastAt: string })[]
-  prices: NorppaiPrice[]
+  versions: (HelpChatbotUsage & { gitSha: string | null; models: string[]; firstAt: string; lastAt: string })[]
+  prices: HelpChatbotPrice[]
 }

@@ -13,9 +13,9 @@ import CacheTab from './tabs/Cache/CacheTab'
 import EnableCourses from './tabs/EnableCourses/EnableCourses'
 import FeedbackCorrespondents from './tabs/FeedbackCorrescpondents/FeedbackCorrespondents'
 import FeedbackTargetInspector from './tabs/FeedbackTargetInspector/FeedbackTargetInspector'
+import HelpChatbotView from './tabs/HelpChatbot/HelpChatbotView'
 import MiscTab from './tabs/Misc/MiscTab'
 import NorppaFeedbackView from './tabs/NorppaFeedback/NorppaFeedbackView'
-import NorppaiView from './tabs/Norppai/NorppaiView'
 import NorppaStatisticView from './tabs/NorppaStatistics/NorppaStatisticsView'
 import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/OrganisationSurveyInspector'
 import UpdaterView from './tabs/Updater/UpdaterView'
@@ -110,7 +110,7 @@ const AdminView = () => {
         <Route path="/enable" element={<EnableCourses />} />
         <Route path="/feedback" element={<NorppaFeedbackView />} />
         <Route path="/statistics" element={<NorppaStatisticView />} />
-        {HELP_CHATBOT_ENABLED && <Route path="/norppai/*" element={<NorppaiView />} />}
+        {HELP_CHATBOT_ENABLED && <Route path="/norppai/*" element={<HelpChatbotView />} />}
         <Route path="/feedback-targets" element={<FeedbackTargetInspector />} />
         <Route path="/organisation-surveys" element={<OrganisationSurveyInspector />} />
         <Route path="/feedback-correspondents" element={<FeedbackCorrespondents />} />

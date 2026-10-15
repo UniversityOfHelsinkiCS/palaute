@@ -24,7 +24,7 @@ const getUiLanguage = (): LanguageId => UI_LANGUAGES.find(language => language =
 
 // previousAnswerId is the latest answer shown in the conversation, null before the first one; the server
 // keeps the history. Any rejection is shown as "No answer received", except a cancellation (see isCancelled).
-export const askNorppai = async (
+export const askQuestion = async (
   conversationId: string,
   previousAnswerId: string | null,
   question: string,

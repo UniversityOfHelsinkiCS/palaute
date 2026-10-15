@@ -1,7 +1,7 @@
 import type {
-  GetNorppaiConversationsQuery,
-  NorppaiFeedbackFilter,
-  NorppaiProblemFilter,
+  GetHelpChatbotConversationsQuery,
+  HelpChatbotFeedbackFilter,
+  HelpChatbotProblemFilter,
 } from '@common/types/helpChatbotAdmin'
 
 import { Box, MenuItem, Paper, TextField, Typography } from '@mui/material'
@@ -14,7 +14,7 @@ import ConversationList from './ConversationList'
 import DebouncedTextField from './DebouncedTextField'
 import useUrlFilters, { daysAgo, today } from './useUrlFilters'
 
-const FEEDBACK_OPTIONS: { value: NorppaiFeedbackFilter; label: string }[] = [
+const FEEDBACK_OPTIONS: { value: HelpChatbotFeedbackFilter; label: string }[] = [
   { value: 'any', label: 'Any' },
   { value: 'down', label: 'Has thumbs down' },
   { value: 'comment', label: 'Has a comment' },
@@ -22,7 +22,7 @@ const FEEDBACK_OPTIONS: { value: NorppaiFeedbackFilter; label: string }[] = [
   { value: 'none', label: 'No feedback' },
 ]
 
-const PROBLEM_OPTIONS: { value: NorppaiProblemFilter; label: string }[] = [
+const PROBLEM_OPTIONS: { value: HelpChatbotProblemFilter; label: string }[] = [
   { value: 'any', label: 'Any' },
   { value: 'empty', label: 'Empty answer' },
   { value: 'failed', label: 'Failed' },
@@ -40,7 +40,7 @@ const ConversationsView = () => {
 
   const feedback = get('feedback')
   const problems = get('problems')
-  const query: Omit<GetNorppaiConversationsQuery, 'offset'> = {
+  const query: Omit<GetHelpChatbotConversationsQuery, 'offset'> = {
     from: get('from') ?? daysAgo(DEFAULT_DAYS - 1),
     to: get('to') ?? today(),
     search: get('q'),

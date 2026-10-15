@@ -1,9 +1,9 @@
 import type {
-  GetNorppaiUsageQuery,
-  GetNorppaiUsageResponse,
-  NorppaiPrice,
-  NorppaiUsage,
-  NorppaiUsageGrouping,
+  GetHelpChatbotUsageQuery,
+  GetHelpChatbotUsageResponse,
+  HelpChatbotPrice,
+  HelpChatbotUsage,
+  HelpChatbotUsageGrouping,
 } from '@common/types/helpChatbotAdmin'
 import type { Theme } from '@mui/material'
 import type { SystemStyleObject } from '@mui/system'
@@ -30,29 +30,29 @@ import type { UsageMetric } from './UsageChart'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
-import { useNorppaiUsage } from './api'
+import { useHelpChatbotUsage } from './api'
 import { formatDate, formatDuration, formatEuros, formatNumber, formatPercent, shortSha } from './format'
 import UsageChart from './UsageChart'
 import useUrlFilters, { daysAgo, today } from './useUrlFilters'
 
-const GROUPINGS: NorppaiUsageGrouping[] = ['day', 'week', 'month']
+const GROUPINGS: HelpChatbotUsageGrouping[] = ['day', 'week', 'month']
 const METRICS: UsageMetric[] = ['questions', 'tokens', 'cost']
 
-const isGrouping = (value: string | undefined): value is NorppaiUsageGrouping => GROUPINGS.some(g => g === value)
+const isGrouping = (value: string | undefined): value is HelpChatbotUsageGrouping => GROUPINGS.some(g => g === value)
 const isMetric = (value: string | undefined): value is UsageMetric => METRICS.some(m => m === value)
 
 const DEFAULT_DAYS = 30
 
 const average = (total: number, count: number) => (count === 0 ? '–' : formatNumber(total / count))
 
-const problems = (usage: NorppaiUsage) => usage.empty + usage.failed + usage.aborted + usage.pending
+const problems = (usage: HelpChatbotUsage) => usage.empty + usage.failed + usage.aborted + usage.pending
 
 const csvCell = (value: string | number | null) => {
   const text = value === null ? '' : String(value)
   return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
 }
 
-const downloadCsv = (usage: GetNorppaiUsageResponse, query: GetNorppaiUsageQuery) => {
+const downloadCsv = (usage: GetHelpChatbotUsageResponse, query: GetHelpChatbotUsageQuery) => {
   const header = [
     'period start',
     'questions',
@@ -136,7 +136,7 @@ const NUMERIC: SystemStyleObject<Theme> = {
   whiteSpace: 'nowrap',
 }
 
-const CostBreakdown = ({ totals }: { totals: NorppaiUsage }) => {
+const CostBreakdown = ({ totals }: { totals: HelpChatbotUsage }) => {
   const rows = [
     { label: 'Uncached input', tokens: totals.promptTokens - totals.cachedTokens, cost: totals.cost.input },
     { label: 'Cached input', tokens: totals.cachedTokens, cost: totals.cost.cachedInput },
@@ -177,7 +177,7 @@ const CostBreakdown = ({ totals }: { totals: NorppaiUsage }) => {
   )
 }
 
-const PriceTable = ({ prices }: { prices: NorppaiPrice[] }) => (
+const PriceTable = ({ prices }: { prices: HelpChatbotPrice[] }) => (
   <TableContainer>
     <Table size="small" aria-label="Prices">
       <TableHead>
@@ -206,7 +206,7 @@ const PriceTable = ({ prices }: { prices: NorppaiPrice[] }) => (
   </TableContainer>
 )
 
-const VersionTable = ({ versions }: { versions: GetNorppaiUsageResponse['versions'] }) => (
+const VersionTable = ({ versions }: { versions: GetHelpChatbotUsageResponse['versions'] }) => (
   <TableContainer>
     <Table size="small" aria-label="Usage by version" sx={{ minWidth: 1000 }}>
       <TableHead>
@@ -260,13 +260,13 @@ const UsageView = () => {
   const { get, set } = useUrlFilters()
   const groupBy = get('groupBy')
   const metric = get('show')
-  const query: GetNorppaiUsageQuery = {
+  const query: GetHelpChatbotUsageQuery = {
     from: get('from') ?? daysAgo(DEFAULT_DAYS - 1),
     to: get('to') ?? today(),
     groupBy: isGrouping(groupBy) ? groupBy : 'day',
   }
   const shownMetric = isMetric(metric) ? metric : 'questions'
-  const { data: usage, isLoading, isError, isFetching } = useNorppaiUsage(query)
+  const { data: usage, isLoading, isError, isFetching } = useHelpChatbotUsage(query)
 
   return (
     <Box>

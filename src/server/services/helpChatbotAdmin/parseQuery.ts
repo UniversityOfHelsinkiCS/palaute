@@ -1,8 +1,8 @@
 import type {
-  GetNorppaiConversationsQuery,
-  GetNorppaiFeedbackQuery,
-  GetNorppaiUsageQuery,
-  PutNorppaiReviewedBody,
+  GetHelpChatbotConversationsQuery,
+  GetHelpChatbotFeedbackQuery,
+  GetHelpChatbotUsageQuery,
+  PutHelpChatbotReviewedBody,
 } from '@common/types/helpChatbotAdmin'
 
 import z from 'zod/v4'
@@ -45,7 +45,7 @@ const ConversationsQuerySchema = z
   })
   .refine(inOrder, 'from must not be after to')
 
-export const parseConversationsQuery = (query: unknown): GetNorppaiConversationsQuery =>
+export const parseConversationsQuery = (query: unknown): GetHelpChatbotConversationsQuery =>
   parse(ConversationsQuerySchema, query)
 
 const ConversationKeySchema = z.object({
@@ -68,7 +68,7 @@ const FeedbackQuerySchema = z
   })
   .refine(inOrder, 'from must not be after to')
 
-export const parseFeedbackQuery = (query: unknown): GetNorppaiFeedbackQuery => parse(FeedbackQuerySchema, query)
+export const parseFeedbackQuery = (query: unknown): GetHelpChatbotFeedbackQuery => parse(FeedbackQuerySchema, query)
 
 const UsageQuerySchema = z
   .object({
@@ -78,8 +78,8 @@ const UsageQuerySchema = z
   })
   .refine(inOrder, 'from must not be after to')
 
-export const parseUsageQuery = (query: unknown): GetNorppaiUsageQuery => parse(UsageQuerySchema, query)
+export const parseUsageQuery = (query: unknown): GetHelpChatbotUsageQuery => parse(UsageQuerySchema, query)
 
 const ReviewedBodySchema = z.object({ reviewed: z.boolean() })
 
-export const parseReviewedBody = (body: unknown): PutNorppaiReviewedBody => parse(ReviewedBodySchema, body)
+export const parseReviewedBody = (body: unknown): PutHelpChatbotReviewedBody => parse(ReviewedBodySchema, body)

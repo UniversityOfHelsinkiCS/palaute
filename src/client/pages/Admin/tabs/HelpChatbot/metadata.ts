@@ -1,4 +1,4 @@
-import type { NorppaiMetadata } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotSavedMetadata } from '@common/types/helpChatbotAdmin'
 
 // A turn's metadata (HelpChatbotTurnMetadata) for display. The keys the code writes get a label; any other key
 // is shown as it is, so context saved later appears without changes here.
@@ -18,7 +18,10 @@ const keyOrder = (key: string) => {
   return known === -1 ? Infinity : known
 }
 
-export const describeMetadata = (metadata: NorppaiMetadata, impersonatedUsername: string | null): MetadataEntry[] =>
+export const describeMetadata = (
+  metadata: HelpChatbotSavedMetadata,
+  impersonatedUsername: string | null
+): MetadataEntry[] =>
   Object.entries(metadata)
     .sort(([a], [b]) => keyOrder(a) - keyOrder(b) || a.localeCompare(b))
     .map(([key, value]) => ({
@@ -41,5 +44,5 @@ export const metadataChanges = (entries: MetadataEntry[], base: MetadataEntry[])
 export const formatEntries = (entries: MetadataEntry[]) =>
   entries.map(({ label, value }) => `${label}: ${value}`).join(' · ')
 
-export const getUiLanguage = (metadata: NorppaiMetadata) =>
+export const getUiLanguage = (metadata: HelpChatbotSavedMetadata) =>
   typeof metadata.uiLanguage === 'string' ? metadata.uiLanguage : null

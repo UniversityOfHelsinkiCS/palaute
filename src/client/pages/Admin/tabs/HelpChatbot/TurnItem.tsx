@@ -1,5 +1,5 @@
 import type { HelpChatbotTurnStatus } from '@common/types/helpChatbot'
-import type { NorppaiTurn } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotTurnDetails } from '@common/types/helpChatbotAdmin'
 import type { ChipProps } from '@mui/material'
 
 import { ThumbDownOutlined, ThumbUpOutlined } from '@mui/icons-material'
@@ -22,7 +22,7 @@ const STATUS_COLORS: Record<HelpChatbotTurnStatus, ChipProps['color']> = {
 }
 
 type TurnItemProps = {
-  turn: NorppaiTurn
+  turn: HelpChatbotTurnDetails
   highlighted: boolean
   // Metadata that differs from the conversation's first turn
   metadataChanges: MetadataEntry[]

@@ -1,4 +1,4 @@
-import type { NorppaiCost, NorppaiDateRange, NorppaiUsage } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotCost, HelpChatbotDateRange, HelpChatbotUsage } from '@common/types/helpChatbotAdmin'
 
 import { QueryTypes } from 'sequelize'
 
@@ -28,7 +28,7 @@ export class Conditions {
   }
 
   // A YYYY-MM-DD range of days in Helsinki time
-  dateRange({ from, to }: Partial<NorppaiDateRange>) {
+  dateRange({ from, to }: Partial<HelpChatbotDateRange>) {
     if (from) this.add(`t.created_at >= CAST(:from AS timestamp) AT TIME ZONE '${TIME_ZONE}'`, { from })
     if (to) this.add(`t.created_at < CAST(CAST(:to AS date) + 1 AS timestamp) AT TIME ZONE '${TIME_ZONE}'`, { to })
     return this
@@ -98,7 +98,7 @@ export const pricedTurns = (conditions: Conditions) => {
   return { sql, replacements: { ...prices.replacements, ...conditions.replacements } }
 }
 
-// Aggregates of `turns` as t, for NorppaiUsage. count(t.id) rather than count(*), so a period without turns
+// Aggregates of `turns` as t, for HelpChatbotUsage. count(t.id) rather than count(*), so a period without turns
 // counts zero when the turns are left joined. Conversations are counted separately: a count(DISTINCT) per group
 // was the slowest part of the usage queries.
 export const USAGE_COLUMNS = `
@@ -125,7 +125,7 @@ export const USAGE_COLUMNS = `
 // Postgres returns counts and sums as strings
 type NumericValue = string | number | null
 
-export type UsageRow = Record<Exclude<keyof NorppaiUsage, 'cost'>, NumericValue> & {
+export type UsageRow = Record<Exclude<keyof HelpChatbotUsage, 'cost'>, NumericValue> & {
   inputCost: NumericValue
   cachedCost: NumericValue
   outputCost: NumericValue
@@ -135,7 +135,7 @@ export type UsageRow = Record<Exclude<keyof NorppaiUsage, 'cost'>, NumericValue>
 
 export const toNumber = (value: NumericValue) => Number(value ?? 0)
 
-export const toCost = (row: UsageRow): NorppaiCost => {
+export const toCost = (row: UsageRow): HelpChatbotCost => {
   const cost = {
     input: toNumber(row.inputCost),
     cachedInput: toNumber(row.cachedCost),
@@ -149,7 +149,7 @@ export const toCost = (row: UsageRow): NorppaiCost => {
   }
 }
 
-export const toUsage = (row: UsageRow): NorppaiUsage => ({
+export const toUsage = (row: UsageRow): HelpChatbotUsage => ({
   questions: toNumber(row.questions),
   answered: toNumber(row.answered),
   empty: toNumber(row.empty),

@@ -1,4 +1,4 @@
-import type { GetNorppaiConversationsQuery, NorppaiConversationSummary } from '@common/types/helpChatbotAdmin'
+import type { GetHelpChatbotConversationsQuery, HelpChatbotConversationSummary } from '@common/types/helpChatbotAdmin'
 
 import { ThumbDownOutlined, ThumbUpOutlined } from '@mui/icons-material'
 import { Alert, Box, List, ListItem, ListItemButton, Paper, Typography } from '@mui/material'
@@ -8,11 +8,11 @@ import type { ConversationKey } from './api'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
-import { useNorppaiConversations } from './api'
+import { useHelpChatbotConversations } from './api'
 import { formatDateTime, formatEuros, formatNumber } from './format'
 import { getUiLanguage } from './metadata'
 
-const describeProblems = ({ failed, empty, aborted, cutOff }: NorppaiConversationSummary) => {
+const describeProblems = ({ failed, empty, aborted, cutOff }: HelpChatbotConversationSummary) => {
   const problems: [number, string][] = [
     [failed, 'failed'],
     [empty, 'empty'],
@@ -25,20 +25,20 @@ const describeProblems = ({ failed, empty, aborted, cutOff }: NorppaiConversatio
     .join(' · ')
 }
 
-const isSelected = (conversation: NorppaiConversationSummary, selected: ConversationKey | null) =>
+const isSelected = (conversation: HelpChatbotConversationSummary, selected: ConversationKey | null) =>
   selected !== null &&
   conversation.conversationId === selected.conversationId &&
   conversation.userId === selected.userId
 
 type ConversationListProps = {
-  query: Omit<GetNorppaiConversationsQuery, 'offset'>
+  query: Omit<GetHelpChatbotConversationsQuery, 'offset'>
   selected: ConversationKey | null
   onSelect: (key: ConversationKey) => void
 }
 
 const ConversationList = ({ query, selected, onSelect }: ConversationListProps) => {
   const { data, isLoading, isError, isFetching, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useNorppaiConversations(query)
+    useHelpChatbotConversations(query)
 
   if (isLoading) return <LoadingProgress />
   if (isError || !data) return <Alert severity="error">The conversations couldn&apos;t be loaded.</Alert>

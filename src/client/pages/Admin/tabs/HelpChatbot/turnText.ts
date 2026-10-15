@@ -1,4 +1,4 @@
-import type { GetNorppaiConversationResponse, NorppaiTurn } from '@common/types/helpChatbotAdmin'
+import type { GetHelpChatbotConversationResponse, HelpChatbotTurnDetails } from '@common/types/helpChatbotAdmin'
 
 import { formatDateTime, formatDuration, formatEuros, formatNumber, formatTime, shortSha } from './format'
 import { describeMetadata, formatEntries, metadataChanges } from './metadata'
@@ -6,7 +6,7 @@ import { describeMetadata, formatEntries, metadataChanges } from './metadata'
 // Texts describing a turn, shared by the conversation view and its Markdown export
 
 // Why a turn isn't part of the conversation the user saw, or null if it is
-export const describeOutsideHistory = (turn: NorppaiTurn): string | null => {
+export const describeOutsideHistory = (turn: HelpChatbotTurnDetails): string | null => {
   if (turn.inHistory) return null
   switch (turn.status) {
     case 'failed':
@@ -26,14 +26,14 @@ export const describeOutsideHistory = (turn: NorppaiTurn): string | null => {
   }
 }
 
-export const describeTokens = (turn: NorppaiTurn) => {
+export const describeTokens = (turn: HelpChatbotTurnDetails) => {
   if (turn.promptTokens === null) return null
   return `${formatNumber(turn.promptTokens)} in (${formatNumber(turn.cachedTokens ?? 0)} cached) · ${formatNumber(
     turn.completionTokens ?? 0
   )} out (${formatNumber(turn.reasoningTokens ?? 0)} reasoning)`
 }
 
-const describeRating = (turn: NorppaiTurn) => {
+const describeRating = (turn: HelpChatbotTurnDetails) => {
   if (turn.rating === null) return null
   const rating = turn.rating === 'up' ? 'Helpful' : 'Not helpful'
   return turn.feedbackComment ? `${rating}: "${turn.feedbackComment}"` : rating
@@ -47,7 +47,7 @@ const quote = (text: string) =>
 
 // For pasting a conversation into a review. Turns outside the history are included only if asked for.
 export const conversationToMarkdown = (
-  conversation: GetNorppaiConversationResponse,
+  conversation: GetHelpChatbotConversationResponse,
   { includeOutsideHistory }: { includeOutsideHistory: boolean }
 ) => {
   const turns = conversation.turns.filter(turn => includeOutsideHistory || turn.inHistory)

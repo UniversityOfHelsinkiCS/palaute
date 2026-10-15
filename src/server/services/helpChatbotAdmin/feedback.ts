@@ -1,8 +1,8 @@
 import type {
-  GetNorppaiFeedbackQuery,
-  GetNorppaiFeedbackResponse,
-  GetNorppaiMetaResponse,
-  NorppaiFeedbackItem,
+  GetHelpChatbotFeedbackQuery,
+  GetHelpChatbotFeedbackResponse,
+  GetHelpChatbotMetaResponse,
+  HelpChatbotFeedbackItem,
 } from '@common/types/helpChatbotAdmin'
 
 import z from 'zod/v4'
@@ -14,13 +14,13 @@ import { Conditions, select, toIso, toNumber } from './sql'
 
 const FEEDBACK_LIMIT = 500
 
-type FeedbackRow = Omit<NorppaiFeedbackItem, 'createdAt' | 'reviewedAt'> & {
+type FeedbackRow = Omit<HelpChatbotFeedbackItem, 'createdAt' | 'reviewedAt'> & {
   createdAt: Date
   reviewedAt: Date | null
 }
 
 // Newest first, by when the answer was given: feedback is almost always given right after
-export const getFeedback = async (query: GetNorppaiFeedbackQuery): Promise<GetNorppaiFeedbackResponse> => {
+export const getFeedback = async (query: GetHelpChatbotFeedbackQuery): Promise<GetHelpChatbotFeedbackResponse> => {
   const conditions = new Conditions().add('t.rating IS NOT NULL').dateRange(query).withoutMockInProduction()
   const rating = query.rating ?? 'down'
   if (rating !== 'both') conditions.add('t.rating = :rating', { rating })
@@ -65,7 +65,7 @@ export const setReviewed = async (turnId: string, reviewed: boolean) => {
   if (count === 0) throw ApplicationError.NotFound()
 }
 
-export const getMeta = async (): Promise<GetNorppaiMetaResponse> => {
+export const getMeta = async (): Promise<GetHelpChatbotMetaResponse> => {
   const conditions = new Conditions()
     .add("t.rating = 'down'")
     .add('t.feedback_reviewed_at IS NULL')

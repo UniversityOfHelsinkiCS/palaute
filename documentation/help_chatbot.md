@@ -121,7 +121,7 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 
 Everything backend-specific is behind one seam, `src/client/components/HelpChatbot/helpChatbotService.ts`. The rest of the module only uses its exports:
 
-- `askNorppai(conversationId, previousAnswerId, question, signal)` → `{ id, markdown }`. `previousAnswerId` is the latest answer in the conversation (null before the first one); the server keeps the history. Any rejection shows "No answer received".
+- `askQuestion(conversationId, previousAnswerId, question, signal)` → `{ id, markdown }`. `previousAnswerId` is the latest answer in the conversation (null before the first one); the server keeps the history. Any rejection shows "No answer received".
 - `sendFeedback(answerId, rating, comment?)`: saves a rating, replacing any earlier one. A null rating removes it.
 - `isCancelled(error)`: recognises a request aborted through `signal` (New conversation aborts it).
 
@@ -156,7 +156,7 @@ Every question is saved in `help_chatbot_turns`, one row per question, together 
 
 ### Viewer
 
-The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) reads the saved conversations. The client is `src/client/pages/Admin/tabs/Norppai/`, the API `GET`/`PUT /admin/norppai/…` in `routes/helpChatbot/adminController.ts` (mounted in the admin router, so admins only even once teachers can chat), the queries `services/helpChatbotAdmin/`. Filters live in the URL, so a link opens the same view.
+The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) reads the saved conversations. The client is `src/client/pages/Admin/tabs/HelpChatbot/`, the API `GET`/`PUT /admin/help-chatbot/…` in `routes/helpChatbot/adminController.ts` (mounted in the admin router, so admins only even once teachers can chat), the queries `services/helpChatbotAdmin/`. Filters live in the URL, so a link opens the same view.
 
 - **Conversations**: a list filtered by date, search, feedback, problems and user, and the full conversation, each turn with its status, tokens, cost and feedback. The conversation's header shows its first turn's metadata, and a turn shows only the metadata that differs from it; keys the viewer doesn't know are shown as they are. Turns that aren't on the history chain (failed, retried, never shown) are marked and can be hidden. "Copy as Markdown" copies the conversation for a review. A conversation is identified by `conversation_id` and `user_id` together, as the client makes up the id.
 - **Feedback**: rated answers, newest first (by when the answer was given), with a Reviewed checkbox. Unreviewed thumbs downs are the "new" count on the tab.

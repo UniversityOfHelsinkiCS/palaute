@@ -7,7 +7,7 @@ import type { ConversationKey } from './api'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
-import { useNorppaiConversation } from './api'
+import { useHelpChatbotConversation } from './api'
 import { formatDateTime, formatEuros, formatNumber, shortSha } from './format'
 import { describeMetadata, formatEntries, metadataChanges } from './metadata'
 import TurnItem from './TurnItem'
@@ -23,7 +23,7 @@ type ConversationDetailProps = {
 
 const ConversationDetail = ({ conversationKey, highlightedTurnId }: ConversationDetailProps) => {
   const { enqueueSnackbar } = useSnackbar()
-  const { data: conversation, isLoading, error } = useNorppaiConversation(conversationKey)
+  const { data: conversation, isLoading, error } = useHelpChatbotConversation(conversationKey)
   const [showOutsideHistory, setShowOutsideHistory] = useState(true)
   const highlightedRef = useRef<HTMLLIElement>(null)
 
@@ -58,10 +58,10 @@ const ConversationDetail = ({ conversationKey, highlightedTurnId }: Conversation
   }
 
   return (
-    <Paper variant="outlined" component="section" aria-labelledby="norppai-conversation-title">
+    <Paper variant="outlined" component="section" aria-labelledby="help-chatbot-conversation-title">
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 1.5, p: '14px 16px' }}>
         <Box>
-          <Typography id="norppai-conversation-title" component="h2" sx={{ fontSize: 17, fontWeight: 700 }}>
+          <Typography id="help-chatbot-conversation-title" component="h2" sx={{ fontSize: 17, fontWeight: 700 }}>
             {formatDateTime(first.createdAt)} · {conversation.username ?? 'unknown user'}
           </Typography>
           {firstMetadata.length > 0 && <Typography variant="body2">{formatEntries(firstMetadata)}</Typography>}

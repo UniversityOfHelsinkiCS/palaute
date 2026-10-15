@@ -3,7 +3,7 @@ import { useRef, useState } from 'react'
 
 import type { ChatEntry, Feedback, Rating, UserEntry } from './types'
 
-import { askNorppai, isCancelled, sendFeedback } from './helpChatbotService'
+import { askQuestion, isCancelled, sendFeedback } from './helpChatbotService'
 
 type Conversation = { id: string; entries: ChatEntry[] }
 
@@ -50,7 +50,7 @@ const useConversation = () => {
 
   const mutation = useMutation({
     mutationFn: ({ conversationId, previousAnswerId, question, signal }: RequestVariables) =>
-      askNorppai(conversationId, previousAnswerId, question, signal),
+      askQuestion(conversationId, previousAnswerId, question, signal),
     onSuccess: (answer, { conversationId, userEntryId }) =>
       updateIfCurrent(conversationId, entries => [
         ...setUserStatus(entries, userEntryId, 'answered'),

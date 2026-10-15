@@ -1,9 +1,9 @@
 import type {
-  GetNorppaiConversationResponse,
-  GetNorppaiConversationsResponse,
-  GetNorppaiFeedbackResponse,
-  GetNorppaiMetaResponse,
-  GetNorppaiUsageResponse,
+  GetHelpChatbotConversationResponse,
+  GetHelpChatbotConversationsResponse,
+  GetHelpChatbotFeedbackResponse,
+  GetHelpChatbotMetaResponse,
+  GetHelpChatbotUsageResponse,
 } from '@common/types/helpChatbotAdmin'
 
 import { Router, type Response } from 'express'
@@ -25,22 +25,25 @@ import {
   setReviewed,
 } from '../../services/helpChatbotAdmin'
 
-// The NorppAI viewer, mounted under /admin/norppai. Admins only, also once teachers can use the chatbot.
+// The NorppAI viewer, mounted under /admin/help-chatbot. Admins only, also once teachers can use the chatbot.
 
-const getMetaHandler = async (_req: AuthenticatedRequest, res: Response<GetNorppaiMetaResponse>) => {
+const getMetaHandler = async (_req: AuthenticatedRequest, res: Response<GetHelpChatbotMetaResponse>) => {
   res.send(await getMeta())
 }
 
-const getConversationsHandler = async (req: AuthenticatedRequest, res: Response<GetNorppaiConversationsResponse>) => {
+const getConversationsHandler = async (
+  req: AuthenticatedRequest,
+  res: Response<GetHelpChatbotConversationsResponse>
+) => {
   res.send(await getConversations(parseConversationsQuery(req.query)))
 }
 
-const getConversationHandler = async (req: AuthenticatedRequest, res: Response<GetNorppaiConversationResponse>) => {
+const getConversationHandler = async (req: AuthenticatedRequest, res: Response<GetHelpChatbotConversationResponse>) => {
   const { conversationId, userId } = parseConversationKey(req.query)
   res.send(await getConversation(conversationId, userId))
 }
 
-const getFeedbackHandler = async (req: AuthenticatedRequest, res: Response<GetNorppaiFeedbackResponse>) => {
+const getFeedbackHandler = async (req: AuthenticatedRequest, res: Response<GetHelpChatbotFeedbackResponse>) => {
   res.send(await getFeedback(parseFeedbackQuery(req.query)))
 }
 
@@ -50,7 +53,7 @@ const putReviewedHandler = async (req: AuthenticatedRequest, res: Response) => {
   res.sendStatus(204)
 }
 
-const getUsageHandler = async (req: AuthenticatedRequest, res: Response<GetNorppaiUsageResponse>) => {
+const getUsageHandler = async (req: AuthenticatedRequest, res: Response<GetHelpChatbotUsageResponse>) => {
   res.send(await getUsage(parseUsageQuery(req.query)))
 }
 

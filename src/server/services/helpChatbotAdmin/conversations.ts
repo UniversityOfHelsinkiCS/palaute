@@ -1,9 +1,9 @@
 import type {
-  GetNorppaiConversationResponse,
-  GetNorppaiConversationsQuery,
-  GetNorppaiConversationsResponse,
-  NorppaiConversationSummary,
-  NorppaiTurn,
+  GetHelpChatbotConversationResponse,
+  GetHelpChatbotConversationsQuery,
+  GetHelpChatbotConversationsResponse,
+  HelpChatbotConversationSummary,
+  HelpChatbotTurnDetails,
 } from '@common/types/helpChatbotAdmin'
 
 import { ApplicationError } from '../../util/ApplicationError'
@@ -15,19 +15,22 @@ export const CONVERSATIONS_PAGE_SIZE = 25
 // Postgres returns counts and sums as strings
 type Numeric = string | number
 
-type ConversationRow = Omit<NorppaiConversationSummary, 'startedAt' | NumericKeys<NorppaiConversationSummary>> & {
+type ConversationRow = Omit<
+  HelpChatbotConversationSummary,
+  'startedAt' | NumericKeys<HelpChatbotConversationSummary>
+> & {
   startedAt: Date
   total: Numeric
   totalQuestions: Numeric
-} & Record<NumericKeys<NorppaiConversationSummary>, Numeric>
+} & Record<NumericKeys<HelpChatbotConversationSummary>, Numeric>
 
 type NumericKeys<T> = { [K in keyof T]: T[K] extends number ? K : never }[keyof T]
 
 // A conversation is identified by its id and user together: the client makes up the id, so two users' ids can
 // collide. The counts are of the turns within the date range.
 export const getConversations = async (
-  query: GetNorppaiConversationsQuery
-): Promise<GetNorppaiConversationsResponse> => {
+  query: GetHelpChatbotConversationsQuery
+): Promise<GetHelpChatbotConversationsResponse> => {
   const turnConditions = new Conditions().dateRange(query).withoutMockInProduction()
   const turns = pricedTurns(turnConditions)
 
@@ -140,7 +143,7 @@ export const getConversations = async (
       total,
       totalQuestions,
       ...row
-    }): NorppaiConversationSummary => ({
+    }): HelpChatbotConversationSummary => ({
       ...row,
       startedAt: toIso(startedAt),
       questions: toNumber(questions),
@@ -164,7 +167,7 @@ export const getConversations = async (
 }
 
 type TurnRow = Omit<
-  NorppaiTurn,
+  HelpChatbotTurnDetails,
   'number' | 'followsNumber' | 'inHistory' | 'retriedAsNumber' | 'createdAt' | 'cost' | 'feedbackReviewedAt'
 > & {
   previousTurnId: string | null
@@ -178,7 +181,7 @@ type TurnRow = Omit<
 export const getConversation = async (
   conversationId: string,
   userId: string | null
-): Promise<GetNorppaiConversationResponse> => {
+): Promise<GetHelpChatbotConversationResponse> => {
   const conditions = new Conditions().add('t.conversation_id = :conversationId', { conversationId })
   if (userId === null) conditions.add('t.user_id IS NULL')
   else conditions.add('t.user_id = :userId', { userId })
@@ -209,7 +212,7 @@ export const getConversation = async (
     userId,
     username: rows[0].username,
     turns: annotateTurns(rows).map(
-      ({ previousTurnId, username, createdAt, feedbackReviewedAt, cost, ...turn }): NorppaiTurn => ({
+      ({ previousTurnId, username, createdAt, feedbackReviewedAt, cost, ...turn }): HelpChatbotTurnDetails => ({
         ...turn,
         createdAt: toIso(createdAt),
         feedbackReviewedAt: feedbackReviewedAt === null ? null : toIso(feedbackReviewedAt),

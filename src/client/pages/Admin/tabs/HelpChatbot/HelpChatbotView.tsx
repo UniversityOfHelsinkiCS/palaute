@@ -2,15 +2,15 @@ import { Box } from '@mui/material'
 import { Navigate, Route, Routes } from 'react-router'
 
 import { RouterTab, RouterTabs } from '../../../../components/common/RouterTabs'
-import { useNorppaiMeta } from './api'
+import { useHelpChatbotMeta } from './api'
 import ConversationsView from './ConversationsView'
 import FeedbackView from './FeedbackView'
 import UsageView from './UsageView'
 
 // The NorppAI viewer: saved help chatbot conversations, their feedback and their cost.
 // See "Viewer" in documentation/help_chatbot.md.
-const NorppaiView = () => {
-  const { data: meta } = useNorppaiMeta()
+const HelpChatbotView = () => {
+  const { data: meta } = useHelpChatbotMeta()
   const newFeedback = meta?.newFeedbackCount ?? 0
 
   return (
@@ -33,4 +33,4 @@ const NorppaiView = () => {
   )
 }
 
-export default NorppaiView
+export default HelpChatbotView

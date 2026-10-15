@@ -1,4 +1,4 @@
-import type { GetNorppaiFeedbackQuery, NorppaiRatingFilter } from '@common/types/helpChatbotAdmin'
+import type { GetHelpChatbotFeedbackQuery, HelpChatbotRatingFilter } from '@common/types/helpChatbotAdmin'
 
 import { ThumbDownOutlined, ThumbUpOutlined } from '@mui/icons-material'
 import {
@@ -22,19 +22,19 @@ import {
 import { Link as RouterLink } from 'react-router-dom'
 
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
-import { useNorppaiFeedback } from './api'
+import { useHelpChatbotFeedback } from './api'
 import { formatDateTime, shortSha } from './format'
 import { getUiLanguage } from './metadata'
 import ReviewedCheckbox from './ReviewedCheckbox'
 import useUrlFilters from './useUrlFilters'
 
-const RATINGS: { value: NorppaiRatingFilter; label: string }[] = [
+const RATINGS: { value: HelpChatbotRatingFilter; label: string }[] = [
   { value: 'down', label: 'Thumbs down' },
   { value: 'up', label: 'Thumbs up' },
   { value: 'both', label: 'Both' },
 ]
 
-const isRating = (value: string | undefined): value is NorppaiRatingFilter => RATINGS.some(r => r.value === value)
+const isRating = (value: string | undefined): value is HelpChatbotRatingFilter => RATINGS.some(r => r.value === value)
 
 const conversationLink = (conversationId: string, userId: string | null, turnId: string) => {
   const params = new URLSearchParams({ c: conversationId, turn: turnId })
@@ -47,14 +47,14 @@ const FeedbackView = () => {
   const { get, set } = useUrlFilters()
 
   const rating = get('rating')
-  const query: GetNorppaiFeedbackQuery = {
+  const query: GetHelpChatbotFeedbackQuery = {
     rating: isRating(rating) ? rating : 'down',
     withComment: get('comment') === 'true' || undefined,
     hideReviewed: get('hideReviewed') === 'true' || undefined,
     from: get('from'),
     to: get('to'),
   }
-  const { data, isLoading, isError, isFetching } = useNorppaiFeedback(query)
+  const { data, isLoading, isError, isFetching } = useHelpChatbotFeedback(query)
 
   return (
     <Box>
@@ -64,7 +64,7 @@ const FeedbackView = () => {
           size="small"
           aria-label="Rating"
           value={query.rating}
-          onChange={(_, value: NorppaiRatingFilter | null) =>
+          onChange={(_, value: HelpChatbotRatingFilter | null) =>
             value && set({ rating: value === 'down' ? undefined : value })
           }
         >

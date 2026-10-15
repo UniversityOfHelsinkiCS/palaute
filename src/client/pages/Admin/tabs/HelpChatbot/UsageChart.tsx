@@ -1,4 +1,4 @@
-import type { GetNorppaiUsageResponse, NorppaiUsageGrouping } from '@common/types/helpChatbotAdmin'
+import type { GetHelpChatbotUsageResponse, HelpChatbotUsageGrouping } from '@common/types/helpChatbotAdmin'
 
 import 'chart.js/auto'
 import { useTheme } from '@mui/material'
@@ -9,15 +9,15 @@ import { formatEuros, formatNumber } from './format'
 
 export type UsageMetric = 'questions' | 'tokens' | 'cost'
 
-const PERIOD_FORMATS: Record<NorppaiUsageGrouping, string> = {
+const PERIOD_FORMATS: Record<HelpChatbotUsageGrouping, string> = {
   day: 'd MMM',
   week: "'Week of' d MMM",
   month: 'MMM yyyy',
 }
 
 type UsageChartProps = {
-  periods: GetNorppaiUsageResponse['periods']
-  groupBy: NorppaiUsageGrouping
+  periods: GetHelpChatbotUsageResponse['periods']
+  groupBy: HelpChatbotUsageGrouping
   metric: UsageMetric
 }
 

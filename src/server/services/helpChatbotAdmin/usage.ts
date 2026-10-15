@@ -1,4 +1,4 @@
-import type { GetNorppaiUsageQuery, GetNorppaiUsageResponse } from '@common/types/helpChatbotAdmin'
+import type { GetHelpChatbotUsageQuery, GetHelpChatbotUsageResponse } from '@common/types/helpChatbotAdmin'
 
 import type { UsageRow } from './sql'
 
@@ -10,7 +10,7 @@ type PeriodRow = UsageRow & { start: string }
 type VersionRow = UsageRow & { gitSha: string | null; models: string[]; firstAt: Date; lastAt: Date }
 
 // Periods are days, weeks (from Monday) or months in Helsinki time
-export const getUsage = async (query: GetNorppaiUsageQuery): Promise<GetNorppaiUsageResponse> => {
+export const getUsage = async (query: GetHelpChatbotUsageQuery): Promise<GetHelpChatbotUsageResponse> => {
   const groupBy = query.groupBy ?? 'day'
   const conditions = new Conditions().dateRange(query).withoutMockInProduction()
   const turns = pricedTurns(conditions)
