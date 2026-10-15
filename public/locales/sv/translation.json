@@ -87,6 +87,7 @@
     "invalidDate": "Ogiltigt datum",
     "invalidStudentNumbers": "Kontrollera de studentnumrena som är markerade som ogiltiga",
     "moreInvalidStudentNumbers": "+ {{count}} ogiltiga studentnummer",
+    "moreStudentNumbers": "+ {{count}} studentnummer",
     "overlappingStudentTeacher": "Den ansvariga personen kan inte samtidigt vara student på kursen"
   },
   "links": {

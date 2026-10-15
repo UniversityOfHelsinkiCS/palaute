@@ -92,6 +92,7 @@
     "invalidDate": "Virheellinen päivämäärä",
     "invalidStudentNumbers": "Tarkistaisitko merkityt virheelliset opiskelijanumerot",
     "moreInvalidStudentNumbers": "+ {{count}} virheellistä opiskelijanumeroa",
+    "moreStudentNumbers": "+ {{count}} opiskelijanumeroa",
     "overlappingStudentTeacher": "Vastuuhenkilö ei voi olla samalla kurssin opiskelija"
   },
   "links": {

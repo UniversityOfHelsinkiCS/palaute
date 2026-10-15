@@ -94,33 +94,44 @@ export const getOverlappingStudentTeachers = data => {
   return overlappingStudentTeachers
 }
 
-export const getOverlappingStudentTeachersError = (t, studentNumbers) => ({
-  text: `${t('validationErrors:overlappingStudentTeacher')}: ${studentNumbers.join(', ')}`,
-  data: studentNumbers,
-  kind: 'overlap',
-})
+// The error text is announced by screen readers, so long lists are cut short
+const LISTED_ERROR_STUDENT_NUMBERS = 4
 
-const LISTED_INVALID_STUDENT_NUMBERS = 10
-
-const getInvalidStudentNumbersErrorText = (t, invalidStudentNumbers) => {
+const getStudentNumbersErrorText = (t, messageKey, moreKey, studentNumbers) => {
   // A single remaining number is listed rather than summarised as "+ 1"
   const listed =
-    invalidStudentNumbers.length > LISTED_INVALID_STUDENT_NUMBERS + 1
-      ? invalidStudentNumbers.slice(0, LISTED_INVALID_STUDENT_NUMBERS)
-      : invalidStudentNumbers
-  const restCount = invalidStudentNumbers.length - listed.length
+    studentNumbers.length > LISTED_ERROR_STUDENT_NUMBERS + 1
+      ? studentNumbers.slice(0, LISTED_ERROR_STUDENT_NUMBERS)
+      : studentNumbers
+  const restCount = studentNumbers.length - listed.length
 
-  let text = `${t('validationErrors:invalidStudentNumbers')}: ${listed.join(', ')}`
+  let text = `${t(messageKey)}: ${listed.join(', ')}`
 
   if (restCount > 0) {
-    text += ` ${t('validationErrors:moreInvalidStudentNumbers', { count: restCount })}`
+    text += ` ${t(moreKey, { count: restCount })}`
   }
 
   return text
 }
 
+export const getOverlappingStudentTeachersError = (t, studentNumbers) => ({
+  text: getStudentNumbersErrorText(
+    t,
+    'validationErrors:overlappingStudentTeacher',
+    'validationErrors:moreStudentNumbers',
+    studentNumbers
+  ),
+  data: studentNumbers,
+  kind: 'overlap',
+})
+
 export const getInvalidStudentNumbersError = (t, invalidStudentNumbers) => ({
-  text: getInvalidStudentNumbersErrorText(t, invalidStudentNumbers),
+  text: getStudentNumbersErrorText(
+    t,
+    'validationErrors:invalidStudentNumbers',
+    'validationErrors:moreInvalidStudentNumbers',
+    invalidStudentNumbers
+  ),
   data: invalidStudentNumbers,
   kind: 'invalid',
 })

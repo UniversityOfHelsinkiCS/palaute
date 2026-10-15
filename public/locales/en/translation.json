@@ -97,6 +97,7 @@
     "invalidDate": "Invalid date",
     "invalidStudentNumbers": "Please check the indicated invalid student numbers",
     "moreInvalidStudentNumbers": "+ {{count}} invalid student numbers",
+    "moreStudentNumbers": "+ {{count}} student numbers",
     "overlappingStudentTeacher": "Responsible person can not be a student at the same time"
   },
   "links": {
