@@ -1,21 +1,8 @@
-import type { LanguageId } from './common'
-import type { HelpChatbotRating } from './helpChatbot'
+import type { HelpChatbotRating, HelpChatbotTurnStatus } from './helpChatbot'
 
 // Wire format of the NorppAI viewer, the admin tab for reading saved help chatbot conversations.
 // Served by the server's routes/helpChatbot/adminController.ts under /admin/norppai.
 // See "Viewer" in documentation/help_chatbot.md.
-
-export type NorppaiTurnStatus = 'pending' | 'answered' | 'empty' | 'failed' | 'aborted'
-
-// Context saved with each turn (help_chatbot_turns.metadata), shown in the viewer when present. Every key is
-// optional and {} is valid. The database takes any object, so turns saved by older code may have keys this
-// type doesn't list; the viewer shows those as they are.
-export type HelpChatbotTurnMetadata = {
-  // The UI language the question was asked in, which the answer's labels follow
-  uiLanguage?: LanguageId
-  // During "login as", the user the admin was viewing Norppa as
-  impersonatedUserId?: string
-}
 
 // A turn's metadata as read back: anything the database holds
 export type NorppaiMetadata = Record<string, unknown>
@@ -100,7 +87,7 @@ export type NorppaiTurn = {
   // 1-based, in the order asked
   number: number
   createdAt: string
-  status: NorppaiTurnStatus
+  status: HelpChatbotTurnStatus
   question: string | null
   answer: string | null
   metadata: NorppaiMetadata
@@ -151,7 +138,7 @@ export type NorppaiFeedbackItem = {
   username: string | null
   createdAt: string
   metadata: NorppaiMetadata
-  status: NorppaiTurnStatus
+  status: HelpChatbotTurnStatus
   finishReason: string | null
   rating: HelpChatbotRating
   comment: string | null

@@ -1,6 +1,6 @@
-import type { NorppaiTurnStatus } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotTurnStatus } from '@common/types/helpChatbot'
 
-type ChainTurn = { id: string; previousTurnId: string | null; status: NorppaiTurnStatus; question: string | null }
+type ChainTurn = { id: string; previousTurnId: string | null; status: HelpChatbotTurnStatus; question: string | null }
 
 export type TurnAnnotations = {
   number: number

@@ -1,6 +1,5 @@
 import type { LanguageId } from '@common/types/common'
-import type { PostHelpChatbotMessageResponse } from '@common/types/helpChatbot'
-import type { HelpChatbotTurnMetadata } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotTurnMetadata, PostHelpChatbotMessageResponse } from '@common/types/helpChatbot'
 
 import * as Sentry from '@sentry/node'
 import { Router, type Response } from 'express'

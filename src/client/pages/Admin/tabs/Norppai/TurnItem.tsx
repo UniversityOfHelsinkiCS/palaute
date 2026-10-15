@@ -1,4 +1,5 @@
-import type { NorppaiTurn, NorppaiTurnStatus } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotTurnStatus } from '@common/types/helpChatbot'
+import type { NorppaiTurn } from '@common/types/helpChatbotAdmin'
 import type { ChipProps } from '@mui/material'
 
 import { ThumbDownOutlined, ThumbUpOutlined } from '@mui/icons-material'
@@ -12,7 +13,7 @@ import { formatEntries, type MetadataEntry } from './metadata'
 import ReviewedCheckbox from './ReviewedCheckbox'
 import { describeOutsideHistory, describeTokens } from './turnText'
 
-const STATUS_COLORS: Record<NorppaiTurnStatus, ChipProps['color']> = {
+const STATUS_COLORS: Record<HelpChatbotTurnStatus, ChipProps['color']> = {
   answered: 'success',
   empty: 'warning',
   failed: 'error',

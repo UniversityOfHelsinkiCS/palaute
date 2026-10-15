@@ -1,4 +1,4 @@
-import type { HelpChatbotTurnMetadata } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotTurnMetadata, HelpChatbotTurnStatus } from '@common/types/helpChatbot'
 
 import { randomUUID } from 'crypto'
 import { Op } from 'sequelize'
@@ -8,7 +8,7 @@ import type { Completion } from './azureCompletion'
 import type { ChatMessage } from './history'
 import type { HelpChatbotFeedback } from './parseRequest'
 
-import { HelpChatbotTurn, type TurnStatus } from '../../models/helpChatbotTurn'
+import { HelpChatbotTurn } from '../../models/helpChatbotTurn'
 import { ApplicationError } from '../../util/ApplicationError'
 import { GIT_SHA } from '../../util/config'
 import { buildHistory } from './history'
@@ -78,7 +78,7 @@ export const createTurn = (turn: NewTurn) =>
     feedbackReviewedAt: null,
   })
 
-export const setTurnStatus = (turn: HelpChatbotTurn, status: Extract<TurnStatus, 'failed' | 'aborted'>) =>
+export const setTurnStatus = (turn: HelpChatbotTurn, status: Extract<HelpChatbotTurnStatus, 'failed' | 'aborted'>) =>
   turn.update({ status })
 
 // Returns 'empty' when the model returned no content
@@ -86,7 +86,7 @@ export const saveCompletion = async (
   turn: HelpChatbotTurn,
   { deployment, model, content, finishReason, usage }: Completion,
   durationMs: number
-): Promise<Extract<TurnStatus, 'answered' | 'empty'>> => {
+): Promise<Extract<HelpChatbotTurnStatus, 'answered' | 'empty'>> => {
   const status = content.trim() === '' ? 'empty' : 'answered'
   await turn.update({
     status,

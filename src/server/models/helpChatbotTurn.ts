@@ -1,5 +1,4 @@
-import type { HelpChatbotRating } from '@common/types/helpChatbot'
-import type { HelpChatbotTurnMetadata } from '@common/types/helpChatbotAdmin'
+import type { HelpChatbotRating, HelpChatbotTurnMetadata, HelpChatbotTurnStatus } from '@common/types/helpChatbot'
 
 import {
   CreationOptional,
@@ -14,14 +13,8 @@ import {
   UUID,
 } from 'sequelize'
 
+import { TURN_STATUSES } from '../../common/helpChatbot'
 import { sequelize } from '../db/dbConnection'
-
-// pending: waiting for the model. answered: has an answer, so it can be part of a conversation's history.
-// empty: the model returned no content, but the tokens were billed. failed: the request to the model failed.
-// aborted: the client went away before the answer arrived.
-export const TURN_STATUSES = ['pending', 'answered', 'empty', 'failed', 'aborted'] as const
-
-export type TurnStatus = (typeof TURN_STATUSES)[number]
 
 // One question to the help chatbot and its answer, saved for analysing the answers and their cost.
 // See "Backend" in documentation/help_chatbot.md.
@@ -39,7 +32,7 @@ class HelpChatbotTurn extends Model<InferAttributes<HelpChatbotTurn>, InferCreat
   declare metadata: CreationOptional<HelpChatbotTurnMetadata>
   declare question: string | null
   declare answer: string | null
-  declare status: TurnStatus
+  declare status: HelpChatbotTurnStatus
   declare finishReason: string | null
   // The Azure deployment we called, and the model version Azure reports, which is what pricing depends on
   declare deployment: string | null
