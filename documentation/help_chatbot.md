@@ -1,261 +1,54 @@
 # Help chatbot
 
-An AI assistant that answers teachers' questions about using Norppa, e.g. "How do I add a question to my feedback survey?" or "Where can I see the responses to my survey?".
+NorppAI is an AI assistant that answers questions about using Norppa. It's an experimental MVP, shown to admins only. Code, routes and config call it the help chatbot; "NorppAI" is only for text users see. `NorppaFeedback` is unrelated: it's feedback about Norppa itself.
 
-This is an experimental MVP. The goal is to learn what makes this kind of feature useful to our users. This draft covers the **frontend only**; the backend is a placeholder that fakes the agreed contract.
+## Where things are
 
-## Terminology
+- Chat widget: `src/client/components/HelpChatbot/`, mounted in `AdUser.tsx` (it stays mounted across navigation, which is what keeps the conversation; a reload starts a new one).
+- Chat API: `routes/helpChatbot/` and `services/helpChatbot/`. Admin viewer: `src/client/pages/Admin/tabs/HelpChatbot/` at `/admin/norppai`, with its API in `routes/helpChatbot/helpChatbotAdminController.ts` and queries in `services/helpChatbotAdmin/`.
+- What the model knows: `services/helpChatbot/knowledge.md`, turned into the system prompt by `systemPrompt.ts`.
+- Saved conversations: the `help_chatbot_turns` table, one row per question.
 
-Use these words in code, comments and docs, and no others for the same things:
+## Switching it off and on
 
-- **NorppAI**: the assistant's name, for text users see (UI copy, the admin tab's label, its `/admin/norppai` page) and prose. Code identifiers, files, routes and config say **help chatbot** instead. `NorppaFeedback` is unrelated: feedback about Norppa itself.
-- **Widget**: the box in the bottom-right corner. It has three **views**: the **pill**, the **menu** and the **chat**.
-- **Conversation**: what the user sees between two New conversations. The client makes up its id.
-- **Turn**: one question and its answer, one row of `help_chatbot_turns`. Every id the chat and the viewer pass around is a turn id; there are no message ids.
-- **Question** and **answer**: the user's text and the model's text in a turn. Not "reply" or "response", and a question here is never a survey question.
-- **Entry**: an item in the chat's own list, on the client only. A question's entry exists before its turn does, and stays if the turn fails.
-- **History**: the chain of answered turns the model sees, built by the server.
-- **Completion**: one call to the model, which gives a turn its answer and token usage.
-- **Feedback**: a **rating** (thumbs up or down) on an answer, and for a thumbs down an optional **comment**. An admin marks it **reviewed**.
-- **Viewer**: the NorppAI admin tab, for reading saved conversations, feedback and usage.
+- `HELP_CHATBOT_ENABLED` (off in `config/default.js`, on in `config/hy.js`) hides the whole feature. Changing it needs a redeploy.
+- **In an emergency**, remove `AZURE_API_KEY` from the deployment: production then answers 503.
+- Without Azure credentials, development uses `mockCompletion.ts`. In development it fails 15% of requests at random; put `#long`, `#slow`, `#fail` or `#failonce` in a question for a long answer, an 8 s wait, a failure, or a failure on the first try only.
+- Rate limits (`rateLimit.ts`, Redis): 10 a minute and 100 a day per user, 2000 a day in total. If Redis is down, nothing is limited.
+- Access is checked only for admins, on the client in `AdUser.tsx` and on the server in `helpChatbotController.ts`. Opening the chat to teachers means changing both. The viewer stays admins-only because it's mounted in the admin router.
 
-## Principles
+## The model and its knowledge
 
-- **A convenience, never a push.** The user guide must always be clearly reachable, both from the help button and from inside the chat. Nobody should feel forced to use the AI.
-- **Accessibility is a primary focus**, not polish. The chat must meet the same WCAG 2.1 AA bar we hold the rest of Norppa to (see [accessibility.md](accessibility.md)).
-- **Answers only.** The assistant explains and links to the user guide; it never performs actions on the user's behalf.
+Azure OpenAI, deployment `HELP_CHATBOT_MODEL` (default `gpt-5-mini`), with the same key and resource as gptwrapper.
 
-## Scope of the MVP
+In `knowledge.md`, `[[section:key]]` becomes the UI label in the user's language (`[[section:key|fi]]` in the given one), so answers quote what users see on screen. A missing key fails the tests. HTML comments are notes for editors and never reach the model. The file is read from the source tree at runtime, as `tsc` doesn't copy it to `build/`. Its own header comment has the rules for editing it.
 
-### Visibility
+## Saved turns
 
-- Visible to **admin users only** for now.
-- The whole feature can be switched off per deployment with the `HELP_CHATBOT_ENABLED` config flag (off in `config/default.js`, on in `config/hy.js`). Changing it requires a redeploy; there is no runtime toggle.
-- The target audience is teachers; a student-facing version would be a separate, more restricted feature.
+- **The server keeps the history.** The client sends `previousTurnId`, the last answer it showed, and the server follows `previous_turn_id` back through the conversation's answered turns. Failed questions, retries and answers the user never saw aren't on that chain, so the model never sees them.
+- A conversation is identified by `conversation_id` **and** `user_id`, because the client makes up the id.
+- A row is inserted as `pending` before the model is called. If that insert fails, the model isn't called. A row stuck at `pending` means the server stopped mid-request or couldn't save the answer; those tokens were billed but aren't recorded.
+- `user_id` is whoever typed: during "login as", the admin. `metadata.impersonatedUserId` holds the user they were viewing as.
+- **Tokens:** `cached_tokens` is part of `prompt_tokens`, and `reasoning_tokens` part of `completion_tokens`, so don't add them up. Prices go by `model` (the version Azure reports), not `deployment`. To change a price in `services/helpChatbotAdmin/prices.ts`, add an entry rather than editing the old one, as each turn is priced with the price valid when it was asked.
+- **Privacy:** conversation content is saved only in this table. The logs get metadata only, and Sentry drops request bodies on `/help-chatbot/` URLs. No retention period has been decided; the content columns are nullable, so old rows can be cleared without losing the usage data.
 
-### Visual reference
+## Viewer performance
 
-The agreed look and behaviour are in the [prototype canvas](https://claude.ai/artifact/SkrKoiooPjbGVmAWQXhpjE) (private; share it from its Share menu before pointing others at it). Its sizes, colours, spacing, copy and animation timings carry over to the implementation. Chat answers there are placeholders, and its auto-scroll and focus handling don't work in the prototype runtime; they are specified below instead.
+With 200 000 turns, most views loaded in under 1.5 s, but searching (`ILIKE '%…%'`) took 6–7 s over 90 days. Add a `pg_trgm` GIN index on `question` and `answer` if that becomes a problem. The queries were tuned against those measurements, so don't undo these choices:
 
-### The assistant: NorppAI
+- The price join matches models with `LIKE`, not a regex, and costs are floats.
+- The conversation list picks its page from the aggregates before looking up first questions and usernames.
+- Conversations are counted in a query of their own.
 
-- The assistant is called **NorppAI**, with the Norppa seal as its mascot. Text that refers to the app itself still says "Norppa".
-- **The small seal is one continuous character.** It travels with the widget: in the pill, then on the "Ask NorppAI" option, then in the chat header. It is never duplicated: there's no avatar next to answers.
-- The only other seal is a **large seal in the empty state's greeting**. It disappears once the conversation starts.
+## Frontend things that aren't obvious
 
-### One widget, three views
-
-The help button, menu and chat are **one box** anchored to the bottom-right corner. It changes size between views; it doesn't open separate popups.
-
-1. **Closed: a pill** reading "Need help?" with the seal.
-   - White background, 1px `#dde3ea` border, subtle shadow; text deep blue `#1f4f8c`, semibold, 14.5px.
-   - Hover: very faint blue background `#f1f6fc`, border `#c3d3e6`. No underline or other link styling.
-2. **Menu.** Clicking the pill plays the seal animation once while the pill grows into the menu:
-   - Title "How would you like to get help?" and a × button that closes the menu.
-   - **Read the user guide** (opens the wiki in a new tab and closes the menu).
-   - **Ask NorppAI** as the bottom option, where the pill was. The seal slides onto it as its icon.
-   - The menu closes only with ×, Esc or by picking an option, not by clicking elsewhere on the page.
-3. **Chat.** "Ask NorppAI" grows the same box into the chat window, and the seal slides into the header.
-   - Closing the chat (× or Esc) shrinks it back to the pill. Closing never clears state: the conversation, the unsent draft, the expanded size and any pending request are all kept.
-   - Clicking elsewhere on the page does not close the chat.
-
-### Chat panel
-
-- Opened over the page so the user can keep looking at the page they are asking about.
-- **Fixed size with an expand toggle** for long answers. On small screens / high zoom the panel is full-screen (WCAG 1.4.10 Reflow).
-- Header: the seal, "Ask NorppAI", then **New conversation**, **Expand/Shrink** and **Close** icon buttons.
-- Below the header, an always-visible strip: "Prefer to read? Open the user guide".
-- The conversation **persists across in-app navigation**. A reload or new tab starts fresh.
-
-### Empty state
-
-- A large seal (72px, decorative) above a short greeting ("Hi, I'm NorppAI!") explaining what the assistant can and cannot help with.
-- A one-line disclaimer: answers are AI-generated and may be wrong, and conversations are saved to improve Norppa.
-
-### Messages
-
-- Questions on the right in a light blue bubble, NorppAI's answers on the left in a light grey bubble.
-- Answers arrive **whole** (no streaming). While waiting, "NorppAI is thinking…" shows under the last message and the header seal loops its animation. When the answer arrives, the loop finishes its current cycle instead of snapping back.
-  - The service contract should not assume "one request = one finished message" so deeply that streaming could not be added later.
-- Answers render as **basic markdown with links**, so links to the user guide work. Questions render as plain text.
-- Sending is disabled while an answer is pending.
-- A failed request shows "No answer received." with a Retry button under that question.
-  - Only the latest failed question offers Retry; older failures keep the text without the button.
-  - Failed questions are not sent to the backend as conversation history.
-  - All errors show the same text, whatever their cause.
-- An answer that arrives while the chat is closed is added to the conversation silently: no announcement, no animation. Closing the chat means the user isn't waiting for it.
-- **Auto-scroll (required):**
-  - Sending a question or retrying scrolls to the bottom, so the question and the waiting indicator are visible.
-  - When an answer arrives, scroll to its **start**, so a long one is shown from its beginning.
-  - Reopening the chat scrolls to the latest message.
-  - Smooth scrolling, except with `prefers-reduced-motion`.
-
-### Feedback
-
-- Every answer has thumbs up and thumbs down buttons under it. Pressing the pressed one again removes the rating, and a rating can be changed at any time.
-- A thumbs down opens an optional "What went wrong?" field with Send and Skip. Thumbs up takes no comment.
-- Nothing changes until the backend has saved the feedback. If saving fails, an inline error says so and the buttons stay as they were.
-- The feedback, and an unsent comment, are kept when the chat is closed, like the rest of the conversation.
-
-### Input
-
-- Enter sends, Shift+Enter inserts a newline. The field grows with its content up to a maximum height.
-- Maximum length 500, with a character counter shown from 400 characters.
-- Focus style: a single solid 2px primary-colour border, as in MUI's outlined text fields, shown only while the text area itself is focused.
-
-### Language
-
-- All static UI text (buttons, greeting, disclaimer, errors) follows the user's UI language (fi/sv/en).
-- Chat content may be in any language; the LLM will answer in the language the question was asked in. This is intentional and not a frontend concern.
-
-### User guide link
-
-- Users who can see the **in-app user guide** ([user_guide.md](user_guide.md)) get it: the menu option and the strip open `/guide` in the same tab, so the conversation is kept. The menu option's description then says "Instructions for using Norppa". The full-screen chat closes when its strip link is followed, as it would cover the guide.
-- Everyone else gets the **user guide on the wiki**, the same one the footer links to ("Käyttöohje"). It is a different service, so links open in a **new tab**, with the usual "opens in a new tab" indication.
-  - The menu's "Read the user guide" option already says "Opens the wiki in a new tab" in its visible description, so it gets no extra icon or hidden text. Everywhere else, use `ExternalLink`.
-- `useGuideLink` picks the link.
-- Answers may link to specific pages of the guide.
-- **Deployments without a user guide** (no in-app guide, and `links:wikiRoot` is not an http(s) URL, e.g. `-`): all guide links are hidden and the pill opens the chat directly (a menu with one option is pointless).
-
-### Backend integration
-
-Everything backend-specific is behind one seam, `src/client/components/HelpChatbot/api.ts`. The rest of the module only uses its exports:
-
-- `askQuestion(conversationId, previousAnswerId, question, signal)` → `{ id, markdown }`. `previousAnswerId` is the latest answer in the conversation (null before the first one); the server keeps the history. Any rejection shows "No answer received".
-- `sendFeedback(answerId, rating, comment?)`: saves a rating, replacing any earlier one. A null rating removes it.
-- `isCancelled(error)`: recognises a request aborted through `signal` (New conversation aborts it).
-
-The wire format is in `src/common/types/helpChatbot.ts`; nothing outside the service depends on it.
-
-## Backend
-
-`src/server/routes/helpChatbot` and `src/server/services/helpChatbot`. Every route is for admins only (`adminAccess`).
-
-- `POST /help-chatbot/turns` with `{ conversationId, previousTurnId, language, question }` → `{ id, answer }`, the new turn's id and its answer in markdown.
-- `PUT /help-chatbot/turns/:id/feedback` with `{ rating, comment? }` → 204. `rating` is `up`, `down` or null; only `down` takes a comment. A 404 unless the turn is an answer to the same user.
-
-### The model
-
-Azure OpenAI, deployment `HELP_CHATBOT_MODEL` (default `gpt-5-mini`) on `AZURE_RESOURCE`, with the system prompt and `knowledge.md` in `systemPrompt.ts`. Without `AZURE_API_KEY` and `AZURE_RESOURCE`, development and tests use `mockCompletion.ts`, while production and staging answer 503.
-
-**To cut the chatbot off** in an emergency, remove `AZURE_API_KEY` from the deployment. `HELP_CHATBOT_ENABLED` hides the whole feature, but needs a redeploy. Rate limits (`rateLimit.ts`, in Redis) cap each user per minute and per day, and everyone together per day.
-
-### Saved conversations
-
-Every question is saved in `help_chatbot_turns`, one row per question, together with its answer, token usage and feedback. `turns.ts` is the only module that writes it.
-
-- **The server keeps the history.** The client sends `previousTurnId`, the last answer it showed. The server follows `previous_turn_id` back from it through the conversation's answered turns. Failed questions, retries and answers the user never saw (e.g. the response was lost on the way) aren't on that chain, so they never reach the model, and the chain shows exactly what the model saw (before trimming to `MAX_HISTORY_LENGTH`). A `previousTurnId` that isn't an answered turn of the same user's conversation is a 400.
-- **Statuses.** A row is inserted as `pending` before the model is called, then becomes `answered`, `empty` (the model returned no content: the token limit was used up by reasoning, or the content filter stopped the answer; the tokens are billed all the same), `failed` (the request to Azure failed) or `aborted` (the client went away). A `pending` row that stays so means the server stopped mid-request, or the answer couldn't be saved (see below), in which case its tokens were billed but aren't recorded.
-- **An answer that can't be saved isn't sent.** If inserting the row fails, the model isn't called; if saving the answer fails, the user gets "No answer received". Either way the error reaches Sentry.
-- **Who asked.** `user_id` is the person typing, saved for every user: during "login as" the admin. It's what the history and the feedback check ownership against, and deleting a user deletes their turns.
-- **Metadata.** `metadata` is a JSON object of context saved with each turn and only shown in the viewer: today `uiLanguage` and, during "login as", `impersonatedUserId`. Later it can hold more of what's sent to the model, e.g. the user's role and the page they were on. The code writes the keys typed in `HelpChatbotTurnMetadata`; the database takes any object, `{}` included. Keys are camelCase, as the object is written and read only by our TypeScript code. Anything the viewer filters or totals on (status, model, tokens, version) stays a column.
-- **Costs.** `prompt_tokens`, `cached_tokens`, `completion_tokens` and `reasoning_tokens` come from Azure. Cached tokens are part of the prompt tokens and reasoning tokens part of the completion tokens, so don't add them up. Price by `model`, the model version Azure reports (`deployment` is our deployment's name). Aborted requests are probably billed in part, but Azure doesn't report their usage. Turns answered by the mock in development have `deployment = 'mock'` (saved before the call, so failed ones too) and no usage. The viewer shows them outside production and leaves them out in production, where there shouldn't be any.
-- **Versions.** `git_sha` is the commit that was deployed, which pins the system prompt and the knowledge. It's empty in development.
-- **Privacy.** The empty state tells users that conversations are saved. Only metadata goes to the logs, and Sentry drops the chatbot's request bodies, so the content stays in this table. Retention isn't decided yet: the content columns (`user_id`, `question`, `answer`, `feedback_comment`) are nullable, so old rows can be cleared and their usage data kept; so can `metadata`, which may hold user ids.
-- **Feedback review.** `feedback_reviewed_at` is set by an admin in the viewer and cleared whenever the user changes their feedback, so changed feedback counts as new again.
-
-### Viewer
-
-The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) reads the saved conversations. The client is `src/client/pages/Admin/tabs/HelpChatbot/`, the API `GET`/`PUT /admin/help-chatbot/…` in `routes/helpChatbot/helpChatbotAdminController.ts` (mounted in the admin router, so admins only even once teachers can chat), the queries `services/helpChatbotAdmin/`. Filters live in the URL, so a link opens the same view.
-
-- **Conversations**: a list filtered by date, search, feedback, problems and user, and the full conversation, each turn with its status, tokens, cost and feedback. The conversation's header shows its first turn's metadata, and a turn shows only the metadata that differs from it; keys the viewer doesn't know are shown as they are. Turns that aren't on the history chain (failed, retried, never shown) are marked and can be hidden. "Copy as Markdown" copies the conversation for a review. A conversation is identified by `conversation_id` and `user_id` together, as the client makes up the id.
-- **Feedback**: rated answers, newest first (by when the answer was given), with a Reviewed checkbox. Unreviewed thumbs downs are the "new" count on the tab.
-- **Usage**: questions, problems, feedback, tokens and cost per day, week or month (in Helsinki time) and per deployed commit, with a CSV download.
-- **Prices** are in `services/helpChatbotAdmin/prices.ts`, in € per million tokens for each model family (uncached input, cached input and output; reasoning is billed as output, but shown as its own row), with the date each price is valid from. Each turn is priced with the price valid when it was asked; to change a price, add an entry rather than editing the old one. A model with no price shows up as "unpriced turns" and isn't in the sums.
-
-**Performance**, measured with 200 000 turns (about three months at the global rate limit) on a development database: lists and usage over 30 days take 0.3–0.5 s, over 90 days about 1–1.5 s; a single conversation and the feedback list well under 0.1 s. Searching is the slow part: `ILIKE '%…%'` reads every question and answer in the date range, about 1.6 s for 30 days and 6–7 s for 90. If that becomes a problem, add a `pg_trgm` GIN index on `question` and `answer`. The queries were shaped by these measurements; keep them so:
-
-- The price join matches the model with `LIKE`, not a regular expression, and costs are floats: both made the sums several times slower.
-- The conversation list picks its page from the aggregates first and only then looks up the first question and the usernames for those rows.
-- Conversations are counted in a query of their own; a `count(DISTINCT …)` per period was the slowest part of the usage queries.
-- `previous_turn_id` and `user_id` are indexed so that deleting turns (retention, a deleted user) doesn't scan the table once per row.
-
-## Accessibility requirements
-
-- The widget is wrapped in an `<aside>` landmark labelled "Help", so screen reader users can jump to it without tabbing through the page.
-- The chat is a **non-modal dialog** with an accessible name.
-  - Exception: in the full-screen layout the panel covers the page, so it becomes modal (`aria-modal` and a focus trap). Tab can't leave it for content hidden behind it, and the page doesn't scroll behind it (the layout uses `100vw`, which includes the scrollbar).
-- **Focus moves on every view change**, because the element the user activated disappears:
-  - Opening the menu moves focus to "Ask NorppAI".
-  - Opening the chat moves focus to the input.
-  - Closing the menu or the chat (× or Esc) returns focus to the pill.
-  - Sending with the Send button, Retry, and New conversation move focus to the input (the button is disabled or removed).
-- New answers are announced in full through a **polite live region** (WCAG 4.1.3 Status Messages), but only while the chat is open. Errors are announced as well.
-- The Expand toggle keeps one accessible name ("Expand chat") and exposes its state with `aria-pressed`; screen readers announce a state change reliably but often miss a name change on the focused button. The icon and tooltip switch between expand and shrink.
-- Icon buttons have a tooltip with the same text as their accessible name.
-- Each answer's feedback buttons are a group named "Feedback on answer N", so the many "Helpful" buttons can be told apart. They expose the rating with `aria-pressed`. A thumbs down moves focus to the comment field; sending or skipping moves it back to the thumbs down. Saved feedback and errors are announced through the live region.
-- The waiting indicator is text ("NorppAI is thinking…"); the seal animation is decorative. The text pulses between `text.secondary` and `text.primary`: fading it out would drop it below 4.5:1 contrast.
-- With `prefers-reduced-motion`, the resize transitions, the seal's slide and all seal animations are switched off (WCAG 2.2.2).
-- The pill, menu, panel controls and message links are fully keyboard operable, with unique accessible names.
-- The input's focus style also shows in Windows high-contrast mode (a transparent outline as a fallback for the box-shadow).
-- Check how screen readers pronounce "NorppAI" in fi/sv/en. If it comes out badly, give the name a spoken form, but only in non-interactive text (the chat heading, the live region, the hidden "NorppAI:" prefixes). Button and link names must keep the visible text (WCAG 2.5.3 Label in Name), so voice control commands like "click Ask NorppAI" keep working.
-- Full-screen layout on small viewports / 400% zoom without loss of content. Full-screen applies below the `sm` breakpoint or below a 640px viewport height. Below 400px height the whole panel scrolls as one, so the header and input don't take up all the space. The header stays sticky there, since the seal in it is fixed to the viewport.
-- Tested manually with keyboard and a screen reader, plus WAVE/Lighthouse. No automated tests in the MVP.
-
-## Later (out of scope for the MVP)
-
-- Links from answers to places in the app (e.g. directly to a survey's results).
-- A retention period for the saved conversations.
-- Faster search in the viewer (`pg_trgm`), if the data grows.
-- Sending the user's current page as context with each message. This needs a routing rework (e.g. a data router with `useMatches`); a hand-maintained route table is not worth it.
-- Linking answers to pages of the in-app user guide instead of the wiki.
-- Streaming answers and a "stop generating" control.
-- Suggested starter questions, possibly varying by the current page.
-- Copy-answer button.
-- Rollout beyond admins; a student-facing version.
-- Behaviour while an admin is impersonating another user.
-- Automated tests. Robust testing belongs with the real backend implementation.
-
-## Implementation notes
-
-The feature is built as a self-contained module (e.g. `src/client/components/HelpChatbot/`) with a small public surface. Its internals deliberately do **not** follow legacy patterns in the rest of the client. It does share the app's foundations: MUI theme, i18n, router and auth.
-
-### Integration points
-
-- **Feature flag:** `HELP_CHATBOT_ENABLED` in `config/default.js` / `config/hy.js`, exported from `src/client/util/common.ts` like `PUBLIC_COURSE_BROWSER_ENABLED`.
-- **Mounting:** in `src/client/pages/AdUser.tsx`, as a sibling of `<DevTools />`, rendered only when the flag is on and `authorizedUser?.isAdmin === true`. AdUser stays mounted across in-app navigation and resets on reload, which gives the required persistence with plain component state or a small context (memoize the context value; `react/jsx-no-constructed-context-values` is a lint error).
-- **Admin check:** `useAuthorizedUser()` → `authorizedUser?.isAdmin`. `isAdmin` is missing from `GetLoginResponse` in `src/common/types/user.ts` even though the server sends it; add it.
-- **User guide link:** reuse the existing `links:wikiRoot` translation key (the real URL comes from the deployment's `hy.json` override) and render it with `ExternalLink`.
-- **i18n:** a new top-level `helpChatbot` group in `public/locales/{fi,sv,en}/translation.json`. Note the separators: `t('helpChatbot:someKey')`. Check with `npm run translations`; its file matcher in `tools/analyzeTranslations.js` is widened to include `.ts`/`.tsx`, which it previously skipped.
-- **Font:** the pill label and links use semibold (600), so weight 600 is added to the Open Sans link in `index.html`.
-- **Mock backend:** there is no MSW or similar. Write a plain async service module (random latency, occasional failures, markdown answers with user guide links) called from a TanStack Query `useMutation`, so it can later be replaced with an `apiClient.post`. Request/response types go in `src/common/types/`.
-
-### Conventions to follow
-
-- New files are `.ts`/`.tsx`: `type` over `interface`, separate `import type` lines, no `as` casts, arrow functions. Write them strict-clean even though the client's `tsconfig` has `strict: false`.
-- Use theme tokens (palette, zIndex, breakpoints), not hard-coded values: deployments can supply a custom theme. Use theme breakpoints for the full-screen layout, not `useIsMobile` (hard-coded 1000px).
-  - The prototype's colours map to existing tokens where one fits (e.g. `primary.dark` for the pill text, `divider` for borders). Its light blue tints are derived from `primary.main` with `alpha()`, so a custom theme recolours the widget automatically. Small deviations from the prototype's exact hex values are accepted.
-  - New palette entries are added only if a deployment needs to override a colour independently.
-- Show chat errors inline; don't use `useInteractiveMutation`, which reports through snackbars.
-- Style with `sx`, and merge with `mergeSx` from `src/client/util/sx.ts`.
-- Use `NorButton`, `focusIndicatorStyle()` from `src/client/util/accessibility.ts` and `ExternalLink` for external links. Icon buttons use `IconButton` + `focusIndicatorStyle()` + `disableFocusRipple` + an `aria-label`.
-- Generate ids with React's `useId`, not `src/client/hooks/useId.ts`.
-- Use `visuallyHidden` from `@mui/utils` without the legacy `width/height: 0` override.
-- Accessible names put the visible text first (WCAG 2.5.3).
-- Message list: `<Box component="ul" role="list">` with `li` items.
-
-### Widget animation
-
-Findings from the prototype. They keep the animation simple to build and maintain:
-
-- **One component, one view state** (`pill | menu | chat`, plus expanded/full-screen) and a table of **fixed box sizes** per view. Plain CSS transitions on width, height and border radius animate between them. There's no DOM measuring and no animation library.
-- Each view's content fades in after the resize. The chat content is laid out at its final size, so it's clipped during the growth instead of reflowing.
-- **The widget sits in a zero-height sticky root** just above the page footer, so it rides along the viewport's bottom edge and stops above the footer, without scroll listeners (updating the position from a scroll listener stuttered while smooth scrolling). The root's sticky `top` keeps the pill and the menu from being pushed past the top of the viewport. The chat pins the root to the viewport's bottom, so it covers the footer rather than the NavBar. The full-screen chat is positioned in the same root, so switching to it doesn't make the box jump.
-- **The seal is a single element outside the resizing box**, positioned from the widget's bottom-right corner with a `transform`. Positioning it relative to the box made it jump ahead of the box's resize animation.
-- **The seal animation is a sprite sheet** of all 77 GIF frames, played with a CSS `steps(77)` animation over 2.31s: once on the pill click, looped while waiting for an answer. JavaScript only toggles a class; driving frames from React state stuttered.
-  - The source is `public/seal.gif` (77 frames of 30 ms each, so `steps(77)` over 2.31s matches its timing).
-  - The sheet is a committed WebP in the module's `assets/` folder, generated once with ImageMagick (`-coalesce` is required because the GIF's frames are partial). The command is kept in a comment next to its import.
-  - It is a 6160×80 strip (80px frames for sharpness at 2× DPR), about 86 KB against the prototype PNG's 450 KB.
-  - The large greeting seal is a 144px still of the first frame (about 3 KB). Clicking it is an easter egg: the seal bounces and plays the animation once from a second 11088×144 strip (about 157 KB), which is only loaded when the pointer reaches the seal. It's hidden from keyboard and screen reader users, doesn't take focus when clicked, and does nothing with `prefers-reduced-motion`.
-- **The pill's width must be a number** so it can animate, but the label's length varies by language, and translations can be overridden per deployment. The label is measured with a `ResizeObserver`, which also follows font loading and user text-spacing overrides (WCAG 1.4.12). A fixed width per language would silently break when the copy changes.
-- **The menu's height is measured the same way.** Its width is fixed, but a fixed height clipped the title and the guide option's description under WCAG 1.4.12 text spacing. The seal's slot is in the bottom option, so its position doesn't depend on the height.
-- The expanded and full-screen sizes are CSS expressions (`min(680px, 100dvh - 48px)`, `100vw`), so the size table stays declarative and fits smaller viewports without measuring.
-
-### Pitfalls found in the existing code
-
-- **Don't build the panel on MUI `Dialog`**, which is always modal. Use a fixed-position `Paper`/`Popper` with `role="dialog"` and `aria-labelledby`. An open MUI modal elsewhere sets `aria-hidden` on the panel; that's acceptable, but announcements made during it are lost.
-- **Own live region:** the panel owns an always-mounted polite region; don't reuse the snackbar announcer. Replace the text, then clear it after a delay so repeated messages are announced again.
-- **Focus management:** follow `EditFeedbackTarget.jsx`: move focus after the new view has rendered, explicitly, per the rules above. No `setTimeout` focus hacks.
-- **Global key listeners:** `EscSnackbarCloser` closes all snackbars on any Esc, so handle Esc inside the panel and stop propagation. The Alt+T chart/table toggle in `Results.jsx` doesn't ignore text inputs, so it fires while typing in the chat. Fix that listener to ignore editable targets.
-- **Markdown:** `components/common/Markdown.tsx` renders links as plain `<a href>` (a full page reload wipes the conversation and skips `basePath`) and emits real `h1`–`h4`. Pass custom `components`: `ExternalLink` for external links (the wiki), router `Link` for any internal ones, and demote headings. Passing `components` replaces all its defaults, so pass a full set. Don't use its `disallowImages` prop: it replaces `urlTransform` with `() => ''`, which blanks every link's `href` too. Use `disallowedElements={['img']}` instead.
-- **Layering:** `FixedContainer` toolbars (z-index 999), skip links (1300) and the notistack container (1400) are fixed-position. Check that the button and panel don't collide with them.
+- **One box, three views** (`pill`, `menu`, `chat`). CSS transitions between fixed sizes do the resizing. The pill's width and the menu's height are measured, because translations vary and deployments can override them.
+- **Position:** the widget sits in a zero-height sticky root just above the footer, so it follows the viewport without scroll listeners (those stuttered).
+- **The seal** is one element outside the box, played from a sprite sheet. The command that generates the sheet is in `sealSprite.ts`.
+- **Layering:** the pill and menu sit below MUI modals. The open chat sits above them, dialogs are laid out beside it, and it stops the modal's focus trap from pulling focus out of it.
+- **Dialog semantics:** the chat is a non-modal dialog. In full-screen it's modal (`aria-modal`), and the page behind it doesn't scroll. Full-screen applies below the `sm` breakpoint or under 640px viewport height.
+- **Focus** moves explicitly on every view change, because the element the user activated disappears.
+- **Screen readers:** answers and errors are announced through the widget's own polite live region, only while the chat is open.
+- **Esc** is handled inside the widget and stopped, otherwise `EscSnackbarCloser` closes every snackbar too.
+- **Accessible names:** buttons keep "Ask NorppAI" as their visible text and accessible name (WCAG 2.5.3). If the name needs a spoken form for screen readers, put it only in non-interactive text.
+- **Answers render with `AnswerMarkdown`, not `common/Markdown.tsx`.** The common one renders links as plain `<a>`, so following one reloads the page and wipes the conversation. It also emits real `h1`s, and its `disallowImages` prop blanks every link's `href`.

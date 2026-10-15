@@ -49,6 +49,6 @@ Some Norppa-related terminology and "koodari slang" is explained here
 |    Course summary    | A summary of all feedback stats visible to the `user`                                             |
 | Organisation summary | Same as above, but stats for one `org`                                                            |
 | Course unit summary  | Stats for feedback on one `cu`, identified by course code                                         |
-|       NorppAI        | The help chatbot. Its terminology is in [help_chatbot.md](help_chatbot.md#terminology)            |
+|       NorppAI        | The help chatbot, see [help_chatbot.md](help_chatbot.md)                                          |
 
 More slang will be added later
