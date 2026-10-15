@@ -1,7 +1,7 @@
 import type { LanguageId } from '@common/types/common'
 import type {
-  PostHelpChatbotMessageBody,
-  PostHelpChatbotMessageResponse,
+  PostHelpChatbotTurnBody,
+  PostHelpChatbotTurnResponse,
   PutHelpChatbotFeedbackBody,
 } from '@common/types/helpChatbot'
 
@@ -15,7 +15,7 @@ import apiClient from '../../util/apiClient'
 // The seam between the chat and its backend. The rest of the module uses only what this file exports,
 // so the wire format in @common/types/helpChatbot stays out of the UI. See "Backend" in documentation/help_chatbot.md.
 
-export type AssistantReply = { id: string; markdown: string }
+export type Answer = { id: string; markdown: string }
 
 const UI_LANGUAGES: LanguageId[] = ['fi', 'sv', 'en']
 
@@ -29,21 +29,21 @@ export const askNorppai = async (
   previousAnswerId: string | null,
   question: string,
   signal: AbortSignal
-): Promise<AssistantReply> => {
-  const body: PostHelpChatbotMessageBody = {
+): Promise<Answer> => {
+  const body: PostHelpChatbotTurnBody = {
     conversationId,
     previousTurnId: previousAnswerId,
     language: getUiLanguage(),
     question,
   }
-  const { data } = await apiClient.post<PostHelpChatbotMessageResponse>('/help-chatbot/messages', body, { signal })
-  return { id: data.message.id, markdown: data.message.content }
+  const { data } = await apiClient.post<PostHelpChatbotTurnResponse>('/help-chatbot/turns', body, { signal })
+  return { id: data.id, markdown: data.answer }
 }
 
 // Replaces any earlier feedback on the answer; a null rating removes it. Only a thumbs down takes a comment.
 export const sendFeedback = async (answerId: string, rating: Rating | null, comment?: string) => {
   const body: PutHelpChatbotFeedbackBody = { rating, comment }
-  await apiClient.put(`/help-chatbot/messages/${answerId}/feedback`, body)
+  await apiClient.put(`/help-chatbot/turns/${answerId}/feedback`, body)
 }
 
 // A request aborted through its signal

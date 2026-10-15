@@ -6,7 +6,7 @@ import { Box } from '@mui/material'
 import Markdown from '../common/Markdown'
 import MarkdownLink from '../common/MarkdownLink'
 
-// The panel's title is an h2, so reply headings start at h3
+// The panel's title is an h2, so answer headings start at h3
 const SectionHeading = ({ children }: ExtraProps & { children?: ComponentProps<'h1'>['children'] }) => (
   <Box component="h3" sx={{ m: '0 0 6px', fontSize: '15px', fontWeight: 700 }}>
     {children}
@@ -29,15 +29,15 @@ const components: Components = {
   h6: SubHeading,
 }
 
-type AssistantMarkdownProps = {
+type AnswerMarkdownProps = {
   markdown: string
 }
 
 // Not the Markdown component's disallowImages: it blanks every link's href too
-const AssistantMarkdown = ({ markdown }: AssistantMarkdownProps) => (
+const AnswerMarkdown = ({ markdown }: AnswerMarkdownProps) => (
   <Markdown components={components} disallowedElements={['img']}>
     {markdown}
   </Markdown>
 )
 
-export default AssistantMarkdown
+export default AnswerMarkdown

@@ -42,7 +42,7 @@ const useConversation = () => {
   const [conversation, setConversation] = useState(createConversation)
   const abortController = useRef<AbortController | null>(null)
 
-  // A reply to an earlier conversation is dropped
+  // An answer to an earlier conversation is dropped
   const updateIfCurrent = (conversationId: string, update: (entries: ChatEntry[]) => ChatEntry[]) =>
     setConversation(current =>
       current.id === conversationId ? { ...current, entries: update(current.entries) } : current
@@ -51,10 +51,10 @@ const useConversation = () => {
   const mutation = useMutation({
     mutationFn: ({ conversationId, previousAnswerId, question, signal }: RequestVariables) =>
       askNorppai(conversationId, previousAnswerId, question, signal),
-    onSuccess: (reply, { conversationId, userEntryId }) =>
+    onSuccess: (answer, { conversationId, userEntryId }) =>
       updateIfCurrent(conversationId, entries => [
         ...setUserStatus(entries, userEntryId, 'answered'),
-        { id: reply.id, role: 'assistant', markdown: reply.markdown, feedback: NO_FEEDBACK },
+        { id: answer.id, role: 'assistant', markdown: answer.markdown, feedback: NO_FEEDBACK },
       ]),
     onError: (error, { conversationId, userEntryId }) => {
       if (isCancelled(error)) return

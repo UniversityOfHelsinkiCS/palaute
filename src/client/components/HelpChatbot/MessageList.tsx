@@ -12,13 +12,13 @@ import type { ChatEntry } from './types'
 import type { FeedbackActions } from './useConversation'
 
 import { NorButton } from '../common/NorButton'
-import AssistantMarkdown from './AssistantMarkdown'
+import AnswerMarkdown from './AnswerMarkdown'
 import EmptyState from './EmptyState'
 import FeedbackBar from './FeedbackBar'
 import { CHAT_HEADER_HEIGHT } from './layout'
 import { userBubbleColor } from './tokens'
 
-const REPLY_SCROLL_MARGIN = 12
+const ANSWER_SCROLL_MARGIN = 12
 
 // Fading the text out would drop it below 4.5:1 contrast, so it pulses between two text colours that both pass
 const pulse = (theme: Theme) => keyframes`
@@ -38,7 +38,7 @@ type MessageListProps = {
   pending: boolean
   retryableId: string | null
   compact: boolean
-  onReply: (text: string) => void
+  onAnswer: (text: string) => void
   onFailure: () => void
   onRetry: () => void
   feedbackActions: FeedbackActions
@@ -50,7 +50,7 @@ const MessageList = ({
   pending,
   retryableId,
   compact,
-  onReply,
+  onAnswer,
   onFailure,
   onRetry,
   feedbackActions,
@@ -76,12 +76,12 @@ const MessageList = ({
     const lastItem = last ? body.querySelector<HTMLElement>(`[data-entry-id="${last.id}"]`) : null
     const behavior = before && !reduceMotion ? 'smooth' : 'auto'
     const scrollToBottom = () => scroller.scrollTo({ top: scroller.scrollHeight, behavior })
-    // A long reply is shown from its start, not from its last line
+    // A long answer is shown from its start, not from its last line
     const scrollToLastItem = () => {
       if (!lastItem) return
       const offset = lastItem.getBoundingClientRect().top - scroller.getBoundingClientRect().top
       const stickyHeader = compact ? CHAT_HEADER_HEIGHT : 0
-      scroller.scrollTo({ top: scroller.scrollTop + offset - stickyHeader - REPLY_SCROLL_MARGIN, behavior })
+      scroller.scrollTo({ top: scroller.scrollTop + offset - stickyHeader - ANSWER_SCROLL_MARGIN, behavior })
     }
 
     if (!before) {
@@ -89,13 +89,13 @@ const MessageList = ({
       else scrollToBottom()
     } else if (entries.length > before.count && last?.role === 'assistant' && lastItem) {
       scrollToLastItem()
-      onReply(lastItem.innerText)
+      onAnswer(lastItem.innerText)
     } else if (pending && !before.pending) {
       scrollToBottom()
     } else if (failed && !before.failed) {
       onFailure()
     }
-  }, [entries, pending, compact, reduceMotion, onReply, onFailure])
+  }, [entries, pending, compact, reduceMotion, onAnswer, onFailure])
 
   return (
     <Box
@@ -179,7 +179,7 @@ const MessageList = ({
                   <Box component="span" sx={visuallyHidden}>
                     {t('helpChatbot:norppaiPrefix')}{' '}
                   </Box>
-                  <AssistantMarkdown markdown={entry.markdown} />
+                  <AnswerMarkdown markdown={entry.markdown} />
                 </Box>
                 <FeedbackBar
                   answerId={entry.id}

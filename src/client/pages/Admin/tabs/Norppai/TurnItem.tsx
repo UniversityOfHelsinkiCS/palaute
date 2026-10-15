@@ -7,7 +7,7 @@ import { Box, Chip, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import { forwardRef } from 'react'
 
-import { AssistantMarkdown } from '../../../../components/HelpChatbot'
+import { AnswerMarkdown } from '../../../../components/HelpChatbot'
 import { formatDuration, formatEuros, formatTime } from './format'
 import { formatEntries, type MetadataEntry } from './metadata'
 import ReviewedCheckbox from './ReviewedCheckbox'
@@ -108,7 +108,7 @@ const TurnItem = forwardRef<HTMLLIElement, TurnItemProps>(({ turn, highlighted, 
             '& > :last-child': { mb: 0 },
           }}
         >
-          <AssistantMarkdown markdown={turn.answer} />
+          <AnswerMarkdown markdown={turn.answer} />
         </Box>
       )}
       {turn.rating !== null && (

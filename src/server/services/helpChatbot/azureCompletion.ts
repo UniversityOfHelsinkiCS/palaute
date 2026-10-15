@@ -30,7 +30,7 @@ export type CompletionRequest = {
 }
 
 // content is empty when the model returned nothing, e.g. when reasoning used up the token limit or the
-// content filter stopped the reply. The tokens are billed all the same.
+// content filter stopped the answer. The tokens are billed all the same.
 export type Completion = {
   deployment: string
   // The model version Azure reports

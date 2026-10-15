@@ -1,5 +1,5 @@
 import type { LanguageId } from '@common/types/common'
-import type { HelpChatbotTurnMetadata, PostHelpChatbotMessageResponse } from '@common/types/helpChatbot'
+import type { HelpChatbotTurnMetadata, PostHelpChatbotTurnResponse } from '@common/types/helpChatbot'
 
 import * as Sentry from '@sentry/node'
 import { Router, type Response } from 'express'
@@ -34,7 +34,7 @@ const getMetadata = (req: AuthenticatedRequest, uiLanguage: LanguageId): HelpCha
 })
 
 // The conversation is saved in help_chatbot_turns; only metadata is logged
-const postMessage = async (req: AuthenticatedRequest, res: Response<PostHelpChatbotMessageResponse>) => {
+const postTurn = async (req: AuthenticatedRequest, res: Response<PostHelpChatbotTurnResponse>) => {
   const { conversationId, previousTurnId, language, question } = parseHelpChatbotRequest(req.body)
   const userId = getUserId(req)
 
@@ -94,7 +94,7 @@ const postMessage = async (req: AuthenticatedRequest, res: Response<PostHelpChat
   })
 
   if (status === 'empty') throw noAnswer()
-  res.send({ message: { id: turn.id, role: 'assistant', content: completion.content } })
+  res.send({ id: turn.id, answer: completion.content })
 }
 
 const putFeedback = async (req: AuthenticatedRequest, res: Response) => {
@@ -112,5 +112,5 @@ export const router = Router()
 // The single access check; teachers get access later
 router.use(adminAccess)
 
-router.post('/messages', postMessage)
-router.put('/messages/:id/feedback', putFeedback)
+router.post('/turns', postTurn)
+router.put('/turns/:id/feedback', putFeedback)

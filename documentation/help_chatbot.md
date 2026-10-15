@@ -40,7 +40,7 @@ The agreed look and behaviour are in the [prototype canvas](https://claude.ai/ar
 ### The assistant: NorppAI
 
 - The assistant is called **NorppAI**, with the Norppa seal as its mascot. Text that refers to the app itself still says "Norppa".
-- **The small seal is one continuous character.** It travels with the widget: in the pill, then on the "Ask NorppAI" option, then in the chat header. It is never duplicated: there's no avatar next to replies.
+- **The small seal is one continuous character.** It travels with the widget: in the pill, then on the "Ask NorppAI" option, then in the chat header. It is never duplicated: there's no avatar next to answers.
 - The only other seal is a **large seal in the empty state's greeting**. It disappears once the conversation starts.
 
 ### One widget, three views
@@ -74,19 +74,19 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 
 ### Messages
 
-- User messages on the right in a light blue bubble, NorppAI's replies on the left in a light grey bubble.
-- Replies arrive **whole** (no streaming). While waiting, "NorppAI is thinking…" shows under the last message and the header seal loops its animation. When the reply arrives, the loop finishes its current cycle instead of snapping back.
+- Questions on the right in a light blue bubble, NorppAI's answers on the left in a light grey bubble.
+- Answers arrive **whole** (no streaming). While waiting, "NorppAI is thinking…" shows under the last message and the header seal loops its animation. When the answer arrives, the loop finishes its current cycle instead of snapping back.
   - The service contract should not assume "one request = one finished message" so deeply that streaming could not be added later.
-- Assistant replies render as **basic markdown with links**, so links to the user guide work. User messages render as plain text.
-- Sending is disabled while a reply is pending.
-- A failed request shows "No answer received." with a Retry button under that message.
-  - Only the latest failed message offers Retry; older failures keep the text without the button.
+- Answers render as **basic markdown with links**, so links to the user guide work. Questions render as plain text.
+- Sending is disabled while an answer is pending.
+- A failed request shows "No answer received." with a Retry button under that question.
+  - Only the latest failed question offers Retry; older failures keep the text without the button.
   - Failed questions are not sent to the backend as conversation history.
   - All errors show the same text, whatever their cause.
-- A reply that arrives while the chat is closed is added to the conversation silently: no announcement, no animation. Closing the chat means the user isn't waiting for it.
+- An answer that arrives while the chat is closed is added to the conversation silently: no announcement, no animation. Closing the chat means the user isn't waiting for it.
 - **Auto-scroll (required):**
-  - Sending a message or retrying scrolls to the bottom, so the message and the waiting indicator are visible.
-  - When a reply arrives, scroll to the **start** of the reply, so a long answer is shown from its beginning.
+  - Sending a question or retrying scrolls to the bottom, so the question and the waiting indicator are visible.
+  - When an answer arrives, scroll to its **start**, so a long one is shown from its beginning.
   - Reopening the chat scrolls to the latest message.
   - Smooth scrolling, except with `prefers-reduced-motion`.
 
@@ -114,7 +114,7 @@ The help button, menu and chat are **one box** anchored to the bottom-right corn
 - Everyone else gets the **user guide on the wiki**, the same one the footer links to ("Käyttöohje"). It is a different service, so links open in a **new tab**, with the usual "opens in a new tab" indication.
   - The menu's "Read the user guide" option already says "Opens the wiki in a new tab" in its visible description, so it gets no extra icon or hidden text. Everywhere else, use `ExternalLink`.
 - `useGuideLink` picks the link.
-- The assistant's replies may link to specific pages of the guide.
+- Answers may link to specific pages of the guide.
 - **Deployments without a user guide** (no in-app guide, and `links:wikiRoot` is not an http(s) URL, e.g. `-`): all guide links are hidden and the pill opens the chat directly (a menu with one option is pointless).
 
 ### Backend integration
@@ -131,8 +131,8 @@ The wire format is in `src/common/types/helpChatbot.ts`; nothing outside the ser
 
 `src/server/routes/helpChatbot` and `src/server/services/helpChatbot`. Every route is for admins only (`adminAccess`).
 
-- `POST /help-chatbot/messages` with `{ conversationId, previousTurnId, language, question }` → `{ message: { id, role, content } }`.
-- `PUT /help-chatbot/messages/:id/feedback` with `{ rating, comment? }` → 204. `rating` is `up`, `down` or null; only `down` takes a comment. A 404 unless the turn is an answer to the same user.
+- `POST /help-chatbot/turns` with `{ conversationId, previousTurnId, language, question }` → `{ id, answer }`, the new turn's id and its answer in markdown.
+- `PUT /help-chatbot/turns/:id/feedback` with `{ rating, comment? }` → 204. `rating` is `up`, `down` or null; only `down` takes a comment. A 404 unless the turn is an answer to the same user.
 
 ### The model
 
@@ -145,7 +145,7 @@ Azure OpenAI, deployment `HELP_CHATBOT_MODEL` (default `gpt-5-mini`) on `AZURE_R
 Every question is saved in `help_chatbot_turns`, one row per question, together with its answer, token usage and feedback. `turns.ts` is the only module that writes it.
 
 - **The server keeps the history.** The client sends `previousTurnId`, the last answer it showed. The server follows `previous_turn_id` back from it through the conversation's answered turns. Failed questions, retries and answers the user never saw (e.g. the response was lost on the way) aren't on that chain, so they never reach the model, and the chain shows exactly what the model saw (before trimming to `MAX_HISTORY_LENGTH`). A `previousTurnId` that isn't an answered turn of the same user's conversation is a 400.
-- **Statuses.** A row is inserted as `pending` before the model is called, then becomes `answered`, `empty` (the model returned no content: the token limit was used up by reasoning, or the content filter stopped the reply; the tokens are billed all the same), `failed` (the request to Azure failed) or `aborted` (the client went away). A `pending` row that stays so means the server stopped mid-request, or the answer couldn't be saved (see below), in which case its tokens were billed but aren't recorded.
+- **Statuses.** A row is inserted as `pending` before the model is called, then becomes `answered`, `empty` (the model returned no content: the token limit was used up by reasoning, or the content filter stopped the answer; the tokens are billed all the same), `failed` (the request to Azure failed) or `aborted` (the client went away). A `pending` row that stays so means the server stopped mid-request, or the answer couldn't be saved (see below), in which case its tokens were billed but aren't recorded.
 - **An answer that can't be saved isn't sent.** If inserting the row fails, the model isn't called; if saving the answer fails, the user gets "No answer received". Either way the error reaches Sentry.
 - **Who asked.** `user_id` is the person typing, saved for every user: during "login as" the admin. It's what the history and the feedback check ownership against, and deleting a user deletes their turns.
 - **Metadata.** `metadata` is a JSON object of context saved with each turn and only shown in the viewer: today `uiLanguage` and, during "login as", `impersonatedUserId`. Later it can hold more of what's sent to the model, e.g. the user's role and the page they were on. The code writes the keys typed in `HelpChatbotTurnMetadata`; the database takes any object, `{}` included. Keys are camelCase, as the object is written and read only by our TypeScript code. Anything the viewer filters or totals on (status, model, tokens, version) stays a column.
@@ -180,7 +180,7 @@ The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) 
   - Opening the chat moves focus to the input.
   - Closing the menu or the chat (× or Esc) returns focus to the pill.
   - Sending with the Send button, Retry, and New conversation move focus to the input (the button is disabled or removed).
-- New assistant replies are announced in full through a **polite live region** (WCAG 4.1.3 Status Messages), but only while the chat is open. Errors are announced as well.
+- New answers are announced in full through a **polite live region** (WCAG 4.1.3 Status Messages), but only while the chat is open. Errors are announced as well.
 - The Expand toggle keeps one accessible name ("Expand chat") and exposes its state with `aria-pressed`; screen readers announce a state change reliably but often miss a name change on the focused button. The icon and tooltip switch between expand and shrink.
 - Icon buttons have a tooltip with the same text as their accessible name.
 - Each answer's feedback buttons are a group named "Feedback on answer N", so the many "Helpful" buttons can be told apart. They expose the rating with `aria-pressed`. A thumbs down moves focus to the comment field; sending or skipping moves it back to the thumbs down. Saved feedback and errors are announced through the live region.
@@ -199,7 +199,7 @@ The **NorppAI** admin tab (`/admin/norppai`, shown when `HELP_CHATBOT_ENABLED`) 
 - Faster search in the viewer (`pg_trgm`), if the data grows.
 - Sending the user's current page as context with each message. This needs a routing rework (e.g. a data router with `useMatches`); a hand-maintained route table is not worth it.
 - Linking answers to pages of the in-app user guide instead of the wiki.
-- Streaming replies and a "stop generating" control.
+- Streaming answers and a "stop generating" control.
 - Suggested starter questions, possibly varying by the current page.
 - Copy-answer button.
 - Rollout beyond admins; a student-facing version.
@@ -218,7 +218,7 @@ The feature is built as a self-contained module (e.g. `src/client/components/Hel
 - **User guide link:** reuse the existing `links:wikiRoot` translation key (the real URL comes from the deployment's `hy.json` override) and render it with `ExternalLink`.
 - **i18n:** a new top-level `helpChatbot` group in `public/locales/{fi,sv,en}/translation.json`. Note the separators: `t('helpChatbot:someKey')`. Check with `npm run translations`; its file matcher in `tools/analyzeTranslations.js` is widened to include `.ts`/`.tsx`, which it previously skipped.
 - **Font:** the pill label and links use semibold (600), so weight 600 is added to the Open Sans link in `index.html`.
-- **Mock backend:** there is no MSW or similar. Write a plain async service module (random latency, occasional failures, markdown replies with user guide links) called from a TanStack Query `useMutation`, so it can later be replaced with an `apiClient.post`. Request/response types go in `src/common/types/`.
+- **Mock backend:** there is no MSW or similar. Write a plain async service module (random latency, occasional failures, markdown answers with user guide links) called from a TanStack Query `useMutation`, so it can later be replaced with an `apiClient.post`. Request/response types go in `src/common/types/`.
 
 ### Conventions to follow
 
@@ -242,7 +242,7 @@ Findings from the prototype. They keep the animation simple to build and maintai
 - Each view's content fades in after the resize. The chat content is laid out at its final size, so it's clipped during the growth instead of reflowing.
 - **The widget sits in a zero-height sticky root** just above the page footer, so it rides along the viewport's bottom edge and stops above the footer, without scroll listeners (updating the position from a scroll listener stuttered while smooth scrolling). The root's sticky `top` keeps the pill and the menu from being pushed past the top of the viewport. The chat pins the root to the viewport's bottom, so it covers the footer rather than the NavBar. The full-screen chat is positioned in the same root, so switching to it doesn't make the box jump.
 - **The seal is a single element outside the resizing box**, positioned from the widget's bottom-right corner with a `transform`. Positioning it relative to the box made it jump ahead of the box's resize animation.
-- **The seal animation is a sprite sheet** of all 77 GIF frames, played with a CSS `steps(77)` animation over 2.31s: once on the pill click, looped while waiting for a reply. JavaScript only toggles a class; driving frames from React state stuttered.
+- **The seal animation is a sprite sheet** of all 77 GIF frames, played with a CSS `steps(77)` animation over 2.31s: once on the pill click, looped while waiting for an answer. JavaScript only toggles a class; driving frames from React state stuttered.
   - The source is `public/seal.gif` (77 frames of 30 ms each, so `steps(77)` over 2.31s matches its timing).
   - The sheet is a committed WebP in the module's `assets/` folder, generated once with ImageMagick (`-coalesce` is required because the GIF's frames are partial). The command is kept in a comment next to its import.
   - It is a 6160×80 strip (80px frames for sharpness at 2× DPR), about 86 KB against the prototype PNG's 450 KB.

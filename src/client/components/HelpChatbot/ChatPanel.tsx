@@ -28,7 +28,7 @@ type ChatPanelProps = {
   draft: string
   onDraftChange: (draft: string) => void
   onSend: () => void
-  onReply: (text: string) => void
+  onAnswer: (text: string) => void
   onFailure: () => void
   onRetry: () => void
   feedbackActions: FeedbackActions
@@ -50,7 +50,7 @@ const ChatPanel = ({
   draft,
   onDraftChange,
   onSend,
-  onReply,
+  onAnswer,
   onFailure,
   onRetry,
   feedbackActions,
@@ -125,7 +125,7 @@ const ChatPanel = ({
           pending={pending}
           retryableId={retryableId}
           compact={compact}
-          onReply={onReply}
+          onAnswer={onAnswer}
           onFailure={onFailure}
           onRetry={onRetry}
           feedbackActions={feedbackActions}

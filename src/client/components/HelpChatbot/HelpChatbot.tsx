@@ -225,7 +225,7 @@ const HelpChatbot = () => {
                 draft={draft}
                 onDraftChange={setDraft}
                 onSend={sendDraft}
-                onReply={announce}
+                onAnswer={announce}
                 onFailure={announceFailure}
                 onRetry={retryQuestion}
                 feedbackActions={feedback}

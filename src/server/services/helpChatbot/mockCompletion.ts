@@ -6,12 +6,12 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { inDevelopment } from '../../util/config'
 
 // Stand-in for Azure when no API key is configured outside production. Test triggers in the question:
-// #long for a long answer, #slow for an 8 s reply, #fail to always fail and #failonce to fail only the first attempt.
+// #long for a long answer, #slow for an 8 s answer, #fail to always fail and #failonce to fail only the first attempt.
 
 const GUIDE = 'https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/'
 const TEACHER_GUIDE = `${GUIDE}3.%20Teacher%27s%20guide/`
 
-const QUESTIONS_REPLY = `You can add questions to your feedback survey on the course's feedback page:
+const QUESTIONS_ANSWER = `You can add questions to your feedback survey on the course's feedback page:
 
 1. Open the course from **My teaching**.
 2. Go to the **Edit survey** tab.
@@ -20,11 +20,11 @@ const QUESTIONS_REPLY = `You can add questions to your feedback survey on the co
 
 The [Teacher's guide](${TEACHER_GUIDE}) has more on the different question types.`
 
-const RESPONSES_REPLY = `Responses are on the course's feedback page, under the **Feedback** tab. You'll see a summary of each question, and the open answers below it.
+const RESPONSES_ANSWER = `Responses are on the course's feedback page, under the **Feedback** tab. You'll see a summary of each question, and the open answers below it.
 
 See the [Teacher's guide](${TEACHER_GUIDE}) for how to download the responses or reply to them.`
 
-const LONG_REPLY = `# Setting up course feedback
+const LONG_ANSWER = `# Setting up course feedback
 
 Course feedback in Norppa has a few stages. Here is an overview of each of them.
 
@@ -50,16 +50,16 @@ Once the period closes, you can read the responses and write a counter-feedback 
 
 The [user guide](${GUIDE}) covers every stage in more detail.`
 
-const DEFAULT_REPLY = `I'm a placeholder, so I only know a few sample answers. Try asking how to add a question to your survey, or where to find the responses.
+const DEFAULT_ANSWER = `I'm a placeholder, so I only know a few sample answers. Try asking how to add a question to your survey, or where to find the responses.
 
 Everything else is in the [user guide](${GUIDE}).`
 
-const replyTo = (question: string) => {
+const answerTo = (question: string) => {
   const q = question.toLowerCase()
-  if (q.includes('#long')) return LONG_REPLY
-  if (/question|survey|kysym|kysely|fråg|enkät/.test(q)) return QUESTIONS_REPLY
-  if (/respons|result|answer|vastau|tulos|palaut|svar|resultat/.test(q)) return RESPONSES_REPLY
-  return DEFAULT_REPLY
+  if (q.includes('#long')) return LONG_ANSWER
+  if (/question|survey|kysym|kysely|fråg|enkät/.test(q)) return QUESTIONS_ANSWER
+  if (/respons|result|answer|vastau|tulos|palaut|svar|resultat/.test(q)) return RESPONSES_ANSWER
+  return DEFAULT_ANSWER
 }
 
 // Random failures only in development, so tests stay deterministic
@@ -90,5 +90,5 @@ export const getMockCompletion = async (
   const question = messages.at(-1)?.content ?? ''
   await sleep(question.includes('#slow') ? 8000 : randomLatency(), undefined, { signal })
   if (shouldFail(conversationId, question)) throw new ApplicationError('Mock failure', 502)
-  return { deployment: 'mock', model: 'mock', content: replyTo(question), finishReason: 'stop', usage: null }
+  return { deployment: 'mock', model: 'mock', content: answerTo(question), finishReason: 'stop', usage: null }
 }

@@ -12,23 +12,23 @@ const parse = <T extends z.ZodType>(schema: T, body: unknown): z.output<T> => {
   return result.data
 }
 
-const MessageBodySchema = z.object({
+const TurnBodySchema = z.object({
   conversationId: z.string().min(1).max(100),
   previousTurnId: z.uuid().nullable(),
   language: z.enum(['fi', 'sv', 'en']),
   question: z.string().min(1).max(MAX_QUESTION_LENGTH),
 })
 
-export type HelpChatbotMessageRequest = {
+export type HelpChatbotTurnRequest = {
   conversationId: string
   previousTurnId: string | null
   language: LanguageId
   question: string
 }
 
-export const parseHelpChatbotRequest = (body: unknown): HelpChatbotMessageRequest => {
+export const parseHelpChatbotRequest = (body: unknown): HelpChatbotTurnRequest => {
   // Spelled out because the server isn't strict, so zod types a nullable field as optional
-  const { conversationId, previousTurnId, language, question } = parse(MessageBodySchema, body)
+  const { conversationId, previousTurnId, language, question } = parse(TurnBodySchema, body)
   return { conversationId, previousTurnId: previousTurnId ?? null, language, question }
 }
 

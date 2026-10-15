@@ -19,8 +19,8 @@ export type HelpChatbotTurnMetadata = {
   impersonatedUserId?: string
 }
 
-// POST /help-chatbot/messages
-export type PostHelpChatbotMessageBody = {
+// POST /help-chatbot/turns
+export type PostHelpChatbotTurnBody = {
   conversationId: string
   // The id of the last answer the user was shown, null for the first question. The server builds the history
   // from it, so an answer the user never saw, e.g. to a request that failed on the way back, isn't part of it.
@@ -30,11 +30,9 @@ export type PostHelpChatbotMessageBody = {
   question: string
 }
 
-export type PostHelpChatbotMessageResponse = {
-  // id identifies the turn, for previousTurnId and feedback. content is markdown.
-  message: { id: string; role: 'assistant'; content: string }
-}
+// id is the turn's, for previousTurnId and feedback. answer is markdown.
+export type PostHelpChatbotTurnResponse = { id: string; answer: string }
 
-// PUT /help-chatbot/messages/:id/feedback, replacing any earlier feedback. A null rating removes it.
+// PUT /help-chatbot/turns/:id/feedback, replacing any earlier feedback. A null rating removes it.
 // Only a thumbs down takes a comment.
 export type PutHelpChatbotFeedbackBody = { rating: HelpChatbotRating | null; comment?: string }

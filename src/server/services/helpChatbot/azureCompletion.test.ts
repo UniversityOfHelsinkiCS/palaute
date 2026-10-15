@@ -71,7 +71,7 @@ describe('getAzureCompletion', () => {
     vi.restoreAllMocks()
   })
 
-  it('returns the reply, model, finish reason and usage', async () => {
+  it('returns the answer, model, finish reason and usage', async () => {
     mockPost().mockResolvedValue(response(completion('Open the survey.')))
 
     await expect(ask()).resolves.toEqual({
@@ -119,7 +119,7 @@ describe('getAzureCompletion', () => {
     expect(body).toHaveProperty('max_completion_tokens')
   })
 
-  it('returns a reply that was cut off at the token limit, with a warning', async () => {
+  it('returns an answer that was cut off at the token limit, with a warning', async () => {
     mockPost().mockResolvedValue(response(completion('Open the', 'length')))
 
     await expect(ask()).resolves.toMatchObject({ content: 'Open the', finishReason: 'length' })
@@ -130,7 +130,7 @@ describe('getAzureCompletion', () => {
     ['empty', ''],
     ['whitespace only', '  \n'],
     ['missing', null],
-  ])('returns an empty reply when it is %s, with an error', async (_, content) => {
+  ])('returns an empty answer when it is %s, with an error', async (_, content) => {
     mockPost().mockResolvedValue(response(completion(content, 'length')))
 
     await expect(ask()).resolves.toMatchObject({
@@ -140,7 +140,7 @@ describe('getAzureCompletion', () => {
     expect(logger.error).toHaveBeenCalledWith('[HelpChatbot] Empty reply from Azure', expect.anything())
   })
 
-  it('returns an empty reply when the response has no choices', async () => {
+  it('returns an empty answer when the response has no choices', async () => {
     mockPost().mockResolvedValue(response({}))
     await expect(ask()).resolves.toMatchObject({ model: null, content: '', finishReason: null, usage: null })
   })
