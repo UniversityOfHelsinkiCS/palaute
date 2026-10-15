@@ -94,12 +94,15 @@ export const getOverlappingStudentTeachers = data => {
   return overlappingStudentTeachers
 }
 
-export const getOverlappingStudentTeachersErrorText = (t, studentNumbers) =>
-  `${t('validationErrors:overlappingStudentTeacher')}: ${studentNumbers.join(', ')}`
+export const getOverlappingStudentTeachersError = (t, studentNumbers) => ({
+  text: `${t('validationErrors:overlappingStudentTeacher')}: ${studentNumbers.join(', ')}`,
+  data: studentNumbers,
+  kind: 'overlap',
+})
 
 const LISTED_INVALID_STUDENT_NUMBERS = 10
 
-export const getInvalidStudentNumbersErrorText = (t, invalidStudentNumbers) => {
+const getInvalidStudentNumbersErrorText = (t, invalidStudentNumbers) => {
   // A single remaining number is listed rather than summarised as "+ 1"
   const listed =
     invalidStudentNumbers.length > LISTED_INVALID_STUDENT_NUMBERS + 1
@@ -115,6 +118,12 @@ export const getInvalidStudentNumbersErrorText = (t, invalidStudentNumbers) => {
 
   return text
 }
+
+export const getInvalidStudentNumbersError = (t, invalidStudentNumbers) => ({
+  text: getInvalidStudentNumbersErrorText(t, invalidStudentNumbers),
+  data: invalidStudentNumbers,
+  kind: 'invalid',
+})
 
 const getTotalStudentCountOfCourses = courses => {
   const courseStudentCounts = courses.map(course => course.studentCount)

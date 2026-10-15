@@ -8,9 +8,9 @@ import OrganisationSurveyEditor from '../../Organisation/OrganisationSurveyEdito
 import { useEditOrganisationSurveyMutation } from '../../Organisation/useOrganisationSurveyMutation'
 import { useOrganisationSurvey } from '../../Organisation/useOrganisationSurveys'
 import {
-  getInvalidStudentNumbersErrorText,
+  getInvalidStudentNumbersError,
   getOverlappingStudentTeachers,
-  getOverlappingStudentTeachersErrorText,
+  getOverlappingStudentTeachersError,
   getOrganisationSurveySchema,
   getSuccessMessage,
   hasNewCourses,
@@ -51,11 +51,7 @@ const EditOrganisationSurvey = () => {
       const overlappingStudentNumbers = overlappingStudentTeachers.map(t => t.studentNumber)
 
       setErrors({
-        studentNumbers: {
-          text: getOverlappingStudentTeachersErrorText(t, overlappingStudentNumbers),
-          data: overlappingStudentNumbers,
-          removeButtonLabel: t('organisationSurveys:removeResponsiblePersonStudentNumbers'),
-        },
+        studentNumbers: getOverlappingStudentTeachersError(t, overlappingStudentNumbers),
       })
       return
     }
@@ -93,11 +89,7 @@ const EditOrganisationSurvey = () => {
           const { invalidStudentNumbers } = error.response.data
 
           setErrors({
-            studentNumbers: {
-              text: getInvalidStudentNumbersErrorText(t, invalidStudentNumbers),
-              data: invalidStudentNumbers,
-              removeButtonLabel: t('organisationSurveys:removeInvalidStudentNumbers'),
-            },
+            studentNumbers: getInvalidStudentNumbersError(t, invalidStudentNumbers),
           })
         } else {
           handleClose()

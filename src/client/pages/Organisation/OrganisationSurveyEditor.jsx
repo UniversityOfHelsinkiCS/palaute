@@ -173,6 +173,11 @@ const ShowAllStudentsToggle = ({ count, showAll, onShowAllChange }) => {
   )
 }
 
+const REMOVE_ERROR_STUDENT_NUMBERS_LABELS = {
+  invalid: 'organisationSurveys:removeInvalidStudentNumbers',
+  overlap: 'organisationSurveys:removeResponsiblePersonStudentNumbers',
+}
+
 const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
@@ -185,7 +190,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const errorText = formikProps.errors[name]?.text
   const errorData = formikProps.errors[name]?.data
   const errorStudentNumbers = React.useMemo(() => new Set(errorData), [errorData])
-  const removeButtonLabel = formikProps.errors[name]?.removeButtonLabel
+  const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[formikProps.errors[name]?.kind]
   const inputRef = React.useRef(null)
 
   const removeErrorStudentNumbers = () => {
@@ -299,7 +304,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         {...props}
       />
 
-      {removeButtonLabel && (
+      {removeButtonLabelKey && (
         <NorButton
           data-cy="formik-student-number-input-remove-erroneous"
           color="cancel"
@@ -307,7 +312,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           onClick={removeErrorStudentNumbers}
           sx={{ mt: 1 }}
         >
-          {removeButtonLabel}
+          {t(removeButtonLabelKey)}
         </NorButton>
       )}
 
