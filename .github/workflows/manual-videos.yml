@@ -83,12 +83,14 @@ jobs:
           path: e2e/manual/.narration-cache
           include-hidden-files: true
           if-no-files-found: ignore
+          retention-days: 1
 
       - uses: actions/upload-artifact@v7
         with:
           name: video-${{ strategy.job-index }}
           path: public/manual
           if-no-files-found: error
+          retention-days: 1
 
       - name: Check logs
         if: failure()
@@ -154,3 +156,4 @@ jobs:
           name: manual-videos
           path: manual
           if-no-files-found: error
+          retention-days: 1
