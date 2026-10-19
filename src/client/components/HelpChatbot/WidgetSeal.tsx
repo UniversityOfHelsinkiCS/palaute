@@ -1,3 +1,5 @@
+import type { Ref } from 'react'
+
 import { Box } from '@mui/material'
 import { useState } from 'react'
 
@@ -10,22 +12,16 @@ import { CYCLE, FRAME_COUNT, flip, sealSprite } from './sealSprite'
 type WidgetSealProps = {
   placement: SealPlacement
   fullScreen: boolean
-  once: boolean
+  imageRef: Ref<HTMLImageElement>
   loop: boolean
-  onOnceEnd: () => void
 }
 
 // JavaScript only switches the animation; driving the frames from React state stuttered
-const WidgetSeal = ({ placement, fullScreen, once, loop, onOnceEnd }: WidgetSealProps) => {
+const WidgetSeal = ({ placement, fullScreen, imageRef, loop }: WidgetSealProps) => {
   // Keeps looping after `loop` turns off, until the current cycle ends, instead of snapping back
   const [finishingLoop, setFinishingLoop] = useState(false)
 
   const looping = loop || finishingLoop
-  const animation = looping
-    ? `${flip} ${CYCLE} steps(${FRAME_COUNT}) infinite`
-    : once
-      ? `${flip} ${CYCLE} steps(${FRAME_COUNT}) 1`
-      : 'none'
 
   return (
     <Box
@@ -44,11 +40,11 @@ const WidgetSeal = ({ placement, fullScreen, once, loop, onOnceEnd }: WidgetSeal
     >
       <Box
         component="img"
+        ref={imageRef}
         src={sealSprite}
         alt=""
         onAnimationStart={() => loop && setFinishingLoop(true)}
         onAnimationIteration={() => setFinishingLoop(loop)}
-        onAnimationEnd={onOnceEnd}
         sx={{
           position: 'absolute',
           left: 0,
@@ -56,7 +52,7 @@ const WidgetSeal = ({ placement, fullScreen, once, loop, onOnceEnd }: WidgetSeal
           width: SEAL_SIZE * FRAME_COUNT,
           height: SEAL_SIZE,
           maxWidth: 'none',
-          animation,
+          animation: looping ? `${flip} ${CYCLE} steps(${FRAME_COUNT}) infinite` : 'none',
           '@media (prefers-reduced-motion: reduce)': { animation: 'none' },
         }}
       />

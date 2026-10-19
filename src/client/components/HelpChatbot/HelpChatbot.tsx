@@ -25,6 +25,7 @@ import {
 } from './layout'
 import MenuView from './MenuView'
 import PillView from './PillView'
+import { playFlip } from './sealSprite'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
 import useAnnouncer from './useAnnouncer'
 import useConversation from './useConversation'
@@ -53,11 +54,11 @@ const HelpChatbot = () => {
   const [menuHeight, setMenuHeight] = useState(DEFAULT_MENU_HEIGHT)
   const [draft, setDraft] = useState('')
   const [chatSize, setChatSize] = useState<ChatSize>('normal')
-  const [sealOnce, setSealOnce] = useState(false)
   const { entries, pending, retryableId, send, retry, startNew, feedback } = useConversation()
   const { message: announcement, announce } = useAnnouncer()
 
   const rootRef = useRef<HTMLElement>(null)
+  const sealRef = useRef<HTMLImageElement>(null)
   const pillRef = useRef<HTMLButtonElement>(null)
   const askRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
@@ -110,12 +111,12 @@ const HelpChatbot = () => {
 
   useEffect(() => {
     if (view !== 'pill' || reduceMotion) return undefined
-    const interval = setInterval(() => setSealOnce(true), IDLE_FLIP_INTERVAL_MS)
+    const interval = setInterval(() => playFlip(sealRef.current), IDLE_FLIP_INTERVAL_MS)
     return () => clearInterval(interval)
   }, [view, reduceMotion])
 
   const openFromPill = () => {
-    if (!reduceMotion) setSealOnce(true)
+    if (!reduceMotion) playFlip(sealRef.current)
     goTo(guide ? 'menu' : 'chat')
   }
 
@@ -239,9 +240,8 @@ const HelpChatbot = () => {
         <WidgetSeal
           placement={layout.seal}
           fullScreen={fullScreen}
-          once={sealOnce}
+          imageRef={sealRef}
           loop={pending && view === 'chat' && !reduceMotion}
-          onOnceEnd={() => setSealOnce(false)}
         />
         <Box role="status" sx={visuallyHidden}>
           {announcement}

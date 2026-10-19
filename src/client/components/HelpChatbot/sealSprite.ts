@@ -13,10 +13,18 @@ export { default as largeSealStill } from './assets/seal-large.webp'
 
 export const FRAME_COUNT = 77
 // The GIF's frames are 30 ms each
-export const CYCLE = '2.31s'
+const CYCLE_MS = FRAME_COUNT * 30
+export const CYCLE = `${CYCLE_MS}ms`
 
 // For a strip of FRAME_COUNT frames, animated with steps(FRAME_COUNT)
 export const flip = keyframes`
   from { transform: translateX(0); }
   to { transform: translateX(-100%); }
 `
+
+// A fresh animation on each call, so a missed animationend can't stop later flips
+export const playFlip = (strip: HTMLElement | null) =>
+  strip?.animate([{ transform: 'translateX(0)' }, { transform: 'translateX(-100%)' }], {
+    duration: CYCLE_MS,
+    easing: `steps(${FRAME_COUNT})`,
+  })
