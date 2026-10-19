@@ -150,6 +150,9 @@ const HelpChatbot = () => {
     close()
   }
 
+  // Hidden on mobile screen width
+  if (narrow && view === 'pill') return null
+
   const layout = getLayout({ view, pillWidth, menuHeight, chatSize, fullScreen })
   const contentSize = {
     width: `calc(${layout.width} - ${2 * layout.border}px)`,

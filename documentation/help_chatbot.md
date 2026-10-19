@@ -1,6 +1,6 @@
 # Help chatbot
 
-NorppAI is an AI assistant that answers questions about using Norppa. It's an experimental MVP, shown to admins only. Code, routes and config call it the help chatbot; "NorppAI" is only for text users see. `NorppaFeedback` is unrelated: it's feedback about Norppa itself.
+NorppAI is an AI assistant that answers questions about using Norppa. It's an experimental MVP, shown to admins only and not on phone-width screens (below the `sm` breakpoint). Code, routes and config call it the help chatbot; "NorppAI" is only for text users see. `NorppaFeedback` is unrelated: it's feedback about Norppa itself.
 
 ## Where things are
 
