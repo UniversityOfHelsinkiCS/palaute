@@ -78,11 +78,11 @@ const ConfirmDialog = ({
         {details}
       </DialogContent>
       <DialogActions sx={{ p: 3, pt: 1 }}>
-        <NorButton data-cy={dataCy && `${dataCy}-cancel`} color="cancel" onClick={onClose} ref={cancelRef}>
-          {cancelLabel ?? t('common:cancel')}
-        </NorButton>
         <NorButton data-cy={dataCy && `${dataCy}-confirm`} color={confirmColor} onClick={onConfirm}>
           {confirmLabel}
+        </NorButton>
+        <NorButton data-cy={dataCy && `${dataCy}-cancel`} color="cancel" onClick={onClose} ref={cancelRef}>
+          {cancelLabel ?? t('common:cancel')}
         </NorButton>
       </DialogActions>
     </Dialog>
