@@ -214,6 +214,12 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   const hasError = errorStudentNumbers.size > 0
   const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[errorKind]
   const inputRef = React.useRef(null)
+  const removeButtonRef = React.useRef(null)
+
+  // Each save that finds erroneous student numbers sets a new error object, so focus moves on every such save
+  React.useEffect(() => {
+    if (error) removeButtonRef.current?.focus()
+  }, [error])
 
   const removeErrorStudentNumbers = () => {
     const studentNumbers = value.filter(v => !errorStudentNumbers.has(v))
@@ -373,6 +379,7 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
 
       {hasError && removeButtonLabelKey && (
         <NorButton
+          ref={removeButtonRef}
           data-cy="formik-student-number-input-remove-erroneous"
           color="cancel"
           type="button"
