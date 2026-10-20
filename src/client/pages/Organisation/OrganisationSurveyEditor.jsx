@@ -1,5 +1,8 @@
-import { WarningAmber } from '@mui/icons-material'
+import { ExpandMore, WarningAmber } from '@mui/icons-material'
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Autocomplete,
   Chip,
   Box,
@@ -15,10 +18,12 @@ import { debounce } from 'lodash-es'
 import React, { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import ConfirmDialog from '../../components/common/ConfirmDialog'
 import FormikDatePicker from '../../components/common/FormikDatePicker'
 import FormikLocalesFieldEditor from '../../components/common/FormikLocalesFieldEditor'
 import Instructions from '../../components/common/Instructions'
 import { NorButton } from '../../components/common/NorButton'
+import { focusIndicatorStyle } from '../../util/accessibility'
 import apiClient from '../../util/apiClient'
 import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../util/common'
 import CourseSearchInput from './CourseSearchInput'
@@ -218,6 +223,51 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
     inputRef.current?.focus()
   }
 
+  const [removeDialogOpen, setRemoveDialogOpen] = React.useState(false)
+  const [removeConfirmed, setRemoveConfirmed] = React.useState(false)
+
+  const handleConfirmRemove = () => {
+    setRemoveConfirmed(true)
+    setRemoveDialogOpen(false)
+  }
+
+  // Remove only after the transition: while the dialog is open the rest of the page is
+  // aria-hidden, and Firefox does not announce focus moved into hidden content
+  const handleRemoveDialogExited = () => {
+    if (!removeConfirmed) return
+    setRemoveConfirmed(false)
+    removeErrorStudentNumbers()
+  }
+
+  const [firstErrorStudentNumber] = errorStudentNumbers
+  const removeConfirmation =
+    errorStudentNumbers.size === 1
+      ? t('organisationSurveys:confirmStudentDelete', { studentNumber: firstErrorStudentNumber })
+      : t('organisationSurveys:confirmStudentDeleteMany', { count: errorStudentNumbers.size })
+
+  const removeConfirmationDetails = errorStudentNumbers.size > 1 && (
+    <Accordion
+      variant="outlined"
+      disableGutters
+      sx={{
+        mt: 2,
+        '&::before': { display: 'none' },
+        '&:last-of-type': { borderRadius: '0.8rem' },
+      }}
+    >
+      <AccordionSummary expandIcon={<ExpandMore />} sx={{ borderRadius: '0.8rem', ...focusIndicatorStyle() }}>
+        {t('organisationSurveys:studentNumbersToRemove')}
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box component="ul" sx={{ m: 0, columnWidth: '8rem' }}>
+          {[...errorStudentNumbers].map(studentNumber => (
+            <li key={studentNumber}>{studentNumber}</li>
+          ))}
+        </Box>
+      </AccordionDetails>
+    </Accordion>
+  )
+
   return (
     <Box>
       <Typography variant="body1" mb={2}>
@@ -326,12 +376,27 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
           data-cy="formik-student-number-input-remove-erroneous"
           color="cancel"
           type="button"
-          onClick={removeErrorStudentNumbers}
+          onClick={editView ? () => setRemoveDialogOpen(true) : removeErrorStudentNumbers}
           sx={{ mt: 1 }}
         >
           {t(removeButtonLabelKey)}
         </NorButton>
       )}
+
+      <ConfirmDialog
+        open={removeDialogOpen}
+        onClose={() => setRemoveDialogOpen(false)}
+        onConfirm={handleConfirmRemove}
+        // The remove button disappears with the numbers, so focus is moved to the input instead
+        disableRestoreFocus={removeConfirmed}
+        onExited={handleRemoveDialogExited}
+        title={t('organisationSurveys:confirmStudentDeleteTitle')}
+        content={removeConfirmation}
+        details={removeConfirmationDetails}
+        confirmLabel={t('organisationSurveys:remove')}
+        confirmColor="error"
+        dataCy="formik-student-number-input-remove-erroneous-dialog"
+      />
 
       {canHideStudentNumbers && (
         <ShowAllStudentsToggle

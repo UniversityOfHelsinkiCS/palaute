@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
+import { Box, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material'
 import { ReactNode, useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -8,6 +8,7 @@ type ConfirmDialogProps = {
   open?: boolean
   title: ReactNode
   content: ReactNode
+  details?: ReactNode
   confirmLabel: ReactNode
   cancelLabel?: ReactNode
   confirmColor?: 'primary' | 'error'
@@ -23,6 +24,7 @@ const ConfirmDialog = ({
   open = false,
   title,
   content,
+  details,
   confirmLabel,
   cancelLabel,
   confirmColor = 'primary',
@@ -71,7 +73,10 @@ const ConfirmDialog = ({
       }}
     >
       <DialogTitle id={titleId}>{title}</DialogTitle>
-      <DialogContent id={descriptionId}>{content}</DialogContent>
+      <DialogContent>
+        <Box id={descriptionId}>{content}</Box>
+        {details}
+      </DialogContent>
       <DialogActions sx={{ p: 3, pt: 1 }}>
         <NorButton data-cy={dataCy && `${dataCy}-cancel`} color="cancel" onClick={onClose} ref={cancelRef}>
           {cancelLabel ?? t('common:cancel')}
