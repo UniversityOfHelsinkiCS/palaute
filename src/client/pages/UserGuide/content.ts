@@ -17,6 +17,7 @@ export type GuidePage = {
   sections: GuideSection[]
   // Without the editors' <!-- comments -->
   markdown: string
+  editUrl: string
 }
 
 type GuideLanguage = 'fi' | 'en'
@@ -24,6 +25,8 @@ type GuideLanguage = 'fi' | 'en'
 const FILES = import.meta.glob<string>('./content/*/*.md', { query: '?raw', import: 'default', eager: true })
 
 const FILE_NAME = /\/content\/(fi|en)\/(\d+)-([a-z0-9-]+)\.md$/
+
+const EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master/src/client/pages/UserGuide'
 
 const parsePage = (path: string, file: string) => {
   const [, language, order, slug] = FILE_NAME.exec(path) ?? []
@@ -37,7 +40,11 @@ const parsePage = (path: string, file: string) => {
     const id = HEADING_ID.exec(heading)?.[1]
     return id ? [{ id, title: heading.replace(HEADING_ID, '') }] : []
   })
-  return { language, order: Number(order), page: { slug, title, sections, markdown } }
+  return {
+    language,
+    order: Number(order),
+    page: { slug, title, sections, markdown, editUrl: `${EDIT_URL}/${path.replace(/^\.\//, '')}` },
+  }
 }
 
 const parsed = Object.entries(FILES).map(([path, file]) => parsePage(path, file))

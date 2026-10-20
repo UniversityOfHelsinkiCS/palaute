@@ -14,6 +14,8 @@ The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`. *
 
 The guide and the chatbot's `knowledge.md` are separate texts, one for people and one compressed for the model. When a fact changes, update both.
 
+Admins get a pen next to each page's title that opens its file in GitHub's editor on `master`.
+
 `content.test.ts` (in `npm run test:unit`) catches what editors can get wrong: a page or section missing in one language, labels that don't exist, broken links.
 
 ## How the content was written

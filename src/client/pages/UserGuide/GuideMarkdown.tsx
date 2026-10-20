@@ -3,8 +3,9 @@ import type { SystemStyleObject } from '@mui/system'
 import type { ComponentProps, ReactNode } from 'react'
 import type { Components, ExtraProps } from 'react-markdown'
 
-import { Box, Typography } from '@mui/material'
-import { memo } from 'react'
+import { EditOutlined } from '@mui/icons-material'
+import { Box, IconButton, Tooltip, Typography } from '@mui/material'
+import { createContext, memo, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Markdown from '../../components/common/Markdown'
@@ -40,12 +41,33 @@ const rehypeHeadingIds = () => (tree: HastNode) => {
 
 type HeadingProps = ComponentProps<'h1'> & ExtraProps
 
+const EditUrlContext = createContext<string | undefined>(undefined)
+
+const EditLink = ({ href }: { href: string }) => {
+  const { t } = useTranslation()
+
+  return (
+    <Tooltip title={t('userGuide:editOnGitHub')}>
+      <IconButton component="a" href={href} target="_blank" rel="noopener noreferrer" size="small" sx={{ mt: 0.75 }}>
+        <EditOutlined fontSize="small" />
+      </IconButton>
+    </Tooltip>
+  )
+}
+
 // Focused after moving to the page (useScrollToSection)
-const H1 = ({ id, children }: HeadingProps) => (
-  <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ mb: 3, '&:focus': { outline: 'none' } }}>
-    {children}
-  </Typography>
-)
+const H1 = ({ id, children }: HeadingProps) => {
+  const editUrl = useContext(EditUrlContext)
+
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 3 }}>
+      <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ '&:focus': { outline: 'none' } }}>
+        {children}
+      </Typography>
+      {editUrl && <EditLink href={editUrl} />}
+    </Box>
+  )
+}
 
 // Focused when a link leads to the section (useScrollToSection)
 const sectionProps = (id: string | undefined, sx: SystemStyleObject<Theme>) => ({
@@ -119,16 +141,19 @@ const components: Components = {
 
 type GuideMarkdownProps = {
   markdown: string
+  editUrl?: string
 }
 
-const GuideMarkdown = ({ markdown }: GuideMarkdownProps) => {
+const GuideMarkdown = ({ markdown, editUrl }: GuideMarkdownProps) => {
   const { t, i18n } = useTranslation()
   const translate = (key: string, language?: string) => (language ? i18n.getFixedT(language)(key) : t(key))
 
   return (
-    <Markdown components={components} rehypePlugins={[rehypeHeadingIds]} disallowedElements={['img']}>
-      {renderLabels(markdown, translate)}
-    </Markdown>
+    <EditUrlContext.Provider value={editUrl}>
+      <Markdown components={components} rehypePlugins={[rehypeHeadingIds]} disallowedElements={['img']}>
+        {renderLabels(markdown, translate)}
+      </Markdown>
+    </EditUrlContext.Provider>
   )
 }
 

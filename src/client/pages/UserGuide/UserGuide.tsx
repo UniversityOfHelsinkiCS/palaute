@@ -15,7 +15,7 @@ import GuideMenu from './GuideMenu'
 import PageNavigation from './PageNavigation'
 import useScrollToSection from './useScrollToSection'
 
-const GuideLayout = ({ pages, index }: { pages: GuidePage[]; index: number }) => {
+const GuideLayout = ({ pages, index, canEdit }: { pages: GuidePage[]; index: number; canEdit: boolean }) => {
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
   useScrollToSection(articleRef)
@@ -34,7 +34,7 @@ const GuideLayout = ({ pages, index }: { pages: GuidePage[]; index: number }) =>
       <GuideMenu pages={pages} current={page} />
       <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
         <Box component="article" ref={articleRef}>
-          <GuideMarkdown markdown={page.markdown} />
+          <GuideMarkdown markdown={page.markdown} editUrl={canEdit ? page.editUrl : undefined} />
         </Box>
         <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
       </Box>
@@ -54,7 +54,7 @@ const UserGuide = () => {
   const index = slug ? pages.findIndex(page => page.slug === slug) : 0
   if (index < 0) return <Navigate to="/guide" replace />
 
-  return <GuideLayout pages={pages} index={index} />
+  return <GuideLayout pages={pages} index={index} canEdit={authorizedUser?.isAdmin === true} />
 }
 
 export default UserGuide

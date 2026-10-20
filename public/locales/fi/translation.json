@@ -872,6 +872,7 @@
     "contents": "Sisällys",
     "previous": "Edellinen",
     "next": "Seuraava",
-    "pageNavigation": "Edellinen ja seuraava sivu"
+    "pageNavigation": "Edellinen ja seuraava sivu",
+    "editOnGitHub": "Muokkaa GitHubissa"
   }
 }

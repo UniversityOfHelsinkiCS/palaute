@@ -31,6 +31,9 @@ const findLabel = (key: string, language: string) =>
 // The ids of all headings, which links can point to
 const anchorsOf = (markdown: string) => [...markdown.matchAll(/^#{1,6} .*\{#([\w-]+)\}\s*$/gm)].map(match => match[1])
 
+// Paths from the repository root
+const REPOSITORY_FILES = import.meta.glob('/src/**/*.md')
+
 const allPages = (['fi', 'en'] as const).flatMap(language => GUIDE_PAGES[language].map(page => ({ language, ...page })))
 
 describe('user guide content', () => {
@@ -78,6 +81,11 @@ describe('user guide content', () => {
       expect(broken).toEqual([])
     }
   )
+
+  it.each(allPages)('$language/$slug has an edit link to a file in the repository', ({ editUrl }) => {
+    const [, file] = /\/edit\/master\/(.+)$/.exec(editUrl) ?? []
+    expect(Object.keys(REPOSITORY_FILES)).toContain(`/${file}`)
+  })
 
   // Neither would show: images are left out, and tables aren't supported
   it.each(allPages)('$language/$slug has no images or tables', ({ markdown }) => {

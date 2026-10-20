@@ -877,6 +877,7 @@
     "contents": "Contents",
     "previous": "Previous",
     "next": "Next",
-    "pageNavigation": "Previous and next page"
+    "pageNavigation": "Previous and next page",
+    "editOnGitHub": "Edit on GitHub"
   }
 }

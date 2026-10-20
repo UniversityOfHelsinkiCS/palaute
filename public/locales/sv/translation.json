@@ -862,6 +862,7 @@
     "contents": "Innehåll",
     "previous": "Föregående",
     "next": "Nästa",
-    "pageNavigation": "Föregående och nästa sida"
+    "pageNavigation": "Föregående och nästa sida",
+    "editOnGitHub": "Redigera på GitHub"
   }
 }
