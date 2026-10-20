@@ -521,11 +521,7 @@ export const getDeletionAllowed = async (organisationSurveyId: number) => {
   return feedbackCount === 0
 }
 
-export const updateUserFeedbackTargets = async (
-  feedbackTargetId: number,
-  userIds: string[],
-  accessStatus: AccessStatus
-) => {
+const removeUserFeedbackTargets = async (feedbackTargetId: number, userIds: string[], accessStatus: AccessStatus) => {
   await UserFeedbackTarget.destroy({
     where: {
       feedbackTargetId,
@@ -533,7 +529,9 @@ export const updateUserFeedbackTargets = async (
       accessStatus,
     },
   })
+}
 
+const addUserFeedbackTargets = async (feedbackTargetId: number, userIds: string[], accessStatus: AccessStatus) => {
   const existingUserIds = (await getUserFeedbackTargets(feedbackTargetId, accessStatus)).map(({ userId }) => userId)
   const newUserIds = userIds.filter(id => !existingUserIds.includes(id))
 
@@ -590,10 +588,6 @@ export const updateOrganisationSurvey = async (
     ...(endDate && { endDate }),
   })
 
-  if (teacherIds) {
-    await updateUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
-  }
-
   let studentIds: string[] = []
 
   if (studentNumbers) {
@@ -607,10 +601,18 @@ export const updateOrganisationSurvey = async (
     await updateOrganisationSurveyCourses(feedbackTargetId, studentDataFromCourseIds)
   }
 
-  // updating student feedback targets even when studentNumbers are empty
-  if (studentIds.length >= 0) {
-    await updateUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
+  // A user can have only one user feedback target per feedback target, so all removals are done before any additions.
+  // Otherwise a user who changes from a student to a responsible teacher, or the other way round, would not be added.
+  // Students are updated even when studentNumbers are empty
+  if (teacherIds) {
+    await removeUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
   }
+  await removeUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
+
+  if (teacherIds) {
+    await addUserFeedbackTargets(feedbackTargetId, teacherIds, 'RESPONSIBLE_TEACHER')
+  }
+  await addUserFeedbackTargets(feedbackTargetId, studentIds, 'STUDENT')
 
   cache.invalidate(feedbackTargetId)
 

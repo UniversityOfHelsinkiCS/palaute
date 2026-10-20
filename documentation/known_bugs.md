@@ -137,11 +137,27 @@ Fix: filter on `accessStatus: 'STUDENT'` and skip disabled course codes, as the 
 
 ### Saving a programme survey again removes students who have answered
 
-`src/server/services/organisations/organisationSurveys.ts:523-541`
+`src/server/services/organisations/organisationSurveys.ts:524-532`
 
-Saving recalculates the students from the chosen courses and the student numbers, and `updateUserFeedbackTargets` deletes the user feedback targets of everyone else. Students who have left a chosen course lose theirs even if they have answered, and the answer drops out of the results, which are read through the user feedback targets.
+Saving recalculates the students from the chosen courses and the student numbers, and `removeUserFeedbackTargets` deletes the user feedback targets of everyone else. Students who have left a chosen course lose theirs even if they have answered, and the answer drops out of the results, which are read through the user feedback targets. The same happens to a student who has answered and is then made a responsible teacher.
 
-Fix: keep the user feedback targets that have feedback.
+Fix: keep the user feedback targets that have feedback. A kept student row also blocks the same user's teacher row, because a user can have only one user feedback target per feedback target.
+
+### Saving a programme survey isn't atomic
+
+`src/server/services/organisations/organisationSurveys.ts:560-622`
+
+`updateOrganisationSurvey` updates the feedback target, the course realisation, the chosen courses and the user feedback targets in separate queries without a transaction. If one fails, the survey is left half-saved, e.g. with the old teachers removed and the new ones not added.
+
+Fix: run the writes in one transaction. `createUserFeedbackTargets` catches and logs insert errors, which doesn't work inside a transaction: in PostgreSQL a failed insert aborts the transaction, and the commit then silently rolls back. Skip the users who already have a user feedback target before inserting, and let other errors through.
+
+### Deleting a programme survey isn't atomic either
+
+`src/server/services/organisations/organisationSurveys.ts:624-702`
+
+`deleteOrganisationSurvey` opens a transaction but doesn't pass it to any of its queries, so each delete is committed on its own and the rollback undoes nothing. If one fails, the survey is left half-deleted, e.g. without its user feedback targets and questions but still listed.
+
+Fix: pass `{ transaction: t }` to every query.
 
 ### The grouping question is carried over with the old groups
 
