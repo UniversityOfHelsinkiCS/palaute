@@ -43,11 +43,11 @@ const InterimFeedbackEditor = ({ title, initialValues, validationSchema, handleS
               <Box sx={{ m: 4 }}>
                 <InterimFeedbackForm />
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'right', gap: 2 }}>
-                  <NorButton data-cy="interim-feedback-editor-cancel" color="cancel" onClick={onStopEditing}>
-                    {t('common:cancel')}
-                  </NorButton>
                   <NorButton data-cy="interim-feedback-editor-save" disabled={disabled} color="primary" type="submit">
                     {t('common:save')}
+                  </NorButton>
+                  <NorButton data-cy="interim-feedback-editor-cancel" color="cancel" onClick={onStopEditing}>
+                    {t('common:cancel')}
                   </NorButton>
                 </Box>
               </Box>

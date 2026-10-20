@@ -284,11 +284,11 @@ const QuestionCard = ({
                 name={name}
               />
               <Box sx={{ ml: { xs: 0, sm: 'auto' }, display: 'flex', gap: '1rem' }}>
-                <NorButton data-cy="question-card-cancel-edit" color="cancel" onClick={handleCancelEditing}>
-                  {t('common:cancel')}
-                </NorButton>
                 <NorButton data-cy="question-card-save-edit" color="primary" onClick={handleStopEditing}>
                   {t('questionEditor:done')}
+                </NorButton>
+                <NorButton data-cy="question-card-cancel-edit" color="cancel" onClick={handleCancelEditing}>
+                  {t('common:cancel')}
                 </NorButton>
               </Box>
             </Box>

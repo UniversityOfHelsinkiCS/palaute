@@ -25,6 +25,14 @@ const ConfirmGivingFeedbackDialog = ({ onClose, open = false }: ConfirmGivingFee
       </DialogContent>
       <DialogActions>
         <NorButton
+          color="primary"
+          sx={{ margin: '0 10px 10px 0' }}
+          onClick={onClose}
+          data-cy="confirm-giving-feedback-dialog-give-feedback"
+        >
+          {t('userFeedbacks:continue')}
+        </NorButton>
+        <NorButton
           color="secondary"
           to="/feedbacks"
           component={Link}
@@ -33,14 +41,6 @@ const ConfirmGivingFeedbackDialog = ({ onClose, open = false }: ConfirmGivingFee
           aria-label={t('userFeedbacks:cancelButtonAriaLabel')}
         >
           {t('common:cancel')}
-        </NorButton>
-        <NorButton
-          color="primary"
-          sx={{ margin: '0 10px 10px 0' }}
-          onClick={onClose}
-          data-cy="confirm-giving-feedback-dialog-give-feedback"
-        >
-          {t('userFeedbacks:continue')}
         </NorButton>
       </DialogActions>
     </Dialog>

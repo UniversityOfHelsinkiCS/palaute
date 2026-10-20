@@ -174,15 +174,6 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
                 </NorButton>
               )}
               <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, gap: 1 }}>
-                <NorButton
-                  data-cy="feedback-target-edit-period-cancel"
-                  color="cancel"
-                  type="button"
-                  onClick={onClose}
-                  ref={refFor('cancel')}
-                >
-                  {t('common:cancel')}
-                </NorButton>
                 {formEnabled && (
                   <NorButton
                     color="primary"
@@ -193,6 +184,15 @@ const FeedbackPeriodForm = ({ onClose, initialFocusRef }) => {
                     {t('common:save')} {isAdmin && !isValid ? '(ADMIN)' : ''}
                   </NorButton>
                 )}
+                <NorButton
+                  data-cy="feedback-target-edit-period-cancel"
+                  color="cancel"
+                  type="button"
+                  onClick={onClose}
+                  ref={refFor('cancel')}
+                >
+                  {t('common:cancel')}
+                </NorButton>
               </Box>
             </DialogActions>
           </Form>

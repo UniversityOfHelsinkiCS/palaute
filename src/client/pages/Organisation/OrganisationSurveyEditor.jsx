@@ -480,20 +480,20 @@ const OrganisationSurveyEditor = ({
                 <OrganisationSurveyForm organisationCode={organisationCode} editView={editView} />
                 <Box sx={{ mt: 4, display: 'flex', justifyContent: 'right', gap: 2 }}>
                   <NorButton
-                    data-cy="organisation-survey-editor-cancel"
-                    color="cancel"
-                    type="button"
-                    onClick={onStopEditing}
-                  >
-                    {t('common:cancel')}
-                  </NorButton>
-                  <NorButton
                     data-cy="organisation-survey-editor-save"
                     disabled={disabled}
                     color="primary"
                     type="submit"
                   >
                     {t('common:save')}
+                  </NorButton>
+                  <NorButton
+                    data-cy="organisation-survey-editor-cancel"
+                    color="cancel"
+                    type="button"
+                    onClick={onStopEditing}
+                  >
+                    {t('common:cancel')}
                   </NorButton>
                 </Box>
               </Box>
