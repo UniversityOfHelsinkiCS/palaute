@@ -67,10 +67,12 @@ const resetDb = async (req: AuthenticatedRequest, res: Response) => {
 }
 
 const seedManualHandler = async (req: AuthenticatedRequest, res: Response) => {
-  const { users, teacherId, studentIds, feedbackFromIds, course } = req.body
+  const { users, teacherId, colleagues, feedbackCorrespondentIds, studentIds, feedbackFromIds, course } = req.body
   const fbt = await seedManual({
     users: users.map(userHeadersToUser),
     teacherId,
+    colleagues,
+    feedbackCorrespondentIds,
     studentIds,
     feedbackFromIds,
     course,

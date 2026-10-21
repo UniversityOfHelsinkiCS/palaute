@@ -4,7 +4,7 @@ import { addDays, subDays } from 'date-fns'
 
 import { admin, type TestUser } from '../fixtures/headers'
 import { toHeaders } from '../support/api'
-import { students, teacher } from './users'
+import { colleagues, students, teacher } from './users'
 
 // Same as in src/server/test/manual/seed.ts
 export const COURSE_CODE = 'TKT10002'
@@ -32,13 +32,22 @@ export const createDemo = (request: APIRequestContext, lang: string) => {
     },
 
     // Replaces all data with the demo course. With feedback, most students except the one who logs in have answered.
-    seed: async (stage: Stage, { feedback = false } = {}) => {
+    // As feedback correspondent, the teacher has admin rights to the course's programme.
+    seed: async (stage: Stage, { feedback = false, feedbackCorrespondent = false } = {}) => {
       const course = courseDates(stage)
-      const users = [admin, teacher, ...students].map(user => ({ ...user, preferredLanguage: lang }))
+      const users = [admin, teacher, ...Object.values(colleagues), ...students].map(user => ({
+        ...user,
+        preferredLanguage: lang,
+      }))
       const response = await request.post('/test/seed-manual', {
         data: {
           users,
           teacherId: teacher.hyPersonSisuId,
+          colleagues: {
+            teacherId: colleagues.teacher.hyPersonSisuId,
+            administrativePersonId: colleagues.administrativePerson.hyPersonSisuId,
+          },
+          feedbackCorrespondentIds: feedbackCorrespondent ? [teacher.hyPersonSisuId] : [],
           studentIds: students.map(user => user.hyPersonSisuId),
           feedbackFromIds: feedback ? students.slice(1, 18).map(user => user.hyPersonSisuId) : [],
           course,

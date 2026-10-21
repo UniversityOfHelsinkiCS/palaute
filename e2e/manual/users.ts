@@ -14,6 +14,12 @@ export const teacher = person('manual-teacher', 'Laura', 'Mäkelä', {
   hygroupcn: ['hy-employees'],
 })
 
+// On the course with the teacher, but never logged in as
+export const colleagues = {
+  teacher: person('manual-colleague-teacher', 'Juho', 'Lindqvist'),
+  administrativePerson: person('manual-administrative-person', 'Tiina', 'Hakala'),
+}
+
 const studentNames = [
   ['Olli', 'Oppilas'],
   ['Aino', 'Virtanen'],

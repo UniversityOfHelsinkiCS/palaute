@@ -122,3 +122,34 @@ export const MANUAL_UNIVERSITY_QUESTIONS = [
     },
   },
 ]
+
+// The teacher's own questions on an earlier course realisation, for copying them to a new survey
+export const MANUAL_TEACHER_QUESTIONS = [
+  {
+    type: 'LIKERT',
+    required: false,
+    data: {
+      label: {
+        fi: 'Kuinka hyödyllisiä harjoitustehtävät olivat?',
+        sv: 'Hur nyttiga var övningsuppgifterna?',
+        en: 'How useful were the exercises?',
+      },
+      description: {
+        fi: '1 = ei lainkaan hyödyllisiä, 5 = erittäin hyödyllisiä',
+        sv: '1 = inte alls nyttiga, 5 = mycket nyttiga',
+        en: '1 = not useful at all, 5 = very useful',
+      },
+    },
+  },
+  {
+    type: 'OPEN',
+    required: false,
+    data: {
+      label: {
+        fi: 'Mitä harjoitustehtävissä voisi parantaa?',
+        sv: 'Vad kunde förbättras i övningsuppgifterna?',
+        en: 'What could be improved in the exercises?',
+      },
+    },
+  },
+]

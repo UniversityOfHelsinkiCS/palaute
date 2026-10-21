@@ -10,6 +10,7 @@ import {
   FeedbackTarget,
   FeedbackTargetLog,
   Organisation,
+  OrganisationFeedbackCorrespondent,
   Question,
   Summary,
   Survey,
@@ -21,7 +22,7 @@ import { buildSummaries } from '../../services/summary/buildSummaries'
 import { userCache } from '../../services/users/cache'
 import { UNIVERSITY_ROOT_ID, WORKLOAD_QUESTION_ID } from '../../util/config'
 import { createTestObject } from '../utils'
-import { MANUAL_UNIVERSITY_QUESTIONS } from './survey'
+import { MANUAL_TEACHER_QUESTIONS, MANUAL_UNIVERSITY_QUESTIONS } from './survey'
 
 // Demo data for the user manual videos in e2e/manual, kept apart from the e2e test seed
 
@@ -50,6 +51,9 @@ const PAST_FEEDBACK_RESPONSE =
 
 type ManualUser = { id: string; username: string; [key: string]: unknown }
 
+// The other two roles on the course page, so it shows every heading
+type ManualColleagues = { teacherId: string; administrativePersonId: string }
+
 type ManualCourse = {
   startDate: string
   endDate: string
@@ -70,18 +74,32 @@ const pick = <T>(fraction: number, ranges: [below: number, value: T][]) =>
 
 const WORKLOAD_OPTIONS = MANUAL_UNIVERSITY_QUESTIONS.find(q => q.id === WORKLOAD_QUESTION_ID)!.data.options!
 
+// Lowers a share of the answers by some points, so the course summary shows red and yellow besides green
+const LOWERED: Record<string, { points: number; share: number }> = {
+  'Opetustilanteissa opiskelijoita kannustettiin keskustelemaan ajatuksistaan ja näkökulmistaan': {
+    points: 2,
+    share: 1,
+  },
+  'Oppimisen arvioinnin vaatimukset (tentti, harjoitus, kurssisuoritus) olivat minulle selvät': {
+    points: 1,
+    share: 0.8,
+  },
+}
+
 // Earlier realisations get slightly lower scores, so the summary shows the course improving
 const answerFor = (question: Question, seed: string, level: number) => {
   const fraction = seededFraction(`${seed}-${question.id}`)
-  if (question.type === 'LIKERT')
-    return String(
-      pick(fraction, [
-        [0.05, 2],
-        [0.2 + level, 3],
-        [0.6 + level, 4],
-        [1, 5],
-      ])
-    )
+  if (question.type === 'LIKERT') {
+    const score = pick(fraction, [
+      [0.03, 2],
+      [0.1 + level, 3],
+      [0.4 + level, 4],
+      [1, 5],
+    ])
+    const lowered = 'label' in question.data ? LOWERED[question.data.label.fi ?? ''] : undefined
+    const lowering = lowered && seededFraction(`${seed}-${question.id}-lowered`) < lowered.share ? lowered.points : 0
+    return String(Math.max(1, score - lowering))
+  }
   if (question.type === 'SINGLE_CHOICE')
     return WORKLOAD_OPTIONS[
       pick(fraction, [
@@ -187,12 +205,14 @@ const seedRealisation = async ({
   id,
   course,
   teacherId,
+  colleagues,
   studentIds,
   past,
 }: {
   id: string
   course: ManualCourse
   teacherId: string
+  colleagues: ManualColleagues
   studentIds: string[]
   past: boolean
 }) => {
@@ -237,10 +257,28 @@ const seedRealisation = async ({
     feedbackTargetId: fbt.id,
     accessStatus: 'RESPONSIBLE_TEACHER',
   })
+  await createTestObject(UserFeedbackTarget, {
+    userId: colleagues.teacherId,
+    feedbackTargetId: fbt.id,
+    accessStatus: 'TEACHER',
+  })
+  await createTestObject(UserFeedbackTarget, {
+    userId: colleagues.administrativePersonId,
+    feedbackTargetId: fbt.id,
+    accessStatus: 'RESPONSIBLE_TEACHER',
+    isAdministrativePerson: true,
+  })
   for (const studentId of studentIds) {
     await createTestObject(UserFeedbackTarget, { userId: studentId, feedbackTargetId: fbt.id, accessStatus: 'STUDENT' })
   }
   return fbt
+}
+
+const seedTeacherSurvey = async (fbt: FeedbackTarget) => {
+  const questions = await Promise.all(
+    MANUAL_TEACHER_QUESTIONS.map(question => Question.create({ secondaryType: 'OTHER', ...question } as any))
+  )
+  await Survey.create({ feedbackTargetId: fbt.id, questionIds: questions.map(q => q.id) } as any)
 }
 
 const giveFeedback = async (fbt: FeedbackTarget, studentIds: string[], questions: Question[], level: number) => {
@@ -256,12 +294,17 @@ const giveFeedback = async (fbt: FeedbackTarget, studentIds: string[], questions
 export const seedManual = async ({
   users,
   teacherId,
+  colleagues,
+  feedbackCorrespondentIds,
   studentIds,
   feedbackFromIds,
   course,
 }: {
   users: ManualUser[]
   teacherId: string
+  colleagues: ManualColleagues
+  // Get admin rights to the programme
+  feedbackCorrespondentIds: string[]
   studentIds: string[]
   feedbackFromIds: string[]
   course: ManualCourse
@@ -270,6 +313,9 @@ export const seedManual = async ({
   const questions = await seedSurvey()
   await seedOrganisations()
   for (const user of users) await User.create(user as any)
+  // Added in Norppa, as login removes the ones that IAM groups would add
+  for (const userId of feedbackCorrespondentIds)
+    await OrganisationFeedbackCorrespondent.create({ userId, organisationId: PROGRAMME_ID, userCreated: true })
 
   // Two earlier autumns with feedback and a feedback response, for the course summary
   for (const yearsAgo of [1, 2]) {
@@ -284,13 +330,23 @@ export const seedManual = async ({
       id: `manual-course-realisation-${yearsAgo}`,
       course: pastCourse,
       teacherId,
+      colleagues,
       studentIds: pastStudentIds,
       past: true,
     })
     await giveFeedback(fbt, pastStudentIds.slice(0, 20 - yearsAgo * 3), questions, yearsAgo * 0.1)
+    // Only the older one, as the newer one's questions would be copied to the current survey by themselves
+    if (yearsAgo === 2) await seedTeacherSurvey(fbt)
   }
 
-  const fbt = await seedRealisation({ id: 'manual-course-realisation', course, teacherId, studentIds, past: false })
+  const fbt = await seedRealisation({
+    id: 'manual-course-realisation',
+    course,
+    teacherId,
+    colleagues,
+    studentIds,
+    past: false,
+  })
   await giveFeedback(fbt, feedbackFromIds, questions, 0)
 
   await buildSummaries()
