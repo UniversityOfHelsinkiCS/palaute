@@ -24,11 +24,17 @@ const courseDates = (stage: Stage) => {
 
 export const createDemo = (request: APIRequestContext, lang: string) => {
   let fbtId: number | undefined
+  let loweredQuestionIds: number[] = []
 
   const demo = {
     get fbtId() {
       if (fbtId === undefined) throw new Error('Seed the demo first')
       return fbtId
+    },
+
+    // The questions with red and yellow averages in the course summary
+    get loweredQuestionIds() {
+      return loweredQuestionIds
     },
 
     // Replaces all data with the demo course. With feedback, most students except the one who logs in have answered.
@@ -55,7 +61,9 @@ export const createDemo = (request: APIRequestContext, lang: string) => {
         timeout: 120_000,
         failOnStatusCode: true,
       })
-      fbtId = (await response.json()).id
+      const body = await response.json()
+      fbtId = body.id
+      loweredQuestionIds = body.loweredQuestionIds
       return course
     },
 

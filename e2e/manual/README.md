@@ -7,7 +7,7 @@ Records user flows as videos with a cursor, captions, and an AI-generated voice.
 ```bash
 npm run manual:setup               # the app (port 8000) and the voice service
 npm run manual:record              # every scenario
-npm run manual:record -- opiskelija # scenarios whose file name matches
+npm run manual:record -- feedback   # scenarios whose file name matches
 ```
 
 Videos go to `public/manual/<lang>/<scenario>.mp4` (gitignored), so the dev server serves them at `/manual/<lang>/<scenario>.mp4`. Without `ffmpeg` you get `.webm`. Failed scenarios write nothing there, see `test-results/manual/`.
@@ -18,7 +18,7 @@ The app is a production build, so it looks like production, but its server is no
 
 ## Writing a scenario
 
-Add `scenarios/<name>.manual.ts`. One file is one video.
+Add `scenarios/<slug>.manual.ts`. One file is one video, shown in the user guide with `[[video:<slug>]]`, so name it after the guide section it shows.
 
 ```ts
 manualTest(

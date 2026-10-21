@@ -49,10 +49,11 @@ export const openFromMyTeaching = async (
 }
 
 // Notifications stay for 20 seconds over the top of the page, so close them like a user would.
-// A closing notification blocks an identical new one until it is removed.
-export const closeNotification = async (page: Page, click: Click, text: string) => {
-  const notification = page.locator('#notistack-snackbar')
+// A closing notification blocks an identical new one until it is removed. Some actions show two at once.
+export const closeNotification = async (page: Page, click: Click, text: string | RegExp) => {
+  const notification = page.locator('#notistack-snackbar').filter({ hasText: text })
   await expect(notification).toHaveText(text)
-  await click(notification.locator('xpath=..').getByRole('button'))
+  // Not by role, as an open dialog hides the rest of the page, the notification too, from the accessibility tree
+  await click(notification.locator('xpath=..').locator('button'))
   await expect(notification).toHaveCount(0)
 }

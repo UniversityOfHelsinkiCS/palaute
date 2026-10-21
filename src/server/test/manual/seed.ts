@@ -350,5 +350,9 @@ export const seedManual = async ({
   await giveFeedback(fbt, feedbackFromIds, questions, 0)
 
   await buildSummaries()
-  return fbt
+  // In the order of LOWERED, so the videos can point at the red and the yellow column in any language
+  const loweredQuestionIds = Object.keys(LOWERED).map(
+    label => questions.find(q => 'label' in q.data && q.data.label.fi === label)!.id
+  )
+  return { fbt, loweredQuestionIds }
 }

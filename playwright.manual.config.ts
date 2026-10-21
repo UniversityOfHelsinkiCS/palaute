@@ -19,6 +19,8 @@ export default defineConfig<ManualOptions>({
     baseURL: process.env.BASE_URL ?? 'http://localhost:8000',
     actionTimeout: 15_000,
     navigationTimeout: 60_000,
+    // The Share tab copies the survey link
+    permissions: ['clipboard-write'],
     video: narrationPass ? 'off' : { mode: 'retain-on-failure', size: viewport },
     // Only without video, as tracing could make the recording stutter, and a failed recording keeps its video
     trace: narrationPass ? 'retain-on-failure' : 'off',
