@@ -21,14 +21,18 @@ The app is a production build, so it looks like production, but its server is no
 Add `scenarios/<name>.manual.ts`. One file is one video.
 
 ```ts
-manualTest('Otsikko', async ({ page, demo, loginAs, caption, click, fill }) => {
-  await demo.seed('ongoing')
-  await loginAs(teacher)
+manualTest(
+  'Otsikko',
+  { annotation: { type: 'en', description: 'Title' } },
+  async ({ page, demo, loginAs, caption, click, fill, t, localize }) => {
+    await demo.seed('ongoing')
+    await loginAs(teacher)
 
-  await caption({ fi: 'Mitä seuraavaksi tapahtuu.' })
-  await click(byDataCy(page, 'some-button'))
-  await fill(page.locator('#some-input'), 'kirjoitettava teksti')
-})
+    await caption({ fi: 'Mitä seuraavaksi tapahtuu.', en: 'What happens next.' })
+    await click(page.getByRole('button', { name: t('common:save') }))
+    await fill(page.locator('#some-input'), localize({ fi: 'kirjoitettava teksti', en: 'text to type' }))
+  }
+)
 ```
 
 - `caption(text, minMs?)` shows the text and plays its narration.
@@ -36,12 +40,13 @@ manualTest('Otsikko', async ({ page, demo, loginAs, caption, click, fill }) => {
 - `hover(locator)` points at an element without clicking, to show what a caption is about.
 - `scrollTo(locator)` scrolls smoothly, `pause(ms?)` waits.
 - `demo.seed(stage, { feedback })` replaces all data with the demo course at that stage. Pick the stage where a user would meet the feature.
+- `t(key)` is a UI label in the video's language, `localize(text)` picks the text to type.
 - `steps.ts` has shared steps.
 - End with an `expect`, so a broken scenario fails instead of recording a wrong video.
 
 ## Languages
 
-Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.manual.config.ts`. Only `fi` is enabled. Missing captions fall back to Finnish.
+Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.manual.config.ts`: `fi` and `en`. Missing captions fall back to Finnish. The title is in Finnish, other languages are annotations.
 
 ## Narration
 

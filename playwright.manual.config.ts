@@ -34,5 +34,15 @@ export default defineConfig<ManualOptions>({
         timezoneId: 'Europe/Helsinki',
       },
     },
+    {
+      name: 'en',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport,
+        lang: 'en',
+        locale: 'en-GB',
+        timezoneId: 'Europe/Helsinki',
+      },
+    },
   ],
 })

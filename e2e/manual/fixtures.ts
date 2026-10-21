@@ -8,6 +8,7 @@ import { createDemo, type Demo } from './demo'
 import { getNarrator } from './narration'
 import { encodeVideo, type PlacedClip, updateIndex } from './output'
 import { CURTAIN_FADE_MS, installOverlay, showCaption, showCurtain } from './overlay'
+import { createTranslate, type Translate } from './translate'
 
 export type Language = 'fi' | 'sv' | 'en'
 export type Caption = { fi: string; sv?: string; en?: string }
@@ -25,6 +26,10 @@ type Recording = {
 
 type ManualFixtures = {
   demo: Demo
+  // A UI label in the video's language, like t('common:save')
+  t: Translate
+  // Text the user types, in the video's language
+  localize: (text: Caption) => string
   recording: Recording
   caption: (text: Caption, minMs?: number) => Promise<void>
   // Points the cursor at an element without clicking, to show what a caption is about
@@ -110,6 +115,14 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
     await use(createDemo(request, lang))
   },
 
+  t: async ({ lang }, use) => {
+    await use(createTranslate(lang))
+  },
+
+  localize: async ({ lang }, use) => {
+    await use(text => text[lang] ?? text.fi)
+  },
+
   // Fails the video if the browser talks to anything but the local app, like Sentry or another real service
   page: async ({ page, baseURL }, use) => {
     const appOrigin = new URL(baseURL!).origin
@@ -160,7 +173,8 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       const videoPath = await encodeVideo(webmPath, clips, trimMs)
       await updateIndex(dir, {
         slug,
-        title: testInfo.title,
+        // The title is in Finnish, the other languages are annotations like { type: 'en', description: 'Title' }
+        title: testInfo.annotations.find(annotation => annotation.type === lang)?.description ?? testInfo.title,
         url: `/manual/${lang}/${path.basename(videoPath)}`,
         durationMs,
         captions: recording.captions,

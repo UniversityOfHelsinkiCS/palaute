@@ -63,7 +63,6 @@ export const encodeVideo = async (webmPath: string, clips: PlacedClip[], trimMs 
   }
 }
 
-// One index per language lists the videos with their captions
 export const updateIndex = async (dir: string, video: VideoInfo) => {
   const indexPath = path.join(dir, 'index.json')
   let index: VideoInfo[] = []
