@@ -8,21 +8,7 @@ inputs:
 runs:
   using: composite
   steps:
-    - uses: actions/setup-node@v7
-      with:
-        node-version-file: package.json
-        cache: npm
-
-    - name: npm ci
-      shell: bash
-      run: npm ci --no-audit --no-fund
-
-    - name: Install Playwright browser and ffmpeg
-      shell: bash
-      run: |
-        npx playwright install --with-deps chromium
-        sudo apt-get install -y --no-install-recommends ffmpeg
-
+    # Everything that needs the registry runs before any npm package
     - uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
 
     - name: Log in to the registry
@@ -41,12 +27,42 @@ runs:
 
     - name: Start the application
       uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
-      env:
-        VERSION: ${{ github.ref_name }}
       with:
         timeout_minutes: 5
         max_attempts: 3
         command: docker compose -f docker-compose.ci.yml -f docker-compose.manual.yml up -d
+
+    - name: Log out of the registry
+      shell: bash
+      run: docker logout registry.version.helsinki.fi
+
+    - uses: actions/setup-node@v7
+      with:
+        node-version-file: package.json
+        cache: npm
+
+    - name: npm ci
+      shell: bash
+      run: npm ci --no-audit --no-fund
+
+    - name: Find the Playwright version
+      id: playwright
+      shell: bash
+      run: echo "version=$(node -p "require('@playwright/test/package.json').version")" >> "$GITHUB_OUTPUT"
+
+    - uses: actions/cache@v6
+      id: browser
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright.outputs.version }}
+
+    - name: Install Playwright browser and ffmpeg
+      shell: bash
+      run: |
+        if [ "$CACHED" = true ]; then npx playwright install-deps chromium; else npx playwright install --with-deps chromium; fi
+        sudo apt-get install -y --no-install-recommends ffmpeg
+      env:
+        CACHED: ${{ steps.browser.outputs.cache-hit }}
 
     - name: Wait for the application
       shell: bash

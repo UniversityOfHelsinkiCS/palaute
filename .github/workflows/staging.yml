@@ -14,7 +14,8 @@ jobs:
   manual-videos:
     if: ${{ github.actor != 'renovate[bot]' }}
     uses: ./.github/workflows/manual-videos.yml
-    secrets: inherit
+    secrets:
+      VERSION_PUSH_SECRET: ${{ secrets.VERSION_PUSH_SECRET }}
 
   build-and-push:
     if: ${{ github.actor != 'renovate[bot]' }}

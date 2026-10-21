@@ -13,6 +13,8 @@ export default defineConfig<ManualOptions>({
   outputDir: 'test-results/manual',
   fullyParallel: false,
   workers: 1,
+  // Every video must pass before a deploy, so a flaky step gets a second chance
+  retries: process.env.CI ? 1 : 0,
   timeout: narrationPass ? 0 : 180_000,
   reporter: 'list',
   use: {

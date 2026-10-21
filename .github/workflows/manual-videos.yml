@@ -4,37 +4,22 @@ name: Manual videos
 on:
   workflow_dispatch:
   workflow_call:
+    secrets:
+      VERSION_PUSH_SECRET:
+        required: true
 
-# Runs started by a push queue
-concurrency:
-  group: manual-videos-${{ github.event_name == 'push' && github.ref || github.run_id }}
-  cancel-in-progress: false
+permissions:
+  contents: read
 
 env:
-  # Pulled and pushed with ORAS
   NARRATION_CACHE: registry.version.helsinki.fi/toska/openshift/kontit/norppa-manual-narration:latest
 
 jobs:
-  scenarios:
-    runs-on: ubuntu-latest
-    timeout-minutes: 5
-    outputs:
-      scenarios: ${{ steps.list.outputs.scenarios }}
-
-    steps:
-      - uses: actions/checkout@v7
-
-      - name: List the scenarios
-        id: list
-        working-directory: e2e/manual/scenarios
-        run: echo "scenarios=$(printf '%s\n' *.manual.ts | jq -Rnc '[inputs]')" >> "$GITHUB_OUTPUT"
-
   record:
-    needs: scenarios
     strategy:
       fail-fast: false
       matrix:
-        scenario: ${{ fromJSON(needs.scenarios.outputs.scenarios) }}
+        shard: [1, 2, 3, 4, 5, 6]
     runs-on: ubuntu-latest
     timeout-minutes: 120
 
@@ -49,14 +34,13 @@ jobs:
         id: missing
         run: |
           touch "$MANUAL_MISSING_FILE"
-          npx playwright test -c playwright.manual.config.ts "$SCENARIO"
+          npx playwright test -c playwright.manual.config.ts --shard="$SHARD"
           echo "missing=$([ -s "$MANUAL_MISSING_FILE" ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
         env:
           MANUAL_PASS: narrate
           MANUAL_MISSING_FILE: ${{ runner.temp }}/missing.txt
-          SCENARIO: ${{ matrix.scenario }}
+          SHARD: ${{ matrix.shard }}/${{ strategy.job-total }}
 
-      # Record generates the missing clips before recording
       - name: Start the voice service
         if: ${{ steps.missing.outputs.missing == 'true' }}
         uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0
@@ -71,26 +55,38 @@ jobs:
         run: timeout 900 bash -c 'until curl -sf http://localhost:5005/health; do sleep 5; done'
 
       - name: Record
-        run: npm run manual:record -- "$SCENARIO"
+        run: npm run manual:record -- --shard="$SHARD"
         env:
-          SCENARIO: ${{ matrix.scenario }}
+          SHARD: ${{ matrix.shard }}/${{ strategy.job-total }}
 
-      # Also on failure, so the new clips are saved
+      # Also on failure and timeout, so the new clips are saved and a re-run continues from them
       - uses: actions/upload-artifact@v7
-        if: ${{ !cancelled() }}
+        if: ${{ always() }}
         with:
-          name: narration-${{ strategy.job-index }}
+          name: narration-${{ matrix.shard }}
           path: e2e/manual/.narration-cache
           include-hidden-files: true
+          # A re-run shard uploads again
+          overwrite: true
           if-no-files-found: ignore
           retention-days: 1
 
       - uses: actions/upload-artifact@v7
         with:
-          name: video-${{ strategy.job-index }}
+          name: video-${{ matrix.shard }}
           path: public/manual
           if-no-files-found: error
           retention-days: 1
+          overwrite: true
+
+      - uses: actions/upload-artifact@v7
+        if: ${{ failure() }}
+        with:
+          name: test-results-${{ matrix.shard }}
+          path: test-results/manual
+          if-no-files-found: ignore
+          retention-days: 3
+          overwrite: true
 
       - name: Check logs
         if: failure()
@@ -98,7 +94,7 @@ jobs:
 
   save-narration:
     needs: record
-    if: ${{ !cancelled() && needs.record.result != 'skipped' }}
+    if: ${{ !cancelled() }}
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -118,12 +114,16 @@ jobs:
           path: .narration-cache
           merge-multiple: true
 
-      # Unused clips are dropped only when every scenario passed
+      # Unused clips are dropped only when every shard of a first attempt passed on master. Releases, which are of older
+      # commits, other branches and re-runs, which may miss expired shards, only add clips.
       - name: Save the narration cache
         env:
-          ALL_RECORDED: ${{ needs.record.result == 'success' }}
+          ALL_RECORDED: ${{ needs.record.result == 'success' && github.run_attempt == 1 && github.ref == 'refs/heads/master' }}
         run: |
-          oras pull "$NARRATION_CACHE" -o saved || echo "No narration cache yet"
+          # Fails rather than saving this run's clips over a cache it couldn't read, unless there is none
+          if ! error=$(oras pull "$NARRATION_CACHE" -o saved 2>&1); then
+            grep -qi "not found" <<< "$error" || { echo "$error"; exit 1; }
+          fi
           mkdir -p saved/.narration-cache .narration-cache
           if [ "$ALL_RECORDED" != true ]; then cp -r saved/.narration-cache/. .narration-cache/; fi
           if diff -rq saved/.narration-cache .narration-cache; then
@@ -144,7 +144,12 @@ jobs:
           path: videos
 
       - name: Merge the videos
+        env:
+          # The number of shards in record's matrix
+          SHARDS: 6
         run: |
+          # A re-run shard finds the other shards' artifacts expired after a day, and a partial set must not be deployed
+          [ "$(ls videos | wc -l)" -eq "$SHARDS" ] || { echo "Expected the videos of $SHARDS shards"; exit 1; }
           mkdir -p manual
           for video in videos/*; do cp -r "$video"/. manual/; done
           for lang in manual/*; do
