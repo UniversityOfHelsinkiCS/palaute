@@ -221,16 +221,21 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
     if (error) removeButtonRef.current?.focus()
   }, [error])
 
-  const removeErrorStudentNumbers = () => {
-    const studentNumbers = value.filter(v => !errorStudentNumbers.has(v))
+  const updateStudentNumbers = studentNumbers => {
     setValue(studentNumbers)
     formikProps.setFieldValue(name, studentNumbers)
+  }
+
+  const removeErrorStudentNumbers = () => {
+    updateStudentNumbers(value.filter(v => !errorStudentNumbers.has(v)))
     formikProps.setStatus({ ...formikProps.status, [name]: undefined })
     inputRef.current?.focus()
   }
 
   const [removeDialogOpen, setRemoveDialogOpen] = React.useState(false)
   const [removeConfirmed, setRemoveConfirmed] = React.useState(false)
+  // Set when the dialog is about removing a single chip instead of the erroneous student numbers
+  const [chipRemoval, setChipRemoval] = React.useState(null)
 
   const handleConfirmRemove = () => {
     setRemoveConfirmed(true)
@@ -240,18 +245,29 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
   // Remove only after the transition: while the dialog is open the rest of the page is
   // aria-hidden, and Firefox does not announce focus moved into hidden content
   const handleRemoveDialogExited = () => {
+    setChipRemoval(null)
     if (!removeConfirmed) return
     setRemoveConfirmed(false)
-    removeErrorStudentNumbers()
+
+    if (chipRemoval) {
+      updateStudentNumbers(chipRemoval.studentNumbers)
+      inputRef.current?.focus()
+    } else {
+      removeErrorStudentNumbers()
+    }
   }
 
   const [firstErrorStudentNumber] = errorStudentNumbers
-  const removeConfirmation =
-    errorStudentNumbers.size === 1
-      ? t('organisationSurveys:confirmStudentDelete', { studentNumber: firstErrorStudentNumber })
-      : t('organisationSurveys:confirmStudentDeleteMany', { count: errorStudentNumbers.size })
+  let removeConfirmation
+  if (chipRemoval) {
+    removeConfirmation = t('organisationSurveys:confirmStudentDelete', { studentNumber: chipRemoval.studentNumber })
+  } else if (errorStudentNumbers.size === 1) {
+    removeConfirmation = t('organisationSurveys:confirmStudentDelete', { studentNumber: firstErrorStudentNumber })
+  } else {
+    removeConfirmation = t('organisationSurveys:confirmStudentDeleteMany', { count: errorStudentNumbers.size })
+  }
 
-  const removeConfirmationDetails = errorStudentNumbers.size > 1 && (
+  const removeConfirmationDetails = !chipRemoval && errorStudentNumbers.size > 1 && (
     <Accordion
       variant="outlined"
       disableGutters
@@ -293,20 +309,26 @@ const StudentNumberInput = ({ name, title, editView = false, ...props }) => {
         freeSolo
         value={value}
         inputValue={inputValue}
-        onChange={(_, studentNumbers, reason, detail) => {
-          if (
-            editView &&
-            reason === 'removeOption' &&
-            !window.confirm(
-              t('organisationSurveys:confirmStudentDelete', {
-                studentNumber: detail.option,
-              })
-            )
-          )
-            return
+        onChange={(event, studentNumbers, reason, detail) => {
+          let newStudentNumbers = studentNumbers
+          let removedStudentNumber = detail?.option
 
-          setValue(studentNumbers)
-          formikProps.setFieldValue(name, studentNumbers)
+          // Autocomplete removes the chip it has focused with the arrow keys, or else the last chip. A screen reader
+          // can move focus to a chip without Autocomplete knowing, so remove the chip the key press came from instead
+          const chip = reason === 'removeOption' && event.target.closest('[data-tag-index]')
+          if (chip) {
+            const chipIndex = Number(chip.dataset.tagIndex)
+            removedStudentNumber = value[chipIndex]
+            newStudentNumbers = value.filter((_, index) => index !== chipIndex)
+          }
+
+          if (editView && reason === 'removeOption') {
+            setChipRemoval({ studentNumber: removedStudentNumber, studentNumbers: newStudentNumbers })
+            setRemoveDialogOpen(true)
+            return
+          }
+
+          updateStudentNumbers(newStudentNumbers)
         }}
         onInputChange={(_, newInputValue) => {
           const options = newInputValue.split(/[,\n; ]/)
