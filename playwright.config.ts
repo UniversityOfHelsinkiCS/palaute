@@ -1,9 +1,13 @@
 import { defineConfig, devices } from '@playwright/test'
 
 const inCI = !!process.env.CI
+// Without BASE_URL the tests run against the Vite dev server, which serves hundreds of
+// unbundled modules on every page load, so each navigation takes seconds
+const againstDevServer = !process.env.BASE_URL
 
 export default defineConfig({
   testDir: 'e2e/specs',
+  timeout: againstDevServer ? 90_000 : 30_000,
   // Tests share one database
   fullyParallel: false,
   workers: 1,
