@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next'
 import type { InitialValues } from '../CourseSearchInput'
 
 import { NorButton } from '../../../components/common/NorButton'
+import { getStudentNumbersErrorText } from '../utils'
 import RemoveStudentNumbersDialog from './RemoveStudentNumbersDialog'
 import ShowAllStudentsToggle from './ShowAllStudentsToggle'
 import StudentNumberInputInfo from './StudentNumberInputInfo'
@@ -25,7 +26,6 @@ type Teacher = User & { studentNumber?: string | null }
 
 // Built by getInvalidStudentNumbersError and getOverlappingStudentTeachersError in ../utils
 type StudentNumbersError = {
-  text: string
   data: string[]
   kind: keyof typeof REMOVE_ERROR_STUDENT_NUMBERS_LABELS
 }
@@ -45,7 +45,6 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
 
   // Submit errors are kept in status, because Formik's validation replaces the whole errors object
   const error: StudentNumbersError | undefined = formikProps.status?.[name]
-  const errorText = error?.text
   const errorData = error?.data
   const errorKind = error?.kind
   const teachers: Teacher[] = formikProps.values.teachers
@@ -64,6 +63,10 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
   }, [errorData, errorKind, value, teachers])
 
   const hasError = errorStudentNumbers.size > 0
+  const errorText = hasError ? getStudentNumbersErrorText(t, errorKind, [...errorStudentNumbers]) : ''
+  // The error is announced when a save finds it. Once the user starts fixing the numbers, the updated
+  // text is no longer announced over the focus moving back to the input, which reads it as its description.
+  const isUnfixedError = hasError && errorStudentNumbers.size === new Set(errorData).size
   const removeButtonLabelKey = REMOVE_ERROR_STUDENT_NUMBERS_LABELS[errorKind]
   const inputRef = React.useRef<HTMLInputElement>(null)
   const removeButtonRef = React.useRef<HTMLButtonElement>(null)
@@ -186,10 +189,10 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
             {...params}
             inputRef={inputRef}
             error={hasError}
-            helperText={hasError ? errorText : ''}
+            helperText={errorText}
             slotProps={{
               formHelperText: {
-                role: hasError ? 'alert' : undefined,
+                role: isUnfixedError ? 'alert' : undefined,
               },
             }}
           />

@@ -97,7 +97,15 @@ export const getOverlappingStudentTeachers = data => {
 // The error text is announced by screen readers, so long lists are cut short
 const LISTED_ERROR_STUDENT_NUMBERS = 4
 
-const getStudentNumbersErrorText = (t, messageKey, moreKey, studentNumbers) => {
+const STUDENT_NUMBERS_ERROR_KEYS = {
+  overlap: ['validationErrors:overlappingStudentTeacher', 'validationErrors:moreStudentNumbers'],
+  invalid: ['validationErrors:invalidStudentNumbers', 'validationErrors:moreInvalidStudentNumbers'],
+}
+
+// Built from the student numbers that are still erroneous, so the text keeps up as the user fixes them
+export const getStudentNumbersErrorText = (t, kind, studentNumbers) => {
+  const [messageKey, moreKey] = STUDENT_NUMBERS_ERROR_KEYS[kind]
+
   // A single remaining number is listed rather than summarised as "+ 1"
   const listed =
     studentNumbers.length > LISTED_ERROR_STUDENT_NUMBERS + 1
@@ -114,24 +122,12 @@ const getStudentNumbersErrorText = (t, messageKey, moreKey, studentNumbers) => {
   return text
 }
 
-export const getOverlappingStudentTeachersError = (t, studentNumbers) => ({
-  text: getStudentNumbersErrorText(
-    t,
-    'validationErrors:overlappingStudentTeacher',
-    'validationErrors:moreStudentNumbers',
-    studentNumbers
-  ),
+export const getOverlappingStudentTeachersError = studentNumbers => ({
   data: studentNumbers,
   kind: 'overlap',
 })
 
-export const getInvalidStudentNumbersError = (t, invalidStudentNumbers) => ({
-  text: getStudentNumbersErrorText(
-    t,
-    'validationErrors:invalidStudentNumbers',
-    'validationErrors:moreInvalidStudentNumbers',
-    invalidStudentNumbers
-  ),
+export const getInvalidStudentNumbersError = invalidStudentNumbers => ({
   data: invalidStudentNumbers,
   kind: 'invalid',
 })

@@ -51,7 +51,7 @@ const EditOrganisationSurvey = () => {
       const overlappingStudentNumbers = overlappingStudentTeachers.map(t => t.studentNumber)
 
       setStatus({
-        studentNumbers: getOverlappingStudentTeachersError(t, overlappingStudentNumbers),
+        studentNumbers: getOverlappingStudentTeachersError(overlappingStudentNumbers),
       })
       return
     }
@@ -89,7 +89,7 @@ const EditOrganisationSurvey = () => {
           const { invalidStudentNumbers } = error.response.data
 
           setStatus({
-            studentNumbers: getInvalidStudentNumbersError(t, invalidStudentNumbers),
+            studentNumbers: getInvalidStudentNumbersError(invalidStudentNumbers),
           })
         } else {
           handleClose()
