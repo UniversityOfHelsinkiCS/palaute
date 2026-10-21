@@ -1,8 +1,8 @@
 import React from 'react'
 
 export type StudentNumberRemoval =
-  | { kind: 'chip'; studentNumber: string; studentNumbers: string[] }
-  | { kind: 'errors' }
+  // A removed chip, or all of them when the input is cleared
+  { kind: 'input'; removedStudentNumbers: string[]; studentNumbers: string[] } | { kind: 'errors' }
 
 type Phase = 'closed' | 'open' | 'confirmed'
 

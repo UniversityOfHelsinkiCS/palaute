@@ -85,7 +85,7 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
   }
 
   const { requestRemoval, dialogProps } = useStudentNumberRemoval(removal => {
-    if (removal.kind === 'chip') {
+    if (removal.kind === 'input') {
       updateStudentNumbers(removal.studentNumbers)
       inputRef.current?.focus()
     } else {
@@ -125,7 +125,17 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
           }
 
           if (editView && reason === 'removeOption') {
-            requestRemoval({ kind: 'chip', studentNumber: removedStudentNumber, studentNumbers: newStudentNumbers })
+            requestRemoval({
+              kind: 'input',
+              removedStudentNumbers: [removedStudentNumber],
+              studentNumbers: newStudentNumbers,
+            })
+            return
+          }
+
+          // The clear button removes every student number at once
+          if (editView && reason === 'clear' && value.length > 0) {
+            requestRemoval({ kind: 'input', removedStudentNumbers: value, studentNumbers: [] })
             return
           }
 

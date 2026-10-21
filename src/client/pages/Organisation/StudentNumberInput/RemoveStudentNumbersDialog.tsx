@@ -20,17 +20,13 @@ type RemoveStudentNumbersDialogProps = {
 const RemoveStudentNumbersDialog = ({ removal, errorStudentNumbers, ...props }: RemoveStudentNumbersDialogProps) => {
   const { t } = useTranslation()
 
-  const [firstErrorStudentNumber] = errorStudentNumbers
-  let content: string
-  if (removal?.kind === 'chip') {
-    content = t('organisationSurveys:confirmStudentDelete', { studentNumber: removal.studentNumber })
-  } else if (errorStudentNumbers.size === 1) {
-    content = t('organisationSurveys:confirmStudentDelete', { studentNumber: firstErrorStudentNumber })
-  } else {
-    content = t('organisationSurveys:confirmStudentDeleteMany', { count: errorStudentNumbers.size })
-  }
+  const removedStudentNumbers = removal?.kind === 'input' ? removal.removedStudentNumbers : [...errorStudentNumbers]
+  const content =
+    removedStudentNumbers.length === 1
+      ? t('organisationSurveys:confirmStudentDelete', { studentNumber: removedStudentNumbers[0] })
+      : t('organisationSurveys:confirmStudentDeleteMany', { count: removedStudentNumbers.length })
 
-  const details = removal?.kind !== 'chip' && errorStudentNumbers.size > 1 && (
+  const details = removedStudentNumbers.length > 1 && (
     <Accordion
       variant="outlined"
       disableGutters
@@ -45,8 +41,8 @@ const RemoveStudentNumbersDialog = ({ removal, errorStudentNumbers, ...props }: 
       </AccordionSummary>
       <AccordionDetails>
         <Box component="ul" sx={{ m: 0, columnWidth: '8rem' }}>
-          {[...errorStudentNumbers].map(studentNumber => (
-            <li key={studentNumber}>{studentNumber}</li>
+          {removedStudentNumbers.map((studentNumber, index) => (
+            <li key={`${studentNumber}-${index}`}>{studentNumber}</li>
           ))}
         </Box>
       </AccordionDetails>
