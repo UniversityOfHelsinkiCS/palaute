@@ -47,7 +47,7 @@ Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.ma
 The voice is [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox) (MIT), running on CPU in `tts/` with pinned weights baked into the image. It watermarks every clip inaudibly.
 
 - `manual:record` first runs the scenarios without video to generate the clips, then records, so generation never freezes the video.
-- Clips are cached in `.narration-cache/` by the files in `tts/`, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
+- Clips are cached as Opus in `.narration-cache/` by the files in `tts/`, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
 - A full run without filters deletes clips that have not been used for a week.
 - The voice is set in `GENERATE_OPTIONS` in `tts/server.py`.
 - Without the service (`MANUAL_TTS_URL`) only cached clips are used, the rest is silent with a warning.

@@ -34,6 +34,56 @@ const clipDurationMs = async (clipPath: string) => {
   return Math.round(parseFloat(stdout) * 1000)
 }
 
+// Opus is a tenth of the WAV the service returns, which keeps the cache in the registry small
+const toOpus = async (wavPath: string, clipPath: string) => {
+  // Via a temp file, so an interrupted run never leaves a broken clip in the cache
+  await execFileAsync('ffmpeg', [
+    '-y',
+    '-v',
+    'error',
+    '-i',
+    wavPath,
+    '-c:a',
+    'libopus',
+    '-b:a',
+    '48k',
+    '-f',
+    'opus',
+    `${clipPath}.tmp`,
+  ])
+  await fs.rename(`${clipPath}.tmp`, clipPath)
+  await fs.rm(wavPath)
+}
+
+const SYNTHESIZE_ATTEMPTS = 3
+const SYNTHESIZE_RETRY_MS = 10_000
+
+// A dropped connection or a server error would otherwise fail the whole scenario, so retry them
+const synthesize = async (text: string, lang: string) => {
+  for (let attempt = 1; ; attempt++) {
+    const last = attempt === SYNTHESIZE_ATTEMPTS
+    let response: Response
+    try {
+      response = await fetch(`${TTS_URL}/synthesize`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, lang, voice: VOICE }),
+      })
+    } catch (error) {
+      if (last) throw error
+      console.warn(`Synthesis attempt ${attempt} failed, retrying: ${(error as Error).message}`)
+      await new Promise(resolve => setTimeout(resolve, SYNTHESIZE_RETRY_MS))
+      continue
+    }
+    if (response.ok) return Buffer.from(await response.arrayBuffer())
+    const message = `Synthesis failed (${response.status}): ${await response.text()}`
+    // A bad request fails the same way every time
+    if (response.status < 500 || last) throw new Error(message)
+    console.warn(`Synthesis attempt ${attempt} failed, retrying: ${message}`)
+    await new Promise(resolve => setTimeout(resolve, SYNTHESIZE_RETRY_MS))
+  }
+}
+
 const exists = async (file: string) => {
   try {
     await fs.access(file)
@@ -81,20 +131,16 @@ const createNarrator = async (): Promise<Narrator> => {
       const key = createHash('sha256')
         .update(JSON.stringify({ model, voice: VOICE, voiceAudio, lang, text }))
         .digest('hex')
-      const clipPath = path.join(CACHE_DIR, `${key}.wav`)
+      const clipPath = path.join(CACHE_DIR, `${key}.opus`)
+      // Clips were WAV before
+      const wavPath = path.join(CACHE_DIR, `${key}.wav`)
+      if (!(await exists(clipPath)) && (await exists(wavPath))) await toOpus(wavPath, clipPath)
       const cached = await exists(clipPath)
 
       if (!cached) {
         if (!health) return null
-        const response = await fetch(`${TTS_URL}/synthesize`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ text, lang, voice: VOICE }),
-        })
-        if (!response.ok) throw new Error(`Synthesis failed (${response.status}): ${await response.text()}`)
-        // Write via a temp file so an interrupted run never leaves a broken clip in the cache
-        await fs.writeFile(`${clipPath}.tmp`, Buffer.from(await response.arrayBuffer()))
-        await fs.rename(`${clipPath}.tmp`, clipPath)
+        await fs.writeFile(`${wavPath}.tmp`, await synthesize(text, lang))
+        await toOpus(`${wavPath}.tmp`, clipPath)
       } else {
         // Marks the clip as in use, so pruning keeps it
         await fs.utimes(clipPath, new Date(), new Date())
