@@ -9,12 +9,23 @@ jobs:
     uses: ./.github/workflows/test.yml
     secrets: inherit
 
+  manual-videos:
+    uses: ./.github/workflows/manual-videos.yml
+    secrets:
+      VERSION_PUSH_SECRET: ${{ secrets.VERSION_PUSH_SECRET }}
+
   build-and-push:
     runs-on: ubuntu-latest
-    needs: test
+    needs: [test, manual-videos]
 
     steps:
       - uses: actions/checkout@v7
+
+      - name: Add the manual videos
+        uses: actions/download-artifact@v8
+        with:
+          name: manual-videos
+          path: public/manual
 
       - name: Build image
         id: build-image

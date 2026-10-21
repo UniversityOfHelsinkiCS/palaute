@@ -69,7 +69,7 @@ To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies a
 
 ## CI
 
-`.github/workflows/manual-videos.yml` records the videos on CI.
+`.github/workflows/manual-videos.yml` records the videos on CI. Staging and production record the commit they build, and deploy only when every video passed.
 
 - The scenarios are split across the runners of the `record` matrix (`--shard`), which start the voice service only if clips are missing. A change in `tts/` generates them all again.
 - The clips are kept in the registry as `norppa-manual-narration:latest` (ORAS). They're saved after every run; unused ones are dropped only when every shard of a first attempt passed on master.
