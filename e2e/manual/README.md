@@ -50,6 +50,7 @@ The voice is [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox
 - Clips are cached as Opus in `.narration-cache/` by the files in `tts/`, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
 - A full run without filters deletes clips that have not been used for a week.
 - The voice is set in `GENERATE_OPTIONS` in `tts/server.py`.
+- Abbreviations the voice reads as words, like XLSX, are spelled out in `SPELLED_OUT` in `narration.ts`.
 - Without the service (`MANUAL_TTS_URL`) only cached clips are used, the rest is silent with a warning.
 - `MANUAL_VOICE=<name>` uses `tts/voices/<name>.wav`, see `tts/voices/README.md` for consent.
 

@@ -84,6 +84,24 @@ const synthesize = async (text: string, lang: string) => {
   }
 }
 
+// Abbreviations the voice would read as a word are spelled out, the caption keeps them as they are
+const SPELLED_OUT: Record<string, [RegExp, string][]> = {
+  fi: [
+    [/\bXLSX\b/g, 'äks-äl-äs-äks'],
+    [/\bpdf\b/gi, 'pee-dee-äf'],
+    [/\bIAM\b/g, 'ii-aa-äm'],
+    [/\bQR\b/g, 'kuu-är'],
+  ],
+  en: [
+    [/\bXLSX\b/g, 'X L S X'],
+    [/\bIAM\b/g, 'I A M'],
+    [/\bQR\b/g, 'Q R'],
+  ],
+}
+
+const toSpeech = (text: string, lang: string) =>
+  (SPELLED_OUT[lang] ?? []).reduce((speech, [abbreviation, letters]) => speech.replace(abbreviation, letters), text)
+
 const exists = async (file: string) => {
   try {
     await fs.access(file)
@@ -126,8 +144,9 @@ const createNarrator = async (): Promise<Narrator> => {
 
   return {
     online: Boolean(health),
-    narrate: async (text, lang) => {
+    narrate: async (caption, lang) => {
       if (health && !health.languages.includes(lang)) return null
+      const text = toSpeech(caption, lang)
       const key = createHash('sha256')
         .update(JSON.stringify({ model, voice: VOICE, voiceAudio, lang, text }))
         .digest('hex')
