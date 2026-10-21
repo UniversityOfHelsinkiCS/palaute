@@ -474,7 +474,6 @@
     "responsibleTeacherTitle": "Lägg till en ansvarsperson för enkäten",
     "responsibleTeacherEmail": "E-post",
     "studentNumberTitle": "Lägg till studenter till enkäten",
-    "studentNumberInputLabel": "Lägg in studentnummer här",
     "showAllStudents": "Visa alla {{count}} studenter (kan vara långsamt)",
     "showFewerStudents": "Visa färre studenter",
     "expandingStudentList": "Studentlistan expanderas",

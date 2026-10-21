@@ -479,7 +479,6 @@
     "students": "Opiskelijat",
     "studentNumberTitle": "Lisää kyselylle opiskelijoita",
     "editStudentNumberTitle": "Muokkaa kyselyn opiskelijoita",
-    "studentNumberInputLabel": "Liitä opiskelijanumerot tähän",
     "showAllStudents": "Näytä kaikki {{count}} opiskelijaa (voi hidastaa sivun toimintaa)",
     "showFewerStudents": "Näytä vähemmän opiskelijoita",
     "expandingStudentList": "Opiskelijalistaa laajennetaan",
