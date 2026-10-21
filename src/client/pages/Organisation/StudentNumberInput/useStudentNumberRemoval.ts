@@ -28,7 +28,7 @@ export const useStudentNumberRemoval = (onRemove: (removal: StudentNumberRemoval
       // Remove only after the transition: while the dialog is open the rest of the page is
       // aria-hidden, and Firefox does not announce focus moved into hidden content
       onExited: () => {
-        if (phase === 'confirmed') onRemove(removal)
+        if (phase === 'confirmed' && removal) onRemove(removal)
         setRemoval(null)
         setPhase('closed')
       },
