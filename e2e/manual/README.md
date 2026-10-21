@@ -33,6 +33,7 @@ manualTest('Otsikko', async ({ page, demo, loginAs, caption, click, fill }) => {
 
 - `caption(text, minMs?)` shows the text and plays its narration.
 - `click` / `fill` move the cursor to the element first, `fill` types character by character.
+- `hover(locator)` points at an element without clicking, to show what a caption is about.
 - `scrollTo(locator)` scrolls smoothly, `pause(ms?)` waits.
 - `demo.seed(stage, { feedback })` replaces all data with the demo course at that stage. Pick the stage where a user would meet the feature.
 - `steps.ts` has shared steps.

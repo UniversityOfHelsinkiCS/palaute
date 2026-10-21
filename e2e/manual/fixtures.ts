@@ -27,6 +27,8 @@ type ManualFixtures = {
   demo: Demo
   recording: Recording
   caption: (text: Caption, minMs?: number) => Promise<void>
+  // Points the cursor at an element without clicking, to show what a caption is about
+  hover: (locator: Locator) => Promise<void>
   click: (locator: Locator) => Promise<void>
   fill: (locator: Locator, text: string) => Promise<void>
   scrollTo: (locator: Locator) => Promise<void>
@@ -196,17 +198,10 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
     })
   },
 
-  click: async ({ page }, use) => {
+  hover: async ({ page }, use) => {
     let cursor = { x: 0, y: 0 }
 
     await use(async locator => {
-      if (narrationPass) return locator.click()
-      await moveTo(locator)
-      await locator.click()
-      await page.waitForTimeout(STEP_DELAY)
-    })
-
-    async function moveTo(locator: Locator) {
       await centerOnScreen(page, locator)
       const box = await locator.boundingBox()
       if (!box) throw new Error('Element has no bounding box, is it visible?')
@@ -214,11 +209,19 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       for (let step = 1; step <= CURSOR_STEPS; step++) {
         const progress = step / CURSOR_STEPS
         await page.mouse.move(cursor.x + (target.x - cursor.x) * progress, cursor.y + (target.y - cursor.y) * progress)
-        await page.waitForTimeout(CURSOR_MOVE_MS / CURSOR_STEPS)
+        await page.waitForTimeout(pace(CURSOR_MOVE_MS / CURSOR_STEPS))
       }
       cursor = target
-      await page.waitForTimeout(150)
-    }
+      await page.waitForTimeout(pace(150))
+    })
+  },
+
+  click: async ({ page, hover }, use) => {
+    await use(async locator => {
+      await hover(locator)
+      await locator.click()
+      await page.waitForTimeout(pace(STEP_DELAY))
+    })
   },
 
   fill: async ({ page, click }, use) => {
