@@ -236,7 +236,7 @@ test.describe('Feedback Correspondents', () => {
     await cancelIcon.click()
 
     await textField(page, 'formik-student-number-input-field').clear()
-    await addStudent(page, '0148959')
+    await addStudent(page, '019999999')
     await byDataCy(page, 'organisation-survey-editor-save').click()
 
     await expect(contains(studentInput, 'Please check the indicated invalid student numbers', 'p')).toBeAttached()
