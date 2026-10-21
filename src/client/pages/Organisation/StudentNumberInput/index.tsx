@@ -109,7 +109,8 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
         id={name}
         multiple
         fullWidth
-        clearOnBlur
+        // Adds a typed student number when focus leaves the input, so it isn't lost
+        autoSelect
         options={[]}
         freeSolo
         value={value}
@@ -143,7 +144,7 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
           }
 
           // Only the typed student number is normalised, as the existing ones already are
-          if (reason === 'createOption') {
+          if (reason === 'createOption' || reason === 'blur') {
             newStudentNumbers = value.concat(normaliseStudentNumbers([detail.option]))
           }
 
