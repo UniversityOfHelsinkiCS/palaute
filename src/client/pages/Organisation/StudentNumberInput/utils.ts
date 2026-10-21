@@ -1,12 +1,20 @@
 import { ADD_LEADING_ZERO_TO_STUDENT_NUMBERS } from '../../../util/common'
 
-export const splitStudentNumbers = (text: string) => text.split(/[,\n; ]/)
+// Splitting on any whitespace also drops the \r and tabs that come along when pasting from a spreadsheet
+export const splitStudentNumbers = (text: string) => text.split(/[\s,;]/)
 
+const STUDENT_NUMBER_LENGTH = 9
+
+// Spreadsheets drop the leading zeros of student numbers, so they are put back. Only digits are padded,
+// so that the user still recognises a mistyped student number in the validation error.
 export const normaliseStudentNumbers = (studentNumbers: string[]) =>
   studentNumbers
+    .map(studentNumber => studentNumber.trim())
     .filter(studentNumber => studentNumber)
     .map(studentNumber =>
-      studentNumber.length < 9 && ADD_LEADING_ZERO_TO_STUDENT_NUMBERS ? `0${studentNumber}` : studentNumber
+      ADD_LEADING_ZERO_TO_STUDENT_NUMBERS && /^\d+$/.test(studentNumber)
+        ? studentNumber.padStart(STUDENT_NUMBER_LENGTH, '0')
+        : studentNumber
     )
 
 const VISIBLE_STUDENT_NUMBERS_AT_START = 250

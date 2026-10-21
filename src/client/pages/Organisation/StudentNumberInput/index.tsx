@@ -139,12 +139,17 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
             return
           }
 
+          // Only the typed student number is normalised, as the existing ones already are
+          if (reason === 'createOption') {
+            newStudentNumbers = value.concat(normaliseStudentNumbers([detail.option]))
+          }
+
           updateStudentNumbers(newStudentNumbers)
         }}
         onInputChange={(_, newInputValue) => {
           const parts = splitStudentNumbers(newInputValue)
           if (parts.length > 1) {
-            updateStudentNumbers(normaliseStudentNumbers(value.concat(parts)))
+            updateStudentNumbers(value.concat(normaliseStudentNumbers(parts)))
             setInputValue('')
           } else {
             setInputValue(newInputValue)
