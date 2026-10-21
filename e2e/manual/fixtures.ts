@@ -35,8 +35,10 @@ type ManualFixtures = {
   curtain: (text: Caption, change: () => Promise<void>) => Promise<void>
 }
 
-// The narration pass only generates the voice clips, so the record pass never waits on them
 const narrationPass = process.env.MANUAL_PASS === 'narrate'
+// The narration pass runs the same steps as the recording, so it also checks them, but without the pacing
+const pace = (ms: number) => (narrationPass ? 0 : ms)
+const scrollBehavior: ScrollBehavior = narrationPass ? 'instant' : 'smooth'
 
 const STEP_DELAY = 600
 const TYPE_DELAY = 60
@@ -72,11 +74,11 @@ const centerOnScreen = async (page: Page, locator: Locator) => {
   const center = box.y + box.height / 2
   if (center > height * SCREEN_EDGE && center < height * (1 - SCREEN_EDGE)) return
 
-  await locator.evaluate(element => element.scrollIntoView({ behavior: 'smooth', block: 'center' }))
+  await locator.evaluate((element, behavior) => element.scrollIntoView({ behavior, block: 'center' }), scrollBehavior)
   // Elements that cannot scroll, like the navbar, stay put and need no wait
   let previous = box
   for (let waited = 0; waited < SCROLL_MS * 2; waited += 100) {
-    await page.waitForTimeout(100)
+    await page.waitForTimeout(pace(100))
     const current = await locator.boundingBox()
     if (!current || current.y === previous.y) break
     previous = current
@@ -177,8 +179,7 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
       if (narrationPass) return
       if (clip && !clip.cached) console.warn(`Narration was not pre-generated, the video freezes here: ${text}`)
 
-      // The video starts just before the first caption, so the page must have finished rendering by then.
-      // This wait is cut out of the video.
+      // The video starts just before the first caption, so the page must have rendered. This wait is cut out.
       if (recording.firstCaptionMs === null) {
         await page.waitForLoadState('networkidle')
         await page.waitForTimeout(SETTLE_MS)
@@ -222,35 +223,35 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
 
   fill: async ({ page, click }, use) => {
     await use(async (locator, text) => {
-      if (narrationPass) return locator.fill(text)
       await click(locator)
-      await locator.pressSequentially(text, { delay: TYPE_DELAY })
-      await page.waitForTimeout(STEP_DELAY)
+      await locator.pressSequentially(text, { delay: pace(TYPE_DELAY) })
+      await page.waitForTimeout(pace(STEP_DELAY))
     })
   },
 
   scrollTo: async ({ page }, use) => {
     await use(async locator => {
-      if (narrationPass) return locator.scrollIntoViewIfNeeded()
-      await locator.evaluate(element => element.scrollIntoView({ behavior: 'smooth', block: 'center' }))
-      await page.waitForTimeout(SCROLL_MS)
+      await locator.evaluate(
+        (element, behavior) => element.scrollIntoView({ behavior, block: 'center' }),
+        scrollBehavior
+      )
+      await page.waitForTimeout(pace(SCROLL_MS))
     })
   },
 
   curtain: async ({ page, lang, recording }, use) => {
     await use(async (text, change) => {
-      if (narrationPass) return change()
       // A quiet pause between the scenes, so the caption before it is finished and removed first
-      await page.waitForTimeout(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now()))
+      await page.waitForTimeout(pace(Math.max(0, recording.speakingUntil + NARRATION_GAP_MS - Date.now())))
       await showCaption(page, '')
       const shownAt = Date.now()
       recording.captions.push(text[lang] ?? text.fi)
       await showCurtain(page, text[lang] ?? text.fi)
-      await page.waitForTimeout(CURTAIN_FADE_MS)
+      await page.waitForTimeout(pace(CURTAIN_FADE_MS))
       await change()
-      await page.waitForTimeout(Math.max(STEP_DELAY, shownAt + CURTAIN_MIN_MS - Date.now()))
+      await page.waitForTimeout(pace(Math.max(STEP_DELAY, shownAt + CURTAIN_MIN_MS - Date.now())))
       await showCurtain(page, null)
-      await page.waitForTimeout(CURTAIN_FADE_MS + AFTER_CURTAIN_MS)
+      await page.waitForTimeout(pace(CURTAIN_FADE_MS + AFTER_CURTAIN_MS))
     })
   },
 

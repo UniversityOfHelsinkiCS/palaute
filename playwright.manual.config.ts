@@ -20,6 +20,8 @@ export default defineConfig<ManualOptions>({
     actionTimeout: 15_000,
     navigationTimeout: 60_000,
     video: narrationPass ? 'off' : { mode: 'retain-on-failure', size: viewport },
+    // Only without video, as tracing could make the recording stutter, and a failed recording keeps its video
+    trace: narrationPass ? 'retain-on-failure' : 'off',
   },
   projects: [
     {
