@@ -21,7 +21,7 @@ const SectionList = ({ page }: { page: GuidePage }) => {
   const activeSection = useActiveSection(page.sections)
 
   return (
-    <Box component="ul" sx={{ ...list, borderLeft: '3px solid', borderColor: 'divider' }}>
+    <Box component="ul" sx={list}>
       {page.sections.map(section => (
         <li key={section.id}>
           <Link
@@ -33,10 +33,8 @@ const SectionList = ({ page }: { page: GuidePage }) => {
               py: 0.5,
               pl: 3,
               pr: 1.5,
-              // Over the list's border
-              ml: '-3px',
               borderLeft: '3px solid',
-              borderColor: section.id === activeSection ? 'primary.main' : 'transparent',
+              borderColor: section.id === activeSection ? 'primary.main' : 'divider',
               fontSize: '0.875rem',
               fontWeight: 400,
               color: section.id === activeSection ? 'primary.main' : 'text.primary',
