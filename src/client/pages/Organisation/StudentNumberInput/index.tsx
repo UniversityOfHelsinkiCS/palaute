@@ -138,7 +138,7 @@ const StudentNumberInput = ({ name, title, editView = false }: StudentNumberInpu
           }
 
           // The clear button removes every student number at once
-          if (editView && reason === 'clear' && value.length > 0) {
+          if (reason === 'clear' && value.length > 0) {
             requestRemoval({ kind: 'input', removedStudentNumbers: value, studentNumbers: [] })
             return
           }
