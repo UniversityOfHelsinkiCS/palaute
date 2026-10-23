@@ -32,7 +32,8 @@ COPY package* ./
 RUN npm ci -f --omit-dev --ignore-scripts
 COPY . .
 
-RUN npm run build
+# The build copies the manual videos to build/client
+RUN npm run build && rm -rf public/manual
 
 EXPOSE $EXPOSE_PORT
 
