@@ -156,6 +156,8 @@ const createNarrator = async (): Promise<Narrator> => {
       // Clips were WAV before
       const wavPath = path.join(CACHE_DIR, `${key}.wav`)
       if (!(await exists(clipPath)) && (await exists(wavPath))) await toOpus(wavPath, clipPath)
+      // A broken clip is generated again
+      if ((await exists(clipPath)) && !(await clipDurationMs(clipPath).catch(() => null))) await fs.rm(clipPath)
       const cached = await exists(clipPath)
 
       if (!cached) {
