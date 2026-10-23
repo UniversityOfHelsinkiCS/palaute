@@ -23,8 +23,8 @@ manualTest(
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
     await caption({
-      fi: 'Kurssin opettajat näkyvät rooleittain otsikoiden Vastuuopettajat, Opettajat ja Hallintohenkilöt alla. Avataan kaikki listat.',
-      en: "The course's teachers are listed by role under the headings Responsible teachers, Teachers and Administrative persons. Open all the lists.",
+      fi: 'Kurssin opettajat näkyvät rooleittain otsikoiden Vastuuopettajat, Opettajat ja Hallintohenkilöt alla.',
+      en: "The course's teachers are listed by role under the headings Responsible teachers, Teachers and Administrative persons.",
     })
     await click(byDataCy(page, 'feedback-target-teacher-list').getByRole('button'))
     await click(byDataCy(page, 'feedback-target-responsible-administrative-person-list').getByRole('button'))
@@ -65,8 +65,13 @@ manualTest(
     })
 
     await caption({
-      fi: 'Koodin vieressä on oikeutesi, Admin tai Read. Esimerkiksi koulutusohjelman palautevastaava saa siihen admin-oikeudet. Nimi näkyy, kun viet hiiren koodin päälle.',
-      en: "Next to the code is your right, Admin or Read. For example, a programme's feedback liaison gets admin rights to it. The name shows when you hover over the code.",
+      fi: 'Koodin vieressä on oikeutesi. Read on lukuoikeus: näet organisaation sivun ja julkiset vastaukset. Admin antaa lisäksi kaikki vastaukset ja organisaation asetukset.',
+      en: "Next to the code is your right. Read lets you see the organisation's page and public answers. Admin also gives you all answers and the organisation's settings.",
+    })
+
+    await caption({
+      fi: 'Organisaation nimi näkyy, kun viet hiiren koodin päälle.',
+      en: "The organisation's name shows when you hover over the code.",
     })
     await hover(dialog.getByText('KH50_005'))
     await pause(1500)
