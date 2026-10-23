@@ -112,8 +112,13 @@ jobs:
       - uses: actions/download-artifact@v8
         with:
           pattern: narration-*
-          path: .narration-cache
-          merge-multiple: true
+          path: shards
+
+      # One at a time, shards that made the same clip would download it into the same file at once and break it
+      - name: Merge the shards' clips
+        run: |
+          mkdir -p .narration-cache
+          for shard in shards/*/; do cp -rn "$shard". .narration-cache/; done
 
       # Unused clips are dropped only when every shard of a first attempt passed on master. Releases, which are of older
       # commits, other branches and re-runs, which may miss expired shards, only add clips.
@@ -126,7 +131,7 @@ jobs:
             grep -qi "not found" <<< "$error" || { echo "$error"; exit 1; }
           fi
           mkdir -p saved/.narration-cache .narration-cache
-          if [ "$ALL_RECORDED" != true ]; then cp -r saved/.narration-cache/. .narration-cache/; fi
+          if [ "$ALL_RECORDED" != true ]; then cp -rn saved/.narration-cache/. .narration-cache/; fi
           if diff -rq saved/.narration-cache .narration-cache; then
             echo "Narration cache unchanged"
           else
