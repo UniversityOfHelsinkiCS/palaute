@@ -16,6 +16,9 @@ import GuideVideo from './GuideVideo'
 const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
   markdown.replace(LABEL, (_, key: string, pinned?: string) => `**${translate(key, pinned).replace(/<[^>]*>/g, '')}**`)
 
+// Editors only need to put a video on its own line, the blank lines make it a paragraph of its own
+const separateVideos = (markdown: string) => markdown.replace(new RegExp(VIDEO.source, 'gm'), '\n$&\n')
+
 // The parts of a hast tree the plugins need; the hast types are only a transitive dependency
 type HastNode = {
   type: string
@@ -177,7 +180,7 @@ const GuideMarkdown = ({ markdown, editUrl, language }: GuideMarkdownProps) => {
     <EditUrlContext.Provider value={editUrl}>
       <LanguageContext.Provider value={language}>
         <Markdown components={components} rehypePlugins={[rehypeHeadingIds, rehypeVideos]} disallowedElements={['img']}>
-          {renderLabels(markdown, translate)}
+          {renderLabels(separateVideos(markdown), translate)}
         </Markdown>
       </LanguageContext.Provider>
     </EditUrlContext.Provider>

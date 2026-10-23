@@ -5,7 +5,7 @@
 export const LABEL = /\[\[(?!video:)([\w:-]+)(?:\|(fi|sv|en))?\]\]/g
 // "## Heading {#id}" gives a heading an id to link to, the same in every language
 export const HEADING_ID = /\s*\{#([\w-]+)\}\s*$/
-// [[video:slug]] as a paragraph of its own is the video recorded by e2e/manual/scenarios/<slug>.manual.ts
+// [[video:slug]] on its own line is the video recorded by e2e/manual/scenarios/<slug>.manual.ts
 export const VIDEO = /^\[\[video:([a-z0-9-]+)\]\]$/
 
 export type GuideSection = {

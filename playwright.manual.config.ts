@@ -5,6 +5,8 @@ import type { ManualOptions } from './e2e/manual/fixtures'
 const viewport = { width: 1360, height: 860 }
 // record.ts first runs the scenarios without video to generate the narration, then records
 const narrationPass = process.env.MANUAL_PASS === 'narrate'
+// Dates computed in the tests must match the browser's timezoneId
+process.env.TZ = 'Europe/Helsinki'
 
 // Records user manual videos, see e2e/manual/README.md
 export default defineConfig<ManualOptions>({
