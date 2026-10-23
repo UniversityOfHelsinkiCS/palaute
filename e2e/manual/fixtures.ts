@@ -111,8 +111,8 @@ export const manualTest = test.extend<ManualOptions & ManualFixtures>({
   },
 
   // The UI language comes from the seeded users
-  demo: async ({ request, lang }, use) => {
-    await use(createDemo(request, lang))
+  demo: async ({ request, page, lang }, use) => {
+    await use(createDemo(request, page, lang))
   },
 
   t: async ({ lang }, use) => {

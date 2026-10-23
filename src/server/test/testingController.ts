@@ -7,6 +7,7 @@ import { getUniversitySurvey } from '../services/surveys'
 import { AuthenticatedRequest } from '../types'
 import { ApplicationError } from '../util/ApplicationError'
 import { inProduction } from '../util/config'
+import { setClock } from './manual/clock'
 import { seedManual } from './manual/seed'
 import { seedDb, seedUsers, seedOrganisationCorrespondent } from './seed'
 import { seedFeedbacks } from './seedFeedbacks'
@@ -62,12 +63,14 @@ const seedFeedbackTargets = async (req: AuthenticatedRequest, res: Response) => 
 }
 
 const resetDb = async (req: AuthenticatedRequest, res: Response) => {
+  setClock(null)
   await seedDb()
   res.sendStatus(204)
 }
 
 const seedManualHandler = async (req: AuthenticatedRequest, res: Response) => {
-  const { users, teacherId, colleagues, feedbackCorrespondentIds, studentIds, feedbackFromIds, course } = req.body
+  const { now, users, teacherId, colleagues, feedbackCorrespondentIds, studentIds, feedbackFromIds, course } = req.body
+  setClock(now)
   const { fbt, loweredQuestionIds } = await seedManual({
     users: users.map(userHeadersToUser),
     teacherId,

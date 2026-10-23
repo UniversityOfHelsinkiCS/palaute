@@ -1,4 +1,4 @@
-import type { APIRequestContext } from '@playwright/test'
+import type { APIRequestContext, Page } from '@playwright/test'
 
 import { addDays, subDays } from 'date-fns'
 
@@ -9,20 +9,37 @@ import { colleagues, students, teacher } from './users'
 // Same as in src/server/test/manual/seed.ts
 export const COURSE_CODE = 'TKT10002'
 
+// The server and the browser run from this moment, so the day of the recording never changes the videos.
+// A Wednesday in the middle of the autumn term, far from the turn of the academic year.
+export const NOW = new Date('2026-11-18T12:00:00+02:00')
+
 // Where the course is in its life cycle. Feedback opens the day after the course ends and stays open for two weeks, as by default.
 export type Stage = 'ongoing' | 'feedbackOpen' | 'feedbackClosed'
 
 const courseDates = (stage: Stage) => {
   const endDate = {
-    ongoing: addDays(new Date(), 14),
-    feedbackOpen: subDays(new Date(), 8),
-    feedbackClosed: subDays(new Date(), 16),
+    ongoing: addDays(NOW, 14),
+    feedbackOpen: subDays(NOW, 8),
+    feedbackClosed: subDays(NOW, 16),
   }[stage]
   const opensAt = addDays(endDate, 1)
   return { startDate: subDays(endDate, 60), endDate, opensAt, closesAt: addDays(opensAt, 14) }
 }
 
-export const createDemo = (request: APIRequestContext, lang: string) => {
+// Runs in the browser, like setClock in src/server/test/manual/clock.ts
+const useClock = ({ now, at }: { now: number; at: number }) => {
+  const RealDate: DateConstructor = (window as any).realDate ?? Date
+  ;(window as any).realDate = RealDate
+  const shiftedNow = () => RealDate.now() + now - at
+
+  window.Date = new Proxy(RealDate, {
+    construct: (target, args) => (args.length === 0 ? new target(shiftedNow()) : new (target as any)(...args)),
+    apply: () => new RealDate(shiftedNow()).toString(),
+    get: (target, prop) => (prop === 'now' ? shiftedNow : Reflect.get(target, prop)),
+  })
+}
+
+export const createDemo = (request: APIRequestContext, page: Page, lang: string) => {
   let fbtId: number | undefined
   let loweredQuestionIds: number[] = []
 
@@ -45,8 +62,11 @@ export const createDemo = (request: APIRequestContext, lang: string) => {
         ...user,
         preferredLanguage: lang,
       }))
+      // The pages opened after seeding share the server's clock
+      await page.addInitScript(useClock, { now: NOW.getTime(), at: Date.now() })
       const response = await request.post('/test/seed-manual', {
         data: {
+          now: NOW.toISOString(),
           users,
           teacherId: teacher.hyPersonSisuId,
           colleagues: {

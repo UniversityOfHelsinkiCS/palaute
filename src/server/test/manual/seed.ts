@@ -317,7 +317,7 @@ export const seedManual = async ({
   for (const userId of feedbackCorrespondentIds)
     await OrganisationFeedbackCorrespondent.create({ userId, organisationId: PROGRAMME_ID, userCreated: true })
 
-  // Two earlier autumns with feedback and a feedback response, for the course summary
+  // The same course one and two years earlier with feedback and a feedback response, for the course summary
   for (const yearsAgo of [1, 2]) {
     const pastCourse = Object.fromEntries(
       Object.entries(course).map(([key, date]) => [key, subYears(new Date(date), yearsAgo).toISOString()])

@@ -43,6 +43,7 @@ manualTest(
 - `hover(locator)` points at an element without clicking, to show what a caption is about.
 - `scrollTo(locator)` scrolls smoothly, `pause(ms?)` waits.
 - `demo.seed(stage, { feedback })` replaces all data with the demo course at that stage. Pick the stage where a user would meet the feature.
+- The server and the browser run from `NOW` in `demo.ts`, not the real date, so a video is the same whenever it is recorded. Compute dates from the ones `demo.seed` returns, never from `new Date()`.
 - `t(key)` is a UI label in the video's language, `localize(text)` picks the text to type.
 - `steps.ts` has shared steps.
 - End with an `expect`, so a broken scenario fails instead of recording a wrong video.
