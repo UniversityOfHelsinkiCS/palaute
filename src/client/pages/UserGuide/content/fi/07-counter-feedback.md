@@ -14,6 +14,8 @@ Vastuuopettajat voivat kirjoittaa vastapalautteen kyselyn sulkeuduttua 12 kuukau
 4. Jätä [[feedbackResponse:checkboxSendEmail]] valituksi, jos haluat lähettää vastapalautteen opiskelijoille sähköpostilla, tai poista valinta, jos haluat vain tallentaa sen.
 5. Klikkaa [[feedbackResponse:dialogSendEmailSubmit]] ja vahvista, tai [[feedbackResponse:dialogSaveSubmit]], jos poistit valinnan.
 
+[[video:write-counter-feedback]]
+
 Kuka tahansa kyselyn vastuuopettajista voi muokata vastapalautetta myöhemmin samalla välilehdellä.
 
 Kurssipalautteen tai koulutusohjelman kyselyn sulkeutumista seuraavana päivänä sen vastuuopettajat saavat sähköpostimuistutuksen vastapalautteesta, jos kyselyyn on vastattu eikä vastapalautetta ole vielä annettu. Katso [sähköpostit](/guide/collecting-answers#emails).

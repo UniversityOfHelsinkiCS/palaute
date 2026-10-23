@@ -10,12 +10,13 @@ import { useTranslation } from 'react-i18next'
 
 import Markdown from '../../components/common/Markdown'
 import MarkdownLink from '../../components/common/MarkdownLink'
-import { HEADING_ID, LABEL } from './content'
+import { HEADING_ID, LABEL, VIDEO } from './content'
+import GuideVideo from './GuideVideo'
 
 const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
   markdown.replace(LABEL, (_, key: string, pinned?: string) => `**${translate(key, pinned).replace(/<[^>]*>/g, '')}**`)
 
-// The parts of a hast tree the heading ids need; the hast types are only a transitive dependency
+// The parts of a hast tree the plugins need; the hast types are only a transitive dependency
 type HastNode = {
   type: string
   tagName?: string
@@ -39,9 +40,25 @@ const rehypeHeadingIds = () => (tree: HastNode) => {
   visit(tree)
 }
 
+// A paragraph of just [[video:slug]] becomes a video
+const rehypeVideos = () => (tree: HastNode) => {
+  const visit = (node: HastNode) => {
+    node.children = node.children?.map(child => {
+      const only = child.tagName === 'p' && child.children?.length === 1 ? child.children[0] : undefined
+      const match = only?.type === 'text' ? VIDEO.exec(only.value ?? '') : null
+      if (match) return { type: 'element', tagName: 'video', properties: { dataSlug: match[1] }, children: [] }
+      visit(child)
+      return child
+    })
+  }
+  visit(tree)
+}
+
 type HeadingProps = ComponentProps<'h1'> & ExtraProps
 
 const EditUrlContext = createContext<string | undefined>(undefined)
+// The guide's language, which can differ from the UI's
+const LanguageContext = createContext('en')
 
 const EditLink = ({ href }: { href: string }) => {
   const { t } = useTranslation()
@@ -100,6 +117,12 @@ const P = ({ children }: ComponentProps<'p'> & ExtraProps) => (
   </Typography>
 )
 
+const Video = ({ node }: ComponentProps<'video'> & ExtraProps) => {
+  const language = useContext(LanguageContext)
+
+  return <GuideVideo slug={String(node?.properties.dataSlug)} language={language} />
+}
+
 const List = ({ component, children }: { component: 'ul' | 'ol'; children?: ReactNode }) => (
   <Box component={component} sx={{ mt: 0, mb: 1.5, pl: 3, '& li': { mb: 0.5 }, '& li > p': { mb: 0.5 } }}>
     {children}
@@ -137,22 +160,26 @@ const components: Components = {
   ol: ({ children }) => <List component="ol">{children}</List>,
   blockquote: Blockquote,
   a: MarkdownLink,
+  video: Video,
 }
 
 type GuideMarkdownProps = {
   markdown: string
   editUrl?: string
+  language: string
 }
 
-const GuideMarkdown = ({ markdown, editUrl }: GuideMarkdownProps) => {
+const GuideMarkdown = ({ markdown, editUrl, language }: GuideMarkdownProps) => {
   const { t, i18n } = useTranslation()
   const translate = (key: string, language?: string) => (language ? i18n.getFixedT(language)(key) : t(key))
 
   return (
     <EditUrlContext.Provider value={editUrl}>
-      <Markdown components={components} rehypePlugins={[rehypeHeadingIds]} disallowedElements={['img']}>
-        {renderLabels(markdown, translate)}
-      </Markdown>
+      <LanguageContext.Provider value={language}>
+        <Markdown components={components} rehypePlugins={[rehypeHeadingIds, rehypeVideos]} disallowedElements={['img']}>
+          {renderLabels(markdown, translate)}
+        </Markdown>
+      </LanguageContext.Provider>
     </EditUrlContext.Provider>
   )
 }

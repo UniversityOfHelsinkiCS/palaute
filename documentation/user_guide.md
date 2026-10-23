@@ -16,6 +16,8 @@ The guide and the chatbot's `knowledge.md` are separate texts, one for people an
 
 Admins get a pen next to each page's title that opens its file in GitHub's editor on `master`.
 
+Videos are recorded from `e2e/manual/scenarios` (see `e2e/manual/README.md`) and shown with `[[video:slug]]` by `GuideVideo.tsx`, which finds them in `/manual/<lang>/index.json`. Where they haven't been recorded, e.g. in development, the guide shows none.
+
 `content.test.ts` (in `npm run test:unit`) catches what editors can get wrong: a page or section missing in one language, labels that don't exist, broken links.
 
 ## How the content was written

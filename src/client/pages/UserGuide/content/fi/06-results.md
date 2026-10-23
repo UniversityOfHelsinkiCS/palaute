@@ -7,6 +7,8 @@ Kyselyn vastaukset näkyvät sen [[feedbackTargetView:feedbacksTab]]-välilehdel
 1. Valitse kurssi [[navBar:myCourses]]-sivulta. Päättyneiden kurssien kyselyt ovat [[teacherView:endedSurveys]]-välilehdellä.
 2. Avaa [[feedbackTargetView:feedbacksTab]]-välilehti.
 
+[[video:view-answers]]
+
 Välilehdellä näet:
 
 - Vastausten kertymän päivittäin osuutena kyselyn opiskelijoista. Kaavioon on merkitty kyselyn avautumis- ja sulkeutumispäivä sekä viimeisin muistutusviesti.
@@ -40,6 +42,8 @@ Kysymyksen näkyvyyden muuttaminen (vastuuopettajat):
 1. Klikkaa [[feedbackTargetView:feedbacksTab]]-välilehdellä kysymyksen yläpuolelta [[common:public]] tai [[common:notPublic]].
 2. Valitse [[common:publicInfo]] tai [[common:notPublicInfo]]. Muutos tallentuu heti.
 
+[[video:answer-visibility]]
+
 Ennen kyselyn avautumista asteikko- ja valintakysymysten näkyvyyden voi asettaa myös [kysymyksiä muokatessa](/guide/questions#edit-questions).
 
 Avoimen kysymyksen voi asettaa julkiseksi vasta kyselyn sulkeuduttua, koska vastauksissa voi olla henkilötietoja. Norppa pyytää vahvistamaan, että olet tarkistanut, ettei vastauksissa ole henkilötietoja tai muuta arkaluontoista tietoa.
@@ -50,6 +54,8 @@ Jos avoimessa vastauksessa on henkilötietoja, kuten opiskelijanumero, tai se on
 
 1. Etsi vastaus [[feedbackTargetView:feedbacksTab]]-välilehdeltä.
 2. Klikkaa sen vieressä olevaa silmäkuvaketta ([[feedbackTargetResults:setHidden]]).
+
+[[video:hide-answers]]
 
 Vastaus piilotetaan kaikilta, jotka näkevät vain julkiset vastaukset. Vastuuopettajat ja koulutusohjelman adminit näkevät sen edelleen piilotetuksi merkittynä. Myös saman kysymyksen täsmälleen samanlaiset vastaukset piilotetaan. Piilotuksen saa pois klikkaamalla kuvaketta uudelleen ([[feedbackTargetResults:setVisible]]).
 
@@ -81,3 +87,5 @@ Vastuuopettajat ja koulutusohjelman henkilöt voivat ladata vastaukset [[feedbac
 Saat vain ne vastaukset, jotka näet välilehdellä. Jos olet valinnut ryhmän, saat vain sen ryhmän vastaukset.
 
 Kurssien, vuosien ja koulutusohjelmien yhteiset luvut löydät [kurssiyhteenvedosta](/guide/course-summary).
+
+[[video:download-answers]]

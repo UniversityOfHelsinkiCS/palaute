@@ -21,6 +21,8 @@ Kysymyksen lisääminen:
 5. Jos kysymykseen on pakko vastata, kytke päälle [[common:required]].
 6. Valitse [[questionEditor:done]].
 
+[[video:edit-questions]]
+
 Kysymys tallentuu heti. Mitään muuta ei tarvitse tallentaa tai julkaista: opiskelijat saavat ne kysymykset, jotka kyselyssä on sen auetessa.
 
 Kysymystä muokataan sen [[common:edit]]-painikkeella. Useamman kysymyksen voit poistaa kerralla kysymysten alla olevalla [[questionEditor:removeMany]]-painikkeella.
@@ -83,6 +85,8 @@ Omien kysymysten kopioiminen toisen kurssin kyselystä kurssin kyselyyn:
 3. Näkyviin tulevat kurssin toteutukset, joita olet opettanut ja joilla on omia kysymyksiä, sekä niiden kysymysten määrät. Näet toteutuksen kysymykset viemällä hiiren sen päälle.
 4. Valitse toteutuksen kohdalta [[editFeedbackTarget:copyQuestionsButton]].
 
+[[video:copy-questions]]
+
 Kysymykset lisätään omien kysymystesi perään ja tallennetaan heti. Vain opettajan omat kysymykset kopioituvat, eivät yliopistotason tai koulutusohjelman kysymykset. Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
 
 Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelmien kyselyt: niiden koulutusohjelmien ja tiedekuntien, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, joka lisää yliopistotason kysymykset omiksi kysymyksiksesi, joten voit muokata tai poistaa niitä.
@@ -96,6 +100,8 @@ Kyselyn näkeminen opiskelijan silmin:
 1. Valitse kieli [[feedbackTargetView:surveyQuestionsTab]]-välilehden alareunan [[editFeedbackTarget:translationLanguage]]-valikosta. Kysymyseditorin kysymykset vaihtuvat tälle kielelle.
 2. Valitse [[editFeedbackTarget:showPreview]].
 
+[[video:preview-survey]]
+
 [[common:preview]]-välilehdellä näkyy koko kysely siinä järjestyksessä kuin opiskelija sen näkee. Opettaja ei voi lähettää sitä. Vastuuopettaja pääsee takaisin muokkaamaan [[feedbackView:editSurvey]]-painikkeella.
 
 ## Ryhmät {#groups}
@@ -107,6 +113,8 @@ Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ry
 1. Valitse [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä [[groups:addGroupingQuestion]].
 2. Muokkaa kysymystä ja sen vaihtoehtoja. Jos kurssilla on ryhmiä Sisussa, ne ovat valmiina vaihtoehtoina.
 3. Valitse [[questionEditor:done]].
+
+[[video:grouping-question]]
 
 Ryhmittelykysymys on pakollinen, se on aina opiskelijan ensimmäinen kysymys, eivätkä sen vastaukset ole julkisia. Kyselyssä voi olla vain yksi ryhmittelykysymys, ja se korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
 

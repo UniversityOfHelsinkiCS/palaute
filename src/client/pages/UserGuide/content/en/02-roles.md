@@ -38,6 +38,8 @@ _Feedback liaisons_ get admin rights to their programme. A programme's admins ad
 - Course roles: open the course's page and see under which heading your name is listed. The responsible persons of a programme survey are listed under [[feedbackTargetView:administrativePersons]]. To see the list, go to [[navBar:myCourses]] and choose the course.
 - Programme and faculty rights: click your name in the top right corner and choose [[navBar:userInformation]]. It lists your Norppa-related [[userInformation:iamGroups]] and, under [[userInformation:organisationAccess]], each organisation's code with your access level, _Admin_ or _Read_ (always in English). Hover over a code to see the organisation's name. This window doesn't show course roles.
 
+[[video:check-your-rights]]
+
 ## If your role is wrong {#wrong-role}
 
 - Wrong course role, or you're missing from a course: the role has to be fixed in Sisu by whoever maintains the course realisation there, often the degree programme's study affairs staff. Norppa updates the roles every night, so the change shows the next morning. For example, a guest lecturer who gets the responsible teachers' emails has been added in Sisu as responsible teacher, contact person or administrative person; changing their role to teacher in Sisu fixes it.

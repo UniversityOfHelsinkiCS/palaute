@@ -7,6 +7,8 @@ A survey's answers are on its [[feedbackTargetView:feedbacksTab]] tab from the f
 1. Go to [[navBar:myCourses]] and choose the course. Surveys of ended courses are on the [[teacherView:endedSurveys]] tab.
 2. Open the [[feedbackTargetView:feedbacksTab]] tab.
 
+[[video:view-answers]]
+
 The tab shows:
 
 - How the number of answers has grown day by day, as a share of the survey's students. The opening and closing dates and the last reminder email are marked on the chart.
@@ -40,6 +42,8 @@ To change whether a question is public (responsible teachers):
 1. On the [[feedbackTargetView:feedbacksTab]] tab, click [[common:public]] or [[common:notPublic]] above the question.
 2. Choose [[common:publicInfo]] or [[common:notPublicInfo]]. The change is saved at once.
 
+[[video:answer-visibility]]
+
 Before the survey opens, you can also set this for scale and choice questions when you [edit the questions](/guide/questions#edit-questions).
 
 An open question can be made public only after the survey has closed, as its answers may contain personal data. Norppa asks you to confirm that you've checked the answers contain no personal data or other sensitive information.
@@ -50,6 +54,8 @@ If an open answer contains personal data, such as a student number, or is otherw
 
 1. On the [[feedbackTargetView:feedbacksTab]] tab, find the answer.
 2. Click the eye icon next to it ([[feedbackTargetResults:setHidden]]).
+
+[[video:hide-answers]]
 
 The answer is hidden from everyone who sees only public answers. Responsible teachers and programme admins still see it, marked as hidden. Answers identical to it in the same question are hidden too. To show it again, click the icon again ([[feedbackTargetResults:setVisible]]).
 
@@ -81,3 +87,5 @@ Responsible teachers and programme staff can download the answers with [[feedbac
 You get only the answers you can see on the tab. If you have chosen a group, you get only that group's answers.
 
 For figures across courses, years and degree programmes, see [course summary](/guide/course-summary).
+
+[[video:download-answers]]

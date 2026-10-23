@@ -12,6 +12,8 @@ Jatkuvan palautteen avulla opiskelijat voivat kirjoittaa kurssista vapaamuotoist
 4. Jos haluat sähköpostia uudesta palautteesta, kytke päälle [[feedbackTargetView:activateContinuousFeedbackDigest]].
 5. Halutessasi kirjoita opiskelijoille teksti kenttään [[feedbackTargetView:continuousFeedbackPreambleLabel]], esimerkiksi mistä toivot palautetta, ja klikkaa [[common:save]]. Teksti näkyy palautelomakkeella.
 
+[[video:continuous-feedback]]
+
 Valinnat tallentuvat heti. Norppa ei kerro jatkuvasta palautteesta opiskelijoille, joten kerro siitä heille itse. He löytävät kurssin [[navBar:myFeedbacks]]-sivun [[userFeedbacks:continuousFeedbackTab]]-välilehdeltä ja kirjoittavat palautteensa painikkeella [[userFeedbacks:giveContinuousFeedback]].
 
 Opiskelijat voivat antaa jatkuvaa palautetta kurssipalautteen avautumiseen asti. Sen jälkeenkin jo annettu palaute säilyy.
@@ -45,6 +47,8 @@ Välipalautteen luominen (vastuuopettajat):
 4. Anna sille nimi ainakin yhdellä kielellä sekä päivämäärät kenttiin [[interimFeedback:startDate]] ja [[interimFeedback:endDate]].
 5. Klikkaa [[common:save]]. Uusi välipalaute avautuu [[feedbackTargetView:surveyQuestionsTab]]-välilehdelle.
 6. Lisää kysymyksesi. Katso [kysymysten muokkaaminen](/guide/questions#edit-questions).
+
+[[video:interim-feedback]]
 
 Välipalautteessa ei ole yliopistotason eikä koulutusohjelman kysymyksiä. Jos haluat yliopistotason kysymykset mukaan, lisää ne painikkeella [[editFeedbackTarget:copyUniversityQuestions]]. Kuten kurssipalautteessa, kysymykset lukittuvat, kun välipalaute avautuu.
 

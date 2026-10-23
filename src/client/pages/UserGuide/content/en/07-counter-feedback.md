@@ -14,6 +14,8 @@ Responsible teachers can write counter feedback after the survey has closed, for
 4. Leave [[feedbackResponse:checkboxSendEmail]] ticked if you want to email it to the students, or untick it to only save it.
 5. Click [[feedbackResponse:dialogSendEmailSubmit]] and confirm, or [[feedbackResponse:dialogSaveSubmit]] if you unticked the checkbox.
 
+[[video:write-counter-feedback]]
+
 Any of the survey's responsible teachers can edit the counter feedback later on the same tab.
 
 The day after a course survey or programme survey closes, its responsible teachers get an email reminding them to write counter feedback, if it got answers and has none yet. See [emails](/guide/collecting-answers#emails).

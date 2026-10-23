@@ -12,6 +12,8 @@ With continuous feedback, students can write free-form feedback on the course at
 4. If you want an email about new feedback, switch on [[feedbackTargetView:activateContinuousFeedbackDigest]].
 5. If you like, write a text for the students in [[feedbackTargetView:continuousFeedbackPreambleLabel]], e.g. what you'd like feedback on, and click [[common:save]]. It's shown on the feedback form.
 
+[[video:continuous-feedback]]
+
 The switches are saved at once. Norppa doesn't tell the students about it, so let them know. They find the course in [[navBar:myFeedbacks]] on the [[userFeedbacks:continuousFeedbackTab]] tab and write their feedback with [[userFeedbacks:giveContinuousFeedback]].
 
 Students can give continuous feedback until the course survey opens. After that, the feedback they gave stays available.
@@ -45,6 +47,8 @@ To create one (responsible teachers):
 4. Give it a name in at least one language, and the dates in [[interimFeedback:startDate]] and [[interimFeedback:endDate]].
 5. Click [[common:save]]. The new interim feedback opens on its [[feedbackTargetView:surveyQuestionsTab]] tab.
 6. Add your questions. See [editing the questions](/guide/questions#edit-questions).
+
+[[video:interim-feedback]]
 
 Interim feedback has no university level or programme questions. If you want the university level questions, add them with [[editFeedbackTarget:copyUniversityQuestions]]. As in course surveys, the questions are locked once it opens.
 

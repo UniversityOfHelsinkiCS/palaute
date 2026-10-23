@@ -11,6 +11,8 @@ Koulutusohjelman oma yhteenveto on myös sen sivulla [[organisationSettings:summ
 
 Avaamalla organisaation näet sen alla olevat rivit. Opintojakson nimestä pääset sen sivulle, jossa on rivi jokaiselle toteutukselle; toteutuksesta pääset sen kyselyn vastauksiin.
 
+[[video:course-summary]]
+
 ## Mitä luvut kertovat {#figures}
 
 Jokaisella rivillä on nämä sarakkeet:
@@ -48,6 +50,8 @@ Ajanjakson vieressä olevasta valikosta valitset, ovatko avoimen yliopiston kurs
 2. Valitse sivun yläreunasta [[common:exportXLSX]].
 3. Valitse, mitä tiedostoon tulee: [[generateReport:organisations]], [[generateReport:courseUnits]] ja/tai [[generateReport:courseRealisations]]. Kukin tulee omalle välilehdelleen.
 4. Valitse [[common:exportXLSX]].
+
+[[video:course-summary-download]]
 
 Kurssiyhteenvedon sivulla tiedostossa ovat organisaatiosi ja omat kurssisi. Koulutusohjelman [[organisationSettings:summaryTab]]-välilehdellä siinä on vain kyseinen koulutusohjelma, myös sen omien kysymysten kanssa.
 

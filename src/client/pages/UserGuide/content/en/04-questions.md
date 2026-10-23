@@ -21,6 +21,8 @@ To add a question:
 5. If students must answer the question, switch on [[common:required]].
 6. Click [[questionEditor:done]].
 
+[[video:edit-questions]]
+
 The question is saved right away. There's nothing else to save or publish: the questions in the editor when the survey opens are the ones students get.
 
 To change a question, click its [[common:edit]] button. To remove several questions at once, use [[questionEditor:removeMany]] below the questions.
@@ -83,6 +85,8 @@ To copy your own questions from another course survey into a course survey:
 3. The course's realisations that you've taught and that have their own questions are listed with their question counts. Hover over a realisation to see its questions.
 4. Click [[editFeedbackTarget:copyQuestionsButton]] next to the realisation.
 
+[[video:copy-questions]]
+
 The questions are added after your existing questions and saved at once. Only the teacher's own questions are copied, not the university level or programme questions. Copied questions aren't public until you make them public.
 
 In interim feedback and programme surveys, [[editFeedbackTarget:copyFromCourseButton]] lists programme surveys instead: those of the degree programmes and faculties where you have admin rights. There's also [[editFeedbackTarget:copyUniversityQuestions]], which adds the university level questions as your own questions, so you can edit or remove them.
@@ -96,6 +100,8 @@ To see the survey as students will:
 1. At the bottom of the [[feedbackTargetView:surveyQuestionsTab]] tab, choose the language in [[editFeedbackTarget:translationLanguage]]. The questions in the editor switch to that language.
 2. Click [[editFeedbackTarget:showPreview]].
 
+[[video:preview-survey]]
+
 The [[common:preview]] tab shows the whole survey in the order students see it. Teachers can't submit it. Responsible teachers return to editing with [[feedbackView:editSurvey]].
 
 ## Groups {#groups}
@@ -107,6 +113,8 @@ If the course has no groups in Sisu, or they don't suit you, add a _grouping que
 1. On the [[feedbackTargetView:surveyQuestionsTab]] tab, click [[groups:addGroupingQuestion]].
 2. Edit the question and its options. If the course has groups in Sisu, they're the default options.
 3. Click [[questionEditor:done]].
+
+[[video:grouping-question]]
 
 The grouping question is required, it's always the first question students see, and its answers aren't public. A survey can have only one, and it replaces the Sisu groups. To go back to the Sisu groups, remove the grouping question.
 

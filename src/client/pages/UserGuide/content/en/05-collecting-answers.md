@@ -10,6 +10,8 @@ Every survey has a link students use to answer it. To share it:
 2. Open the [[feedbackTargetView:shareTab]] tab.
 3. Next to [[feedbackTargetView:studentLinkTitle]], click [[common:copyToClipBoard]].
 
+[[video:share-link]]
+
 The tab also has the [[feedbackTargetView:studentLinkQRTitle]], which students can scan with their phones, e.g. from a slide at the last lecture. The easiest way to share it is to take a screenshot of it.
 
 The link works before the survey opens too, so you can add it to e.g. Moodle in advance. Students who open it early see when the survey will be open. Only the survey's own students can answer: the students enrolled on the course in Sisu, or the respondents of a programme survey.
@@ -24,6 +26,8 @@ While a survey is open, you can email its students who haven't answered yet. Thi
 2. Click [[feedbackTargetResults:sendReminder]].
 3. Edit the message under [[feedbackTargetResults:writeAMessage]] if you like.
 4. Click [[feedbackTargetResults:sendReminderButton]].
+
+[[video:send-reminder]]
 
 The email goes to every student of the survey who hasn't answered yet, and it always includes a link to the survey.
 

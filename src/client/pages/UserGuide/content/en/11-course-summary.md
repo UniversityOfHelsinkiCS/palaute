@@ -11,6 +11,8 @@ A programme's own summary is also on its page, on the [[organisationSettings:sum
 
 Open an organisation to see the rows under it. Clicking a course unit opens its page, with a row for each realisation; from a realisation you get to its survey's answers.
 
+[[video:course-summary]]
+
 ## What the figures show {#figures}
 
 Each row has these columns:
@@ -48,6 +50,8 @@ The menu next to the time period chooses whether Open University courses are inc
 2. Click [[common:exportXLSX]] at the top of the page.
 3. Choose what to include: [[generateReport:organisations]], [[generateReport:courseUnits]] and/or [[generateReport:courseRealisations]]. Each becomes its own sheet.
 4. Click [[common:exportXLSX]].
+
+[[video:course-summary-download]]
 
 On the course summary page, the file has your organisations and your own courses. On a programme's [[organisationSettings:summaryTab]] tab, it has only that programme, with its own questions too.
 

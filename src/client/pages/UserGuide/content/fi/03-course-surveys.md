@@ -58,6 +58,8 @@ Vastuuopettajat ja hallintohenkilöt voivat muuttaa kurssikyselyn päivämääri
 3. Valitse ikkunassa [[feedbackTargetSettings:editPeriodTitle]] päivämäärät kohtiin [[editFeedbackTarget:opensAt]] ja [[editFeedbackTarget:closesAt]].
 4. Napsauta [[common:save]].
 
+[[video:change-dates]]
+
 Se, mitä voit muuttaa, riippuu kyselyn tilasta:
 
 - Ennen avautumista voit muuttaa molempia päivämääriä. Avautumispäivä ei voi olla menneisyydessä, ja kyselyn pitää olla auki vähintään vuorokauden, joten sulkeutumispäivän on oltava aikaisintaan avautumispäivää seuraava päivä.

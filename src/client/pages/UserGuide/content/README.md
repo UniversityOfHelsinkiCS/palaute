@@ -33,4 +33,5 @@ Plain Markdown: headings, paragraphs, lists, bold, italics and links. No images 
 - **Links** to guide pages: `[counter feedback](/guide/counter-feedback)`, or to a section: `(/guide/counter-feedback#send-email)`. Other links to Norppa start with `/` too, e.g. `/courses`. Links to other sites open in a new tab.
 - **Bold** is for UI labels only, so the reader can tell what's on the screen. Use _italics_ for terms and emphasis.
 - **Notes**: `> **Note:** ...` shows a highlighted box.
+- **Videos**: `[[video:slug]]` on its own line shows the video recorded by `e2e/manual/scenarios/<slug>.manual.ts`, in the guide's language. In every language, put it after the steps it shows.
 - **Comments**: `<!-- ... -->` are notes for editors and aren't shown.

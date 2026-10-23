@@ -6,7 +6,7 @@ import fiHy from '../../../../public/locales/fi/hy.json'
 import fi from '../../../../public/locales/fi/translation.json'
 import svHy from '../../../../public/locales/sv/hy.json'
 import sv from '../../../../public/locales/sv/translation.json'
-import { GUIDE_PAGES, LABEL } from './content'
+import { GUIDE_PAGES, LABEL, VIDEO } from './content'
 
 // Checks what editors can get wrong in the Markdown files (see content/README.md)
 
@@ -34,14 +34,17 @@ const anchorsOf = (markdown: string) => [...markdown.matchAll(/^#{1,6} .*\{#([\w
 // Paths from the repository root
 const REPOSITORY_FILES = import.meta.glob('/src/**/*.md')
 
-const allPages = (['fi', 'en'] as const).flatMap(language => GUIDE_PAGES[language].map(page => ({ language, ...page })))
+const videosOf = (markdown: string) => markdown.split('\n').flatMap(line => VIDEO.exec(line)?.[1] ?? [])
+
+const allPages = (['fi', 'en'] as const).flatMap(language => GUIDE_PAGES[language])
 
 describe('user guide content', () => {
-  it('has the same pages and section ids in Finnish and English, so links work in both', () => {
+  it('has the same pages, section ids and videos in Finnish and English, so links work in both', () => {
     expect(GUIDE_PAGES.fi.length).toBeGreaterThan(0)
     expect(GUIDE_PAGES.fi.map(page => page.slug)).toEqual(GUIDE_PAGES.en.map(page => page.slug))
     for (const [index, page] of GUIDE_PAGES.fi.entries()) {
       expect(anchorsOf(page.markdown), page.slug).toEqual(anchorsOf(GUIDE_PAGES.en[index].markdown))
+      expect(videosOf(page.markdown), page.slug).toEqual(videosOf(GUIDE_PAGES.en[index].markdown))
     }
   })
 
@@ -85,6 +88,15 @@ describe('user guide content', () => {
   it.each(allPages)('$language/$slug has an edit link to a file in the repository', ({ editUrl }) => {
     const [, file] = /\/edit\/master\/(.+)$/.exec(editUrl) ?? []
     expect(Object.keys(REPOSITORY_FILES)).toContain(`/${file}`)
+  })
+
+  it('shows only videos that have a scenario', () => {
+    // Only the file names, the scenarios aren't loaded
+    const scenarios = Object.keys(import.meta.glob('../../../../e2e/manual/scenarios/*.manual.ts'))
+    const missing = GUIDE_PAGES.en
+      .flatMap(page => videosOf(page.markdown))
+      .filter(slug => !scenarios.some(file => file.endsWith(`/${slug}.manual.ts`)))
+    expect(missing).toEqual([])
   })
 
   // Neither would show: images are left out, and tables aren't supported

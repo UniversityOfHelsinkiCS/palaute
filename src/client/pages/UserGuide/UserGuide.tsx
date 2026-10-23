@@ -34,7 +34,11 @@ const GuideLayout = ({ pages, index, canEdit }: { pages: GuidePage[]; index: num
       <GuideMenu pages={pages} current={page} />
       <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
         <Box component="article" ref={articleRef}>
-          <GuideMarkdown markdown={page.markdown} editUrl={canEdit ? page.editUrl : undefined} />
+          <GuideMarkdown
+            markdown={page.markdown}
+            editUrl={canEdit ? page.editUrl : undefined}
+            language={page.language}
+          />
         </Box>
         <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
       </Box>

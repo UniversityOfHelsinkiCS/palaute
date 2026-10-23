@@ -2,9 +2,11 @@
 
 // The guide's additions to Markdown (see content/README.md):
 // [[section:key]] is a UI label in the user's language, [[section:key|fi]] in the given one
-export const LABEL = /\[\[([\w:-]+)(?:\|(fi|sv|en))?\]\]/g
+export const LABEL = /\[\[(?!video:)([\w:-]+)(?:\|(fi|sv|en))?\]\]/g
 // "## Heading {#id}" gives a heading an id to link to, the same in every language
 export const HEADING_ID = /\s*\{#([\w-]+)\}\s*$/
+// [[video:slug]] as a paragraph of its own is the video recorded by e2e/manual/scenarios/<slug>.manual.ts
+export const VIDEO = /^\[\[video:([a-z0-9-]+)\]\]$/
 
 export type GuideSection = {
   id: string
@@ -12,6 +14,7 @@ export type GuideSection = {
 }
 
 export type GuidePage = {
+  language: GuideLanguage
   slug: string
   title: string
   sections: GuideSection[]
@@ -28,7 +31,7 @@ const FILE_NAME = /\/content\/(fi|en)\/(\d+)-([a-z0-9-]+)\.md$/
 
 const EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master/src/client/pages/UserGuide'
 
-const parsePage = (path: string, file: string) => {
+const parsePage = (path: string, file: string): { order: number; page: GuidePage } => {
   const [, language, order, slug] = FILE_NAME.exec(path) ?? []
   if (language !== 'fi' && language !== 'en') {
     throw new Error(`[UserGuide] Unexpected file name ${path}, should be content/<fi|en>/<order>-<slug>.md`)
@@ -41,9 +44,8 @@ const parsePage = (path: string, file: string) => {
     return id ? [{ id, title: heading.replace(HEADING_ID, '') }] : []
   })
   return {
-    language,
     order: Number(order),
-    page: { slug, title, sections, markdown, editUrl: `${EDIT_URL}/${path.replace(/^\.\//, '')}` },
+    page: { language, slug, title, sections, markdown, editUrl: `${EDIT_URL}/${path.replace(/^\.\//, '')}` },
   }
 }
 
@@ -51,11 +53,11 @@ const parsed = Object.entries(FILES).map(([path, file]) => parsePage(path, file)
 
 const pagesIn = (language: GuideLanguage) =>
   parsed
-    .filter(file => file.language === language)
+    .filter(file => file.page.language === language)
     .sort((a, b) => a.order - b.order)
     .map(file => file.page)
 
 export const GUIDE_PAGES: Record<GuideLanguage, GuidePage[]> = { fi: pagesIn('fi'), en: pagesIn('en') }
 
-// Swedish has no guide of its own: Swedish users get the English text, with the UI labels in Swedish
+// Swedish has no guide of its own: Swedish users get the English text and videos, with the UI labels in Swedish
 export const getGuidePages = (uiLanguage: string) => GUIDE_PAGES[uiLanguage.startsWith('fi') ? 'fi' : 'en']

@@ -38,6 +38,8 @@ _Palautevastaavat_ saavat koulutusohjelmaansa admin-oikeudet. Koulutusohjelman a
 - Roolit kurssilla: avaa kurssin sivu ja katso, minkä otsikon alla nimesi on. Koulutusohjelman kyselyn vastuuhenkilöt ovat otsikon [[feedbackTargetView:administrativePersons]] alla. Löydät kurssin valitsemalla [[navBar:myCourses]] ja sieltä kurssin.
 - Oikeudet koulutusohjelmiin ja tiedekuntiin: napsauta nimeäsi oikeassa yläkulmassa ja valitse [[navBar:userInformation]]. Siinä näkyvät Norppaan vaikuttavat [[userInformation:iamGroups]] ja kohdassa [[userInformation:organisationAccess]] kunkin organisaation koodi ja oikeutesi, _Admin_ tai _Read_ (aina englanniksi). Organisaation nimi näkyy, kun viet hiiren koodin päälle. Ikkuna ei näytä rooleja kursseilla.
 
+[[video:check-your-rights]]
+
 ## Jos roolisi on väärä {#wrong-role}
 
 - Väärä rooli kurssilla tai puutut kurssilta kokonaan: rooli pitää korjata Sisussa. Sen tekee kurssitoteutusta Sisussa ylläpitävä henkilö, usein koulutusohjelman opintohallinnon henkilöstö. Norppa päivittää roolit joka yö, joten muutos näkyy seuraavana aamuna. Esimerkiksi jos vierailevalle luennoitsijalle tulee vastuuopettajien sähköposteja, hänet on lisätty Sisuun vastuuopettajaksi, yhteyshenkilöksi tai hallintohenkilöksi; roolin vaihtaminen Sisussa opettajaksi korjaa asian.

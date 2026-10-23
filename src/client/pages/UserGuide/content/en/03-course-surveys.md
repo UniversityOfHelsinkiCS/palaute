@@ -58,6 +58,8 @@ Responsible teachers and administrative persons can change a course survey's dat
 3. In the [[feedbackTargetSettings:editPeriodTitle]] window, choose the dates under [[editFeedbackTarget:opensAt]] and [[editFeedbackTarget:closesAt]].
 4. Click [[common:save]].
 
+[[video:change-dates]]
+
 What you can change depends on the survey's state:
 
 - Before it opens, you can change both dates. The opening date can't be in the past, and the survey must be open for at least a day, so the closing date must be at least the day after the opening date.

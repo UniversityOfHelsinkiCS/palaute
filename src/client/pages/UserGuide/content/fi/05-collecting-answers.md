@@ -10,6 +10,8 @@ Jokaisella kyselyllä on linkki, jonka kautta opiskelijat vastaavat siihen. Link
 2. Avaa [[feedbackTargetView:shareTab]]-välilehti.
 3. Valitse kohdan [[feedbackTargetView:studentLinkTitle]] vierestä [[common:copyToClipBoard]].
 
+[[video:share-link]]
+
 Välilehdellä on myös [[feedbackTargetView:studentLinkQRTitle]], jonka opiskelijat voivat lukea puhelimellaan esimerkiksi viimeisen luennon dialta. Helpoiten sen saa jaettua ottamalla siitä kuvakaappauksen.
 
 Linkki toimii jo ennen kyselyn aukeamista, joten voit lisätä sen etukäteen esimerkiksi Moodleen. Jos opiskelija avaa sen etuajassa, hän näkee, milloin kysely on auki. Vastata voivat vain kyselyn omat opiskelijat: kurssille Sisussa ilmoittautuneet tai koulutusohjelman kyselyn vastaajiksi lisätyt.
@@ -24,6 +26,8 @@ Kun kysely on auki, voit lähettää sähköpostin niille sen opiskelijoille, jo
 2. Valitse [[feedbackTargetResults:sendReminder]].
 3. Muokkaa halutessasi viestiä kentässä [[feedbackTargetResults:writeAMessage]].
 4. Valitse [[feedbackTargetResults:sendReminderButton]].
+
+[[video:send-reminder]]
 
 Viesti lähtee kaikille kyselyn opiskelijoille, jotka eivät ole vielä vastanneet, ja siinä on aina linkki kyselyyn.
 
