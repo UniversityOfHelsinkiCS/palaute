@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi9/nodejs-24-minimal
+FROM node:24-alpine
 
 ENV TZ="Europe/Helsinki"
 
