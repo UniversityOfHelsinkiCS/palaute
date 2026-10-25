@@ -29,12 +29,8 @@ const getQuestionsWithFeedback = (questions, questionOrder, feedbacks) => {
   const feedbacksArray = feedbacks ?? []
 
   const feedbackData = feedbacksArray
-    .reduce(
-      (acc, feedback) => [
-        ...acc,
-        ...(Array.isArray(feedback.data) ? feedback.data.map(d => ({ ...d, feedbackId: feedback.id })) : []),
-      ],
-      []
+    .flatMap(feedback =>
+      Array.isArray(feedback.data) ? feedback.data.map(d => ({ ...d, feedbackId: feedback.id })) : []
     ) // filter short answers which are not a number, or answers that are blank
     .filter(answer => {
       const isNumber = !Number.isNaN(parseInt(answer.data, 10))
@@ -79,7 +75,7 @@ const QuestionResults = React.memo(
 
     const questionsWithFeedbacks = useMemo(
       () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
-      [questions, feedbacks, publicQuestionIds]
+      [questions, questionOrder, feedbacks]
     )
 
     const openQuestions = questionsWithFeedbacks.filter(
