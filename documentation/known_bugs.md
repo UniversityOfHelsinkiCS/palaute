@@ -183,14 +183,6 @@ Hidden answers are left out of the PDF (`OpenFeedback.jsx:23-26`), but the XLSX 
 
 Fix: leave out answers marked `hidden`.
 
-### The spreadsheet's columns don't match for those who see only public answers
-
-`src/client/pages/FeedbackTarget/tabs/Results/ExportFeedbacksMenu.jsx:14-25`
-
-The headers are made from all the survey's labelled questions, sorted by their place in the first answer row. Programme staff with read rights get only public, unhidden answers (`getFeedbacks.ts:111-115`), so the non-public questions aren't in the first row, `indexOf` gives -1 and their headers are sorted first. Every column then has the wrong header. A hidden answer also moves the rest of its row one column to the left.
-
-Fix: build the headers from the questions in the answers, and fill a row by question id instead of by position.
-
 ### The live summary update gets the mean wrong
 
 `src/server/services/summary/utils.ts:181-250`
