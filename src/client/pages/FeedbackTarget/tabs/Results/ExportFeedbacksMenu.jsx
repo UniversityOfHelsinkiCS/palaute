@@ -95,10 +95,12 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
   })
 
   const filename = `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
+  // Excel sheet names are at most 31 characters and cannot contain : \ / ? * [ ]
+  const sheetName = filename.replace(/[:\\/?*[\]]/g, '_').slice(0, 31)
 
   const worksheet = utils.aoa_to_sheet(data)
   const workbook = utils.book_new()
-  utils.book_append_sheet(workbook, worksheet, filename)
+  utils.book_append_sheet(workbook, worksheet, sheetName)
 
   return { workbook, filename: `${filename}.xlsx` }
 }
@@ -114,9 +116,7 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
     try {
       const { workbook, filename } = createXLSX({ feedbackTarget, feedbacks, language })
       writeFileXLSX(workbook, filename)
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e)
+    } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
   }
