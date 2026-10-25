@@ -64,6 +64,12 @@ const ExportButton = ({ label, disabled = false, children }: ExportButtonProps) 
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        // Choosing an item closes the menu, so that the rest of the page is no longer aria-hidden
+        // and a snackbar the item shows can be announced. A MenuItem chosen with Enter or Space
+        // does not fire a real click, so those keys close the menu too.
+        onClick={handleClose}
+        onKeyDown={event => event.key === 'Enter' && handleClose()}
+        onKeyUp={event => event.key === ' ' && handleClose()}
         keepMounted
         anchorOrigin={{
           vertical: 'bottom',

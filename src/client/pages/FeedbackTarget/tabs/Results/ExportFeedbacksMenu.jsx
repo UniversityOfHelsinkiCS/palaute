@@ -1,6 +1,6 @@
 import { MenuItem } from '@mui/material'
 import { flatMap, keyBy, orderBy } from 'lodash-es'
-import React from 'react'
+import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
 import { writeFileXLSX, utils } from 'xlsx'
@@ -106,15 +106,20 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
 const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
+  const { enqueueSnackbar } = useSnackbar()
   const hasFeedbacks = feedbacks?.length > 0
 
-  const memo = React.useMemo(
-    () => (hasFeedbacks ? createXLSX({ feedbackTarget, feedbacks, language }) : null),
-    [feedbacks, feedbackTarget, language, hasFeedbacks]
-  )
-
-  const workbook = memo?.workbook
-  const filename = memo?.filename
+  // Build the workbook only on click, it is expensive for large feedback targets
+  const handleExportXLSX = () => {
+    try {
+      const { workbook, filename } = createXLSX({ feedbackTarget, feedbacks, language })
+      writeFileXLSX(workbook, filename)
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error(e)
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    }
+  }
 
   const handlePrint = useReactToPrint({
     contentRef: componentRef,
@@ -123,16 +128,12 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
 
   return (
     <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export')}>
-      {hasFeedbacks && workbook && filename && (
-        <MenuItem onClick={() => writeFileXLSX(workbook, filename)} sx={focusIndicatorStyle()}>
-          {t('common:exportXLSX')}
-        </MenuItem>
-      )}
-      {hasFeedbacks && (
-        <MenuItem onClick={handlePrint} sx={focusIndicatorStyle()}>
-          {t('common:exportPdf')}
-        </MenuItem>
-      )}
+      <MenuItem onClick={handleExportXLSX} sx={focusIndicatorStyle()}>
+        {t('common:exportXLSX')}
+      </MenuItem>
+      <MenuItem onClick={handlePrint} sx={focusIndicatorStyle()}>
+        {t('common:exportPdf')}
+      </MenuItem>
     </ExportButton>
   )
 }
