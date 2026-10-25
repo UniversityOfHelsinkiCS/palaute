@@ -1,5 +1,5 @@
 import { MenuItem } from '@mui/material'
-import { flatMap, keyBy, orderBy } from 'lodash-es'
+import { flatMap, keyBy, uniq } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 import { useReactToPrint } from 'react-to-print'
@@ -11,18 +11,13 @@ import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import { getCourseStartDate } from './utils'
 
-const getHeaders = (questions, feedbacks, language) => {
-  const orderOfIds = feedbacks[0].data.map(f => f.questionId)
-  const sortedQuestions = orderBy(questions, q => orderOfIds.indexOf(q.id))
+// Questions that appear in the feedbacks, in the order they appear. Users who can see only public
+// feedbacks get only public questions from the server, so only those are exported for them.
+const getExportQuestions = (questions, feedbacks) => {
+  const questionById = keyBy(questions, 'id')
+  const questionIds = uniq(feedbacks.flatMap(f => f.data.map(d => d.questionId)))
 
-  const headers = sortedQuestions
-    .filter(q => {
-      if (!q.data.label) return false
-      return true
-    })
-    .map(q => getLanguageValue(q.data.label, language))
-
-  return headers
+  return questionIds.map(id => questionById[id]).filter(q => q?.data?.label)
 }
 
 const getData = (questions, feedbacks, language) => {
@@ -54,40 +49,42 @@ const getData = (questions, feedbacks, language) => {
   const optionById = keyBy(options, ({ questionOptionId }) => questionOptionId)
 
   const data = feedbacks.map(f => {
-    const feedback = f.data
-      .filter(d => questions.find(q => q.id === d.questionId))
-      .map(d => {
-        const q = questions.find(q => q.id === d.questionId)
+    const answerByQuestionId = keyBy(f.data, 'questionId')
 
-        if (['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)) {
-          if (Array.isArray(d.data)) {
-            return d.data
-              .map(optionId => {
-                const questionOptionId = `${q.id}_${optionId}`
-                const option = optionById[questionOptionId]
-                return getLanguageValue(option?.label, language)
-              })
-              .join(', ')
-          }
+    // One cell for every question, so that answers stay under their own header even when some are hidden
+    return questions.map(q => {
+      const d = answerByQuestionId[q.id]
+      if (!d) return ''
 
-          const questionOptionId = `${q.id}_${d.data}`
-          const option = optionById[questionOptionId]
-          return getLanguageValue(option?.label, language)
+      if (['MULTIPLE_CHOICE', 'SINGLE_CHOICE'].includes(q.type)) {
+        if (Array.isArray(d.data)) {
+          return d.data
+            .map(optionId => {
+              const questionOptionId = `${q.id}_${optionId}`
+              const option = optionById[questionOptionId]
+              return getLanguageValue(option?.label, language)
+            })
+            .join(', ')
         }
 
-        return d.data
-      })
-    return feedback
+        const questionOptionId = `${q.id}_${d.data}`
+        const option = optionById[questionOptionId]
+        return getLanguageValue(option?.label, language)
+      }
+
+      return d.data
+    })
   })
 
   return data
 }
 
 const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
-  const headers = getHeaders(feedbackTarget.questions, feedbacks, language)
-  const questions = getData(feedbackTarget.questions, feedbacks, language)
+  const exportQuestions = getExportQuestions(feedbackTarget.questions, feedbacks)
+  const headers = exportQuestions.map(q => getLanguageValue(q.data.label, language))
+  const rows = getData(exportQuestions, feedbacks, language)
 
-  const data = [headers, ...questions]
+  const data = [headers, ...rows]
 
   const safeCourseCode = getSafeCourseCode({
     courseCode: feedbackTarget?.courseUnit?.courseCode,
