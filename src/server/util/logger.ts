@@ -1,78 +1,41 @@
 import winston from 'winston'
 import LokiTransport from 'winston-loki'
 
-import { inProduction, LOKI_HOST } from './config'
+import { inProduction, inStaging, LOKI_HOST } from './config'
 
-const { combine, timestamp, printf, splat } = winston.format
+const { combine, timestamp, printf } = winston.format
+const { levels } = winston.config.npm
 
-const transports = []
-
-if (process.env.NODE_ENV !== 'test') {
-  transports.push(new winston.transports.File({ filename: 'debug.log' }))
-}
-
-if (!inProduction) {
-  const devFormat = printf(
-    // eslint-disable-next-line @typescript-eslint/no-shadow
-    ({ level, message, timestamp, ...rest }) => {
-      let restMsg = ''
-      try {
-        restMsg = JSON.stringify(rest)
-      } catch {
-        // eslint-disable-next-line no-console
-        console.error('Failed to stringify log message', rest)
-      }
-      // message/timestamp are intentionally loosely typed by winston; best-effort stringifying
-      // arbitrary log values here is the desired behavior for a logger
-      // eslint-disable-next-line typescript/no-base-to-string, typescript/restrict-template-expressions
-      const msg = `${timestamp} ${level}: ${message} ${restMsg}`
-      return msg
-    }
-  )
-
-  transports.push(
-    new winston.transports.Console({
-      level: 'debug',
-      format: combine(splat(), timestamp(), devFormat),
-    })
-  )
-}
-
-if (inProduction) {
-  const levels: { [key: string]: number } = {
-    error: 0,
-    warn: 1,
-    info: 2,
-    http: 3,
-    verbose: 4,
-    debug: 5,
-    silly: 6,
+const prodFormat = printf(({ level, message, ...rest }) => {
+  try {
+    return JSON.stringify({ level: levels[level], message, ...rest })
+  } catch {
+    // Logged values may contain circular references, never let logging crash the caller
+    return JSON.stringify({ level: levels[level], message, logError: 'Failed to stringify log entry' })
   }
+})
 
-  const prodFormat = winston.format.printf(({ level, ...rest }) => {
-    try {
-      return JSON.stringify({
-        level: levels[level],
-        ...rest,
-      })
-    } catch {
-      // Logged values may contain circular references (e.g. axios errors), never let logging crash the caller
-      return JSON.stringify({
-        level: levels[level],
-        message: rest.message,
-        logError: 'Failed to stringify log entry',
-      })
-    }
-  })
+const devFormat = printf(({ level, message, timestamp, ...rest }) => {
+  let restMsg = ''
+  try {
+    restMsg = JSON.stringify(rest)
+  } catch {
+    // eslint-disable-next-line no-console
+    console.error('Failed to stringify log message', rest)
+  }
+  // eslint-disable-next-line typescript/no-base-to-string, typescript/restrict-template-expressions
+  return `${timestamp} ${level}: ${message} ${restMsg}`
+})
 
-  transports.push(new winston.transports.Console({ format: prodFormat }))
-
-  transports.push(
-    new LokiTransport({
-      host: LOKI_HOST,
-      labels: { app: 'norppa', environment: process.env.NODE_ENV || 'production' },
-    })
-  )
-}
-
-export const logger = winston.createLogger({ transports })
+export const logger = winston.createLogger({
+  transports: inProduction
+    ? [
+        new winston.transports.Console({ format: prodFormat }),
+        new LokiTransport({
+          host: LOKI_HOST,
+          format: prodFormat,
+          labels: { app: 'norppa', environment: inStaging ? 'staging' : 'production' },
+        }),
+      ]
+    : [new winston.transports.Console({ level: 'debug', format: combine(timestamp(), devFormat) })],
+})
