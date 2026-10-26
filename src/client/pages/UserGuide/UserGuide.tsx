@@ -1,4 +1,4 @@
-import { Box } from '@mui/material'
+import { Box, GlobalStyles } from '@mui/material'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useParams } from 'react-router-dom'
@@ -13,11 +13,13 @@ import { getGuidePages } from './content'
 import GuideMarkdown from './GuideMarkdown'
 import GuideMenu from './GuideMenu'
 import PageNavigation from './PageNavigation'
+import useHeaderHeight, { BELOW_HEADER } from './useHeaderHeight'
 import useScrollToSection from './useScrollToSection'
 
 const GuideLayout = ({ pages, index, canEdit }: { pages: GuidePage[]; index: number; canEdit: boolean }) => {
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
+  useHeaderHeight()
   useScrollToSection(articleRef)
   const page = pages[index]
 
@@ -30,6 +32,7 @@ const GuideLayout = ({ pages, index, canEdit }: { pages: GuidePage[]; index: num
         alignItems: 'start',
       }}
     >
+      <GlobalStyles styles={{ html: { scrollPaddingTop: BELOW_HEADER } }} />
       <Title>{`${page.title} – ${t('userGuide:title')}`}</Title>
       <GuideMenu pages={pages} current={page} />
       <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>

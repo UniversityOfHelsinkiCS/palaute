@@ -1,15 +1,21 @@
 import type { Theme } from '@mui/material'
 import type { SystemStyleObject } from '@mui/system'
 
+const OUTLINE_WIDTH = 3
+const OUTLINE_OFFSET = 3
+
+// How far a focus indicator reaches outside its element
+export const FOCUS_INDICATOR_REACH = OUTLINE_WIDTH + OUTLINE_OFFSET
+
 export const focusIndicatorStyle = ({
   color,
   backgroundColor,
 }: { color?: string; backgroundColor?: string } = {}): SystemStyleObject<Theme> => {
   const focusIndicatorStyle: SystemStyleObject<Theme> = {
     '&.Mui-focusVisible': {
-      outline: '3px solid',
+      outline: `${OUTLINE_WIDTH}px solid`,
       outlineColor: theme => color ?? theme.palette.primary.main,
-      outlineOffset: '3px',
+      outlineOffset: `${OUTLINE_OFFSET}px`,
       backgroundColor: backgroundColor,
     },
   }
@@ -23,16 +29,16 @@ export const optionFocusIndicatorStyle = ({ color }: { color?: string } = {}): S
   alignItems: 'center',
   borderRadius: 1,
   '&:has(:focus-visible)': {
-    outline: '3px solid',
+    outline: `${OUTLINE_WIDTH}px solid`,
     outlineColor: theme => color ?? theme.palette.primary.main,
-    outlineOffset: '3px',
+    outlineOffset: `${OUTLINE_OFFSET}px`,
   },
 })
 
 export const switchFocusIndicatorStyle: SystemStyleObject<Theme> = {
   '& .MuiSwitch-switchBase.Mui-focusVisible .MuiSwitch-thumb': {
-    outline: '3px solid',
+    outline: `${OUTLINE_WIDTH}px solid`,
     outlineColor: theme => theme.palette.primary.main,
-    outlineOffset: '3px',
+    outlineOffset: `${OUTLINE_OFFSET}px`,
   },
 }

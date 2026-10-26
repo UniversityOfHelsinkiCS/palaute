@@ -1,5 +1,5 @@
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
-import { Box, GlobalStyles, Link, Typography } from '@mui/material'
+import { Box, Link, Typography } from '@mui/material'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
@@ -7,15 +7,14 @@ import { Link as RouterLink, useLocation } from 'react-router-dom'
 import type { GuidePage } from './content'
 
 import { NorButton } from '../../components/common/NorButton'
-import { focusIndicatorStyle } from '../../util/accessibility'
+import { FOCUS_INDICATOR_REACH, focusIndicatorStyle } from '../../util/accessibility'
 import useActiveSection from './useActiveSection'
+import { BELOW_HEADER } from './useHeaderHeight'
 
 const list = { listStyle: 'none', m: 0, p: 0 }
 
-const TOP = 'calc(64px + 3rem)'
-
 // Keeps the focus indicator from being cut off when the menu scrolls on its own
-const PADDING = 6
+const PADDING = FOCUS_INDICATOR_REACH
 
 const SectionList = ({ page }: { page: GuidePage }) => {
   const activeSection = useActiveSection(page.sections)
@@ -88,15 +87,14 @@ const GuideMenu = ({ pages, current }: { pages: GuidePage[]; current: GuidePage 
       aria-labelledby={titleId}
       sx={{
         position: { md: 'sticky' },
-        top: { md: `calc(${TOP} - ${PADDING}px)` },
+        top: { md: `calc(${BELOW_HEADER} - ${PADDING}px)` },
         // Fits the window, but shows at least a few items in a very low one
-        maxHeight: { md: `max(10rem, calc(100vh - ${TOP} - 1rem))` },
+        maxHeight: { md: `max(10rem, calc(100vh - ${BELOW_HEADER} - 1rem))` },
         overflowY: { md: 'auto' },
         p: { md: `${PADDING}px` },
         m: { md: `-${PADDING}px` },
       }}
     >
-      <GlobalStyles styles={{ html: { scrollPaddingTop: TOP } }} />
       <Typography
         id={titleId}
         component="h2"
