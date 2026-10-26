@@ -169,7 +169,7 @@ jobs:
           if-no-files-found: error
           retention-days: 1
 
-  # Staging and the releases build with the newest bundle recorded from their commit or an earlier one
+  # Staging and the releases build with the newest videos
   publish-videos:
     needs: merge-videos
     if: ${{ github.ref == 'refs/heads/master' }}
@@ -177,10 +177,6 @@ jobs:
     timeout-minutes: 15
 
     steps:
-      - uses: actions/checkout@v7
-        with:
-          fetch-depth: 0
-
       - uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
 
       - name: Log in to the registry
@@ -195,16 +191,5 @@ jobs:
           name: manual-videos
           path: manual
 
-      # The revision keeps the manifests of identical videos apart, so deleting an old one leaves the newer tags
       - name: Push the videos
-        run: oras push "$MANUAL_VIDEOS:$GITHUB_SHA" manual --annotation "org.opencontainers.image.revision=$GITHUB_SHA"
-
-      # A release takes the bundle of its commit or an earlier one, so the ones before the last release's are not needed
-      - name: Delete the bundles before the last release
-        run: |
-          tags=$(oras repo tags "$MANUAL_VIDEOS")
-          release=$(git describe --tags --abbrev=0 --match 'v*')
-          used=$(grep -m 1 -Fxf <(echo "$tags") <(git rev-list --first-parent "$release")) || exit 0
-          for sha in $(grep -Fxf <(echo "$tags") <(git rev-list --first-parent "$used^") || true); do
-            oras manifest delete --force "$MANUAL_VIDEOS:$sha"
-          done
+        run: oras push "$MANUAL_VIDEOS:latest" manual --annotation "org.opencontainers.image.revision=$GITHUB_SHA"

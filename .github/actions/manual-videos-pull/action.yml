@@ -1,5 +1,5 @@
 name: Manual videos pull
-description: The newest manual videos recorded on master from this commit or an earlier one into public/manual, see e2e/manual/README.md
+description: The newest manual videos recorded on master into public/manual, see e2e/manual/README.md
 
 inputs:
   registry-password:
@@ -17,19 +17,16 @@ runs:
         username: kontit
         password: ${{ inputs.registry-password }}
 
-    # Never of a newer commit, which could show UI that isn't in this one
     - name: Pull the videos
       shell: bash
       run: |
-        if [ "$(git rev-parse --is-shallow-repository)" = true ]; then git fetch --quiet --unshallow; fi
         # None before the first push, its error stays in the log
-        tags=$(oras repo tags "$MANUAL_VIDEOS") || tags=
-        sha=$(grep -m 1 -Fxf <(echo "$tags") <(git rev-list --first-parent HEAD)) || {
-          echo "::warning::No manual videos recorded from this commit or the ones before it"
+        oras pull "$MANUAL_VIDEOS:latest" -o public || {
+          echo "::warning::No manual videos recorded yet"
           exit 0
         }
-        oras pull "$MANUAL_VIDEOS:$sha" -o public
-        echo "Manual videos recorded from $sha, $(git rev-list --count "$sha..HEAD") commits before this one" >> "$GITHUB_STEP_SUMMARY"
+        sha=$(oras manifest fetch "$MANUAL_VIDEOS:latest" | jq -r '.annotations["org.opencontainers.image.revision"]')
+        echo "Manual videos recorded from $sha" >> "$GITHUB_STEP_SUMMARY"
       env:
         MANUAL_VIDEOS: registry.version.helsinki.fi/toska/openshift/kontit/norppa-manual-videos
 

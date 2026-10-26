@@ -72,8 +72,8 @@ To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies a
 
 `.github/workflows/manual-videos.yml` records the videos on every push to master, one run at a time. It doesn't hold up the deploy, a failed video only fails the run.
 
-- When every video passed on master, they're pushed to the registry as `norppa-manual-videos:<sha>`. Bundles before the one the last release used are deleted.
-- Staging and releases build with the newest bundle of their commit or an earlier one, the build's summary tells which. To release new videos, wait for their run to pass.
+- When every video passed on master, they're pushed to the registry as `norppa-manual-videos:latest`.
+- Staging and releases build with the newest videos, the build's summary tells which commit they're from. To release new videos, wait for their run to pass.
 - The scenarios are split across the runners of the `record` matrix (`--shard`), which start the voice service only if clips are missing. A change in `tts/` generates them all again.
 - The clips are kept in the registry as `norppa-manual-narration:latest` (ORAS). They're saved after every run; unused ones are dropped only when every shard of a first attempt passed on master.
 - When every shard passes, the videos and their `index.json` files are merged.
