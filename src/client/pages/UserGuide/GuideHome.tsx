@@ -31,7 +31,8 @@ const GroupCard = ({ group, pages }: { group: string; pages: GuidePage[] }) => {
         {t(`userGuide:groups:${group}`)}
       </Typography>
       <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-        {t(`userGuide:groupDescriptions:${group}`)}
+        {/* A version can describe a group of the same name differently */}
+        {t([`userGuide:groupDescriptions:${pages[0].version}:${group}`, `userGuide:groupDescriptions:${group}`])}
       </Typography>
       <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
         {pages.map(page => (

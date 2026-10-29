@@ -6,12 +6,13 @@ import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 
-import type { GuidePage } from './content'
+import type { GuidePage, GuideVersion } from './content'
 
 import { NorButton } from '../../components/common/NorButton'
 import { FOCUS_INDICATOR_REACH, focusIndicatorStyle } from '../../util/accessibility'
 import PageIcon from './PageIcon'
-import { BELOW_HEADER } from './useHeaderHeight'
+import { HEADER_BOTTOM, PAGE_TOP_GAP } from './useHeaderHeight'
+import VersionToggle from './VersionToggle'
 
 const list = { listStyle: 'none', m: 0, p: 0 }
 
@@ -69,7 +70,14 @@ const Shortcut = ({ to, icon, label, current }: { to: string; icon: ReactNode; l
   </li>
 )
 
-const GuideMenu = ({ pages, current }: { pages: GuidePage[]; current?: GuidePage }) => {
+type GuideMenuProps = {
+  pages: GuidePage[]
+  current?: GuidePage
+  version: GuideVersion
+  onVersionChange: (version: GuideVersion) => void
+}
+
+const GuideMenu = ({ pages, current, version, onVersionChange }: GuideMenuProps) => {
   const { t } = useTranslation()
   const { key } = useLocation()
   const listId = useId()
@@ -84,14 +92,20 @@ const GuideMenu = ({ pages, current }: { pages: GuidePage[]; current?: GuidePage
       aria-label={t('userGuide:title')}
       sx={{
         position: { md: 'sticky' },
-        top: { md: `calc(${BELOW_HEADER} - ${PADDING}px)` },
-        // Fits the window, but shows at least a few items in a very low one
-        maxHeight: { md: `max(10rem, calc(100vh - ${BELOW_HEADER} - 1rem))` },
+        top: { md: HEADER_BOTTOM },
+        // Fills the window below the header, but shows at least a few items in a very low one
+        maxHeight: { md: `max(10rem, calc(100vh - ${HEADER_BOTTOM}))` },
         overflowY: { md: 'auto' },
-        p: { md: `${PADDING}px` },
-        m: { md: `-${PADDING}px` },
+        // The page's space above and some below are inside the menu, so they scroll with it. It starts right below
+        // the header, where it sticks, as its height only fits from there.
+        mt: { md: `-${PAGE_TOP_GAP}` },
+        pt: { md: PAGE_TOP_GAP },
+        pb: { md: '1rem' },
+        px: { md: `${PADDING}px` },
+        mx: { md: `-${PADDING}px` },
       }}
     >
+      <VersionToggle version={version} onChange={onVersionChange} />
       <Box component="ul" sx={{ ...list, mb: 2 }}>
         <Shortcut
           to="/guide"

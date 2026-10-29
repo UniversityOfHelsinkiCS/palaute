@@ -881,17 +881,28 @@
     "pageNavigation": "Edellinen ja seuraava sivu",
     "editOnGitHub": "Muokkaa GitHubissa",
     "onThisPage": "Tällä sivulla",
-    "homeIntro": "Valitse, mistä haluat lukea. Jos Norppa on sinulle uusi, aloita yleistiedoista.",
+    "homeIntro": "Valitse, mistä haluat lukea. Jos Norppa on sinulle uusi, aloita Aloittaminen-sivulta.",
     "homeVideos": "Jos katsot mieluummin videoita, ne on koottu yhdelle sivulle:",
     "groupDescriptions": {
+      "v3": {
+        "basics": "Kaikille: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset, kurssiyhteenveto ja apu ongelmatilanteisiin.",
+        "teachers": "Kurssin kysely aikataulusta vastapalautteeseen sekä palaute kurssin aikana. Samat ohjeet koskevat hallintohenkilöitä ja koulutusohjelman kyselyiden vastuuhenkilöitä.",
+        "programmes": "Koulutusohjelman tai tiedekunnan palautteen seuraaminen, koulutusohjelman kysymykset, asetukset ja koulutusohjelman omat kyselyt."
+      },
       "general": "Kaikille: miten Norppa ja kyselyt toimivat, roolit, kuka näkee vastaukset, sähköpostit, kurssiyhteenveto ja tuki.",
       "teachers": "Kyselyn käyttö päivämääristä vastapalautteeseen. Samat ohjeet koskevat hallintohenkilöitä ja koulutusohjelman kyselyiden vastuuhenkilöitä.",
-      "programmes": "Koulutusohjelman tai tiedekunnan sivu, sen asetukset ja kysymykset sekä koulutusohjelman omat kyselyt."
+      "programmes": "Koulutusohjelman tai tiedekunnan sivu, sen asetukset ja kysymykset sekä koulutusohjelman omat kyselyt.",
+      "basics": "Mitä Norppa on ja miten kysely toimii, roolit ja oikeudet sekä ratkaisuja yleisimpiin ongelmiin.",
+      "surveys": "Kyselyn vaiheet aikataulusta vastapalautteeseen sekä kurssiyhteenveto ja jatkuva palaute. Samat ohjeet koskevat kurssikyselyjä, välipalautetta ja koulutusohjelman kyselyjä.",
+      "organisations": "Koulutusohjelman tai tiedekunnan sivu, sen asetukset ja kysymykset sekä koulutusohjelman omat kyselyt."
     },
     "groups": {
       "general": "Yleistiedot",
       "teachers": "Vastuuopettajalle",
-      "programmes": "Koulutusohjelmalle"
+      "programmes": "Koulutusohjelmalle",
+      "basics": "Perusteet",
+      "surveys": "Kyselyt",
+      "organisations": "Koulutusohjelmat"
     }
   }
 }

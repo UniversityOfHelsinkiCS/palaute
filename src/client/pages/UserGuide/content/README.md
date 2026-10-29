@@ -6,12 +6,23 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 
 ## Files
 
-- Each page is in a group folder, `<order>-<group>/<order>-<slug>.md`, e.g. `2-teachers/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
+- There are several versions of the guide, `v1/`, `v2/` and `v3/`, with different structures. Admins switch between them with the buttons at the top of the menu until one is chosen; the others are then removed. Edit all of them while they exist.
+- In a version, each page is in a group folder, `<language>/<order>-<group>/<order>-<slug>.md`, e.g. `v2/fi/2-surveys/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
 - A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it above the groups, under the link to the home page, with its icon from `PageIcon.tsx`.
-- The menu shows each group under the heading `userGuide:groups:<group>` from the translations, and the home page (`/guide`) describes it with `userGuide:groupDescriptions:<group>`. The groups:
+- The menu shows each group under the heading `userGuide:groups:<group>` from the translations, and the home page (`/guide`) describes it with `userGuide:groupDescriptions:<group>`.
+- v1 groups pages by reader:
   - `general`: what applies to everyone, such as rules, terms and the course summary. No steps for working with a survey.
   - `teachers`: working with a survey, from its dates to counter feedback. Programme surveys and programme admins use these pages too, so say where they differ.
   - `programmes`: the programme's page and programme surveys.
+- v2 groups pages by topic, and keeps each rule on the page of the task it affects:
+  - `basics`: getting started, roles, and problems with short answers that link to the page that explains them.
+  - `surveys`: a survey from its schedule to counter feedback, in that order, for all survey types and everyone who works on them. Say where survey types or roles differ.
+  - `organisations`: the programme's page and programme surveys.
+- v3 groups pages by reader like v1, but writes each part for its reader:
+  - `basics`: what everyone needs, and no steps for working on a survey: getting started, roles, all the rules on anonymity and who sees which answers, the course summary, and problems with short answers.
+  - `teachers`: the responsible teacher's survey in the order it runs, addressed to them as "you". Administrative persons and the responsible persons of programme surveys use these pages too.
+  - `programmes`: programme staff's own tasks, addressed to them: following feedback, programme questions, settings and programme surveys. Programme surveys link to the teachers' pages for what works the same way.
+  - A rule has one full home, usually in `basics`. A task page may repeat its gist in one sentence and link to it, so the reader needn't leave the task.
 - Each page starts with one `# Title`, which is also its name in the menu. Don't put labels in the title.
 - Write the same pages, sections and section ids in both languages. The texts don't have to be word-for-word translations.
 
