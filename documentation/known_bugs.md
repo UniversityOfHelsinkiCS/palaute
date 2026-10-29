@@ -38,6 +38,14 @@ The Open questions tab is for admins only in the UI, but the endpoint accepts an
 
 Fix: require admin access, as the UI does.
 
+### Small courses' open answers show on the Open questions tab
+
+`src/server/services/organisations/getOpenFeedbackByOrganisation.ts:45`, `src/client/pages/Organisation/ProgrammeOpenQuestions.jsx`
+
+On courses with fewer than five students, a survey's results are shown only to its responsible teachers, and students agree to the teacher seeing their answers. The organisation's Open questions tab doesn't leave these courses out, so the programme's admins see their answers to the university and programme open questions.
+
+Fix: leave out courses with fewer than five students, as the Results tab does.
+
 ### Readers see the hidden answer count in the course summary
 
 `src/server/services/summary/getTeacherSummary.ts:14-41`
@@ -158,6 +166,14 @@ Fix: run the writes in one transaction. `createUserFeedbackTargets` catches and 
 `deleteOrganisationSurvey` opens a transaction but doesn't pass it to any of its queries, so each delete is committed on its own and the rollback undoes nothing. If one fails, the survey is left half-deleted, e.g. without its user feedback targets and questions but still listed.
 
 Fix: pass `{ transaction: t }` to every query.
+
+### A new programme question's publicity can't be set before a reload
+
+`src/client/components/QuestionEditor/ProgrammeSurvey.jsx:53-56`
+
+Until the page is reloaded after saving, a new programme question's card has no id and shows Public, although a new programme question isn't public. The publicity toggle uses the question's id, so it doesn't work before a reload.
+
+Fix: update the editor with the saved questions' ids after saving.
 
 ### The grouping question is carried over with the old groups
 
