@@ -21,6 +21,8 @@ Admins, i.e. the programme director, others with admin rights from the IAM group
 
 Admins see all answers of the programme's courses; read rights show only the answers to public questions.
 
+Admins can also act on the programme's course surveys: edit the questions before the survey opens, hide open answers, send reminders and switch on continuous feedback. They do this on the survey's page the same way responsible teachers do; see e.g. [Your own questions](/guide/questions) and [Results](/guide/results).
+
 ## Programme questions {#programme-questions}
 
 Programme questions are added to the course surveys of all the course units that belong to the programme in Sisu, after the university level questions. Teachers see them in their survey but can't edit or remove them.
@@ -34,7 +36,7 @@ The questions work like a teacher's own questions; see [Editing the questions](/
 
 The change shows at once in every course survey of the programme, _also in surveys that are already open or have closed_. Changing a question's wording changes it in surveys that already have answers to it, and removing a question removes it from them. So add programme questions before the semester's surveys open, and add a new question rather than change the meaning of an old one.
 
-In the survey, students see the programme's scale and choice questions right after the university level ones, and its open questions after the teacher's own questions, before the university level open questions.
+Where in the survey students see the programme questions is described in [The order students see](/guide/course-surveys#question-order).
 
 ### Making the answers public {#programme-questions-public}
 
@@ -46,7 +48,7 @@ A new programme question is [[common:notPublic]]: only the course's responsible 
 2. Click the question's [[common:notPublic]] button.
 3. Choose [[common:publicInfo]].
 
-When the programme has made a question public, it's public on every course of the programme, and teachers can't change that. Answers to open programme questions can't be made public here; a responsible teacher can make them public on their own course after it has closed. See [Public answers](/guide/results#public-answers).
+When the programme has made a question public, it's public on every course of the programme, and teachers can't change that. Answers to open programme questions can't be made public here; a responsible teacher can make them public on their own course after it has closed. See [Changing who sees the answers](/guide/results#change-visibility).
 
 ## Adding a feedback liaison {#feedback-liaison}
 

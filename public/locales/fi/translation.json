@@ -879,6 +879,11 @@
     "previous": "Edellinen",
     "next": "Seuraava",
     "pageNavigation": "Edellinen ja seuraava sivu",
-    "editOnGitHub": "Muokkaa GitHubissa"
+    "editOnGitHub": "Muokkaa GitHubissa",
+    "groups": {
+      "general": "Yleistiedot",
+      "teachers": "Opettajalle",
+      "programmes": "Koulutusohjelmalle"
+    }
   }
 }

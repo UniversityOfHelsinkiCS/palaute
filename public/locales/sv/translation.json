@@ -869,6 +869,11 @@
     "previous": "Föregående",
     "next": "Nästa",
     "pageNavigation": "Föregående och nästa sida",
-    "editOnGitHub": "Redigera på GitHub"
+    "editOnGitHub": "Redigera på GitHub",
+    "groups": {
+      "general": "Allmänt",
+      "teachers": "För lärare",
+      "programmes": "För utbildningsprogram"
+    }
   }
 }

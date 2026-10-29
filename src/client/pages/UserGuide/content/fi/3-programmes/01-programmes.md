@@ -21,6 +21,8 @@ Hallinnoijat eli koulutusohjelman johtaja, muut IAM-ryhmien kautta hallinnointio
 
 Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, lukuoikeuksilla näkee vain julkisten kysymysten vastaukset.
 
+Hallinnoijat voivat myös toimia koulutusohjelman kurssikyselyissä: muokata kysymyksiä ennen kyselyn avautumista, piilottaa avoimia vastauksia, lähettää muistutusviestejä ja ottaa jatkuvan palautteen käyttöön. Ne tehdään kyselyn sivulla samoin kuin vastuuopettajat tekevät ne; katso esimerkiksi [Omat kysymykset](/guide/questions) ja [Tulokset](/guide/results).
+
 ## Koulutusohjelman kysymykset {#programme-questions}
 
 Koulutusohjelman kysymykset lisätään kaikkien niiden opintojaksojen kurssikyselyihin, jotka kuuluvat Sisussa koulutusohjelmalle. Ne tulevat yliopistotason kysymysten jälkeen. Opettajat näkevät ne kyselyssään, mutta eivät voi muokata tai poistaa niitä.
@@ -34,7 +36,7 @@ Kysymykset toimivat samoin kuin opettajan omat kysymykset; katso [Kysymysten muo
 
 Muutos näkyy heti kaikissa koulutusohjelman kurssikyselyissä, _myös jo avautuneissa ja päättyneissä_. Jos muutat kysymyksen sanamuotoa, se muuttuu myös kyselyissä, joissa siihen on jo vastattu, ja poistettu kysymys katoaa niistäkin. Lisää siis koulutusohjelman kysymykset ennen kuin lukukauden kyselyt avautuvat, ja lisää mieluummin uusi kysymys kuin muuta vanhan merkitystä.
 
-Opiskelija näkee kyselyssä koulutusohjelman asteikko- ja valintakysymykset heti yliopistotason kysymysten jälkeen ja sen avoimet kysymykset opettajan omien kysymysten jälkeen, ennen yliopistotason avoimia kysymyksiä.
+Missä kohdassa kyselyä opiskelija näkee koulutusohjelman kysymykset, kerrotaan kohdassa [Kysymysten järjestys opiskelijalle](/guide/course-surveys#question-order).
 
 ### Vastausten julkisuus {#programme-questions-public}
 
@@ -46,7 +48,7 @@ Uusi koulutusohjelman kysymys on [[common:notPublic]]: sen vastaukset näkevät 
 2. Valitse kysymyksen [[common:notPublic]]-painike.
 3. Valitse [[common:publicInfo]].
 
-Kun koulutusohjelma on tehnyt kysymyksestä julkisen, se on julkinen kaikilla koulutusohjelman kursseilla, eikä opettaja voi muuttaa sitä. Avointen kysymysten vastauksia ei voi tehdä julkisiksi täällä; vastuuopettaja voi tehdä ne julkisiksi omalla kurssillaan kyselyn päätyttyä. Katso [Julkiset vastaukset](/guide/results#public-answers).
+Kun koulutusohjelma on tehnyt kysymyksestä julkisen, se on julkinen kaikilla koulutusohjelman kursseilla, eikä opettaja voi muuttaa sitä. Avointen kysymysten vastauksia ei voi tehdä julkisiksi täällä; vastuuopettaja voi tehdä ne julkisiksi omalla kurssillaan kyselyn päätyttyä. Katso [Vastausten näkyvyyden muuttaminen](/guide/results#change-visibility).
 
 ## Palautevastaavan lisääminen {#feedback-liaison}
 

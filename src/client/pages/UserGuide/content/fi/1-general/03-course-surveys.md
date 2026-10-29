@@ -1,6 +1,6 @@
 # Kurssikyselyt
 
-Norppa luo jokaiselle kurssitoteutukselle kurssikyselyn automaattisesti, ja sen päivämäärät määräytyvät kurssin Sisussa olevien päivämäärien mukaan. Sinun ei tarvitse tehdä mitään, jotta kysely avautuu: vastuuopettajat voivat lisätä omia kysymyksiään ja muuttaa päivämääriä, mutta se ei ole pakollista.
+Norppa luo jokaiselle kurssitoteutukselle kurssikyselyn automaattisesti, ja sen päivämäärät määräytyvät kurssin Sisussa olevien päivämäärien mukaan. Sinun ei tarvitse tehdä mitään, jotta kysely avautuu: vastuuopettajat voivat lisätä [omia kysymyksiään](/guide/questions) ja [muuttaa päivämääriä](/guide/survey-dates), mutta se ei ole pakollista.
 
 ## Mille kursseille tulee kysely {#which-courses}
 
@@ -47,27 +47,35 @@ Kurssin sivulla näkyvät molemmat ajat: [[feedbackTargetView:coursePeriod]] on 
 - Niin kauan kuin kukaan ei ole tallentanut kyselylle päivämääriä Norpassa, kyselyn päivämäärät seuraavat joka yö kurssin päivämääriä Sisussa. Kurssin päivämäärien muuttaminen Sisussa siis siirtää myös kyselyä.
 - Kun päivämäärät on kerran tallennettu Norpassa, Sisu ei enää muuta niitä.
 
-Viikkoa ennen kyselyn avautumista vastuuopettajat saavat sähköpostin, joka muistuttaa, että he voivat vielä lisätä omia kysymyksiä. Katso [Norpan lähettämät sähköpostit](/guide/collecting-answers#emails).
+Viikkoa ennen kyselyn avautumista vastuuopettajat saavat sähköpostin, joka muistuttaa, että he voivat vielä lisätä omia kysymyksiä. Katso [Norpan sähköpostit](/guide/emails).
 
-## Päivämäärien muuttaminen {#change-dates}
+Vastuuopettajat voivat muuttaa päivämääriä Norpassa; katso [Kyselyn päivämäärät](/guide/survey-dates).
 
-Vastuuopettajat ja hallintohenkilöt voivat muuttaa kurssikyselyn päivämääriä:
+## Yliopistotason kysymykset {#university-questions}
 
-1. Valitse [[navBar:myCourses]] ja sieltä kurssi.
-2. Napsauta [[common:edit]] kohdan [[feedbackTargetView:feedbackPeriod]] vieressä.
-3. Valitse ikkunassa [[feedbackTargetSettings:editPeriodTitle]] päivämäärät kohtiin [[editFeedbackTarget:opensAt]] ja [[editFeedbackTarget:closesAt]].
-4. Napsauta [[common:save]].
+Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta niihin voi [lisätä niistä kopiot](/guide/questions#copy-questions).
 
-[[video:change-dates]]
+Ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa. Kyselyn kysymykset riippuvat sen avautumispäivästä: 2.8.2026 tai myöhemmin aukeavissa kyselyissä on uudet kysymykset.
 
-Se, mitä voit muuttaa, riippuu kyselyn tilasta:
+Yliopistotason asteikkokysymysten keskiarvot näkyvät [kurssiyhteenvedossa](/guide/course-summary#figures).
 
-- Ennen avautumista voit muuttaa molempia päivämääriä. Avautumispäivä ei voi olla menneisyydessä, ja kyselyn pitää olla auki vähintään vuorokauden, joten sulkeutumispäivän on oltava aikaisintaan avautumispäivää seuraava päivä.
-- Kun kysely on auki, voit muuttaa vain sulkeutumispäivää. Voit jatkaa kyselyä esimerkiksi arvioinnin jälkeiseen aikaan tai asettaa sulkeutumispäiväksi tämän päivän, jolloin kysely sulkeutuu tänään klo 23.59. Painiketta, joka sulkisi kyselyn heti, ei ole.
-- Kun kysely on sulkeutunut, päivämääriä ei voi enää muuttaa. Vain tuki voi avata sulkeutuneen kurssikyselyn uudelleen.
+## Koulutusohjelman kysymykset {#programme-questions}
 
-Jos haluat avata kyselyn heti, napsauta samassa ikkunassa [[editFeedbackTarget:openImmediately]] ja vahvista valitsemalla [[editFeedbackTarget:openFeedbackImmediatelyDialogConfirm]]. Kysely avautuu saman tien, ja opiskelijat saavat linkin sähköpostiinsa heti. Lisää omat kysymyksesi ensin: kun kysely on auki, niitä ei voi enää muuttaa.
+Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiään kaikkien opintojaksojensa kyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunan laatikko kertoo, montako niitä on ja mikä organisaatio ne on lisännyt.
 
-Jos sen sijaan asetat avautumispäiväksi tämän päivän ja tallennat, Norppa pyytää niin ikään vahvistusta, ja kysely avautuu saman tien. Opiskelijat saavat silloin sähköpostinsa päivittäisessä postituksessa klo 11.15, tai seuraavana päivänä, jos se on jo mennyt.
+Opettaja ei voi muokata tai poistaa koulutusohjelman kysymyksiä. Jos jokin niistä ei sovi kurssillesi, ota yhteyttä koulutusohjelmaan. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä.
 
-> **Huom.** Välipalautteet ja koulutusohjelman kyselyt eivät seuraa Sisua, ja niiden päivämäärät muutetaan toisella tavalla missä tahansa tilassa. Katso [Välipalaute](/guide/continuous-and-interim-feedback#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).
+Koulutusohjelman henkilöstö lisää ja muokkaa näitä kysymyksiä koulutusohjelman sivulla, ks. [Koulutusohjelman kysymykset](/guide/programmes#programme-questions).
+
+## Kysymysten järjestys opiskelijalle {#question-order}
+
+Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman kysymykset ja lopuksi opettajan omat kysymykset. Opiskelija näkee ne tässä järjestyksessä:
+
+1. Ryhmittelykysymys, jos kyselyssä on sellainen (ks. [Ryhmät](/guide/questions#groups)).
+2. Yliopistotason asteikko- ja monivalintakysymykset.
+3. Koulutusohjelman asteikko- ja monivalintakysymykset.
+4. Opettajan omat kysymykset ja tekstiosiot siinä järjestyksessä, johon opettaja on ne laittanut.
+5. Koulutusohjelman avoimet kysymykset.
+6. Yliopistotason avoin kysymys, joten _Muita huomioita_ on aina viimeisenä.
+
+Lopputuloksen näet [[editFeedbackTarget:showPreview]]-painikkeella (ks. [Kieliversiot ja esikatselu](/guide/questions#languages)).

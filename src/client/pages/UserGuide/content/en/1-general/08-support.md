@@ -20,7 +20,7 @@ Norppa is a University of Helsinki service. The [[feedbackView:dataProtectionNot
 What this means for the feedback:
 
 - Students log in to Norppa, so it knows who may answer which survey. Teachers and programme staff still can't see who gave which answers. Open answers are listed in alphabetical order, each question's answers are shuffled separately in the download, and downloaded answers contain no student information.
-- On courses with fewer than five enrolled students, only the responsible teachers see the results. See [Small courses](/guide/collecting-answers#small-courses).
+- On courses with fewer than five enrolled students, only the responsible teachers see the results. See [Small courses](/guide/answer-visibility#small-courses).
 - Students may write personal data, their own or someone else's, in open answers. Check the answers before making an open question public, and [hide](/guide/results#hide-answers) any that shouldn't be seen.
 - In the survey, students can read how their answers are used under the link [[feedbackView:feedbackInfoLink]]
 

@@ -18,7 +18,7 @@ Vastuuopettajat voivat kirjoittaa vastapalautteen kyselyn sulkeuduttua 12 kuukau
 
 Kuka tahansa kyselyn vastuuopettajista voi muokata vastapalautetta myöhemmin samalla välilehdellä.
 
-Kurssipalautteen tai koulutusohjelman kyselyn sulkeutumista seuraavana päivänä sen vastuuopettajat saavat sähköpostimuistutuksen vastapalautteesta, jos kyselyyn on vastattu eikä vastapalautetta ole vielä annettu. Katso [sähköpostit](/guide/collecting-answers#emails).
+Kurssipalautteen tai koulutusohjelman kyselyn sulkeutumista seuraavana päivänä sen vastuuopettajat saavat sähköpostimuistutuksen vastapalautteesta, jos kyselyyn on vastattu eikä vastapalautetta ole vielä annettu. Katso [sähköpostit](/guide/emails).
 
 ## Lähettäminen sähköpostilla {#send-email}
 

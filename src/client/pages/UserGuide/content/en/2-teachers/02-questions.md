@@ -1,6 +1,6 @@
-# Survey questions
+# Your own questions
 
-A course survey always has the university level questions and possibly questions from the degree programme. Neither can be changed. You can add your own questions until the survey opens.
+A course survey always has the [university level questions](/guide/course-surveys#university-questions) and possibly [questions from the degree programme](/guide/course-surveys#programme-questions). Neither can be changed. You can add your own questions until the survey opens. Interim feedback and programme surveys have only your own questions.
 
 ## Editing the questions {#edit-questions}
 
@@ -29,40 +29,11 @@ To change a question, click its [[common:edit]] button. To remove several questi
 
 [[questionEditor:addTextualContent]] adds a _text section_ instead of a question, e.g. instructions or a heading for the questions after it. Text sections and question descriptions support Markdown, e.g. links and lists.
 
-The editing dialog of a scale or choice question also lets you choose whether its answers are public. See [Who sees the answers](/guide/results#public-answers).
+The editing dialog of a scale or choice question also lets you choose whether its answers are public. See [Who sees which answers](/guide/answer-visibility#public-answers).
 
 ## Question types {#question-types}
 
 There are four question types: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] and [[questionEditor:multipleChoiceQuestion]]. Scale questions are answered from 1 to 5, or _N/A_. The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
-
-## University level questions {#university-questions}
-
-The university sets these questions for all course surveys. They're the same for every course and can't be edited or removed. In the editor they're marked [[questionEditor:universityQuestion]]. Interim feedback and programme surveys don't have them, but you can [add copies of them](#copy-questions).
-
-They're shown at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab. Which set a survey gets depends on when it opens: a new set is used in surveys that open on 2 August 2026 or later.
-
-The averages of the university level scale questions are what [Course summary](/guide/course-summary#figures) shows.
-
-## Programme questions {#programme-questions}
-
-A degree programme or a faculty can add its own questions to the course surveys of all its course units. In the editor they're marked [[questionEditor:programmeQuestion]], and the box at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab tells how many there are and which organisation added them.
-
-Teachers can't edit or remove programme questions. If one doesn't suit your course, contact the programme. Interim feedback and programme surveys don't have programme questions.
-
-Programme staff add and edit these questions on the programme's page: see [Programme questions](/guide/programmes#programme-questions).
-
-## The order students see {#question-order}
-
-The editor lists the university level questions first, then the programme questions, then your own. Students see them in this order:
-
-1. The grouping question, if the survey has one (see [Groups](#groups)).
-2. The university level scale and choice questions.
-3. The programme's scale and choice questions.
-4. Your own questions and text sections, in the order you've set.
-5. The programme's open questions.
-6. The university level open question, so _Additional comments_ is always last.
-
-To check the result, use [[editFeedbackTarget:showPreview]] (see [Languages and preview](#languages)).
 
 ## Questions from the previous realisation {#carry-over}
 

@@ -6,13 +6,23 @@
 
 [[video:check-your-rights]]
 
-## Course surveys {#course-surveys}
+## Course summary {#course-summary}
+
+### Course summary
+
+[[video:course-summary]]
+
+### Downloading the course summary
+
+[[video:course-summary-download]]
+
+## Survey dates {#survey-dates}
 
 ### Changing the survey dates
 
 [[video:change-dates]]
 
-## Survey questions {#questions}
+## Your own questions {#questions}
 
 ### Adding your own question
 
@@ -73,13 +83,3 @@
 ### Creating interim feedback
 
 [[video:interim-feedback]]
-
-## Course summary {#course-summary}
-
-### Course summary
-
-[[video:course-summary]]
-
-### Downloading the course summary
-
-[[video:course-summary-download]]

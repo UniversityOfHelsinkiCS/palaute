@@ -19,23 +19,11 @@ Uudet vastaukset tulevat näkyviin, kun lataat sivun uudelleen. [[feedbackTarget
 
 Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, voit katsoa yhden ryhmän vastauksia välilehden yläosan valinnalla [[groups:chooseGroup]]. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa ryhmässä on joko ei yhtään tai vähintään 5 vastausta, jotta vastaajia ei voi tunnistaa. Katso [ryhmät](/guide/questions#groups).
 
-Jos kurssille on ilmoittautunut alle 5 opiskelijaa, tulokset näkyvät vain kurssin vastuuopettajille. Katso [pienet kurssit](/guide/collecting-answers#small-courses).
+Jos kurssille on ilmoittautunut alle 5 opiskelijaa, tulokset näkyvät vain kurssin vastuuopettajille. Katso [pienet kurssit](/guide/answer-visibility#small-courses).
 
-## Kuka näkee mitkäkin vastaukset {#public-answers}
+## Vastausten näkyvyyden muuttaminen {#change-visibility}
 
-Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]].
-
-- Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet, näkevät kaikkien kysymysten vastaukset.
-- Opettajat, koulutusohjelman henkilöt, joilla on lukuoikeudet, ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
-
-Roolit on kuvattu sivulla [roolit](/guide/roles#course-roles).
-
-Oletuksena:
-
-- Lisäämäsi asteikko- ja valintakysymykset ovat julkisia.
-- Avoimet kysymykset eivät ole julkisia.
-- Toisesta kyselystä kopioidut ja kurssin edelliseltä toteutukselta siirtyneet kysymykset eivät ole julkisia.
-- Kysymykset, jotka yliopisto tai koulutusohjelma on asettanut julkisiksi, ovat aina julkisia, eikä sitä voi muuttaa. Näitä ovat yliopistotason asteikko- ja valintakysymykset.
+Kuka näkee julkisten ja ei-julkisten kysymysten vastaukset ja mitkä kysymykset ovat oletuksena julkisia, kerrotaan sivulla [Vastausten näkyvyys](/guide/answer-visibility#public-answers).
 
 Kysymyksen näkyvyyden muuttaminen (vastuuopettajat):
 

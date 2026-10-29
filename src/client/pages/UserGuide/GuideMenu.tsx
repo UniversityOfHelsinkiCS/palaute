@@ -80,6 +80,7 @@ const GuideMenu = ({ pages, current }: { pages: GuidePage[]; current: GuidePage 
   // The location the list was opened at, so following a link closes it
   const [openAt, setOpenAt] = useState<string>()
   const open = openAt === key
+  const groups = [...new Set(pages.map(page => page.group))]
 
   return (
     <Box
@@ -113,8 +114,19 @@ const GuideMenu = ({ pages, current }: { pages: GuidePage[]; current: GuidePage 
         {t('userGuide:contents')}
       </NorButton>
       <Box component="ul" id={listId} sx={{ ...list, display: { xs: open ? 'block' : 'none', md: 'block' } }}>
-        {pages.map(page => (
-          <PageItem key={page.slug} page={page} current={page.slug === current.slug} />
+        {groups.map(group => (
+          <Box component="li" key={group} sx={{ '& + &': { mt: 2 } }}>
+            <Typography component="h3" sx={{ mb: 0.5, fontSize: '0.875rem', fontWeight: 600, color: 'text.secondary' }}>
+              {t(`userGuide:groups:${group}`)}
+            </Typography>
+            <Box component="ul" sx={list}>
+              {pages
+                .filter(page => page.group === group)
+                .map(page => (
+                  <PageItem key={page.slug} page={page} current={page.slug === current.slug} />
+                ))}
+            </Box>
+          </Box>
         ))}
       </Box>
     </Box>

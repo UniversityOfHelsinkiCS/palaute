@@ -13,7 +13,7 @@ Norppa reads each course realisation's teachers and their roles from Sisu. The c
   - write counter feedback
   - use continuous feedback and create interim feedback
 - _Administrative person_: the Sisu role administrative person. Has exactly the same rights as a responsible teacher.
-- _Teacher_: any other teaching role in Sisu. A teacher sees the survey as a [[common:preview]], can copy the survey link in the [[feedbackTargetView:shareTab]] tab, and sees the answers to public questions only (see [public answers](/guide/results#public-answers)). A teacher can't edit the survey or write counter feedback.
+- _Teacher_: any other teaching role in Sisu. A teacher sees the survey as a [[common:preview]], can copy the survey link in the [[feedbackTargetView:shareTab]] tab, and sees the answers to public questions only (see [public answers](/guide/answer-visibility#public-answers)). A teacher can't edit the survey or write counter feedback.
 
 Responsible teachers and administrative persons also get Norppa's emails about the survey, such as the reminder before it opens. On courses that started before 2023, everyone listed in Sisu is a responsible teacher.
 

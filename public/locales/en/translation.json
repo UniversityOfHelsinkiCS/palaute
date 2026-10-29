@@ -884,6 +884,11 @@
     "previous": "Previous",
     "next": "Next",
     "pageNavigation": "Previous and next page",
-    "editOnGitHub": "Edit on GitHub"
+    "editOnGitHub": "Edit on GitHub",
+    "groups": {
+      "general": "General",
+      "teachers": "For teachers",
+      "programmes": "For degree programmes"
+    }
   }
 }

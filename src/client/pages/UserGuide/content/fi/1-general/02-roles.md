@@ -13,7 +13,7 @@ Norppa hakee kunkin kurssitoteutuksen opettajat ja heidän roolinsa Sisusta. Kur
   - kirjoittaa vastapalautteen
   - käyttää jatkuvaa palautetta ja luoda välipalautteita.
 - _Hallintohenkilö_: Sisun rooli hallintohenkilö. Hallintohenkilöllä on täsmälleen samat oikeudet kuin vastuuopettajalla.
-- _Opettaja_: mikä tahansa muu opetusrooli Sisussa. Opettaja näkee kyselyn [[common:preview]]-näkymässä, voi kopioida kyselyn linkin [[feedbackTargetView:shareTab]]-välilehdeltä ja näkee vain julkisten kysymysten vastaukset (katso [julkiset vastaukset](/guide/results#public-answers)). Opettaja ei voi muokata kyselyä eikä kirjoittaa vastapalautetta.
+- _Opettaja_: mikä tahansa muu opetusrooli Sisussa. Opettaja näkee kyselyn [[common:preview]]-näkymässä, voi kopioida kyselyn linkin [[feedbackTargetView:shareTab]]-välilehdeltä ja näkee vain julkisten kysymysten vastaukset (katso [julkiset vastaukset](/guide/answer-visibility#public-answers)). Opettaja ei voi muokata kyselyä eikä kirjoittaa vastapalautetta.
 
 Vastuuopettajat ja hallintohenkilöt saavat myös Norpan kyselyä koskevat sähköpostit, kuten muistutuksen ennen kyselyn avautumista. Kursseilla, jotka ovat alkaneet ennen vuotta 2023, kaikki Sisussa mainitut opettajat ovat vastuuopettajia.
 

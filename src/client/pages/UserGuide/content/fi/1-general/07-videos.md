@@ -6,13 +6,23 @@
 
 [[video:check-your-rights]]
 
-## Kurssikyselyt {#course-surveys}
+## Kurssiyhteenveto {#course-summary}
+
+### Kurssiyhteenveto
+
+[[video:course-summary]]
+
+### Kurssiyhteenvedon lataaminen
+
+[[video:course-summary-download]]
+
+## Kyselyn päivämäärät {#survey-dates}
 
 ### Kyselyn päivämäärien muuttaminen
 
 [[video:change-dates]]
 
-## Kyselyn kysymykset {#questions}
+## Omat kysymykset {#questions}
 
 ### Oman kysymyksen lisääminen
 
@@ -73,13 +83,3 @@
 ### Välipalautteen luominen
 
 [[video:interim-feedback]]
-
-## Kurssiyhteenveto {#course-summary}
-
-### Kurssiyhteenveto
-
-[[video:course-summary]]
-
-### Kurssiyhteenvedon lataaminen
-
-[[video:course-summary-download]]

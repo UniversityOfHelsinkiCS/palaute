@@ -19,23 +19,11 @@ New answers appear when you reload the page. [[feedbackTargetResults:tableView]]
 
 If the course has groups in Sisu, or the survey has a grouping question, you can look at one group's answers with [[groups:chooseGroup]] at the top of the tab. A single group's answers are shown only if every group has either no answers or at least 5, so that no one can be recognised from them. See [groups](/guide/questions#groups).
 
-If fewer than 5 students are enrolled on the course, the results are shown only to its responsible teachers. See [small courses](/guide/collecting-answers#small-courses).
+If fewer than 5 students are enrolled on the course, the results are shown only to its responsible teachers. See [small courses](/guide/answer-visibility#small-courses).
 
-## Who sees which answers {#public-answers}
+## Changing who sees the answers {#change-visibility}
 
-Each question is either [[common:public]] or [[common:notPublic]].
-
-- Responsible teachers, administrative persons and degree programme staff with admin rights see the answers to all questions.
-- Teachers, programme staff with read rights and students see only the answers to public questions. Students see them once they have answered themselves, or after the survey has closed.
-
-See [roles](/guide/roles#course-roles) for who has which role.
-
-By default:
-
-- Scale and choice questions you add are public.
-- Open questions are not public.
-- Questions you copy from another survey, or that are carried over from the course's previous realisation, are not public.
-- Questions the university or the degree programme has made public are always public, and you can't change them. These include the university level scale and choice questions.
+Who sees the answers to public and non-public questions, and which questions are public by default, is described in [Visibility of answers](/guide/answer-visibility#public-answers).
 
 To change whether a question is public (responsible teachers):
 

@@ -42,10 +42,24 @@ describe('user guide content', () => {
   it('has the same pages, section ids and videos in Finnish and English, so links work in both', () => {
     expect(GUIDE_PAGES.fi.length).toBeGreaterThan(0)
     expect(GUIDE_PAGES.fi.map(page => page.slug)).toEqual(GUIDE_PAGES.en.map(page => page.slug))
+    expect(GUIDE_PAGES.fi.map(page => page.group)).toEqual(GUIDE_PAGES.en.map(page => page.group))
     for (const [index, page] of GUIDE_PAGES.fi.entries()) {
       expect(anchorsOf(page.markdown), page.slug).toEqual(anchorsOf(GUIDE_PAGES.en[index].markdown))
       expect(videosOf(page.markdown), page.slug).toEqual(videosOf(GUIDE_PAGES.en[index].markdown))
     }
+  })
+
+  // The address has only the slug, not the group
+  it('has a unique slug for each page', () => {
+    const slugs = GUIDE_PAGES.en.map(page => page.slug)
+    expect(slugs.filter((slug, index) => slugs.indexOf(slug) !== index)).toEqual([])
+  })
+
+  it('has a menu heading for each group in every language', () => {
+    const missing = [...new Set(allPages.map(page => page.group))].flatMap(group =>
+      ['fi', 'sv', 'en'].filter(language => typeof findLabel(`userGuide:groups:${group}`, language) !== 'string')
+    )
+    expect(missing).toEqual([])
   })
 
   // The menu shows the page and section titles as they're written, without labels, formatting or escapes

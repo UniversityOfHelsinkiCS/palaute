@@ -18,7 +18,7 @@ Responsible teachers can write counter feedback after the survey has closed, for
 
 Any of the survey's responsible teachers can edit the counter feedback later on the same tab.
 
-The day after a course survey or programme survey closes, its responsible teachers get an email reminding them to write counter feedback, if it got answers and has none yet. See [emails](/guide/collecting-answers#emails).
+The day after a course survey or programme survey closes, its responsible teachers get an email reminding them to write counter feedback, if it got answers and has none yet. See [emails](/guide/emails).
 
 ## Sending it by email {#send-email}
 

@@ -6,7 +6,11 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 
 ## Files
 
-- Name files `<order>-<slug>.md`, e.g. `07-counter-feedback.md`. The order sets the page's place in the menu, the slug its address (`/guide/counter-feedback`). Use the same file name in both languages.
+- Each page is in a group folder, `<order>-<group>/<order>-<slug>.md`, e.g. `2-teachers/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
+- The menu shows each group under the heading `userGuide:groups:<group>` from the translations. The groups:
+  - `general`: what applies to everyone, such as rules, terms and the course summary. No steps for working with a survey.
+  - `teachers`: working with a survey, from its dates to counter feedback. Programme surveys and programme admins use these pages too, so say where they differ.
+  - `programmes`: the programme's page and programme surveys.
 - Each page starts with one `# Title`, which is also its name in the menu. Don't put labels in the title.
 - Write the same pages, sections and section ids in both languages. The texts don't have to be word-for-word translations.
 

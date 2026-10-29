@@ -10,7 +10,7 @@ An in-app user guide at `/guide` for teachers and degree programme staff, meant 
 
 ## Content
 
-The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`. **`content/README.md` has the rules for editing them**, e.g. UI labels as `[[section:key]]`, so the guide always quotes what's on the screen. Swedish users get the English text with Swedish labels.
+The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`, in three groups that the menu shows as headings: general, for teachers and for degree programmes. **`content/README.md` has the rules for editing them**, e.g. UI labels as `[[section:key]]`, so the guide always quotes what's on the screen. Swedish users get the English text with Swedish labels.
 
 The guide and the chatbot's `knowledge.md` are separate texts, one for people and one compressed for the model. When a fact changes, update both.
 

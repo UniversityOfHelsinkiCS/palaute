@@ -1,6 +1,6 @@
-# Kyselyn kysymykset
+# Omat kysymykset
 
-Kurssin kyselyssä on aina yliopistotason kysymykset ja mahdollisesti koulutusohjelman omia kysymyksiä. Niitä ei voi muuttaa. Omia kysymyksiä voit lisätä siihen asti, kun kysely aukeaa.
+Kurssin kyselyssä on aina [yliopistotason kysymykset](/guide/course-surveys#university-questions) ja mahdollisesti [koulutusohjelman kysymyksiä](/guide/course-surveys#programme-questions). Niitä ei voi muuttaa. Omia kysymyksiä voit lisätä siihen asti, kun kysely aukeaa. Välipalautteessa ja koulutusohjelman kyselyssä on vain omia kysymyksiä.
 
 ## Kysymysten muokkaaminen {#edit-questions}
 
@@ -29,40 +29,11 @@ Kysymystä muokataan sen [[common:edit]]-painikkeella. Useamman kysymyksen voit 
 
 [[questionEditor:addTextualContent]] lisää kysymyksen sijaan _tekstiosion_, esimerkiksi ohjeen tai väliotsikon sitä seuraaville kysymyksille. Tekstiosioissa ja kysymysten kuvauksissa voi käyttää Markdownia, esimerkiksi linkkejä ja luetteloita.
 
-Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovatko sen vastaukset julkisia. Katso [Kuka näkee vastaukset](/guide/results#public-answers).
+Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovatko sen vastaukset julkisia. Katso [Kuka näkee mitkäkin vastaukset](/guide/answer-visibility#public-answers).
 
 ## Kysymystyypit {#question-types}
 
 Kysymystyyppejä on neljä: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] ja [[questionEditor:multipleChoiceQuestion]]. Asteikkokysymyksiin vastataan asteikolla 1–5 tai vaihtoehdolla _eos_ (en osaa sanoa). Numeroilla ei ole selitteitä, joten kerro kysymyksessä tai sen kuvauksessa, mitä 1 ja 5 tarkoittavat, esimerkiksi 1 = täysin eri mieltä, 5 = täysin samaa mieltä.
-
-## Yliopistotason kysymykset {#university-questions}
-
-Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta niihin voi [lisätä niistä kopiot](#copy-questions).
-
-Ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa. Kyselyn kysymykset riippuvat sen avautumispäivästä: 2.8.2026 tai myöhemmin aukeavissa kyselyissä on uudet kysymykset.
-
-Yliopistotason asteikkokysymysten keskiarvot näkyvät [kurssiyhteenvedossa](/guide/course-summary#figures).
-
-## Koulutusohjelman kysymykset {#programme-questions}
-
-Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiään kaikkien opintojaksojensa kyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunan laatikko kertoo, montako niitä on ja mikä organisaatio ne on lisännyt.
-
-Opettaja ei voi muokata tai poistaa koulutusohjelman kysymyksiä. Jos jokin niistä ei sovi kurssillesi, ota yhteyttä koulutusohjelmaan. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä.
-
-Koulutusohjelman henkilöstö lisää ja muokkaa näitä kysymyksiä koulutusohjelman sivulla, ks. [Koulutusohjelman kysymykset](/guide/programmes#programme-questions).
-
-## Kysymysten järjestys opiskelijalle {#question-order}
-
-Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman kysymykset ja lopuksi omat kysymyksesi. Opiskelija näkee ne tässä järjestyksessä:
-
-1. Ryhmittelykysymys, jos kyselyssä on sellainen (ks. [Ryhmät](#groups)).
-2. Yliopistotason asteikko- ja monivalintakysymykset.
-3. Koulutusohjelman asteikko- ja monivalintakysymykset.
-4. Omat kysymyksesi ja tekstiosiosi siinä järjestyksessä, johon olet ne laittanut.
-5. Koulutusohjelman avoimet kysymykset.
-6. Yliopistotason avoin kysymys, joten _Muita huomioita_ on aina viimeisenä.
-
-Lopputuloksen näet [[editFeedbackTarget:showPreview]]-painikkeella (ks. [Kieliversiot ja esikatselu](#languages)).
 
 ## Kysymykset edelliseltä toteutukselta {#carry-over}
 

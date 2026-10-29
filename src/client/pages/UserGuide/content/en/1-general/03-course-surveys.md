@@ -1,6 +1,6 @@
 # Course surveys
 
-Norppa creates a course survey for each course realisation automatically, with dates based on the course's dates in Sisu. You don't have to do anything for it to open: the responsible teachers can add their own questions and change the dates, but they don't have to.
+Norppa creates a course survey for each course realisation automatically, with dates based on the course's dates in Sisu. You don't have to do anything for it to open: the responsible teachers can add [their own questions](/guide/questions) and [change the dates](/guide/survey-dates), but they don't have to.
 
 ## Which courses get a survey {#which-courses}
 
@@ -47,27 +47,35 @@ The course's page shows both periods: [[feedbackTargetView:coursePeriod]] is the
 - Until someone saves dates for the survey in Norppa, its dates follow the course's dates in Sisu every night. So changing the course's dates in Sisu also moves the survey.
 - Once dates have been saved in Norppa, Sisu no longer changes them.
 
-A week before the survey opens, the responsible teachers get an email reminding them that they can still add their own questions. See [Emails Norppa sends](/guide/collecting-answers#emails).
+A week before the survey opens, the responsible teachers get an email reminding them that they can still add their own questions. See [Emails from Norppa](/guide/emails).
 
-## Changing the dates {#change-dates}
+Responsible teachers can change the dates in Norppa; see [Survey dates](/guide/survey-dates).
 
-Responsible teachers and administrative persons can change a course survey's dates:
+## University level questions {#university-questions}
 
-1. Go to [[navBar:myCourses]] and choose the course.
-2. Next to [[feedbackTargetView:feedbackPeriod]], click [[common:edit]].
-3. In the [[feedbackTargetSettings:editPeriodTitle]] window, choose the dates under [[editFeedbackTarget:opensAt]] and [[editFeedbackTarget:closesAt]].
-4. Click [[common:save]].
+The university sets these questions for all course surveys. They're the same for every course and can't be edited or removed. In the editor they're marked [[questionEditor:universityQuestion]]. Interim feedback and programme surveys don't have them, but you can [add copies of them](/guide/questions#copy-questions).
 
-[[video:change-dates]]
+They're shown at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab. Which set a survey gets depends on when it opens: a new set is used in surveys that open on 2 August 2026 or later.
 
-What you can change depends on the survey's state:
+The averages of the university level scale questions are what [Course summary](/guide/course-summary#figures) shows.
 
-- Before it opens, you can change both dates. The opening date can't be in the past, and the survey must be open for at least a day, so the closing date must be at least the day after the opening date.
-- While it's open, you can only change the closing date. You can extend the survey, e.g. past the grading, or set the closing date to today to close it at 23:59 tonight. There's no button to close it at once.
-- After it has closed, the dates can't be changed. Only support can reopen a closed course survey.
+## Programme questions {#programme-questions}
 
-To open the survey now, click [[editFeedbackTarget:openImmediately]] in the same window and confirm with [[editFeedbackTarget:openFeedbackImmediatelyDialogConfirm]]. The survey opens at once and the students get an email with the link right away. Add your own questions first: once the survey is open, they can't be changed.
+A degree programme or a faculty can add its own questions to the course surveys of all its course units. In the editor they're marked [[questionEditor:programmeQuestion]], and the box at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab tells how many there are and which organisation added them.
 
-If you instead set the opening date to today and save, Norppa also asks you to confirm, and the survey opens at once. The students then get their email at the daily mailing at 11:15, the next day if it has already passed.
+Teachers can't edit or remove programme questions. If one doesn't suit your course, contact the programme. Interim feedback and programme surveys don't have programme questions.
 
-> **Note:** Interim feedback and programme surveys don't follow Sisu, and their dates are changed differently, in any state. See [Interim feedback](/guide/continuous-and-interim-feedback#interim-feedback) and [Editing a programme survey](/guide/programme-surveys#edit).
+Programme staff add and edit these questions on the programme's page: see [Programme questions](/guide/programmes#programme-questions).
+
+## The order students see {#question-order}
+
+The editor lists the university level questions first, then the programme questions, then the teacher's own. Students see them in this order:
+
+1. The grouping question, if the survey has one (see [Groups](/guide/questions#groups)).
+2. The university level scale and choice questions.
+3. The programme's scale and choice questions.
+4. The teacher's own questions and text sections, in the order the teacher has set.
+5. The programme's open questions.
+6. The university level open question, so _Additional comments_ is always last.
+
+To check the result, use [[editFeedbackTarget:showPreview]] (see [Languages and preview](/guide/questions#languages)).

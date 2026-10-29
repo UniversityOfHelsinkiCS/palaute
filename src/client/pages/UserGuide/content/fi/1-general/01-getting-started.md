@@ -13,13 +13,14 @@ Jokainen kysely on tuleva, auki tai sulkeutunut, ja sen ratkaisevat vain kyselyn
 3. Kysely sulkeutuu itsestään sulkeutumispäivänä klo 23.59 (Suomen aikaa).
 4. Sulkeutumisen jälkeen vastaukset säilyvät. Vastuuopettajat voivat kirjoittaa opiskelijoille [vastapalautteen](/guide/counter-feedback) 12 kuukauden ajan.
 
-## Kolmenlaisia kyselyitä {#survey-types}
+## Neljänlaista palautetta {#survey-types}
 
 - _Kurssikysely_: jokaiselle kurssitoteutukselle oma, luodaan automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Suurin osa tästä ohjeesta koskee kurssikyselyitä. Katso [Kurssikyselyt](/guide/course-surveys).
-- _Välipalaute_: ylimääräinen kysely, jonka vastuuopettaja luo kurssilleen esimerkiksi kurssin puolivälissä. Katso [Jatkuva palaute ja välipalaute](/guide/continuous-and-interim-feedback).
+- _Jatkuva palaute_: vapaamuotoinen palaute, jota opiskelijat voivat kirjoittaa kurssista milloin tahansa ennen kurssikyselyn avautumista. Se on pois päältä, kunnes vastuuopettaja ottaa sen käyttöön. Katso [Jatkuva palaute](/guide/continuous-and-interim-feedback#continuous-feedback).
+- _Välipalaute_: ylimääräinen kysely, jonka vastuuopettaja luo kurssilleen esimerkiksi kurssin puolivälissä. Katso [Välipalaute](/guide/continuous-and-interim-feedback#interim-feedback).
 - _Koulutusohjelman kysely_: koulutusohjelman tai tiedekunnan valituille opiskelijoille luoma kysely, esimerkiksi lukukausipalaute. Katso [Koulutusohjelman kyselyt](/guide/programme-surveys).
 
-Kysymysten muokkaus, kyselyn jakaminen, vastausten lukeminen ja vastapalaute toimivat kaikissa kolmessa samalla tavalla.
+Jatkuvassa palautteessa ei ole kysymyksiä, ja vastuuopettajat vastaavat jokaiseen palautteeseen erikseen. Kysymysten muokkaus, kyselyn jakaminen, vastausten lukeminen ja vastapalaute toimivat kolmessa muussa samalla tavalla.
 
 ## Näin löydät perille {#navigation}
 
@@ -34,6 +35,12 @@ Yläreunan valikossa näkyvät vain sinua koskevat kohdat:
 - Nimesi oikeassa yläkulmassa: [[navBar:userInformation]] ja käyttöliittymän kieli.
 
 Avaa kysely valitsemalla [[navBar:myCourses]] ja sieltä kurssi. Kyselyn sivulla näkyvät kurssin päivämäärät, sen opettajat ja välilehdet, joita voit käyttää. Välilehdet riippuvat [roolistasi](/guide/roles) ja siitä, onko kysely tuleva, auki vai sulkeutunut.
+
+## Ohjeen osat {#guide-parts}
+
+- _Yleistiedot_ koskevat kaikkia: roolit, kurssikyselyt, vastausten näkyvyys, sähköpostit ja kurssiyhteenveto.
+- _Opettajalle_ kertoo, miten kyselyä käytetään: päivämäärät, kysymykset, vastausten kerääminen, tulokset ja vastapalaute. Useimpiin näistä tarvitset vastuuopettajan tai hallintohenkilön roolin. Samat ohjeet pätevät koulutusohjelman kyselyihin.
+- _Koulutusohjelmalle_ kertoo koulutusohjelman sivusta, asetuksista ja omista kyselyistä.
 
 ## Apua {#help}
 

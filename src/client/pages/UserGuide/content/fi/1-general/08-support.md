@@ -20,7 +20,7 @@ Norppa on Helsingin yliopiston palvelu. Jokaisen Norpan sivun alareunassa oleva 
 Mitä tämä tarkoittaa palautteelle:
 
 - Opiskelijat kirjautuvat Norppaan, jotta se tietää, kuka saa vastata mihinkin kyselyyn. Opettajat ja koulutusohjelman henkilökunta eivät silti näe, kuka antoi minkäkin vastauksen. Avoimet vastaukset näytetään aakkosjärjestyksessä, ladatuissa vastauksissa kunkin kysymyksen vastaukset on sekoitettu erikseen, eikä niissä ole opiskelijoiden tietoja.
-- Kursseilla, joilla on alle viisi ilmoittautunutta opiskelijaa, tulokset näkevät vain vastuuopettajat. Katso [Pienet kurssit](/guide/collecting-answers#small-courses).
+- Kursseilla, joilla on alle viisi ilmoittautunutta opiskelijaa, tulokset näkevät vain vastuuopettajat. Katso [Pienet kurssit](/guide/answer-visibility#small-courses).
 - Opiskelijat voivat kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Tarkista vastaukset ennen kuin teet avoimesta kysymyksestä julkisen, ja [piilota](/guide/results#hide-answers) ne, joita ei pidä näyttää.
 - Kyselyssä opiskelijat voivat lukea, miten heidän vastauksiaan käytetään, linkistä [[feedbackView:feedbackInfoLink]]
 
