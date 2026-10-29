@@ -37,7 +37,7 @@ Kun kurssi on käynnissä ja jatkuva palaute on päällä, [[navBar:myCourses]]-
 
 ## Välipalaute {#interim-feedback}
 
-Välipalaute on erillinen kysely omilla kysymyksilläsi esimerkiksi kurssin puolivälissä. Niitä voi luoda useita. Norppa kopioi välipalautteeseen kurssin opiskelijat ja opettajat, kun luot sen.
+Välipalaute on erillinen kysely omilla kysymyksilläsi, esimerkiksi kurssin puolivälissä. Välipalautteita voi luoda useita. Norppa kopioi välipalautteeseen kurssin opiskelijat ja opettajat, kun luot sen.
 
 Välipalautteen luominen (vastuuopettajat):
 
@@ -62,6 +62,6 @@ Kun välipalaute on auki, [[navBar:myCourses]]-sivulla kurssin kohdalla näkyy [
 
 ### Tulokset ja poistaminen
 
-Välipalautteen [[interimFeedback:viewResults]] avaa sen vastaukset, kun vastauksia on. Ne toimivat kuten kurssipalautteessa: katso [tulokset](/guide/results). Sulkeuduttuaan välipalautteeseen voi kirjoittaa [vastapalautteen](/guide/counter-feedback). Välipalaute ei näy [[navBar:courseSummary]]-sivulla.
+Välipalautteen [[interimFeedback:viewResults]] avaa sen vastaukset, kun vastauksia on. Ne toimivat kuten kurssipalautteessa: katso [tulokset](/guide/results). Kun välipalaute on sulkeutunut, siihen voi kirjoittaa [vastapalautteen](/guide/counter-feedback). Välipalaute ei näy [[navBar:courseSummary]]-sivulla.
 
 Välipalautteen poistaminen: klikkaa sen kohdalla [[interimFeedback:remove]] ja vahvista. Välipalautteen voi poistaa vain, jos siihen ei ole vastattu.

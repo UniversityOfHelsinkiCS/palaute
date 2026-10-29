@@ -6,11 +6,11 @@ Vastapalautteen pituus on vapaa. Voit esimerkiksi kiittää opiskelijoita, koota
 
 ## Vastapalautteen kirjoittaminen {#write}
 
-Kyselyn vastuuopettajana voit kirjoittaa vastapalautteen kyselyn sulkeuduttua 12 kuukauden ajan.
+Kyselyn vastuuopettajana voit kirjoittaa vastapalautteen 12 kuukauden kuluessa kyselyn sulkeutumisesta.
 
 1. Valitse kurssi [[navBar:myCourses]]-sivulta. Kurssin vieressä oleva [[teacherView:feedbackResponseMissing]]-merkki vie suoraan kohtaan 3.
 2. Avaa [[feedbackTargetView:giveFeedbackResponseTab]]-välilehti.
-3. Kirjoita teksti [[feedbackResponse:responseLabel]]-kenttään. Kenttä tukee Markdownia, esimerkiksi otsikoita, luetteloita, lihavointia ja linkkejä. Alla oleva [[feedbackResponse:previewLabel]] näyttää, miltä teksti näyttää.
+3. Kirjoita teksti [[feedbackResponse:responseLabel]]-kenttään. Kenttä tukee Markdownia, esimerkiksi otsikoita, luetteloita, lihavointia ja linkkejä. Alla olevasta kohdasta [[feedbackResponse:previewLabel]] näet, miltä teksti näyttää.
 4. Jätä [[feedbackResponse:checkboxSendEmail]] valituksi, jos haluat lähettää vastapalautteen opiskelijoille sähköpostilla, tai poista valinta, jos haluat vain tallentaa sen.
 5. Klikkaa [[feedbackResponse:dialogSendEmailSubmit]] ja vahvista, tai [[feedbackResponse:dialogSaveSubmit]], jos poistit valinnan.
 

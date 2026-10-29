@@ -7,7 +7,7 @@ Se, kuka näkee minkäkin kysymyksen vastaukset, riippuu roolista ja siitä, onk
 Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]].
 
 - Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet, näkevät kaikkien kysymysten vastaukset.
-- Opettajat, koulutusohjelman henkilöt, joilla on lukuoikeudet, ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
+- Opettajat, opiskelijat ja ne koulutusohjelman henkilöt, joilla on lukuoikeudet, näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
 
 Roolit on kuvattu sivulla [roolit](/guide/roles#course-roles).
 
@@ -48,6 +48,6 @@ Mitä tämä tarkoittaa palautteelle:
 
 - Opiskelijat kirjautuvat Norppaan, jotta se tietää, kuka saa vastata mihinkin kyselyyn. Opettajat ja koulutusohjelman henkilökunta eivät silti näe, kuka antoi minkäkin vastauksen. Avoimet vastaukset näytetään aakkosjärjestyksessä, ladatuissa vastauksissa kunkin kysymyksen vastaukset on sekoitettu erikseen, eikä niissä ole opiskelijoiden tietoja.
 - Opiskelijat voivat kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Tarkista vastaukset ennen kuin teet avoimesta kysymyksestä julkisen, ja [piilota](/guide/results#hide-answers) ne, joita ei pidä näyttää.
-- Kyselyssä opiskelijat voivat lukea, miten heidän vastauksiaan käytetään, linkistä [[feedbackView:feedbackInfoLink]]
+- Opiskelijat voivat lukea kyselyn linkistä [[feedbackView:feedbackInfoLink]], miten heidän vastauksiaan käytetään.
 
 Jos sinulla on kysyttävää siitä, miten Norppa käsittelee tietoja, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

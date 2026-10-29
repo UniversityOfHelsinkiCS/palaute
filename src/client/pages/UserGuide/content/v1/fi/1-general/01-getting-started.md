@@ -2,11 +2,11 @@
 
 Norppa on Helsingin yliopiston kurssipalautejärjestelmä. Opiskelijat vastaavat palautekyselyihin. Opettajat muokkaavat kyselyitä, lukevat vastaukset ja vastaavat niihin vastapalautteella. Koulutusohjelmat ja tiedekunnat seuraavat kurssiensa palautetta.
 
-Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija antoi mitkäkin vastaukset.
+Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija on vastannut mitäkin.
 
 ## Näin kysely toimii {#survey-lifecycle}
 
-Jokainen kysely on tuleva, auki tai sulkeutunut, ja sen ratkaisevat vain kyselyn päivämäärät. Erillistä julkaisua tai lähettämistä ei ole:
+Kysely on joko tuleva, auki tai sulkeutunut, ja tilan ratkaisevat vain kyselyn päivämäärät. Erillistä julkaisua tai lähettämistä ei ole:
 
 1. Ennen kuin kysely avautuu, sen vastuuopettajat voivat muuttaa sen kysymyksiä ja päivämääriä.
 2. Kysely avautuu itsestään avautumispäivänä klo 00.00. Siitä lähtien kysymykset ovat lukittuja, ja vain sulkeutumispäivää voi vielä muuttaa. Opiskelijat voivat vastata ja muuttaa tai poistaa vastauksiaan, kunnes kysely sulkeutuu.
@@ -15,7 +15,7 @@ Jokainen kysely on tuleva, auki tai sulkeutunut, ja sen ratkaisevat vain kyselyn
 
 ## Neljänlaista palautetta {#survey-types}
 
-- _Kurssikysely_: jokaiselle kurssitoteutukselle oma, luodaan automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Suurin osa tästä ohjeesta koskee kurssikyselyitä. Katso [Kurssikyselyt](/guide/course-surveys).
+- _Kurssikysely_: kurssitoteutuksen oma kysely, jonka Norppa luo automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Suurin osa tästä ohjeesta koskee kurssikyselyitä. Katso [Kurssikyselyt](/guide/course-surveys).
 - _Jatkuva palaute_: vapaamuotoinen palaute, jota opiskelijat voivat kirjoittaa kurssista milloin tahansa ennen kurssikyselyn avautumista. Se on pois päältä, kunnes vastuuopettaja ottaa sen käyttöön. Katso [Jatkuva palaute](/guide/continuous-and-interim-feedback#continuous-feedback).
 - _Välipalaute_: ylimääräinen kysely, jonka vastuuopettaja luo kurssilleen esimerkiksi kurssin puolivälissä. Katso [Välipalaute](/guide/continuous-and-interim-feedback#interim-feedback).
 - _Koulutusohjelman kysely_: koulutusohjelman tai tiedekunnan valituille opiskelijoille luoma kysely, esimerkiksi lukukausipalaute. Katso [Koulutusohjelman kyselyt](/guide/programme-surveys).
@@ -45,6 +45,6 @@ Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat asiat v
 - apua, kun kurssi, opettaja tai opiskelija puuttuu Norpasta vielä muutama päivä sen jälkeen, kun tiedot on korjattu Sisussa (Sisun muutokset näkyvät yleensä seuraavana aamuna; katso [Päivitykset Sisusta](/guide/course-surveys#sisu-updates));
 - apua virheeseen, joka ei mene ohi.
 
-Kerro viestissä linkki kyselyn sivulle tai kurssikoodi, mitä yritit ja mitä tapahtui.
+Liitä viestiin linkki kyselyn sivulle tai kurssikoodi ja kerro, mitä yritit tehdä ja mitä tapahtui.
 
-Ideat ja palaute itse Norpasta menevät sen kehittäjille ylävalikon kohdasta [[navBar:feedback]].
+Voit lähettää ideoita ja palautetta Norpasta ylävalikon kohdasta [[navBar:feedback]].

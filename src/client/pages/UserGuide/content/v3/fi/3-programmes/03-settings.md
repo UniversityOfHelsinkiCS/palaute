@@ -28,6 +28,6 @@ Silloinkin kun näyttäminen on sallittu, tieto näkyy vain, kun kysely on sulke
 
 ## Palautteen poistaminen käytöstä kurssilta {#disable-feedback}
 
-Kohdassa [[organisationSettings:courseSettings]] jokaisella koulutusohjelman opintojaksolla on kytkin [[organisationSettings:feedbackEnabled]]. Etsi kurssi kentällä [[organisationSettings:findByCourseUnit]] ja kytke kytkin pois, esimerkiksi jos kurssin palaute kerätään muulla tavalla.
+Kohdassa [[organisationSettings:courseSettings]] jokaisella koulutusohjelman opintojaksolla on kytkin [[organisationSettings:feedbackEnabled]]. Etsi kurssi kentällä [[organisationSettings:findByCourseUnit]] ja kytke se pois päältä, esimerkiksi jos kurssin palaute kerätään muulla tavalla.
 
 Kytkin koskee opintojakson kaikkia toteutuksia. Kurssin opettajat näkevät silloin [[navBar:myCourses]]-sivulla ilmoituksen [[teacherView:disabledCourseWarning]] ja kurssin sivulla ilmoituksen [[feedbackTargetView:feedbackDisabled]]. Opiskelijat eivät pääse kyselyyn, eikä Norppa lähetä siitä sähköposteja. Kun kytket kytkimen takaisin päälle, palautetta kerätään taas.

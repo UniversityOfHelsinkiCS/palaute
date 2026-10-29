@@ -16,7 +16,7 @@ Kurssikysely luodaan kurssitoteutuksille, joiden toteutustyyppi Sisussa on jokin
 - monimuoto-opetus
 - lähiopetus
 - etäopetus
-- sekä pelkästään Kielikeskuksessa itsenäisen työskentelyn projektit.
+- itsenäisen työskentelyn projekti, mutta vain Kielikeskuksen kursseilla.
 
 <!-- Sisu-koodit: urn:code:course-unit-realisation-type:teaching-participation-lab, -online, -field-course, -project, -lectures, -small-group, -seminar, -blended, -contact, -distance; Kielikeskukselle (hy-org-1000003401) myös independent-work-project. Lähde: validRealisationTypes, norppa-updater, updateCoursesAndTeacherFeedbackTargets.js. -->
 
@@ -53,7 +53,7 @@ Vastuuopettajat voivat muuttaa päivämääriä Norpassa; katso [Kyselyn päivä
 
 ## Yliopistotason kysymykset {#university-questions}
 
-Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta niihin voi [lisätä niistä kopiot](/guide/questions#copy-questions).
+Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta voit [kopioida ne niihin](/guide/questions#copy-questions).
 
 Ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa. Kyselyn kysymykset riippuvat sen avautumispäivästä: 2.8.2026 tai myöhemmin aukeavissa kyselyissä on uudet kysymykset.
 
@@ -76,6 +76,6 @@ Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman 
 3. Koulutusohjelman asteikko- ja monivalintakysymykset.
 4. Opettajan omat kysymykset ja tekstiosiot siinä järjestyksessä, johon opettaja on ne laittanut.
 5. Koulutusohjelman avoimet kysymykset.
-6. Yliopistotason avoin kysymys, joten _Muita huomioita_ on aina viimeisenä.
+6. Yliopistotason avoin kysymys _Muita huomioita_, joka on aina viimeisenä.
 
 Lopputuloksen näet [[editFeedbackTarget:showPreview]]-painikkeella (ks. [Kieliversiot ja esikatselu](/guide/questions#languages)).

@@ -7,7 +7,7 @@ Avaa ylävalikosta [[navBar:courseSummary]]. Siinä on kaksi näkymää:
 - [[courseSummary:myCourses]]: kurssit, joilla olet vastuuopettaja tai opettaja, organisaatioittain.
 - [[courseSummary:myOrganisations]]: koulutusohjelmat, tiedekunnat ja muut organisaatiot, joihin sinulla on [oikeudet](/guide/roles#organisation-rights), ja niiden opintojaksot. Näkyy vain, jos sinulla on tällaisia oikeuksia.
 
-Koulutusohjelman oma yhteenveto on myös sen sivulla [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelmat ja tiedekunnat](/guide/programmes#programme-page).
+Koulutusohjelman oma yhteenveto on lisäksi sen sivulla [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelmat ja tiedekunnat](/guide/programmes#programme-page).
 
 Avaamalla organisaation näet sen alla olevat rivit. Opintojakson nimestä pääset sen sivulle, jossa on rivi jokaiselle toteutukselle; toteutuksesta pääset sen kyselyn vastauksiin.
 
@@ -26,7 +26,7 @@ Jokaisella rivillä on nämä sarakkeet:
 
 Keskiarvon väri kertoo, kuinka korkea se on: matalat keskiarvot ovat punaisia, keskitason keltaisia ja korkeat vihreitä. Vaalea solu tarkoittaa, ettei vastauksia ole.
 
-Opintojakson, koulutusohjelman tai tiedekunnan luvut lasketaan kaikkien sen kurssitoteutusten vastauksista, eivät keskiarvojen keskiarvona.
+Opintojakson, koulutusohjelman tai tiedekunnan luvut lasketaan kaikkien sen kurssitoteutusten vastauksista, ei keskiarvojen keskiarvona.
 
 Sarakkeina ovat ne yliopistotason kysymykset, jotka olivat käytössä valitun ajanjakson alussa. Jos kurssin kyselyssä oli eri kysymykset, sen rivillä näkyy keskiarvojen sijaan info-kuvake.
 
@@ -53,7 +53,7 @@ Ajanjakson vieressä olevasta valikosta valitset, ovatko avoimen yliopiston kurs
 
 [[video:course-summary-download]]
 
-Kurssiyhteenvedon sivulla tiedostossa ovat organisaatiosi ja omat kurssisi. Koulutusohjelman [[organisationSettings:summaryTab]]-välilehdellä siinä on vain kyseinen koulutusohjelma, myös sen omien kysymysten kanssa.
+Kurssiyhteenvedon sivulta ladattuun tiedostoon tulevat organisaatiosi ja omat kurssisi. Koulutusohjelman [[organisationSettings:summaryTab]]-välilehdeltä ladattuun tulee vain kyseinen koulutusohjelma, ja mukana ovat myös sen omat kysymykset.
 
 Yksittäisen kyselyn vastaukset ladataan sen [[feedbackTargetView:feedbacksTab]]-välilehdeltä; katso [Vastausten lataaminen](/guide/results#download).
 

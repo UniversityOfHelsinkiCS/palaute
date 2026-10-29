@@ -26,6 +26,6 @@ Se, mitä voit muuttaa, riippuu kyselyn tilasta:
 
 Kysely avautuu saman tien, ja opiskelijat saavat linkin sähköpostiinsa heti. Lisää omat kysymyksesi ensin: kun kysely on auki, niitä ei voi enää muuttaa.
 
-Jos sen sijaan asetat avautumispäiväksi tämän päivän ja tallennat, Norppa pyytää niin ikään vahvistusta, ja kysely avautuu saman tien. Opiskelijat saavat silloin sähköpostinsa päivittäisessä postituksessa klo 11.15, tai seuraavana päivänä, jos se on jo mennyt.
+Jos sen sijaan asetat avautumispäiväksi tämän päivän ja tallennat, Norppa pyytää niin ikään vahvistusta, ja kysely avautuu saman tien. Opiskelijat saavat silloin sähköpostinsa päivittäisessä postituksessa klo 11.15 tai seuraavana päivänä, jos päivän postitus on jo lähtenyt.
 
-> **Huom.** Välipalautteet ja koulutusohjelman kyselyt eivät seuraa Sisua, ja niiden päivämäärät muutetaan toisella tavalla missä tahansa tilassa. Katso [Välipalaute](/guide/continuous-and-interim-feedback#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).
+> **Huom.** Välipalautteet ja koulutusohjelman kyselyt eivät seuraa Sisua, ja niiden päivämääriä voi muuttaa toisella tavalla kyselyn tilasta riippumatta. Katso [Välipalaute](/guide/continuous-and-interim-feedback#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).

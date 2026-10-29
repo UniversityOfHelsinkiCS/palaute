@@ -2,7 +2,7 @@
 
 Norppa on Helsingin yliopiston kurssipalautejärjestelmä. Opiskelijat vastaavat palautekyselyihin. Opettajat muokkaavat kyselyitä, lukevat vastaukset ja vastaavat niihin vastapalautteella. Koulutusohjelmat ja tiedekunnat seuraavat kurssiensa palautetta.
 
-Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija antoi mitkäkin vastaukset. Katso [Nimettömyys ja näkyvyys](/guide/anonymity).
+Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija on vastannut mitäkin. Katso [Nimettömyys ja näkyvyys](/guide/anonymity).
 
 ## Mikä osa ohjeesta on sinulle {#guide-parts}
 
@@ -14,18 +14,18 @@ Jos olet kurssilla opettaja mutta et vastuuopettaja, näet kyselyn esikatseluna,
 
 ## Näin kysely toimii {#survey-lifecycle}
 
-Jokainen kysely on tuleva, auki tai sulkeutunut, ja sen ratkaisevat vain kyselyn päivämäärät. Erillistä julkaisua tai lähettämistä ei ole:
+Kysely on joko tuleva, auki tai sulkeutunut, ja tilan ratkaisevat vain kyselyn päivämäärät. Erillistä julkaisua tai lähettämistä ei ole:
 
 1. Ennen kuin kysely avautuu, sen vastuuopettajat voivat muuttaa sen kysymyksiä ja päivämääriä. Kurssikyselystä vastuuopettajat ja hallintohenkilöt saavat muistutuksen noin viikkoa ennen avautumista.
 2. Kysely avautuu itsestään avautumispäivänä klo 00.00. Siitä lähtien kysymykset ovat lukittuja, ja vain sulkeutumispäivää voi vielä muuttaa. Kurssikyselyn opiskelijat saavat avautumisesta sähköpostin. Opiskelijat voivat vastata ja muuttaa tai poistaa vastauksiaan, kunnes kysely sulkeutuu.
 3. Kysely sulkeutuu itsestään sulkeutumispäivänä klo 23.59 (Suomen aikaa).
 4. Sulkeutumisen jälkeen vastaukset säilyvät. Vastuuopettajat voivat kirjoittaa opiskelijoille [vastapalautteen](/guide/counter-feedback) 12 kuukauden ajan. Kurssikyselyn vastuuopettajat ja hallintohenkilöt sekä koulutusohjelman kyselyn vastuuhenkilöt saavat seuraavana päivänä muistutuksen, jos kyselyyn on vastattu eikä vastapalautetta ole vielä kirjoitettu.
 
-Norppa lähettää kyselyjä koskevat automaattiset sähköpostinsa kerran päivässä klo 11.15. Välipalautteesta se ei lähetä niitä lainkaan, eikä koulutusohjelman kyselyn opiskelijoille. Tarkemmin: [muistutus ennen avautumista](/guide/schedule#feedback-period), [opiskelijoiden sähköposti](/guide/collecting-answers#student-emails) ja [vastapalautemuistutus](/guide/counter-feedback#write).
+Norppa lähettää kyselyjä koskevat automaattiset sähköpostinsa kerran päivässä klo 11.15. Välipalautteesta Norppa ei lähetä sähköposteja lainkaan, eikä koulutusohjelman kyselyistä opiskelijoille. Tarkemmin: [muistutus ennen avautumista](/guide/schedule#feedback-period), [opiskelijoiden sähköposti](/guide/collecting-answers#student-emails) ja [vastapalautemuistutus](/guide/counter-feedback#write).
 
 ## Neljänlaista palautetta {#survey-types}
 
-- _Kurssikysely_: jokaiselle kurssitoteutukselle oma, luodaan automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Suurin osa tästä ohjeesta koskee kurssikyselyitä. Katso [Kyselyn aikataulu](/guide/schedule).
+- _Kurssikysely_: kurssitoteutuksen oma kysely, jonka Norppa luo automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Suurin osa tästä ohjeesta koskee kurssikyselyitä. Katso [Kyselyn aikataulu](/guide/schedule).
 - _Jatkuva palaute_: vapaamuotoinen palaute, jota opiskelijat voivat kirjoittaa kurssista milloin tahansa ennen kurssikyselyn avautumista. Se on pois päältä, kunnes vastuuopettaja ottaa sen käyttöön. Katso [Jatkuva palaute](/guide/during-the-course#continuous-feedback).
 - _Välipalaute_: ylimääräinen kysely, jonka vastuuopettaja luo kurssilleen esimerkiksi kurssin puolivälissä. Katso [Välipalaute](/guide/during-the-course#interim-feedback).
 - _Koulutusohjelman kysely_: koulutusohjelman tai tiedekunnan valituille opiskelijoille luoma kysely, esimerkiksi lukukausipalaute. Katso [Koulutusohjelman kyselyt](/guide/programme-surveys).

@@ -19,7 +19,7 @@ Hallinnoijat eli koulutusohjelman johtaja, muut IAM-ryhmien kautta hallinnointio
 - [[organisationSettings:surveyTab]] (tiedekunnan sivulla [[organisationSettings:surveyFacultyTab]]): kysymykset, jotka lisätään kaikkiin koulutusohjelman kurssikyselyihin. Katso [Koulutusohjelman kysymykset](/guide/programme-questions).
 - [[organisationSettings:organisationSurveysTab]] (tiedekunnan sivulla [[organisationSettings:organisationFacultySurveysTab]]): koulutusohjelman omat kyselyt. Katso [Koulutusohjelman kyselyt](/guide/programme-surveys).
 
-Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, lukuoikeuksilla näkee vain julkisten kysymysten vastaukset; katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, kun taas lukuoikeuksilla näkee vain julkisten kysymysten vastaukset; katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
 
 ## Avoimet kysymykset {#open-questions}
 

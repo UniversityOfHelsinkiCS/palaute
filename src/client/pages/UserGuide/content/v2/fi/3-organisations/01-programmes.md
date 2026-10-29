@@ -19,9 +19,9 @@ Hallinnoijat eli koulutusohjelman johtaja, muut IAM-ryhmien kautta hallinnointio
 - [[organisationSettings:surveyTab]] (tiedekunnan sivulla [[organisationSettings:surveyFacultyTab]]): kysymykset, jotka lisätään kaikkiin koulutusohjelman kurssikyselyihin.
 - [[organisationSettings:organisationSurveysTab]] (tiedekunnan sivulla [[organisationSettings:organisationFacultySurveysTab]]): koulutusohjelman omat kyselyt. Katso [Koulutusohjelman kyselyt](/guide/programme-surveys).
 
-Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, lukuoikeuksilla näkee vain julkisten kysymysten vastaukset.
+Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, kun taas lukuoikeuksilla näkee vain julkisten kysymysten vastaukset.
 
-Hallinnoijat voivat myös toimia koulutusohjelman kurssikyselyissä: muokata kysymyksiä ennen kyselyn avautumista, piilottaa avoimia vastauksia, lähettää muistutusviestejä ja ottaa jatkuvan palautteen käyttöön. Ne tehdään kyselyn sivulla samoin kuin vastuuopettajat tekevät ne; katso esimerkiksi [Kysymykset](/guide/questions) ja [Tulokset](/guide/results).
+Hallinnoijat voivat myös toimia koulutusohjelman kurssikyselyissä: muokata kysymyksiä ennen kyselyn avautumista, piilottaa avoimia vastauksia, lähettää muistutusviestejä ja ottaa jatkuvan palautteen käyttöön. Hallinnoijat toimivat kyselyn sivulla samoin kuin vastuuopettajat; katso esimerkiksi [Kysymykset](/guide/questions) ja [Tulokset](/guide/results).
 
 ## Koulutusohjelman kysymykset {#programme-questions}
 
@@ -80,7 +80,7 @@ Silloinkin kun näyttäminen on sallittu, tieto näkyy vain tietyin ehdoin; kats
 
 ### Palautteen poistaminen käytöstä kurssilta {#disable-feedback}
 
-Kohdassa [[organisationSettings:courseSettings]] jokaisella koulutusohjelman opintojaksolla on kytkin [[organisationSettings:feedbackEnabled]]. Etsi kurssi kentällä [[organisationSettings:findByCourseUnit]] ja kytke kytkin pois, esimerkiksi jos kurssin palaute kerätään muulla tavalla.
+Kohdassa [[organisationSettings:courseSettings]] jokaisella koulutusohjelman opintojaksolla on kytkin [[organisationSettings:feedbackEnabled]]. Etsi kurssi kentällä [[organisationSettings:findByCourseUnit]] ja kytke se pois päältä, esimerkiksi jos kurssin palaute kerätään muulla tavalla.
 
 Kytkin koskee opintojakson kaikkia toteutuksia. Kurssin opettajat näkevät silloin [[navBar:myCourses]]-sivulla ilmoituksen [[teacherView:disabledCourseWarning]] ja kurssin sivulla ilmoituksen [[feedbackTargetView:feedbackDisabled]]. Opiskelijat eivät pääse kyselyyn, eikä Norppa lähetä siitä sähköposteja. Kun kytket kytkimen takaisin päälle, palautetta kerätään taas.
 

@@ -1,6 +1,6 @@
 # Roolit ja oikeudet
 
-Se, mitä voit tehdä Norpassa, riippuu kahdesta asiasta: roolistasi kullakin kurssilla, joka tulee Sisusta, ja oikeuksistasi koulutusohjelmiin ja tiedekuntiin, jotka tulevat yliopiston IAM-ryhmistä. Kumpaakaan ei voi muuttaa Norpassa.
+Se, mitä voit tehdä Norpassa, riippuu kahdesta asiasta: roolistasi kullakin kurssilla ja oikeuksistasi koulutusohjelmiin ja tiedekuntiin. Roolit tulevat Sisusta ja oikeudet yliopiston IAM-ryhmistä, eikä kumpaakaan voi muuttaa Norpassa.
 
 ## Roolit kurssilla {#course-roles}
 
@@ -40,7 +40,7 @@ Koulutusohjelman henkilöstön ohjeet ovat osiossa _Koulutusohjelmalle_. Aloita 
 ## Omien oikeuksien tarkistaminen {#check-your-rights}
 
 - Roolit kurssilla: avaa kurssin sivu ja katso, minkä otsikon alla nimesi on. Koulutusohjelman kyselyn vastuuhenkilöt ovat otsikon [[feedbackTargetView:administrativePersons]] alla. Löydät kurssin valitsemalla [[navBar:myCourses]] ja sieltä kurssin.
-- Oikeudet koulutusohjelmiin ja tiedekuntiin: napsauta nimeäsi oikeassa yläkulmassa ja valitse [[navBar:userInformation]]. Siinä näkyvät Norppaan vaikuttavat [[userInformation:iamGroups]] ja kohdassa [[userInformation:organisationAccess]] kunkin organisaation koodi ja oikeutesi, _Admin_ tai _Read_ (aina englanniksi). Organisaation nimi näkyy, kun viet hiiren koodin päälle. Ikkuna ei näytä rooleja kursseilla.
+- Oikeudet koulutusohjelmiin ja tiedekuntiin: napsauta nimeäsi oikeassa yläkulmassa ja valitse [[navBar:userInformation]]. Ikkunassa näkyvät Norppaan vaikuttavat [[userInformation:iamGroups]] ja kohdassa [[userInformation:organisationAccess]] kunkin organisaation koodi ja oikeutesi, _Admin_ tai _Read_ (aina englanniksi). Organisaation nimi näkyy, kun viet hiiren koodin päälle. Ikkuna ei näytä rooleja kursseilla.
 
 [[video:check-your-rights]]
 
@@ -49,4 +49,4 @@ Koulutusohjelman henkilöstön ohjeet ovat osiossa _Koulutusohjelmalle_. Aloita 
 - Väärä rooli kurssilla tai puutut kurssilta kokonaan: rooli pitää korjata Sisussa. Sen tekee kurssitoteutusta Sisussa ylläpitävä henkilö, usein koulutusohjelman opintohallinnon henkilöstö. Norppa päivittää roolit joka yö, joten muutos näkyy seuraavana aamuna. Esimerkiksi jos vierailevalle luennoitsijalle tulee vastuuopettajien sähköposteja, hänet on lisätty Sisuun vastuuopettajaksi, yhteyshenkilöksi tai hallintohenkilöksi; roolin vaihtaminen Sisussa opettajaksi korjaa asian.
 - Oikeudet koulutusohjelmaan tai tiedekuntaan puuttuvat: IAM-ryhmiä ylläpidetään Norpan ulkopuolella. Pyydä koulutusohjelmasi tai tiedekuntasi hallintoa lisäämään sinut oikeaan ryhmään, ja kirjaudu sitten ulos Norpasta ja takaisin sisään. Vaihtoehtoisesti koulutusohjelman admin-käyttäjä voi lisätä sinut palautevastaavaksi.
 
-Jos rooli on Sisussa oikein, mutta Norppa näyttää vielä parin päivän päästä vanhaa, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).
+Jos rooli on Sisussa oikein, mutta Norppa näyttää vielä parin päivän päästä vanhaa roolia, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

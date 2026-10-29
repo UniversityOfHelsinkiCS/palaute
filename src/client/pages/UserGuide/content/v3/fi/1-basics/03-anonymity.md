@@ -14,7 +14,7 @@ Palaute annetaan aina nimettömänä. Tällä sivulla ovat kaikki säännöt sii
 Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]].
 
 - Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet, näkevät kaikkien kysymysten vastaukset.
-- Opettajat, koulutusohjelman henkilöt, joilla on lukuoikeudet, ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
+- Opettajat, opiskelijat ja ne koulutusohjelman henkilöt, joilla on lukuoikeudet, näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
 
 Roolit on kuvattu sivulla [Roolit ja oikeudet](/guide/roles#course-roles).
 
@@ -41,7 +41,7 @@ Raja lasketaan Norpassa kurssille ilmoittautuneista opiskelijoista, ei vastauksi
 
 ## Ryhmien vastaukset {#groups}
 
-Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, vastauksia voi katsoa ryhmittäin. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa ryhmässä on joko ei yhtään tai vähintään viisi vastausta, jotta vastaajia ei voi tunnistaa. Katso [Ryhmät](/guide/questions#groups).
+Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, vastauksia voi katsoa ryhmittäin. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa ryhmässä on vähintään viisi vastausta tai ei yhtään, jotta vastaajia ei voi tunnistaa. Katso [Ryhmät](/guide/questions#groups).
 
 ## Ketkä ovat vastanneet {#who-answered}
 
@@ -58,6 +58,6 @@ Luettelosta ei koskaan näe, kuka vastasi mitäkin. Katso [Ketkä ovat vastannee
 Norppa on Helsingin yliopiston palvelu. Jokaisen Norpan sivun alareunassa oleva linkki [[feedbackView:dataProtectionNotice]] vie yliopiston tietosuojatietoihin, jotka on koottu yliopiston [tietosuojasivulle](https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja).
 
 - Opiskelijat voivat kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Tarkista vastaukset ennen kuin teet avoimesta kysymyksestä julkisen, ja [piilota](/guide/results#hide-answers) ne, joita ei pidä näyttää.
-- Kyselyssä opiskelijat voivat lukea, miten heidän vastauksiaan käytetään, linkistä [[feedbackView:feedbackInfoLink]]
+- Opiskelijat voivat lukea kyselyn linkistä [[feedbackView:feedbackInfoLink]], miten heidän vastauksiaan käytetään.
 
 Jos sinulla on kysyttävää siitä, miten Norppa käsittelee tietoja, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

@@ -51,7 +51,7 @@ Norppa ei itse lähetä opiskelijoille sähköpostia koulutusohjelman kyselystä
 
 ## Tulokset {#results}
 
-Vastaukset näkyvät sitä mukaa kuin niitä tulee kyselyn [[feedbackTargetView:feedbacksTab]]-välilehdellä; koulutusohjelman [[organisationSettings:organisationSurveysTab]]-välilehdeltä pääset sinne painikkeella [[organisationSurveys:viewResults]]. Ne toimivat kuten kurssikyselyissä; katso [Tulokset](/guide/results). Koulutusohjelman kyselyiden välilehdellä jokaisen kyselyn kortissa näkyy [[organisationSurveys:givenFeedback]] muodossa vastaukset / vastaajat.
+Vastaukset näkyvät kyselyn [[feedbackTargetView:feedbacksTab]]-välilehdellä sitä mukaa kuin niitä tulee; koulutusohjelman [[organisationSettings:organisationSurveysTab]]-välilehdeltä pääset sinne painikkeella [[organisationSurveys:viewResults]]. Ne toimivat kuten kurssikyselyissä; katso [Tulokset](/guide/results). Koulutusohjelman kyselyiden välilehdellä jokaisen kyselyn kortissa näkyy [[organisationSurveys:givenFeedback]] muodossa vastaukset / vastaajat.
 
 Kun kysely on päättynyt, vastuuhenkilöt voivat kirjoittaa opiskelijoille vastapalautteen. Jos kyselyyn on vastattu, mutta vastapalautetta ei ole kirjoitettu, he saavat muistutusviestin päättymistä seuraavana päivänä, ja [[navBar:myCourses]]-sivulla näkyy [[teacherView:feedbackResponseMissing]]. Katso [Vastapalaute](/guide/counter-feedback).
 

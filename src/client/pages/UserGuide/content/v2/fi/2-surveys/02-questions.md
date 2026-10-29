@@ -49,7 +49,7 @@ Mitään ei kopioidu, jos millään aiemmalla toteutuksella ei ole yhteistä ope
 
 ## Kysymysten kopioiminen toisesta kyselystä {#copy-questions}
 
-Omien kysymysten kopioiminen toisen kurssin kyselystä kurssin kyselyyn:
+Omien kysymysten kopioiminen toisen kurssin kyselystä:
 
 1. Valitse [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä [[editFeedbackTarget:copyFromCourseButton]].
 2. Valitse kurssi kurssikentästä. Siinä ovat kurssit, joita opetat.
@@ -60,11 +60,11 @@ Omien kysymysten kopioiminen toisen kurssin kyselystä kurssin kyselyyn:
 
 Kysymykset lisätään omien kysymystesi perään ja tallennetaan heti. Vain opettajan omat kysymykset kopioituvat, eivät yliopistotason tai koulutusohjelman kysymykset. Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
 
-Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelmien kyselyt: niiden koulutusohjelmien ja tiedekuntien, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, joka lisää yliopistotason kysymykset omiksi kysymyksiksesi, joten voit muokata tai poistaa niitä.
+Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelman kyselyt niistä koulutusohjelmista ja tiedekunnista, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, joka lisää yliopistotason kysymykset omiksi kysymyksiksesi, joten voit muokata tai poistaa niitä.
 
 ## Kieliversiot ja esikatselu {#languages}
 
-Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin ne kielet, joita opiskelijasi käyttävät. Jos kenttä on tyhjä, sitä kieltä käyttävät opiskelijat näkevät kysymyksen jollain toisella kielellä.
+Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin niiden kielten kentät, joita opiskelijasi käyttävät. Jos kenttä on tyhjä, sitä kieltä käyttävät opiskelijat näkevät kysymyksen jollain toisella kielellä.
 
 Kyselyn näkeminen opiskelijan silmin:
 
@@ -93,7 +93,7 @@ Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokais
 
 ## Yliopistotason kysymykset {#university-questions}
 
-Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta niihin voi [lisätä niistä kopiot](#copy-questions).
+Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]]. Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta voit [kopioida ne niihin](#copy-questions).
 
 Ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa. Kyselyn kysymykset riippuvat sen avautumispäivästä: 2.8.2026 tai myöhemmin aukeavissa kyselyissä on uudet kysymykset.
 
@@ -116,6 +116,6 @@ Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman 
 3. Koulutusohjelman asteikko- ja monivalintakysymykset.
 4. Opettajan omat kysymykset ja tekstiosiot siinä järjestyksessä, johon opettaja on ne laittanut.
 5. Koulutusohjelman avoimet kysymykset.
-6. Yliopistotason avoin kysymys, joten _Muita huomioita_ on aina viimeisenä.
+6. Yliopistotason avoin kysymys _Muita huomioita_, joka on aina viimeisenä.
 
 Lopputuloksen näet [[editFeedbackTarget:showPreview]]-painikkeella (ks. [Kieliversiot ja esikatselu](#languages)).

@@ -31,7 +31,7 @@ Se, mitä voit muuttaa, riippuu kyselyn tilasta:
 - Kun kysely on auki, voit muuttaa vain sulkeutumispäivää. Voit jatkaa kyselyä esimerkiksi arvioinnin jälkeiseen aikaan tai asettaa sulkeutumispäiväksi tämän päivän, jolloin kysely sulkeutuu tänään klo 23.59. Painiketta, joka sulkisi kyselyn heti, ei ole.
 - Kun kysely on sulkeutunut, päivämääriä ei voi enää muuttaa. Vain tuki voi avata sulkeutuneen kurssikyselyn uudelleen; katso [Tuki](/guide/help#support).
 
-> **Huom.** Välipalautteet ja koulutusohjelman kyselyt eivät seuraa Sisua, ja niiden päivämäärät muutetaan toisella tavalla missä tahansa tilassa. Katso [Välipalaute](/guide/during-the-course#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).
+> **Huom.** Välipalautteet ja koulutusohjelman kyselyt eivät seuraa Sisua, ja niiden päivämääriä voi muuttaa toisella tavalla kyselyn tilasta riippumatta. Katso [Välipalaute](/guide/during-the-course#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).
 
 ## Kyselyn avaaminen heti {#open-now}
 
@@ -42,7 +42,7 @@ Se, mitä voit muuttaa, riippuu kyselyn tilasta:
 
 Kysely avautuu saman tien, ja opiskelijat saavat linkin sähköpostiinsa heti. Lisää omat kysymyksesi ensin: kun kysely on auki, niitä ei voi enää muuttaa.
 
-Jos sen sijaan asetat avautumispäiväksi tämän päivän ja tallennat, Norppa pyytää niin ikään vahvistusta, ja kysely avautuu saman tien. Opiskelijat saavat silloin sähköpostinsa päivittäisessä postituksessa klo 11.15, tai seuraavana päivänä, jos se on jo mennyt.
+Jos sen sijaan asetat avautumispäiväksi tämän päivän ja tallennat, Norppa pyytää niin ikään vahvistusta, ja kysely avautuu saman tien. Opiskelijat saavat silloin sähköpostinsa päivittäisessä postituksessa klo 11.15 tai seuraavana päivänä, jos päivän postitus on jo lähtenyt.
 
 ## Mille kursseille tulee kysely {#which-courses}
 
@@ -58,7 +58,7 @@ Kurssikysely luodaan kurssitoteutuksille, joiden toteutustyyppi Sisussa on jokin
 - monimuoto-opetus
 - lähiopetus
 - etäopetus
-- sekä pelkästään Kielikeskuksessa itsenäisen työskentelyn projektit.
+- itsenäisen työskentelyn projekti, mutta vain Kielikeskuksen kursseilla.
 
 <!-- Sisu-koodit: urn:code:course-unit-realisation-type:teaching-participation-lab, -online, -field-course, -project, -lectures, -small-group, -seminar, -blended, -contact, -distance; Kielikeskukselle (hy-org-1000003401) myös independent-work-project. Lähde: validRealisationTypes, norppa-updater, updateCoursesAndTeacherFeedbackTargets.js. -->
 

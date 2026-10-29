@@ -10,7 +10,7 @@ Tältä sivulta löydät ratkaisuja yleisimpiin ongelmiin. Jos ongelmasi ei ratk
 
 ## Kyselyä ei voi muokata {#cannot-edit}
 
-- Kysymykset lukittuvat, kun kysely avautuu, jotta kaikki opiskelijat vastaavat samoihin kysymyksiin. Sen jälkeen voit muuttaa enää sulkeutumispäivää; katso [Päivämäärien muuttaminen](/guide/schedule#change-dates).
+- Kysymykset lukittuvat, kun kysely avautuu, jotta kaikki opiskelijat vastaavat samoihin kysymyksiin. Sen jälkeen voit muuttaa vain sulkeutumispäivää; katso [Päivämäärien muuttaminen](/guide/schedule#change-dates).
 - Kyselyä voivat muokata kurssin vastuuopettajat ja hallintohenkilöt, ja sen kysymyksiä myös koulutusohjelman adminit. Opettajan roolilla näet kyselyn vain esikatseluna. Katso [Roolit kurssilla](/guide/roles#course-roles).
 - Yliopistotason ja koulutusohjelman kysymyksiä ei voi muokata kurssin kyselyssä. Katso [Kysymykset](/guide/questions).
 
@@ -26,7 +26,7 @@ Välipalautteen ja koulutusohjelman kyselyn voit avata uudelleen itse siirtämä
 - Tavoitat opiskelijat [muistutusviestillä](/guide/collecting-answers#send-reminder) tai jakamalla [kyselyn linkin](/guide/collecting-answers#share-link).
 - Vastata voivat vain kurssille Sisussa hyväksytysti ilmoittautuneet. Uusi ilmoittautuminen näkyy Norpassa yleensä parin tunnin kuluessa; katso [Päivitykset Sisusta](/guide/schedule#sisu-updates).
 
-## Saan sähköposteja kurssista, jota en vastaa {#unexpected-emails}
+## Saan sähköposteja kurssista, josta en vastaa {#unexpected-emails}
 
 Norppa lähettää vastuuopettajien sähköpostit kaikille, jotka ovat Sisussa kurssin vastuuopettajia, yhteyshenkilöitä tai hallintohenkilöitä. Roolin voi korjata vain Sisussa; katso [Jos roolisi on väärä](/guide/roles#wrong-role).
 
@@ -42,7 +42,7 @@ Kurssiyhteenvedon luvut lasketaan uudelleen joka yö, ja siinä ovat vain avautu
 
 ## Vastaus pitää poistaa {#remove-answer}
 
-Vastauksia ei voi poistaa Norpassa. Avoimen vastauksen voi [piilottaa](/guide/results#hide-answers), jolloin sen näkevät enää vastuuopettajat ja koulutusohjelman adminit. Jos vastaus on poistettava kokonaan, ota yhteyttä [tukeen](#support).
+Vastauksia ei voi poistaa Norpassa. Avoimen vastauksen voi [piilottaa](/guide/results#hide-answers), jolloin sen näkevät vain vastuuopettajat ja koulutusohjelman adminit. Jos vastaus on poistettava kokonaan, ota yhteyttä [tukeen](#support).
 
 ## Tuki {#support}
 
@@ -53,9 +53,9 @@ Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat asiat v
 - apua, kun kurssi, opettaja tai opiskelija puuttuu Norpasta vielä muutama päivä sen jälkeen, kun tiedot on korjattu Sisussa (Sisun muutokset näkyvät yleensä seuraavana aamuna; katso [Päivitykset Sisusta](/guide/schedule#sisu-updates));
 - apua virheeseen, joka ei mene ohi.
 
-Kerro viestissä linkki kyselyn sivulle tai kurssikoodi, mitä yritit ja mitä tapahtui.
+Liitä viestiin linkki kyselyn sivulle tai kurssikoodi ja kerro, mitä yritit tehdä ja mitä tapahtui.
 
-Ideat ja palaute itse Norpasta menevät sen kehittäjille ylävalikon kohdasta [[navBar:feedback]].
+Voit lähettää ideoita ja palautetta Norpasta ylävalikon kohdasta [[navBar:feedback]].
 
 ## Tietosuoja {#data-protection}
 
@@ -65,6 +65,6 @@ Mitä tämä tarkoittaa palautteelle:
 
 - Opiskelijat kirjautuvat Norppaan, jotta se tietää, kuka saa vastata mihinkin kyselyyn. Opettajat ja koulutusohjelman henkilökunta eivät silti näe, kuka antoi minkäkin vastauksen. Avoimet vastaukset näytetään aakkosjärjestyksessä, ladatuissa vastauksissa kunkin kysymyksen vastaukset on sekoitettu erikseen, eikä niissä ole opiskelijoiden tietoja.
 - Opiskelijat voivat kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Tarkista vastaukset ennen kuin teet avoimesta kysymyksestä julkisen, ja [piilota](/guide/results#hide-answers) ne, joita ei pidä näyttää.
-- Kyselyssä opiskelijat voivat lukea, miten heidän vastauksiaan käytetään, linkistä [[feedbackView:feedbackInfoLink]]
+- Opiskelijat voivat lukea kyselyn linkistä [[feedbackView:feedbackInfoLink]], miten heidän vastauksiaan käytetään.
 
 Jos sinulla on kysyttävää siitä, miten Norppa käsittelee tietoja, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

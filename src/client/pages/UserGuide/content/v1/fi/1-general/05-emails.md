@@ -12,4 +12,4 @@ Koulutusohjelman kysely: vain vastapalautemuistutus kyselyn vastuuhenkilöille s
 
 Välipalaute: ei lainkaan automaattisia sähköposteja.
 
-Näiden lisäksi [jatkuvan palautteen](/guide/continuous-and-interim-feedback#continuous-feedback) kooste lähtee klo 8 niiltä kursseilta, joilla se on kytketty päälle, ja Norppa lähettää viestit, jotka käyttäjät lähettävät sen kautta: [muistutusviestit](/guide/collecting-answers#send-reminder), [vastapalautteen](/guide/counter-feedback#send-email), jos päätät lähettää sen sähköpostilla, sekä vastaukset jatkuvaan palautteeseen.
+Näiden lisäksi [jatkuvan palautteen](/guide/continuous-and-interim-feedback#continuous-feedback) kooste lähtee klo 8 niiltä kursseilta, joilla se on kytketty päälle, ja Norppa välittää viestit, jotka käyttäjät lähettävät sen kautta: [muistutusviestit](/guide/collecting-answers#send-reminder), [vastapalautteen](/guide/counter-feedback#send-email), jos päätät lähettää sen sähköpostilla, sekä vastaukset jatkuvaan palautteeseen.

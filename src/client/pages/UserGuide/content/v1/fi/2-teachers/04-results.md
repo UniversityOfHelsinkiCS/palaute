@@ -17,7 +17,7 @@ Välilehdellä näet:
 
 Uudet vastaukset tulevat näkyviin, kun lataat sivun uudelleen. [[feedbackTargetResults:tableView]] näyttää kaaviot taulukkoina ja [[feedbackTargetResults:chartView]] palauttaa kaaviot.
 
-Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, voit katsoa yhden ryhmän vastauksia välilehden yläosan valinnalla [[groups:chooseGroup]]. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa ryhmässä on joko ei yhtään tai vähintään 5 vastausta, jotta vastaajia ei voi tunnistaa. Katso [ryhmät](/guide/questions#groups).
+Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, voit katsoa yhden ryhmän vastauksia välilehden yläosan valinnalla [[groups:chooseGroup]]. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa ryhmässä on vähintään 5 vastausta tai ei yhtään, jotta vastaajia ei voi tunnistaa. Katso [ryhmät](/guide/questions#groups).
 
 Jos kurssille on ilmoittautunut alle 5 opiskelijaa, tulokset näkyvät vain kurssin vastuuopettajille. Katso [pienet kurssit](/guide/answer-visibility#small-courses).
 
