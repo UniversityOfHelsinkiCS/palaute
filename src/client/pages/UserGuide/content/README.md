@@ -7,7 +7,8 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 ## Files
 
 - Each page is in a group folder, `<order>-<group>/<order>-<slug>.md`, e.g. `2-teachers/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
-- The menu shows each group under the heading `userGuide:groups:<group>` from the translations. The groups:
+- A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it above the groups, under the link to the home page, with its icon from `PageIcon.tsx`.
+- The menu shows each group under the heading `userGuide:groups:<group>` from the translations, and the home page (`/guide`) describes it with `userGuide:groupDescriptions:<group>`. The groups:
   - `general`: what applies to everyone, such as rules, terms and the course summary. No steps for working with a survey.
   - `teachers`: working with a survey, from its dates to counter feedback. Programme surveys and programme admins use these pages too, so say where they differ.
   - `programmes`: the programme's page and programme surveys.

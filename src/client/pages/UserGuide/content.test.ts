@@ -56,7 +56,7 @@ describe('user guide content', () => {
   })
 
   it('has a menu heading for each group in every language', () => {
-    const missing = [...new Set(allPages.map(page => page.group))].flatMap(group =>
+    const missing = [...new Set(allPages.flatMap(page => page.group ?? []))].flatMap(group =>
       ['fi', 'sv', 'en'].filter(language => typeof findLabel(`userGuide:groups:${group}`, language) !== 'string')
     )
     expect(missing).toEqual([])
@@ -92,7 +92,9 @@ describe('user guide content', () => {
       const broken = links.filter(link => {
         if (link.startsWith('#')) return !anchorsOf(markdown).includes(link.slice(1))
         const [, slug, anchor] = /^\/guide(?:\/([a-z0-9-]+))?(?:#([\w-]+))?$/.exec(link) ?? []
-        const target = slug ? pages.find(page => page.slug === slug) : pages[0]
+        // /guide alone is the home page, which has no sections
+        if (!slug) return anchor !== undefined
+        const target = pages.find(page => page.slug === slug)
         return !target || (anchor !== undefined && !anchorsOf(target.markdown).includes(anchor))
       })
       expect(broken).toEqual([])

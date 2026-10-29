@@ -8,10 +8,13 @@ import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { createContext, memo, useContext } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import type { GuidePage } from './content'
+
 import Markdown from '../../components/common/Markdown'
 import MarkdownLink from '../../components/common/MarkdownLink'
 import { HEADING_ID, LABEL, VIDEO } from './content'
 import GuideVideo from './GuideVideo'
+import { PageContentsInline } from './PageContents'
 
 const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
   markdown.replace(LABEL, (_, key: string, pinned?: string) => `**${translate(key, pinned).replace(/<[^>]*>/g, '')}**`)
@@ -60,8 +63,7 @@ const rehypeVideos = () => (tree: HastNode) => {
 type HeadingProps = ComponentProps<'h1'> & ExtraProps
 
 const EditUrlContext = createContext<string | undefined>(undefined)
-// The guide's language, which can differ from the UI's
-const LanguageContext = createContext('en')
+const PageContext = createContext<GuidePage | undefined>(undefined)
 
 const EditLink = ({ href }: { href: string }) => {
   const { t } = useTranslation()
@@ -78,14 +80,18 @@ const EditLink = ({ href }: { href: string }) => {
 // Focused after moving to the page (useScrollToSection)
 const H1 = ({ id, children }: HeadingProps) => {
   const editUrl = useContext(EditUrlContext)
+  const page = useContext(PageContext)
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 3 }}>
-      <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ '&:focus': { outline: 'none' } }}>
-        {children}
-      </Typography>
-      {editUrl && <EditLink href={editUrl} />}
-    </Box>
+    <>
+      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 3 }}>
+        <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ '&:focus': { outline: 'none' } }}>
+          {children}
+        </Typography>
+        {editUrl && <EditLink href={editUrl} />}
+      </Box>
+      {page && <PageContentsInline page={page} />}
+    </>
   )
 }
 
@@ -121,9 +127,9 @@ const P = ({ children }: ComponentProps<'p'> & ExtraProps) => (
 )
 
 const Video = ({ node }: ComponentProps<'video'> & ExtraProps) => {
-  const language = useContext(LanguageContext)
+  const page = useContext(PageContext)
 
-  return <GuideVideo slug={String(node?.properties.dataSlug)} language={language} />
+  return <GuideVideo slug={String(node?.properties.dataSlug)} language={page?.language ?? 'en'} />
 }
 
 const List = ({ component, children }: { component: 'ul' | 'ol'; children?: ReactNode }) => (
@@ -167,22 +173,21 @@ const components: Components = {
 }
 
 type GuideMarkdownProps = {
-  markdown: string
+  page: GuidePage
   editUrl?: string
-  language: string
 }
 
-const GuideMarkdown = ({ markdown, editUrl, language }: GuideMarkdownProps) => {
+const GuideMarkdown = ({ page, editUrl }: GuideMarkdownProps) => {
   const { t, i18n } = useTranslation()
   const translate = (key: string, language?: string) => (language ? i18n.getFixedT(language)(key) : t(key))
 
   return (
     <EditUrlContext.Provider value={editUrl}>
-      <LanguageContext.Provider value={language}>
+      <PageContext.Provider value={page}>
         <Markdown components={components} rehypePlugins={[rehypeHeadingIds, rehypeVideos]} disallowedElements={['img']}>
-          {renderLabels(separateVideos(markdown), translate)}
+          {renderLabels(separateVideos(page.markdown), translate)}
         </Markdown>
-      </LanguageContext.Provider>
+      </PageContext.Provider>
     </EditUrlContext.Provider>
   )
 }

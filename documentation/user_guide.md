@@ -10,7 +10,7 @@ An in-app user guide at `/guide` for teachers and degree programme staff, meant 
 
 ## Content
 
-The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`, in three groups that the menu shows as headings: general, for teachers and for degree programmes. **`content/README.md` has the rules for editing them**, e.g. UI labels as `[[section:key]]`, so the guide always quotes what's on the screen. Swedish users get the English text with Swedish labels.
+The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`, in three groups that the menu shows as headings: general, for responsible teachers and for degree programmes. `/guide` itself is a home page with a card for each group (`GuideHome.tsx`), and the videos page sits outside the groups as a shortcut under the link home. **`content/README.md` has the rules for editing them**, e.g. UI labels as `[[section:key]]`, so the guide always quotes what's on the screen. Swedish users get the English text with Swedish labels.
 
 The guide and the chatbot's `knowledge.md` are separate texts, one for people and one compressed for the model. When a fact changes, update both.
 
@@ -29,6 +29,7 @@ From the wiki, the chatbot's `knowledge.md`, the code and the e2e tests, and che
 In `src/client/pages/UserGuide/`. The page is loaded lazily with all of its text, so moving between pages needs no loading.
 
 - The menu's sticky position and the page's scroll padding use the header's height as a constant in `GuideMenu.tsx`, a stopgap until the app handles its sticky header itself. Banners, which make the header taller, put them off.
+- A page's sections are listed beside it on wide screens and under its title otherwise (`PageContents.tsx`), so the menu only has groups and pages.
 - The router doesn't scroll or move focus on navigation, so `useScrollToSection.ts` does: following a link goes to the top of the page or to the `#section` and focuses it. Back and forward leave the position to the browser.
 
 ## Later

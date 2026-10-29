@@ -10,41 +10,55 @@ import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import canSeeUserGuide from './canSeeUserGuide'
 import { getGuidePages } from './content'
+import GuideHome from './GuideHome'
 import GuideMarkdown from './GuideMarkdown'
 import GuideMenu from './GuideMenu'
+import { PageContentsAside } from './PageContents'
 import PageNavigation from './PageNavigation'
 import useHeaderHeight, { BELOW_HEADER } from './useHeaderHeight'
 import useScrollToSection from './useScrollToSection'
 
-const GuideLayout = ({ pages, index, canEdit }: { pages: GuidePage[]; index: number; canEdit: boolean }) => {
+type GuideLayoutProps = {
+  pages: GuidePage[]
+  // Without a page, the guide's home
+  page?: GuidePage
+  canEdit: boolean
+}
+
+const GuideLayout = ({ pages, page, canEdit }: GuideLayoutProps) => {
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
   useHeaderHeight()
   useScrollToSection(articleRef)
-  const page = pages[index]
+  const index = page ? pages.indexOf(page) : -1
 
   return (
     <Box
       sx={{
         display: 'grid',
         gap: { xs: 2, md: 6 },
-        gridTemplateColumns: { xs: '1fr', md: '16rem minmax(0, 1fr)' },
+        gridTemplateColumns: { xs: '1fr', md: '16rem minmax(0, 1fr)', lg: '16rem minmax(0, 1fr) 14rem' },
         alignItems: 'start',
       }}
     >
       <GlobalStyles styles={{ html: { scrollPaddingTop: BELOW_HEADER } }} />
-      <Title>{`${page.title} – ${t('userGuide:title')}`}</Title>
+      <Title>{page ? `${page.title} – ${t('userGuide:title')}` : t('userGuide:title')}</Title>
       <GuideMenu pages={pages} current={page} />
-      <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
-        <Box component="article" ref={articleRef}>
-          <GuideMarkdown
-            markdown={page.markdown}
-            editUrl={canEdit ? page.editUrl : undefined}
-            language={page.language}
-          />
+      {page ? (
+        <>
+          <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
+            <Box component="article" ref={articleRef}>
+              <GuideMarkdown page={page} editUrl={canEdit ? page.editUrl : undefined} />
+            </Box>
+            <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
+          </Box>
+          <PageContentsAside page={page} />
+        </>
+      ) : (
+        <Box component="article" ref={articleRef} sx={{ minWidth: 0, gridColumn: { lg: '2 / 4' } }}>
+          <GuideHome pages={pages} />
         </Box>
-        <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
-      </Box>
+      )}
     </Box>
   )
 }
@@ -58,10 +72,10 @@ const UserGuide = () => {
   if (!canSeeUserGuide(authorizedUser)) return <Navigate to="/" replace />
 
   const pages = getGuidePages(i18n.language)
-  const index = slug ? pages.findIndex(page => page.slug === slug) : 0
-  if (index < 0) return <Navigate to="/guide" replace />
+  const page = slug ? pages.find(candidate => candidate.slug === slug) : undefined
+  if (slug && !page) return <Navigate to="/guide" replace />
 
-  return <GuideLayout pages={pages} index={index} canEdit={authorizedUser?.isAdmin === true} />
+  return <GuideLayout pages={pages} page={page} canEdit={authorizedUser?.isAdmin === true} />
 }
 
 export default UserGuide

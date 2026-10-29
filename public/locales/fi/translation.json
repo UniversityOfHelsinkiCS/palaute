@@ -880,9 +880,17 @@
     "next": "Seuraava",
     "pageNavigation": "Edellinen ja seuraava sivu",
     "editOnGitHub": "Muokkaa GitHubissa",
+    "onThisPage": "Tällä sivulla",
+    "homeIntro": "Valitse, mistä haluat lukea. Jos Norppa on sinulle uusi, aloita yleistiedoista.",
+    "homeVideos": "Jos katsot mieluummin videoita, ne on koottu yhdelle sivulle:",
+    "groupDescriptions": {
+      "general": "Kaikille: miten Norppa ja kyselyt toimivat, roolit, kuka näkee vastaukset, sähköpostit, kurssiyhteenveto ja tuki.",
+      "teachers": "Kyselyn käyttö päivämääristä vastapalautteeseen. Samat ohjeet koskevat hallintohenkilöitä ja koulutusohjelman kyselyiden vastuuhenkilöitä.",
+      "programmes": "Koulutusohjelman tai tiedekunnan sivu, sen asetukset ja kysymykset sekä koulutusohjelman omat kyselyt."
+    },
     "groups": {
       "general": "Yleistiedot",
-      "teachers": "Opettajalle",
+      "teachers": "Vastuuopettajalle",
       "programmes": "Koulutusohjelmalle"
     }
   }
