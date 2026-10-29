@@ -68,12 +68,14 @@ const GuideLayout = ({ pages, page, canEdit, version, onVersionChange }: GuideLa
   )
 }
 
+const DEFAULT_VERSION: GuideVersion = 'v3'
+
 const UserGuide = () => {
   const { i18n } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
   const { slug } = useParams()
-  const [storedVersion, setVersion] = useLocalStorageState<GuideVersion>('userGuideVersion', 'v1')
-  const version = isGuideVersion(storedVersion) ? storedVersion : 'v1'
+  const [storedVersion, setVersion] = useLocalStorageState<GuideVersion>('userGuideVersion', DEFAULT_VERSION)
+  const version = isGuideVersion(storedVersion) ? storedVersion : DEFAULT_VERSION
 
   if (isLoading) return <LoadingProgress />
   if (!canSeeUserGuide(authorizedUser)) return <Navigate to="/" replace />
