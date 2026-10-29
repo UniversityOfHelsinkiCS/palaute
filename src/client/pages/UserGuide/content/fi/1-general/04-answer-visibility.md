@@ -39,3 +39,15 @@ Raja lasketaan Norpassa kurssille ilmoittautuneista opiskelijoista, ei vastauksi
 - Vastaaminen on nimetöntä. Et näe, kuka vastasi mitä, joten et voi palkita yksittäisiä opiskelijoita vastaamisesta. Mitä voit nähdä, kerrotaan kohdassa [Ketkä ovat vastanneet](/guide/results#who-answered).
 
 Opettaja ei voi vastata oman kurssinsa kyselyyn, vaan näkee sen [[common:preview]]-näkymänä.
+
+## Tietosuoja {#data-protection}
+
+Norppa on Helsingin yliopiston palvelu. Jokaisen Norpan sivun alareunassa oleva linkki [[feedbackView:dataProtectionNotice]] vie yliopiston tietosuojatietoihin, jotka on koottu yliopiston [tietosuojasivulle](https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja).
+
+Mitä tämä tarkoittaa palautteelle:
+
+- Opiskelijat kirjautuvat Norppaan, jotta se tietää, kuka saa vastata mihinkin kyselyyn. Opettajat ja koulutusohjelman henkilökunta eivät silti näe, kuka antoi minkäkin vastauksen. Avoimet vastaukset näytetään aakkosjärjestyksessä, ladatuissa vastauksissa kunkin kysymyksen vastaukset on sekoitettu erikseen, eikä niissä ole opiskelijoiden tietoja.
+- Opiskelijat voivat kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Tarkista vastaukset ennen kuin teet avoimesta kysymyksestä julkisen, ja [piilota](/guide/results#hide-answers) ne, joita ei pidä näyttää.
+- Kyselyssä opiskelijat voivat lukea, miten heidän vastauksiaan käytetään, linkistä [[feedbackView:feedbackInfoLink]]
+
+Jos sinulla on kysyttävää siitä, miten Norppa käsittelee tietoja, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

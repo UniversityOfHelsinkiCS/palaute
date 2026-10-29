@@ -68,4 +68,4 @@ Kurssiyhteenvedossa ovat _vain kurssikyselyt_: välipalautteet ja koulutusohjelm
 - _Se kuuluu Sisussa toiselle organisaatiolle._ Organisaation yhteenvedossa ovat kurssit, joiden opintojakso tai toteutus kuuluu sille Sisussa. Opintojakso, joka liittyy koulutusohjelmaan vain toteutuksensa kautta, on merkitty tekstillä [[common:partiallyResponsible]].
 - _Et ole sen opettaja Sisussa._ [[courseSummary:myCourses]] näyttää vain kurssit, joilla olet vastuuopettaja tai opettaja.
 
-Jos kurssi puuttuu yhä muutama päivä sen jälkeen, kun sen tiedot on korjattu Sisussa, [ota yhteyttä tukeen](/guide/support#support).
+Jos kurssi puuttuu yhä muutama päivä sen jälkeen, kun sen tiedot on korjattu Sisussa, [ota yhteyttä tukeen](/guide/getting-started#support).

@@ -36,12 +36,15 @@ Yläreunan valikossa näkyvät vain sinua koskevat kohdat:
 
 Avaa kysely valitsemalla [[navBar:myCourses]] ja sieltä kurssi. Kyselyn sivulla näkyvät kurssin päivämäärät, sen opettajat ja välilehdet, joita voit käyttää. Välilehdet riippuvat [roolistasi](/guide/roles) ja siitä, onko kysely tuleva, auki vai sulkeutunut.
 
-## Ohjeen osat {#guide-parts}
+## Tuki {#support}
 
-- _Yleistiedot_ koskevat kaikkia: roolit, kurssikyselyt, vastausten näkyvyys, sähköpostit ja kurssiyhteenveto.
-- _Opettajalle_ kertoo, miten kyselyä käytetään: päivämäärät, kysymykset, vastausten kerääminen, tulokset ja vastapalaute. Useimpiin näistä tarvitset vastuuopettajan tai hallintohenkilön roolin. Samat ohjeet pätevät koulutusohjelman kyselyihin.
-- _Koulutusohjelmalle_ kertoo koulutusohjelman sivusta, asetuksista ja omista kyselyistä.
+Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat asiat voi tehdä Norpassa tai korjata Sisussa, mutta ota yhteyttä tukeen, jos tarvitset:
 
-## Apua {#help}
+- päättyneen kurssikyselyn avaamista uudelleen tai sen päivämäärien muuttamista;
+- kyselyä kurssityypille, joka ei saa sitä automaattisesti, kuten itsenäiselle työskentelylle, esseelle, harjoittelulle tai pro gradu -tutkielmalle (ei tenteille);
+- apua, kun kurssi, opettaja tai opiskelija puuttuu Norpasta vielä muutama päivä sen jälkeen, kun tiedot on korjattu Sisussa (Sisun muutokset näkyvät yleensä seuraavana aamuna; katso [Päivitykset Sisusta](/guide/course-surveys#sisu-updates));
+- apua virheeseen, joka ei mene ohi.
 
-Jos jokin Norpassa ei toimi tässä kuvatulla tavalla tai tarvitset jotain, minkä vain tuki voi tehdä, kuten sulkeutuneen kurssikyselyn avaamisen uudelleen, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Katso [Milloin ottaa yhteyttä tukeen](/guide/support#support).
+Kerro viestissä linkki kyselyn sivulle tai kurssikoodi, mitä yritit ja mitä tapahtui.
+
+Ideat ja palaute itse Norpasta menevät sen kehittäjille ylävalikon kohdasta [[navBar:feedback]].

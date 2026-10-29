@@ -49,7 +49,7 @@ The answer is hidden from everyone who sees only public answers. Responsible tea
 
 Hiding matters only for questions that are public. Hidden answers are left out of the PDF download.
 
-You can't delete answers. If an answer must be removed entirely, contact [support](/guide/support#support).
+You can't delete answers. If an answer must be removed entirely, contact [support](/guide/getting-started#support).
 
 ## Who has answered {#who-answered}
 

@@ -39,3 +39,15 @@ The limit counts the students enrolled in Norppa, not the answers. It applies to
 - Answering is anonymous. You can't see who answered what, so you can't reward individual students for answering. See [Who has answered](/guide/results#who-answered) for what you can see.
 
 Teachers can't answer their own course's survey: they see it as a [[common:preview]].
+
+## Data protection {#data-protection}
+
+Norppa is a University of Helsinki service. The [[feedbackView:dataProtectionNotice]] link at the bottom of every Norppa page leads to the university's data protection information, which is collected on the university's [data protection page](https://www.helsinki.fi/en/about-us/data-protection).
+
+What this means for the feedback:
+
+- Students log in to Norppa, so it knows who may answer which survey. Teachers and programme staff still can't see who gave which answers. Open answers are listed in alphabetical order, each question's answers are shuffled separately in the download, and downloaded answers contain no student information.
+- Students may write personal data, their own or someone else's, in open answers. Check the answers before making an open question public, and [hide](/guide/results#hide-answers) any that shouldn't be seen.
+- In the survey, students can read how their answers are used under the link [[feedbackView:feedbackInfoLink]]
+
+If you have questions about how Norppa handles data, contact [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

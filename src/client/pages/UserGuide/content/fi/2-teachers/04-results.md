@@ -49,7 +49,7 @@ Vastaus piilotetaan kaikilta, jotka näkevät vain julkiset vastaukset. Vastuuop
 
 Piilottamisella on merkitystä vain julkisissa kysymyksissä. Piilotetut vastaukset jätetään pois pdf-tiedostosta.
 
-Vastauksia ei voi poistaa. Jos vastaus on poistettava kokonaan, ota yhteyttä [tukeen](/guide/support#support).
+Vastauksia ei voi poistaa. Jos vastaus on poistettava kokonaan, ota yhteyttä [tukeen](/guide/getting-started#support).
 
 ## Ketkä ovat vastanneet {#who-answered}
 

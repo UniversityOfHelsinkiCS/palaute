@@ -36,12 +36,15 @@ The menu at the top shows only the items that concern you:
 
 To open a survey, go to [[navBar:myCourses]] and choose the course. The survey's page shows the course's dates, its teachers and the tabs you can use. The tabs depend on your [role](/guide/roles) and on whether the survey is upcoming, open or closed.
 
-## Parts of this guide {#guide-parts}
+## Support {#support}
 
-- _General_ applies to everyone: roles, course surveys, visibility of answers, emails and the course summary.
-- _For teachers_ explains how to work with a survey: its dates, questions, collecting answers, results and counter feedback. Most of these need the responsible teacher or administrative person role. The same instructions apply to programme surveys.
-- _For degree programmes_ covers the programme's page, its settings and its own surveys.
+Support is at [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Most things can be done in Norppa or fixed in Sisu, but contact support for:
 
-## Getting help {#help}
+- reopening a closed course survey, or changing its dates;
+- a survey for a course type that doesn't get one automatically, such as independent work, an essay, training or a master's thesis (not for exams);
+- a course, teacher or student that's still missing from Norppa a few days after the data in Sisu was fixed (Sisu changes normally show the next morning; see [Sisu updates](/guide/course-surveys#sisu-updates));
+- an error that doesn't go away.
 
-If something in Norppa doesn't work as described here, or you need something only support can do, such as reopening a closed course survey, contact [norppa@helsinki.fi](mailto:norppa@helsinki.fi). See [When to contact support](/guide/support#support).
+To help support help you, include a link to the survey's page or the course code, what you tried and what happened.
+
+Ideas and feedback about Norppa itself go to its developers through [[navBar:feedback]] in the top menu.

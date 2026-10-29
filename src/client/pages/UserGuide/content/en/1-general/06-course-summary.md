@@ -68,4 +68,4 @@ The course summary covers _course surveys only_: interim feedback and programme 
 - _It belongs to another organisation in Sisu._ An organisation's summary has the courses whose course unit or realisation belongs to it in Sisu. A course unit that's linked to the programme only through its realisation is marked [[common:partiallyResponsible]].
 - _You're not its teacher in Sisu._ [[courseSummary:myCourses]] shows only the courses where you're a responsible teacher or a teacher.
 
-If a course is still missing a few days after its data in Sisu has been fixed, [contact support](/guide/support#support).
+If a course is still missing a few days after its data in Sisu has been fixed, [contact support](/guide/getting-started#support).

@@ -2,7 +2,7 @@
 
 A programme survey is a survey a degree programme or faculty makes itself for students it chooses, e.g. semester feedback, feedback on a study track or feedback across several courses. It has no university level or programme questions: you write all its questions.
 
-Programme surveys are created by the programme's admins. Otherwise they work like course surveys: they open and close by their dates, and the questions, sharing, answers and counter feedback work the same way. Their instructions are on the pages for teachers: [Your own questions](/guide/questions), [Collecting answers](/guide/collecting-answers), [Results](/guide/results) and [Counter feedback](/guide/counter-feedback). The survey's [responsible persons](#responsible-persons) have the same rights there as a responsible teacher.
+Programme surveys are created by the programme's admins. Otherwise they work like course surveys: they open and close by their dates, and the questions, sharing, answers and counter feedback work the same way. Their instructions are on the pages for responsible teachers: [Your own questions](/guide/questions), [Collecting answers](/guide/collecting-answers), [Results](/guide/results) and [Counter feedback](/guide/counter-feedback). The survey's [responsible persons](#responsible-persons) have the same rights there as a responsible teacher.
 
 ## Creating a programme survey {#create}
 

@@ -2,7 +2,7 @@
 
 Koulutusohjelman kysely on kysely, jonka koulutusohjelma tai tiedekunta tekee itse valitsemilleen opiskelijoille, esimerkiksi lukukausipalaute, opintosuunnan palaute tai usean kurssin yhteinen palaute. Siinä ei ole yliopistotason eikä koulutusohjelman kysymyksiä, vaan kirjoitat kaikki kysymykset itse.
 
-Koulutusohjelman kyselyt tekevät koulutusohjelman hallinnoijat. Muuten ne toimivat kuten kurssikyselyt: ne avautuvat ja sulkeutuvat päivämääriensä mukaan, ja kysymykset, jakaminen, vastaukset ja vastapalaute toimivat samalla tavalla. Niiden ohjeet ovat opettajille tarkoitetuilla sivuilla [Omat kysymykset](/guide/questions), [Vastausten kerääminen](/guide/collecting-answers), [Tulokset](/guide/results) ja [Vastapalaute](/guide/counter-feedback). Kyselyn [vastuuhenkilöillä](#responsible-persons) on niissä samat oikeudet kuin vastuuopettajalla.
+Koulutusohjelman kyselyt tekevät koulutusohjelman hallinnoijat. Muuten ne toimivat kuten kurssikyselyt: ne avautuvat ja sulkeutuvat päivämääriensä mukaan, ja kysymykset, jakaminen, vastaukset ja vastapalaute toimivat samalla tavalla. Niiden ohjeet ovat vastuuopettajille tarkoitetuilla sivuilla [Omat kysymykset](/guide/questions), [Vastausten kerääminen](/guide/collecting-answers), [Tulokset](/guide/results) ja [Vastapalaute](/guide/counter-feedback). Kyselyn [vastuuhenkilöillä](#responsible-persons) on niissä samat oikeudet kuin vastuuopettajalla.
 
 ## Kyselyn luominen {#create}
 
