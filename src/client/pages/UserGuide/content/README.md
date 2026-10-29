@@ -8,6 +8,7 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 
 - There are several versions of the guide, `v1/`, `v2/` and `v3/`, with different structures. Admins switch between them with the buttons at the top of the menu until one is chosen; the others are then removed. Edit all of them while they exist.
 - In a version, each page is in a group folder, `<language>/<order>-<group>/<order>-<slug>.md`, e.g. `v2/fi/2-surveys/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
+- `home.md` in each language folder is the top of the home page (`/guide`), above the groups' cards. It isn't in the menu.
 - A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it above the groups, under the link to the home page, with its icon from `PageIcon.tsx`.
 - The menu shows each group under the heading `userGuide:groups:<group>` from the translations, and the home page (`/guide`) describes it with `userGuide:groupDescriptions:<group>`.
 - v1 groups pages by reader:

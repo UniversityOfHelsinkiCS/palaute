@@ -6,7 +6,7 @@ import fiHy from '../../../../public/locales/fi/hy.json'
 import fi from '../../../../public/locales/fi/translation.json'
 import svHy from '../../../../public/locales/sv/hy.json'
 import sv from '../../../../public/locales/sv/translation.json'
-import { GUIDE_PAGES, GUIDE_VERSIONS, LABEL, VIDEO } from './content'
+import { GUIDE_HOMES, GUIDE_PAGES, GUIDE_VERSIONS, LABEL, VIDEO } from './content'
 
 // Checks what editors can get wrong in the Markdown files (see content/README.md)
 
@@ -38,7 +38,8 @@ const videosOf = (markdown: string) => markdown.split('\n').flatMap(line => VIDE
 
 describe.each(GUIDE_VERSIONS)('user guide content, %s', version => {
   const GUIDE = GUIDE_PAGES[version]
-  const allPages = (['fi', 'en'] as const).flatMap(language => GUIDE[language])
+  // The home page's top too, which isn't in the list of pages
+  const allPages = (['fi', 'en'] as const).flatMap(language => [...GUIDE[language], GUIDE_HOMES[version][language]])
 
   it('has the same pages, section ids and videos in Finnish and English, so links work in both', () => {
     expect(GUIDE.fi.length).toBeGreaterThan(0)

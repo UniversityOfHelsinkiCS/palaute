@@ -35,7 +35,7 @@ export type GuideVersion = (typeof GUIDE_VERSIONS)[number]
 export const isGuideVersion = (value: unknown): value is GuideVersion =>
   GUIDE_VERSIONS.some(version => version === value)
 
-const FILES = import.meta.glob<string>(['./content/*/*/*.md', './content/*/*/*/*.md'], {
+const FILES = import.meta.glob<string>(['./content/*/*/*.md', './content/*/*/*/*.md', '!./content/*/*/home.md'], {
   query: '?raw',
   import: 'default',
   eager: true,
@@ -83,10 +83,39 @@ const pagesIn = (version: GuideVersion, language: GuideLanguage) =>
     .sort((a, b) => a.order[0] - b.order[0] || a.order[1] - b.order[1])
     .map(file => file.page)
 
+// The top of the home page, above the groups' cards. Not a page of its own, so it's not in the menu.
+const HOME_FILES = import.meta.glob<string>('./content/*/*/home.md', { query: '?raw', import: 'default', eager: true })
+
+const homeIn = (version: GuideVersion, language: GuideLanguage): GuidePage => {
+  const path = `./content/${version}/${language}/home.md`
+  const file = HOME_FILES[path]
+  if (!file) throw new Error(`[UserGuide] ${path} is missing`)
+  const markdown = file.replace(/<!--[\s\S]*?-->/g, '')
+  const title = /^# (.+)$/m.exec(markdown)?.[1].trim() ?? ''
+  return {
+    version,
+    language,
+    slug: 'home',
+    title,
+    sections: [],
+    markdown,
+    editUrl: `${EDIT_URL}/${path.replace(/^\.\//, '')}`,
+  }
+}
+
+export const GUIDE_HOMES = Object.fromEntries(
+  GUIDE_VERSIONS.map(version => [version, { fi: homeIn(version, 'fi'), en: homeIn(version, 'en') }])
+) as Record<GuideVersion, Record<GuideLanguage, GuidePage>>
+
 export const GUIDE_PAGES = Object.fromEntries(
   GUIDE_VERSIONS.map(version => [version, { fi: pagesIn(version, 'fi'), en: pagesIn(version, 'en') }])
 ) as Record<GuideVersion, Record<GuideLanguage, GuidePage[]>>
 
 // Swedish has no guide of its own: Swedish users get the English text and videos, with the UI labels in Swedish
+const guideLanguage = (uiLanguage: string): GuideLanguage => (uiLanguage.startsWith('fi') ? 'fi' : 'en')
+
 export const getGuidePages = (version: GuideVersion, uiLanguage: string) =>
-  GUIDE_PAGES[version][uiLanguage.startsWith('fi') ? 'fi' : 'en']
+  GUIDE_PAGES[version][guideLanguage(uiLanguage)]
+
+export const getGuideHome = (version: GuideVersion, uiLanguage: string) =>
+  GUIDE_HOMES[version][guideLanguage(uiLanguage)]

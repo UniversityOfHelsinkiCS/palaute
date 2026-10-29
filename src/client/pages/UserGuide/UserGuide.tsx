@@ -10,7 +10,7 @@ import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import canSeeUserGuide from './canSeeUserGuide'
-import { getGuidePages, isGuideVersion } from './content'
+import { getGuideHome, getGuidePages, isGuideVersion } from './content'
 import GuideHome from './GuideHome'
 import GuideMarkdown from './GuideMarkdown'
 import GuideMenu from './GuideMenu'
@@ -21,6 +21,7 @@ import useScrollToSection from './useScrollToSection'
 
 type GuideLayoutProps = {
   pages: GuidePage[]
+  home: GuidePage
   // Without a page, the guide's home
   page?: GuidePage
   canEdit: boolean
@@ -28,7 +29,7 @@ type GuideLayoutProps = {
   onVersionChange: (version: GuideVersion) => void
 }
 
-const GuideLayout = ({ pages, page, canEdit, version, onVersionChange }: GuideLayoutProps) => {
+const GuideLayout = ({ pages, home, page, canEdit, version, onVersionChange }: GuideLayoutProps) => {
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
   useHeaderHeight()
@@ -62,7 +63,7 @@ const GuideLayout = ({ pages, page, canEdit, version, onVersionChange }: GuideLa
       ) : (
         <Box sx={{ minWidth: 0, gridColumn: { lg: '2 / 4' } }}>
           <Box component="article" ref={articleRef}>
-            <GuideHome pages={pages} />
+            <GuideHome pages={pages} home={home} editUrl={canEdit ? home.editUrl : undefined} />
           </Box>
         </Box>
       )}
@@ -89,6 +90,7 @@ const UserGuide = () => {
   return (
     <GuideLayout
       pages={pages}
+      home={getGuideHome(version, i18n.language)}
       page={page}
       canEdit={authorizedUser?.isAdmin === true}
       version={version}

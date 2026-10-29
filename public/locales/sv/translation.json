@@ -871,9 +871,6 @@
     "pageNavigation": "Föregående och nästa sida",
     "editOnGitHub": "Redigera på GitHub",
     "onThisPage": "På den här sidan",
-    "homeIntro": "Välj vad du vill läsa om. Om Norppa är nytt för dig, börja med <gettingStarted>Getting started</gettingStarted>.",
-    "homeHelp": "Om något inte fungerar eller du inte hittar det du söker, se",
-    "homeVideos": "Om du hellre tittar på videor finns de samlade på en sida:",
     "groupDescriptions": {
       "v3": {
         "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren och kurssammanfattningen.",
