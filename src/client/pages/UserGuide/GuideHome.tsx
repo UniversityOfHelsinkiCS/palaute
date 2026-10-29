@@ -46,7 +46,13 @@ const GroupCard = ({ group, pages }: { group: string; pages: GuidePage[] }) => {
 const GuideHome = ({ pages }: { pages: GuidePage[] }) => {
   const { t } = useTranslation()
   const groups = [...new Set(pages.flatMap(page => page.group ?? []))]
+  // Pages outside the groups get a sentence of their own, as no card lists them
+  const help = pages.find(page => page.slug === 'help' && !page.group)
   const videos = pages.find(page => page.slug === 'videos')
+  const pointers = [
+    ...(videos ? [{ text: t('userGuide:homeVideos'), page: videos }] : []),
+    ...(help ? [{ text: t('userGuide:homeHelp'), page: help }] : []),
+  ]
 
   return (
     <>
@@ -54,30 +60,32 @@ const GuideHome = ({ pages }: { pages: GuidePage[] }) => {
       <Typography variant="h4" component="h1" tabIndex={-1} sx={{ mb: 2, '&:focus': { outline: 'none' } }}>
         {t('userGuide:title')}
       </Typography>
-      <Typography variant="body1" sx={{ mb: videos ? 1 : 3 }}>
-        <Trans
-          i18nKey="userGuide:homeIntro"
-          components={{
-            gettingStarted: (
-              <Link
-                key="gettingStarted"
-                component={RouterLink}
-                to="/guide/getting-started"
-                sx={focusIndicatorStyle()}
-              />
-            ),
-          }}
-        />
-      </Typography>
-      {videos && (
-        <Typography variant="body1" sx={{ mb: 3 }}>
-          {`${t('userGuide:homeVideos')} `}
-          <Link component={RouterLink} to={`/guide/${videos.slug}`} sx={focusIndicatorStyle()}>
-            {videos.title}
-          </Link>
-          .
+      <Box sx={{ mb: 3, '& > p + p': { mt: 1 } }}>
+        <Typography variant="body1">
+          <Trans
+            i18nKey="userGuide:homeIntro"
+            components={{
+              gettingStarted: (
+                <Link
+                  key="gettingStarted"
+                  component={RouterLink}
+                  to="/guide/getting-started"
+                  sx={focusIndicatorStyle()}
+                />
+              ),
+            }}
+          />
         </Typography>
-      )}
+        {pointers.map(({ text, page }) => (
+          <Typography key={page.slug} variant="body1">
+            {`${text} `}
+            <Link component={RouterLink} to={`/guide/${page.slug}`} sx={focusIndicatorStyle()}>
+              {page.title}
+            </Link>
+            .
+          </Typography>
+        ))}
+      </Box>
       <Box sx={{ display: 'grid', gap: 2, gridTemplateColumns: { xs: '1fr', lg: 'repeat(3, minmax(0, 1fr))' } }}>
         {groups.map(group => (
           <GroupCard key={group} group={group} pages={pages.filter(page => page.group === group)} />

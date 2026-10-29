@@ -1,4 +1,4 @@
-# Ongelmatilanteet ja tuki
+# Ongelmat ja tuki
 
 Tältä sivulta löydät ratkaisuja yleisimpiin ongelmiin. Jos ongelmasi ei ratkea, ota yhteyttä [tukeen](#support).
 

@@ -887,12 +887,13 @@
     "editOnGitHub": "Edit on GitHub",
     "onThisPage": "On this page",
     "homeIntro": "Choose what you want to read about. If Norppa is new to you, start with <gettingStarted>Getting started</gettingStarted>.",
+    "homeHelp": "If something doesn't work or you can't find what you're looking for, see",
     "homeVideos": "If you'd rather watch videos, they're collected on one page:",
     "groupDescriptions": {
       "v3": {
-        "basics": "For everyone: how a survey works, roles and rights, who sees the answers, the course summary and help with problems.",
+        "basics": "For everyone: how a survey works, roles and rights, who sees the answers and the course summary.",
         "teachers": "Your course's survey from its schedule to counter feedback, and feedback during the course. The same instructions apply to administrative persons and to the responsible persons of programme surveys.",
-        "programmes": "Following a degree programme's or faculty's feedback, programme questions, settings and the programme's own surveys."
+        "programmes": "Following a degree programme's or faculty's feedback, programme questions, the programme's own surveys and settings."
       },
       "general": "For everyone: how Norppa and its surveys work, roles, who sees the answers, emails, the course summary and support.",
       "teachers": "Working with a survey, from its dates to counter feedback. The same instructions apply to administrative persons and to the responsible persons of programme surveys.",

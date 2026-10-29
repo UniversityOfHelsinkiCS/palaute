@@ -6,9 +6,9 @@ Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan 
 
 ## Mikä osa ohjeesta on sinulle {#guide-parts}
 
-- _Perusteet_ koskevat kaikkia: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset, kurssiyhteenveto ja apu ongelmatilanteisiin.
+- _Perusteet_ koskevat kaikkia: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset ja kurssiyhteenveto.
 - _Vastuuopettajalle_ on kurssin vastuuopettajille ja hallintohenkilöille: kyselyn aikataulu, kysymykset, vastausten kerääminen, tulokset ja vastapalaute sekä palaute kurssin aikana. Samat ohjeet koskevat koulutusohjelman kyselyjen vastuuhenkilöitä.
-- _Koulutusohjelmalle_ on niille, joilla on oikeudet koulutusohjelmaan tai tiedekuntaan: palautteen seuraaminen, koulutusohjelman kysymykset, asetukset ja koulutusohjelman omat kyselyt.
+- _Koulutusohjelmalle_ on niille, joilla on oikeudet koulutusohjelmaan tai tiedekuntaan: palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset.
 
 Jos olet kurssilla opettaja mutta et vastuuopettaja, näet kyselyn esikatseluna, voit kopioida sen linkin ja näet julkisten kysymysten vastaukset. Oman roolisi löydät kohdasta [Omien oikeuksien tarkistaminen](/guide/roles#check-your-rights).
 
@@ -46,4 +46,4 @@ Yläreunan valikossa näkyvät vain sinua koskevat kohdat:
 
 Avaa kysely valitsemalla [[navBar:myCourses]] ja sieltä kurssi. Kyselyn sivulla näkyvät kurssin päivämäärät, sen opettajat ja välilehdet, joita voit käyttää. Välilehdet riippuvat [roolistasi](/guide/roles) ja siitä, onko kysely tuleva, auki vai sulkeutunut.
 
-Jos jokin ei toimi tai et löydä etsimääsi, katso [Ongelmatilanteet ja tuki](/guide/help).
+Jos jokin ei toimi tai et löydä etsimääsi, katso [Ongelmat ja tuki](/guide/help).

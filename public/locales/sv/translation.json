@@ -872,12 +872,13 @@
     "editOnGitHub": "Redigera på GitHub",
     "onThisPage": "På den här sidan",
     "homeIntro": "Välj vad du vill läsa om. Om Norppa är nytt för dig, börja med <gettingStarted>Getting started</gettingStarted>.",
+    "homeHelp": "Om något inte fungerar eller du inte hittar det du söker, se",
     "homeVideos": "Om du hellre tittar på videor finns de samlade på en sida:",
     "groupDescriptions": {
       "v3": {
-        "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren, kurssammanfattningen och hjälp med problem.",
+        "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren och kurssammanfattningen.",
         "teachers": "Kursens enkät från tidsschema till motrespons samt respons under kursen. Samma instruktioner gäller administrativa personer och de ansvariga för utbildningsprogrammens enkäter.",
-        "programmes": "Att följa utbildningsprogrammets eller fakultetens respons, programmets frågor, inställningar och programmets egna enkäter."
+        "programmes": "Att följa utbildningsprogrammets eller fakultetens respons, programmets frågor, programmets egna enkäter och inställningar."
       },
       "general": "För alla: hur Norppa och enkäterna fungerar, roller, vem som ser svaren, e-post, kurssammanfattningen och support.",
       "teachers": "Att arbeta med en enkät, från datum till motrespons. Samma instruktioner gäller administrativa personer och de ansvariga för utbildningsprogrammens enkäter.",
