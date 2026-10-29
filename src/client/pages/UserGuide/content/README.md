@@ -38,7 +38,7 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 - Don't list what the user sees on the screen anyway, such as every button of a question or every column of a table. Explain only what isn't obvious from the screen.
 - Say that something doesn't exist only where a reader would look for it, together with what to do instead. Don't collect such things in a list of their own.
 - Give each fact one home, and link to it from other pages instead of repeating it.
-- If the UI behaves wrongly, e.g. offers a button that fails, report it as a bug instead of documenting the workaround. If the guide must describe a workaround until the bug is fixed, add a comment saying when to remove it.
+- Describe how Norppa is meant to work. If it behaves otherwise, e.g. offers a button that fails or shows something it shouldn't, record it in `documentation/known_bugs.md` instead of describing it in the guide.
 - Leave out edge cases that don't affect what the user does. The knowledge base has to cover everything, because the chatbot can't see the screen; the guide doesn't.
 
 ## Syntax

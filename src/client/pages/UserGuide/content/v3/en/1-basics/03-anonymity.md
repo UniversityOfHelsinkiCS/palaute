@@ -23,10 +23,11 @@ By default:
 - Scale and choice questions a teacher adds are public.
 - Open questions are not public.
 - Questions copied from another survey, or carried over from the course's previous realisation, are not public.
-- The answers to a grouping question are not public.
 - Questions the university or the degree programme has made public are always public, and that can't be changed. These include the university level scale and choice questions.
 
-A responsible teacher can change whether their own questions are public. An open question can be made public only after the survey has closed, as its answers may contain personal data. See [Changing who sees the answers](/guide/results#visibility), and for programme questions, [Making the answers public](/guide/programme-questions#public).
+The answers to a grouping question are never public, and that can't be changed.
+
+A responsible teacher can change whether the other questions are public on their course: besides their own questions, e.g. the university level open question and the programme questions the programme hasn't made public. An open question can be made public only after the survey has closed, as its answers may contain personal data. See [Changing who sees the answers](/guide/results#visibility), and for programme questions, [Making the answers public](/guide/programme-questions#public).
 
 ## Courses with fewer than 5 students {#small-courses}
 

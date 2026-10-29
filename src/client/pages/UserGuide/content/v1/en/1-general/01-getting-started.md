@@ -41,7 +41,7 @@ To open a survey, go to [[navBar:myCourses]] and choose the course. The survey's
 Support is at [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Most things can be done in Norppa or fixed in Sisu, but contact support for:
 
 - reopening a closed course survey, or changing its dates;
-- a survey for a course type that doesn't get one automatically, such as independent work, an essay, training or a master's thesis (not for exams);
+- a survey for a course type that doesn't get one automatically, such as an independent work project, an essay, training or a master's thesis (not for exams);
 - a course, teacher or student that's still missing from Norppa a few days after the data in Sisu was fixed (Sisu changes normally show the next morning; see [Sisu updates](/guide/course-surveys#sisu-updates));
 - an error that doesn't go away.
 

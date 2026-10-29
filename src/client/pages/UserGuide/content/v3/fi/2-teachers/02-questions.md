@@ -28,7 +28,7 @@ Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovat
 Kysymyksiä voivat muokata:
 
 - kurssin kysely: kurssin vastuuopettajat ja hallintohenkilöt sekä kurssin koulutusohjelman hallinnoijat (ks. [Roolit ja oikeudet](/guide/roles#course-roles))
-- välipalaute: kurssin vastuuopettajat
+- välipalaute: kurssin vastuuopettajat ja koulutusohjelman hallinnoijat
 - koulutusohjelman kysely: sen vastuuhenkilöt ja koulutusohjelman hallinnoijat.
 
 ## Kysymystyypit {#question-types}

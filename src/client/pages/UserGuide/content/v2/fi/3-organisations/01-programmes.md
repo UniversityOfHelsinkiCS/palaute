@@ -42,11 +42,8 @@ Missä kohdassa kyselyä opiskelija näkee koulutusohjelman kysymykset, kerrotaa
 
 Uusi koulutusohjelman kysymys on [[common:notPublic]]: sen vastaukset näkevät vain kurssin vastuuopettajat ja koulutusohjelman hallinnoijat. Jos haluat asteikko- tai valintakysymyksen vastausten näkyvän myös kurssin opiskelijoille ja opettajille:
 
-<!-- Remove the reload step once a new programme question's publicity works without it (until a reload, its card shows Public and has no id). -->
-
-1. Lataa sivu uudelleen kysymyksen tallentamisen jälkeen.
-2. Valitse kysymyksen [[common:notPublic]]-painike.
-3. Valitse [[common:publicInfo]].
+1. Valitse kysymyksen [[common:notPublic]]-painike.
+2. Valitse [[common:publicInfo]].
 
 Kun koulutusohjelma on tehnyt kysymyksestä julkisen, se on julkinen kaikilla koulutusohjelman kursseilla, eikä opettaja voi muuttaa sitä. Avointen kysymysten vastauksia ei voi tehdä julkisiksi täällä; vastuuopettaja voi tehdä ne julkisiksi omalla kurssillaan kyselyn päätyttyä. Katso [Kuka näkee mitkäkin vastaukset](/guide/results#public-answers).
 

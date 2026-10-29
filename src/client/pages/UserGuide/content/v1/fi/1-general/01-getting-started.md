@@ -41,7 +41,7 @@ Avaa kysely valitsemalla [[navBar:myCourses]] ja sieltä kurssi. Kyselyn sivulla
 Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat asiat voi tehdä Norpassa tai korjata Sisussa, mutta ota yhteyttä tukeen, jos tarvitset:
 
 - päättyneen kurssikyselyn avaamista uudelleen tai sen päivämäärien muuttamista;
-- kyselyä kurssityypille, joka ei saa sitä automaattisesti, kuten itsenäiselle työskentelylle, esseelle, harjoittelulle tai pro gradu -tutkielmalle (ei tenteille);
+- kyselyä kurssityypille, joka ei saa sitä automaattisesti, kuten itsenäisen työskentelyn projektille, esseelle, harjoittelulle tai pro gradu -tutkielmalle (ei tenteille);
 - apua, kun kurssi, opettaja tai opiskelija puuttuu Norpasta vielä muutama päivä sen jälkeen, kun tiedot on korjattu Sisussa (Sisun muutokset näkyvät yleensä seuraavana aamuna; katso [Päivitykset Sisusta](/guide/course-surveys#sisu-updates));
 - apua virheeseen, joka ei mene ohi.
 

@@ -21,7 +21,7 @@ Kysely on joko tuleva, auki tai sulkeutunut, ja tilan ratkaisevat vain kyselyn p
 3. Kysely sulkeutuu itsestään sulkeutumispäivänä klo 23.59 (Suomen aikaa).
 4. Sulkeutumisen jälkeen vastaukset säilyvät. Vastuuopettajat voivat kirjoittaa opiskelijoille [vastapalautteen](/guide/counter-feedback) 12 kuukauden ajan. Kurssikyselyn vastuuopettajat ja hallintohenkilöt sekä koulutusohjelman kyselyn vastuuhenkilöt saavat seuraavana päivänä muistutuksen, jos kyselyyn on vastattu eikä vastapalautetta ole vielä kirjoitettu.
 
-Norppa lähettää kyselyjä koskevat automaattiset sähköpostinsa kerran päivässä klo 11.15. Välipalautteesta Norppa ei lähetä sähköposteja lainkaan, eikä koulutusohjelman kyselyistä opiskelijoille. Tarkemmin: [muistutus ennen avautumista](/guide/schedule#feedback-period), [opiskelijoiden sähköposti](/guide/collecting-answers#student-emails) ja [vastapalautemuistutus](/guide/counter-feedback#write).
+Norppa lähettää kyselyjä koskevat automaattiset sähköpostinsa kerran päivässä klo 11.15. Välipalautteesta Norppa ei lähetä automaattisia sähköposteja lainkaan, eikä koulutusohjelman kyselyistä opiskelijoille. Tarkemmin: [muistutus ennen avautumista](/guide/schedule#feedback-period), [opiskelijoiden sähköposti](/guide/collecting-answers#student-emails) ja [vastapalautemuistutus](/guide/counter-feedback#write).
 
 ## Neljänlaista palautetta {#survey-types}
 

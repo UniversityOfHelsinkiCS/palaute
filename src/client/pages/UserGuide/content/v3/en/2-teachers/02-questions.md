@@ -28,7 +28,7 @@ The editing dialog of a scale or choice question also lets you choose whether it
 Who can edit the questions:
 
 - Course survey: the course's responsible teachers and administrative persons, and the admins of the course's degree programme. See [Roles and rights](/guide/roles#course-roles).
-- Interim feedback: the course's responsible teachers.
+- Interim feedback: the course's responsible teachers and the programme's admins.
 - Programme survey: its responsible persons and the programme's admins.
 
 ## Question types {#question-types}

@@ -7,7 +7,7 @@ Kurssin kyselyssä on aina [yliopistotason kysymykset](/guide/course-surveys#uni
 Kysymyksiä voivat muokata:
 
 - kurssin kysely: kurssin vastuuopettajat ja hallintohenkilöt sekä kurssin koulutusohjelman hallinnoijat (ks. [Roolit ja oikeudet](/guide/roles#course-roles))
-- välipalaute: kurssin vastuuopettajat
+- välipalaute: kurssin vastuuopettajat ja koulutusohjelman hallinnoijat
 - koulutusohjelman kysely: sen vastuuhenkilöt ja koulutusohjelman hallinnoijat.
 
 Kysymyksiä voi muokata vain siihen asti, kun kysely aukeaa. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, jotta kaikki opiskelijat vastaavat samoihin kysymyksiin. Kun kysely on sulkeutunut, välilehteä ei enää näy.

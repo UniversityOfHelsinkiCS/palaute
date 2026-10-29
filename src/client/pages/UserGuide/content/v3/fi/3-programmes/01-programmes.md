@@ -32,7 +32,7 @@ Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, kun taas luk
 
 ## Kurssikyselyt hallinnoijana {#course-surveys}
 
-Admin-oikeuksilla voit toimia myös koulutusohjelmasi kurssikyselyissä. Avaa kysely [[organisationSettings:courseRealisationsTab]]-välilehdeltä valitsemalla kurssi. Toimit kyselyn sivulla samoin kuin vastuuopettajat, ja voit:
+Admin-oikeuksilla voit toimia myös koulutusohjelmasi kurssikyselyissä. Avaa kysely [[organisationSettings:courseRealisationsTab]]-välilehdeltä valitsemalla kurssi. Voit:
 
 - muokata kysymyksiä ennen kyselyn avautumista; katso [Kysymysten muokkaaminen](/guide/questions#edit-questions)
 - piilottaa avoimia vastauksia; katso [Avointen vastausten piilottaminen](/guide/results#hide-answers)
@@ -40,4 +40,4 @@ Admin-oikeuksilla voit toimia myös koulutusohjelmasi kurssikyselyissä. Avaa ky
 - nähdä, ketkä ovat vastanneet; katso [Ketkä ovat vastanneet](/guide/results#who-answered)
 - ottaa jatkuvan palautteen käyttöön ja lukea sitä; katso [Jatkuva palaute](/guide/during-the-course#continuous-feedback).
 
-Koulutusohjelman oikeudet eivät tee sinusta kurssin opettajaa: kurssikyselyn päivämäärien muuttamiseen tai vastapalautteen kirjoittamiseen tarvitset vastuuopettajan roolin Sisussa.
+Koulutusohjelman oikeudet eivät tee sinusta kurssin opettajaa: kurssikyselyn päivämäärien muuttamiseen tai vastapalautteen kirjoittamiseen tarvitset vastuuopettajan roolin Sisussa. Samoin vain vastuuopettajat voivat muuttaa kysymysten näkyvyyttä, luoda välipalautteita ja vastata jatkuvaan palautteeseen.

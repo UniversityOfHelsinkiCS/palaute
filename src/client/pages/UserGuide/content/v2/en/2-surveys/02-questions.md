@@ -7,7 +7,7 @@ A course survey has three kinds of questions: the [university level questions](#
 Who can edit the questions:
 
 - Course survey: the course's responsible teachers and administrative persons, and the admins of the course's degree programme. See [Roles and rights](/guide/roles#course-roles).
-- Interim feedback: the course's responsible teachers.
+- Interim feedback: the course's responsible teachers and the programme's admins.
 - Programme survey: its responsible persons and the programme's admins.
 
 You can edit the questions only until the survey opens. After that the [[feedbackTargetView:surveyQuestionsTab]] tab is greyed out, so that all students answer the same questions, and once the survey has closed, the tab is gone.

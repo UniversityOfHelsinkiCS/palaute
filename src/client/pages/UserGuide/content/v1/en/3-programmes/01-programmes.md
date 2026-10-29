@@ -42,11 +42,8 @@ Where in the survey students see the programme questions is described in [The or
 
 A new programme question is [[common:notPublic]]: only the course's responsible teachers and the programme's admins see its answers. To show the answers of a scale or choice question to the course's students and teachers as well:
 
-<!-- Remove the reload step once a new programme question's publicity works without it (until a reload, its card shows Public and has no id). -->
-
-1. Reload the page after saving the question.
-2. Click the question's [[common:notPublic]] button.
-3. Choose [[common:publicInfo]].
+1. Click the question's [[common:notPublic]] button.
+2. Choose [[common:publicInfo]].
 
 When the programme has made a question public, it's public on every course of the programme, and teachers can't change that. Answers to open programme questions can't be made public here; a responsible teacher can make them public on their own course after it has closed. See [Changing who sees the answers](/guide/results#change-visibility).
 

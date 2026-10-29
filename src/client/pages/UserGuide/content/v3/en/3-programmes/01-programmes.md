@@ -32,7 +32,7 @@ The [[organisationSettings:openQuestionsTab]] tab (admins only) collects in one 
 
 ## Course surveys as an admin {#course-surveys}
 
-With admin rights, you can also act on your programme's course surveys. Open a survey by choosing the course on the [[organisationSettings:courseRealisationsTab]] tab. You work on the survey's page the same way responsible teachers do, and can:
+With admin rights, you can also act on your programme's course surveys. Open a survey by choosing the course on the [[organisationSettings:courseRealisationsTab]] tab. You can:
 
 - edit the questions before the survey opens; see [Editing the questions](/guide/questions#edit-questions)
 - hide open answers; see [Hiding open answers](/guide/results#hide-answers)
@@ -40,4 +40,4 @@ With admin rights, you can also act on your programme's course surveys. Open a s
 - see who has answered; see [Who has answered](/guide/results#who-answered)
 - switch on continuous feedback and read it; see [Continuous feedback](/guide/during-the-course#continuous-feedback).
 
-Programme rights don't make you a teacher on a course: to change a course survey's dates or write counter feedback, you need the responsible teacher role in Sisu.
+Programme rights don't make you a teacher on a course: to change a course survey's dates or write counter feedback, you need the responsible teacher role in Sisu. Likewise, only responsible teachers can change whether questions are public, create interim feedback and reply to continuous feedback.

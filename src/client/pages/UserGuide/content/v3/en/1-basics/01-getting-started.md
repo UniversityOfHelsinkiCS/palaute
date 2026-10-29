@@ -21,7 +21,7 @@ Every survey is upcoming, open or closed, and only its dates decide which. There
 3. It closes by itself at 23:59 on its closing date (Finnish time).
 4. After it has closed, the answers stay available. For 12 months, the responsible teachers can write [counter feedback](/guide/counter-feedback) to the students. The day after closing, the responsible teachers and administrative persons of a course survey, and the responsible persons of a programme survey, get a reminder if the survey got answers and has no counter feedback yet.
 
-Norppa sends its automatic emails about surveys once a day, at 11:15. It sends none about interim feedback, and none to the students of a programme survey. In more detail: [the reminder before opening](/guide/schedule#feedback-period), [the students' email](/guide/collecting-answers#student-emails) and [the counter feedback reminder](/guide/counter-feedback#write).
+Norppa sends its automatic emails about surveys once a day, at 11:15. It sends no automatic emails about interim feedback, and none to the students of a programme survey. In more detail: [the reminder before opening](/guide/schedule#feedback-period), [the students' email](/guide/collecting-answers#student-emails) and [the counter feedback reminder](/guide/counter-feedback#write).
 
 ## Four kinds of feedback {#survey-types}
 

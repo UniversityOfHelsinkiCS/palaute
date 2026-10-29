@@ -23,10 +23,11 @@ Oletuksena:
 - Opettajan lisäämät asteikko- ja valintakysymykset ovat julkisia.
 - Avoimet kysymykset eivät ole julkisia.
 - Toisesta kyselystä kopioidut ja kurssin edelliseltä toteutukselta siirtyneet kysymykset eivät ole julkisia.
-- Ryhmittelykysymyksen vastaukset eivät ole julkisia.
 - Kysymykset, jotka yliopisto tai koulutusohjelma on asettanut julkisiksi, ovat aina julkisia, eikä sitä voi muuttaa. Näitä ovat yliopistotason asteikko- ja valintakysymykset.
 
-Vastuuopettaja voi muuttaa oman kysymyksensä näkyvyyttä. Avoimen kysymyksen voi tehdä julkiseksi vasta kyselyn sulkeuduttua, koska vastauksissa voi olla henkilötietoja. Katso [Vastausten näkyvyyden muuttaminen](/guide/results#visibility) ja koulutusohjelman kysymyksistä [Vastausten julkisuus](/guide/programme-questions#public).
+Ryhmittelykysymyksen vastaukset eivät ole koskaan julkisia, eikä sitä voi muuttaa.
+
+Vastuuopettaja voi muuttaa kurssillaan muiden kysymysten näkyvyyttä: omien kysymystensä lisäksi esimerkiksi yliopistotason avoimen kysymyksen ja niiden koulutusohjelman kysymysten, joita koulutusohjelma ei ole tehnyt julkisiksi. Avoimen kysymyksen voi tehdä julkiseksi vasta kyselyn sulkeuduttua, koska vastauksissa voi olla henkilötietoja. Katso [Vastausten näkyvyyden muuttaminen](/guide/results#visibility) ja koulutusohjelman kysymyksistä [Vastausten julkisuus](/guide/programme-questions#public).
 
 ## Alle viiden opiskelijan kurssit {#small-courses}
 
