@@ -36,9 +36,9 @@ Jatkuvassa palautteessa ei ole kysymyksiä, ja vastuuopettajat vastaavat jokaise
 
 Yläreunan valikossa näkyvät vain sinua koskevat kohdat:
 
+- [[navBar:myProgrammes]] tai [[navBar:myOrganisations]]: koulutusohjelmat ja tiedekunnat, joihin sinulla on oikeudet. Kohdan nimi on [[navBar:myProgrammes]], jos ne kaikki ovat kandidaatti- tai maisteriohjelmia.
 - [[navBar:myCourses]]: kurssiesi kyselyt sekä koulutusohjelman kyselyt, joiden vastuuhenkilö olet.
 - [[navBar:courseSummary]]: kurssiesi palautetilastot sekä niiden koulutusohjelmien ja tiedekuntien tilastot, joihin sinulla on oikeudet.
-- [[navBar:myProgrammes]] tai [[navBar:myOrganisations]]: koulutusohjelmat ja tiedekunnat, joihin sinulla on oikeudet. Kohdan nimi on [[navBar:myProgrammes]], jos ne kaikki ovat kandidaatti- tai maisteriohjelmia.
 - [[navBar:myFeedbacks]]: kyselyt, joihin voit itse vastata opiskelijana.
 - [[navBar:browseCourses]]: koulutusohjelman kurssit alkamispäivän mukaan ja linkit niiden sivuille Opintopalveluissa.
 - [[navBar:feedback]]: palaute itse Norpasta sen kehittäjille.

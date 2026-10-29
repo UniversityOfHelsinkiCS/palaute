@@ -26,9 +26,9 @@ Continuous feedback has no questions, and the responsible teachers reply to each
 
 The menu at the top shows only the items that concern you:
 
+- [[navBar:myProgrammes]] or [[navBar:myOrganisations]]: the degree programmes and faculties you have rights to. The item is called [[navBar:myProgrammes]] if all of them are bachelor's or master's programmes.
 - [[navBar:myCourses]]: the surveys of your courses, and programme surveys you're responsible for.
 - [[navBar:courseSummary]]: feedback statistics of your courses, and of the degree programmes and faculties you have rights to.
-- [[navBar:myProgrammes]] or [[navBar:myOrganisations]]: the degree programmes and faculties you have rights to. The item is called [[navBar:myProgrammes]] if all of them are bachelor's or master's programmes.
 - [[navBar:myFeedbacks]]: surveys you can answer yourself as a student.
 - [[navBar:browseCourses]]: a degree programme's courses by start date, with links to their pages in the Studies Service.
 - [[navBar:feedback]]: feedback about Norppa itself to its developers.
