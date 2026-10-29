@@ -14,7 +14,7 @@ The page's tabs depend on your rights. With read rights you see:
 
 Admins, i.e. the programme director, others with admin rights from the IAM groups and the programme's feedback liaisons, also see:
 
-- [[organisationSettings:settingsTab]]: feedback liaisons, who sees the respondents, and which courses collect feedback. See [Settings](/guide/settings).
+- [[organisationSettings:settingsTab]]: feedback liaisons, who sees the respondents, and which courses collect feedback. See [Programme settings](/guide/settings).
 - [[organisationSettings:openQuestionsTab]]: the answers to the open questions of all the programme's courses. See [Open questions](#open-questions).
 - [[organisationSettings:surveyTab]] (on a faculty's page [[organisationSettings:surveyFacultyTab]]): questions added to all the programme's course surveys. See [Programme questions](/guide/programme-questions).
 - [[organisationSettings:organisationSurveysTab]] (on a faculty's page [[organisationSettings:organisationFacultySurveysTab]]): the programme's own surveys. See [Programme surveys](/guide/programme-surveys).

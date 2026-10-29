@@ -14,7 +14,7 @@ Sivun välilehdet riippuvat oikeuksistasi. Lukuoikeuksilla näet:
 
 Hallinnoijat eli koulutusohjelman johtaja, muut IAM-ryhmien kautta hallinnointioikeudet saaneet ja koulutusohjelman palautevastaavat näkevät lisäksi:
 
-- [[organisationSettings:settingsTab]]: palautevastaavat, vastanneiden näkyvyys ja se, millä kursseilla palautetta kerätään. Katso [Asetukset](/guide/settings).
+- [[organisationSettings:settingsTab]]: palautevastaavat, vastanneiden näkyvyys ja se, millä kursseilla palautetta kerätään. Katso [Koulutusohjelman asetukset](/guide/settings).
 - [[organisationSettings:openQuestionsTab]]: kaikkien koulutusohjelman kurssien avointen kysymysten vastaukset. Katso [Avoimet kysymykset](#open-questions).
 - [[organisationSettings:surveyTab]] (tiedekunnan sivulla [[organisationSettings:surveyFacultyTab]]): kysymykset, jotka lisätään kaikkiin koulutusohjelman kurssikyselyihin. Katso [Koulutusohjelman kysymykset](/guide/programme-questions).
 - [[organisationSettings:organisationSurveysTab]] (tiedekunnan sivulla [[organisationSettings:organisationFacultySurveysTab]]): koulutusohjelman omat kyselyt. Katso [Koulutusohjelman kyselyt](/guide/programme-surveys).

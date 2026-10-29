@@ -1,4 +1,4 @@
-# Settings
+# Programme settings
 
 The [[organisationSettings:settingsTab]] tab of the programme's page (admins only) has the feedback liaisons, [[organisationSettings:generalSettings]] and [[organisationSettings:courseSettings]]. Every change is saved at once.
 
