@@ -1,5 +1,5 @@
 import { Box, Link, Typography } from '@mui/material'
-import { useTranslation } from 'react-i18next'
+import { Trans, useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
 import type { GuidePage } from './content'
@@ -55,7 +55,19 @@ const GuideHome = ({ pages }: { pages: GuidePage[] }) => {
         {t('userGuide:title')}
       </Typography>
       <Typography variant="body1" sx={{ mb: videos ? 1 : 3 }}>
-        {t('userGuide:homeIntro')}
+        <Trans
+          i18nKey="userGuide:homeIntro"
+          components={{
+            gettingStarted: (
+              <Link
+                key="gettingStarted"
+                component={RouterLink}
+                to="/guide/getting-started"
+                sx={focusIndicatorStyle()}
+              />
+            ),
+          }}
+        />
       </Typography>
       {videos && (
         <Typography variant="body1" sx={{ mb: 3 }}>

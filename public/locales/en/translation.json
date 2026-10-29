@@ -886,7 +886,7 @@
     "pageNavigation": "Previous and next page",
     "editOnGitHub": "Edit on GitHub",
     "onThisPage": "On this page",
-    "homeIntro": "Choose what you want to read about. If Norppa is new to you, start with Getting started.",
+    "homeIntro": "Choose what you want to read about. If Norppa is new to you, start with <gettingStarted>Getting started</gettingStarted>.",
     "homeVideos": "If you'd rather watch videos, they're collected on one page:",
     "groupDescriptions": {
       "v3": {

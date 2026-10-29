@@ -871,7 +871,7 @@
     "pageNavigation": "Föregående och nästa sida",
     "editOnGitHub": "Redigera på GitHub",
     "onThisPage": "På den här sidan",
-    "homeIntro": "Välj vad du vill läsa om. Om Norppa är nytt för dig, börja med Getting started.",
+    "homeIntro": "Välj vad du vill läsa om. Om Norppa är nytt för dig, börja med <gettingStarted>Getting started</gettingStarted>.",
     "homeVideos": "Om du hellre tittar på videor finns de samlade på en sida:",
     "groupDescriptions": {
       "v3": {
