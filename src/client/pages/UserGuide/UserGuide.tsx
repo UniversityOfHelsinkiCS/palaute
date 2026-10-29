@@ -40,7 +40,9 @@ const GuideLayout = ({ pages, page, canEdit, version, onVersionChange }: GuideLa
       sx={{
         display: 'grid',
         gap: { xs: 2, md: 6 },
-        gridTemplateColumns: { xs: '1fr', md: '16rem minmax(0, 1fr)', lg: '16rem minmax(0, 1fr) 14rem' },
+        // The text's column is only as wide as its lines, so that the page's contents stay next to it
+        gridTemplateColumns: { xs: '1fr', md: '16rem minmax(0, 1fr)', lg: '16rem minmax(0, 75ch) 14rem' },
+        justifyContent: { lg: 'center' },
         alignItems: 'start',
       }}
     >
