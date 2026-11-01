@@ -22,6 +22,19 @@ export const getLatestFeedbackTarget = courseRealisations => {
 export const hasOngoingInterimFeedbacks = interimFeedbacktargets =>
   interimFeedbacktargets.some(interimFeedbackTarget => feedbackTargetIsOpen(interimFeedbackTarget))
 
+const isMissingFeedbackResponse = feedbackTarget =>
+  feedbackTargetIsEnded(feedbackTarget) &&
+  !feedbackTargetIsOld(feedbackTarget) &&
+  (feedbackTarget.feedbackCount > 0 || Boolean(feedbackTarget.feedbackResponseGiven)) &&
+  !feedbackTarget.feedbackResponseSent
+
+export const courseUnitNeedsAttention = courseUnit =>
+  courseUnit.courseRealisations.some(
+    courseRealisation =>
+      hasOngoingInterimFeedbacks(courseRealisation.interimFeedbackTargets) ||
+      courseRealisation.feedbackTargets.some(isMissingFeedbackResponse)
+  )
+
 export const getGroupedCourseUnits = courseUnits => {
   const normalizedCourseUnits = courseUnits ?? []
 

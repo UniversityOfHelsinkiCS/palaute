@@ -1,9 +1,10 @@
 import { useQuery } from '@tanstack/react-query'
-import { orderBy, sortBy } from 'lodash-es'
+import { orderBy } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../util/apiClient'
 import { getLanguageValue } from '../../util/languageUtils'
+import { courseUnitNeedsAttention } from './utils/utils'
 
 const defaultCacheTime = 900000
 
@@ -26,7 +27,8 @@ export const useTeacherCourseUnits = (params, options = {}) => {
 
     const orderFn = getOrderFnByStatus(params.status)
 
-    return orderBy(data, orderFn, 'asc')
+    // Courses with an ongoing interim feedback or a missing feedback response come first
+    return orderBy(data, [courseUnitNeedsAttention, orderFn], ['desc', 'asc'])
   }
 
   const { data: courseUnits, ...rest } = useQuery({
@@ -46,7 +48,7 @@ export const useTeacherOrganisatioSurveys = (params, options = {}) => {
   const queryFn = async () => {
     const { data } = await apiClient.get('/my-teaching/courses', { params: { ...params, isOrganisationSurvey: true } })
 
-    return sortBy(data, cu => getLanguageValue(cu.name, i18n.language))
+    return orderBy(data, [courseUnitNeedsAttention, cu => getLanguageValue(cu.name, i18n.language)], ['desc', 'asc'])
   }
 
   const { data: courseUnits, ...rest } = useQuery({
