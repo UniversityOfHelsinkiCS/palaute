@@ -1,6 +1,7 @@
 import { lightFormat } from 'date-fns'
 import { orderBy } from 'lodash-es'
 
+import feedbackTargetCourseIsOngoing from '../../../util/feedbackTargetCourseIsOngoing'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOld from '../../../util/feedbackTargetIsOld'
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
@@ -14,11 +15,19 @@ export const isMissingFeedbackResponse = feedbackTarget =>
   (feedbackTarget.feedbackCount > 0 || Boolean(feedbackTarget.feedbackResponseGiven)) &&
   !feedbackTarget.feedbackResponseSent
 
+const hasOngoingContinuousFeedback = (feedbackTarget, courseRealisation) =>
+  feedbackTarget.continuousFeedbackEnabled &&
+  feedbackTargetCourseIsOngoing({ courseRealisation, opensAt: feedbackTarget.opensAt }) &&
+  !feedbackTargetIsOpen(feedbackTarget)
+
 export const courseUnitNeedsAttention = courseUnit =>
   courseUnit.courseRealisations.some(
     courseRealisation =>
       hasOngoingInterimFeedbacks(courseRealisation.interimFeedbackTargets) ||
-      courseRealisation.feedbackTargets.some(isMissingFeedbackResponse)
+      courseRealisation.feedbackTargets.some(
+        feedbackTarget =>
+          isMissingFeedbackResponse(feedbackTarget) || hasOngoingContinuousFeedback(feedbackTarget, courseRealisation)
+      )
   )
 
 export const getGroupedCourseUnits = courseUnits => {

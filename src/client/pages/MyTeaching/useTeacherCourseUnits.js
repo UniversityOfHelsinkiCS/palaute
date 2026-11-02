@@ -27,7 +27,7 @@ export const useTeacherCourseUnits = (params, options = {}) => {
 
     const orderFn = getOrderFnByStatus(params.status)
 
-    // Courses with an ongoing interim feedback or a missing feedback response come first
+    // Courses with an ongoing interim feedback, ongoing continuous feedback or a missing feedback response come first
     return orderBy(data, [courseUnitNeedsAttention, orderFn], ['desc', 'asc'])
   }
 
