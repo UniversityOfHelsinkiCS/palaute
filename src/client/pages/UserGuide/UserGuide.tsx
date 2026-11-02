@@ -3,14 +3,13 @@ import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 
-import type { GuidePage, GuideVersion } from './content'
+import type { GuidePage } from './content'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import useLocalStorageState from '../../hooks/useLocalStorageState'
 import canSeeUserGuide from './canSeeUserGuide'
-import { getGuideHome, getGuidePages, isGuideVersion } from './content'
+import { getGuideHome, getGuidePages } from './content'
 import GuideHome from './GuideHome'
 import GuideMarkdown from './GuideMarkdown'
 import GuideMenu from './GuideMenu'
@@ -28,11 +27,9 @@ type GuideLayoutProps = {
   // Empty when not searching
   query: string
   canEdit: boolean
-  version: GuideVersion
-  onVersionChange: (version: GuideVersion) => void
 }
 
-const GuideLayout = ({ pages, home, page, query, canEdit, version, onVersionChange }: GuideLayoutProps) => {
+const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) => {
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
   useHeaderHeight()
@@ -56,7 +53,7 @@ const GuideLayout = ({ pages, home, page, query, canEdit, version, onVersionChan
     >
       <GlobalStyles styles={{ html: { scrollPaddingTop: BELOW_HEADER } }} />
       <Title>{title}</Title>
-      <GuideMenu pages={pages} current={page} query={query} version={version} onVersionChange={onVersionChange} />
+      <GuideMenu pages={pages} current={page} query={query} />
       {page && (
         <>
           <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
@@ -84,32 +81,26 @@ const GuideLayout = ({ pages, home, page, query, canEdit, version, onVersionChan
   )
 }
 
-const DEFAULT_VERSION: GuideVersion = 'v3'
-
 const UserGuide = () => {
   const { i18n } = useTranslation()
   const { authorizedUser, isLoading } = useAuthorizedUser()
   const { slug } = useParams()
   const [searchParams] = useSearchParams()
-  const [storedVersion, setVersion] = useLocalStorageState<GuideVersion>('userGuideVersion', DEFAULT_VERSION)
-  const version = isGuideVersion(storedVersion) ? storedVersion : DEFAULT_VERSION
 
   if (isLoading) return <LoadingProgress />
   if (!canSeeUserGuide(authorizedUser)) return <Navigate to="/" replace />
 
-  const pages = getGuidePages(version, i18n.language)
+  const pages = getGuidePages(i18n.language)
   const page = slug ? pages.find(candidate => candidate.slug === slug) : undefined
   if (slug && !page) return <Navigate to="/guide" replace />
 
   return (
     <GuideLayout
       pages={pages}
-      home={getGuideHome(version, i18n.language)}
+      home={getGuideHome(i18n.language)}
       page={page}
       query={page ? '' : (searchParams.get('q')?.trim() ?? '')}
       canEdit={authorizedUser?.isAdmin === true}
-      version={version}
-      onVersionChange={setVersion}
     />
   )
 }

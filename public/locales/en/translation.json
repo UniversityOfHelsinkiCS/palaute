@@ -894,25 +894,14 @@
     "noResults": "No results for “{{query}}”",
     "notFound": "Didn't find what you were looking for?",
     "groupDescriptions": {
-      "v3": {
-        "basics": "For everyone: how a survey works, roles and rights, who sees the answers and the course summary.",
-        "teachers": "Your course's survey from its schedule to counter feedback, and feedback during the course. The same instructions apply to administrative persons and to the responsible persons of programme surveys.",
-        "programmes": "Following a degree programme's or faculty's feedback, programme questions, the programme's own surveys and settings."
-      },
-      "general": "For everyone: how Norppa and its surveys work, roles, who sees the answers, emails, the course summary and support.",
-      "teachers": "Working with a survey, from its dates to counter feedback. The same instructions apply to administrative persons and to the responsible persons of programme surveys.",
-      "programmes": "The degree programme's or faculty's page, its settings and questions, and the programme's own surveys.",
-      "basics": "What Norppa is and how a survey works, roles and rights, and solutions to the most common problems.",
-      "surveys": "Every stage of a survey from its schedule to counter feedback, the course summary and continuous feedback. The same instructions apply to course surveys, interim feedback and programme surveys.",
-      "organisations": "The degree programme's or faculty's page, its settings and questions, and the programme's own surveys."
+      "basics": "For everyone: how a survey works, roles and rights, who sees the answers and the course summary.",
+      "teachers": "Your course's survey from its schedule to counter feedback, and feedback during the course. The same instructions apply to administrative persons and to the responsible persons of programme surveys.",
+      "programmes": "Following a degree programme's or faculty's feedback, programme questions, the programme's own surveys and settings."
     },
     "groups": {
-      "general": "General",
       "teachers": "For responsible teachers",
       "programmes": "For degree programmes",
-      "basics": "Basics",
-      "surveys": "Surveys",
-      "organisations": "Degree programmes"
+      "basics": "Basics"
     }
   }
 }

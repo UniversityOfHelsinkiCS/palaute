@@ -5,7 +5,6 @@ import type { GuidePage } from './content'
 import { indexPages, search, searchTerms } from './search'
 
 const page = (slug: string, markdown: string): GuidePage => ({
-  version: 'v3',
   language: 'en',
   slug,
   title: /^# (.+)$/m.exec(markdown)?.[1] ?? slug,

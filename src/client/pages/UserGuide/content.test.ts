@@ -6,7 +6,7 @@ import fiHy from '../../../../public/locales/fi/hy.json'
 import fi from '../../../../public/locales/fi/translation.json'
 import svHy from '../../../../public/locales/sv/hy.json'
 import sv from '../../../../public/locales/sv/translation.json'
-import { GUIDE_HOMES, GUIDE_PAGES, GUIDE_VERSIONS, LABEL, VIDEO } from './content'
+import { GUIDE_HOMES, GUIDE_PAGES, LABEL, VIDEO } from './content'
 
 // Checks what editors can get wrong in the Markdown files (see content/README.md)
 
@@ -36,24 +36,23 @@ const REPOSITORY_FILES = import.meta.glob('/src/**/*.md')
 
 const videosOf = (markdown: string) => markdown.split('\n').flatMap(line => VIDEO.exec(line)?.[1] ?? [])
 
-describe.each(GUIDE_VERSIONS)('user guide content, %s', version => {
-  const GUIDE = GUIDE_PAGES[version]
+describe('user guide content', () => {
   // The home page's top too, which isn't in the list of pages
-  const allPages = (['fi', 'en'] as const).flatMap(language => [...GUIDE[language], GUIDE_HOMES[version][language]])
+  const allPages = (['fi', 'en'] as const).flatMap(language => [...GUIDE_PAGES[language], GUIDE_HOMES[language]])
 
   it('has the same pages, section ids and videos in Finnish and English, so links work in both', () => {
-    expect(GUIDE.fi.length).toBeGreaterThan(0)
-    expect(GUIDE.fi.map(page => page.slug)).toEqual(GUIDE.en.map(page => page.slug))
-    expect(GUIDE.fi.map(page => page.group)).toEqual(GUIDE.en.map(page => page.group))
-    for (const [index, page] of GUIDE.fi.entries()) {
-      expect(anchorsOf(page.markdown), page.slug).toEqual(anchorsOf(GUIDE.en[index].markdown))
-      expect(videosOf(page.markdown), page.slug).toEqual(videosOf(GUIDE.en[index].markdown))
+    expect(GUIDE_PAGES.fi.length).toBeGreaterThan(0)
+    expect(GUIDE_PAGES.fi.map(page => page.slug)).toEqual(GUIDE_PAGES.en.map(page => page.slug))
+    expect(GUIDE_PAGES.fi.map(page => page.group)).toEqual(GUIDE_PAGES.en.map(page => page.group))
+    for (const [index, page] of GUIDE_PAGES.fi.entries()) {
+      expect(anchorsOf(page.markdown), page.slug).toEqual(anchorsOf(GUIDE_PAGES.en[index].markdown))
+      expect(videosOf(page.markdown), page.slug).toEqual(videosOf(GUIDE_PAGES.en[index].markdown))
     }
   })
 
   // The address has only the slug, not the group
   it('has a unique slug for each page', () => {
-    const slugs = GUIDE.en.map(page => page.slug)
+    const slugs = GUIDE_PAGES.en.map(page => page.slug)
     expect(slugs.filter((slug, index) => slugs.indexOf(slug) !== index)).toEqual([])
   })
 
@@ -89,7 +88,7 @@ describe.each(GUIDE_VERSIONS)('user guide content, %s', version => {
   it.each(allPages)(
     '$language/$slug links only to guide pages and sections that exist, also on the same page',
     ({ language, markdown }) => {
-      const pages = GUIDE[language]
+      const pages = GUIDE_PAGES[language]
       const links = [...markdown.matchAll(/\]\(((?:\/guide|#)[^)\s]*)\)/g)].map(match => match[1])
       const broken = links.filter(link => {
         if (link.startsWith('#')) return !anchorsOf(markdown).includes(link.slice(1))
@@ -111,7 +110,7 @@ describe.each(GUIDE_VERSIONS)('user guide content, %s', version => {
   it('shows only videos that have a scenario', () => {
     // Only the file names, the scenarios aren't loaded
     const scenarios = Object.keys(import.meta.glob('../../../../e2e/manual/scenarios/*.manual.ts'))
-    const missing = GUIDE.en
+    const missing = GUIDE_PAGES.en
       .flatMap(page => videosOf(page.markdown))
       .filter(slug => !scenarios.some(file => file.endsWith(`/${slug}.manual.ts`)))
     expect(missing).toEqual([])

@@ -879,25 +879,14 @@
     "noResults": "Inga träffar för ”{{query}}”",
     "notFound": "Hittade du inte det du letade efter?",
     "groupDescriptions": {
-      "v3": {
-        "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren och kurssammanfattningen.",
-        "teachers": "Kursens enkät från tidsschema till motrespons samt respons under kursen. Samma instruktioner gäller administrativa personer och de ansvariga för utbildningsprogrammens enkäter.",
-        "programmes": "Att följa utbildningsprogrammets eller fakultetens respons, programmets frågor, programmets egna enkäter och inställningar."
-      },
-      "general": "För alla: hur Norppa och enkäterna fungerar, roller, vem som ser svaren, e-post, kurssammanfattningen och support.",
-      "teachers": "Att arbeta med en enkät, från datum till motrespons. Samma instruktioner gäller administrativa personer och de ansvariga för utbildningsprogrammens enkäter.",
-      "programmes": "Utbildningsprogrammets eller fakultetens sida, dess inställningar och frågor samt programmets egna enkäter.",
-      "basics": "Vad Norppa är och hur en enkät fungerar, roller och rättigheter samt lösningar på de vanligaste problemen.",
-      "surveys": "Enkätens alla skeden från tidsschema till motrespons, kurssammanfattningen och kontinuerlig respons. Samma instruktioner gäller kursenkäter, mellanrespons och utbildningsprogrammens enkäter.",
-      "organisations": "Utbildningsprogrammets eller fakultetens sida, dess inställningar och frågor samt programmets egna enkäter."
+      "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren och kurssammanfattningen.",
+      "teachers": "Kursens enkät från tidsschema till motrespons samt respons under kursen. Samma instruktioner gäller administrativa personer och de ansvariga för utbildningsprogrammens enkäter.",
+      "programmes": "Att följa utbildningsprogrammets eller fakultetens respons, programmets frågor, programmets egna enkäter och inställningar."
     },
     "groups": {
-      "general": "Allmänt",
       "teachers": "För ansvariga lärare",
       "programmes": "För utbildningsprogram",
-      "basics": "Grunder",
-      "surveys": "Enkäter",
-      "organisations": "Utbildningsprogram"
+      "basics": "Grunder"
     }
   }
 }

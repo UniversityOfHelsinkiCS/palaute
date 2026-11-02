@@ -6,14 +6,13 @@ import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 
-import type { GuidePage, GuideVersion } from './content'
+import type { GuidePage } from './content'
 
 import { NorButton } from '../../components/common/NorButton'
 import { FOCUS_INDICATOR_REACH, focusIndicatorStyle } from '../../util/accessibility'
 import PageIcon from './PageIcon'
 import SearchField from './SearchField'
 import { HEADER_BOTTOM, PAGE_TOP_GAP } from './useHeaderHeight'
-import VersionToggle from './VersionToggle'
 
 const list = { listStyle: 'none', m: 0, p: 0 }
 
@@ -75,11 +74,9 @@ type GuideMenuProps = {
   pages: GuidePage[]
   current?: GuidePage
   query: string
-  version: GuideVersion
-  onVersionChange: (version: GuideVersion) => void
 }
 
-const GuideMenu = ({ pages, current, query, version, onVersionChange }: GuideMenuProps) => {
+const GuideMenu = ({ pages, current, query }: GuideMenuProps) => {
   const { t } = useTranslation()
   const { key } = useLocation()
   const listId = useId()
@@ -107,7 +104,6 @@ const GuideMenu = ({ pages, current, query, version, onVersionChange }: GuideMen
         mx: { md: `-${PADDING}px` },
       }}
     >
-      <VersionToggle version={version} onChange={onVersionChange} />
       <SearchField query={query} />
       <Box component="ul" sx={{ ...list, mb: 2 }}>
         <Shortcut

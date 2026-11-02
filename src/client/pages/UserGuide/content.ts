@@ -14,7 +14,6 @@ export type GuideSection = {
 }
 
 export type GuidePage = {
-  version: GuideVersion
   language: GuideLanguage
   // The menu's heading for the page, userGuide:groups:<group>. Without one, the page stands on its own in the menu.
   group?: string
@@ -28,29 +27,22 @@ export type GuidePage = {
 
 type GuideLanguage = 'fi' | 'en'
 
-// Admins compare structures of the guide until one of them is chosen
-export const GUIDE_VERSIONS = ['v1', 'v2', 'v3'] as const
-export type GuideVersion = (typeof GUIDE_VERSIONS)[number]
-
-export const isGuideVersion = (value: unknown): value is GuideVersion =>
-  GUIDE_VERSIONS.some(version => version === value)
-
-const FILES = import.meta.glob<string>(['./content/*/*/*.md', './content/*/*/*/*.md', '!./content/*/*/home.md'], {
+const FILES = import.meta.glob<string>(['./content/*/*.md', './content/*/*/*.md', '!./content/*/home.md'], {
   query: '?raw',
   import: 'default',
   eager: true,
 })
 
 // A page in a group folder, or one of its own, whose order then places it among the groups
-const FILE_NAME = /\/content\/(v\d+)\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(\d+)-([a-z0-9-]+)\.md$/
+const FILE_NAME = /\/content\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(\d+)-([a-z0-9-]+)\.md$/
 
 const EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master/src/client/pages/UserGuide'
 
 const parsePage = (path: string, file: string): { order: number[]; page: GuidePage } => {
-  const [, version, language, groupOrder, group, order, slug] = FILE_NAME.exec(path) ?? []
-  if (!isGuideVersion(version) || (language !== 'fi' && language !== 'en')) {
+  const [, language, groupOrder, group, order, slug] = FILE_NAME.exec(path) ?? []
+  if (language !== 'fi' && language !== 'en') {
     throw new Error(
-      `[UserGuide] Unexpected file name ${path}, should be content/<version>/<fi|en>/[<order>-<group>/]<order>-<slug>.md`
+      `[UserGuide] Unexpected file name ${path}, should be content/<fi|en>/[<order>-<group>/]<order>-<slug>.md`
     )
   }
   const markdown = file.replace(/<!--[\s\S]*?-->/g, '')
@@ -63,7 +55,6 @@ const parsePage = (path: string, file: string): { order: number[]; page: GuidePa
   return {
     order: groupOrder ? [Number(groupOrder), Number(order)] : [Number(order), 0],
     page: {
-      version,
       language,
       group,
       slug,
@@ -77,23 +68,22 @@ const parsePage = (path: string, file: string): { order: number[]; page: GuidePa
 
 const parsed = Object.entries(FILES).map(([path, file]) => parsePage(path, file))
 
-const pagesIn = (version: GuideVersion, language: GuideLanguage) =>
+const pagesIn = (language: GuideLanguage) =>
   parsed
-    .filter(file => file.page.version === version && file.page.language === language)
+    .filter(file => file.page.language === language)
     .sort((a, b) => a.order[0] - b.order[0] || a.order[1] - b.order[1])
     .map(file => file.page)
 
 // The top of the home page, above the groups' cards. Not a page of its own, so it's not in the menu.
-const HOME_FILES = import.meta.glob<string>('./content/*/*/home.md', { query: '?raw', import: 'default', eager: true })
+const HOME_FILES = import.meta.glob<string>('./content/*/home.md', { query: '?raw', import: 'default', eager: true })
 
-const homeIn = (version: GuideVersion, language: GuideLanguage): GuidePage => {
-  const path = `./content/${version}/${language}/home.md`
+const homeIn = (language: GuideLanguage): GuidePage => {
+  const path = `./content/${language}/home.md`
   const file = HOME_FILES[path]
   if (!file) throw new Error(`[UserGuide] ${path} is missing`)
   const markdown = file.replace(/<!--[\s\S]*?-->/g, '')
   const title = /^# (.+)$/m.exec(markdown)?.[1].trim() ?? ''
   return {
-    version,
     language,
     slug: 'home',
     title,
@@ -103,19 +93,13 @@ const homeIn = (version: GuideVersion, language: GuideLanguage): GuidePage => {
   }
 }
 
-export const GUIDE_HOMES = Object.fromEntries(
-  GUIDE_VERSIONS.map(version => [version, { fi: homeIn(version, 'fi'), en: homeIn(version, 'en') }])
-) as Record<GuideVersion, Record<GuideLanguage, GuidePage>>
+export const GUIDE_HOMES: Record<GuideLanguage, GuidePage> = { fi: homeIn('fi'), en: homeIn('en') }
 
-export const GUIDE_PAGES = Object.fromEntries(
-  GUIDE_VERSIONS.map(version => [version, { fi: pagesIn(version, 'fi'), en: pagesIn(version, 'en') }])
-) as Record<GuideVersion, Record<GuideLanguage, GuidePage[]>>
+export const GUIDE_PAGES: Record<GuideLanguage, GuidePage[]> = { fi: pagesIn('fi'), en: pagesIn('en') }
 
 // Swedish has no guide of its own: Swedish users get the English text and videos, with the UI labels in Swedish
 const guideLanguage = (uiLanguage: string): GuideLanguage => (uiLanguage.startsWith('fi') ? 'fi' : 'en')
 
-export const getGuidePages = (version: GuideVersion, uiLanguage: string) =>
-  GUIDE_PAGES[version][guideLanguage(uiLanguage)]
+export const getGuidePages = (uiLanguage: string) => GUIDE_PAGES[guideLanguage(uiLanguage)]
 
-export const getGuideHome = (version: GuideVersion, uiLanguage: string) =>
-  GUIDE_HOMES[version][guideLanguage(uiLanguage)]
+export const getGuideHome = (uiLanguage: string) => GUIDE_HOMES[guideLanguage(uiLanguage)]
