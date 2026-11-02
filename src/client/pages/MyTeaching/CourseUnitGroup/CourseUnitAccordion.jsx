@@ -88,30 +88,24 @@ const CourseUnitAccordion = ({ courseUnit }) => {
 
           {disabledCourse && <DisabledCourseWarning />}
         </Box>
-        <Box sx={{ pr: 2, pt: 1, display: 'flex', flexWrap: 'wrap' }}>
-          <Box>
-            {!expanded && feedbackTargetsMissingResponse.length > 0 && (
+        {!expanded && (
+          <Box sx={{ pr: 2, pt: 1, display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+            {feedbackTargetsMissingResponse.length > 0 && (
               <FeedbackResponseChip id={undefined} feedbackResponseGiven={responsesWrittenButNotSent} />
             )}
-          </Box>
 
-          {SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS && (
-            <Box>
-              <Box sx={{ mr: 1 }}>{fetchInterimFeedbackChip && <InterimFeedbackChip />}</Box>
-            </Box>
-          )}
+            {SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS && fetchInterimFeedbackChip && <InterimFeedbackChip />}
 
-          {SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS &&
-            (ongoingFeedbackTargetFound || continuousFeedbackTargetFound) && (
-              <Box>
+            {SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS &&
+              (ongoingFeedbackTargetFound || continuousFeedbackTargetFound) && (
                 <FeedbackResponseChip
                   id={undefined}
                   ongoing={ongoingFeedbackTargetFound}
                   continuous={continuousFeedbackTargetFound}
                 />
-              </Box>
-            )}
-        </Box>
+              )}
+          </Box>
+        )}
       </AccordionSummary>
       <AccordionDetails sx={styles.details}>
         {courseRealisations.map(courseRealisation => (

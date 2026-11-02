@@ -63,7 +63,7 @@ const FeedbackTargetPrimaryText = ({ feedbackTarget, fetchInterimFeedbackChip })
         {courseName}
       </Link>
 
-      <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
+      <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
         {fetchInterimFeedbackChip && <InterimFeedbackChip parentFeedbackTarget={feedbackTarget} />}
         {fetchFeedbackResponseChip && (
           <FeedbackResponseChip
