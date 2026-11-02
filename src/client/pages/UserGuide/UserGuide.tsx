@@ -35,7 +35,10 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
   const articleRef = useRef<HTMLElement>(null)
   useHeaderHeight()
   useScrollToSection(articleRef)
-  const index = page ? pages.indexOf(page) : -1
+  // Previous and next stay within the page's group; landing pages and pages outside the groups have neither
+  const siblings =
+    page?.group && !page.isLanding ? pages.filter(other => other.group === page.group && !other.isLanding) : []
+  const index = page ? siblings.indexOf(page) : -1
 
   let title = t('userGuide:title')
   if (page) title = `${page.title} – ${title}`
@@ -61,7 +64,7 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
             <Box component="article" ref={articleRef}>
               <GuideMarkdown page={page} editUrl={canEdit ? page.editUrl : undefined} />
             </Box>
-            <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
+            {index >= 0 && <PageNavigation previous={siblings[index - 1]} next={siblings[index + 1]} />}
           </Box>
           <PageContentsAside page={page} />
         </>
@@ -75,7 +78,6 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
               editUrl={canEdit ? page.editUrl : undefined}
             />
           </Box>
-          <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
         </Box>
       )}
       {!page && query && (
