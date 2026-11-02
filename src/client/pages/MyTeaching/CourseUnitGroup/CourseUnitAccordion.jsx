@@ -1,5 +1,6 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionSummary, AccordionDetails, Box, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS } from '../../../util/common'
@@ -11,7 +12,7 @@ import FeedbackResponseChip from '../chips/FeedbackResponseChip'
 import InterimFeedbackChip from '../chips/InterimFeedbackChip'
 import FeedbackTargetList from '../FeedbackTargetList/FeedbackTargetList'
 import commonStyles from '../utils/styles'
-import { getLatestFeedbackTarget, hasOngoingInterimFeedbacks } from '../utils/utils'
+import { hasOngoingInterimFeedbacks, isMissingFeedbackResponse } from '../utils/utils'
 import DisabledCourseWarning from './DisabledCourseWarning'
 
 const styles = {
@@ -28,15 +29,16 @@ const styles = {
 
 const CourseUnitAccordion = ({ courseUnit }) => {
   const { i18n } = useTranslation()
+  const [expanded, setExpanded] = useState(false)
 
   const { name, courseCode, courseRealisations, disabledCourse } = courseUnit
 
   const visibleCourseCode = getCourseCode(courseUnit)
   const courseName = getLanguageValue(name, i18n.language)
-  const latestFeedbackTarget = getLatestFeedbackTarget(courseRealisations)
-
-  const { id, feedbackResponseGiven, feedbackResponseSent, summary, isEnded, isOld } = latestFeedbackTarget
-  const feedbackCount = summary?.data?.feedbackCount ?? 0
+  const feedbackTargetsMissingResponse = courseRealisations
+    .flatMap(courseRealisation => courseRealisation.feedbackTargets)
+    .filter(isMissingFeedbackResponse)
+  const responsesWrittenButNotSent = feedbackTargetsMissingResponse.every(fbt => fbt.feedbackResponseGiven)
 
   let continuousFeedbackTargetFound = false
   let ongoingFeedbackTargetFound = false
@@ -66,6 +68,8 @@ const CourseUnitAccordion = ({ courseUnit }) => {
       }}
       data-cy="my-teaching-course-unit-item"
       disableGutters
+      expanded={expanded}
+      onChange={(_event, isExpanded) => setExpanded(isExpanded)}
     >
       <AccordionSummary
         id={`course-unit-accordion-header-${courseCode}`}
@@ -86,13 +90,8 @@ const CourseUnitAccordion = ({ courseUnit }) => {
         </Box>
         <Box sx={{ pr: 2, pt: 1, display: 'flex', flexWrap: 'wrap' }}>
           <Box>
-            {!isOld && isEnded && !feedbackResponseGiven && feedbackCount > 0 && (
-              <FeedbackResponseChip
-                id={id}
-                feedbackResponseGiven={feedbackResponseGiven}
-                feedbackResponseSent={feedbackResponseSent}
-                isOld={isOld}
-              />
+            {!expanded && feedbackTargetsMissingResponse.length > 0 && (
+              <FeedbackResponseChip id={undefined} feedbackResponseGiven={responsesWrittenButNotSent} />
             )}
           </Box>
 
