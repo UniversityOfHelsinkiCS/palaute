@@ -240,7 +240,6 @@ Fix: exclude `userCreated` feedback targets.
 ## Dead code and data
 
 - `feedback_targets.feedback_visibility` has had no UI since commit 493aaab9, but the server still accepts and reads it (`update.ts:22`, `getFeedbacks.ts:148`). 47 surveys still have `ALL`.
-- Token enrolment (`services/feedbackTargets/enrollByToken.ts`) isn't wired to any route.
 - The "not giving feedback" button needs `course_units_organisations.no_feedback_allowed`, which nothing sets and which is never true in production.
 - `feedbackTargetResults:useLegacyVersion`, `STUDENT_FEEDBACK_SHOW_REALISATION_NAME`, `FEEDBACK_RESPONSE_EMAILS_SINCE_DATE` and `organisations.responsible_user_id` aren't used.
 

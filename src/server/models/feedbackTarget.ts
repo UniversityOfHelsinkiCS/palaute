@@ -59,7 +59,6 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
   declare continuousFeedbackEnabled: CreationOptional<boolean>
   declare continuousFeedbackPreamble: CreationOptional<string | null>
   declare sendContinuousFeedbackDigestEmail: CreationOptional<boolean>
-  declare tokenEnrolmentEnabled: CreationOptional<boolean | null>
   declare userCreated: CreationOptional<boolean>
 
   // --- Virtual fields. ---------
@@ -437,11 +436,6 @@ FeedbackTarget.init(
       type: TEXT,
     },
     sendContinuousFeedbackDigestEmail: {
-      type: BOOLEAN,
-      allowNull: false,
-      defaultValue: false,
-    },
-    tokenEnrolmentEnabled: {
       type: BOOLEAN,
       allowNull: false,
       defaultValue: false,

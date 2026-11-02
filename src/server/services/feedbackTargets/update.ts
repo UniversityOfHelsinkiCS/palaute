@@ -24,7 +24,6 @@ const parseUpdates = (body: any) => {
     sendContinuousFeedbackDigestEmail,
     continuousFeedbackPreamble,
     settingsReadByTeacher,
-    tokenEnrolmentEnabled,
   } = body
   const parseDate = (d: any) => parseFromTimeZone(d, { timeZone: 'Europe/Helsinki' })
 
@@ -40,7 +39,6 @@ const parseUpdates = (body: any) => {
       sendContinuousFeedbackDigestEmail,
       continuousFeedbackPreamble,
       settingsReadByTeacher,
-      tokenEnrolmentEnabled,
     },
     filterUpdates
   )
@@ -192,10 +190,6 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
     updates.publicQuestionIds = updates.publicQuestionIds.filter((id: any) => !removedIds.includes(id))
 
     updates.questions = updatedQuestions
-  }
-
-  if (!feedbackTarget.userCreated && updates.tokenEnrolmentEnabled) {
-    throw ApplicationError.Forbidden('Token enrolment can only be enabled for userCreated feedback targets')
   }
 
   await createFeedbackTargetLog(feedbackTarget, updates, user)
