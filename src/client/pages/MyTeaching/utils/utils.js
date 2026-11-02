@@ -30,6 +30,11 @@ export const courseUnitNeedsAttention = courseUnit =>
       )
   )
 
+export const courseUnitHasOpenSurvey = courseUnit =>
+  courseUnit.courseRealisations.some(courseRealisation =>
+    courseRealisation.feedbackTargets.some(feedbackTarget => feedbackTargetIsOpen(feedbackTarget))
+  )
+
 export const getGroupedCourseUnits = courseUnits => {
   const normalizedCourseUnits = courseUnits ?? []
 

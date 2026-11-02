@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../util/apiClient'
 import { getLanguageValue } from '../../util/languageUtils'
-import { courseUnitNeedsAttention } from './utils/utils'
+import { courseUnitHasOpenSurvey, courseUnitNeedsAttention } from './utils/utils'
 
 const defaultCacheTime = 900000
 
@@ -27,8 +27,9 @@ export const useTeacherCourseUnits = (params, options = {}) => {
 
     const orderFn = getOrderFnByStatus(params.status)
 
-    // Courses with an ongoing interim feedback, ongoing continuous feedback or a missing feedback response come first
-    return orderBy(data, [courseUnitNeedsAttention, orderFn], ['desc', 'asc'])
+    // Courses with an ongoing interim feedback, ongoing continuous feedback or a missing feedback response come first,
+    // then courses with an open survey
+    return orderBy(data, [courseUnitNeedsAttention, courseUnitHasOpenSurvey, orderFn], ['desc', 'desc', 'asc'])
   }
 
   const { data: courseUnits, ...rest } = useQuery({
@@ -48,7 +49,11 @@ export const useTeacherOrganisatioSurveys = (params, options = {}) => {
   const queryFn = async () => {
     const { data } = await apiClient.get('/my-teaching/courses', { params: { ...params, isOrganisationSurvey: true } })
 
-    return orderBy(data, [courseUnitNeedsAttention, cu => getLanguageValue(cu.name, i18n.language)], ['desc', 'asc'])
+    return orderBy(
+      data,
+      [courseUnitNeedsAttention, courseUnitHasOpenSurvey, cu => getLanguageValue(cu.name, i18n.language)],
+      ['desc', 'desc', 'asc']
+    )
   }
 
   const { data: courseUnits, ...rest } = useQuery({
