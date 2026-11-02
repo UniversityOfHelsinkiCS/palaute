@@ -26,4 +26,4 @@ When the programme has made a question public, it's public on every course of th
 
 In the survey, students see the programme's scale and choice questions right after the university level ones, and its open questions after the teacher's own questions, before the university level open questions. See [The order students see](/guide/questions#question-order).
 
-The averages of the programme's scale questions are on the programme page's [[organisationSettings:summaryTab]] tab, and the answers to its open questions on the [[organisationSettings:openQuestionsTab]] tab; see [The programme's page](/guide/programmes#programme-page).
+The averages of the programme's scale questions are on the programme page's [[organisationSettings:summaryTab]] tab, and the answers to its open questions on the [[organisationSettings:openQuestionsTab]] tab; see [The programme's page](/guide/programme-page#programme-page).

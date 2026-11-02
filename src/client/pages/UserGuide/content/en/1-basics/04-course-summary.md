@@ -7,7 +7,7 @@ Open [[navBar:courseSummary]] in the top menu. It has two views:
 - [[courseSummary:myCourses]]: the courses where you're a responsible teacher or a teacher, grouped by organisation.
 - [[courseSummary:myOrganisations]]: the degree programmes, faculties and other organisations you have [rights](/guide/roles#organisation-rights) to, with their course units. Shown only if you have such rights.
 
-A programme's own summary is also on its page, on the [[organisationSettings:summaryTab]] tab; there the programme's own scale questions are included too. See [Degree programmes and faculties](/guide/programmes#programme-page).
+A programme's own summary is also on its page, on the [[organisationSettings:summaryTab]] tab; there the programme's own scale questions are included too. See [Degree programmes and faculties](/guide/programme-page#programme-page).
 
 Open an organisation to see the rows under it. Clicking a course unit opens its page, with a row for each realisation; from a realisation you get to its survey's answers.
 

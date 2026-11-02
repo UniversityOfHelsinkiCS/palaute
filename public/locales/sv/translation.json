@@ -877,16 +877,6 @@
     "resultCount_one": "{{count}} träff för ”{{query}}”",
     "resultCount_other": "{{count}} träffar för ”{{query}}”",
     "noResults": "Inga träffar för ”{{query}}”",
-    "notFound": "Hittade du inte det du letade efter?",
-    "groupDescriptions": {
-      "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren och kurssammanfattningen.",
-      "teachers": "Kursens enkät från tidsschema till motrespons samt respons under kursen. Samma instruktioner gäller administrativa personer och de ansvariga för utbildningsprogrammens enkäter.",
-      "programmes": "Att följa utbildningsprogrammets eller fakultetens respons, programmets frågor, programmets egna enkäter och inställningar."
-    },
-    "groups": {
-      "teachers": "För ansvariga lärare",
-      "programmes": "För utbildningsprogram",
-      "basics": "Grunder"
-    }
+    "notFound": "Hittade du inte det du letade efter?"
   }
 }

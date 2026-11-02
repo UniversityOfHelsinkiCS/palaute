@@ -6,7 +6,7 @@ Programme surveys are created by the programme's admins. Otherwise they work lik
 
 ## Creating a programme survey {#create}
 
-1. On the [programme's page](/guide/programmes#programme-page), open the [[organisationSettings:organisationSurveysTab]] tab (on a faculty's page [[organisationSettings:organisationFacultySurveysTab]]).
+1. On the [programme's page](/guide/programme-page#programme-page), open the [[organisationSettings:organisationSurveysTab]] tab (on a faculty's page [[organisationSettings:organisationFacultySurveysTab]]).
 2. Click [[organisationSurveys:addSurvey]].
 3. Give the survey a name under [[organisationSurveys:newSurveyName]], in at least one language.
 4. Choose the dates under [[organisationSurveys:startDate]] and [[organisationSurveys:endDate]]. The survey opens at 00:00 on the first day and closes at 23:59 on the last. It can be open as long as you like, e.g. a whole semester.

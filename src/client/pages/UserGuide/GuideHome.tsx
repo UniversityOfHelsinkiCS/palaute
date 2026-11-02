@@ -1,10 +1,10 @@
 import { Box, Link, Typography } from '@mui/material'
-import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
-import type { GuidePage } from './content'
+import type { GuideGroup, GuidePage } from './content'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
+import { groupsOf, summaryOf } from './content'
 import GuideMarkdown from './GuideMarkdown'
 
 const PageLink = ({ page }: { page: GuidePage }) => (
@@ -20,42 +20,36 @@ const PageLink = ({ page }: { page: GuidePage }) => (
   </li>
 )
 
-const GroupCard = ({ group, pages }: { group: string; pages: GuidePage[] }) => {
-  const { t } = useTranslation()
-
-  return (
-    <Box
-      component="section"
-      sx={{ p: 2.5, border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper' }}
-    >
-      <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-        {t(`userGuide:groups:${group}`)}
-      </Typography>
-      <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-        {t(`userGuide:groupDescriptions:${group}`)}
-      </Typography>
-      <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
-        {pages.map(page => (
-          <PageLink key={page.slug} page={page} />
-        ))}
-      </Box>
+const GroupCard = ({ group: { landing, pages } }: { group: GuideGroup }) => (
+  <Box
+    component="section"
+    sx={{ p: 2.5, border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper' }}
+  >
+    <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
+      <Link component={RouterLink} to={`/guide/${landing.slug}`} underline="hover" sx={focusIndicatorStyle()}>
+        {landing.title}
+      </Link>
+    </Typography>
+    <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
+      {summaryOf(landing)}
+    </Typography>
+    <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
+      {pages.map(page => (
+        <PageLink key={page.slug} page={page} />
+      ))}
     </Box>
-  )
-}
+  </Box>
+)
 
-const GuideHome = ({ pages, home, editUrl }: { pages: GuidePage[]; home: GuidePage; editUrl?: string }) => {
-  const groups = [...new Set(pages.flatMap(page => page.group ?? []))]
-
-  return (
-    <>
-      <GuideMarkdown page={home} editUrl={editUrl} />
-      <Box sx={{ display: 'grid', gap: 2, mt: 3, gridTemplateColumns: { xs: '1fr', lg: 'repeat(3, minmax(0, 1fr))' } }}>
-        {groups.map(group => (
-          <GroupCard key={group} group={group} pages={pages.filter(page => page.group === group)} />
-        ))}
-      </Box>
-    </>
-  )
-}
+const GuideHome = ({ pages, home, editUrl }: { pages: GuidePage[]; home: GuidePage; editUrl?: string }) => (
+  <>
+    <GuideMarkdown page={home} editUrl={editUrl} />
+    <Box sx={{ display: 'grid', gap: 2, mt: 3, gridTemplateColumns: { xs: '1fr', lg: 'repeat(3, minmax(0, 1fr))' } }}>
+      {groupsOf(pages).map(group => (
+        <GroupCard key={group.landing.slug} group={group} />
+      ))}
+    </Box>
+  </>
+)
 
 export default GuideHome

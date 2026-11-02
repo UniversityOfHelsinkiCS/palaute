@@ -18,10 +18,9 @@ const Highlighted = ({ text, terms }: { text: string; terms: string[] }) => {
   return parts.map((part, index) => (index % 2 === 1 ? <mark key={index}>{part}</mark> : part))
 }
 
-const Result = ({ result, terms }: { result: SearchResult; terms: string[] }) => {
-  const { t } = useTranslation()
+const Result = ({ result, terms, groupTitle }: { result: SearchResult; terms: string[]; groupTitle?: string }) => {
   const { page, section, snippet } = result
-  const path = [page.group && t(`userGuide:groups:${page.group}`), section && page.title].filter(Boolean).join(' › ')
+  const path = [!page.isLanding && groupTitle, section && page.title].filter(Boolean).join(' › ')
 
   return (
     <li>
@@ -53,6 +52,7 @@ const SearchResults = ({ pages, query }: { pages: GuidePage[]; query: string }) 
   const entries = useMemo(() => indexPages(pages, renderLabels), [pages, renderLabels])
   const terms = searchTerms(query)
   const results = search(entries, terms)
+  const groupTitles = new Map(pages.filter(page => page.isLanding).map(page => [page.group, page.title]))
   const help = pages.find(page => page.slug === 'help')
   // React escapes the query
   const values = { query: query.trim(), interpolation: { escapeValue: false } }
@@ -70,7 +70,7 @@ const SearchResults = ({ pages, query }: { pages: GuidePage[]; query: string }) 
       </Typography>
       <Box component="ol" sx={{ listStyle: 'none', m: 0, p: 0, display: 'grid', gap: 2.5 }}>
         {results.map(result => (
-          <Result key={result.key} result={result} terms={terms} />
+          <Result key={result.key} result={result} terms={terms} groupTitle={groupTitles.get(result.page.group)} />
         ))}
       </Box>
       {help && (

@@ -19,7 +19,7 @@ Responsible teachers and administrative persons also get Norppa's emails about t
 
 The same roles carry over to the course's interim feedback. On a programme survey, the persons the programme chose as responsible have the responsible teacher's rights; see [Programme surveys](/guide/programme-surveys).
 
-The instructions for responsible teachers and administrative persons are in the _For responsible teachers_ part. Start with [Survey schedule](/guide/schedule).
+The instructions for responsible teachers and administrative persons are in the [For responsible teachers](/guide/teachers) part. Start with [Survey schedule](/guide/schedule).
 
 ## Rights in a degree programme or faculty {#organisation-rights}
 
@@ -35,7 +35,7 @@ Programme rights don't make you a teacher on a course: to change a course survey
 
 _Feedback liaisons_ get admin rights to their programme. A programme's admins add them in Norppa; see [Adding a feedback liaison](/guide/settings#feedback-liaison).
 
-The instructions for programme staff are in the _For degree programmes_ part. Start with [The programme's page](/guide/programmes).
+The instructions for programme staff are in the [For degree programmes](/guide/programmes) part. Start with [The programme's page](/guide/programme-page).
 
 ## Checking your rights {#check-your-rights}
 

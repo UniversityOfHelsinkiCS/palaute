@@ -7,9 +7,10 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 ## Files
 
 - Each page is in a group folder, `<language>/<order>-<group>/<order>-<slug>.md`, e.g. `fi/2-teachers/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
+- Each group folder has an `index.md`, the group's landing page at `/guide/<group>`, e.g. `/guide/teachers`. Its `# Title` is the group's name in the menu and on the home page, and its first paragraph describes the group on the home page, so keep that paragraph plain text. Below the text, the landing page lists the group's pages and their sections by itself. As the group's name is also an address, no page may have it as its slug.
 - `home.md` in each language folder is the top of the home page (`/guide`), above the groups' cards. It isn't in the menu.
-- A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it above the groups, under the link to the home page, with its icon from `PageIcon.tsx`.
-- The menu shows each group under the heading `userGuide:groups:<group>` from the translations, and the home page (`/guide`) describes it with `userGuide:groupDescriptions:<group>`.
+- A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it below the groups.
+- The menu shows the groups' and the outside pages' icons from `PageIcon.tsx`.
 - The groups are by reader, and each is written for its reader:
   - `basics`: what everyone needs, and no steps for working on a survey: getting started, roles, all the rules on anonymity and who sees which answers, and the course summary.
   - `teachers`: the responsible teacher's survey in the order it runs, addressed to them as "you". Administrative persons and the responsible persons of programme surveys use these pages too.

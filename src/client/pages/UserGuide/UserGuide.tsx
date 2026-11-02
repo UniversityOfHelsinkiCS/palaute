@@ -10,6 +10,7 @@ import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import canSeeUserGuide from './canSeeUserGuide'
 import { getGuideHome, getGuidePages } from './content'
+import GroupLanding from './GroupLanding'
 import GuideHome from './GuideHome'
 import GuideMarkdown from './GuideMarkdown'
 import GuideMenu from './GuideMenu'
@@ -58,7 +59,15 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
         <>
           <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
             <Box component="article" ref={articleRef}>
-              <GuideMarkdown page={page} editUrl={canEdit ? page.editUrl : undefined} />
+              {page.isLanding ? (
+                <GroupLanding
+                  landing={page}
+                  pages={pages.filter(other => other.group === page.group && !other.isLanding)}
+                  editUrl={canEdit ? page.editUrl : undefined}
+                />
+              ) : (
+                <GuideMarkdown page={page} editUrl={canEdit ? page.editUrl : undefined} />
+              )}
             </Box>
             <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
           </Box>

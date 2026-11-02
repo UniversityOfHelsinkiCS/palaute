@@ -887,16 +887,6 @@
     "resultCount_one": "{{count}} tulos haulla ”{{query}}”",
     "resultCount_other": "{{count}} tulosta haulla ”{{query}}”",
     "noResults": "Ei tuloksia haulla ”{{query}}”",
-    "notFound": "Etkö löytänyt etsimääsi?",
-    "groupDescriptions": {
-      "basics": "Kaikille: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset ja kurssiyhteenveto.",
-      "teachers": "Kurssin kysely aikataulusta vastapalautteeseen sekä palaute kurssin aikana. Samat ohjeet koskevat hallintohenkilöitä ja koulutusohjelman kyselyiden vastuuhenkilöitä.",
-      "programmes": "Koulutusohjelman tai tiedekunnan palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset."
-    },
-    "groups": {
-      "teachers": "Vastuuopettajalle",
-      "programmes": "Koulutusohjelmalle",
-      "basics": "Perusteet"
-    }
+    "notFound": "Etkö löytänyt etsimääsi?"
   }
 }

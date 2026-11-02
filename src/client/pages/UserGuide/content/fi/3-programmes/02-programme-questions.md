@@ -26,4 +26,4 @@ Kun koulutusohjelma on tehnyt kysymyksestä julkisen, se on julkinen kaikilla ko
 
 Opiskelija näkee kyselyssä koulutusohjelman asteikko- ja valintakysymykset heti yliopistotason kysymysten jälkeen ja sen avoimet kysymykset opettajan omien kysymysten jälkeen, ennen yliopistotason avoimia kysymyksiä. Katso [Kysymysten järjestys opiskelijalle](/guide/questions#question-order).
 
-Koulutusohjelman asteikkokysymysten keskiarvot näkyvät koulutusohjelman sivun [[organisationSettings:summaryTab]]-välilehdellä, ja avointen kysymysten vastaukset [[organisationSettings:openQuestionsTab]]-välilehdellä; katso [Koulutusohjelman sivu](/guide/programmes#programme-page).
+Koulutusohjelman asteikkokysymysten keskiarvot näkyvät koulutusohjelman sivun [[organisationSettings:summaryTab]]-välilehdellä, ja avointen kysymysten vastaukset [[organisationSettings:openQuestionsTab]]-välilehdellä; katso [Koulutusohjelman sivu](/guide/programme-page#programme-page).

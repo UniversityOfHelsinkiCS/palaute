@@ -892,16 +892,6 @@
     "resultCount_one": "{{count}} result for “{{query}}”",
     "resultCount_other": "{{count}} results for “{{query}}”",
     "noResults": "No results for “{{query}}”",
-    "notFound": "Didn't find what you were looking for?",
-    "groupDescriptions": {
-      "basics": "For everyone: how a survey works, roles and rights, who sees the answers and the course summary.",
-      "teachers": "Your course's survey from its schedule to counter feedback, and feedback during the course. The same instructions apply to administrative persons and to the responsible persons of programme surveys.",
-      "programmes": "Following a degree programme's or faculty's feedback, programme questions, the programme's own surveys and settings."
-    },
-    "groups": {
-      "teachers": "For responsible teachers",
-      "programmes": "For degree programmes",
-      "basics": "Basics"
-    }
+    "notFound": "Didn't find what you were looking for?"
   }
 }

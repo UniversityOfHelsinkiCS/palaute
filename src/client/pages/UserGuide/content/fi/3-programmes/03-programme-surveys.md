@@ -6,7 +6,7 @@ Koulutusohjelman kyselyt tekevät koulutusohjelman hallinnoijat. Muuten ne toimi
 
 ## Kyselyn luominen {#create}
 
-1. Avaa [koulutusohjelman sivulla](/guide/programmes#programme-page) [[organisationSettings:organisationSurveysTab]]-välilehti (tiedekunnan sivulla [[organisationSettings:organisationFacultySurveysTab]]).
+1. Avaa [koulutusohjelman sivulla](/guide/programme-page#programme-page) [[organisationSettings:organisationSurveysTab]]-välilehti (tiedekunnan sivulla [[organisationSettings:organisationFacultySurveysTab]]).
 2. Valitse [[organisationSurveys:addSurvey]].
 3. Anna kyselylle nimi kohtaan [[organisationSurveys:newSurveyName]] vähintään yhdellä kielellä.
 4. Valitse päivämäärät kohtiin [[organisationSurveys:startDate]] ja [[organisationSurveys:endDate]]. Kysely avautuu ensimmäisenä päivänä klo 0.00 ja sulkeutuu viimeisenä päivänä klo 23.59. Se voi olla auki niin kauan kuin haluat, esimerkiksi koko lukukauden.

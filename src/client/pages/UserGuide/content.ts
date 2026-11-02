@@ -15,8 +15,10 @@ export type GuideSection = {
 
 export type GuidePage = {
   language: GuideLanguage
-  // The menu's heading for the page, userGuide:groups:<group>. Without one, the page stands on its own in the menu.
+  // Without one, the page stands on its own in the menu
   group?: string
+  // The group's own page, its index.md, whose slug is the group's
+  isLanding: boolean
   slug: string
   title: string
   sections: GuideSection[]
@@ -33,16 +35,16 @@ const FILES = import.meta.glob<string>(['./content/*/*.md', './content/*/*/*.md'
   eager: true,
 })
 
-// A page in a group folder, or one of its own, whose order then places it among the groups
-const FILE_NAME = /\/content\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(\d+)-([a-z0-9-]+)\.md$/
+// A page in a group folder or the group's index.md, or a page of its own, whose order then places it among the groups
+const FILE_NAME = /\/content\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(?:(\d+)-([a-z0-9-]+)|(index))\.md$/
 
 const EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master/src/client/pages/UserGuide'
 
 const parsePage = (path: string, file: string): { order: number[]; page: GuidePage } => {
-  const [, language, groupOrder, group, order, slug] = FILE_NAME.exec(path) ?? []
-  if (language !== 'fi' && language !== 'en') {
+  const [, language, groupOrder, group, order, slug, index] = FILE_NAME.exec(path) ?? []
+  if ((language !== 'fi' && language !== 'en') || (index && !group)) {
     throw new Error(
-      `[UserGuide] Unexpected file name ${path}, should be content/<fi|en>/[<order>-<group>/]<order>-<slug>.md`
+      `[UserGuide] Unexpected file name ${path}, should be content/<fi|en>/[<order>-<group>/]<order>-<slug>.md or content/<fi|en>/<order>-<group>/index.md`
     )
   }
   const markdown = file.replace(/<!--[\s\S]*?-->/g, '')
@@ -53,11 +55,12 @@ const parsePage = (path: string, file: string): { order: number[]; page: GuidePa
     return id ? [{ id, title: heading.replace(HEADING_ID, '') }] : []
   })
   return {
-    order: groupOrder ? [Number(groupOrder), Number(order)] : [Number(order), 0],
+    order: groupOrder ? [Number(groupOrder), index ? 0 : Number(order)] : [Number(order), 0],
     page: {
       language,
       group,
-      slug,
+      isLanding: Boolean(index),
+      slug: index ? group : slug,
       title,
       sections,
       markdown,
@@ -85,6 +88,7 @@ const homeIn = (language: GuideLanguage): GuidePage => {
   const title = /^# (.+)$/m.exec(markdown)?.[1].trim() ?? ''
   return {
     language,
+    isLanding: false,
     slug: 'home',
     title,
     sections: [],
@@ -103,3 +107,20 @@ const guideLanguage = (uiLanguage: string): GuideLanguage => (uiLanguage.startsW
 export const getGuidePages = (uiLanguage: string) => GUIDE_PAGES[guideLanguage(uiLanguage)]
 
 export const getGuideHome = (uiLanguage: string) => GUIDE_HOMES[guideLanguage(uiLanguage)]
+
+export type GuideGroup = {
+  landing: GuidePage
+  pages: GuidePage[]
+}
+
+export const groupsOf = (pages: GuidePage[]): GuideGroup[] =>
+  pages
+    .filter(page => page.isLanding)
+    .map(landing => ({ landing, pages: pages.filter(page => page.group === landing.group && !page.isLanding) }))
+
+// A landing page's first paragraph, which the home page shows as the group's description
+export const summaryOf = (page: GuidePage) =>
+  page.markdown
+    .split(/\n\s*\n/)
+    .map(block => block.trim())
+    .find(block => block && !block.startsWith('#')) ?? ''

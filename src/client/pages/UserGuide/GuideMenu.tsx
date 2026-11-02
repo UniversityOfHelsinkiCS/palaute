@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 
-import { ExpandLess, ExpandMore, HomeOutlined } from '@mui/icons-material'
-import { Box, Link, Typography } from '@mui/material'
+import { ChevronRight, ExpandLess, ExpandMore, HomeOutlined } from '@mui/icons-material'
+import { Box, Link } from '@mui/material'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
@@ -10,6 +10,7 @@ import type { GuidePage } from './content'
 
 import { NorButton } from '../../components/common/NorButton'
 import { FOCUS_INDICATOR_REACH, focusIndicatorStyle } from '../../util/accessibility'
+import { groupsOf } from './content'
 import PageIcon from './PageIcon'
 import SearchField from './SearchField'
 import { HEADER_BOTTOM, PAGE_TOP_GAP } from './useHeaderHeight'
@@ -42,9 +43,23 @@ const PageItem = ({ page, current }: { page: GuidePage; current: boolean }) => (
   </li>
 )
 
-// The home page and the pages outside the groups, above the groups and always shown
-const Shortcut = ({ to, icon, label, current }: { to: string; icon: ReactNode; label: string; current: boolean }) => (
-  <li>
+type MenuLinkProps = {
+  to: string
+  icon: ReactNode
+  label: string
+  current: boolean
+  // Only for a group, whose pages are listed under it while the reader is in the group
+  expanded?: boolean
+}
+
+const MenuLink = ({ to, icon, label, current, expanded }: MenuLinkProps) => {
+  let chevron: ReactNode = null
+  if (expanded !== undefined) {
+    const Chevron = expanded ? ExpandMore : ChevronRight
+    chevron = <Chevron fontSize="small" sx={{ ml: 'auto', color: 'text.secondary' }} />
+  }
+
+  return (
     <Link
       component={RouterLink}
       to={to}
@@ -66,9 +81,13 @@ const Shortcut = ({ to, icon, label, current }: { to: string; icon: ReactNode; l
     >
       {icon}
       {label}
+      {chevron}
     </Link>
-  </li>
-)
+  )
+}
+
+// The menu's parts: the home page, the groups and the pages outside them
+const part = { ...list, '& + &': { mt: 1.5, pt: 1.5, borderTop: '1px solid', borderColor: 'divider' } }
 
 type GuideMenuProps = {
   pages: GuidePage[]
@@ -83,7 +102,6 @@ const GuideMenu = ({ pages, current, query }: GuideMenuProps) => {
   // The location the list was opened at, so following a link closes it
   const [openAt, setOpenAt] = useState<string>()
   const open = openAt === key
-  const groups = [...new Set(pages.flatMap(page => page.group ?? []))]
 
   return (
     <Box
@@ -105,25 +123,6 @@ const GuideMenu = ({ pages, current, query }: GuideMenuProps) => {
       }}
     >
       <SearchField query={query} />
-      <Box component="ul" sx={{ ...list, mb: 2 }}>
-        <Shortcut
-          to="/guide"
-          icon={<HomeOutlined fontSize="small" />}
-          label={t('userGuide:title')}
-          current={!current && !query}
-        />
-        {pages
-          .filter(page => !page.group)
-          .map(page => (
-            <Shortcut
-              key={page.slug}
-              to={`/guide/${page.slug}`}
-              icon={<PageIcon slug={page.slug} />}
-              label={page.title}
-              current={page.slug === current?.slug}
-            />
-          ))}
-      </Box>
       <NorButton
         color="secondary"
         icon={open ? <ExpandLess /> : <ExpandMore />}
@@ -134,21 +133,54 @@ const GuideMenu = ({ pages, current, query }: GuideMenuProps) => {
       >
         {t('userGuide:contents')}
       </NorButton>
-      <Box component="ul" id={listId} sx={{ ...list, display: { xs: open ? 'block' : 'none', md: 'block' } }}>
-        {groups.map(group => (
-          <Box component="li" key={group} sx={{ '& + &': { mt: 2 } }}>
-            <Typography component="h2" sx={{ mb: 0.5, fontSize: '0.875rem', fontWeight: 600, color: 'text.secondary' }}>
-              {t(`userGuide:groups:${group}`)}
-            </Typography>
-            <Box component="ul" sx={list}>
-              {pages
-                .filter(page => page.group === group)
-                .map(page => (
-                  <PageItem key={page.slug} page={page} current={page.slug === current?.slug} />
-                ))}
-            </Box>
-          </Box>
-        ))}
+      <Box id={listId} sx={{ display: { xs: open ? 'block' : 'none', md: 'block' } }}>
+        <Box component="ul" sx={part}>
+          <li>
+            <MenuLink
+              to="/guide"
+              icon={<HomeOutlined fontSize="small" />}
+              label={t('userGuide:title')}
+              current={!current && !query}
+            />
+          </li>
+        </Box>
+        <Box component="ul" sx={part}>
+          {groupsOf(pages).map(({ landing, pages: groupPages }) => {
+            const expanded = current?.group === landing.group
+            return (
+              <li key={landing.slug}>
+                <MenuLink
+                  to={`/guide/${landing.slug}`}
+                  icon={<PageIcon slug={landing.slug} />}
+                  label={landing.title}
+                  current={landing.slug === current?.slug}
+                  expanded={expanded}
+                />
+                {expanded && (
+                  <Box component="ul" sx={{ ...list, ml: 2.5, my: 0.5 }}>
+                    {groupPages.map(page => (
+                      <PageItem key={page.slug} page={page} current={page.slug === current?.slug} />
+                    ))}
+                  </Box>
+                )}
+              </li>
+            )
+          })}
+        </Box>
+        <Box component="ul" sx={part}>
+          {pages
+            .filter(page => !page.group)
+            .map(page => (
+              <li key={page.slug}>
+                <MenuLink
+                  to={`/guide/${page.slug}`}
+                  icon={<PageIcon slug={page.slug} />}
+                  label={page.title}
+                  current={page.slug === current?.slug}
+                />
+              </li>
+            ))}
+        </Box>
       </Box>
     </Box>
   )

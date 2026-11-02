@@ -6,6 +6,7 @@ import { indexPages, search, searchTerms } from './search'
 
 const page = (slug: string, markdown: string): GuidePage => ({
   language: 'en',
+  isLanding: false,
   slug,
   title: /^# (.+)$/m.exec(markdown)?.[1] ?? slug,
   sections: [],

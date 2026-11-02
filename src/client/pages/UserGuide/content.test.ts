@@ -6,7 +6,7 @@ import fiHy from '../../../../public/locales/fi/hy.json'
 import fi from '../../../../public/locales/fi/translation.json'
 import svHy from '../../../../public/locales/sv/hy.json'
 import sv from '../../../../public/locales/sv/translation.json'
-import { GUIDE_HOMES, GUIDE_PAGES, LABEL, VIDEO } from './content'
+import { GUIDE_HOMES, GUIDE_PAGES, LABEL, summaryOf, VIDEO } from './content'
 
 // Checks what editors can get wrong in the Markdown files (see content/README.md)
 
@@ -56,12 +56,21 @@ describe('user guide content', () => {
     expect(slugs.filter((slug, index) => slugs.indexOf(slug) !== index)).toEqual([])
   })
 
-  it('has a menu heading for each group in every language', () => {
-    const missing = [...new Set(allPages.flatMap(page => page.group ?? []))].flatMap(group =>
-      ['fi', 'sv', 'en'].filter(language => typeof findLabel(`userGuide:groups:${group}`, language) !== 'string')
+  // Its title is the group's heading in the menu
+  it('has a landing page for each group', () => {
+    const missing = allPages.filter(
+      page => page.group && !allPages.some(other => other.isLanding && other.group === page.group)
     )
-    expect(missing).toEqual([])
+    expect(missing.map(page => `${page.language}/${page.slug}`)).toEqual([])
   })
+
+  // The home page shows it as text
+  it.each(allPages.filter(page => page.isLanding))(
+    '$language/$slug starts with a plain paragraph to describe the group',
+    page => {
+      expect(summaryOf(page)).toMatch(/^[^[*_`\\>\-\n]+$/)
+    }
+  )
 
   // The menu shows the page and section titles as they're written, without labels, formatting or escapes
   it.each(allPages)('$language/$slug has one plain title, and plain sections with unique ids', ({ markdown }) => {

@@ -19,7 +19,7 @@ Vastuuopettajat ja hallintohenkilöt saavat myös Norpan kyselyä koskevat sähk
 
 Samat roolit pätevät kurssin välipalautteisiin. Koulutusohjelman kyselyssä koulutusohjelman valitsemilla vastuuhenkilöillä on vastuuopettajan oikeudet; katso [Koulutusohjelman kyselyt](/guide/programme-surveys).
 
-Vastuuopettajan ja hallintohenkilön ohjeet ovat osiossa _Vastuuopettajalle_. Aloita sivulta [Kyselyn aikataulu](/guide/schedule).
+Vastuuopettajan ja hallintohenkilön ohjeet ovat osiossa [Vastuuopettajalle](/guide/teachers). Aloita sivulta [Kyselyn aikataulu](/guide/schedule).
 
 ## Oikeudet koulutusohjelmassa tai tiedekunnassa {#organisation-rights}
 
@@ -35,7 +35,7 @@ Koulutusohjelman oikeudet eivät tee sinusta kurssin opettajaa: kurssikyselyn p�
 
 _Palautevastaavat_ saavat koulutusohjelmaansa admin-oikeudet. Koulutusohjelman admin-käyttäjät lisäävät heidät Norpassa; katso [Palautevastaavan lisääminen](/guide/settings#feedback-liaison).
 
-Koulutusohjelman henkilöstön ohjeet ovat osiossa _Koulutusohjelmalle_. Aloita sivulta [Koulutusohjelman sivu](/guide/programmes).
+Koulutusohjelman henkilöstön ohjeet ovat osiossa [Koulutusohjelmalle](/guide/programmes). Aloita sivulta [Koulutusohjelman sivu](/guide/programme-page).
 
 ## Omien oikeuksien tarkistaminen {#check-your-rights}
 
