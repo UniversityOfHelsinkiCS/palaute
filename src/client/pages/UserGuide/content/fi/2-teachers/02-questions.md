@@ -1,3 +1,7 @@
+---
+description: Omien kysymysten lisääminen ennen kyselyn avautumista, kysymystyypit ja valmiit kysymykset.
+---
+
 # Kysymykset
 
 Kurssikyselyssä on aina yliopistotason kysymykset ja mahdollisesti koulutusohjelman kysymyksiä, joita et voi muuttaa; katso [Valmiit kysymykset](#fixed-questions). Niiden lisäksi voit lisätä omia kysymyksiä siihen asti, kun kysely avautuu. Välipalautteessa ja koulutusohjelman kyselyssä on vain omia kysymyksiä.

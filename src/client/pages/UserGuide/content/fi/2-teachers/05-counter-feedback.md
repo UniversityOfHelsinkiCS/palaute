@@ -1,3 +1,7 @@
+---
+description: Vastauksesi opiskelijoiden palautteeseen: sen kirjoittaminen ja lähettäminen sähköpostilla.
+---
+
 # Vastapalaute
 
 Vastapalaute on vastauksesi opiskelijoille heidän antamaansa palautteeseen. Se osoittaa, että palaute on luettu, ja kannustaa opiskelijoita antamaan palautetta jatkossakin. Kyselyllä on yksi vastapalaute, joka on yhteinen kaikille sen opiskelijoille. Vastapalaute toimii samoin kurssipalautteessa, välipalautteessa ja koulutusohjelman kyselyissä.

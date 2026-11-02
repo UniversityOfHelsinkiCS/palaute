@@ -1,3 +1,7 @@
+---
+description: The degree programme's or faculty's page, where you follow the feedback of its courses.
+---
+
 # The programme's page
 
 Each degree programme and faculty has its own page in Norppa. There, you follow the feedback of its courses. With admin rights, you also add [questions to all its course surveys](/guide/programme-questions), choose its [settings](/guide/settings) and run [programme surveys](/guide/programme-surveys) there.

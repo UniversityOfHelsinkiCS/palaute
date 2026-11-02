@@ -1,3 +1,7 @@
+---
+description: Who sees which answers, and how Norppa protects respondents even on small courses.
+---
+
 # Anonymity and visibility
 
 All feedback is anonymous. This page has all the rules on who sees which answers, and on how Norppa protects respondents even when there are few of them.

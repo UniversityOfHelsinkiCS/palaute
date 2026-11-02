@@ -1,3 +1,7 @@
+---
+description: Mitä kurssin roolisi ja koulutusohjelman oikeutesi antavat tehdä, ja mitä teet, jos rooli on väärä.
+---
+
 # Roolit ja oikeudet
 
 Se, mitä voit tehdä Norpassa, riippuu kahdesta asiasta: roolistasi kullakin kurssilla ja oikeuksistasi koulutusohjelmiin ja tiedekuntiin. Roolit tulevat Sisusta ja oikeudet yliopiston IAM-ryhmistä, eikä kumpaakaan voi muuttaa Norpassa.

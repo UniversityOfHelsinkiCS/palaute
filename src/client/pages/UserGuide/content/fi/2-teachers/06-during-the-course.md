@@ -1,3 +1,7 @@
+---
+description: Jatkuva palaute ja välipalaute, joilla kuulet opiskelijoita jo kurssin aikana.
+---
+
 # Palaute kurssin aikana
 
 Kurssipalautekysely avautuu vasta kurssin päätyttyä. Jos haluat kuulla opiskelijoita jo kurssin aikana, voit vastuuopettajana käyttää jatkuvaa palautetta, välipalautetta tai molempia. Kumpikaan ei vaikuta itse kurssipalautteeseen, eikä kumpaakaan ole koulutusohjelman kyselyissä.

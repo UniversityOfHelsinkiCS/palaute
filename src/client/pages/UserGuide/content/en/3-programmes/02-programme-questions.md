@@ -1,3 +1,7 @@
+---
+description: The questions a programme adds to all of its course surveys.
+---
+
 # Programme questions
 
 Programme questions are added to the course surveys of all the course units that belong to the programme in Sisu, after the university level questions. Teachers see them in their survey but can't edit or remove them. The programme's admins add and edit them.

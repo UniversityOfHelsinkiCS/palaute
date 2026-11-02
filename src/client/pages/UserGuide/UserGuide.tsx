@@ -55,24 +55,28 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
       <GlobalStyles styles={{ html: { scrollPaddingTop: BELOW_HEADER } }} />
       <Title>{title}</Title>
       <GuideMenu pages={pages} current={page} query={query} />
-      {page && (
+      {page && !page.isLanding && (
         <>
           <Box sx={{ maxWidth: '75ch', minWidth: 0 }}>
             <Box component="article" ref={articleRef}>
-              {page.isLanding ? (
-                <GroupLanding
-                  landing={page}
-                  pages={pages.filter(other => other.group === page.group && !other.isLanding)}
-                  editUrl={canEdit ? page.editUrl : undefined}
-                />
-              ) : (
-                <GuideMarkdown page={page} editUrl={canEdit ? page.editUrl : undefined} />
-              )}
+              <GuideMarkdown page={page} editUrl={canEdit ? page.editUrl : undefined} />
             </Box>
             <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
           </Box>
           <PageContentsAside page={page} />
         </>
+      )}
+      {page?.isLanding && (
+        <Box sx={{ minWidth: 0, gridColumn: { lg: '2 / 4' } }}>
+          <Box component="article" ref={articleRef}>
+            <GroupLanding
+              landing={page}
+              pages={pages.filter(other => other.group === page.group && !other.isLanding)}
+              editUrl={canEdit ? page.editUrl : undefined}
+            />
+          </Box>
+          <PageNavigation previous={pages[index - 1]} next={pages[index + 1]} />
+        </Box>
       )}
       {!page && query && (
         <Box ref={articleRef} sx={{ maxWidth: '75ch', minWidth: 0 }}>

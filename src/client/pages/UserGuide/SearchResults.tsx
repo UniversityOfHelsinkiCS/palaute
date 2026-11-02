@@ -33,7 +33,12 @@ const Result = ({ result, terms, groupTitle }: { result: SearchResult; terms: st
         component={RouterLink}
         to={`/guide/${page.slug}${section?.id ? `#${section.id}` : ''}`}
         underline="hover"
-        sx={{ fontSize: '1.125rem', fontWeight: 600, ...focusIndicatorStyle() }}
+        sx={{
+          fontSize: '1.125rem',
+          fontWeight: 600,
+          color: 'text.primary',
+          ...focusIndicatorStyle(),
+        }}
       >
         {section?.title ?? page.title}
       </Link>

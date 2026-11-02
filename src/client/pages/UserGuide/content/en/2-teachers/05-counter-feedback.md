@@ -1,3 +1,7 @@
+---
+description: Your reply to the students' feedback: writing it and sending it by email.
+---
+
 # Counter feedback
 
 Counter feedback is your reply to the students about their feedback. It shows them their feedback was read, which encourages them to keep giving it. There's one counter feedback per survey, shared by all its students. It works the same way in course surveys, interim feedback and programme surveys.

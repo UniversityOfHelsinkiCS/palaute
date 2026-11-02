@@ -1,3 +1,7 @@
+---
+description: The feedback statistics of course surveys on your own courses or your programme's courses.
+---
+
 # Course summary
 
 The course summary collects the feedback statistics of course surveys: the averages of the university level scale questions, how many students answered and how many courses got counter feedback. Teachers see their own courses, programme staff the courses of their programmes and faculties.

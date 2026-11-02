@@ -1,3 +1,7 @@
+---
+description: How students get the survey, and how to get more answers with a link, a QR code and a reminder.
+---
+
 # Collecting answers
 
 The students of a course survey get an email when it opens. To get more answers, share the survey's link in your teaching and send a reminder while the survey is open.

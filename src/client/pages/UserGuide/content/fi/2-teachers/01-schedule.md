@@ -1,3 +1,7 @@
+---
+description: Milloin kurssikysely avautuu ja sulkeutuu, ja miten muutat sen päivämääriä.
+---
+
 # Kyselyn aikataulu
 
 Norppa luo kurssillesi kurssikyselyn automaattisesti, ja kysely avautuu ja sulkeutuu itsestään kurssin Sisussa olevien päivämäärien mukaan. Sinun ei tarvitse tehdä mitään, jotta kysely avautuu. Ennen avautumista voit kuitenkin lisätä [omia kysymyksiä](/guide/questions) ja [muuttaa päivämääriä](#change-dates).

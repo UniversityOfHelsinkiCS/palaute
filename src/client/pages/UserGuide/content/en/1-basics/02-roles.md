@@ -1,3 +1,7 @@
+---
+description: What your role on a course and your rights in a programme let you do, and what to do if your role is wrong.
+---
+
 # Roles and rights
 
 What you can do in Norppa depends on two things: your role on each course, which comes from Sisu, and your rights in degree programmes and faculties, which come from the university's IAM groups. Neither can be changed in Norppa itself.

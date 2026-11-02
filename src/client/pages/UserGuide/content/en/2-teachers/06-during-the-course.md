@@ -1,3 +1,7 @@
+---
+description: Continuous and interim feedback, to hear from students while the course is still running.
+---
+
 # Feedback during the course
 
 The course survey opens only after the course has ended. To hear from students while the course is still running, you as a responsible teacher can use continuous feedback, interim feedback or both. Neither affects the course survey itself, and neither is available in programme surveys.

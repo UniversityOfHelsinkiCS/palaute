@@ -1,3 +1,7 @@
+---
+description: Reading the answers, their visibility, hiding open answers and downloading the answers.
+---
+
 # Results
 
 A survey's answers are on its [[feedbackTargetView:feedbacksTab]] tab from the first answer on, so you can follow them while the survey is open. Results work the same way in course surveys, interim feedback and programme surveys.

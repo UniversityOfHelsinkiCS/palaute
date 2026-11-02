@@ -1,3 +1,5 @@
-# Perusteet
+---
+description: Kaikille: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset ja kurssiyhteenveto.
+---
 
-Kaikille: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset ja kurssiyhteenveto.
+# Perusteet

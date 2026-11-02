@@ -1,3 +1,7 @@
+---
+description: Mikä Norppa on, miten kysely etenee ja mistä löydät ohjeet omaan rooliisi.
+---
+
 # Aloittaminen
 
 Norppa on Helsingin yliopiston kurssipalautejärjestelmä. Opiskelijat vastaavat palautekyselyihin. Opettajat muokkaavat kyselyitä, lukevat vastaukset ja vastaavat niihin vastapalautteella. Koulutusohjelmat ja tiedekunnat seuraavat kurssiensa palautetta.

@@ -26,15 +26,17 @@ const PageItem = ({ page, current }: { page: GuidePage; current: boolean }) => (
       component={RouterLink}
       to={`/guide/${page.slug}`}
       aria-current={current ? 'page' : undefined}
-      underline="hover"
+      underline="none"
       sx={{
         display: 'block',
         py: 0.75,
         px: 1.5,
-        borderLeft: '3px solid',
+        borderLeft: '2px solid',
         borderColor: current ? 'primary.main' : 'divider',
-        color: current ? 'primary.main' : 'text.primary',
-        fontWeight: current ? 600 : 400,
+        fontSize: '0.9375rem',
+        color: current ? 'primary.main' : 'text.secondary',
+        fontWeight: current ? 700 : 500,
+        '&:hover': { color: current ? 'primary.main' : 'text.primary' },
         ...focusIndicatorStyle(),
       }}
     >
@@ -56,7 +58,7 @@ const MenuLink = ({ to, icon, label, current, expanded }: MenuLinkProps) => {
   let chevron: ReactNode = null
   if (expanded !== undefined) {
     const Chevron = expanded ? ExpandMore : ChevronRight
-    chevron = <Chevron fontSize="small" sx={{ ml: 'auto', color: 'text.secondary' }} />
+    chevron = <Chevron fontSize="small" sx={{ ml: 'auto', color: 'text.disabled' }} />
   }
 
   return (
@@ -64,7 +66,7 @@ const MenuLink = ({ to, icon, label, current, expanded }: MenuLinkProps) => {
       component={RouterLink}
       to={to}
       aria-current={current ? 'page' : undefined}
-      underline="hover"
+      underline="none"
       sx={{
         display: 'flex',
         alignItems: 'center',
@@ -73,9 +75,10 @@ const MenuLink = ({ to, icon, label, current, expanded }: MenuLinkProps) => {
         px: 1.5,
         borderRadius: 1,
         fontWeight: 600,
-        color: 'primary.main',
+        color: current ? 'primary.main' : 'text.primary',
         bgcolor: current ? 'action.selected' : undefined,
-        '&:hover': { bgcolor: 'action.hover' },
+        '& > svg:first-of-type': { color: current ? 'primary.main' : 'text.secondary' },
+        '&:hover': { bgcolor: current ? 'action.selected' : 'action.hover' },
         ...focusIndicatorStyle(),
       }}
     >
@@ -157,7 +160,7 @@ const GuideMenu = ({ pages, current, query }: GuideMenuProps) => {
                   expanded={expanded}
                 />
                 {expanded && (
-                  <Box component="ul" sx={{ ...list, ml: 2.5, my: 0.5 }}>
+                  <Box component="ul" sx={{ ...list, ml: '21px', my: 0.5 }}>
                     {groupPages.map(page => (
                       <PageItem key={page.slug} page={page} current={page.slug === current?.slug} />
                     ))}

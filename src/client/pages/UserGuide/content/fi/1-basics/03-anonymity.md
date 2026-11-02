@@ -1,3 +1,7 @@
+---
+description: Kuka näkee mitkäkin vastaukset ja miten Norppa suojaa vastaajia pienilläkin kursseilla.
+---
+
 # Nimettömyys ja näkyvyys
 
 Palaute annetaan aina nimettömänä. Tällä sivulla ovat kaikki säännöt siitä, kuka näkee mitkäkin vastaukset ja miten Norppa suojaa vastaajia silloinkin, kun heitä on vähän.

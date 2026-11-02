@@ -1,3 +1,7 @@
+---
+description: The programme's or faculty's own surveys, such as semester feedback: creating one, its respondents and its responsible persons.
+---
+
 # Programme surveys
 
 A programme survey is a survey a degree programme or faculty makes itself for students it chooses, e.g. semester feedback, feedback on a study track or feedback across several courses. It has no university level or programme questions: you write all its questions.

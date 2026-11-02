@@ -15,6 +15,7 @@ import MarkdownLink from '../../components/common/MarkdownLink'
 import { HEADING_ID, VIDEO } from './content'
 import GuideVideo from './GuideVideo'
 import { PageContentsInline } from './PageContents'
+import PageIcon from './PageIcon'
 import useRenderLabels from './useRenderLabels'
 
 // Editors only need to put a video on its own line, the blank lines make it a paragraph of its own
@@ -83,9 +84,12 @@ const H1 = ({ id, children }: HeadingProps) => {
   return (
     <>
       <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 3 }}>
-        <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ '&:focus': { outline: 'none' } }}>
-          {children}
-        </Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
+          {page?.isLanding && <PageIcon slug={page.slug} fontSize="large" />}
+          <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ '&:focus': { outline: 'none' } }}>
+            {children}
+          </Typography>
+        </Box>
         {editUrl && <EditLink href={editUrl} />}
       </Box>
       {page && <PageContentsInline page={page} />}

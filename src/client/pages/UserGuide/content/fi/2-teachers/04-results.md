@@ -1,3 +1,7 @@
+---
+description: Vastausten katsominen, niiden näkyvyys, avointen vastausten piilottaminen ja vastausten lataaminen.
+---
+
 # Tulokset
 
 Kyselyn vastaukset näkyvät sen [[feedbackTargetView:feedbacksTab]]-välilehdellä ensimmäisestä vastauksesta lähtien, joten voit seurata niitä jo kyselyn ollessa auki. Tulokset toimivat samoin kurssipalautteessa, välipalautteessa ja koulutusohjelman kyselyissä.

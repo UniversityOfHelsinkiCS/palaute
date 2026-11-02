@@ -1,3 +1,7 @@
+---
+description: Kysymykset, jotka koulutusohjelma lisää kaikkiin kurssiensa kyselyihin.
+---
+
 # Koulutusohjelman kysymykset
 
 Koulutusohjelman kysymykset lisätään kaikkien niiden opintojaksojen kurssikyselyihin, jotka kuuluvat Sisussa koulutusohjelmalle. Ne tulevat yliopistotason kysymysten jälkeen. Opettajat näkevät ne kyselyssään, mutta eivät voi muokata tai poistaa niitä. Kysymyksiä lisäävät ja muokkaavat koulutusohjelman hallinnoijat.

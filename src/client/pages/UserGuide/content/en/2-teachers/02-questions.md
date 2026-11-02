@@ -1,3 +1,7 @@
+---
+description: Adding your own questions before the survey opens, the question types and the fixed questions.
+---
+
 # Questions
 
 A course survey always has the university level questions and possibly questions from the degree programme, which you can't change; see [Fixed questions](#fixed-questions). In addition, you can add your own questions until the survey opens. Interim feedback and programme surveys have only their own questions.

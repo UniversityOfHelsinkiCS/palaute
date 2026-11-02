@@ -1,3 +1,7 @@
+---
+description: Palautevastaavat, vastanneiden näkyvyys ja palautteen poistaminen käytöstä kurssilta.
+---
+
 # Koulutusohjelman asetukset
 
 Koulutusohjelman sivun [[organisationSettings:settingsTab]]-välilehdellä (vain hallinnoijat) ovat palautevastaavat, [[organisationSettings:generalSettings]] ja [[organisationSettings:courseSettings]]. Jokainen muutos tallentuu heti.

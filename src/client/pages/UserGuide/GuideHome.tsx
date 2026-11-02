@@ -1,55 +1,32 @@
-import { Box, Link, Typography } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
+import { Box } from '@mui/material'
 
-import type { GuideGroup, GuidePage } from './content'
+import type { GuidePage } from './content'
 
-import { focusIndicatorStyle } from '../../util/accessibility'
-import { groupsOf, summaryOf } from './content'
+import { groupsOf } from './content'
+import GuideCard, { GuideCardList } from './GuideCard'
 import GuideMarkdown from './GuideMarkdown'
+import PageIcon from './PageIcon'
 
-const PageLink = ({ page }: { page: GuidePage }) => (
-  <li>
-    <Link
-      component={RouterLink}
-      to={`/guide/${page.slug}`}
-      underline="hover"
-      sx={{ display: 'block', py: 0.5, ...focusIndicatorStyle() }}
-    >
-      {page.title}
-    </Link>
-  </li>
-)
-
-const GroupCard = ({ group: { landing, pages } }: { group: GuideGroup }) => (
-  <Box
-    component="section"
-    sx={{ p: 2.5, border: '1px solid', borderColor: 'divider', borderRadius: 2, bgcolor: 'background.paper' }}
-  >
-    <Typography variant="h5" component="h2" sx={{ mb: 1 }}>
-      <Link component={RouterLink} to={`/guide/${landing.slug}`} underline="hover" sx={focusIndicatorStyle()}>
-        {landing.title}
-      </Link>
-    </Typography>
-    <Typography variant="body2" sx={{ mb: 2, color: 'text.secondary' }}>
-      {summaryOf(landing)}
-    </Typography>
-    <Box component="ul" sx={{ listStyle: 'none', m: 0, p: 0 }}>
-      {pages.map(page => (
-        <PageLink key={page.slug} page={page} />
-      ))}
-    </Box>
-  </Box>
-)
-
-const GuideHome = ({ pages, home, editUrl }: { pages: GuidePage[]; home: GuidePage; editUrl?: string }) => (
-  <>
-    <GuideMarkdown page={home} editUrl={editUrl} />
-    <Box sx={{ display: 'grid', gap: 2, mt: 3, gridTemplateColumns: { xs: '1fr', lg: 'repeat(3, minmax(0, 1fr))' } }}>
-      {groupsOf(pages).map(group => (
-        <GroupCard key={group.landing.slug} group={group} />
-      ))}
-    </Box>
-  </>
-)
+const GuideHome = ({ pages, home, editUrl }: { pages: GuidePage[]; home: GuidePage; editUrl?: string }) => {
+  return (
+    <>
+      <Box sx={{ '& p': { maxWidth: '75ch' } }}>
+        <GuideMarkdown page={home} editUrl={editUrl} />
+      </Box>
+      <GuideCardList>
+        {groupsOf(pages).map(({ landing, pages: groupPages }) => (
+          <GuideCard
+            key={landing.slug}
+            to={`/guide/${landing.slug}`}
+            title={landing.title}
+            description={landing.description}
+            icon={<PageIcon slug={landing.slug} fontSize="medium" />}
+            links={groupPages.map(page => ({ to: `/guide/${page.slug}`, label: page.title }))}
+          />
+        ))}
+      </GuideCardList>
+    </>
+  )
+}
 
 export default GuideHome

@@ -1,3 +1,7 @@
+---
+description: When a course survey opens and closes, and how to change its dates.
+---
+
 # Survey schedule
 
 Norppa creates a course survey for your course automatically, and it opens and closes by itself according to the course's dates in Sisu. You don't have to do anything for it to open. Before it opens, you can still add [your own questions](/guide/questions) and [change the dates](#change-dates).

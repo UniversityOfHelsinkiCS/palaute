@@ -1,3 +1,7 @@
+---
+description: Koulutusohjelman tai tiedekunnan omat kyselyt, kuten lukukausipalaute: luominen, vastaajat ja vastuuhenkilöt.
+---
+
 # Koulutusohjelman kyselyt
 
 Koulutusohjelman kysely on kysely, jonka koulutusohjelma tai tiedekunta tekee itse valitsemilleen opiskelijoille, esimerkiksi lukukausipalaute, opintosuunnan palaute tai usean kurssin yhteinen palaute. Siinä ei ole yliopistotason eikä koulutusohjelman kysymyksiä, vaan kirjoitat kaikki kysymykset itse.

@@ -1,3 +1,7 @@
+---
+description: Miten opiskelijat saavat kyselyn ja miten saat lisää vastauksia linkillä, QR-koodilla ja muistutuksella.
+---
+
 # Vastausten kerääminen
 
 Kurssikyselyn opiskelijat saavat sähköpostin, kun kysely avautuu. Saat lisää vastauksia, kun jaat kyselyn linkin opetuksessasi ja lähetät muistutuksen kyselyn ollessa auki.

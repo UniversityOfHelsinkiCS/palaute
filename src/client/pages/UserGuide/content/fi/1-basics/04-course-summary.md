@@ -1,3 +1,7 @@
+---
+description: Kurssikyselyiden tunnusluvut omilta kursseiltasi tai koulutusohjelmasi kursseilta.
+---
+
 # Kurssiyhteenveto
 
 Kurssiyhteenvedossa ovat kurssikyselyjen tilastot: yliopistotason asteikkokysymysten keskiarvot, vastanneiden määrä ja se, moniko kurssi on saanut vastapalautteen. Opettajat näkevät omat kurssinsa ja koulutusohjelmien henkilökunta koulutusohjelmiensa ja tiedekuntiensa kurssit.

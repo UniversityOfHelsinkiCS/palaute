@@ -1,3 +1,7 @@
+---
+description: Koulutusohjelman tai tiedekunnan sivu, jolla seuraat sen kurssien palautetta.
+---
+
 # Koulutusohjelman sivu
 
 Jokaisella koulutusohjelmalla ja tiedekunnalla on Norpassa oma sivunsa. Siellä seuraat sen kurssien palautetta. Jos sinulla on admin-oikeudet, lisäät sivulla myös [kysymyksiä kaikkiin sen kurssikyselyihin](/guide/programme-questions), valitset sen [asetukset](/guide/settings) ja teet [koulutusohjelman kyselyitä](/guide/programme-surveys).

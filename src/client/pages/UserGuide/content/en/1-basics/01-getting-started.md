@@ -1,3 +1,7 @@
+---
+description: What Norppa is, how a survey runs and where to find the instructions for your role.
+---
+
 # Getting started
 
 Norppa is the course feedback system of the University of Helsinki. Students answer feedback surveys. Teachers edit the surveys, read the answers and reply to them with counter feedback. Degree programmes and faculties follow the feedback of their courses.

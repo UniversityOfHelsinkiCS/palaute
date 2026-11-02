@@ -21,6 +21,8 @@ export type GuidePage = {
   isLanding: boolean
   slug: string
   title: string
+  // On the page's card: a page's on its group's landing page, a landing page's on the home page
+  description?: string
   sections: GuideSection[]
   // Without the editors' <!-- comments -->
   markdown: string
@@ -38,6 +40,9 @@ const FILES = import.meta.glob<string>(['./content/*/*.md', './content/*/*/*.md'
 // A page in a group folder or the group's index.md, or a page of its own, whose order then places it among the groups
 const FILE_NAME = /\/content\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(?:(\d+)-([a-z0-9-]+)|(index))\.md$/
 
+// Only a description, as "description: ..." between --- lines at the top of the file
+const FRONT_MATTER = /^---\n([\s\S]*?)\n---\n/
+
 const EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master/src/client/pages/UserGuide'
 
 const parsePage = (path: string, file: string): { order: number[]; page: GuidePage } => {
@@ -47,9 +52,13 @@ const parsePage = (path: string, file: string): { order: number[]; page: GuidePa
       `[UserGuide] Unexpected file name ${path}, should be content/<fi|en>/[<order>-<group>/]<order>-<slug>.md or content/<fi|en>/<order>-<group>/index.md`
     )
   }
-  const markdown = file.replace(/<!--[\s\S]*?-->/g, '')
+  const frontMatter = FRONT_MATTER.exec(file)?.[1] ?? ''
+  const description = /^description:(.+)$/m.exec(frontMatter)?.[1].trim()
+  let markdown = file.replace(FRONT_MATTER, '').replace(/<!--[\s\S]*?-->/g, '')
   const title = /^# (.+)$/m.exec(markdown)?.[1].trim()
   if (!title) throw new Error(`[UserGuide] ${path} has no # title`)
+  // A landing page shows its description under its title
+  if (index && description) markdown = markdown.replace(/^# .+$/m, heading => `${heading}\n\n${description}\n`)
   const sections = [...markdown.matchAll(/^## (.+)$/gm)].flatMap(([, heading]) => {
     const id = HEADING_ID.exec(heading)?.[1]
     return id ? [{ id, title: heading.replace(HEADING_ID, '') }] : []
@@ -62,6 +71,7 @@ const parsePage = (path: string, file: string): { order: number[]; page: GuidePa
       isLanding: Boolean(index),
       slug: index ? group : slug,
       title,
+      description,
       sections,
       markdown,
       editUrl: `${EDIT_URL}/${path.replace(/^\.\//, '')}`,
@@ -117,10 +127,3 @@ export const groupsOf = (pages: GuidePage[]): GuideGroup[] =>
   pages
     .filter(page => page.isLanding)
     .map(landing => ({ landing, pages: pages.filter(page => page.group === landing.group && !page.isLanding) }))
-
-// A landing page's first paragraph, which the home page shows as the group's description
-export const summaryOf = (page: GuidePage) =>
-  page.markdown
-    .split(/\n\s*\n/)
-    .map(block => block.trim())
-    .find(block => block && !block.startsWith('#')) ?? ''
