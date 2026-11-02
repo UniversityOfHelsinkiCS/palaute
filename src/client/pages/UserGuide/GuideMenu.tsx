@@ -11,6 +11,7 @@ import type { GuidePage, GuideVersion } from './content'
 import { NorButton } from '../../components/common/NorButton'
 import { FOCUS_INDICATOR_REACH, focusIndicatorStyle } from '../../util/accessibility'
 import PageIcon from './PageIcon'
+import SearchField from './SearchField'
 import { HEADER_BOTTOM, PAGE_TOP_GAP } from './useHeaderHeight'
 import VersionToggle from './VersionToggle'
 
@@ -73,11 +74,12 @@ const Shortcut = ({ to, icon, label, current }: { to: string; icon: ReactNode; l
 type GuideMenuProps = {
   pages: GuidePage[]
   current?: GuidePage
+  query: string
   version: GuideVersion
   onVersionChange: (version: GuideVersion) => void
 }
 
-const GuideMenu = ({ pages, current, version, onVersionChange }: GuideMenuProps) => {
+const GuideMenu = ({ pages, current, query, version, onVersionChange }: GuideMenuProps) => {
   const { t } = useTranslation()
   const { key } = useLocation()
   const listId = useId()
@@ -106,12 +108,13 @@ const GuideMenu = ({ pages, current, version, onVersionChange }: GuideMenuProps)
       }}
     >
       <VersionToggle version={version} onChange={onVersionChange} />
+      <SearchField query={query} />
       <Box component="ul" sx={{ ...list, mb: 2 }}>
         <Shortcut
           to="/guide"
           icon={<HomeOutlined fontSize="small" />}
           label={t('userGuide:title')}
-          current={!current}
+          current={!current && !query}
         />
         {pages
           .filter(page => !page.group)

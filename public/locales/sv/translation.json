@@ -871,6 +871,13 @@
     "pageNavigation": "Föregående och nästa sida",
     "editOnGitHub": "Redigera på GitHub",
     "onThisPage": "På den här sidan",
+    "search": "Sök i guiden",
+    "clearSearch": "Rensa sökningen",
+    "searchResults": "Sökresultat",
+    "resultCount_one": "{{count}} träff för ”{{query}}”",
+    "resultCount_other": "{{count}} träffar för ”{{query}}”",
+    "noResults": "Inga träffar för ”{{query}}”",
+    "notFound": "Hittade du inte det du letade efter?",
     "groupDescriptions": {
       "v3": {
         "basics": "För alla: hur en enkät fungerar, roller och rättigheter, vem som ser svaren och kurssammanfattningen.",

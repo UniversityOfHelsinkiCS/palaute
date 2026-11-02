@@ -31,10 +31,10 @@ In `src/client/pages/UserGuide/`. The page is loaded lazily with all of its text
 - The menu's sticky position and the page's scroll padding use the header's height as a constant in `GuideMenu.tsx`, a stopgap until the app handles its sticky header itself. Banners, which make the header taller, put them off.
 - A page's sections are listed beside it on wide screens and under its title otherwise (`PageContents.tsx`), so the menu only has groups and pages.
 - The router doesn't scroll or move focus on navigation, so `useScrollToSection.ts` does: following a link goes to the top of the page or to the `#section` and focuses it. Back and forward leave the position to the browser.
+- Search (`search.ts`) runs in the browser over the loaded text, split into sections at the `##` headings, with the UI labels in the user's language. The field is in the menu and the results take the text's place at `/guide?q=…`, updating as the reader types; the field keeps the focus until Enter moves it to the results.
 
 ## Later
 
 - Open the guide to all staff once the content has been reviewed, and link it from the footer instead of the wiki.
 - Swedish translation.
 - Link the chatbot's answers to guide pages instead of the wiki.
-- Search.

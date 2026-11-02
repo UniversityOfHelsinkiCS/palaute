@@ -3,6 +3,8 @@ import type { RefObject } from 'react'
 import { useEffect, useRef } from 'react'
 import { NavigationType, useLocation, useNavigationType } from 'react-router-dom'
 
+import { isFromSearchField } from './search'
+
 // decodeURIComponent throws on a malformed address, e.g. a broken percent-encoding
 const findSection = (hash: string) => {
   try {
@@ -15,9 +17,10 @@ const findSection = (hash: string) => {
 // The router doesn't scroll like a page load does. After following a link, focus moves to where it led too, as the
 // link may be gone. The location's key changes on every navigation, also when the same link is followed again.
 const useScrollToSection = (articleRef: RefObject<HTMLElement | null>) => {
-  const { hash, key } = useLocation()
+  const { hash, key, state } = useLocation()
   const navigationType = useNavigationType()
   const mounted = useRef(false)
+  const keepFocus = isFromSearchField(state)
 
   useEffect(() => {
     // Loading the page, back and forward
@@ -31,11 +34,11 @@ const useScrollToSection = (articleRef: RefObject<HTMLElement | null>) => {
     } else if (followedLink) {
       window.scrollTo(0, 0)
     }
-    if (followedLink) {
+    if (followedLink && !keepFocus) {
       const target = section ?? articleRef.current?.querySelector<HTMLElement>('h1')
       target?.focus({ preventScroll: true })
     }
-  }, [articleRef, hash, key, navigationType])
+  }, [articleRef, hash, key, keepFocus, navigationType])
 }
 
 export default useScrollToSection

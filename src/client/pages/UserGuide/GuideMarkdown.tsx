@@ -12,12 +12,10 @@ import type { GuidePage } from './content'
 
 import Markdown from '../../components/common/Markdown'
 import MarkdownLink from '../../components/common/MarkdownLink'
-import { HEADING_ID, LABEL, VIDEO } from './content'
+import { HEADING_ID, VIDEO } from './content'
 import GuideVideo from './GuideVideo'
 import { PageContentsInline } from './PageContents'
-
-const renderLabels = (markdown: string, translate: (key: string, language?: string) => string) =>
-  markdown.replace(LABEL, (_, key: string, pinned?: string) => `**${translate(key, pinned).replace(/<[^>]*>/g, '')}**`)
+import useRenderLabels from './useRenderLabels'
 
 // Editors only need to put a video on its own line, the blank lines make it a paragraph of its own
 const separateVideos = (markdown: string) => markdown.replace(new RegExp(VIDEO.source, 'gm'), '\n$&\n')
@@ -178,14 +176,13 @@ type GuideMarkdownProps = {
 }
 
 const GuideMarkdown = ({ page, editUrl }: GuideMarkdownProps) => {
-  const { t, i18n } = useTranslation()
-  const translate = (key: string, language?: string) => (language ? i18n.getFixedT(language)(key) : t(key))
+  const renderLabels = useRenderLabels()
 
   return (
     <EditUrlContext.Provider value={editUrl}>
       <PageContext.Provider value={page}>
         <Markdown components={components} rehypePlugins={[rehypeHeadingIds, rehypeVideos]} disallowedElements={['img']}>
-          {renderLabels(separateVideos(page.markdown), translate)}
+          {renderLabels(separateVideos(page.markdown))}
         </Markdown>
       </PageContext.Provider>
     </EditUrlContext.Provider>

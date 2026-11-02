@@ -886,6 +886,13 @@
     "pageNavigation": "Previous and next page",
     "editOnGitHub": "Edit on GitHub",
     "onThisPage": "On this page",
+    "search": "Search the guide",
+    "clearSearch": "Clear search",
+    "searchResults": "Search results",
+    "resultCount_one": "{{count}} result for “{{query}}”",
+    "resultCount_other": "{{count}} results for “{{query}}”",
+    "noResults": "No results for “{{query}}”",
+    "notFound": "Didn't find what you were looking for?",
     "groupDescriptions": {
       "v3": {
         "basics": "For everyone: how a survey works, roles and rights, who sees the answers and the course summary.",
