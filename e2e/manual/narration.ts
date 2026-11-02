@@ -34,6 +34,16 @@ const clipDurationMs = async (clipPath: string) => {
   return Math.round(parseFloat(stdout) * 1000)
 }
 
+// ffprobe reads the duration from the end of the file, only decoding all of it finds a damaged page in the middle
+const isIntact = async (clipPath: string) => {
+  try {
+    const { stderr } = await execFileAsync('ffmpeg', ['-v', 'error', '-i', clipPath, '-f', 'null', '-'])
+    return stderr === ''
+  } catch {
+    return false
+  }
+}
+
 // Opus is a tenth of the WAV the service returns, which keeps the cache in the registry small
 const toOpus = async (wavPath: string, clipPath: string) => {
   // Via a temp file, so an interrupted run never leaves a broken clip in the cache
@@ -157,7 +167,7 @@ const createNarrator = async (): Promise<Narrator> => {
       const wavPath = path.join(CACHE_DIR, `${key}.wav`)
       if (!(await exists(clipPath)) && (await exists(wavPath))) await toOpus(wavPath, clipPath)
       // A broken clip is generated again
-      if ((await exists(clipPath)) && !(await clipDurationMs(clipPath).catch(() => null))) await fs.rm(clipPath)
+      if ((await exists(clipPath)) && !(await isIntact(clipPath))) await fs.rm(clipPath)
       const cached = await exists(clipPath)
 
       if (!cached) {
