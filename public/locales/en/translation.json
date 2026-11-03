@@ -920,6 +920,8 @@
     "noAccess": "You don't have access to manage this survey.",
     "openAnswerPage": "Open the answer page",
     "settingsTab": "Settings",
-    "logsTab": "Logs"
+    "logsTab": "Logs",
+    "groupTitle": "Other surveys",
+    "answeredGroupTitle": "Other surveys"
   }
 }
