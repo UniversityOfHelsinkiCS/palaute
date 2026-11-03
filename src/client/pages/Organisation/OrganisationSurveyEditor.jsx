@@ -11,7 +11,7 @@ import apiClient from '../../util/apiClient'
 import CourseSearchInput from './CourseSearchInput'
 import StudentNumberInput from './StudentNumberInput'
 
-const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
+export const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
   const { t } = useTranslation()
   const formikProps = useFormikContext()
   const [potentialUsers, setPotentialUsers] = useState([])
@@ -46,11 +46,11 @@ const ResponsibleTeachersSelector = ({ name, title, ...props }) => {
         name={name}
         multiple
         fullWidth
-        value={formikProps.values.teachers}
-        onChange={(_, teachers) => formikProps.setFieldValue('teachers', teachers)}
+        value={formikProps.values[name]}
+        onChange={(_, teachers) => formikProps.setFieldValue(name, teachers)}
         onBlur={formikProps.handleBlur}
         options={potentialUsers}
-        getOptionDisabled={option => formikProps.values.teachers.some(v => v.id === option.id)}
+        getOptionDisabled={option => formikProps.values[name].some(v => v.id === option.id)}
         onInputChange={handleChange}
         getOptionLabel={option => `${option.firstName} ${option.lastName} (${option.email})`}
         isOptionEqualToValue={(option, value) => option.id === value.id}
