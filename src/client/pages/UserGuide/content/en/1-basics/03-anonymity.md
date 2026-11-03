@@ -46,7 +46,7 @@ The limit counts the students enrolled in Norppa, not the answers. It applies to
 
 ## Answers by group {#groups}
 
-If the course has groups in Sisu, or the survey has a grouping question, the answers can be viewed by group. A single group's answers are shown only if every group has either no answers or at least 5, so that no one can be recognised from them. See [Groups](/guide/questions#groups).
+If the course has groups in Sisu, or the survey has a grouping question, the answers can be viewed by group. A single group's answers are shown only if every group with answers has at least 5 respondents, so that no one can be recognised from them. See [Groups](/guide/questions#groups).
 
 ## Who has answered {#who-answered}
 

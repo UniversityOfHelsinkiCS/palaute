@@ -46,7 +46,7 @@ Raja lasketaan Norpassa kurssille ilmoittautuneista opiskelijoista, ei vastauksi
 
 ## Ryhmien vastaukset {#groups}
 
-Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, vastauksia voi katsoa ryhmittäin. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa ryhmässä on vähintään viisi vastausta tai ei yhtään, jotta vastaajia ei voi tunnistaa. Katso [Ryhmät](/guide/questions#groups).
+Jos kurssilla on Sisussa ryhmiä tai kyselyssä on ryhmittelykysymys, vastauksia voi katsoa ryhmittäin. Yksittäisen ryhmän vastaukset näytetään vain, jos jokaisessa vastauksia saaneessa ryhmässä on vähintään viisi vastaajaa, jotta vastaajia ei voi tunnistaa. Katso [Ryhmät](/guide/questions#groups).
 
 ## Ketkä ovat vastanneet {#who-answered}
 

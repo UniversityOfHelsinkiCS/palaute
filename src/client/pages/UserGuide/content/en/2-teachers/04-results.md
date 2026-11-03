@@ -21,7 +21,7 @@ The tab shows:
 
 New answers appear when you reload the page. [[feedbackTargetResults:tableView]] shows the charts as tables, and [[feedbackTargetResults:chartView]] switches back.
 
-If the course has groups in Sisu, or the survey has a grouping question, you can look at one group's answers with [[groups:chooseGroup]] at the top of the tab. A single group's answers are shown only if every group has either no answers or at least 5; see [Answers by group](/guide/anonymity#groups).
+If the course has groups in Sisu, or the survey has a grouping question, you can look at one group's answers with [[groups:chooseGroup]] at the top of the tab. A single group's answers are shown only if every group with answers has at least 5 respondents; see [Answers by group](/guide/anonymity#groups).
 
 If fewer than 5 students are enrolled on the course, the results are shown only to its responsible teachers and administrative persons. See [Courses with fewer than 5 students](/guide/anonymity#small-courses).
 

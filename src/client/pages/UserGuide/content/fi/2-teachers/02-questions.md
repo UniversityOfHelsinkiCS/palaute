@@ -93,7 +93,7 @@ Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ry
 
 Ryhmittelykysymys on pakollinen, se on aina opiskelijan ensimmäinen kysymys, eivätkä sen vastaukset ole julkisia. Kyselyssä voi olla vain yksi ryhmittelykysymys, ja se korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
 
-Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa ryhmässä on vähintään viisi vastausta tai ei yhtään (ks. [Ryhmien vastaukset](/guide/anonymity#groups)). Pidä siis vaihtoehtoja vähän.
+Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa vastauksia saaneessa ryhmässä on vähintään viisi vastaajaa (ks. [Ryhmien vastaukset](/guide/anonymity#groups)). Pidä siis vaihtoehtoja vähän.
 
 ## Valmiit kysymykset {#fixed-questions}
 

@@ -93,7 +93,7 @@ If the course has no groups in Sisu, or they don't suit you, add a _grouping que
 
 The grouping question is required, it's always the first question students see, and its answers aren't public. A survey can have only one, and it replaces the Sisu groups. To go back to the Sisu groups, remove the grouping question.
 
-To protect anonymity, answers are shown by group only if each group has either no answers or at least 5 (see [Answers by group](/guide/anonymity#groups)). So keep the number of options small.
+To protect anonymity, answers are shown by group only if every group with answers has at least 5 respondents (see [Answers by group](/guide/anonymity#groups)). So keep the number of options small.
 
 ## Fixed questions {#fixed-questions}
 
