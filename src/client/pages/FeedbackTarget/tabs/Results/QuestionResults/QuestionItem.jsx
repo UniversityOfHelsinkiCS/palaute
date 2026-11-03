@@ -6,7 +6,6 @@ import { useTranslation } from 'react-i18next'
 
 import Instructions from '../../../../../components/common/Instructions'
 import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
-import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { boxPrintStyle } from '../../../../../util/printStyle'
 import AverageResult from './AverageResult'
@@ -51,16 +50,12 @@ const QuestionItem = ({
   publicQuestionIds,
   feedbackCount,
   disabled,
-  feedbackTargetId,
+  savePublicQuestionIds,
+  openAnswerActions,
   showTable,
 }) => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const mutation = useQuestionPublicityMutation({
-    resource: 'feedbackTarget',
-    resourceId: feedbackTargetId,
-  })
 
   const onPublicityToggle = React.useCallback(
     async isPublic => {
@@ -69,7 +64,7 @@ const QuestionItem = ({
         : publicQuestionIds.filter(id => id !== question.id)
 
       try {
-        await mutation.mutateAsync(newPublicQuestionIds)
+        await savePublicQuestionIds(newPublicQuestionIds)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       } catch {
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
@@ -93,7 +88,12 @@ const QuestionItem = ({
 
   const Component = componentByType[question.type]
   const content = Component ? (
-    <Component question={question} feedbackCount={feedbackCount} showTable={showTable} />
+    <Component
+      question={question}
+      feedbackCount={feedbackCount}
+      showTable={showTable}
+      openAnswerActions={openAnswerActions}
+    />
   ) : null
 
   const isPublic = publicQuestionIds.includes(question.id)

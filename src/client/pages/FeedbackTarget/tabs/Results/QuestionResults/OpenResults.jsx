@@ -1,4 +1,3 @@
-// import { useLocation } from 'react-router-dom'
 import { Box, CircularProgress } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import React from 'react'
@@ -6,9 +5,6 @@ import { useInView } from 'react-intersection-observer'
 
 import Markdown from '../../../../../components/common/Markdown'
 import { OpenFeedback } from '../../../../../components/OpenFeedback/OpenFeedback'
-import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
-import useDeleteOpenFeedback from './useDeleteOpenFeedback'
-import useUpdateOpenFeedbackVisibility from './useUpdateOpenFeedbackVisibility'
 
 const styles = {
   list: theme => ({
@@ -56,12 +52,8 @@ const useRenderVisible = ({ threshold = 0.0, delay = 0, initial = false }) => {
   return { render, ref }
 }
 
-const OpenResults = ({ question }) => {
-  // const { pathname } = useLocation()
-  // const isNoad = pathname.startsWith('/noad')
-  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
-  const { canDelete, deleteAnswer } = useDeleteOpenFeedback()
-  const { feedbackTarget } = useFeedbackTargetContext()
+const OpenResults = ({ question, openAnswerActions }) => {
+  const { canHide = false, toggleVisibility, canDelete = false, deleteAnswer } = openAnswerActions ?? {}
 
   const feedbacks = React.useMemo(
     () => (question.feedbacks ?? []).filter(({ data }) => Boolean(data)).sort((a, b) => a.data.localeCompare(b.data)),
@@ -87,7 +79,7 @@ const OpenResults = ({ question }) => {
               canHide={canHide}
               canDelete={canDelete}
               deleteAnswer={() => deleteAnswer(f)}
-              toggleVisibility={() => toggleVisibility(f, feedbackTarget.id)}
+              toggleVisibility={() => toggleVisibility(f)}
             />
           ))}
       </Box>
