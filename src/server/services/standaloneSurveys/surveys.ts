@@ -9,7 +9,7 @@ import { StandaloneSurvey, StandaloneSurveyResponse, StandaloneSurveyResponsible
 import { ApplicationError } from '../../util/ApplicationError'
 import { createLog } from './logs'
 
-const generateToken = () => randomBytes(24).toString('base64url')
+const generateToken = () => randomBytes(9).toString('base64url')
 
 const assertDates = (opensAt: Date, closesAt: Date) => {
   if (!(opensAt < closesAt)) throw ApplicationError.BadRequest('Survey must close after it opens')
