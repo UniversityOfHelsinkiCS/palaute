@@ -1,10 +1,10 @@
 import _ from 'lodash'
 
 import { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } from '../../models'
-import { PublicFeedback } from '../../models/feedback'
 import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/config'
+import { getPublicFeedbacks, shuffleFeedbacks } from '../../util/shuffleFeedbacks'
 import { getAccess } from './getAccess'
 import { getAdditionalDataFromCacheOrDb } from './getOneForUser'
 
@@ -92,27 +92,6 @@ const filterByGroupId = (
   // grouped automatically by group ids
   return studentFeedbackTargets.filter(ufbt => ufbt.groupIds?.includes(groupId))
 }
-
-/**
- * Shuffle feedbacks so that answers from the same student are not identifiable.
- */
-const shuffleFeedbacks = (feedbacks: PublicFeedback[], questionIds: number[]) => {
-  const shuffledAnswers = _.shuffle(feedbacks.flatMap(({ data }) => data))
-  const answersByQuestion = _.groupBy(shuffledAnswers, 'questionId')
-
-  const shuffledFeedbacks = Array.from(feedbacks, feedback => feedback).map((feedback, i) => ({
-    ...feedback,
-    data: questionIds.map(questionId => answersByQuestion?.[questionId]?.[i] ?? { questionId, data: '' }),
-  }))
-
-  return shuffledFeedbacks
-}
-
-const getPublicFeedbacks = (allFeedbacks: PublicFeedback[], publicQuestionIds: number[]) =>
-  allFeedbacks.map(feedback => ({
-    ...feedback,
-    data: feedback.data.filter(answer => !answer.hidden && publicQuestionIds.includes(answer.questionId)),
-  }))
 
 const getGroupingQuestion = (surveys: any) =>
   surveys.teacherSurvey?.questions?.find((q: any) => q.secondaryType === 'GROUPING')
