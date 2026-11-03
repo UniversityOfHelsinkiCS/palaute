@@ -18,6 +18,7 @@ import MiscTab from './tabs/Misc/MiscTab'
 import NorppaFeedbackView from './tabs/NorppaFeedback/NorppaFeedbackView'
 import NorppaStatisticView from './tabs/NorppaStatistics/NorppaStatisticsView'
 import OrganisationSurveyInspector from './tabs/OrganisationSurveyInspector/OrganisationSurveyInspector'
+import StandaloneSurveysTab from './tabs/StandaloneSurveys/StandaloneSurveysTab'
 import UpdaterView from './tabs/Updater/UpdaterView'
 import UsersTab from './tabs/Users/UsersTab'
 
@@ -92,6 +93,7 @@ const AdminView = () => {
             sx={tabStyle}
             disableRipple
           />
+          <Tab label="Standalone surveys" component={Link} to="/admin/standalone-surveys" sx={tabStyle} disableRipple />
           <Tab
             label="Palautevastaavat"
             component={Link}
@@ -113,6 +115,7 @@ const AdminView = () => {
         {HELP_CHATBOT_ENABLED && <Route path="/norppai/*" element={<HelpChatbotView />} />}
         <Route path="/feedback-targets" element={<FeedbackTargetInspector />} />
         <Route path="/organisation-surveys" element={<OrganisationSurveyInspector />} />
+        <Route path="/standalone-surveys" element={<StandaloneSurveysTab />} />
         <Route path="/feedback-correspondents" element={<FeedbackCorrespondents />} />
         <Route path="/banners" element={<BannerView />} />
         <Route path="/updater" element={<UpdaterView />} />
