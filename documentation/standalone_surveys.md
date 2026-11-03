@@ -86,11 +86,11 @@ An access helper returns `{ isAdmin, isResponsibleUser }` for a user and survey,
 
 New code in `src/client/pages/StandaloneSurvey/`.
 
-- `/survey/:token`: the respondent page. `FeedbackForm`, `ErrorSummary` and `PrivacyDialog` reused, plus results (`QuestionResults`) when visible.
+- `/survey/:slug/:token`: the respondent page. The slug comes from the name (Finnish first) and is only for reading; a wrong slug redirects to the current one. `FeedbackForm`, `ErrorSummary` and `PrivacyDialog` reused, plus results (`QuestionResults`) when visible.
 - `/standalone-surveys/:id/*`: the management page, built from the same layout and tab components as `/targets/:id`. Tabs: Survey (preview), Results, Edit (name, dates, `QuestionEditor`), Responsible persons, Share (copy link), Logs.
 - Admin panel: a new "Standalone surveys" tab in `src/client/pages/Admin/Admin.jsx` with the list of all surveys and the creation form. The responsible persons picker reuses `ResponsibleTeachersSelector` from `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`.
 - My surveys (`src/client/pages/MyTeaching/`): a heading listing the surveys the user is responsible for, shown only when there are any.
-- My feedback (`src/client/pages/MyFeedbacks/`): the surveys the user has answered, linking to `/survey/:token`, shown only when there are any.
+- My feedback (`src/client/pages/MyFeedbacks/`): the surveys the user has answered, linking to the answer page, shown only when there are any.
 
 `QuestionEditor` is already configured through props: without `groupingQuestionSettings` and `copyFromCourseDialog` it offers no grouping or copying. `FeedbackChart` isn't used, because its response rate needs an expected respondent count. The results page shows the answer count instead.
 
