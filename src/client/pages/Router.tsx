@@ -61,7 +61,8 @@ const Router = () => (
         <Route path="/cur/:id/*" element={<CourseRealisation />} />
         <Route path="/norppa-feedback" element={<NorppaFeedback />} />
         {USER_GUIDE_ENABLED && <Route path="/guide/:slug?" element={<UserGuide />} />}
-        <Route path="/survey/:segment/*" element={<AnswerSurvey />} />
+        <Route path="/survey/:token" element={<AnswerSurvey />} />
+        <Route path="/survey/:token/:slug/*" element={<AnswerSurvey />} />
         <Route path="/standalone-surveys/:id/*" element={<ManageSurvey />} />
         <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<Home />} />
