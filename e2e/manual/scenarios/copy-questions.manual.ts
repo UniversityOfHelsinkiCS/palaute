@@ -7,7 +7,7 @@ import { teacher } from '../users'
 manualTest(
   'Kysymysten kopioiminen toisesta kyselystä',
   { annotation: { type: 'en', description: 'Copying questions from another survey' } },
-  async ({ page, demo, loginAs, caption, click, scrollTo, t, localize }) => {
+  async ({ page, demo, loginAs, caption, hover, click, scrollTo, pause, t, localize }) => {
     await demo.seed('ongoing')
     const fbtId = demo.fbtId
     await loginAs(teacher)
@@ -40,9 +40,14 @@ manualTest(
     await click(page.getByRole('option', { name: new RegExp(COURSE_CODE) }))
 
     await caption({
-      fi: 'Näkyviin tulevat toteutukset, joilla on omia kysymyksiä. Kopioidaan kysymykset.',
-      en: 'The realisations with their own questions are shown. Copy the questions.',
+      fi: 'Näkyviin tulevat toteutukset, joilla on omia kysymyksiä. Kysymykset näkyvät, kun viet hiiren toteutuksen päälle.',
+      en: 'The realisations with their own questions are shown. Their questions show when you hover over a realisation.',
     })
+    await hover(dialog.getByRole('link').first())
+    await expect(page.getByRole('tooltip')).toBeVisible()
+    await pause(2500)
+
+    await caption({ fi: 'Kopioidaan kysymykset.', en: 'Copy the questions.' })
     await click(dialog.getByRole('button', { name: t('editFeedbackTarget:copyQuestionsButton') }).first())
     await closeNotification(page, click, t('editFeedbackTarget:copySuccessSnackbar'))
     await closeNotification(page, click, t('common:saveSuccess'))
@@ -60,8 +65,8 @@ manualTest(
     await scrollTo(copied)
 
     await caption({
-      fi: 'Valmista! Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.',
-      en: 'Done! The copied questions are not public until you make them public.',
+      fi: 'Valmista! Kopioidut kysymykset ovat oletuksena ei-julkisia, kunnes muutat ne julkisiksi.',
+      en: 'Done! The copied questions are not public by default, until you make them public.',
     })
   }
 )
