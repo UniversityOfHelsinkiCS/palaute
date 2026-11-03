@@ -18,6 +18,11 @@ import { OrganisationFeedbackCorrespondent } from './organisationFeedbackCorresp
 import { OrganisationLog } from './organisationLog'
 import OrganisationSurveyCourse from './organisationSurveyCourse'
 import { Question } from './question'
+import { StandaloneSurvey } from './standaloneSurvey'
+import { StandaloneSurveyLog } from './standaloneSurveyLog'
+import { StandaloneSurveyQuestion } from './standaloneSurveyQuestion'
+import { StandaloneSurveyResponse } from './standaloneSurveyResponse'
+import { StandaloneSurveyResponsibleUser } from './standaloneSurveyResponsibleUser'
 import Summary from './summary'
 import { Survey } from './survey'
 import { Tag } from './tag'
@@ -272,6 +277,27 @@ FeedbackTarget.hasMany(Summary, { foreignKey: 'feedbackTargetId', as: 'summaries
 Summary.belongsTo(CourseRealisation, { foreignKey: 'entityId', as: 'courseRealisation' })
 CourseRealisation.hasOne(Summary, { foreignKey: 'entityId', as: 'summary' })
 
+/**
+ * Standalone survey associations
+ */
+StandaloneSurvey.hasMany(StandaloneSurveyQuestion, { as: 'surveyQuestions', foreignKey: 'standaloneSurveyId' })
+StandaloneSurveyQuestion.belongsTo(StandaloneSurvey, { as: 'standaloneSurvey', foreignKey: 'standaloneSurveyId' })
+StandaloneSurveyQuestion.belongsTo(Question, { as: 'question', foreignKey: 'questionId' })
+
+StandaloneSurvey.hasMany(StandaloneSurveyResponsibleUser, { as: 'responsibleUsers', foreignKey: 'standaloneSurveyId' })
+StandaloneSurveyResponsibleUser.belongsTo(StandaloneSurvey, {
+  as: 'standaloneSurvey',
+  foreignKey: 'standaloneSurveyId',
+})
+StandaloneSurveyResponsibleUser.belongsTo(User, { as: 'user', foreignKey: 'userId' })
+
+StandaloneSurvey.hasMany(StandaloneSurveyResponse, { as: 'responses', foreignKey: 'standaloneSurveyId' })
+StandaloneSurveyResponse.belongsTo(StandaloneSurvey, { as: 'standaloneSurvey', foreignKey: 'standaloneSurveyId' })
+
+StandaloneSurvey.hasMany(StandaloneSurveyLog, { as: 'logs', foreignKey: 'standaloneSurveyId' })
+StandaloneSurveyLog.belongsTo(StandaloneSurvey, { as: 'standaloneSurvey', foreignKey: 'standaloneSurveyId' })
+StandaloneSurveyLog.belongsTo(User, { as: 'user', foreignKey: 'userId' })
+
 export {
   Feedback,
   User,
@@ -300,4 +326,9 @@ export {
   Summary,
   OrganisationSurveyCourse,
   HelpChatbotTurn,
+  StandaloneSurvey,
+  StandaloneSurveyQuestion,
+  StandaloneSurveyResponsibleUser,
+  StandaloneSurveyResponse,
+  StandaloneSurveyLog,
 }
