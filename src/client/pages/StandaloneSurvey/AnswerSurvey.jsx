@@ -16,7 +16,7 @@ import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
 import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 import { formatDate, getInitialValues, makeValidate } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { toFeedbackData, useAnswerResults, useAnswerSurvey, useDeleteResponse, useSaveResponse } from './api'
-import { getAnswerPath, toSlug } from './paths'
+import { getAnswerPath, getSurveyLinkSegment, parseSurveyLinkSegment } from './paths'
 import SurveyHeader from './SurveyHeader'
 import SurveyResults from './SurveyResults'
 
@@ -115,7 +115,8 @@ const AnswerForm = ({ survey, token, basePath }) => {
 
 const AnswerSurvey = () => {
   const { t } = useTranslation()
-  const { slug, token } = useParams()
+  const { segment } = useParams()
+  const token = parseSurveyLinkSegment(segment)
   const location = useLocation()
   const { data: survey, isLoading } = useAnswerSurvey(token)
   const results = useAnswerResults(token, survey?.resultsVisible ?? false)
@@ -126,8 +127,8 @@ const AnswerSurvey = () => {
   const isOpen = feedbackTargetIsOpen(survey)
   const basePath = getAnswerPath({ name: survey.name, token })
 
-  if (slug !== toSlug(survey.name)) {
-    const rest = location.pathname.split(`/${token}`)[1] ?? ''
+  if (segment !== getSurveyLinkSegment({ name: survey.name, token })) {
+    const rest = location.pathname.split(`/${segment}`)[1] ?? ''
     return <Navigate to={`${basePath}${rest}`} replace />
   }
 

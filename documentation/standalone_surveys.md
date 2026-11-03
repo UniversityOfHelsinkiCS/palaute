@@ -86,7 +86,7 @@ An access helper returns `{ isAdmin, isResponsibleUser }` for a user and survey,
 
 New code in `src/client/pages/StandaloneSurvey/`.
 
-- `/survey/:slug/:token`: the respondent page. The slug comes from the name (Finnish first) and is only for reading; a wrong slug redirects to the current one. `FeedbackForm`, `ErrorSummary` and `PrivacyDialog` reused, plus results (`QuestionResults`) when visible.
+- `/survey/<token>-<slug>`: the respondent page. The slug comes from the name (Finnish first) and is only for reading; the token is the first 32 characters, and a wrong or missing slug redirects to the current one. `FeedbackForm`, `ErrorSummary` and `PrivacyDialog` reused, plus results (`QuestionResults`) when visible.
 - `/standalone-surveys/:id/*`: the management page, built from the same layout and tab components as `/targets/:id`. Tabs: Survey (preview), Results, Edit (name, dates, `QuestionEditor`), Responsible persons, Share (copy link), Logs.
 - Admin panel: a new "Standalone surveys" tab in `src/client/pages/Admin/Admin.jsx` with the list of all surveys and the creation form. The responsible persons picker reuses `ResponsibleTeachersSelector` from `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`.
 - My surveys (`src/client/pages/MyTeaching/`): a heading listing the surveys the user is responsible for, shown only when there are any.
