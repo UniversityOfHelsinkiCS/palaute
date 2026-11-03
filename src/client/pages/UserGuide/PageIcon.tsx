@@ -16,7 +16,7 @@ const ICONS: Record<string, typeof ArticleOutlined> = {
 }
 
 // The icon of a group's landing page or of a page outside the groups
-const PageIcon = ({ slug, fontSize = 'small' }: { slug: string; fontSize?: 'small' | 'medium' | 'large' }) => {
+const PageIcon = ({ slug, fontSize = 'small' }: { slug: string; fontSize?: 'small' | 'large' }) => {
   const Icon = ICONS[slug] ?? ArticleOutlined
   return <Icon fontSize={fontSize} sx={{ color: 'text.secondary' }} />
 }

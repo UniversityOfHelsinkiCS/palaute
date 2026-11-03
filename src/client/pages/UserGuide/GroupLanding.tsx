@@ -12,15 +12,9 @@ const GroupLanding = ({ landing, pages, editUrl }: { landing: GuidePage; pages: 
       <Box sx={{ '& p': { maxWidth: '75ch' } }}>
         <GuideMarkdown page={landing} editUrl={editUrl} />
       </Box>
-      <GuideCardList>
+      <GuideCardList columns={2}>
         {pages.map(page => (
-          <GuideCard
-            key={page.slug}
-            to={`/guide/${page.slug}`}
-            title={page.title}
-            description={page.description}
-            links={page.sections.map(section => ({ to: `/guide/${page.slug}#${section.id}`, label: section.title }))}
-          />
+          <GuideCard key={page.slug} to={`/guide/${page.slug}`} title={page.title} description={page.description} />
         ))}
       </GuideCardList>
     </>

@@ -22,12 +22,12 @@ type GuideCardProps = {
   icon?: ReactNode
   title: string
   description?: string
-  links: { to: string; label: string }[]
+  links?: { to: string; label: string }[]
 }
 
-// A group on the home page or a page on its group's landing page, a full-width row so that cards of different
-// lengths don't stand side by side. The left side opens it, the links on the right go into it.
-const GuideCard = ({ to, icon, title, description, links }: GuideCardProps) => {
+// A group on the home page or a page on its group's landing page. The top opens it, the links below go into it.
+// Without links, the whole card opens it.
+const GuideCard = ({ to, icon, title, description, links = [] }: GuideCardProps) => {
   const titleId = useId()
   const descriptionId = useId()
 
@@ -35,8 +35,8 @@ const GuideCard = ({ to, icon, title, description, links }: GuideCardProps) => {
     <Box
       component="section"
       sx={{
-        display: 'grid',
-        gridTemplateColumns: { xs: '1fr', lg: 'repeat(2, minmax(0, 1fr))' },
+        display: 'flex',
+        flexDirection: 'column',
         border: '1px solid',
         borderColor: 'grey.300',
         bgcolor: 'background.paper',
@@ -50,19 +50,20 @@ const GuideCard = ({ to, icon, title, description, links }: GuideCardProps) => {
         aria-describedby={description ? descriptionId : undefined}
         sx={{
           display: 'block',
-          p: 2.5,
+          flexGrow: links.length > 0 ? 0 : 1,
+          p: 2,
           color: 'text.primary',
           '&:hover h2': { textDecoration: 'underline' },
           ...clickableHover(),
           ...focusIndicatorStyle(),
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.25 }}>
-          {icon && <Box sx={{ display: 'flex', flexShrink: 0, width: 24, pt: '1px' }}>{icon}</Box>}
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+          {icon && <Box sx={{ display: 'flex', flexShrink: 0, pt: '2px' }}>{icon}</Box>}
           <Typography
             id={titleId}
             component="h2"
-            sx={{ minWidth: 0, fontSize: '1.25rem', fontWeight: 700, lineHeight: 1.3, overflowWrap: 'anywhere' }}
+            sx={{ minWidth: 0, fontSize: '1.0625rem', fontWeight: 700, lineHeight: 1.4, overflowWrap: 'anywhere' }}
           >
             {title}
           </Typography>
@@ -71,8 +72,7 @@ const GuideCard = ({ to, icon, title, description, links }: GuideCardProps) => {
         {description && (
           <Typography
             id={descriptionId}
-            // Under the title, past the icon
-            sx={{ mt: 0.75, pl: icon ? '34px' : 0, fontSize: '0.9375rem', color: 'text.secondary', lineHeight: 1.5 }}
+            sx={{ mt: 0.75, fontSize: '0.9375rem', color: 'text.secondary', lineHeight: 1.5 }}
           >
             {description}
           </Typography>
@@ -85,15 +85,11 @@ const GuideCard = ({ to, icon, title, description, links }: GuideCardProps) => {
             listStyle: 'none',
             m: 0,
             p: 0,
-            mx: { xs: 2.5, lg: 0 },
-            my: { lg: 2.5 },
-            pt: { xs: 1, lg: 0 },
-            pb: { xs: 1.5, lg: 0 },
-            px: { lg: 2.5 },
-            borderStyle: 'solid',
-            borderColor: 'grey.300',
-            // Above the list when stacked, beside it in a row
-            borderWidth: { xs: '1px 0 0 0', lg: '0 0 0 1px' },
+            mx: 2,
+            pt: 1,
+            pb: 1.5,
+            borderTop: '1px solid',
+            borderTopColor: 'grey.300',
           }}
         >
           {links.map(link => (
@@ -114,8 +110,17 @@ const GuideCard = ({ to, icon, title, description, links }: GuideCardProps) => {
   )
 }
 
-export const GuideCardList = ({ children }: { children: ReactNode }) => (
-  <Box sx={{ display: 'grid', gap: 2, mt: 3 }}>{children}</Box>
+export const GuideCardList = ({ columns, children }: { columns: number; children: ReactNode }) => (
+  <Box
+    sx={{
+      display: 'grid',
+      gap: 2,
+      mt: 3,
+      gridTemplateColumns: { xs: '1fr', lg: `repeat(${columns}, minmax(0, 1fr))` },
+    }}
+  >
+    {children}
+  </Box>
 )
 
 export default GuideCard

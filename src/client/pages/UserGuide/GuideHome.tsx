@@ -13,14 +13,14 @@ const GuideHome = ({ pages, home, editUrl }: { pages: GuidePage[]; home: GuidePa
       <Box sx={{ '& p': { maxWidth: '75ch' } }}>
         <GuideMarkdown page={home} editUrl={editUrl} />
       </Box>
-      <GuideCardList>
+      <GuideCardList columns={3}>
         {groupsOf(pages).map(({ landing, pages: groupPages }) => (
           <GuideCard
             key={landing.slug}
             to={`/guide/${landing.slug}`}
             title={landing.title}
             description={landing.description}
-            icon={<PageIcon slug={landing.slug} fontSize="medium" />}
+            icon={<PageIcon slug={landing.slug} />}
             links={groupPages.map(page => ({ to: `/guide/${page.slug}`, label: page.title }))}
           />
         ))}
