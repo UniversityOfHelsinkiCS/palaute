@@ -46,13 +46,10 @@ const mapTypeToValidator: Record<string, (data: any, question: Question) => bool
   MULTIPLE_CHOICE: validateMultiChoice,
 }
 
-export const validateFeedback = async (data: QuestionAnswer[], feedbackTarget: FeedbackTarget) => {
+export const validateAnswers = (data: QuestionAnswer[], questions: Question[]) => {
   try {
-    const surveys = await getFeedbackTargetSurveys(feedbackTarget)
-    feedbackTarget.populateQuestions(surveys)
     const idToQuestion: Record<number, Question> = {}
-    feedbackTarget.questions.forEach(q => {
-      const question = q as Question
+    questions.forEach(question => {
       if (question.type === 'TEXT') return
 
       idToQuestion[question.id] = question
@@ -68,12 +65,22 @@ export const validateFeedback = async (data: QuestionAnswer[], feedbackTarget: F
         valid = false
       }
     })
-    feedbackTarget.questions.forEach(q => {
+    questions.forEach(q => {
       if (q.required && mapTypeToValidator[q.type] && !answerIds.has(q.id)) {
         valid = false
       }
     })
     return valid
+  } catch {
+    return false
+  }
+}
+
+export const validateFeedback = async (data: QuestionAnswer[], feedbackTarget: FeedbackTarget) => {
+  try {
+    const surveys = await getFeedbackTargetSurveys(feedbackTarget)
+    feedbackTarget.populateQuestions(surveys)
+    return validateAnswers(data, feedbackTarget.questions as Question[])
   } catch {
     return false
   }
