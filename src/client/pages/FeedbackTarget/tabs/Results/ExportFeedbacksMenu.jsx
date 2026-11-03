@@ -7,9 +7,7 @@ import { writeFileXLSX, utils } from 'xlsx'
 
 import ExportButton from '../../../../components/common/ExportButton'
 import { focusIndicatorStyle } from '../../../../util/accessibility'
-import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 import { getLanguageValue } from '../../../../util/languageUtils'
-import { getCourseStartDate } from './utils'
 
 // Questions that appear in the feedbacks, in the order they appear. Users who can see only public
 // feedbacks get only public questions from the server, so only those are exported for them.
@@ -79,19 +77,13 @@ const getData = (questions, feedbacks, language) => {
   return data
 }
 
-const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
-  const exportQuestions = getExportQuestions(feedbackTarget.questions, feedbacks)
+const createXLSX = ({ questions, feedbacks, filename, language }) => {
+  const exportQuestions = getExportQuestions(questions, feedbacks)
   const headers = exportQuestions.map(q => getLanguageValue(q.data.label, language))
   const rows = getData(exportQuestions, feedbacks, language)
 
   const data = [headers, ...rows]
 
-  const safeCourseCode = getSafeCourseCode({
-    courseCode: feedbackTarget?.courseUnit?.courseCode,
-    forUrl: false,
-  })
-
-  const filename = `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
   // Excel sheet names are at most 31 characters and cannot contain : \ / ? * [ ]
   const sheetName = filename.replace(/[:\\/?*[\]]/g, '_').slice(0, 31)
 
@@ -102,7 +94,7 @@ const createXLSX = ({ feedbackTarget, feedbacks, language }) => {
   return { workbook, filename: `${filename}.xlsx` }
 }
 
-const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
+const ExportFeedbacksMenu = ({ questions, feedbacks, filename, componentRef }) => {
   const { t, i18n } = useTranslation()
   const { language } = i18n
   const { enqueueSnackbar } = useSnackbar()
@@ -111,8 +103,8 @@ const ExportFeedbacksMenu = ({ feedbackTarget, feedbacks, componentRef }) => {
   // Build the workbook only on click, it is expensive for large feedback targets
   const handleExportXLSX = () => {
     try {
-      const { workbook, filename } = createXLSX({ feedbackTarget, feedbacks, language })
-      writeFileXLSX(workbook, filename)
+      const { workbook, filename: xlsxFilename } = createXLSX({ questions, feedbacks, filename, language })
+      writeFileXLSX(workbook, xlsxFilename)
     } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
     }
