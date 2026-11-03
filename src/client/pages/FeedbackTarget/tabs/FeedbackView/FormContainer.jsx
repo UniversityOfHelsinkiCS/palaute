@@ -84,8 +84,8 @@ const FormContainer = ({
               />
             )}
             <Card>
-              <CardContent sx={{ px: { md: 3 } }}>
-                <Box mb={2}>
+              <CardContent sx={{ px: { md: 3 }, pt: { md: 3 } }}>
+                <Box mb={4}>
                   <Alert severity="info">
                     {infoText ?? t('feedbackView:feedbackInfo')}{' '}
                     <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
