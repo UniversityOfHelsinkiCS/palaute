@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next'
 import LinkButton from '../../../../components/common/LinkButton'
 import { NorButton } from '../../../../components/common/NorButton'
 
-const PrivacyDialog = ({ open, onClose }) => {
+const PrivacyDialog = ({ open, onClose, content }) => {
   const { t } = useTranslation()
 
   return (
@@ -17,7 +17,7 @@ const PrivacyDialog = ({ open, onClose }) => {
       <DialogTitle id="feedback-privacy-dialog-title">{t('feedbackView:feedbackInfoTitle')}</DialogTitle>
       <DialogContent>
         <DialogContentText id="feedback-privacy-dialog-description">
-          {t('feedbackView:feedbackInfoContent')}
+          {content ?? t('feedbackView:feedbackInfoContent')}
           <br />
           <LinkButton
             title={t('feedbackView:dataProtectionNotice')}
