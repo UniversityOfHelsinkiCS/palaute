@@ -6,6 +6,7 @@ import { NorButton } from '../../components/common/NorButton'
 import { getLanguageValue } from '../../util/languageUtils'
 import { formatDate } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { useAnsweredSurveys } from './api'
+import { getAnswerPath } from './paths'
 
 export const useAnsweredSurveysWithStatus = status => {
   const { data } = useAnsweredSurveys()
@@ -47,7 +48,7 @@ const AnsweredSurveys = ({ surveys }) => {
                   <NorButton
                     color="secondary"
                     component={Link}
-                    to={ended ? `/survey/${survey.token}/results` : `/survey/${survey.token}`}
+                    to={ended ? `${getAnswerPath(survey)}/results` : getAnswerPath(survey)}
                   >
                     {ended ? t('standaloneSurvey:seeResults') : t('standaloneSurvey:editAnswerTab')}
                   </NorButton>
