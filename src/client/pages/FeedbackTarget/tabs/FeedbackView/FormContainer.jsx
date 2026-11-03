@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import AlertLink from '../../../../components/common/AlertLink'
 import { NorButton } from '../../../../components/common/NorButton'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+import { useTranslationContext } from '../../../../util/translationContext'
 import { ConsentCheckbox } from './ConsentCheckbox'
 import ErrorSummary from './ErrorSummary'
 import FeedbackForm from './FeedbackForm'
@@ -23,6 +24,7 @@ const FormContainer = ({
   infoText,
 }) => {
   const { t } = useTranslation()
+  const context = useTranslationContext()
 
   return (
     <Formik
@@ -115,7 +117,7 @@ const FormContainer = ({
                   type="submit"
                   sx={{ width: 'auto' }}
                 >
-                  {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
+                  {isEdit ? t('feedbackView:editButton', { context }) : t('feedbackView:submitButton', { context })}
                 </NorButton>
                 {showCannotSubmitText && (
                   <Typography color="textSecondary">{t('feedbackView:cannotSubmitText')}</Typography>
