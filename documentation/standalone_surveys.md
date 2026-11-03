@@ -78,7 +78,7 @@ Management routes, by id (admin or responsible user):
 
 Admin routes:
 
-- `GET /admin/standalone-surveys`, `POST /admin/standalone-surveys`, `DELETE /admin/standalone-surveys/:id`
+- `GET /standalone-surveys/all`, `POST /standalone-surveys`, `DELETE /standalone-surveys/:id`
 
 An access helper returns `{ isAdmin, isResponsibleUser }` for a user and survey, and every management route checks it. Changes to name, dates, questions and responsible users are logged.
 
