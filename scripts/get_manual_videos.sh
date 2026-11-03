@@ -1,46 +1,28 @@
 #!/bin/bash
 
-# Copies the manual videos and index files from the production or staging image to public/manual
+# Copies the newest manual videos recorded on master and their index files to public/manual
 
-echo "Get the videos from:"
-select TAG in production staging; do
-  if [ -n "$TAG" ]; then
-    echo "You selected: $TAG"
-    break
-  else
-    echo "Invalid selection. Please select a valid number."
-  fi
-done
-[ -z "$TAG" ] && exit 1
-
-IMAGE=registry.version.helsinki.fi/toska/openshift/kontit/norppa:$TAG
-CONTAINER=norppa_manual_videos
+ARTIFACT=registry.version.helsinki.fi/toska/openshift/kontit/norppa-manual-videos:latest
 
 PROJECT_ROOT=$(dirname $(dirname $(realpath "$0")))
 TARGET=$PROJECT_ROOT/public/manual
+PULLED=$(mktemp -d)
+trap 'rm -rf "$PULLED"' EXIT
 
-echo "Pulling $IMAGE"
-if ! docker pull "$IMAGE"; then
+echo "Pulling $ARTIFACT"
+if ! oras pull "$ARTIFACT" -o "$PULLED"; then
   echo ""
-  echo "!! Could not pull the image !!"
-  echo "Log in first: docker login registry.version.helsinki.fi"
+  echo "!! Could not pull the videos !!"
+  echo "Log in first: oras login registry.version.helsinki.fi"
   echo ""
   exit 1
 fi
 
-docker rm -f $CONTAINER >/dev/null 2>&1
-docker create --name $CONTAINER "$IMAGE" >/dev/null
-
-rm -rf "$TARGET.new"
-if ! docker cp $CONTAINER:/opt/app-root/src/build/client/manual "$TARGET.new"; then
-  echo "The $TAG image has no manual videos"
-  docker rm $CONTAINER >/dev/null
-  exit 1
-fi
-docker rm $CONTAINER >/dev/null
+SHA=$(oras manifest fetch "$ARTIFACT" | jq -r '.annotations["org.opencontainers.image.revision"]')
+echo "Recorded from $SHA"
 
 echo "Replacing $TARGET"
 rm -rf "$TARGET"
-mv "$TARGET.new" "$TARGET"
+mv "$PULLED/manual" "$TARGET"
 
 ls "$TARGET"/*

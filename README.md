@@ -58,13 +58,13 @@ To populate the Norppa and Jami databases from a backup in a remote server, use:
 
 (If you're not in Toska, you can still use the script for reference)
 
-To copy the user manual videos and their index files from production or staging to `public/manual`, use:
+To copy the newest user manual videos recorded on master and their index files to `public/manual`, use:
 
 ```bash
 ./scripts/get_manual_videos.sh
 ```
 
-The script pulls the Norppa image from `registry.version.helsinki.fi`, so you need to be logged in to that registry with `docker login` first.
+The script needs [ORAS](https://oras.land) and `jq`, and a login to `registry.version.helsinki.fi` (`oras login` or `docker login`).
 
 Once in a while to remove useless unnamed volumes:
 
