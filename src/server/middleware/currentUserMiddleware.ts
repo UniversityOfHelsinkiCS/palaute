@@ -78,7 +78,8 @@ export const currentUserMiddleware = async (req: UnauthenticatedRequest, _res: R
 
   const username = isNoAdPath ? getUsernameFromToken(req) : getUsernameFromShibboHeaders(req)
 
-  const user = await getUserByUsername(username)
+  // Users who are not in Sisu are created on their first Shibboleth login
+  const user = await getUserByUsername(username, { createIfMissing: !isNoAdPath })
 
   user.iamGroups = req.iamGroups
   await populateUserAccess(user)
