@@ -7,7 +7,14 @@
 
 import _ from 'lodash'
 
-import { FeedbackTarget, UserFeedbackTarget, Summary, CourseRealisation, User } from '../../models'
+import {
+  FeedbackTarget,
+  UserFeedbackTarget,
+  Summary,
+  CourseRealisation,
+  User,
+  StandaloneSurveyResponsibleUser,
+} from '../../models'
 import { startOfStudyYear, endOfStudyYear } from '../../util/common'
 
 const getTeachedFeedbackTargets = async (user: User) => {
@@ -116,7 +123,13 @@ export const getUserPreferences = async (user: User) => {
     userIsTeacherOnSomeCourse ||
     user.isAdmin ||
     !_.isEmpty(user?.organisationAccess)
-  const hasCourseAccess = (user.isEmployee && teachedFbts.length > 0) || userIsTeacherOnSomeCourse || user.isAdmin
+  const isStandaloneSurveyResponsible =
+    (await StandaloneSurveyResponsibleUser.count({ where: { userId: user.id } })) > 0
+  const hasCourseAccess =
+    (user.isEmployee && teachedFbts.length > 0) ||
+    userIsTeacherOnSomeCourse ||
+    user.isAdmin ||
+    isStandaloneSurveyResponsible
   const preferredTab = getPreferredTab(user, teachedFbts, hasSummaryAccess)
   const summaryView = hasSummaryAccess ? await getPreferredSummaryView(user) : null
 
