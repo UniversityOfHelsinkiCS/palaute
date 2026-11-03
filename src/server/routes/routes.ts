@@ -20,6 +20,7 @@ import { myTeachingRouter } from './myTeaching'
 import { noadRouter } from './noad'
 import { norppaFeedbackRouter } from './norppaFeedback'
 import { organisationRouter } from './organisations'
+import { standaloneSurveysRouter } from './standaloneSurveys'
 import { surveysRouter } from './surveys'
 import { tagsRouter } from './tags'
 import { userController } from './users'
@@ -51,6 +52,7 @@ router.use('/my-teaching', myTeachingRouter)
 router.use('/tags', tagsRouter)
 router.use('/norppa-feedback', norppaFeedbackRouter)
 router.use('/continuous-feedback', continuousFeedbackController)
+router.use('/standalone-surveys', standaloneSurveysRouter)
 if (HELP_CHATBOT_ENABLED) router.use('/help-chatbot', helpChatbotRouter)
 router.use('/admin', adminRouter)
 

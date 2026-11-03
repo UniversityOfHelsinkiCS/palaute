@@ -1,0 +1,1 @@
+export { standaloneSurveysRouter } from './standaloneSurveysController'
