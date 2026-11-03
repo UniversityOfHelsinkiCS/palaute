@@ -906,6 +906,15 @@
     "ended": "Kysely on sulkeutunut.",
     "seeResults": "Katso tulokset",
     "unknownUser": "Et voi vielä vastata kyselyyn, koska käyttäjätiliäsi ei ole lisätty Norppaan. Yritä myöhemmin uudelleen.",
-    "notFound": "Kyselyä ei löytynyt. Tarkista, että linkki on kokonainen."
+    "notFound": "Kyselyä ei löytynyt. Tarkista, että linkki on kokonainen.",
+    "name": "Kyselyn nimi",
+    "nameAndPeriod": "Nimi ja vastausaika",
+    "responsibleUsersRequired": "Vähintään yksi vastuuhenkilö vaaditaan",
+    "shareInfo": "Lähetä tämä linkki niille, joiden halutaan vastaavan. Kuka tahansa, jolla on linkki, voi vastata kirjauduttuaan. Linkkiä ei voi vaihtaa.",
+    "link": "Linkki kyselyyn",
+    "noAccess": "Sinulla ei ole oikeutta hallinnoida tätä kyselyä.",
+    "openAnswerPage": "Avaa vastaussivu",
+    "settingsTab": "Asetukset",
+    "logsTab": "Lokit"
   }
 }
