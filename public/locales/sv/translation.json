@@ -896,6 +896,15 @@
     "ended": "Enkäten har stängts.",
     "seeResults": "Se resultaten",
     "unknownUser": "Du kan inte svara på enkäten ännu, eftersom ditt användarkonto inte har lagts till i Norppa. Försök igen senare.",
-    "notFound": "Enkäten hittades inte. Kontrollera att länken är fullständig."
+    "notFound": "Enkäten hittades inte. Kontrollera att länken är fullständig.",
+    "name": "Enkätens namn",
+    "nameAndPeriod": "Namn och svarstid",
+    "responsibleUsersRequired": "Minst en ansvarig person krävs",
+    "shareInfo": "Skicka den här länken till dem som ska svara. Vem som helst som har länken kan svara efter att ha loggat in. Länken kan inte ändras.",
+    "link": "Länk till enkäten",
+    "noAccess": "Du har inte behörighet att hantera den här enkäten.",
+    "openAnswerPage": "Öppna svarssidan",
+    "settingsTab": "Inställningar",
+    "logsTab": "Loggar"
   }
 }
