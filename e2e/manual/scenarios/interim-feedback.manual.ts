@@ -79,7 +79,7 @@ manualTest(
     })
 
     await caption({
-      fi: 'Kun välipalaute on auki, opiskelijat löytävät sen Palautteeni-sivun Odottaa-välilehdeltä.',
+      fi: 'Kun välipalaute on auki, opiskelijat löytävät sen Kurssipalautteeni-sivun Odottaa-välilehdeltä.',
       en: 'While the interim feedback is open, students find it on the Awaiting tab of the My feedback page.',
     })
 
