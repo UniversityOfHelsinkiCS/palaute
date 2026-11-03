@@ -16,7 +16,7 @@ import useFeedbackTargetId from '../../useFeedbackTargetId'
 import { copyLink } from '../../utils'
 import ReminderEmailModal from './ReminderEmailModal'
 
-const ShareItem = ({ chipLabel, buttonLabel, linkText, copyLink }) => (
+export const ShareItem = ({ chipLabel, buttonLabel, linkText, copyLink }) => (
   <Paper sx={{ my: 4 }}>
     <Box sx={{ p: 2 }}>
       <Chip label={chipLabel} variant="outlined" />
