@@ -2,7 +2,7 @@
 
 Surveys that aren't tied to courses, meant as an alternative to E-lomake. Admins create them, and the people who should answer get a secret link from outside Norppa. Answering requires Shibboleth login.
 
-Status: planned, not implemented.
+Status: implemented on master (not pushed). The e2e spec hasn't been run yet.
 
 ## Decisions
 
@@ -105,8 +105,14 @@ Each change is its own commit, made before the code that needs it, and course be
 3. `src/client/pages/FeedbackTarget/tabs/FeedbackView/utils.js`: `getInitialValues(feedbackTarget)` takes the questions and the existing answer instead of a feedback target.
 4. `src/client/pages/FeedbackTarget/tabs/Results/QuestionResults/`: `OpenResults`, `useUpdateOpenFeedbackVisibility`, `useDeleteOpenFeedback` and `QuestionItem` stop reading `FeedbackTargetContext` and calling `/feedback-targets` endpoints themselves. `QuestionResults` takes the hide, delete and publicity handlers as props, and the course results page passes the current ones.
 5. `src/client/pages/FeedbackTarget/tabs/Results/ExportFeedbacksMenu.jsx`: take the file name as a prop instead of building it from the course code and start date.
-6. Move `FeedbackForm` and `QuestionResults` from `src/client/pages/FeedbackTarget/tabs/` to `src/client/components/` once they no longer depend on the course page. File moves only.
-7. `src/server/services/feedbackTargets/hideFeedback.ts`: if the part that updates `hidden` in an answer's `data` separates cleanly, extract it for reuse. Otherwise write it separately for standalone surveys.
+6. `src/server/services/feedbackTargets/hideFeedback.ts`: the part that hides or removes matching open answers is extracted to `src/server/util/openAnswers.ts`.
+7. `src/client/pages/FeedbackTarget/tabs/FeedbackView/FeedbackView.jsx`: `FormContainer` moved to its own file, with an optional `infoText`. `PrivacyDialog` takes optional `content`.
+8. `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`: `ResponsibleTeachersSelector` is exported and uses its `name` prop instead of a hard-coded `teachers` field.
+9. `ShareItem` (Share tab) and `getLogMessage` (Logs tab) are exported.
+10. `src/server/services/users/preferences.ts`: responsible users of standalone surveys get the My surveys menu item.
+11. `MyTeaching.jsx` and `MyFeedbacks.tsx` render the standalone survey sections.
+
+The shared components stay in `src/client/pages/FeedbackTarget/`, because the guest pages already import them from there.
 
 ## Order
 
