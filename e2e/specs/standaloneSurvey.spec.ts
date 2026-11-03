@@ -46,7 +46,7 @@ const setupSurvey = async (request: APIRequestContext) => {
 }
 
 const answerOnPage = async (page: Page, token: string) => {
-  await page.goto(`/survey/${token}-henkilostokysely`)
+  await page.goto(`/survey/${token}/henkilostokysely`)
   await page.locator('input[value="4"]').first().click()
   await page.locator('textarea').first().fill('Remote days are great')
   await byDataCy(page, 'feedback-view-give-feedback').click()
@@ -73,12 +73,12 @@ test.describe('Standalone surveys', () => {
 
     await loginAs(student)
     await answerOnPage(page, token)
-    await expect(page).toHaveURL(new RegExp(`/survey/${token}-henkilostokysely/results`))
+    await expect(page).toHaveURL(new RegExp(`/survey/${token}/henkilostokysely/results`))
     await expect(contains(page, 'I like my job')).toBeVisible()
     await expect(contains(page, 'Anything else?')).not.toBeVisible()
 
-    await page.goto(`/survey/${token}-old-name`)
-    await expect(page).toHaveURL(new RegExp(`/survey/${token}-henkilostokysely$`))
+    await page.goto(`/survey/${token}/old-name`)
+    await expect(page).toHaveURL(new RegExp(`/survey/${token}/henkilostokysely$`))
     await expect(byDataCy(page, 'feedback-view-give-feedback')).toContainText('Edit')
     await contains(page, 'Remove my answer', 'button').click()
     await expect(byDataCy(page, 'feedback-view-give-feedback')).not.toContainText('Edit')
