@@ -101,7 +101,7 @@ To protect anonymity, answers are shown by group only if every group with answer
 
 The university sets these questions for all course surveys. They're the same for every course and can't be edited or removed. In the editor they're marked [[questionEditor:universityQuestion]], and they're shown at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab.
 
-Which set a survey gets depends on when it opens: a new set is used in surveys that open on 2 August 2026 or later. The averages of the university level scale questions are what the [course summary](/guide/course-summary#figures) shows.
+The questions changed in August 2026: a survey gets the questions in use on the day it opens. See [University level questions](/guide/university-questions) for what they are and what the change means.
 
 Interim feedback and programme surveys don't have them, but you can [add copies of them](#copy-questions).
 

@@ -10,7 +10,7 @@ Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan 
 
 ## Mikä osa ohjeesta on sinulle {#guide-parts}
 
-- [Perusteet](/guide/basics) koskevat kaikkia: miten kysely toimii, roolit ja oikeudet, kuka näkee vastaukset ja kurssiyhteenveto.
+- [Perusteet](/guide/basics) koskevat kaikkia: miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
 - [Vastuuopettajalle](/guide/teachers) on kurssin vastuuopettajille ja hallintohenkilöille: kyselyn aikataulu, kysymykset, vastausten kerääminen, tulokset ja vastapalaute sekä palaute kurssin aikana. Samat ohjeet koskevat koulutusohjelman kyselyjen vastuuhenkilöitä.
 - [Koulutusohjelmalle](/guide/programmes) on niille, joilla on oikeudet koulutusohjelmaan tai tiedekuntaan: palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset.
 

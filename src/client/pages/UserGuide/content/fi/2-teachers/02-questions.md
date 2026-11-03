@@ -101,7 +101,7 @@ Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokais
 
 Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]], ja ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa.
 
-Kyselyn kysymykset riippuvat sen avautumispäivästä: 2.8.2026 tai myöhemmin aukeavissa kyselyissä on uudet kysymykset. Yliopistotason asteikkokysymysten keskiarvot näkyvät [kurssiyhteenvedossa](/guide/course-summary#figures).
+Kysymykset vaihtuivat elokuussa 2026: kysely saa ne kysymykset, jotka ovat käytössä sen avautumispäivänä. Katso [Yliopistotason kysymykset](/guide/university-questions), mitä kysymykset ovat ja mitä vaihtuminen tarkoittaa.
 
 Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta voit [kopioida ne niihin](#copy-questions).
 

@@ -24,7 +24,7 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 - A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it below the groups.
 - The menu shows the groups' and the outside pages' icons from `PageIcon.tsx`.
 - The groups are by reader, and each is written for its reader:
-  - `basics`: what everyone needs, and no steps for working on a survey: getting started, roles, all the rules on anonymity and who sees which answers, and the course summary.
+  - `basics`: what everyone needs, and no steps for working on a survey: getting started, roles, the university level questions, all the rules on anonymity and who sees which answers, and the course summary.
   - `teachers`: the responsible teacher's survey in the order it runs, addressed to them as "you". Administrative persons and the responsible persons of programme surveys use these pages too.
   - `programmes`: programme staff's own tasks, addressed to them: following feedback, programme questions, settings and programme surveys. Programme surveys link to the teachers' pages for what works the same way.
   - A rule has one full home, usually in `basics`. A task page may repeat its gist in one sentence and link to it, so the reader needn't leave the task.

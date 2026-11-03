@@ -10,7 +10,7 @@ Course, teacher and student data comes from Sisu. All feedback is anonymous: tea
 
 ## Which part of this guide is for you {#guide-parts}
 
-- [Basics](/guide/basics) is for everyone: how a survey works, roles and rights, who sees the answers and the course summary.
+- [Basics](/guide/basics) is for everyone: how a survey works, roles and rights, the university level questions, who sees the answers and the course summary.
 - [For responsible teachers](/guide/teachers) is for a course's responsible teachers and administrative persons: the survey's schedule, questions, collecting answers, results and counter feedback, and feedback during the course. The same instructions apply to the responsible persons of programme surveys.
 - [For degree programmes](/guide/programmes) is for those with rights to a degree programme or faculty: following its feedback, programme questions, the programme's own surveys and settings.
 
