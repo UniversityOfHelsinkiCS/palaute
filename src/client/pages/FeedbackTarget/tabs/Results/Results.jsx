@@ -9,6 +9,7 @@ import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import useQuestionPublicityMutation from '../../../../hooks/useQuestionPublicityMutation'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
+import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
@@ -20,6 +21,7 @@ import FeedbackChart from './QuestionResults/FeedbackChart'
 import useChartConfig from './QuestionResults/useChartConfig'
 import useDeleteOpenFeedback from './QuestionResults/useDeleteOpenFeedback'
 import useUpdateOpenFeedbackVisibility from './QuestionResults/useUpdateOpenFeedbackVisibility'
+import { getCourseStartDate } from './utils'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -80,6 +82,15 @@ const getGroups = feedbackTarget => {
   return feedbackTarget.groups ?? []
 }
 
+const getExportFilename = feedbackTarget => {
+  const safeCourseCode = getSafeCourseCode({
+    courseCode: feedbackTarget?.courseUnit?.courseCode,
+    forUrl: false,
+  })
+
+  return `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
+}
+
 const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef }) => {
   const { ref, inView } = useInView({ initialInView: true })
 
@@ -125,7 +136,12 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
           />
         )}
         <Box ml="auto">
-          <ExportFeedbacksMenu feedbackTarget={feedbackTarget} feedbacks={feedbacks} componentRef={exportRef} />
+          <ExportFeedbacksMenu
+            questions={feedbackTarget.questions}
+            feedbacks={feedbacks}
+            filename={getExportFilename(feedbackTarget)}
+            componentRef={exportRef}
+          />
         </Box>
       </Paper>
     </Box>
