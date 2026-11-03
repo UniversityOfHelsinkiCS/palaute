@@ -184,7 +184,7 @@ const FeedbackView = () => {
   const formIsDisabled = !isOpen || isTeacher || isOutsider || isOrganisationAdmin
   const showToolbar = (isOrganisationAdmin || isTeacher) && !isOpen && !isEnded
   const questions = getQuestions(feedbackTarget)
-  const initialValues = getInitialValues(feedbackTarget)
+  const initialValues = getInitialValues(questions, feedbackTarget.feedback)
   const validate = makeValidate(questions)
 
   const editLink = interimFeedbackId
