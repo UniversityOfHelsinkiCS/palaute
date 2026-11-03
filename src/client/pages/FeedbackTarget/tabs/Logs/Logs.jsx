@@ -7,7 +7,7 @@ import useFeedbackTargetLogs from '../../../../hooks/useFeedbackTargetLogs'
 import { getLanguageValue } from '../../../../util/languageUtils'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 
-const getLogMessage = data => {
+export const getLogMessage = data => {
   if (!data) {
     return 'Unknown action wtf'
   }
