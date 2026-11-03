@@ -71,7 +71,7 @@ manualTest(
     })
 
     await caption({
-      fi: 'Opiskelija löytää kurssin Kurssipalautteeni-sivun Päättyneet-välilehdeltä.',
+      fi: 'Opiskelija löytää kurssin Palautteeni-sivun Päättyneet-välilehdeltä.',
       en: 'The student finds the course on the Closed tab of the My feedback page.',
     })
     await click(byDataCy(page, 'my-feedbacks-closed-tab'))
