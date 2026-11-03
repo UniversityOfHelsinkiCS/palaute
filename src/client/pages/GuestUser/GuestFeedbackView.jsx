@@ -140,7 +140,7 @@ const GuestFeedbackView = () => {
   const showForm = isOpen || isEnded
   const formIsDisabled = !isOpen
   const questions = getQuestions(feedbackTarget)
-  const initialValues = getInitialValues(feedbackTarget)
+  const initialValues = getInitialValues(questions, feedbackTarget.feedback)
   const validate = makeValidate(questions)
 
   const handleSubmit = async values => {
