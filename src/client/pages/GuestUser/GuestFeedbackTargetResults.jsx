@@ -131,7 +131,6 @@ const FeedbackTargetResultsView = () => {
             isOpen={isOpen}
             organisationAccess={false}
             feedbackCount={feedbackCount}
-            feedbackTargetId={id}
             showTable={showTable}
           />
         </Box>
