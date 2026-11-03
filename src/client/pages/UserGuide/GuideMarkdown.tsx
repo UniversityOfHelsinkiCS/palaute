@@ -3,16 +3,15 @@ import type { SystemStyleObject } from '@mui/system'
 import type { ComponentProps, ReactNode } from 'react'
 import type { Components, ExtraProps } from 'react-markdown'
 
-import { EditOutlined } from '@mui/icons-material'
-import { Box, IconButton, Tooltip, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { createContext, memo, useContext } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import type { GuidePage } from './content'
 
 import Markdown from '../../components/common/Markdown'
 import MarkdownLink from '../../components/common/MarkdownLink'
-import { HEADING_ID, VIDEO } from './content'
+import { HEADING_ID, VIDEO, videoEditUrl } from './content'
+import EditLink from './EditLink'
 import GuideVideo from './GuideVideo'
 import { PageContentsInline } from './PageContents'
 import PageIcon from './PageIcon'
@@ -51,7 +50,13 @@ const rehypeVideos = () => (tree: HastNode) => {
     node.children = node.children?.map(child => {
       const only = child.tagName === 'p' && child.children?.length === 1 ? child.children[0] : undefined
       const match = only?.type === 'text' ? VIDEO.exec(only.value ?? '') : null
-      if (match) return { type: 'element', tagName: 'video', properties: { dataSlug: match[1] }, children: [] }
+      if (match)
+        return {
+          type: 'element',
+          tagName: 'video',
+          properties: { dataSlug: match[1] },
+          children: [],
+        }
       visit(child)
       return child
     })
@@ -64,18 +69,6 @@ type HeadingProps = ComponentProps<'h1'> & ExtraProps
 const EditUrlContext = createContext<string | undefined>(undefined)
 const PageContext = createContext<GuidePage | undefined>(undefined)
 
-const EditLink = ({ href }: { href: string }) => {
-  const { t } = useTranslation()
-
-  return (
-    <Tooltip title={t('userGuide:editOnGitHub')}>
-      <IconButton component="a" href={href} target="_blank" rel="noopener noreferrer" size="small" sx={{ mt: 0.75 }}>
-        <EditOutlined fontSize="small" />
-      </IconButton>
-    </Tooltip>
-  )
-}
-
 // Focused after moving to the page (useScrollToSection)
 const H1 = ({ id, children }: HeadingProps) => {
   const editUrl = useContext(EditUrlContext)
@@ -83,7 +76,15 @@ const H1 = ({ id, children }: HeadingProps) => {
 
   return (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 1, mb: 3 }}>
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'flex-start',
+          justifyContent: 'space-between',
+          gap: 1,
+          mb: 3,
+        }}
+      >
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
           {page?.isLanding && <PageIcon slug={page.slug} fontSize="large" />}
           <Typography variant="h4" component="h1" id={id} tabIndex={-1} sx={{ '&:focus': { outline: 'none' } }}>
@@ -130,8 +131,10 @@ const P = ({ children }: ComponentProps<'p'> & ExtraProps) => (
 
 const Video = ({ node }: ComponentProps<'video'> & ExtraProps) => {
   const page = useContext(PageContext)
+  const canEdit = Boolean(useContext(EditUrlContext))
+  const slug = String(node?.properties.dataSlug)
 
-  return <GuideVideo slug={String(node?.properties.dataSlug)} language={page?.language ?? 'en'} />
+  return <GuideVideo slug={slug} language={page?.language ?? 'en'} editUrl={canEdit ? videoEditUrl(slug) : undefined} />
 }
 
 const List = ({ component, children }: { component: 'ul' | 'ol'; children?: ReactNode }) => (

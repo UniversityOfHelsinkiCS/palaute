@@ -43,7 +43,11 @@ const FILE_NAME = /\/content\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(?:(\d+)-([a-z0-9-]+
 // Only a description, as "description: ..." between --- lines at the top of the file
 const FRONT_MATTER = /^---\n([\s\S]*?)\n---\n/
 
-const EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master/src/client/pages/UserGuide'
+const REPO_EDIT_URL = 'https://github.com/UniversityOfHelsinkiCS/palaute/edit/master'
+const EDIT_URL = `${REPO_EDIT_URL}/src/client/pages/UserGuide`
+
+// The scenario that records the video
+export const videoEditUrl = (slug: string) => `${REPO_EDIT_URL}/e2e/manual/scenarios/${slug}.manual.ts`
 
 const parsePage = (path: string, file: string): { order: number[]; page: GuidePage } => {
   const [, language, groupOrder, group, order, slug, index] = FILE_NAME.exec(path) ?? []

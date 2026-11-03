@@ -14,7 +14,7 @@ The pages are Markdown files in `src/client/pages/UserGuide/content/{fi,en}/`, i
 
 The guide and the chatbot's `knowledge.md` are separate texts, one for people and one compressed for the model. When a fact changes, update both.
 
-Admins get a pen next to each page's title that opens its file in GitHub's editor on `master`.
+Admins get a pen next to each page's title that opens its file in GitHub's editor on `master`, and next to each video that opens its scenario.
 
 Videos are recorded from `e2e/manual/scenarios` (see `e2e/manual/README.md`) and shown with `[[video:slug]]` by `GuideVideo.tsx`, which finds them in `/manual/<lang>/index.json`. Where they haven't been recorded, e.g. in development, the guide shows none.
 
