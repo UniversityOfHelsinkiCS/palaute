@@ -83,3 +83,9 @@
 ### Välipalautteen luominen
 
 [[video:interim-feedback]]
+
+## Koulutusohjelman kyselyt {#programme-surveys}
+
+### Koulutusohjelman kyselyn luominen
+
+[[video:programme-survey]]

@@ -19,6 +19,8 @@ Koulutusohjelman kyselyt tekevät koulutusohjelman hallinnoijat. Muuten ne toimi
 7. Valitse [[common:save]]. Norppa avaa uuden kyselyn [[feedbackTargetView:surveyQuestionsTab]]-välilehden.
 8. Lisää kysymykset kuten mihin tahansa kyselyyn; katso [Kysymysten muokkaaminen](/guide/questions#edit-questions). [[editFeedbackTarget:copyFromCourseButton]] kopioi kysymyksiä muista koulutusohjelman kyselyistä, ja [[editFeedbackTarget:copyUniversityQuestions]] lisää yliopistotason kysymykset, jos haluat ne mukaan.
 
+[[video:programme-survey]]
+
 Muuta ei tarvita: kysely avautuu itsestään alkamispäivänään. Siihen asti voit vielä muuttaa sen kysymyksiä.
 
 > **Huom.** Opiskelijat eivät saa sähköpostia, kun koulutusohjelman kysely avautuu. Kun kysely on auki, lähetä heille [muistutusviesti](#reminders) tai jaa kyselyn linkki [[feedbackTargetView:shareTab]]-välilehdeltä.

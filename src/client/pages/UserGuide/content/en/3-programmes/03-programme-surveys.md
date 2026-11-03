@@ -19,6 +19,8 @@ Programme surveys are created by the programme's admins. Otherwise they work lik
 7. Click [[common:save]]. Norppa opens the new survey's [[feedbackTargetView:surveyQuestionsTab]] tab.
 8. Add the questions as in any survey; see [Editing the questions](/guide/questions#edit-questions). [[editFeedbackTarget:copyFromCourseButton]] copies questions from other programme surveys, and [[editFeedbackTarget:copyUniversityQuestions]] adds the university level questions if you want them.
 
+[[video:programme-survey]]
+
 That's all: the survey opens by itself on its opening date. Until then, you can still change its questions.
 
 > **Note:** Students get no email when a programme survey opens. Once it's open, send them a [reminder](#reminders) or share its link from the [[feedbackTargetView:shareTab]] tab.
