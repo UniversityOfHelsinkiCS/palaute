@@ -10,6 +10,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { NorButton } from '../../components/common/NorButton'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { TranslationContextProvider } from '../../util/translationContext'
 import { FeedbackTargetTab, FeedbackTargetTabsContainer } from '../FeedbackTarget/FeedbackTargetTabs'
 import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
 import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
@@ -124,7 +125,7 @@ const AnswerSurvey = () => {
   const basePath = `/survey/${token}`
 
   return (
-    <>
+    <TranslationContextProvider value="standalone">
       <SurveyHeader survey={survey}>
         {survey.id && (
           <Box>
@@ -170,7 +171,7 @@ const AnswerSurvey = () => {
         />
         <Route path="*" element={<Navigate to={basePath} replace />} />
       </Routes>
-    </>
+    </TranslationContextProvider>
   )
 }
 

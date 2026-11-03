@@ -18,6 +18,7 @@ import { LogItem } from '../../../components/Logs/LogItem'
 import feedbackTargetIsEnded from '../../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../../util/feedbackTargetIsOpen'
 import { getLanguageValue } from '../../../util/languageUtils'
+import { TranslationContextProvider } from '../../../util/translationContext'
 import { FeedbackTargetTab, FeedbackTargetTabsContainer } from '../../FeedbackTarget/FeedbackTargetTabs'
 import FormContainer from '../../FeedbackTarget/tabs/FeedbackView/FormContainer'
 import PrivacyDialog from '../../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
@@ -126,7 +127,7 @@ const ManageSurvey = () => {
   const questionsLocked = (isOpen || isOver) && !survey.access.isAdmin
 
   return (
-    <>
+    <TranslationContextProvider value="standalone">
       <SurveyHeader survey={survey}>
         <Box>
           <NorButton color="secondary" component={Link} to={`/survey/${survey.token}`}>
@@ -141,7 +142,7 @@ const ManageSurvey = () => {
           label={t('feedbackTargetView:surveyQuestionsTab')}
           to={`${basePath}/edit`}
           disabled={questionsLocked}
-          disabledTooltip={t('feedbackTargetView:surveyTabDisabledTooltip')}
+          disabledTooltip={t('standaloneSurvey:questionsLockedTooltip')}
           icon={<EditOutlined />}
         />
         <FeedbackTargetTab
@@ -170,7 +171,7 @@ const ManageSurvey = () => {
         <Route path="/logs" element={<Logs survey={survey} />} />
         <Route path="*" element={<Navigate to={basePath} replace />} />
       </Routes>
-    </>
+    </TranslationContextProvider>
   )
 }
 

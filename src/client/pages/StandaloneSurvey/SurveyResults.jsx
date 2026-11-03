@@ -31,7 +31,7 @@ const SurveyResults = ({
       </Box>
       {responseCount === 0 ? (
         <Alert severity="info" sx={{ mt: 2 }}>
-          {t('feedbackTargetResults:notEnoughFeedbacksInfo')}
+          {t('standaloneSurvey:noAnswersYet')}
         </Alert>
       ) : (
         <QuestionResults
