@@ -84,7 +84,7 @@ const FormContainer = ({
               />
             )}
             <Card>
-              <CardContent>
+              <CardContent sx={{ px: { md: 3 } }}>
                 <Box mb={2}>
                   <Alert severity="info">
                     {infoText ?? t('feedbackView:feedbackInfo')}{' '}
