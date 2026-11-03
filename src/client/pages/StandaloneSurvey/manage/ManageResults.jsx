@@ -49,7 +49,7 @@ const useOpenAnswerActions = survey => {
       ),
     canDelete: survey.access.isAdmin,
     deleteAnswer: feedback => {
-      if (window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) !== 'delete') return
+      if (window.prompt(t('standaloneSurvey:confirmDeleteAnswer')) !== 'delete') return
       void run(
         remove,
         { questionId: feedback.questionId, content: feedback.data },
