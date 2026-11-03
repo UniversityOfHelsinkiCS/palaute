@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { boxPrintStyle } from '../../util/printStyle'
+import { useTranslationContext } from '../../util/translationContext'
 
 const styles = {
   listItem: {
@@ -37,7 +38,8 @@ export const OpenFeedbackContainer = ({ children, sx = {} }) => <Box sx={[styles
 
 export const OpenFeedback = ({ content, hidden, toggleVisibility, canHide, canDelete, deleteAnswer }) => {
   const { t } = useTranslation()
-  const secondaryText = hidden ? t('feedbackTargetResults:hiddenInfo') : ''
+  const context = useTranslationContext()
+  const secondaryText = hidden ? t('feedbackTargetResults:hiddenInfo', { context }) : ''
 
   return (
     <OpenFeedbackContainer sx={hidden ? styles.hiddenListItem : {}}>

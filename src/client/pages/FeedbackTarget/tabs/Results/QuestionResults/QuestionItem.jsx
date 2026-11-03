@@ -8,6 +8,7 @@ import Instructions from '../../../../../components/common/Instructions'
 import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { boxPrintStyle } from '../../../../../util/printStyle'
+import { useTranslationContext } from '../../../../../util/translationContext'
 import AverageResult from './AverageResult'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
@@ -24,13 +25,18 @@ const componentByType = {
 
 const VisibilityInfoBox = ({ isPublic }) => {
   const { t } = useTranslation()
+  const context = useTranslationContext()
 
   const content = (
     <>
-      <span>{isPublic ? t('feedbackTargetResults:unpublishingInfo') : t('feedbackTargetResults:publishingInfo')}</span>
+      <span>
+        {isPublic
+          ? t('feedbackTargetResults:unpublishingInfo', { context })
+          : t('feedbackTargetResults:publishingInfo', { context })}
+      </span>
       <br />
       <br />
-      <span>{t('feedbackTargetResults:hidingFeatureInfo')}</span>
+      <span>{t('feedbackTargetResults:hidingFeatureInfo', { context })}</span>
     </>
   )
 

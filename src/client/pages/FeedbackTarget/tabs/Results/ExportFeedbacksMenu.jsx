@@ -8,6 +8,7 @@ import { writeFileXLSX, utils } from 'xlsx'
 import ExportButton from '../../../../components/common/ExportButton'
 import { focusIndicatorStyle } from '../../../../util/accessibility'
 import { getLanguageValue } from '../../../../util/languageUtils'
+import { useTranslationContext } from '../../../../util/translationContext'
 
 // Questions that appear in the feedbacks, in the order they appear. Users who can see only public
 // feedbacks get only public questions from the server, so only those are exported for them.
@@ -96,6 +97,7 @@ const createXLSX = ({ questions, feedbacks, filename, language }) => {
 
 const ExportFeedbacksMenu = ({ questions, feedbacks, filename, componentRef }) => {
   const { t, i18n } = useTranslation()
+  const context = useTranslationContext()
   const { language } = i18n
   const { enqueueSnackbar } = useSnackbar()
   const hasFeedbacks = feedbacks?.length > 0
@@ -116,7 +118,7 @@ const ExportFeedbacksMenu = ({ questions, feedbacks, filename, componentRef }) =
   })
 
   return (
-    <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export')}>
+    <ExportButton disabled={!hasFeedbacks} label={t('feedbackTargetResults:export', { context })}>
       <MenuItem onClick={handleExportXLSX} sx={focusIndicatorStyle()}>
         {t('common:exportXLSX')}
       </MenuItem>

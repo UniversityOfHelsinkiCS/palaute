@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 import { focusIndicatorStyle, optionFocusIndicatorStyle } from '../../util/accessibility'
 import styles from '../../util/chipStyles'
 import { mergeSx } from '../../util/sx'
+import { useTranslationContext } from '../../util/translationContext'
 
 const radioButtonStyle = mergeSx({ ml: 1, my: 1, pr: 1 }, optionFocusIndicatorStyle())
 
@@ -35,9 +36,10 @@ const QuestionPublicityToggle = ({
   questionLabel?: string
 }) => {
   const { t } = useTranslation()
+  const context = useTranslationContext()
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
 
-  const tooltipText = `${checked ? t('common:publicInfo') : t('common:notPublicInfo')}. ${
+  const tooltipText = `${checked ? t('common:publicInfo', { context }) : t('common:notPublicInfo', { context })}. ${
     !disabled ? t('common:editable') : t('common:notEditable')
   }`
 
@@ -137,13 +139,13 @@ const QuestionPublicityToggle = ({
               <FormControlLabel
                 value="true"
                 control={<Radio autoFocus={checked && isOpen && !disabled} disableFocusRipple disabled={disabled} />}
-                label={t('common:publicInfo')}
+                label={t('common:publicInfo', { context })}
                 sx={radioButtonStyle}
               />
               <FormControlLabel
                 value="false"
                 control={<Radio autoFocus={!checked && isOpen && !disabled} disableFocusRipple disabled={disabled} />}
-                label={t('common:notPublicInfo')}
+                label={t('common:notPublicInfo', { context })}
                 sx={radioButtonStyle}
               />
             </RadioGroup>

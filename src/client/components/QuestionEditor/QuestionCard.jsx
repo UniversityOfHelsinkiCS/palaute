@@ -18,6 +18,7 @@ import { useTranslation } from 'react-i18next'
 
 import { LANGUAGES } from '../../util/common'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
+import { useTranslationContext } from '../../util/translationContext'
 import ConfirmDialog from '../common/ConfirmDialog'
 import FormikRadioButtons from '../common/FormikRadioButtons'
 import FormikSwitch from '../common/FormikSwitch'
@@ -85,6 +86,7 @@ const ActionsContainer = ({ children }) => (
 
 const EditActions = ({ showRequiredToggle, name, publicityConfigurable, isPublic }) => {
   const { t } = useTranslation()
+  const context = useTranslationContext()
 
   return (
     <>
@@ -93,15 +95,15 @@ const EditActions = ({ showRequiredToggle, name, publicityConfigurable, isPublic
           <FormikRadioButtons
             name={`${name}.public`}
             options={[
-              { label: t('common:publicInfo'), value: true },
-              { label: t('common:notPublicInfo'), value: false },
+              { label: t('common:publicInfo', { context }), value: true },
+              { label: t('common:notPublicInfo', { context }), value: false },
             ]}
             valueMapper={value => value === 'true'}
             disabled={!publicityConfigurable}
           />
         ) : (
           <Typography variant="body1" color="textSecondary">
-            {isPublic ? t('common:publicInfo') : t('common:notPublicInfo')}
+            {isPublic ? t('common:publicInfo', { context }) : t('common:notPublicInfo', { context })}
           </Typography>
         )}
       </Box>
