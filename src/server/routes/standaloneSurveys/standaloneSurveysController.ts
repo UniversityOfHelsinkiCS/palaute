@@ -27,7 +27,6 @@ import {
   createSurvey,
   deleteSurvey,
   getAllSurveys,
-  getAnsweredSurveys,
   getSurveysForResponsibleUser,
   setResponsibleUsers,
   updateSurvey,
@@ -110,10 +109,6 @@ const router = Router()
 
 router.get('/', async (req: AuthenticatedRequest, res: Response) => {
   res.send(await getSurveysForResponsibleUser(req.user))
-})
-
-router.get('/answered', async (req: AuthenticatedRequest, res: Response) => {
-  res.send(await getAnsweredSurveys(req.user))
 })
 
 router.get('/all', adminAccess, async (_req: AuthenticatedRequest, res: Response) => {

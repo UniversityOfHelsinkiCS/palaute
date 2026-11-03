@@ -53,13 +53,6 @@ export type SurveyListItem = {
   responseCount: number
 }
 
-export type AnsweredSurvey = {
-  name: LocalizedString
-  token: string
-  opensAt: string
-  closesAt: string
-}
-
 const get = async <T>(url: string) => (await apiClient.get<T>(url)).data
 
 const answerKey = (token: string) => ['standaloneSurveyAnswer', token]
@@ -78,7 +71,6 @@ export const useAnswerResults = (token: string, enabled: boolean) =>
 const invalidateAnswer = async (token: string) => {
   await queryClient.invalidateQueries({ queryKey: answerKey(token) })
   await queryClient.invalidateQueries({ queryKey: ['standaloneSurveyAnswerResults', token] })
-  await queryClient.invalidateQueries({ queryKey: ['standaloneSurveysAnswered'] })
 }
 
 export const useSaveResponse = (token: string) =>
@@ -135,12 +127,6 @@ export const useUpdateResponsibleUsers = (id: number | string) =>
 
 export const useMySurveys = () =>
   useQuery({ queryKey: ['standaloneSurveys'], queryFn: () => get<SurveyListItem[]>('/standalone-surveys') })
-
-export const useAnsweredSurveys = () =>
-  useQuery({
-    queryKey: ['standaloneSurveysAnswered'],
-    queryFn: () => get<AnsweredSurvey[]>('/standalone-surveys/answered'),
-  })
 
 export const useAllSurveys = () =>
   useQuery({ queryKey: ['standaloneSurveysAll'], queryFn: () => get<SurveyListItem[]>('/standalone-surveys/all') })

@@ -916,7 +916,6 @@
     "settingsTab": "Inställningar",
     "logsTab": "Loggar",
     "groupTitle": "Andra enkäter",
-    "answeredGroupTitle": "Andra enkäter",
     "confirmDeleteAnswer": "Du är på väg att PERMANENT radera ett svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svar? Skriv \"delete\" för att bekräfta.",
     "noAnswersYet": "Resultaten visas inte eftersom ingen har svarat ännu.",
     "questionsLockedTooltip": "Fliken Frågor är inaktiverad: Enkäten kan inte längre redigeras efter att den har öppnats."

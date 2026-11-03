@@ -931,7 +931,6 @@
     "settingsTab": "Settings",
     "logsTab": "Logs",
     "groupTitle": "Other surveys",
-    "answeredGroupTitle": "Other surveys",
     "confirmDeleteAnswer": "You are about to PERMANENTLY delete an answer using admin rights. Are you sure you want to delete this answer? Type \"delete\" to confirm.",
     "noAnswersYet": "Results are not shown because nobody has answered yet.",
     "questionsLockedTooltip": "Questions tab disabled: The survey can no longer be edited after it has opened."

@@ -8,7 +8,6 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import { StatusTabs, StatusTab } from '../../components/common/StatusTabs'
 import Title from '../../components/common/Title'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
-import AnsweredSurveys, { useAnsweredSurveysWithStatus } from '../StandaloneSurvey/AnsweredSurveys'
 import CourseRealisationItem from './CourseRealisationItem'
 import {
   filterFeedbackTargets,
@@ -38,9 +37,7 @@ const MyFeedbacks = () => {
     [filteredFeedbackTargets, status]
   )
 
-  const answeredSurveys = useAnsweredSurveysWithStatus(status)
-
-  const showNoFeedbackAlert = !isLoading && sortedCourseRealisations.length === 0 && answeredSurveys.length === 0
+  const showNoFeedbackAlert = !isLoading && sortedCourseRealisations.length === 0
   const counts = {
     ongoing: filteredFeedbackTargets.ongoing.length,
     waiting: filteredFeedbackTargets.waiting.length,
@@ -100,7 +97,7 @@ const MyFeedbacks = () => {
       <Box role="tabpanel" id={`tabpanel-${status}`} aria-labelledby={`tab-${status}`}>
         {isLoading && <LoadingProgress />}
 
-        {showNoFeedbackAlert && (
+        {showNoFeedbackAlert && sortedCourseRealisations.length === 0 && (
           <Alert data-cy="my-feedbacks-no-feedbacks" severity="info">
             {t('userFeedbacks:noFeedback')}
           </Alert>
@@ -111,8 +108,6 @@ const MyFeedbacks = () => {
             <CourseRealisationItem courseRealisation={courseRealisation} />
           </Fragment>
         ))}
-
-        {answeredSurveys.length > 0 && <AnsweredSurveys surveys={answeredSurveys} />}
       </Box>
     </>
   )
