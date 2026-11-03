@@ -905,6 +905,8 @@
     "noAccess": "Du har inte behörighet att hantera den här enkäten.",
     "openAnswerPage": "Öppna svarssidan",
     "settingsTab": "Inställningar",
-    "logsTab": "Loggar"
+    "logsTab": "Loggar",
+    "groupTitle": "Andra enkäter",
+    "answeredGroupTitle": "Andra enkäter"
   }
 }
