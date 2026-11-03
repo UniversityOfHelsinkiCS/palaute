@@ -8,6 +8,7 @@
     "unknownError": "Jotain meni pieleen",
     "choiceQuestionError": "Valintakysymykset tarvitsevat vastausvaihtoehtoja",
     "fetchError": "Jokin meni vikaan tietoja haettaessa. Sivun uudelleenlataus voi auttaa.",
+    "notLoggedIn": "Et ole kirjautunut sisään. Lataa sivu uudelleen kirjautuaksesi uudestaan.",
     "serverError": "Hmph, jokin meni pieleen meidän puolellamme ja pyrimme korjaamaan vian piakkoin. Pahoittelut.",
     "notFound": "Sivua tai resurssia ei löydy.",
     "noAccess": "Sinulla ei ole pääsyoikeutta tähän resurssiin.",

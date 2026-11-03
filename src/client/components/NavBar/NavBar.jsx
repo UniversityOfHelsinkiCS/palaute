@@ -142,7 +142,7 @@ const NavLabelWrapper = ({ renderBadge, children }) => {
   return baseElement
 }
 
-const NavBar = ({ guest = false }) => {
+const NavBar = ({ guest = false, reloadHome = false }) => {
   const menuButtonRef = useRef()
   const { pathname } = useLocation()
   const { t, i18n } = useTranslation()
@@ -377,7 +377,7 @@ const NavBar = ({ guest = false }) => {
       >
         <Container maxWidth={false}>
           <Toolbar sx={styles.toolbar} disableGutters>
-            <Logo guest={guest} />
+            <Logo guest={guest} reloadHome={reloadHome} />
             {!isMobile && navBarLinks}
             {isMobile ? mobileMenuButton : desktopMenuButton}
           </Toolbar>

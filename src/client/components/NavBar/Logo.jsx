@@ -39,7 +39,8 @@ const styles = {
   },
 }
 
-const Logo = ({ guest = false }) => {
+// reloadHome: load the front page through the browser so that Shibboleth can start a new login
+const Logo = ({ guest = false, reloadHome = false }) => {
   const { t } = useTranslation()
   const customUiConfig = useUiConfig()
   const customStyles = customUiConfig?.styles?.logo ?? {}
@@ -47,7 +48,12 @@ const Logo = ({ guest = false }) => {
   const customLogo = customUiConfig?.images?.logo
 
   return (
-    <Link to={guest ? '/noad' : '/'} style={{ textDecoration: 'none' }} aria-label={t('navBar:norppa')}>
+    <Link
+      to={guest && !reloadHome ? '/noad' : '/'}
+      reloadDocument={reloadHome}
+      style={{ textDecoration: 'none' }}
+      aria-label={t('navBar:norppa')}
+    >
       <Box sx={logoStyles.link}>
         <img src={customLogo || hyLogo} alt="" aria-hidden="true" style={logoStyles.image} />
         <span style={logoStyles.text}>Norppa</span>

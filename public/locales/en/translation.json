@@ -8,6 +8,7 @@
     "unknownError": "Something went wrong",
     "choiceQuestionError": "Choice questions require answer options",
     "fetchError": "Error while fetching data. Refreshing the page may fix this.",
+    "notLoggedIn": "You are not logged in. Refresh the page to log in again.",
     "serverError": "Oops, something broke on our end, we will try to fix it ASAP. Apologies.",
     "notFound": "Page or resource not found, sorry.",
     "noAccess": "You have no access to the requested resource.",

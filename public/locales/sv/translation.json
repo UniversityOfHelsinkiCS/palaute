@@ -9,6 +9,7 @@
     "serverError": "Hmm, något gick fel på vår sida och vi försöker fixa det så fort som möjligt. Vi ber om ursäkt.",
     "choiceQuestionError": "Flervalsfrågor kräver svarsalternativ",
     "fetchError": "Något gick fel under datahämtningen. Att ladda om sidan kan hjälpa.",
+    "notLoggedIn": "Du är inte inloggad. Ladda om sidan för att logga in igen.",
     "notFound": "Sidan eller resursen hittas inte.",
     "noAccess": "Du har inte tillgång till denna resurs.",
     "supportContact": "Vid problemfall, kontakta supporten: ",
