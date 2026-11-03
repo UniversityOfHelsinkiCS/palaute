@@ -926,7 +926,6 @@
     "settingsTab": "Asetukset",
     "logsTab": "Lokit",
     "groupTitle": "Muut kyselyt",
-    "answeredGroupTitle": "Muut kyselyt",
     "confirmDeleteAnswer": "Olet poistamassa vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
     "noAnswersYet": "Tuloksia ei näytetä, koska kukaan ei ole vielä vastannut.",
     "questionsLockedTooltip": "Kysymykset-välilehti ei käytössä: Kyselyä ei voi enää muokata sen avauduttua."

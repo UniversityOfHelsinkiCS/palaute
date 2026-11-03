@@ -9,7 +9,7 @@ Status: implemented on master (not pushed). The e2e spec hasn't been run yet.
 - Separate tables. No fake course, course realisation or feedback target.
 - Only admins create surveys. Admins see and can do everything.
 - Responsible users ("Responsible persons" / "Vastuuhenkilöt" / "Ansvariga personer" in the UI) edit the survey and see results. Responsible users and admins add and remove them, and there's always at least one. The creating admin is prefilled in the creation form and can be removed.
-- Responsible users find their surveys on "My surveys" (`/courses`, `MyTeaching`) under their own heading. Respondents find surveys they've answered on "My feedback" (`/feedbacks`, `MyFeedbacks`). Surveys nobody has answered are reachable only through the link.
+- Responsible users find their surveys on "My surveys" (`/courses`, `MyTeaching`) under their own heading. Respondents reach a survey only through its link. Answered surveys aren't listed anywhere, because My feedback only exists for students.
 - The link carries a random token that never changes. There's no disabled state. A survey is stopped by setting `closes_at` to now.
 - One answer per person. Answers can be edited and deleted until the survey closes.
 - No list of who answered. `user_id` is stored only to prevent duplicates and allow editing.
@@ -60,7 +60,6 @@ New code in `src/server/services/standaloneSurveys/` and `src/server/routes/stan
 
 Respondent routes, by token:
 
-- `GET /standalone-surveys/answered`: surveys the user has answered, with their tokens (for My feedback)
 - `GET /standalone-surveys/answer/:token`: name, dates, questions, the user's own answer, and whether results are visible
 - `PUT /standalone-surveys/answer/:token/response`: create or update the own answer. Checks: survey open, not the placeholder user, answers valid.
 - `DELETE /standalone-surveys/answer/:token/response`
@@ -90,7 +89,6 @@ New code in `src/client/pages/StandaloneSurvey/`.
 - `/standalone-surveys/:id/*`: the management page, built from the same layout and tab components as `/targets/:id`. Tabs: Survey (preview), Results, Edit (name, dates, `QuestionEditor`), Responsible persons, Share (copy link), Logs.
 - Admin panel: a new "Standalone surveys" tab in `src/client/pages/Admin/Admin.jsx` with the list of all surveys and the creation form. The responsible persons picker reuses `ResponsibleTeachersSelector` from `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`.
 - My surveys (`src/client/pages/MyTeaching/`): a heading listing the surveys the user is responsible for, shown only when there are any.
-- My feedback (`src/client/pages/MyFeedbacks/`): the surveys the user has answered, linking to the answer page, shown only when there are any.
 
 `QuestionEditor` is already configured through props: without `groupingQuestionSettings` and `copyFromCourseDialog` it offers no grouping or copying. `FeedbackChart` isn't used, because its response rate needs an expected respondent count. The results page shows the answer count instead.
 
@@ -110,7 +108,7 @@ Each change is its own commit, made before the code that needs it, and course be
 8. `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`: `ResponsibleTeachersSelector` is exported and uses its `name` prop instead of a hard-coded `teachers` field.
 9. `ShareItem` (Share tab) and `getLogMessage` (Logs tab) are exported.
 10. `src/server/services/users/preferences.ts`: responsible users of standalone surveys get the My surveys menu item.
-11. `MyTeaching.jsx` and `MyFeedbacks.tsx` render the standalone survey sections.
+11. `MyTeaching.jsx` renders the standalone survey section.
 
 The shared components stay in `src/client/pages/FeedbackTarget/`, because the guest pages already import them from there.
 
@@ -125,7 +123,7 @@ Each step is committed to master. The work isn't visible to users until the admi
 5. Client refactors 3–7
 6. Client: respondent page
 7. Client: management page
-8. Client: admin tab, My surveys and My feedback headings
+8. Client: admin tab, My surveys heading
 9. Playwright spec `e2e/specs/standaloneSurvey.spec.ts`
 
 ## Tests

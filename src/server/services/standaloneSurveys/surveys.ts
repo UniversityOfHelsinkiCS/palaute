@@ -167,19 +167,3 @@ export const getSurveysForResponsibleUser = async (user: User) => {
   const counts = await getResponseCounts(surveys.map(s => s.id))
   return surveys.map(s => toListItem(s, counts))
 }
-
-export const getAnsweredSurveys = async (user: User) => {
-  const responses = await StandaloneSurveyResponse.findAll({
-    where: { userId: user.id },
-    include: [{ model: StandaloneSurvey, as: 'standaloneSurvey' }],
-  })
-
-  return _.orderBy(
-    responses.map(r => {
-      const survey = (r as any).standaloneSurvey as StandaloneSurvey
-      return { name: survey.name, token: survey.token, opensAt: survey.opensAt, closesAt: survey.closesAt }
-    }),
-    'closesAt',
-    'desc'
-  )
-}
