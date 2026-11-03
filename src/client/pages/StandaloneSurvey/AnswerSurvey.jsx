@@ -3,7 +3,7 @@ import { Alert, Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Link, Navigate, Route, Routes, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import AlertLink from '../../components/common/AlertLink'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
@@ -16,10 +16,11 @@ import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
 import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 import { formatDate, getInitialValues, makeValidate } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { toFeedbackData, useAnswerResults, useAnswerSurvey, useDeleteResponse, useSaveResponse } from './api'
+import { getAnswerPath, toSlug } from './paths'
 import SurveyHeader from './SurveyHeader'
 import SurveyResults from './SurveyResults'
 
-const AnswerForm = ({ survey, token }) => {
+const AnswerForm = ({ survey, token, basePath }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
@@ -39,7 +40,7 @@ const AnswerForm = ({ survey, token }) => {
     try {
       await saveResponse.mutateAsync(toFeedbackData(values.answers))
       enqueueSnackbar(t('standaloneSurvey:saved'), { variant: 'success', autoHideDuration: 6000 })
-      navigate(`/survey/${token}/results`)
+      navigate(`${basePath}/results`)
     } catch (e) {
       handleError(e)
     }
@@ -75,7 +76,7 @@ const AnswerForm = ({ survey, token }) => {
       {isEnded && (
         <Alert severity="info" sx={{ mb: 2 }}>
           {t('standaloneSurvey:ended')}{' '}
-          <AlertLink component={Link} to={`/survey/${token}/results`}>
+          <AlertLink component={Link} to={`${basePath}/results`}>
             {t('standaloneSurvey:seeResults')}
           </AlertLink>
         </Alert>
@@ -114,7 +115,8 @@ const AnswerForm = ({ survey, token }) => {
 
 const AnswerSurvey = () => {
   const { t } = useTranslation()
-  const { token } = useParams()
+  const { slug, token } = useParams()
+  const location = useLocation()
   const { data: survey, isLoading } = useAnswerSurvey(token)
   const results = useAnswerResults(token, survey?.resultsVisible ?? false)
 
@@ -122,7 +124,12 @@ const AnswerSurvey = () => {
   if (!survey) return <Alert severity="error">{t('standaloneSurvey:notFound')}</Alert>
 
   const isOpen = feedbackTargetIsOpen(survey)
-  const basePath = `/survey/${token}`
+  const basePath = getAnswerPath({ name: survey.name, token })
+
+  if (slug !== toSlug(survey.name)) {
+    const rest = location.pathname.split(`/${token}`)[1] ?? ''
+    return <Navigate to={`${basePath}${rest}`} replace />
+  }
 
   return (
     <TranslationContextProvider value="standalone">
@@ -152,7 +159,7 @@ const AnswerSurvey = () => {
       </FeedbackTargetTabsContainer>
 
       <Routes>
-        <Route path="/" element={<AnswerForm survey={survey} token={token} />} />
+        <Route path="/" element={<AnswerForm survey={survey} token={token} basePath={basePath} />} />
         <Route
           path="/results"
           element={

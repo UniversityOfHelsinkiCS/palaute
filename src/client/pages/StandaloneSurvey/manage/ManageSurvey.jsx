@@ -27,6 +27,7 @@ import { getLogMessage } from '../../FeedbackTarget/tabs/Logs/Logs'
 import { ShareItem } from '../../FeedbackTarget/tabs/Share/Share'
 import { copyLink } from '../../FeedbackTarget/utils'
 import { useManagedSurvey, useSurveyLogs } from '../api'
+import { getAnswerPath } from '../paths'
 import SurveyHeader from '../SurveyHeader'
 import EditQuestions from './EditQuestions'
 import ManageResults from './ManageResults'
@@ -62,7 +63,7 @@ const Preview = ({ survey }) => {
 const Share = ({ survey }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const link = `https://${window.location.host}/survey/${survey.token}`
+  const link = `https://${window.location.host}${getAnswerPath(survey)}`
 
   return (
     <Box id="feedback-target-tab-content" sx={{ my: 3 }}>
@@ -130,7 +131,7 @@ const ManageSurvey = () => {
     <TranslationContextProvider value="standalone">
       <SurveyHeader survey={survey}>
         <Box>
-          <NorButton color="secondary" component={Link} to={`/survey/${survey.token}`}>
+          <NorButton color="secondary" component={Link} to={getAnswerPath(survey)}>
             {t('standaloneSurvey:openAnswerPage')}
           </NorButton>
         </Box>
