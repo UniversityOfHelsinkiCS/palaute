@@ -27,8 +27,8 @@ manualTest(
     // The button and the menu are both above and below the questions
     const language = page.getByRole('combobox', { name: t('editFeedbackTarget:translationLanguage') }).last()
     await caption({
-      fi: 'Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa. Kieli valitaan kysymysten alta.',
-      en: 'Students see the survey in the language they use Norppa in. The language is chosen below the questions.',
+      fi: 'Opiskelija näkee Norpan kysymykset oletusarvoisesti Sisun asiointikielen mukaisesti. Norpan kieltä voi vaihtaa alavalikosta.',
+      en: "By default, students see Norppa's questions in their preferred language from Sisu. The language can be changed from the menu below.",
     })
     await click(language)
 

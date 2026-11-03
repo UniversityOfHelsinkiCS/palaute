@@ -31,8 +31,8 @@ manualTest(
     await expect(message).toBeVisible()
 
     await caption({
-      fi: 'Viesti on valmiina. Jos lähetät sen sellaisenaan, jokainen opiskelija saa sen omalla kielellään.',
-      en: 'The message is ready. If you send it as it is, each student gets it in their own language.',
+      fi: 'Viesti on valmiina. Jos lähetät sen sellaisenaan, jokainen opiskelija saa sen omalla asiointikielellään.',
+      en: 'The message is ready. If you send it as it is, each student gets it in their own preferred language.',
     })
 
     await caption({

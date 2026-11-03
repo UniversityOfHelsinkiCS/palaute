@@ -17,12 +17,15 @@ manualTest(
     })
 
     await caption({
-      fi: 'Vastaukset näkyvät ensimmäisestä vastauksesta lähtien, joten niitä voi seurata jo kyselyn ollessa auki.',
-      en: 'The answers show from the first one on, so you can follow them while the survey is still open.',
+      fi: 'Vastaukset näkyvät ensimmäisestä vastaajasta lähtien, joten niitä voi seurata jo kyselyn ollessa auki.',
+      en: 'The answers show from the first respondent on, so you can follow them while the survey is still open.',
     })
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
-    await caption({ fi: 'Avataan Vastaukset-välilehti.', en: 'Open the Answers tab.' })
+    await caption({
+      fi: 'Avataan Vastaukset-välilehti.',
+      en: 'Open the Answers tab.',
+    })
     await click(byDataCy(page, 'feedback-target-results-tab'))
 
     await caption({
@@ -34,14 +37,21 @@ manualTest(
 
     const multipleChoice = page.locator('[data-cy^="feedback-target-results-multiple-choice-questions"]')
     await caption({
-      fi: 'Asteikko- ja valintakysymysten vastausjakaumat näytetään kaavioina. Keskiarvoon ei lasketa eos-vastauksia.',
-      en: 'The scale and choice questions show how the answers are spread, as charts. The average leaves out N/A answers.',
+      fi: 'Asteikko- ja valintakysymysten vastausjakaumat näytetään kaavioina. Keskiarvoon ei lasketa ”ei osaa sanoa” -vastauksia.',
+      en: 'The scale and choice questions show how the answers are spread, as charts. The average leaves out “don’t know” answers.',
     })
     await hover(multipleChoice.first())
     await pause(1500)
 
-    await caption({ fi: 'Kaaviot voi näyttää myös taulukkoina.', en: 'The charts can also be shown as tables.' })
-    await click(page.getByRole('button', { name: new RegExp(`^${t('feedbackTargetResults:tableView')}`) }))
+    await caption({
+      fi: 'Kaaviot voi näyttää myös taulukkoina.',
+      en: 'The charts can also be shown as tables.',
+    })
+    await click(
+      page.getByRole('button', {
+        name: new RegExp(`^${t('feedbackTargetResults:tableView')}`),
+      })
+    )
     await pause(1500)
 
     await caption({

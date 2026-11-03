@@ -53,8 +53,8 @@ manualTest(
     await click(byDataCy(page, 'question-editor-type-menu-select-likert'))
 
     await caption({
-      fi: 'Kirjoitetaan kysymys suomeksi, ruotsiksi ja englanniksi, sillä opiskelija näkee kyselyn omalla kielellään.',
-      en: 'Write the question in Finnish, Swedish and English, as each student sees the survey in their own language.',
+      fi: 'Kirjoitetaan kysymys suomeksi, ruotsiksi ja englanniksi, sillä opiskelija näkee kysymyksen omalla, Sisussa määritellyllä asiointikielellään.',
+      en: 'Write the question in Finnish, Swedish and English, as each student sees it in their own preferred language set in Sisu.',
     })
     for (const language of ['fi', 'sv', 'en'] as const) {
       await fill(page.locator(`input[id^=likert-label-${language}-questions]`), QUESTION[language])

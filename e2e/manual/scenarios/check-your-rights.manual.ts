@@ -17,14 +17,19 @@ manualTest(
     })
 
     await caption({
-      fi: 'Roolisi kurssilla tulee Sisusta. Se näkyy kurssin sivulla.',
-      en: 'Your role on a course comes from Sisu. It shows on the course page.',
+      fi: 'Norpan käyttöoikeusroolit tulevat Sisusta. Poikkeus on palautevastaavan rooli, joka lisätään Norpassa käsin.',
+      en: "Norppa's user roles come from Sisu. The exception is the feedback correspondent's role, which is added by hand in Norppa.",
+    })
+
+    await caption({
+      fi: 'Roolisi kurssilla näkyy kurssin sivulla.',
+      en: 'Your role on a course shows on the course page.',
     })
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
     await caption({
-      fi: 'Kurssin opettajat näkyvät rooleittain otsikoiden Vastuuopettajat, Opettajat ja Hallintohenkilöt alla.',
-      en: "The course's teachers are listed by role under the headings Responsible teachers, Teachers and Administrative persons.",
+      fi: 'Kurssin henkilökunta näkyy rooleittain otsikoiden Vastuuopettajat, Opettajat ja Hallintohenkilöt alla.',
+      en: "The course's staff are listed by role under the headings Responsible teachers, Teachers and Administrative persons.",
     })
     await click(byDataCy(page, 'feedback-target-teacher-list').getByRole('button'))
     await click(byDataCy(page, 'feedback-target-responsible-administrative-person-list').getByRole('button'))
@@ -37,8 +42,8 @@ manualTest(
     await hover(byDataCy(page, 'feedback-target-responsible-teacher-list'))
 
     await caption({
-      fi: 'Hallintohenkilöillä on samat oikeudet. Koulutusohjelman kyselyssä tämän otsikon alla ovat kyselyn vastuuhenkilöt.',
-      en: "Administrative persons have the same rights. In a programme's survey, the persons responsible for it are under this heading.",
+      fi: 'Hallintohenkilöillä on samat oikeudet. Koulutusohjelman kyselyssä roolit määrittelee kyselyn ylläpitäjä, ja vastuuhenkilöt ovat tämän otsikon alla.',
+      en: "Administrative persons have the same rights. In a programme's survey, the roles are set by the survey's maintainer, and the responsible persons are under this heading.",
     })
     await hover(byDataCy(page, 'feedback-target-responsible-administrative-person-list'))
 
