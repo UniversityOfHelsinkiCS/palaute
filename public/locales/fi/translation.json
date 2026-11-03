@@ -889,5 +889,23 @@
     "resultCount_other": "{{count}} tulosta haulla ”{{query}}”",
     "noResults": "Ei tuloksia haulla ”{{query}}”",
     "notFound": "Etkö löytänyt etsimääsi?"
+  },
+  "standaloneSurvey": {
+    "dates": "Avoinna {{opensAt}}–{{closesAt}}",
+    "manage": "Hallinnoi kyselyä",
+    "editAnswerTab": "Muokkaa vastausta",
+    "responseCount_one": "{{count}} vastaus",
+    "responseCount_other": "{{count}} vastausta",
+    "saved": "Vastauksesi on tallennettu. Kiitos!",
+    "deleteConfirmation": "Haluatko varmasti poistaa vastauksesi?",
+    "deleted": "Vastauksesi on poistettu",
+    "deleteAnswer": "Poista vastaukseni",
+    "formInfo": "Nimesi ei näy vastaustesi yhteydessä. Tähdellä (*) merkityt kentät ovat pakollisia.",
+    "privacyInfo": "Vastauksiasi käyttävät kyselystä vastaavat henkilöt, jotka näkevät ne ilman nimiä. Kirjautumisella varmistetaan, että jokainen vastaa vain kerran.",
+    "notOpenYet": "Kysely ei ole vielä avoinna. Siihen voi vastata {{opensAt}}–{{closesAt}}.",
+    "ended": "Kysely on sulkeutunut.",
+    "seeResults": "Katso tulokset",
+    "unknownUser": "Et voi vielä vastata kyselyyn, koska käyttäjätiliäsi ei ole lisätty Norppaan. Yritä myöhemmin uudelleen.",
+    "notFound": "Kyselyä ei löytynyt. Tarkista, että linkki on kokonainen."
   }
 }
