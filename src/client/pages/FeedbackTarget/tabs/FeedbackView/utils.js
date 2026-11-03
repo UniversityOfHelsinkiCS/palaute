@@ -114,16 +114,13 @@ const getInitialAnswerByFeedback = (feedback, question) => {
   return questionAnswer?.data
 }
 
-export const getInitialValues = feedbackTarget => {
-  const questions = getQuestions(feedbackTarget)
-
+export const getInitialValues = (questions, feedback) => {
   const answers = questions
     .filter(q => q.type !== 'TEXT')
     .reduce(
       (acc, question) => ({
         ...acc,
-        [question.id]:
-          getInitialAnswerByFeedback(feedbackTarget.feedback, question) ?? getInitialAnswerByType(question.type),
+        [question.id]: getInitialAnswerByFeedback(feedback, question) ?? getInitialAnswerByType(question.type),
       }),
       {}
     )
