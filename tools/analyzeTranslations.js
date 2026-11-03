@@ -50,6 +50,8 @@ const TRANSLATION_KEY_REFERENCE_MATCHER_2 = new RegExp(/\bt\(['"`]\w+(?::\w+)*['
 
 const LANGUAGES = ['fi', 'sv', 'en']
 const NAMESPACE = 'translation'
+// i18next plural forms: t('a:b', { count }) resolves to a:b_one, a:b_other, ...
+const PLURAL_SUFFIXES = ['_zero', '_one', '_two', '_few', '_many', '_other']
 
 /**
  * Imports a translation object from an ES module file.
@@ -178,15 +180,18 @@ const log = (...msg) => {
     const parts = k.split(':')
 
     Object.entries(locales).forEach(([lang, t]) => {
-      let obj = t
-      for (const p of parts) {
-        obj = obj[p]
-        if (!obj) break
+      let parent = t
+      for (const p of parts.slice(0, -1)) {
+        parent = parent?.[p]
       }
-      if (typeof obj !== 'string') {
-        missing.push(lang)
-      } else {
+      const last = parts[parts.length - 1]
+      const pluralKeys = PLURAL_SUFFIXES.map(s => `${last}${s}`).filter(p => typeof parent?.[p] === 'string')
+      if (typeof parent?.[last] === 'string') {
         translationsNotUsed.delete(k)
+      } else if (pluralKeys.includes(`${last}_other`)) {
+        pluralKeys.forEach(p => translationsNotUsed.delete(`${k}${p.slice(last.length)}`))
+      } else {
+        missing.push(lang)
       }
     })
 
