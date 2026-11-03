@@ -879,5 +879,23 @@
     "resultCount_other": "{{count}} träffar för ”{{query}}”",
     "noResults": "Inga träffar för ”{{query}}”",
     "notFound": "Hittade du inte det du letade efter?"
+  },
+  "standaloneSurvey": {
+    "dates": "Öppen {{opensAt}}–{{closesAt}}",
+    "manage": "Hantera enkäten",
+    "editAnswerTab": "Redigera svar",
+    "responseCount_one": "{{count}} svar",
+    "responseCount_other": "{{count}} svar",
+    "saved": "Ditt svar har sparats. Tack!",
+    "deleteConfirmation": "Är du säker på att du vill ta bort ditt svar?",
+    "deleted": "Ditt svar har tagits bort",
+    "deleteAnswer": "Ta bort mitt svar",
+    "formInfo": "Ditt namn visas inte tillsammans med dina svar. Fält markerade med en asterisk (*) är obligatoriska.",
+    "privacyInfo": "Dina svar används av de personer som ansvarar för enkäten, och de ser dem utan namn. Inloggningen används för att säkerställa att varje person svarar bara en gång.",
+    "notOpenYet": "Enkäten är inte öppen ännu. Den kan besvaras {{opensAt}}–{{closesAt}}.",
+    "ended": "Enkäten har stängts.",
+    "seeResults": "Se resultaten",
+    "unknownUser": "Du kan inte svara på enkäten ännu, eftersom ditt användarkonto inte har lagts till i Norppa. Försök igen senare.",
+    "notFound": "Enkäten hittades inte. Kontrollera att länken är fullständig."
   }
 }

@@ -894,5 +894,23 @@
     "resultCount_other": "{{count}} results for “{{query}}”",
     "noResults": "No results for “{{query}}”",
     "notFound": "Didn't find what you were looking for?"
+  },
+  "standaloneSurvey": {
+    "dates": "Open {{opensAt}}–{{closesAt}}",
+    "manage": "Manage survey",
+    "editAnswerTab": "Edit answer",
+    "responseCount_one": "{{count}} answer",
+    "responseCount_other": "{{count}} answers",
+    "saved": "Your answer has been saved. Thank you!",
+    "deleteConfirmation": "Are you sure you want to remove your answer?",
+    "deleted": "Your answer has been removed",
+    "deleteAnswer": "Remove my answer",
+    "formInfo": "Your name will not be shown with your answers. Fields marked with an asterisk (*) are required.",
+    "privacyInfo": "Your answers are used by the people responsible for this survey, who see them without names. Logging in is used to make sure each person answers only once.",
+    "notOpenYet": "This survey is not open yet. It can be answered between {{opensAt}} and {{closesAt}}.",
+    "ended": "This survey has closed.",
+    "seeResults": "See the results",
+    "unknownUser": "You can't answer this survey yet, because your user account hasn't been added to Norppa. Please try again later.",
+    "notFound": "Survey not found. Check that the link is complete."
   }
 }

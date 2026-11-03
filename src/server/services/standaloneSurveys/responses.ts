@@ -10,8 +10,10 @@ import { getPublicQuestionIds, getQuestions } from './getSurvey'
 export const getOwnResponse = (survey: StandaloneSurvey, user: User) =>
   StandaloneSurveyResponse.findOne({ where: { standaloneSurveyId: survey.id, userId: user.id } })
 
+export const isKnownUser = (user: User) => user.username !== NO_USER_USERNAME
+
 const assertCanAnswer = (survey: StandaloneSurvey, user: User) => {
-  if (user.username === NO_USER_USERNAME) throw ApplicationError.Forbidden('User is not known to Norppa')
+  if (!isKnownUser(user)) throw ApplicationError.Forbidden('User is not known to Norppa')
   if (!survey.isOpen()) throw ApplicationError.Forbidden('Survey is not open')
 }
 
