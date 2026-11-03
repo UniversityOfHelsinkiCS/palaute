@@ -68,7 +68,8 @@ const QuestionResults = React.memo(
     isOrganisationUser,
     isOpen,
     feedbackCount,
-    feedbackTargetId,
+    savePublicQuestionIds,
+    openAnswerActions,
     showTable,
   }) => {
     const { t } = useTranslation()
@@ -141,7 +142,8 @@ const QuestionResults = React.memo(
                   disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
-                  feedbackTargetId={feedbackTargetId}
+                  savePublicQuestionIds={savePublicQuestionIds}
+                  openAnswerActions={openAnswerActions}
                   showTable={showTable}
                 />
               </Box>
@@ -177,7 +179,8 @@ const QuestionResults = React.memo(
                   disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
-                  feedbackTargetId={feedbackTargetId}
+                  savePublicQuestionIds={savePublicQuestionIds}
+                  openAnswerActions={openAnswerActions}
                 />
               </Box>
             ))}

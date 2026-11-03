@@ -7,6 +7,7 @@ import { useInView } from 'react-intersection-observer'
 
 import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
+import useQuestionPublicityMutation from '../../../../hooks/useQuestionPublicityMutation'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
@@ -17,6 +18,8 @@ import GroupSelector from './GroupSelector'
 import QuestionResults from './QuestionResults'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useChartConfig from './QuestionResults/useChartConfig'
+import useDeleteOpenFeedback from './QuestionResults/useDeleteOpenFeedback'
+import useUpdateOpenFeedbackVisibility from './QuestionResults/useUpdateOpenFeedbackVisibility'
 
 const NotEnoughFeedbacks = ({ t }) => (
   <Box mb={2}>
@@ -141,6 +144,15 @@ const Results = () => {
 
   const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
   const { feedbackTargetData, isLoading } = useFeedbackTargetFeedbacks(id, groupId)
+  const publicityMutation = useQuestionPublicityMutation({ resource: 'feedbackTarget', resourceId: id })
+  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
+  const { canDelete, deleteAnswer } = useDeleteOpenFeedback()
+  const openAnswerActions = {
+    canHide,
+    toggleVisibility: feedback => toggleVisibility(feedback, id),
+    canDelete,
+    deleteAnswer,
+  }
 
   const {
     questions,
@@ -253,7 +265,8 @@ const Results = () => {
             isOrganisationUser={isOrganisationReader}
             isOpen={isOpen}
             feedbackCount={groupFeedbackCount}
-            feedbackTargetId={id}
+            savePublicQuestionIds={publicityMutation.mutateAsync}
+            openAnswerActions={openAnswerActions}
             showTable={showTable}
           />
         ) : (
