@@ -15,6 +15,7 @@ import Title from '../../components/common/Title'
 import { YearSelector } from '../../components/common/YearSemesterPeriodSelector'
 import useURLSearchParams from '../../hooks/useURLSearchParams'
 import { useAcademicYears, getYearRange } from '../../util/yearUtils'
+import StandaloneSurveyGroup, { useMySurveysWithStatus } from '../StandaloneSurvey/StandaloneSurveyGroup'
 import CourseUnitAccordion from './CourseUnitGroup/CourseUnitAccordion'
 import CourseUnitGroup from './CourseUnitGroup/CourseUnitGroup'
 import CourseUnitGroupGrid from './CourseUnitGroup/CourseUnitGroupGrid'
@@ -164,6 +165,7 @@ const MyTeaching = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } =
     useTeacherOrganisatioSurveys(queryParams)
+  const { surveys: standaloneSurveys } = useMySurveysWithStatus(status)
 
   const getPageTitle = () => {
     const baseTitle = t('teacherView:mainHeading')
@@ -217,7 +219,7 @@ const MyTeaching = () => {
       <Box role="tabpanel" id={`tabpanel-${status}`} aria-labelledby={`tab-${status}`}>
         {isLoading && isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
 
-        {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && (
+        {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && standaloneSurveys.length === 0 && (
           <Alert data-cy="my-teaching-no-courses" severity="info">
             {status === 'ended' && !showAllYears ? t('teacherView:noFilteredCourses') : t('teacherView:noCourses')}
           </Alert>
@@ -231,6 +233,8 @@ const MyTeaching = () => {
             setShowAllYears={setShowAllYears}
           />
         )}
+
+        {standaloneSurveys.length > 0 && <StandaloneSurveyGroup surveys={standaloneSurveys} />}
 
         {orgSurveyCourseUnits?.length > 0 && (
           <RenderCourseUnitGroup

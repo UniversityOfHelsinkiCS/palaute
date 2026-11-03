@@ -915,6 +915,8 @@
     "noAccess": "Sinulla ei ole oikeutta hallinnoida tätä kyselyä.",
     "openAnswerPage": "Avaa vastaussivu",
     "settingsTab": "Asetukset",
-    "logsTab": "Lokit"
+    "logsTab": "Lokit",
+    "groupTitle": "Muut kyselyt",
+    "answeredGroupTitle": "Muut kyselyt"
   }
 }
