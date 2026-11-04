@@ -24,7 +24,7 @@ Uusi koulutusohjelman kysymys on [[common:notPublic]]: sen vastaukset näkevät 
 1. Valitse kysymyksen [[common:notPublic]]-painike.
 2. Valitse [[common:publicInfo]].
 
-Kun koulutusohjelma on tehnyt kysymyksestä julkisen, se on julkinen kaikilla koulutusohjelman kursseilla, eikä opettaja voi muuttaa sitä. Avointen kysymysten vastauksia ei voi tehdä julkisiksi täällä; vastuuopettaja voi tehdä ne julkisiksi omalla kurssillaan kyselyn päätyttyä. Katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+Kun koulutusohjelma on tehnyt kysymyksestä julkisen, se on julkinen kaikilla koulutusohjelman kursseilla, eikä opettaja voi muuttaa sitä. Avointen kysymysten vastauksia ei voi tehdä julkisiksi täällä; vastuuopettaja voi tehdä ne julkisiksi omalla kurssillaan kyselyn päätyttyä. Katso [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 
 ## Missä kysymykset näkyvät {#placement}
 

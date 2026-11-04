@@ -27,7 +27,7 @@ Kysymystä muokataan sen [[common:edit]]-painikkeella. Useamman kysymyksen voit 
 
 [[questionEditor:addTextualContent]] lisää kysymyksen sijaan _tekstiosion_, esimerkiksi ohjeen tai väliotsikon sitä seuraaville kysymyksille. Tekstiosioissa ja kysymysten kuvauksissa voi käyttää Markdownia, esimerkiksi linkkejä ja luetteloita.
 
-Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovatko sen vastaukset julkisia. Lisäämäsi asteikko- ja valintakysymykset ovat oletuksena julkisia ja avoimet kysymykset eivät; katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovatko sen vastaukset julkisia. Lisäämäsi asteikko- ja valintakysymykset ovat oletuksena julkisia ja avoimet kysymykset eivät; katso [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 
 Kysymyksiä voivat muokata:
 

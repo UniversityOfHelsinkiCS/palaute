@@ -35,5 +35,5 @@ Uudet väittämät ovat eri kysymyksiä kuin vanhat, joten niiden tuloksia ei vo
 
 - Kurssikyselyn kysymyseditorissa yliopistotason kysymykset ovat ylimpänä tunnisteella [[questionEditor:universityQuestion]], eikä niitä voi muokata tai poistaa. Katso [Valmiit kysymykset](/guide/questions#fixed-questions).
 - Opiskelija näkee asteikko- ja valintakysymykset ensimmäisinä ja _Muita huomioita_ -kysymyksen viimeisenä; katso [Kysymysten järjestys opiskelijalle](/guide/questions#question-order).
-- Asteikko- ja valintakysymysten vastaukset ovat aina julkisia. Avoimen kysymyksen vastaukset eivät oletuksena ole julkisia. Katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+- Asteikko- ja valintakysymysten vastaukset ovat aina julkisia. Avoimen kysymyksen vastaukset eivät oletuksena ole julkisia. Katso [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 - Välipalautteessa ja koulutusohjelman kyselyissä ei ole yliopistotason kysymyksiä, mutta niihin voi lisätä kopiot painikkeella [[editFeedbackTarget:copyUniversityQuestions]]. Kopiot ovat kyselyn omia kysymyksiä, joita voi muokata. Katso [Kysymysten kopioiminen toisesta kyselystä](/guide/questions#copy-questions).

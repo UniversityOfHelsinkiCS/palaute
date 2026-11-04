@@ -49,7 +49,7 @@ Viesti lähtee kaikille kyselyn opiskelijoille, jotka eivät ole vielä vastanne
 
 - Opiskelija näkee kyselynsä Norpassa kohdassa [[navBar:myFeedbacks]]. Avoimet kyselyt, joihin hän ei ole vastannut, ovat välilehdellä [[userFeedbacks:waitingForFeedbackTab]], ja niissä on [[userFeedbacks:giveFeedbackButton]]-painike.
 - Kyselyn ollessa auki opiskelija voi muokata tai poistaa vastauksensa kohdassa [[navBar:myFeedbacks]].
-- Vastattuaan opiskelija näkee yhteenvedon julkisten kysymysten siihen mennessä annetuista vastauksista. Katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+- Vastattuaan opiskelija näkee yhteenvedon julkisten kysymysten siihen mennessä annetuista vastauksista. Katso [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 - Jos kurssille on ilmoittautunut alle viisi opiskelijaa, opiskelijaa varoitetaan ennen vastaamista, että vastaukset voi olla mahdollista yhdistää häneen. Katso [Alle viiden opiskelijan kurssit](/guide/anonymity#small-courses).
 - Vastaaminen on nimetöntä, joten et voi palkita yksittäisiä opiskelijoita vastaamisesta. Mitä voit nähdä, kerrotaan kohdassa [Ketkä ovat vastanneet](/guide/results#who-answered).
 

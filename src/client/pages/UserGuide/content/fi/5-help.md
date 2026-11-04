@@ -22,7 +22,7 @@ Välipalautteen ja koulutusohjelman kyselyn voit avata uudelleen itse siirtämä
 
 ## Opiskelijat eivät ole saaneet kyselyä {#students-not-reached}
 
-- Kurssikyselystä opiskelijat saavat sähköpostin avautumispäivänä, välipalautteesta ja koulutusohjelman kyselystä eivät lainkaan. Katso [Mitä opiskelijat saavat](/guide/collecting-answers#student-emails).
+- Kurssikyselystä opiskelijat saavat sähköpostin avautumispäivänä, välipalautteesta ja koulutusohjelman kyselystä eivät lainkaan. Katso [Mitä sähköpostiviestejä opiskelijat saavat](/guide/collecting-answers#student-emails).
 - Tavoitat opiskelijat [muistutusviestillä](/guide/collecting-answers#send-reminder) tai jakamalla [kyselyn linkin](/guide/collecting-answers#share-link).
 - Vastata voivat vain kurssille Sisussa hyväksytysti ilmoittautuneet. Uusi ilmoittautuminen näkyy Norpassa yleensä parin tunnin kuluessa; katso [Päivitykset Sisusta](/guide/schedule#sisu-updates).
 

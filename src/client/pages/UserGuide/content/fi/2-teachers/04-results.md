@@ -27,7 +27,7 @@ Jos kurssille on ilmoittautunut alle viisi opiskelijaa, tulokset näkyvät vain 
 
 ## Vastausten näkyvyyden muuttaminen {#visibility}
 
-Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]]. Sinä, muut vastuuopettajat ja hallintohenkilöt sekä koulutusohjelman adminit näette kaikki vastaukset. Muut opettajat, koulutusohjelman lukuoikeuksilla olevat ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Kaikki säännöt ja oletukset ovat kohdassa [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]]. Sinä, muut vastuuopettajat ja hallintohenkilöt sekä koulutusohjelman adminit näette kaikki vastaukset. Muut opettajat, koulutusohjelman lukuoikeuksilla olevat ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Kaikki säännöt ja oletukset ovat kohdassa [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 
 Kysymyksen näkyvyyden muuttaminen:
 
