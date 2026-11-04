@@ -10,7 +10,7 @@ Kurssien, kurssien henkilökunnana (vastuuopettaja, opettaja, hallintohenkilö) 
 
 ## Ohjeet pähkinänkuoressa {#guide-parts}
 
-- [Perusteet](/guide/basics): miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
+- [Perusteet](/guide/basics) (suunnattu kaikille): miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
 - [Vastuuopettajalle](/guide/teachers) :lle ja hallintohenkilöille suunnattu ohje: kyselyn aikataulu, kysymykset, vastausten kerääminen, tulokset ja vastapalaute sekä palaute kurssin aikana.
 - [Koulutusohjelmalle](/guide/programmes) koulutusohjelmajohtajille ja palautevastaaville suunnattu ohje: palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset.
 
