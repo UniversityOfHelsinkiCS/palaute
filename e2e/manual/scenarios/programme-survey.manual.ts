@@ -22,7 +22,7 @@ manualTest(
     })
 
     await caption({
-      fi: 'Kyselyn voivat luoda koulutusohjelman hallinnoijat, kuten palautevastaavat. Koulutusohjelma avataan ylävalikosta.',
+      fi: 'Kyselyn voivat luoda koulutusohjelman hallinnoijat, kuten palautevastaavat ja koulutusohjelmajohtaja.',
       en: "The programme's administrators, like the feedback correspondents, can create one. The programme opens from the top bar.",
     })
     await click(page.getByRole('link', { name: t('navBar:myOrganisations'), exact: true }))
@@ -82,8 +82,8 @@ manualTest(
     await closeNotification(page, click, new RegExp(`^${t('common:saveSuccess')}`))
 
     await caption({
-      fi: 'Norppa avasi kyselyn Kysymykset-välilehden. Kyselyssä ei ole yliopistotason kysymyksiä, joten lisätään omat kysymykset.',
-      en: 'Norppa opened the Questions tab of the survey. It has no university-wide questions, so add your own.',
+      fi: 'Norppa avasi kyselyn Kysymykset-välilehden. Kyselyssä ei ole oletusarvoisesti yliopistotason kysymyksiä, mutta voit halutessasi lisätä ne tai omat kysymyksesi.',
+      en: 'Norppa opened the Questions tab of the survey. It has no university-wide questions by default, but your're entitled to add them or your own custom ones.',
     })
     await click(byDataCy(page, 'question-editor-add-question'))
 
@@ -104,8 +104,8 @@ manualTest(
     await expect(byDataCy(page, 'editQuestion').first()).toBeVisible()
 
     await caption({
-      fi: 'Norppa ei lähetä koulutusohjelman kyselystä sähköpostia, joten lähetä opiskelijoille muistutusviesti tai jaa kyselyn linkki, kun se on auki.',
-      en: "Norppa sends no emails about a programme survey, so send the students a reminder or share the survey's link once it's open.",
+      fi: 'Norppa ei lähetä koulutusohjelman kyselystä automaattista sähköpostimuistutusta, joten lähetä opiskelijoille muistutusviesti tai jaa kyselyn linkki, kun se on auki.',
+      en: "Norppa sends no automatic emails about the programme survey, so send the students a reminder or share the survey's link once it's open.",
     })
 
     await caption({
