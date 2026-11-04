@@ -12,7 +12,7 @@ Tältä sivulta löydät ratkaisuja yleisimpiin ongelmiin. Jos ongelmasi ei ratk
 
 - Kysymykset lukittuvat, kun kysely avautuu, jotta kaikki opiskelijat vastaavat samoihin kysymyksiin. Sen jälkeen voit muuttaa vain sulkeutumispäivää; katso [Päivämäärien muuttaminen](/guide/schedule#change-dates).
 - Kyselyä voivat muokata kurssin vastuuopettajat ja hallintohenkilöt, ja sen kysymyksiä myös koulutusohjelman adminit. Opettajan roolilla näet kyselyn vain esikatseluna. Katso [Roolit kurssilla](/guide/roles#course-roles).
-- Yliopistotason ja koulutusohjelman kysymyksiä ei voi muokata kurssin kyselyssä. Katso [Kysymykset](/guide/questions).
+- Yliopistotason ja koulutusohjelman kysymyksiä ei voi muokata kurssikyselyssä. Katso [Kysymykset](/guide/questions).
 
 ## Kysely on jo sulkeutunut {#closed}
 
@@ -42,17 +42,17 @@ Kurssiyhteenvedon luvut lasketaan uudelleen joka yö, ja siinä ovat vain avautu
 
 ## Vastaus pitää poistaa {#remove-answer}
 
-Vastauksia ei voi poistaa Norpassa. Avoimen vastauksen voi [piilottaa](/guide/results#hide-answers), jolloin sen näkevät vain vastuuopettajat ja koulutusohjelman adminit. Jos vastaus on poistettava kokonaan, ota yhteyttä [tukeen](#support).
+Vastauksia ei voi poistaa Norpassa. Avoimen vastauksen voi [piilottaa](/guide/results#hide-answers), jolloin sen näkevät vain vastuuopettajat ja koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava). Jos vastaus on poistettava kokonaan, ota yhteyttä [tukeen](#support).
 
 ## Tuki {#support}
 
-Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat asiat voi tehdä Norpassa tai korjata Sisussa, mutta ota yhteyttä tukeen, jos tarvitset:
+Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat  asiat voi tehdä Norpassa tai korjata Sisussa, mutta ota yhteyttä tukeen, jos tarvitset:
 
-- päättyneen kurssikyselyn avaamista uudelleen tai sen päivämäärien muuttamista;
-- kyselyä kurssityypille, joka ei saa sitä automaattisesti, kuten itsenäisen työskentelyn projektille, esseelle, harjoittelulle tai pro gradu -tutkielmalle (ei tenteille);
-- apua, kun kurssi, opettaja tai opiskelija puuttuu Norpasta vielä muutama päivä sen jälkeen, kun tiedot on korjattu Sisussa (Sisun muutokset näkyvät yleensä seuraavana aamuna; katso [Päivitykset Sisusta](/guide/schedule#sisu-updates));
-- apua virheeseen, joka ei mene ohi.
+- päättyneen kurssikyselyn avaamista uudelleen tai sen päivämäärien muuttamista
+- kyselyä kurssityypille, joka ei saa sitä automaattisesti, kuten itsenäisen työskentelyn projektille, esseelle, harjoittelulle tai pro gradu -tutkielmalle (ei tenteille)
+- apua, kun kurssi, opettaja tai opiskelija puuttuu Norpasta vielä muutama päivä sen jälkeen, kun tiedot on korjattu Sisussa (Sisun muutokset näkyvät yleensä seuraavana aamuna; katso [Päivitykset Sisusta](/guide/schedule#sisu-updates))
+- apua virheeseen, joka ei mene ohi
 
 Liitä viestiin linkki kyselyn sivulle tai kurssikoodi ja kerro, mitä yritit tehdä ja mitä tapahtui.
 
-Voit lähettää ideoita ja palautetta Norpasta ylävalikon kohdasta [[navBar:feedback]].
+Voit lähettää ideoita ja palautetta suoraan ylävalikon kohdasta [[navBar:feedback]].
