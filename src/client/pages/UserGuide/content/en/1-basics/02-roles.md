@@ -4,7 +4,7 @@ description: What your role on a course and your rights in a programme let you d
 
 # Roles and rights
 
-What you can do in Norppa depends on two things: your role on each course, which comes from Sisu, and your rights in degree programmes and faculties, which come from the university's IAM groups. Neither can be changed in Norppa itself.
+Norppa has different user roles. Those related to a course come directly from Sisu (responsible teacher, teacher, administrative person). In addition, access to the data of faculties and degree programmes is given through IAM groups. These can't be changed in Norppa. Only the feedback liaison role is set in Norppa, in the programme's settings, and it gives rights to all of the programme's feedback.
 
 ## Roles on a course {#course-roles}
 
@@ -23,28 +23,28 @@ Responsible teachers and administrative persons also get Norppa's emails about t
 
 The same roles carry over to the course's interim feedback. On a programme survey, the persons the programme chose as responsible have the responsible teacher's rights; see [Programme surveys](/guide/programme-surveys).
 
-The instructions for responsible teachers and administrative persons are in the [For responsible teachers](/guide/teachers) part. Start with [Survey schedule](/guide/schedule).
+The instructions for responsible teachers and administrative persons are in the [Responsible teachers](/guide/teachers) part.
 
 ## Rights in a degree programme or faculty {#organisation-rights}
 
 Rights to a degree programme or faculty come from the university's IAM groups. For example, a programme director gets admin rights to their programme and the members of its steering group get read rights. If you have such rights, the menu shows [[navBar:myProgrammes]] or [[navBar:myOrganisations]].
 
 - _Read_: the programme's or faculty's page with its course summary and courses, and the answers to the public questions of its courses once their surveys have closed.
-- _Admin_: everything read rights give, and also:
+- _Admin_: read rights (see above), and also:
   - all the answers of its courses, including the open questions in the [[organisationSettings:openQuestionsTab]] tab
-  - its [[organisationSettings:settingsTab]], [[organisationSettings:surveyTab]] and [[organisationSettings:organisationSurveysTab]] tabs
-  - on its course surveys: editing the questions before the survey opens, hiding open answers, sending reminder emails and seeing who has answered
+  - the [[organisationSettings:settingsTab]], [[organisationSettings:surveyTab]] and [[organisationSettings:organisationSurveysTab]] tabs
+  - course surveys: editing the questions before the survey opens, hiding open answers, sending reminder emails and seeing who has answered
 
 Programme rights don't make you a teacher on a course: to change a course survey's dates or write counter feedback, you need the responsible teacher role in Sisu.
 
 _Feedback liaisons_ get admin rights to their programme. A programme's admins add them in Norppa; see [Adding a feedback liaison](/guide/settings#feedback-liaison).
 
-The instructions for programme staff are in the [For degree programmes](/guide/programmes) part. Start with [The programme's page](/guide/programme-page).
+The instructions for programme staff are in the [Degree programmes](/guide/programmes) part.
 
 ## Checking your rights {#check-your-rights}
 
-- Course roles: open the course's page and see under which heading your name is listed. The responsible persons of a programme survey are listed under [[feedbackTargetView:administrativePersons]]. To see the list, go to [[navBar:myCourses]] and choose the course.
-- Programme and faculty rights: click your name in the top right corner and choose [[navBar:userInformation]]. It lists your Norppa-related [[userInformation:iamGroups]] and, under [[userInformation:organisationAccess]], each organisation's code with your access level, _Admin_ or _Read_ (always in English). Hover over a code to see the organisation's name. This window doesn't show course roles.
+- Course roles: open the course's page and see under which heading your name is listed. The responsible persons of a programme survey are listed under [[feedbackTargetView:administrativePersons]].
+- Programme and faculty rights: click your name in the top right corner and choose [[navBar:userInformation]]. It lists your Norppa-related [[userInformation:iamGroups]] and, under [[userInformation:organisationAccess]], each organisation's code with your access level, _Admin_ or _Read_ (in English). Hover over a code to see the organisation's name. This window doesn't show course roles.
 
 [[video:check-your-rights]]
 
@@ -53,4 +53,6 @@ The instructions for programme staff are in the [For degree programmes](/guide/p
 - Wrong course role, or you're missing from a course: the role has to be fixed in Sisu by whoever maintains the course realisation there, often the degree programme's study affairs staff. Norppa updates the roles every night, so the change shows the next morning. For example, a guest lecturer who gets the responsible teachers' emails has been added in Sisu as responsible teacher, contact person or administrative person; changing their role to teacher in Sisu fixes it.
 - Missing programme or faculty rights: IAM groups are maintained outside Norppa. Ask your programme's or faculty's administration to add you to the right group, then log out of Norppa and back in. Alternatively, a programme admin can add you as a feedback liaison.
 
-If the role in Sisu is right but Norppa still shows the old one after a couple of days, contact [norppa@helsinki.fi](mailto:norppa@helsinki.fi).
+If the role in Sisu is wrong, contact the university's general support at [uni-help@helsinki.fi](mailto:uni-help@helsinki.fi).
+
+If the role has been changed in Sisu and is right there, but Norppa still shows the old one after a couple of days, contact [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

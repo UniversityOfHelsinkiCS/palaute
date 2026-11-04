@@ -4,37 +4,41 @@ description: What Norppa is, how a survey runs and where to find the instruction
 
 # Getting started
 
-Norppa is the course feedback system of the University of Helsinki. Students answer feedback surveys. Teachers edit the surveys, read the answers and reply to them with counter feedback. Degree programmes and faculties follow the feedback of their courses.
+Norppa is the course feedback system of the University of Helsinki. The course feedback survey is sent to students automatically and needs no action from the teacher. Teachers can edit the survey, read the answers and send the students counter feedback reflecting on the feedback received. Degree programmes and faculties can follow the feedback of their courses and create their own [feedback surveys](/guide/programme-surveys).
 
-Course, teacher and student data comes from Sisu. All feedback is anonymous: teachers and programme staff can't see which student gave which answers. See [Anonymity and visibility](/guide/anonymity).
+Course data and the course staff (responsible teacher, teacher, administrative person) come automatically from Sisu. All feedback is anonymous: teachers and programme staff can't see which student gave which answers. See [Anonymity and visibility](/guide/anonymity).
 
-## Which part of this guide is for you {#guide-parts}
+## The guide in a nutshell {#guide-parts}
 
-- [Basics](/guide/basics) is for everyone: how a survey works, roles and rights, the university level questions, who sees the answers and the course summary.
-- [For responsible teachers](/guide/teachers) is for a course's responsible teachers and administrative persons: the survey's schedule, questions, collecting answers, results and counter feedback, and feedback during the course. The same instructions apply to the responsible persons of programme surveys.
-- [For degree programmes](/guide/programmes) is for those with rights to a degree programme or faculty: following its feedback, programme questions, the programme's own surveys and settings.
+- [Basics](/guide/basics): instructions for everyone. How a survey works, roles and rights, the university level questions, who sees the answers and the course summary.
+- [Responsible teachers](/guide/teachers): instructions for responsible teachers and administrative persons. The survey's schedule, questions, collecting answers, results and counter feedback, and feedback during the course.
+- [Degree programmes](/guide/programmes): instructions for programme directors and feedback liaisons. Following the feedback, programme questions, the programme's own surveys and settings.
 
 If you're a teacher on a course but not a responsible teacher, you see the survey as a preview, can copy its link and see the answers to public questions. To find your role, see [Checking your rights](/guide/roles#check-your-rights).
 
 ## How a survey works {#survey-lifecycle}
 
-Every survey is upcoming, open or closed, and only its dates decide which. There's no publish or send step:
+A survey can be in three states: "upcoming", "open" or "closed":
 
-1. Before it opens, the survey's responsible teachers can change its questions and its dates. For a course survey, the responsible teachers and administrative persons get a reminder about a week before it opens.
-2. It opens by itself at 00:00 on its opening date. From then on, the questions are locked, and only the closing date can still be changed. The students of a course survey get an email when it opens. Students can answer, and change or delete their answers, until it closes.
+1. Before the survey opens, the course's responsible teachers can edit its questions and dates. The responsible teachers and administrative persons get a reminder about the course survey about a week before it opens.
+2. The survey opens automatically at 00:00 on the day after the course's end date. From then on, the questions are locked, and only the closing date can still be changed. Students get an automatic email telling them the feedback form has opened. Students can answer, and change or delete their answers, until it closes.
 3. It closes by itself at 23:59 on its closing date (Finnish time).
-4. After it has closed, the answers stay available. For 12 months, the responsible teachers can write [counter feedback](/guide/counter-feedback) to the students. The day after closing, the responsible teachers and administrative persons of a course survey, and the responsible persons of a programme survey, get a reminder if the survey got answers and has no counter feedback yet.
+4. After it has closed, the answers stay in Norppa. For 12 months, the responsible teachers can write one combined [counter feedback](/guide/counter-feedback) to the students. The responsible teachers and administrative persons of a course survey, and the responsible persons of a programme survey, get a reminder by email if the survey got answers and has no counter feedback yet.
 
 Norppa sends its automatic emails about surveys once a day, at 11:15. It sends no automatic emails about interim feedback, and none to the students of a programme survey. In more detail: [the reminder before opening](/guide/schedule#feedback-period), [the students' email](/guide/collecting-answers#student-emails) and [the counter feedback reminder](/guide/counter-feedback#write).
 
 ## Four kinds of feedback {#survey-types}
 
-- _Course survey_: one for each course realisation, created automatically from Sisu. It has the university level questions and possibly the degree programme's own questions, to which the teachers add their own. Most of this guide is about course surveys. See [Survey schedule](/guide/schedule).
-- _Continuous feedback_: free-form feedback students can write about a course at any time before its course survey opens. It's off until a responsible teacher switches it on. See [Continuous feedback](/guide/during-the-course#continuous-feedback).
-- _Interim feedback_: an extra survey a responsible teacher creates for their course, e.g. in the middle of it. See [Interim feedback](/guide/during-the-course#interim-feedback).
-- _Programme survey_: a survey a degree programme or faculty creates for chosen students, e.g. semester feedback. See [Programme surveys](/guide/programme-surveys).
+- _Course survey_: one for each course realisation, created automatically from Sisu. It has the university level questions and possibly the degree programme's own questions, to which the teachers can add their own. This happens automatically. See [Survey schedule](/guide/schedule).
 
-Continuous feedback has no questions, and the responsible teachers reply to each piece of it separately. Editing the questions, sharing the survey, reading the answers and counter feedback work the same way in the other three.
+The teacher's optional ways to collect feedback:
+
+- _Continuous feedback_: free-form feedback students can write about a course at any time before its course survey opens. Off by default until a responsible teacher switches it on. See [Continuous feedback](/guide/during-the-course#continuous-feedback).
+- _Interim feedback_: an extra survey a responsible teacher creates for their course, e.g. in the middle of it. See [Interim feedback](/guide/during-the-course#interim-feedback).
+
+Organisation level survey:
+
+- _Programme survey_: a survey a degree programme or faculty creates for chosen students, e.g. semester feedback. See [Programme surveys](/guide/programme-surveys).
 
 ## Finding your way {#navigation}
 

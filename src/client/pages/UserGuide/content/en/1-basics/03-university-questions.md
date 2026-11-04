@@ -4,7 +4,7 @@ description: The questions every course survey has, and the new questions taken 
 
 # University level questions
 
-The university level questions are the university's shared questions, which every course's course survey has. They're the same on every course, so their results can be compared between courses in the [course summary](/guide/course-summary). Teachers and degree programmes can't change them.
+The university level questions are the university's shared questions and are the same in every course survey, so their results can be compared across years and between courses in the [course summary](/guide/course-summary). Teachers and degree programmes can't change them.
 
 ## The questions {#questions}
 
@@ -16,24 +16,21 @@ In surveys that open on 2 August 2026 or later, students first answer five state
 4. The requirements for assessment (examination, assignment, course performance) were clear to me.
 5. The methods used in the course helped me make connections between the course content and my prior knowledge.
 
-Then the student chooses whether _the workload in relation to the credits awarded_ was heavy, fairly heavy, appropriate, fairly light or light.
+In the sixth question, the student chooses whether _the workload in relation to the credits awarded_ was heavy, fairly heavy, appropriate, fairly light or light.
 
-These six questions must be answered before the feedback can be sent. The open question _Additional comments_ is optional, and it's always the survey's last question.
+These six questions must be answered before the feedback can be sent. The seventh question, _Additional comments_, is open and optional, and it's always the survey's last question.
 
 ## The change in August 2026 {#new-questions}
 
-A survey gets the university level questions in use on the day it opens:
+In 2021-2026, Norppa had the following questions:
 
-- Surveys that open on 2 August 2026 or later have the questions above.
-- Surveys that opened on 1 August 2026 or earlier had four statements: _The learning objectives were clear to me_, _The course activities supported my learning_, _The course materials supported my learning_ and _The methods used to assess the course measure my learning_. The workload question was the same as now, and at the end was the open question _Any additional comments or suggestions_.
+_The learning objectives were clear to me_, _The course activities supported my learning_, _The course materials supported my learning_ and _The methods used to assess the course measure my learning_. The workload question was the same as now, and at the end was the open question _Any additional comments or suggestions_.
 
-A survey that opened before the change keeps the old questions, even while it's still open in August. If you change a survey's opening date before it opens, its questions follow the new date.
-
-The new statements are different questions from the old ones, so their results can't be compared with those of older surveys. The workload question is the same in both. In the course summary, the columns are the questions in use at the start of the chosen period; see [What the figures show](/guide/course-summary#figures).
+In the course summary, the columns are the questions in use at the start of the chosen period; see [What the figures show](/guide/course-summary#figures).
 
 ## In surveys and results {#in-surveys}
 
 - In a course survey's question editor, the university level questions are at the top, marked [[questionEditor:universityQuestion]], and they can't be edited or removed. See [Fixed questions](/guide/questions#fixed-questions).
 - Students see the scale and choice questions first and _Additional comments_ last; see [The order students see](/guide/questions#question-order).
-- The answers to the scale and choice questions are always public. The answers to the open question aren't public by default. See [Answer visibility for different users](/guide/anonymity#public-answers).
-- Interim feedback and programme surveys have no university level questions, but copies of them can be added with [[editFeedbackTarget:copyUniversityQuestions]]. The copies are the survey's own questions and can be edited. See [Copying questions from another survey](/guide/questions#copy-questions).
+- The answers to the scale and multiple choice questions are public. The answers to the open question aren't public by default, i.e. only the responsible teacher sees them. See [Answer visibility for different users](/guide/anonymity#public-answers).
+- Interim feedback and programme surveys have no university level questions, but you can add them with [[editFeedbackTarget:copyUniversityQuestions]] if you want.

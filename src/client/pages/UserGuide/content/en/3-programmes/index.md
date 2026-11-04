@@ -2,4 +2,4 @@
 description:
 ---
 
-# For degree programmes
+# Degree programmes

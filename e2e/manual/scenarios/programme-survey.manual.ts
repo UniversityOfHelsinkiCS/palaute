@@ -23,7 +23,7 @@ manualTest(
 
     await caption({
       fi: 'Kyselyn voivat luoda koulutusohjelman hallinnoijat, kuten palautevastaavat ja koulutusohjelmajohtaja.',
-      en: "The programme's administrators, like the feedback correspondents, can create one. The programme opens from the top bar.",
+      en: "The programme's administrators, like the feedback correspondents and the programme director, can create one.",
     })
     await click(page.getByRole('link', { name: t('navBar:myOrganisations'), exact: true }))
     await click(page.getByRole('link', { name: /KH50_005/ }))
