@@ -13,7 +13,7 @@ Palaute annetaan aina nimettömänä. Tällä sivulla ovat kaikki säännöt sii
 - Ladatuissa vastauksissa kunkin kysymyksen vastaukset on sekoitettu erikseen, eikä niissä ole aikaleimoja eikä opiskelijoiden tietoja.
 - Koska et näe, kuka vastasi mitä, et voi palkita yksittäisiä opiskelijoita vastaamisesta.
 
-## Kuka näkee mitkäkin vastaukset {#public-answers}
+## Vastausten näkyvyys eri käyttäjille {#public-answers}
 
 Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]].
 
