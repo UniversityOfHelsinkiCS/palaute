@@ -6,7 +6,7 @@ description: Miten opiskelijat saavat kyselyn ja miten saat lisää vastauksia l
 
 Kurssikyselyn opiskelijat saavat sähköpostin, kun kysely avautuu. Saat lisää vastauksia, kun jaat kyselyn linkin opetuksessasi ja lähetät muistutuksen kyselyn ollessa auki.
 
-## Mitä opiskelijat saavat {#student-emails}
+## Mitä sähköpostiviestejä opiskelijat saavat {#student-emails}
 
 - Kurssikyselyn avautumispäivänä opiskelijat saavat sähköpostin, jossa on linkki kyselyyn ja sen sulkeutumispäivä. Norppa lähettää sen päivittäisessä postituksessa klo 11.15. Myöhemmin ilmoittautuneet saavat viestin myöhempänä päivänä kyselyn ollessa auki.
 - Jos avaat kyselyn [[editFeedbackTarget:openImmediately]]-painikkeella, viesti lähtee heti; katso [Kyselyn avaaminen heti](/guide/schedule#open-now).
