@@ -1,5 +1,5 @@
 ---
-description: Your course's survey from its schedule to counter feedback, and feedback during the course. The same instructions apply to administrative persons and to the responsible persons of programme surveys.
+description: Note! The same instructions also apply to the course's administrative persons defined in Sisu, and to the responsible persons of programme surveys.
 ---
 
 # For responsible teachers

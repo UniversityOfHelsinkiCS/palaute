@@ -6,7 +6,7 @@ description: How students get the survey, and how to get more answers with a lin
 
 The students of a course survey get an email when it opens. To get more answers, share the survey's link in your teaching and send a reminder while the survey is open.
 
-## What students receive {#student-emails}
+## What emails students receive {#student-emails}
 
 - On a course survey's opening day, the students get an email with a link to the survey and its closing date. Norppa sends it at the daily mailing at 11:15. Students who enrol later get it on a later day while the survey is open.
 - If you open the survey with [[editFeedbackTarget:openImmediately]], the email is sent at once; see [Opening the survey now](/guide/schedule#open-now).
@@ -49,7 +49,7 @@ The email goes to every student of the survey who hasn't answered yet, and it al
 
 - Students see their surveys in Norppa under [[navBar:myFeedbacks]]. Open surveys they haven't answered are under [[userFeedbacks:waitingForFeedbackTab]], with [[userFeedbacks:giveFeedbackButton]].
 - While the survey is open, they can edit their answers or remove them in [[navBar:myFeedbacks]].
-- After answering, they see a summary of the answers given so far to the public questions. See [Who sees which answers](/guide/anonymity#public-answers).
+- After answering, they see a summary of the answers given so far to the public questions. See [Answer visibility for different users](/guide/anonymity#public-answers).
 - If fewer than 5 students are enrolled, students are warned before answering that their answers could be linked to them. See [Courses with fewer than 5 students](/guide/anonymity#small-courses).
 - Answering is anonymous, so you can't reward individual students for answering. See [Who has answered](/guide/results#who-answered) for what you can see.
 

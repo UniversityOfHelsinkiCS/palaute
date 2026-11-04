@@ -13,7 +13,7 @@ All feedback is anonymous. This page has all the rules on who sees which answers
 - In downloaded answers, each question's answers are shuffled separately, and there are no timestamps or student information.
 - As you can't see who answered what, you can't reward individual students for answering.
 
-## Who sees which answers {#public-answers}
+## Answer visibility for different users {#public-answers}
 
 Each question is either [[common:public]] or [[common:notPublic]].
 

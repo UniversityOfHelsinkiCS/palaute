@@ -46,7 +46,7 @@ Vastauksia ei voi poistaa Norpassa. Avoimen vastauksen voi [piilottaa](/guide/re
 
 ## Tuki {#support}
 
-Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat  asiat voi tehdä Norpassa tai korjata Sisussa, mutta ota yhteyttä tukeen, jos tarvitset:
+Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat asiat voi tehdä Norpassa tai korjata Sisussa, mutta ota yhteyttä tukeen, jos tarvitset:
 
 - päättyneen kurssikyselyn avaamista uudelleen tai sen päivämäärien muuttamista
 - kyselyä kurssityypille, joka ei saa sitä automaattisesti, kuten itsenäisen työskentelyn projektille, esseelle, harjoittelulle tai pro gradu -tutkielmalle (ei tenteille)

@@ -22,7 +22,7 @@ You can reopen interim feedback or a programme survey yourself by moving its end
 
 ## Students haven't got the survey {#students-not-reached}
 
-- Students get an email about a course survey on its opening day, but none about interim feedback or programme surveys. See [What students receive](/guide/collecting-answers#student-emails).
+- Students get an email about a course survey on its opening day, but none about interim feedback or programme surveys. See [What emails students receive](/guide/collecting-answers#student-emails).
 - You can reach students with a [reminder](/guide/collecting-answers#send-reminder) or by sharing [the survey's link](/guide/collecting-answers#share-link).
 - Only students whose enrolment in Sisu is confirmed can answer. A new enrolment usually shows in Norppa within a couple of hours; see [Updates from Sisu](/guide/schedule#sisu-updates).
 
@@ -32,7 +32,7 @@ Norppa sends the responsible teachers' emails to everyone who is the course's re
 
 ## I can't see the answers {#cannot-see-answers}
 
-- With the teacher role or read rights to a degree programme, you see only the answers to public questions. See [Who sees which answers](/guide/anonymity#public-answers).
+- With the teacher role or read rights to a degree programme, you see only the answers to public questions. See [Answer visibility for different users](/guide/anonymity#public-answers).
 - If fewer than 5 students are enrolled, only the responsible teachers and administrative persons see the answers. See [Courses with fewer than 5 students](/guide/anonymity#small-courses).
 - New answers appear when you reload the page.
 
@@ -42,17 +42,17 @@ The course summary's figures are recalculated every night, and it includes only 
 
 ## An answer must be removed {#remove-answer}
 
-Answers can't be deleted in Norppa. You can [hide](/guide/results#hide-answers) an open answer, so that only the responsible teachers and programme admins still see it. If an answer must be removed entirely, contact [support](#support).
+Answers can't be deleted in Norppa. You can [hide](/guide/results#hide-answers) an open answer, so that only the responsible teachers and programme admins (the programme director, feedback liaisons) still see it. If an answer must be removed entirely, contact [support](#support).
 
 ## Support {#support}
 
 Support is at [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Most things can be done in Norppa or fixed in Sisu, but contact support for:
 
-- reopening a closed course survey, or changing its dates;
-- a survey for a course type that doesn't get one automatically, such as an independent work project, an essay, training or a master's thesis (not for exams);
-- a course, teacher or student that's still missing from Norppa a few days after the data in Sisu was fixed (Sisu changes normally show the next morning; see [Sisu updates](/guide/schedule#sisu-updates));
-- an error that doesn't go away.
+- reopening a closed course survey, or changing its dates
+- a survey for a course type that doesn't get one automatically, such as an independent work project, an essay, training or a master's thesis (not for exams)
+- a course, teacher or student that's still missing from Norppa a few days after the data in Sisu was fixed (Sisu changes normally show the next morning; see [Updates from Sisu](/guide/schedule#sisu-updates))
+- an error that doesn't go away
 
 To help support help you, include a link to the survey's page or the course code, what you tried and what happened.
 
-Ideas and feedback about Norppa itself go to its developers through [[navBar:feedback]] in the top menu.
+You can send ideas and feedback directly through [[navBar:feedback]] in the top menu.

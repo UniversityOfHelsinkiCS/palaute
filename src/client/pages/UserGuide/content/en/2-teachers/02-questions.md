@@ -27,7 +27,7 @@ To change a question, click its [[common:edit]] button. To remove several questi
 
 [[questionEditor:addTextualContent]] adds a _text section_ instead of a question, e.g. instructions or a heading for the questions after it. Text sections and question descriptions support Markdown, e.g. links and lists.
 
-The editing dialog of a scale or choice question also lets you choose whether its answers are public. Scale and choice questions you add are public by default, and open questions aren't; see [Who sees which answers](/guide/anonymity#public-answers).
+The editing dialog of a scale or choice question also lets you choose whether its answers are public. Scale and choice questions you add are public by default, and open questions aren't; see [Answer visibility for different users](/guide/anonymity#public-answers).
 
 Who can edit the questions:
 

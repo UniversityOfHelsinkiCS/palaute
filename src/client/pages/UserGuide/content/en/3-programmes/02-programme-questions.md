@@ -24,7 +24,7 @@ A new programme question is [[common:notPublic]]: only the course's responsible 
 1. Click the question's [[common:notPublic]] button.
 2. Choose [[common:publicInfo]].
 
-When the programme has made a question public, it's public on every course of the programme, and teachers can't change that. Answers to open programme questions can't be made public here; a responsible teacher can make them public on their own course after it has closed. See [Who sees which answers](/guide/anonymity#public-answers).
+When the programme has made a question public, it's public on every course of the programme, and teachers can't change that. Answers to open programme questions can't be made public here; a responsible teacher can make them public on their own course after it has closed. See [Answer visibility for different users](/guide/anonymity#public-answers).
 
 ## Where the questions appear {#placement}
 

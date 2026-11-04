@@ -23,7 +23,7 @@ Admins, i.e. the programme director, others with admin rights from the IAM group
 - [[organisationSettings:surveyTab]] (on a faculty's page [[organisationSettings:surveyFacultyTab]]): questions added to all the programme's course surveys. See [Programme questions](/guide/programme-questions).
 - [[organisationSettings:organisationSurveysTab]] (on a faculty's page [[organisationSettings:organisationFacultySurveysTab]]): the programme's own surveys. See [Programme surveys](/guide/programme-surveys).
 
-Admins see all answers of the programme's courses; read rights show only the answers to public questions. See [Who sees which answers](/guide/anonymity#public-answers).
+Admins see all answers of the programme's courses; read rights show only the answers to public questions. See [Answer visibility for different users](/guide/anonymity#public-answers).
 
 ## Open questions {#open-questions}
 

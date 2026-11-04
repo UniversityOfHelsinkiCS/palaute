@@ -35,5 +35,5 @@ The new statements are different questions from the old ones, so their results c
 
 - In a course survey's question editor, the university level questions are at the top, marked [[questionEditor:universityQuestion]], and they can't be edited or removed. See [Fixed questions](/guide/questions#fixed-questions).
 - Students see the scale and choice questions first and _Additional comments_ last; see [The order students see](/guide/questions#question-order).
-- The answers to the scale and choice questions are always public. The answers to the open question aren't public by default. See [Who sees which answers](/guide/anonymity#public-answers).
+- The answers to the scale and choice questions are always public. The answers to the open question aren't public by default. See [Answer visibility for different users](/guide/anonymity#public-answers).
 - Interim feedback and programme surveys have no university level questions, but copies of them can be added with [[editFeedbackTarget:copyUniversityQuestions]]. The copies are the survey's own questions and can be edited. See [Copying questions from another survey](/guide/questions#copy-questions).

@@ -27,7 +27,7 @@ If fewer than 5 students are enrolled on the course, the results are shown only 
 
 ## Changing who sees the answers {#visibility}
 
-Each question is either [[common:public]] or [[common:notPublic]]. You, the other responsible teachers and administrative persons, and the programme's admins see all answers. Other teachers, programme staff with read rights and students see only the answers to public questions. All the rules and defaults are under [Who sees which answers](/guide/anonymity#public-answers).
+Each question is either [[common:public]] or [[common:notPublic]]. You, the other responsible teachers and administrative persons, and the programme's admins see all answers. Other teachers, programme staff with read rights and students see only the answers to public questions. All the rules and defaults are under [Answer visibility for different users](/guide/anonymity#public-answers).
 
 To change whether a question is public:
 
