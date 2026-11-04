@@ -19,7 +19,6 @@ const GuideHome = ({ pages, home, editUrl }: { pages: GuidePage[]; home: GuidePa
             key={landing.slug}
             to={`/guide/${landing.slug}`}
             title={landing.title}
-            description={landing.description}
             icon={<PageIcon slug={landing.slug} />}
             links={groupPages.map(page => ({ to: `/guide/${page.slug}`, label: page.title }))}
           />

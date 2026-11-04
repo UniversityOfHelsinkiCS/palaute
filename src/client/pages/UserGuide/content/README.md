@@ -19,7 +19,7 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 
   Keep it plain text, as the card shows it as is. Leave it empty (`description:`) for a card without one.
 
-- Each group folder has an `index.md`, the group's landing page at `/guide/<group>`, e.g. `/guide/teachers`. Its `# Title` is the group's name in the menu and on the home page. Its description is shown under the title and on the group's card on the home page. Below any text of its own, the landing page shows a card for each of the group's pages by itself. As the group's name is also an address, no page may have it as its slug.
+- Each group folder has an `index.md`, the group's landing page at `/guide/<group>`, e.g. `/guide/teachers`. Its `# Title` is the group's name in the menu and on the home page. Its description is shown under the title. Below any text of its own, the landing page shows a card for each of the group's pages by itself. As the group's name is also an address, no page may have it as its slug.
 - `home.md` in each language folder is the top of the home page (`/guide`), above the groups' cards. It isn't in the menu.
 - A page outside the groups, such as `4-videos.md`, goes straight in the language folder. The menu shows it below the groups.
 - The menu shows the groups' and the outside pages' icons from `PageIcon.tsx`.
