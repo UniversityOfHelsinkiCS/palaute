@@ -54,5 +54,5 @@ Tuen osoite on [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Useimmat  asiat 
 - apua virheeseen, joka ei mene ohi
 
 Liitä viestiin linkki kyselyn sivulle tai kurssikoodi ja kerro, mitä yritit tehdä ja mitä tapahtui.
-
+MUISTA OLLA TARKKANA. AINA.
 Voit lähettää ideoita ja palautetta suoraan ylävalikon kohdasta [[navBar:feedback]].
