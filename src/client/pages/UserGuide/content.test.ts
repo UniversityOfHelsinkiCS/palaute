@@ -65,9 +65,12 @@ describe('user guide content', () => {
   })
 
   // The cards show it as text
-  it.each(allPages.filter(page => page.group))('$language/$slug has a plain description for its card', page => {
-    expect(page.description).toMatch(/^[^[*_`\\]+$/)
-  })
+  it.each(allPages.filter(page => page.description !== undefined))(
+    '$language/$slug has a plain description for its card',
+    page => {
+      expect(page.description).toMatch(/^[^[*_`\\]+$/)
+    }
+  )
 
   // The menu shows the page and section titles as they're written, without labels, formatting or escapes
   it.each(allPages)('$language/$slug has one plain title, and plain sections with unique ids', ({ markdown }) => {
