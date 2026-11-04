@@ -11,7 +11,7 @@ Avaa ylävalikosta [[navBar:courseSummary]]. Siinä on kaksi näkymää:
 - [[courseSummary:myCourses]]: kurssit, joilla olet vastuuopettaja tai opettaja, organisaatioittain.
 - [[courseSummary:myOrganisations]]: koulutusohjelmat, tiedekunnat ja muut organisaatiot, joihin sinulla on [oikeudet](/guide/roles#organisation-rights), ja niiden opintojaksot. Näkyy vain, jos sinulla on tällaisia oikeuksia.
 
-Koulutusohjelman oma yhteenveto on lisäksi sen sivulla [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelmat ja tiedekunnat](/guide/programme-page#programme-page).
+Koulutusohjelman oma yhteenveto on lisäksi sen sivulla [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelman sivu](/guide/programme-page#programme-page).
 
 Avaamalla organisaation näet sen alla olevat rivit. Opintojakson nimestä pääset sen sivulle, jossa on rivi jokaiselle toteutukselle; toteutuksesta pääset sen kyselyn vastauksiin.
 

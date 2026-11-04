@@ -22,7 +22,7 @@ Näihin kuuteen kysymykseen on vastattava, jotta palautteen voi lähettää. Sei
 
 ## Kysymysten vaihtuminen elokuussa 2026 {#new-questions}
 
-Norpassa oli vuosina 2021-2026 seuraavat kysymykset: 
+Norpassa oli vuosina 2021-2026 seuraavat kysymykset:
 
 _Osaamistavoitteet olivat selvät_, _Toteutustapa tuki oppimistani_, _Materiaalit tukivat oppimistani_ ja _Kurssilla käytettävät arviointimenetelmät mittaavat oppimistani_. Työmääräkysymys oli sama kuin nyt, ja lopussa oli avoin kysymys _Muita huomioita_.
 

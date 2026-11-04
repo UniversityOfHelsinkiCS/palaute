@@ -4,7 +4,7 @@ description: Mitä kurssin roolisi ja koulutusohjelman oikeutesi antavat tehdä,
 
 # Roolit ja oikeudet
 
-Norpassa on erilaisia käyttäjärooleja, joista kurssiin liittyvät periytyvät suoraan SISU:sta vastuuopettaja, opettaja, hallintöhenkilö). Lisäksi näkyvyys tiedekuntien ja koulutusohjelmien dataan annetaan IAM-ryhmien kautta. Näitä ei voi muuttaa Norpassa. Ainoastaan palautevastaavan rooli määritellään Norpassa, koulutusohjelman asetuksissa ja se antaa oikeudet kaikkeen koulutusohjelman palautteeseen.
+Norpassa on erilaisia käyttäjärooleja, joista kurssiin liittyvät periytyvät suoraan SISU:sta (vastuuopettaja, opettaja, hallintohenkilö). Lisäksi näkyvyys tiedekuntien ja koulutusohjelmien dataan annetaan IAM-ryhmien kautta. Näitä ei voi muuttaa Norpassa. Ainoastaan palautevastaavan rooli määritellään Norpassa, koulutusohjelman asetuksissa ja se antaa oikeudet kaikkeen koulutusohjelman palautteeseen.
 
 ## Roolit kurssilla {#course-roles}
 
@@ -23,7 +23,7 @@ Vastuuopettajat ja hallintohenkilöt saavat myös Norpan kyselyä koskevat sähk
 
 Samat roolit pätevät kurssin välipalautteisiin. Koulutusohjelman kyselyssä koulutusohjelman valitsemilla vastuuhenkilöillä on vastuuopettajan oikeudet; katso [Koulutusohjelman kyselyt](/guide/programme-surveys).
 
-Vastuuopettajan ja hallintohenkilön ohjeet ovat osiossa [Vastuuopettajalle](/guide/teachers).
+Vastuuopettajan ja hallintohenkilön ohjeet ovat osiossa [Vastuuopettaja](/guide/teachers).
 
 ## Oikeudet koulutusohjelmassa tai tiedekunnassa {#organisation-rights}
 
@@ -53,5 +53,6 @@ Koulutusohjelman henkilöstön ohjeet ovat osiossa [Koulutusohjelma](/guide/prog
 - Väärä rooli kurssilla tai puutut kurssilta kokonaan: rooli pitää korjata Sisussa. Sen tekee kurssitoteutusta Sisussa ylläpitävä henkilö, usein koulutusohjelman opintohallinnon henkilöstö. Norppa päivittää roolit joka yö, joten muutos näkyy seuraavana aamuna. Esimerkiksi jos vierailevalle luennoitsijalle tulee vastuuopettajien sähköposteja, hänet on lisätty Sisuun vastuuopettajaksi, yhteyshenkilöksi tai hallintohenkilöksi; roolin vaihtaminen Sisussa opettajaksi korjaa asian.
 - Oikeudet koulutusohjelmaan tai tiedekuntaan puuttuvat: IAM-ryhmiä ylläpidetään Norpan ulkopuolella. Pyydä koulutusohjelmasi tai tiedekuntasi hallintoa lisäämään sinut oikeaan ryhmään, ja kirjaudu sitten ulos Norpasta ja takaisin sisään. Vaihtoehtoisesti koulutusohjelman admin-käyttäjä voi lisätä sinut palautevastaavaksi.
 
-Jos rooli Sisussa on väärin, ota yhteyttä yliopiston yleiseen tukeen osoitteessa:  [uni-help@helsinki.fi](mailto:uni-help@helsinki.fi).
+Jos rooli Sisussa on väärin, ota yhteyttä yliopiston yleiseen tukeen osoitteessa: [uni-help@helsinki.fi](mailto:uni-help@helsinki.fi).
+
 Jos rooli on muutettu Sisuun ja siellä oikein, mutta Norppa näyttää vielä parin päivän päästä vanhaa roolia, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).

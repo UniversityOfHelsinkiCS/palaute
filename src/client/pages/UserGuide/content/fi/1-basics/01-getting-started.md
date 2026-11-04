@@ -6,22 +6,22 @@ description: Mikä Norppa on, miten kysely etenee ja mistä löydät ohjeet omaa
 
 Norppa on Helsingin yliopiston kurssipalautejärjestelmä. Kurssipalautelomake lähetetään opiskelijoille automaattisesti, eikä vaadi opettajalta toimenpiteitä. Opettajat voivat muokata kyselyä, lukea vastauksia ja lähettää opiskelijoille saatua palautetta reflektoivan vastapalautteen. Koulutusohjelmat ja tiedekunnat voivat seurata kurssiensa palautetta ja luoda omia [palautekyselyjä](/guide/programme-surveys).
 
-Kurssien, kurssien henkilökunnana (vastuuopettaja, opettaja, hallintohenkilö) tiedot periytyvät automaattisesti Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija on vastannut mitäkin. Katso [Nimettömyys ja näkyvyys](/guide/anonymity).
+Kurssien ja kurssien henkilökunnan (vastuuopettaja, opettaja, hallintohenkilö) tiedot periytyvät automaattisesti Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija on vastannut mitäkin. Katso [Nimettömyys ja näkyvyys](/guide/anonymity).
 
 ## Ohjeet pähkinänkuoressa {#guide-parts}
 
-- [Perusteet](/guide/basics) (suunnattu kaikille): miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
-- [Vastuuopettajalle](/guide/teachers) :lle ja hallintohenkilöille suunnattu ohje: kyselyn aikataulu, kysymykset, vastausten kerääminen, tulokset ja vastapalaute sekä palaute kurssin aikana.
-- [Koulutusohjelmalle](/guide/programmes) koulutusohjelmajohtajille ja palautevastaaville suunnattu ohje: palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset.
+- [Perusteet](/guide/basics): kaikille suunnattu ohje. Miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
+- [Vastuuopettaja](/guide/teachers): vastuuopettajille ja hallintohenkilöille suunnattu ohje. Kyselyn aikataulu, kysymykset, vastausten kerääminen, tulokset ja vastapalaute sekä palaute kurssin aikana.
+- [Koulutusohjelma](/guide/programmes): koulutusohjelmajohtajille ja palautevastaaville suunnattu ohje. Palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset.
 
 Jos olet kurssilla opettaja mutta et vastuuopettaja, näet kyselyn esikatseluna, voit kopioida sen linkin ja näet julkisten kysymysten vastaukset. Oman roolisi löydät kohdasta [Omien oikeuksien tarkistaminen](/guide/roles#check-your-rights).
 
 ## Näin kysely toimii {#survey-lifecycle}
 
-Kysely on voi olla kolmessa eri tilassa: "tuleva", "auki" tai "sulkeutunut":
+Kysely voi olla kolmessa eri tilassa: "tuleva", "auki" tai "sulkeutunut":
 
 1. Ennen kuin kysely avautuu, kurssin vastuuopettajat voivat muokata sen kysymyksiä ja päivämääriä. Vastuuopettajat ja hallintohenkilöt saavat muistutuksen kurssikyselystä noin viikkoa ennen avautumista.
-2. Kysely avautuu kurssin päättymispäivämäärää seuraavana päivänä automaattisesti klo 00.00. Siitä lähtien kysymykset ovat lukittuja, ja vain sulkeutumispäivää voi vielä muuttaa. Opiskelijat saavat automaattisesti tiedon sähköpostiin, että palautalomake on avautunut. Opiskelijat voivat vastata ja muuttaa tai poistaa vastauksiaan, kunnes kysely sulkeutuu.
+2. Kysely avautuu kurssin päättymispäivämäärää seuraavana päivänä automaattisesti klo 00.00. Siitä lähtien kysymykset ovat lukittuja, ja vain sulkeutumispäivää voi vielä muuttaa. Opiskelijat saavat automaattisesti tiedon sähköpostiin, että palautelomake on avautunut. Opiskelijat voivat vastata ja muuttaa tai poistaa vastauksiaan, kunnes kysely sulkeutuu.
 3. Kysely sulkeutuu itsestään sulkeutumispäivänä klo 23.59 (Suomen aikaa).
 4. Sulkeutumisen jälkeen vastaukset säilyvät Norpassa. Vastuuopettajat voivat kirjoittaa yhden kootun [vastapalautteen](/guide/counter-feedback) opiskelijoille 12 kuukauden ajan. Kurssikyselyn vastuuopettajat ja hallintohenkilöt sekä koulutusohjelman kyselyn vastuuhenkilöt saavat sähköpostiin muistutuksen, jos kyselyyn on vastattu eikä vastapalautetta ole vielä kirjoitettu.
 
@@ -29,7 +29,7 @@ Norppa lähettää kyselyjä koskevat automaattiset sähköpostit kerran päivä
 
 ## Neljänlaista palautetta {#survey-types}
 
-- _Kurssikysely_: kurssitoteutuksen oma kysely, jonka Norppa luo automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Tämä tapahtuu automaattisesti  Katso [Kyselyn aikataulu](/guide/schedule).
+- _Kurssikysely_: kurssitoteutuksen oma kysely, jonka Norppa luo automaattisesti Sisun tietojen perusteella. Siinä ovat yliopistotason kysymykset ja mahdollisesti koulutusohjelman omat kysymykset, ja opettajat voivat lisätä omiaan. Tämä tapahtuu automaattisesti. Katso [Kyselyn aikataulu](/guide/schedule).
 
 Opettajan valinnaiset tavat kerätä palautetta:
 
