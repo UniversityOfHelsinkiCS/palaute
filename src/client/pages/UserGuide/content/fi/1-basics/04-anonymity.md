@@ -4,18 +4,17 @@ description: Kuka näkee mitkäkin vastaukset ja miten Norppa suojaa vastaajia p
 
 # Nimettömyys ja näkyvyys
 
-Palaute annetaan aina nimettömänä. Tällä sivulla ovat kaikki säännöt siitä, kuka näkee mitkäkin vastaukset ja miten Norppa suojaa vastaajia silloinkin, kun heitä on vähän.
+Palaute annetaan aina nimettömänä.
 
 ## Vastaukset ovat nimettömiä {#anonymous}
 
-- Opiskelijat kirjautuvat Norppaan, jotta se tietää, kuka saa vastata mihinkin kyselyyn. Opettajat ja koulutusohjelman henkilökunta eivät silti näe, kuka antoi minkäkin vastauksen.
-- Avoimet vastaukset näytetään aakkosjärjestyksessä.
-- Ladatuissa vastauksissa kunkin kysymyksen vastaukset on sekoitettu erikseen, eikä niissä ole aikaleimoja eikä opiskelijoiden tietoja.
-- Koska et näe, kuka vastasi mitä, et voi palkita yksittäisiä opiskelijoita vastaamisesta.
+- Opiskelijat kirjautuvat Norppaan, jotta heille näkyy oikeiden kurssien kurssipalautelomakkeet. Opettajat ja koulutusohjelman henkilökunta eivät näe, kuka antoi mitkäkin vastaukset.
+- Avoimet vastaukset näytetään opettajalle aakkosjärjestyksessä.
+- Ladatuissa vastauksissa kunkin kysymyksen numeeriset yms. vastaukset on sekoitettu, eikä niissä ole aikaleimoja eikä opiskelijoiden tietoja.
 
 ## Vastausten näkyvyys eri käyttäjille {#public-answers}
 
-Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]].
+Kysymyksen tyyppi voi olla [[common:public]] tai [[common:notPublic]].
 
 - Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet, näkevät kaikkien kysymysten vastaukset.
 - Opettajat, opiskelijat ja ne koulutusohjelman henkilöt, joilla on lukuoikeudet, näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
@@ -31,7 +30,7 @@ Oletuksena:
 
 Ryhmittelykysymyksen vastaukset eivät ole koskaan julkisia, eikä sitä voi muuttaa.
 
-Vastuuopettaja voi muuttaa kurssillaan muiden kysymysten näkyvyyttä: omien kysymystensä lisäksi esimerkiksi yliopistotason avoimen kysymyksen ja niiden koulutusohjelman kysymysten, joita koulutusohjelma ei ole tehnyt julkisiksi. Avoimen kysymyksen voi tehdä julkiseksi vasta kyselyn sulkeuduttua, koska vastauksissa voi olla henkilötietoja. Katso [Vastausten näkyvyyden muuttaminen](/guide/results#visibility) ja koulutusohjelman kysymyksistä [Vastausten julkisuus](/guide/programme-questions#public).
+Vastuuopettaja voi muuttaa kurssillaan muiden kysymysten näkyvyyttä: omien kysymystensä lisäksi esimerkiksi yliopistotason avoimen kysymyksen ja niiden koulutusohjelman kysymysten, joita koulutusohjelma ei ole tehnyt julkisiksi. Avoimen kysymyksen voi tehdä julkiseksi vasta kyselyn sulkeuduttua. Katso [Vastausten näkyvyyden muuttaminen](/guide/results#visibility) ja koulutusohjelman kysymyksistä [Vastausten julkisuus](/guide/programme-questions#public).
 
 ## Alle viiden opiskelijan kurssit {#small-courses}
 
@@ -60,9 +59,7 @@ Luettelosta ei koskaan näe, kuka vastasi mitäkin. Katso [Ketkä ovat vastannee
 
 ## Tietosuoja {#data-protection}
 
-Norppa on Helsingin yliopiston palvelu. Jokaisen Norpan sivun alareunassa oleva linkki [[feedbackView:dataProtectionNotice]] vie yliopiston tietosuojatietoihin, jotka on koottu yliopiston [tietosuojasivulle](https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja).
+Norppa on Helsingin yliopiston palvelu ja sivun alareunassa oleva linkki [[feedbackView:dataProtectionNotice]] vie yliopiston [tietosuojasivulle](https://www.helsinki.fi/fi/tutustu-meihin/tietosuoja).
 
-- Opiskelijat voivat kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Tarkista vastaukset ennen kuin teet avoimesta kysymyksestä julkisen, ja [piilota](/guide/results#hide-answers) ne, joita ei pidä näyttää.
+- Opiskelijat saattavat vahingossa kirjoittaa avoimiin vastauksiin henkilötietoja, omiaan tai muiden. Vastuuopettajan on hyvä tarkistaa vastaukset ennen kuin tekee avoimen kysymyksen vastaukset julkisiksi ja [piilottaa](/guide/results#hide-answers) ne, joita ei pidä näyttää.
 - Opiskelijat voivat lukea kyselyn linkistä [[feedbackView:feedbackInfoLink]], miten heidän vastauksiaan käytetään.
-
-Jos sinulla on kysyttävää siitä, miten Norppa käsittelee tietoja, ota yhteyttä osoitteeseen [norppa@helsinki.fi](mailto:norppa@helsinki.fi).
