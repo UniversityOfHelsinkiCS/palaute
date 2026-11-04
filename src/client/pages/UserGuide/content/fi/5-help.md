@@ -32,7 +32,7 @@ Norppa lähettää vastuuopettajien sähköpostit kaikille, jotka ovat Sisussa k
 
 ## En näe vastauksia {#cannot-see-answers}
 
-- Opettajan roolilla ja koulutusohjelman lukuoikeuksilla näet vain julkisten kysymysten vastaukset. Katso [Kuka näkee mitkäkin vastaukset](/guide/anonymity#public-answers).
+- Opettajan roolilla ja koulutusohjelman lukuoikeuksilla näet vain julkisten kysymysten vastaukset. Katso [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 - Jos kurssille on ilmoittautunut alle viisi opiskelijaa, vastaukset näkevät vain vastuuopettajat ja hallintohenkilöt. Katso [Alle viiden opiskelijan kurssit](/guide/anonymity#small-courses).
 - Uudet vastaukset tulevat näkyviin, kun lataat sivun uudelleen.
 
