@@ -83,7 +83,7 @@ manualTest(
 
     await caption({
       fi: 'Norppa avasi kyselyn Kysymykset-välilehden. Kyselyssä ei ole oletusarvoisesti yliopistotason kysymyksiä, mutta voit halutessasi lisätä ne tai omat kysymyksesi.',
-      en: 'Norppa opened the Questions tab of the survey. It has no university-wide questions by default, but your're entitled to add them or your own custom ones.',
+      en: "Norppa opened the Questions tab of the survey. It has no university-wide questions by default, but you're entitled to add them or your own custom ones.",
     })
     await click(byDataCy(page, 'question-editor-add-question'))
 
