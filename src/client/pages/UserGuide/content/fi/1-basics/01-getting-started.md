@@ -4,13 +4,13 @@ description: Mikä Norppa on, miten kysely etenee ja mistä löydät ohjeet omaa
 
 # Aloittaminen
 
-Norppa on Helsingin yliopiston kurssipalautejärjestelmä. Opiskelijat vastaavat palautekyselyihin. Opettajat muokkaavat kyselyitä, lukevat vastaukset ja vastaavat niihin vastapalautteella. Koulutusohjelmat ja tiedekunnat seuraavat kurssiensa palautetta.
+Norppa on Helsingin yliopiston kurssipalautejärjestelmä. Opiskelijat vastaavat palautekyselyihin. Opettajat muokkaavat kyselyitä, lukevat vastaukset ja vastaavat niihin vastapalautteella. Koulutusohjelmat ja tiedekunnat seuraavat kurssiensa palautetta ja voivat luoda omia [palautekyselyjä](/guide/programme-surveys).
 
-Kurssien, opettajien ja opiskelijoiden tiedot tulevat Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija on vastannut mitäkin. Katso [Nimettömyys ja näkyvyys](/guide/anonymity).
+Kurssien, kurssien henkilökunnana (vastuuopettaja, opettaja, hallintohenkilö) tiedot periytyvät automaattisesti Sisusta. Palaute annetaan aina nimettömänä: opettajat ja koulutusohjelman henkilöstö eivät näe, kuka opiskelija on vastannut mitäkin. Katso [Nimettömyys ja näkyvyys](/guide/anonymity).
 
-## Mikä osa ohjeesta on sinulle {#guide-parts}
+## Ohjeet pähkinänkuoressa {#guide-parts}
 
-- [Perusteet](/guide/basics) koskevat kaikkia: miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
+- [Perusteet](/guide/basics): miten kysely toimii, roolit ja oikeudet, yliopistotason kysymykset, kuka näkee vastaukset ja kurssiyhteenveto.
 - [Vastuuopettajalle](/guide/teachers) on kurssin vastuuopettajille ja hallintohenkilöille: kyselyn aikataulu, kysymykset, vastausten kerääminen, tulokset ja vastapalaute sekä palaute kurssin aikana. Samat ohjeet koskevat koulutusohjelman kyselyjen vastuuhenkilöitä.
 - [Koulutusohjelmalle](/guide/programmes) on niille, joilla on oikeudet koulutusohjelmaan tai tiedekuntaan: palautteen seuraaminen, koulutusohjelman kysymykset, koulutusohjelman omat kyselyt ja asetukset.
 
