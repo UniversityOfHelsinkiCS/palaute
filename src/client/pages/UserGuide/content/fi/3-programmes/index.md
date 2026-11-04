@@ -2,4 +2,4 @@
 description:
 ---
 
-# Koulutusohjelmalle
+# Koulutusohjelma
