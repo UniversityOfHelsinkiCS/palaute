@@ -34,7 +34,7 @@ const api = (request: APIRequestContext) => {
     results: (token: string, user: TestUser) => send('GET', `/answer/${token}/results`, user),
     managedResults: (id: number, user: TestUser = admin) => send('GET', `/${id}/results`, user),
     hideAnswer: (id: number, questionId: number, content: string, user: TestUser = teacher) =>
-      send('PUT', `/${id}/hide-answer`, user, { questionId, content, hidden: true }),
+      send('PUT', `/${id}/hide-answer`, user, { questionId, feedbackContent: content, hidden: true }),
   }
 }
 

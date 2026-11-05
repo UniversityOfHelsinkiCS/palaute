@@ -363,6 +363,7 @@
     "hidingFeatureInfo": "Om ett svar innehåller konfidentiell information så som ett studerandenummer eller om svaret på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts.",
     "hidingFeatureInfo_standalone": "Om ett svar innehåller konfidentiell information eller på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts.",
     "confirmDeleteFeedback": "Du är på väg att PERMANENT radera en students svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svaret? Skriv \"radera\" för att bekräfta.",
+    "confirmDeleteFeedback_standalone": "Du är på väg att PERMANENT radera ett svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svar? Skriv \"delete\" för att bekräfta.",
     "deleteSuccess": "Svar \"{{content}}\" raderat. ({{count}})",
     "hideSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har dolts. ({{count}}) st.",
     "showSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har synligjorts. ({{count}}) st.",
@@ -915,7 +916,6 @@
     "settingsTab": "Inställningar",
     "logsTab": "Loggar",
     "groupTitle": "Andra enkäter",
-    "confirmDeleteAnswer": "Du är på väg att PERMANENT radera ett svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svar? Skriv \"delete\" för att bekräfta.",
     "noAnswersYet": "Resultaten visas inte eftersom ingen har svarat ännu.",
     "questionsLockedTooltip": "Fliken Frågor är inaktiverad: Enkäten kan inte längre redigeras efter att den har öppnats."
   }
