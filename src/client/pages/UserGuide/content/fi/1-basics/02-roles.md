@@ -10,7 +10,7 @@ Norpassa on erilaisia käyttäjärooleja, joista kurssiin liittyvät periytyvät
 
 Norppa hakee kunkin kurssitoteutuksen opettajat ja heidän roolinsa Sisusta. Kurssin sivulla Norpassa ne näkyvät otsikoiden [[feedbackTargetView:responsibleTeachers]], [[feedbackTargetView:teachers]] ja [[feedbackTargetView:administrativePersons]] alla.
 
-- _Vastuuopettaja_: Sisun roolit vastuuopettaja ja yhteyshenkilö. Vastuuopettaja voi
+- _Vastuuopettaja_: Sisun roolit "vastuuopettaja" ja "yhteyshenkilö" voi
   - muokata kyselyn kysymyksiä ja muuttaa sen päivämääriä
   - lukea kaikki vastaukset, piilottaa avoimia vastauksia ja nähdä, ketkä ovat vastanneet
   - lähettää opiskelijoille muistutusviestejä
