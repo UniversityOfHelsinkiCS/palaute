@@ -21,7 +21,7 @@ Status: implemented on master (not pushed). The e2e spec hasn't been run yet.
 - Admins can delete a survey only when it has no answers.
 - `closes_at` can be changed at any time. `opens_at` is locked once the survey is open.
 - Generic privacy notice.
-- Logged-in users who resolve to the `NO_USER_USERNAME` placeholder can't answer. Login will create Norppa users for people without Sisu data (separate work), but the check stays as a guard.
+- Login creates a Norppa user for people without Sisu data, so everyone who logs in can answer.
 - No feature flag. Nothing shows up until an admin creates a survey.
 
 Out of scope for now: copying surveys, counter feedback, a list of who answered, summaries.
@@ -61,7 +61,7 @@ New code in `src/server/services/standaloneSurveys/` and `src/server/routes/stan
 Respondent routes, by token:
 
 - `GET /standalone-surveys/answer/:token`: name, dates, questions, the user's own answer, and whether results are visible
-- `PUT /standalone-surveys/answer/:token/response`: create or update the own answer. Checks: survey open, not the placeholder user, answers valid.
+- `PUT /standalone-surveys/answer/:token/response`: create or update the own answer. Checks: survey open, answers valid.
 - `DELETE /standalone-surveys/answer/:token/response`
 - `GET /standalone-surveys/answer/:token/results`: shuffled `PUBLIC` results, by the rules above
 
@@ -133,7 +133,7 @@ The Playwright spec covers:
 - An admin creates a survey and a responsible user edits its questions.
 - A respondent answers through the link, edits and deletes the answer, and can't answer twice.
 - `PUBLIC` results visibility while open and after close.
-- Answering is refused before `opens_at`, after `closes_at`, and for the placeholder user.
+- Answering is refused before `opens_at` and after `closes_at`.
 - A responsible user of one survey can't open another survey's management routes.
 
 The existing specs must keep passing, especially `feedbackResults.spec.ts`, `teacherview.spec.ts` and `organisationSurvey.spec.ts`, which cover the refactored components.
