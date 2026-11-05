@@ -362,7 +362,7 @@
     "hidingFeatureInfoTitle": "Information om att gömma svaren",
     "hidingFeatureInfo": "Om ett svar innehåller konfidentiell information så som ett studerandenummer eller om svaret på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts.",
     "hidingFeatureInfo_standalone": "Om ett svar innehåller konfidentiell information eller på annat sätt är olämpligt, kan du dölja det från ögonikonen till höger. Detta har endast påverkan om svaren har offentliggjorts.",
-    "confirmDeleteFeedback": "Du är på väg att PERMANENT radera en students svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svaret? Skriv \"radera\" för att bekräfta.",
+    "confirmDeleteFeedback": "Du är på väg att PERMANENT radera en students svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svaret? Skriv \"delete\" för att bekräfta.",
     "confirmDeleteFeedback_standalone": "Du är på väg att PERMANENT radera ett svar med administratörsrättigheter. Är du säker på att du vill ta bort detta svar? Skriv \"delete\" för att bekräfta.",
     "deleteSuccess": "Svar \"{{content}}\" raderat. ({{count}})",
     "hideSuccess": "Ok. Svar på denna fråga med innehållet \"{{content}}...\" har dolts. ({{count}}) st.",
