@@ -901,8 +901,6 @@
     "deleteConfirmation": "Är du säker på att du vill ta bort ditt svar?",
     "deleted": "Ditt svar har tagits bort",
     "deleteAnswer": "Ta bort mitt svar",
-    "formInfo": "Ditt namn visas inte tillsammans med dina svar. Fält markerade med en asterisk (*) är obligatoriska.",
-    "privacyInfo": "Dina svar används av de personer som ansvarar för enkäten, och de ser dem utan namn. Inloggningen används för att säkerställa att varje person svarar bara en gång.",
     "notOpenYet": "Enkäten är inte öppen ännu. Den kan besvaras {{opensAt}}–{{closesAt}}.",
     "ended": "Enkäten har stängts.",
     "seeResults": "Se resultaten",

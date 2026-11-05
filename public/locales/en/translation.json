@@ -916,8 +916,6 @@
     "deleteConfirmation": "Are you sure you want to remove your answer?",
     "deleted": "Your answer has been removed",
     "deleteAnswer": "Remove my answer",
-    "formInfo": "Your name will not be shown with your answers. Fields marked with an asterisk (*) are required.",
-    "privacyInfo": "Your answers are used by the people responsible for this survey, who see them without names. Logging in is used to make sure each person answers only once.",
     "notOpenYet": "This survey is not open yet. It can be answered between {{opensAt}} and {{closesAt}}.",
     "ended": "This survey has closed.",
     "seeResults": "See the results",

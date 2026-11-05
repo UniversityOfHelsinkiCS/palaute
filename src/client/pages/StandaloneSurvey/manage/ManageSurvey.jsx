@@ -8,7 +8,6 @@ import {
 } from '@mui/icons-material'
 import { Alert, Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, Navigate, Route, Routes, useParams } from 'react-router-dom'
 
@@ -21,7 +20,6 @@ import { getLanguageValue } from '../../../util/languageUtils'
 import { TranslationContextProvider } from '../../../util/translationContext'
 import { FeedbackTargetTab, FeedbackTargetTabsContainer } from '../../FeedbackTarget/FeedbackTargetTabs'
 import FormContainer from '../../FeedbackTarget/tabs/FeedbackView/FormContainer'
-import PrivacyDialog from '../../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 import { getInitialValues } from '../../FeedbackTarget/tabs/FeedbackView/utils'
 import { getLogMessage } from '../../FeedbackTarget/tabs/Logs/Logs'
 import { ShareItem } from '../../FeedbackTarget/tabs/Share/Share'
@@ -33,32 +31,18 @@ import EditQuestions from './EditQuestions'
 import ManageResults from './ManageResults'
 import Settings from './Settings'
 
-const Preview = ({ survey }) => {
-  const { t } = useTranslation()
-  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
-
-  return (
-    <Box id="feedback-target-tab-content">
-      <PrivacyDialog
-        open={privacyDialogOpen}
-        onClose={() => setPrivacyDialogOpen(false)}
-        content={t('standaloneSurvey:privacyInfo')}
-      />
-      <FormContainer
-        initialValues={getInitialValues(survey.questions, null)}
-        onSubmit={() => {}}
-        disabled
-        showSubmitButton={false}
-        questions={survey.questions}
-        onOpenPrivacyDialog={event => {
-          event.preventDefault()
-          setPrivacyDialogOpen(true)
-        }}
-        infoText={t('standaloneSurvey:formInfo')}
-      />
-    </Box>
-  )
-}
+const Preview = ({ survey }) => (
+  <Box id="feedback-target-tab-content">
+    <FormContainer
+      initialValues={getInitialValues(survey.questions, null)}
+      onSubmit={() => {}}
+      disabled
+      showSubmitButton={false}
+      questions={survey.questions}
+      showInfo={false}
+    />
+  </Box>
+)
 
 const Share = ({ survey }) => {
   const { t } = useTranslation()

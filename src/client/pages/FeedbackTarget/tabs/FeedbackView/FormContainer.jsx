@@ -22,7 +22,6 @@ const FormContainer = ({
   showSubmitButton = true,
   isEdit = false,
   showInfo = true,
-  infoText,
 }) => {
   const { t } = useTranslation()
   const context = useTranslationContext()
@@ -89,7 +88,7 @@ const FormContainer = ({
                 {showInfo && (
                   <Box mb={4}>
                     <Alert severity="info">
-                      {infoText ?? t('feedbackView:feedbackInfo')}{' '}
+                      {t('feedbackView:feedbackInfo')}{' '}
                       <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
                         {t('feedbackView:feedbackInfoLink')}
                       </AlertLink>

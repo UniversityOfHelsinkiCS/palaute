@@ -85,7 +85,7 @@ An access helper returns `{ isAdmin, isResponsibleUser }` for a user and survey,
 
 New code in `src/client/pages/StandaloneSurvey/`.
 
-- `/survey/:token/:slug`: the respondent page. The slug comes from the name (Finnish first) and is only for reading; a wrong or missing slug redirects to the current one. `FeedbackForm`, `ErrorSummary` and `PrivacyDialog` reused, plus results (`QuestionResults` with `ChartTableToggle`) when visible.
+- `/survey/:token/:slug`: the respondent page. The slug comes from the name (Finnish first) and is only for reading; a wrong or missing slug redirects to the current one. `FeedbackForm` and `ErrorSummary` reused, without the privacy info alert, plus results (`QuestionResults` with `ChartTableToggle`) when visible.
 - `/standalone-surveys/:id/*`: the management page, built from the same layout and tab components as `/targets/:id`. Tabs: Survey (preview), Results, Edit (name, dates, `QuestionEditor`), Responsible persons, Share (copy link), Logs.
 - Admin panel: a new "Standalone surveys" tab in `src/client/pages/Admin/Admin.jsx` with the list of all surveys and the creation form. The responsible persons picker reuses `ResponsibleTeachersSelector` from `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`.
 - My surveys (`src/client/pages/MyTeaching/`): a heading listing the surveys the user is responsible for, shown only when there are any.
@@ -104,7 +104,7 @@ Each change is its own commit, made before the code that needs it, and course be
 4. `src/client/pages/FeedbackTarget/tabs/Results/QuestionResults/`: `OpenResults`, `useUpdateOpenFeedbackVisibility`, `useDeleteOpenFeedback` and `QuestionItem` stop reading `FeedbackTargetContext` and calling `/feedback-targets` endpoints themselves. `QuestionResults` takes the hide, delete and publicity handlers as props, and the course results page passes the current ones.
 5. `src/client/pages/FeedbackTarget/tabs/Results/ExportFeedbacksMenu.jsx`: take the file name as a prop instead of building it from the course code and start date.
 6. `src/server/services/feedbackTargets/hideFeedback.ts`: the part that hides or removes matching open answers is extracted to `src/server/util/openAnswers.ts`.
-7. `src/client/pages/FeedbackTarget/tabs/FeedbackView/FeedbackView.jsx`: `FormContainer` moved to its own file, with an optional `infoText`. `PrivacyDialog` takes optional `content`.
+7. `src/client/pages/FeedbackTarget/tabs/FeedbackView/FeedbackView.jsx`: `FormContainer` moved to its own file, with a `showInfo` prop for leaving out the info alert.
 8. `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`: `ResponsibleTeachersSelector` is exported and uses its `name` prop instead of a hard-coded `teachers` field.
 9. `ShareItem` (Share tab) and `getLogMessage` (Logs tab) are exported.
 10. `src/server/services/users/preferences.ts`: responsible users of standalone surveys get the My surveys menu item.
