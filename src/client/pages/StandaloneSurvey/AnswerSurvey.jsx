@@ -20,6 +20,8 @@ import { getAnswerPath, toSlug } from './paths'
 import SurveyHeader from './SurveyHeader'
 import SurveyResults from './SurveyResults'
 
+const isBlank = answer => (Array.isArray(answer) ? answer.length === 0 : !String(answer ?? '').trim())
+
 const AnswerForm = ({ survey, token, basePath }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
@@ -37,6 +39,10 @@ const AnswerForm = ({ survey, token, basePath }) => {
   }
 
   const handleSubmit = async values => {
+    if (Object.values(values.answers).every(isBlank)) {
+      enqueueSnackbar(t('standaloneSurvey:emptyAnswer'), { variant: 'error' })
+      return
+    }
     try {
       await saveResponse.mutateAsync(toFeedbackData(values.answers))
       enqueueSnackbar(t('standaloneSurvey:saved'), { variant: 'success', autoHideDuration: 6000 })

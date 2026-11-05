@@ -912,6 +912,7 @@
     "responseCount_one": "{{count}} answer",
     "responseCount_other": "{{count}} answers",
     "saved": "Your answer has been saved. Thank you!",
+    "emptyAnswer": "Answer at least one question.",
     "deleteConfirmation": "Are you sure you want to remove your answer?",
     "deleted": "Your answer has been removed",
     "deleteAnswer": "Remove my answer",

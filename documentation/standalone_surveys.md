@@ -11,7 +11,7 @@ Status: implemented on master (not pushed). The e2e spec hasn't been run yet.
 - Responsible users ("Responsible persons" / "Vastuuhenkilöt" / "Ansvariga personer" in the UI) edit the survey and see results. Responsible users and admins add and remove them, and there's always at least one. The creating admin is prefilled in the creation form and can be removed.
 - Responsible users find their surveys on "My surveys" (`/courses`, `MyTeaching`) under their own heading. Respondents reach a survey only through its link. Answered surveys aren't listed anywhere, because My feedback only exists for students.
 - The link carries a random token that never changes. There's no disabled state. A survey is stopped by setting `closes_at` to now.
-- One answer per person. Answers can be edited and deleted until the survey closes.
+- One answer per person, with at least one question answered. Answers can be edited and deleted until the survey closes.
 - No list of who answered. `user_id` is stored only to prevent duplicates and allow editing.
 - No minimum answer count for results. Answers are shuffled per question, as for courses.
 - `PUBLIC` question results: while open, only to people who have answered; after close, anyone with the link. Checked on the server.

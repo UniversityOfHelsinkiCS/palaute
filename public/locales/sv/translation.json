@@ -897,6 +897,7 @@
     "responseCount_one": "{{count}} svar",
     "responseCount_other": "{{count}} svar",
     "saved": "Ditt svar har sparats. Tack!",
+    "emptyAnswer": "Svara på minst en fråga.",
     "deleteConfirmation": "Är du säker på att du vill ta bort ditt svar?",
     "deleted": "Ditt svar har tagits bort",
     "deleteAnswer": "Ta bort mitt svar",

@@ -907,6 +907,7 @@
     "responseCount_one": "{{count}} vastaus",
     "responseCount_other": "{{count}} vastausta",
     "saved": "Vastauksesi on tallennettu. Kiitos!",
+    "emptyAnswer": "Vastaa vähintään yhteen kysymykseen.",
     "deleteConfirmation": "Haluatko varmasti poistaa vastauksesi?",
     "deleted": "Vastauksesi on poistettu",
     "deleteAnswer": "Poista vastaukseni",
