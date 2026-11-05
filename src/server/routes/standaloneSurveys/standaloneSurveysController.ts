@@ -33,12 +33,7 @@ import {
 import { updateQuestions } from '../../services/standaloneSurveys/updateQuestions'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
-
-const parse = <T extends z.ZodType>(schema: T, value: unknown): z.infer<T> => {
-  const result = schema.safeParse(value)
-  if (!result.success) throw ApplicationError.BadRequest(z.prettifyError(result.error))
-  return result.data
-}
+import { parseInput } from '../../util/parseInput'
 
 const LocalizedStringSchema = z.object({
   fi: z.string().optional(),
@@ -117,7 +112,7 @@ router.get('/all', adminAccess, async (_req: AuthenticatedRequest, res: Response
 })
 
 router.post('/', adminAccess, async (req: AuthenticatedRequest, res: Response) => {
-  const body = parse(CreateBodySchema, req.body)
+  const body = parseInput(CreateBodySchema, req.body)
   const survey = await createSurvey({ ...body, user: req.user })
   res.status(201).send({ id: survey.id })
 })
@@ -140,7 +135,7 @@ router.get('/answer/:token', async (req: AuthenticatedRequest, res: Response) =>
 })
 
 router.put('/answer/:token/response', async (req: AuthenticatedRequest, res: Response) => {
-  const { data } = parse(ResponseBodySchema, req.body)
+  const { data } = parseInput(ResponseBodySchema, req.body)
   const survey = await getSurveyByToken(req.params.token)
   const response = await saveResponse(survey, req.user, data as QuestionAnswer[])
   res.send({ data: response.data })
@@ -166,7 +161,7 @@ router.get('/:id', async (req: AuthenticatedRequest, res: Response) => {
 })
 
 router.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
-  const body = parse(UpdateBodySchema, req.body)
+  const body = parseInput(UpdateBodySchema, req.body)
   const { survey } = await getManagedSurvey(req)
   await updateSurvey(survey, body, req.user)
   const updated = await getSurveyById(survey.id)
@@ -180,7 +175,7 @@ router.delete('/:id', adminAccess, async (req: AuthenticatedRequest, res: Respon
 })
 
 router.put('/:id/questions', async (req: AuthenticatedRequest, res: Response) => {
-  const { questions } = parse(QuestionsBodySchema, req.body)
+  const { questions } = parseInput(QuestionsBodySchema, req.body)
   const { survey } = await getManagedSurvey(req)
   await updateQuestions(survey, questions as any, req.user)
   const updated = await getSurveyById(survey.id)
@@ -188,7 +183,7 @@ router.put('/:id/questions', async (req: AuthenticatedRequest, res: Response) =>
 })
 
 router.put('/:id/responsible-users', async (req: AuthenticatedRequest, res: Response) => {
-  const { userIds } = parse(ResponsibleUsersBodySchema, req.body)
+  const { userIds } = parseInput(ResponsibleUsersBodySchema, req.body)
   const { survey } = await getManagedSurvey(req)
   await setResponsibleUsers(survey, userIds, req.user)
   const updated = await getSurveyById(survey.id)
@@ -201,13 +196,13 @@ router.get('/:id/results', async (req: AuthenticatedRequest, res: Response) => {
 })
 
 router.put('/:id/hide-answer', async (req: AuthenticatedRequest, res: Response) => {
-  const { questionId, content, hidden } = parse(OpenAnswerBodySchema.extend({ hidden: z.boolean() }), req.body)
+  const { questionId, content, hidden } = parseInput(OpenAnswerBodySchema.extend({ hidden: z.boolean() }), req.body)
   const { survey } = await getManagedSurvey(req)
   res.send({ count: await hideAnswers(survey, questionId, content, hidden) })
 })
 
 router.put('/:id/delete-answer', adminAccess, async (req: AuthenticatedRequest, res: Response) => {
-  const { questionId, content } = parse(OpenAnswerBodySchema, req.body)
+  const { questionId, content } = parseInput(OpenAnswerBodySchema, req.body)
   const survey = await getSurveyById(getId(req))
   res.send({ count: await deleteAnswers(survey, questionId, content) })
 })
