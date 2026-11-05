@@ -914,7 +914,6 @@
     "notOpenYet": "Kysely ei ole vielä avoinna. Siihen voi vastata {{opensAt}}–{{closesAt}}.",
     "ended": "Kysely on sulkeutunut.",
     "seeResults": "Katso tulokset",
-    "unknownUser": "Et voi vielä vastata kyselyyn, koska käyttäjätiliäsi ei ole lisätty Norppaan. Yritä myöhemmin uudelleen.",
     "notFound": "Kyselyä ei löytynyt. Tarkista, että linkki on kokonainen.",
     "name": "Kyselyn nimi",
     "nameAndPeriod": "Nimi ja vastausaika",

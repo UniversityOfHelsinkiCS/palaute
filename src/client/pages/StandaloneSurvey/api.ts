@@ -22,7 +22,6 @@ export type AnswerSurvey = {
   publicQuestionIds: number[]
   response: { data: QuestionAnswer[] } | null
   resultsVisible: boolean
-  userKnown: boolean
 }
 
 export type ResponsibleUser = {

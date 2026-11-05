@@ -919,7 +919,6 @@
     "notOpenYet": "This survey is not open yet. It can be answered between {{opensAt}} and {{closesAt}}.",
     "ended": "This survey has closed.",
     "seeResults": "See the results",
-    "unknownUser": "You can't answer this survey yet, because your user account hasn't been added to Norppa. Please try again later.",
     "notFound": "Survey not found. Check that the link is complete.",
     "name": "Survey name",
     "nameAndPeriod": "Name and answering period",
