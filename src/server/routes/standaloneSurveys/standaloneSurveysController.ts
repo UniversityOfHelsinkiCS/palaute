@@ -35,21 +35,23 @@ import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { parseInput } from '../../util/parseInput'
 
-const LocalizedStringSchema = z.object({
-  fi: z.string().optional(),
-  sv: z.string().optional(),
-  en: z.string().optional(),
-})
+const NameSchema = z
+  .object({
+    fi: z.string().optional(),
+    sv: z.string().optional(),
+    en: z.string().optional(),
+  })
+  .refine(name => Object.values(name).some(value => value?.trim()), 'Name is required')
 
 const CreateBodySchema = z.object({
-  name: LocalizedStringSchema,
+  name: NameSchema,
   opensAt: z.coerce.date(),
   closesAt: z.coerce.date(),
   responsibleUserIds: z.array(z.string()).min(1),
 })
 
 const UpdateBodySchema = z.object({
-  name: LocalizedStringSchema.optional(),
+  name: NameSchema.optional(),
   opensAt: z.coerce.date().optional(),
   closesAt: z.coerce.date().optional(),
 })
