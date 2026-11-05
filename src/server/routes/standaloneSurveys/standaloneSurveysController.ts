@@ -74,7 +74,9 @@ const QuestionsBodySchema = z.object({
 const ResponsibleUsersBodySchema = z.object({ userIds: z.array(z.string()).min(1) })
 
 const ResponseBodySchema = z.object({
-  data: z.array(z.object({ questionId: z.number().int(), data: z.union([z.string(), z.array(z.string())]) })),
+  data: z
+    .array(z.object({ questionId: z.number().int(), data: z.union([z.string(), z.array(z.string())]) }))
+    .refine(answers => new Set(answers.map(a => a.questionId)).size === answers.length, 'Duplicate question'),
 })
 
 const OpenAnswerBodySchema = z.object({ questionId: z.number().int(), content: z.string() })

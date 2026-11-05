@@ -32,6 +32,9 @@ const api = (request: APIRequestContext) => {
       send('PUT', `/answer/${token}/response`, user, { data }),
     deleteAnswer: (token: string, user: TestUser) => send('DELETE', `/answer/${token}/response`, user),
     results: (token: string, user: TestUser) => send('GET', `/answer/${token}/results`, user),
+    managedResults: (id: number, user: TestUser = admin) => send('GET', `/${id}/results`, user),
+    hideAnswer: (id: number, questionId: number, content: string, user: TestUser = teacher) =>
+      send('PUT', `/${id}/hide-answer`, user, { questionId, content, hidden: true }),
   }
 }
 
@@ -128,5 +131,55 @@ test.describe('Standalone surveys', () => {
     await expect(page).toHaveURL(new RegExp(`/standalone-surveys/${id}`))
     await page.goto(`/standalone-surveys/${id}/results`)
     await expect(contains(page, '1 answer')).toBeVisible()
+  })
+
+  test('hidden answers stay hidden when the respondent edits their answer', async ({ request }) => {
+    const surveys = api(request)
+    const { id, token, likertId, openId } = await setupSurvey(request)
+
+    await surveys.answer(
+      token,
+      [
+        { questionId: likertId, data: '4' },
+        { questionId: openId, data: 'My phone is 040 123' },
+      ],
+      student
+    )
+    expect((await surveys.hideAnswer(id, openId, 'My phone is 040 123')).status).toBe(200)
+    await surveys.answer(
+      token,
+      [
+        { questionId: likertId, data: '5' },
+        { questionId: openId, data: 'My phone is 040 123' },
+      ],
+      student
+    )
+
+    const { body } = await surveys.managedResults(id)
+    expect(body.feedbacks[0].data).toContainEqual({ questionId: openId, data: 'My phone is 040 123', hidden: true })
+  })
+
+  test('a response cannot answer the same question twice', async ({ request }) => {
+    const surveys = api(request)
+    const { token, likertId } = await setupSurvey(request)
+
+    const answer = [
+      { questionId: likertId, data: '5' },
+      { questionId: likertId, data: '5' },
+    ]
+    expect((await surveys.answer(token, answer, student)).status).toBe(400)
+  })
+
+  test('a closed survey can be renamed from the settings', async ({ page, loginAs, request }) => {
+    const surveys = api(request)
+    const { id } = await setupSurvey(request)
+    await surveys.update(id, { opensAt: subDays(new Date(), 3), closesAt: subDays(new Date(), 1) })
+
+    await loginAs(teacher)
+    await page.goto(`/standalone-surveys/${id}/settings`)
+    await textField(page, 'formik-locales-field-en-name').fill('Staff survey 2026')
+    await page.locator('form').first().locator('button[type="submit"]').click()
+
+    await expect.poll(async () => (await surveys.get(id)).body.name.en).toBe('Staff survey 2026')
   })
 })
