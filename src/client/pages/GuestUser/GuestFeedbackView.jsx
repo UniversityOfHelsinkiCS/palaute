@@ -1,6 +1,5 @@
-import { Box, Card, CardContent, Alert } from '@mui/material'
+import { Box, Alert } from '@mui/material'
 /** @jsxImportSource @emotion/react */
-import { Formik, Form } from 'formik'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useTranslation, Trans } from 'react-i18next'
@@ -8,12 +7,10 @@ import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 
 import AlertLink from '../../components/common/AlertLink'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
-import { NorButton } from '../../components/common/NorButton'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
-import ErrorSummary from '../FeedbackTarget/tabs/FeedbackView/ErrorSummary'
-import FeedbackForm from '../FeedbackTarget/tabs/FeedbackView/FeedbackForm'
+import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
 import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 import {
   makeValidate,
@@ -23,96 +20,6 @@ import {
   checkIsFeedbackOpen,
 } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { saveValues } from './utils'
-
-const FormContainer = ({
-  onSubmit,
-  initialValues,
-  onOpenPrivacyDialog,
-  validate,
-  questions,
-  disabled: disabledProp,
-  isEdit = false,
-}) => {
-  const { t } = useTranslation()
-
-  return (
-    <Formik initialValues={initialValues} onSubmit={onSubmit} validate={validate} validateOnChange={false}>
-      {({ isSubmitting, errors, submitCount, setFieldTouched }) => {
-        const disabled = isSubmitting || disabledProp
-
-        const handleFocusField = fieldName => {
-          const questionId = fieldName.split('.')[1]
-          const question = questions.find(q => q.id.toString() === questionId)
-          const element = document.getElementById(`question-${questionId}`)
-
-          if (element) {
-            element.scrollIntoView({ behavior: 'smooth', block: 'center' })
-
-            let focusableElement = null
-
-            if (
-              question?.type === 'MULTIPLE_CHOICE' ||
-              question?.type === 'SINGLE_CHOICE' ||
-              question?.type === 'LIKERT'
-            ) {
-              focusableElement = element.querySelector('input[type="checkbox"], input[type="radio"]')
-            } else if (question?.type === 'OPEN') {
-              focusableElement = element.querySelector('textarea')
-            }
-
-            if (focusableElement) {
-              focusableElement.focus()
-            } else {
-              const fallbackElement = element.querySelector('input, textarea, button')
-              if (fallbackElement) {
-                fallbackElement.focus()
-              } else {
-                element.focus()
-              }
-            }
-
-            setFieldTouched(fieldName, true, false)
-          }
-        }
-
-        const hasErrors = submitCount > 0 && errors.answers && Object.keys(errors.answers).length > 0
-
-        return (
-          <Form>
-            {hasErrors && (
-              <ErrorSummary
-                errors={errors}
-                questions={questions}
-                onFocusField={handleFocusField}
-                submitCount={submitCount}
-              />
-            )}
-            <Card>
-              <CardContent>
-                <Box mb={2}>
-                  <Alert severity="info">
-                    {t('feedbackView:feedbackInfo')}{' '}
-                    <AlertLink href="#feedback-privacy-dialog-title" onClick={onOpenPrivacyDialog}>
-                      {t('feedbackView:feedbackInfoLink')}
-                    </AlertLink>
-                  </Alert>
-                </Box>
-
-                <FeedbackForm questions={questions} name="answers" />
-              </CardContent>
-            </Card>
-
-            <Box mt={2}>
-              <NorButton disabled={disabled} color="primary" type="submit" data-cy="feedback-view-give-feedback">
-                {isEdit ? t('feedbackView:editButton') : t('feedbackView:submitButton')}
-              </NorButton>
-            </Box>
-          </Form>
-        )
-      }}
-    </Formik>
-  )
-}
 
 const GuestFeedbackView = () => {
   const { id } = useParams()
