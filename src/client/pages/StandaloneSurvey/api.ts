@@ -55,6 +55,7 @@ export type SurveyListItem = {
 const get = async <T>(url: string) => (await apiClient.get<T>(url)).data
 
 const answerKey = (token: string) => ['standaloneSurveyAnswer', token]
+const answerResultsKey = (token: string) => ['standaloneSurveyAnswerResults', token]
 const surveyKey = (id: number | string) => ['standaloneSurvey', String(id)]
 
 export const useAnswerSurvey = (token: string) =>
@@ -62,26 +63,28 @@ export const useAnswerSurvey = (token: string) =>
 
 export const useAnswerResults = (token: string, enabled: boolean) =>
   useQuery({
-    queryKey: ['standaloneSurveyAnswerResults', token],
+    queryKey: answerResultsKey(token),
     queryFn: () => get<ResultsData>(`/standalone-surveys/answer/${token}/results`),
     enabled,
   })
 
-const invalidateAnswer = async (token: string) => {
-  await queryClient.invalidateQueries({ queryKey: answerKey(token) })
-  await queryClient.invalidateQueries({ queryKey: ['standaloneSurveyAnswerResults', token] })
-}
-
 export const useSaveResponse = (token: string) =>
   useMutation({
     mutationFn: (data: QuestionAnswer[]) => apiClient.put(`/standalone-surveys/answer/${token}/response`, { data }),
-    onSuccess: () => invalidateAnswer(token),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: answerKey(token) })
+      await queryClient.invalidateQueries({ queryKey: answerResultsKey(token) })
+    },
   })
 
 export const useDeleteResponse = (token: string) =>
   useMutation({
     mutationFn: () => apiClient.delete(`/standalone-surveys/answer/${token}/response`),
-    onSuccess: () => invalidateAnswer(token),
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: answerKey(token) })
+      // Only after the refetch has hidden the results, or they're fetched again and refused
+      queryClient.removeQueries({ queryKey: answerResultsKey(token) })
+    },
   })
 
 export const useManagedSurvey = (id: number | string) =>
