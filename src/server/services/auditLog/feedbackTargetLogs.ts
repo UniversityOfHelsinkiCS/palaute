@@ -1,15 +1,11 @@
 import _ from 'lodash'
 
 import { Question, FeedbackTargetLog, FeedbackTarget, User } from '../../models'
+import { withMockedBy } from './withMockedBy'
 
 const createFromData = async (feedbackTargetId: number, user: User, data: object) => {
-  const logData: any = { ...data }
-  if (user.mockedBy) {
-    logData.mockedBy = user.mockedBy.username
-  }
-
   const log = await FeedbackTargetLog.create({
-    data: logData,
+    data: withMockedBy(user, data),
     feedbackTargetId: String(feedbackTargetId),
     userId: user.id,
   })

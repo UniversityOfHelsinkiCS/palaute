@@ -2,15 +2,11 @@ import _ from 'lodash'
 import { Op } from 'sequelize'
 
 import { OrganisationLog, Organisation, Question, User } from '../../models'
+import { withMockedBy } from './withMockedBy'
 
 const createFromData = async (organisationId: string, user: User, data: object) => {
-  const logData: any = { ...data }
-  if (user.mockedBy) {
-    logData.mockedBy = user.mockedBy.username
-  }
-
   const log = await OrganisationLog.create({
-    data: logData,
+    data: withMockedBy(user, data),
     organisationId,
     userId: user.id,
   })
