@@ -30,7 +30,7 @@ const AnswerForm = ({ survey, token, basePath }) => {
 
   const isOpen = feedbackTargetIsOpen(survey)
   const isEnded = feedbackTargetIsEnded(survey)
-  const canAnswer = isOpen && survey.userKnown
+  const canAnswer = isOpen
 
   const handleError = e => {
     enqueueSnackbar(e?.response?.data?.error ?? t('common:unknownError'), { variant: 'error' })
@@ -79,12 +79,6 @@ const AnswerForm = ({ survey, token, basePath }) => {
           <AlertLink component={Link} to={`${basePath}/results`}>
             {t('standaloneSurvey:seeResults')}
           </AlertLink>
-        </Alert>
-      )}
-
-      {isOpen && !survey.userKnown && (
-        <Alert severity="warning" sx={{ mb: 2 }}>
-          {t('standaloneSurvey:unknownUser')}
         </Alert>
       )}
 

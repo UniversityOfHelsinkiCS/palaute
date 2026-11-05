@@ -904,7 +904,6 @@
     "notOpenYet": "Enkäten är inte öppen ännu. Den kan besvaras {{opensAt}}–{{closesAt}}.",
     "ended": "Enkäten har stängts.",
     "seeResults": "Se resultaten",
-    "unknownUser": "Du kan inte svara på enkäten ännu, eftersom ditt användarkonto inte har lagts till i Norppa. Försök igen senare.",
     "notFound": "Enkäten hittades inte. Kontrollera att länken är fullständig.",
     "name": "Enkätens namn",
     "nameAndPeriod": "Namn och svarstid",

@@ -20,7 +20,6 @@ import {
   deleteResponse,
   getOwnResponse,
   getResults,
-  isKnownUser,
   saveResponse,
 } from '../../services/standaloneSurveys/responses'
 import {
@@ -135,7 +134,6 @@ router.get('/answer/:token', async (req: AuthenticatedRequest, res: Response) =>
     publicQuestionIds: getPublicQuestionIds(survey),
     response: response ? { data: response.data } : null,
     resultsVisible: canSeePublicResults(survey, !!response),
-    userKnown: isKnownUser(req.user),
   })
 })
 

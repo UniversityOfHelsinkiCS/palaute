@@ -2,7 +2,6 @@ import type { QuestionAnswer } from '@common/types/question'
 
 import { StandaloneSurvey, StandaloneSurveyResponse, User } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
-import { NO_USER_USERNAME } from '../../util/config'
 import { validateAnswers } from '../../util/feedbackValidator'
 import { getPublicFeedbacks, shuffleFeedbacks } from '../../util/shuffleFeedbacks'
 import { getPublicQuestionIds, getQuestions } from './getSurvey'
@@ -10,15 +9,12 @@ import { getPublicQuestionIds, getQuestions } from './getSurvey'
 export const getOwnResponse = (survey: StandaloneSurvey, user: User) =>
   StandaloneSurveyResponse.findOne({ where: { standaloneSurveyId: survey.id, userId: user.id } })
 
-export const isKnownUser = (user: User) => user.username !== NO_USER_USERNAME
-
-const assertCanAnswer = (survey: StandaloneSurvey, user: User) => {
-  if (!isKnownUser(user)) throw ApplicationError.Forbidden('User is not known to Norppa')
+const assertCanAnswer = (survey: StandaloneSurvey) => {
   if (!survey.isOpen()) throw ApplicationError.Forbidden('Survey is not open')
 }
 
 export const saveResponse = async (survey: StandaloneSurvey, user: User, data: QuestionAnswer[]) => {
-  assertCanAnswer(survey, user)
+  assertCanAnswer(survey)
 
   const cleanData = data.map(({ questionId, data: answer }) => ({ questionId, data: answer }))
   if (!validateAnswers(cleanData, getQuestions(survey))) throw ApplicationError.BadRequest('Form data not valid')
@@ -36,7 +32,7 @@ export const saveResponse = async (survey: StandaloneSurvey, user: User, data: Q
 }
 
 export const deleteResponse = async (survey: StandaloneSurvey, user: User) => {
-  assertCanAnswer(survey, user)
+  assertCanAnswer(survey)
   await StandaloneSurveyResponse.destroy({ where: { standaloneSurveyId: survey.id, userId: user.id } })
 }
 
