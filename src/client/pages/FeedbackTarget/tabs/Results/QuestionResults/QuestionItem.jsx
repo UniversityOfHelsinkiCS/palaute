@@ -76,7 +76,7 @@ const QuestionItem = ({
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },
-    [publicQuestionIds]
+    [publicQuestionIds, savePublicQuestionIds]
   )
 
   const handlePublicityToggle = isPublic => {

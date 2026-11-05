@@ -1,7 +1,7 @@
 import BarChartIcon from '@mui/icons-material/BarChart'
 import TableRowsIcon from '@mui/icons-material/TableRows'
 import { Box, Alert, Paper, Tooltip } from '@mui/material'
-import React, { useRef, useState, useEffect } from 'react'
+import React, { useRef, useState, useEffect, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 
@@ -163,12 +163,15 @@ const Results = () => {
   const publicityMutation = useQuestionPublicityMutation({ resource: 'feedbackTarget', resourceId: id })
   const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
   const { canDelete, deleteAnswer } = useDeleteOpenFeedback()
-  const openAnswerActions = {
-    canHide,
-    toggleVisibility: feedback => toggleVisibility(feedback, id),
-    canDelete,
-    deleteAnswer,
-  }
+  const openAnswerActions = useMemo(
+    () => ({
+      canHide,
+      toggleVisibility: feedback => toggleVisibility(feedback, id),
+      canDelete,
+      deleteAnswer,
+    }),
+    [canHide, toggleVisibility, id, canDelete, deleteAnswer]
+  )
 
   const {
     questions,
