@@ -182,4 +182,27 @@ test.describe('Standalone surveys', () => {
 
     await expect.poll(async () => (await surveys.get(id)).body.name.en).toBe('Staff survey 2026')
   })
+
+  test('only visibility can be changed once the survey has opened', async ({ request }) => {
+    const surveys = api(request)
+    const { id } = await setupSurvey(request)
+    const { body } = await surveys.get(id)
+    const current = body.questions.map(
+      ({ id: questionId, type, required, data }: { id: number; type: string; required: boolean; data: unknown }) => ({
+        id: questionId,
+        type,
+        required,
+        data,
+        visibility: body.publicQuestionIds.includes(questionId) ? 'PUBLIC' : 'PRIVATE',
+      })
+    )
+
+    const relabelled = [{ ...current[0], data: { label: { en: 'I love my job' } } }, current[1]]
+    expect((await surveys.setQuestions(id, relabelled, teacher)).status).toBe(403)
+    expect((await surveys.setQuestions(id, [current[0]], teacher)).status).toBe(403)
+    expect(
+      (await surveys.setQuestions(id, [current[0], { ...current[1], visibility: 'PUBLIC' }], teacher)).status
+    ).toBe(200)
+    expect((await surveys.setQuestions(id, relabelled, admin)).status).toBe(200)
+  })
 })
