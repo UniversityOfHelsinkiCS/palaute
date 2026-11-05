@@ -21,6 +21,7 @@ const FormContainer = ({
   showCannotSubmitText = false,
   showSubmitButton = true,
   isEdit = false,
+  showInfo = true,
   infoText,
 }) => {
   const { t } = useTranslation()
@@ -85,14 +86,16 @@ const FormContainer = ({
             )}
             <Card>
               <CardContent sx={{ px: { md: 3 }, pt: { md: 3 } }}>
-                <Box mb={4}>
-                  <Alert severity="info">
-                    {infoText ?? t('feedbackView:feedbackInfo')}{' '}
-                    <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
-                      {t('feedbackView:feedbackInfoLink')}
-                    </AlertLink>
-                  </Alert>
-                </Box>
+                {showInfo && (
+                  <Box mb={4}>
+                    <Alert severity="info">
+                      {infoText ?? t('feedbackView:feedbackInfo')}{' '}
+                      <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
+                        {t('feedbackView:feedbackInfoLink')}
+                      </AlertLink>
+                    </Alert>
+                  </Box>
+                )}
 
                 <FeedbackForm questions={questions} name="answers" disabled={disabledProp && showSubmitButton} />
               </CardContent>
