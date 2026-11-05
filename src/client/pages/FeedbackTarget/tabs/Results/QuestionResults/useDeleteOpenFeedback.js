@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../../../../util/apiClient'
@@ -31,18 +32,22 @@ const useDeleteOpenFeedback = () => {
 
   const canDelete = isAdmin
 
-  const deleteAnswer = async feedback => {
-    if (!canDelete || !(window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) === 'delete')) return
+  const { mutateAsync } = mutation
+  const deleteAnswer = useCallback(
+    async feedback => {
+      if (!canDelete || !(window.prompt(t('feedbackTargetResults:confirmDeleteFeedback')) === 'delete')) return
 
-    try {
-      await mutation.mutateAsync({
-        feedbackContent: feedback.data,
-        questionId: feedback.questionId,
-      })
-    } catch {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
-  }
+      try {
+        await mutateAsync({
+          feedbackContent: feedback.data,
+          questionId: feedback.questionId,
+        })
+      } catch {
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      }
+    },
+    [canDelete, mutateAsync, enqueueSnackbar, t]
+  )
 
   return {
     canDelete,
