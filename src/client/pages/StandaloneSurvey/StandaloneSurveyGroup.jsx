@@ -17,9 +17,15 @@ const matchesStatus = (survey, status, now = new Date()) => {
   return opensAt <= now && now < closesAt
 }
 
-export const useMySurveysWithStatus = status => {
-  const { data, isLoading } = useMySurveys()
-  return { surveys: (data ?? []).filter(s => matchesStatus(s, status)), isLoading }
+const closesWithin = (survey, range) => {
+  const closesAt = new Date(survey.closesAt)
+  return new Date(range.start) <= closesAt && closesAt <= new Date(range.end)
+}
+
+export const useMySurveysWithStatus = (status, yearRange) => {
+  const { data } = useMySurveys()
+  const surveys = data?.filter(s => matchesStatus(s, status) && (!yearRange || closesWithin(s, yearRange)))
+  return { surveys }
 }
 
 const StandaloneSurveyGroup = ({ surveys }) => {
