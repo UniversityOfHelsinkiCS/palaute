@@ -1,7 +1,6 @@
 import { EditOutlined, LiveHelpOutlined, PollOutlined } from '@mui/icons-material'
 import { Alert, Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } from 'react-router-dom'
 
@@ -13,7 +12,6 @@ import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { TranslationContextProvider } from '../../util/translationContext'
 import { FeedbackTargetTab, FeedbackTargetTabsContainer } from '../FeedbackTarget/FeedbackTargetTabs'
 import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
-import PrivacyDialog from '../FeedbackTarget/tabs/FeedbackView/PrivacyDialog'
 import { formatDate, getInitialValues, makeValidate } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { toFeedbackData, useAnswerResults, useAnswerSurvey, useDeleteResponse, useSaveResponse } from './api'
 import { getAnswerPath, toSlug } from './paths'
@@ -26,7 +24,6 @@ const AnswerForm = ({ survey, token, basePath }) => {
   const { t } = useTranslation()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
-  const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
   const saveResponse = useSaveResponse(token)
   const deleteResponse = useDeleteResponse(token)
 
@@ -64,12 +61,6 @@ const AnswerForm = ({ survey, token, basePath }) => {
 
   return (
     <Box id="feedback-target-tab-content">
-      <PrivacyDialog
-        open={privacyDialogOpen}
-        onClose={() => setPrivacyDialogOpen(false)}
-        content={t('standaloneSurvey:privacyInfo')}
-      />
-
       {!isOpen && !isEnded && (
         <Alert severity="warning" sx={{ mb: 2 }}>
           {t('standaloneSurvey:notOpenYet', {
@@ -96,12 +87,8 @@ const AnswerForm = ({ survey, token, basePath }) => {
         disabled={!canAnswer}
         showSubmitButton
         questions={survey.questions}
-        onOpenPrivacyDialog={event => {
-          event.preventDefault()
-          setPrivacyDialogOpen(true)
-        }}
         isEdit={Boolean(survey.response)}
-        infoText={t('standaloneSurvey:formInfo')}
+        showInfo={false}
       />
 
       {canAnswer && survey.response && (

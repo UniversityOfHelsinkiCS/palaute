@@ -911,8 +911,6 @@
     "deleteConfirmation": "Haluatko varmasti poistaa vastauksesi?",
     "deleted": "Vastauksesi on poistettu",
     "deleteAnswer": "Poista vastaukseni",
-    "formInfo": "Nimesi ei näy vastaustesi yhteydessä. Tähdellä (*) merkityt kentät ovat pakollisia.",
-    "privacyInfo": "Vastauksiasi käyttävät kyselystä vastaavat henkilöt, jotka näkevät ne ilman nimiä. Kirjautumisella varmistetaan, että jokainen vastaa vain kerran.",
     "notOpenYet": "Kysely ei ole vielä avoinna. Siihen voi vastata {{opensAt}}–{{closesAt}}.",
     "ended": "Kysely on sulkeutunut.",
     "seeResults": "Katso tulokset",
