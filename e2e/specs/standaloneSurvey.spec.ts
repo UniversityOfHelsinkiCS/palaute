@@ -172,6 +172,17 @@ test.describe('Standalone surveys', () => {
     expect((await surveys.answer(token, answer, student)).status).toBe(400)
   })
 
+  test('an open question only accepts text', async ({ request }) => {
+    const surveys = api(request)
+    const { token, likertId, openId } = await setupSurvey(request)
+
+    const answer = [
+      { questionId: likertId, data: '5' },
+      { questionId: openId, data: ['not', 'text'] },
+    ]
+    expect((await surveys.answer(token, answer, student)).status).toBe(400)
+  })
+
   test('a closed survey can be renamed from the settings', async ({ page, loginAs, request }) => {
     const surveys = api(request)
     const { id } = await setupSurvey(request)

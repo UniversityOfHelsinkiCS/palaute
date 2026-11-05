@@ -58,6 +58,7 @@ export const validateAnswers = (data: QuestionAnswer[], questions: Question[]) =
     const answerIds = new Set<number>()
     data.forEach(answer => {
       const question = idToQuestion[answer.questionId]
+      if (question.type === 'OPEN' && typeof answer.data !== 'string') valid = false
       const validator = mapTypeToValidator[question.type]
       if (!validator) return
       answerIds.add(answer.questionId)
