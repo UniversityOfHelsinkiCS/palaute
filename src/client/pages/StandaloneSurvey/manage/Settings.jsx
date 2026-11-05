@@ -18,7 +18,8 @@ export const toPeriod = ({ opensAt, closesAt }) => ({
 })
 
 export const validateNameAndPeriod = (isOpen, isOver) => values => {
-  const errors = validateFeedbackPeriod(isOpen, isOver)(values)
+  const closesAt = values.closesAt && endOfDay(values.closesAt)
+  const errors = validateFeedbackPeriod(isOpen, isOver)({ ...values, closesAt })
   if (!Object.values(values.name ?? {}).some(value => value?.trim())) errors.name = { fi: 'validationErrors:required' }
   return errors
 }
