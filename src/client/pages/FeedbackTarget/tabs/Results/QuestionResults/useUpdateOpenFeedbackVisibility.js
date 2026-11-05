@@ -1,5 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { useSnackbar } from 'notistack'
+import { useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../../../../util/apiClient'
@@ -38,18 +39,22 @@ const useUpdateOpenFeedbackVisibility = () => {
 
   const canHide = isTeacher || isOrganisationAdmin
 
-  const toggleVisibility = async (feedback, feedbackTargetId) => {
-    try {
-      await mutation.mutateAsync({
-        feedbackContent: feedback.data,
-        questionId: feedback.questionId,
-        hidden: !feedback.hidden,
-        feedbackTargetId,
-      })
-    } catch {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
-  }
+  const { mutateAsync } = mutation
+  const toggleVisibility = useCallback(
+    async (feedback, feedbackTargetId) => {
+      try {
+        await mutateAsync({
+          feedbackContent: feedback.data,
+          questionId: feedback.questionId,
+          hidden: !feedback.hidden,
+          feedbackTargetId,
+        })
+      } catch {
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      }
+    },
+    [mutateAsync, enqueueSnackbar, t]
+  )
 
   return {
     canHide,
