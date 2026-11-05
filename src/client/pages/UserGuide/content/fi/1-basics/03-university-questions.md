@@ -8,7 +8,7 @@ Yliopistotason kysymykset ovat yliopiston yhteisiä kysymyksiä ja ovat samat ka
 
 ## Kysymykset {#questions}
 
-Kyselyissä, jotka avautuvat 2.8.2026 tai myöhemmin, opiskelija vastaa ensin viiteen väittämään asteikolla 1–5, jossa 1 on _täysin eri mieltä_ ja 5 _täysin samaa mieltä_. Jos opiskelija ei osaa vastata, hän voi valita _en osaa sanoa_.
+Nykyiset HY kysymykset otettiin käyttöön elokuussa 2026. Opiskelija vastaa ensin viiteen väittämään asteikolla 1–5, jossa 1 on _täysin eri mieltä_ ja 5 _täysin samaa mieltä_. Jos opiskelija ei osaa vastata, hän voi valita _en osaa sanoa_.
 
 1. Kurssin rakenne ja aikataulu olivat selkeät.
 2. Kurssilla oli selvästi esitetty se, mitä meidän tulisi oppia.
@@ -20,9 +20,11 @@ Kuudennessa kysymyksessä opiskelija valitsee, oliko _työmäärä suhteessa opi
 
 Näihin kuuteen kysymykseen on vastattava, jotta palautteen voi lähettää. Seitsemäs kysymys _Muita huomioita_ on avoin ja vapaaehtoinen, ja se on aina kyselyn viimeinen kysymys.
 
+Kurssiyhteenvedossa sarakkeina ovat ne kysymykset, jotka olivat käytössä valitun ajanjakson alussa; katso [Mitä luvut kertovat](/guide/course-summary#figures).
+
 ## Kysymysten vaihtuminen elokuussa 2026 {#new-questions}
 
-Norpassa oli vuosina 2021-2026 seuraavat kysymykset:
+Norpassa oli vuosina 2021-2026 seuraavat HY-tason kysymykset:
 
 _Osaamistavoitteet olivat selvät_, _Toteutustapa tuki oppimistani_, _Materiaalit tukivat oppimistani_ ja _Kurssilla käytettävät arviointimenetelmät mittaavat oppimistani_. Työmääräkysymys oli sama kuin nyt, ja lopussa oli avoin kysymys _Muita huomioita_.
 
