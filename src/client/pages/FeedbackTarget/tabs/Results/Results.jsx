@@ -1,11 +1,8 @@
-import BarChartIcon from '@mui/icons-material/BarChart'
-import TableRowsIcon from '@mui/icons-material/TableRows'
-import { Box, Alert, Paper, Tooltip } from '@mui/material'
-import React, { useRef, useState, useEffect } from 'react'
+import { Box, Alert, Paper } from '@mui/material'
+import React, { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 
-import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
 import useOpenAnswerActions from '../../../../hooks/useOpenAnswerActions'
 import useQuestionPublicityMutation from '../../../../hooks/useQuestionPublicityMutation'
@@ -14,6 +11,7 @@ import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import ChartTableToggle, { useShowTable } from './ChartTableToggle'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import FeedbackResponse from './FeedbackResponse'
 import GroupSelector from './GroupSelector'
@@ -153,7 +151,7 @@ const Results = () => {
   const { t } = useTranslation()
   const exportRef = useRef(null)
   const [groupId, setGroupId] = React.useState('ALL')
-  const [showTable, setShowTable] = useState(false)
+  const [showTable, setShowTable] = useShowTable()
 
   useChartConfig()
 
@@ -198,25 +196,6 @@ const Results = () => {
 
   const showFeedback = enoughFeedbacks && (enoughStudents || (feedbacks.length > 0 && isResponsibleTeacher))
 
-  useEffect(() => {
-    const handleKeyDown = event => {
-      const { target } = event
-      const isEditable =
-        target instanceof HTMLElement &&
-        (target.isContentEditable || ['INPUT', 'TEXTAREA', 'SELECT'].includes(target.tagName))
-      if (isEditable) return
-
-      // Alt + T to toggle between chart and table
-      if (event.altKey && event.key === 't') {
-        event.preventDefault()
-        setShowTable(prev => !prev)
-      }
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [])
-
   return (
     <Box id="feedback-target-tab-content">
       {filtersVisible && (
@@ -242,20 +221,7 @@ const Results = () => {
 
         {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
-        {showFeedback && (
-          <Tooltip title={t('feedbackTargetResults:keyboardShortcut')} placement="top">
-            <NorButton
-              id="chart-table-toggle-button"
-              onClick={() => setShowTable(prev => !prev)}
-              fullWidth
-              icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
-              sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
-              aria-label={`${showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}. ${t('feedbackTargetResults:keyboardShortcut')}`}
-            >
-              {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
-            </NorButton>
-          </Tooltip>
-        )}
+        {showFeedback && <ChartTableToggle showTable={showTable} setShowTable={setShowTable} />}
 
         {showFeedback && (
           <FeedbackChart
