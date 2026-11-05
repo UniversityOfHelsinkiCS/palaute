@@ -74,7 +74,7 @@ const ResponseBodySchema = z.object({
     .refine(answers => new Set(answers.map(a => a.questionId)).size === answers.length, 'Duplicate question'),
 })
 
-const OpenAnswerBodySchema = z.object({ questionId: z.number().int(), content: z.string() })
+const OpenAnswerBodySchema = z.object({ questionId: z.number().int(), feedbackContent: z.string() })
 
 const getId = (req: AuthenticatedRequest) => {
   const id = Number(req.params.id)
@@ -196,15 +196,18 @@ router.get('/:id/results', async (req: AuthenticatedRequest, res: Response) => {
 })
 
 router.put('/:id/hide-answer', async (req: AuthenticatedRequest, res: Response) => {
-  const { questionId, content, hidden } = parseInput(OpenAnswerBodySchema.extend({ hidden: z.boolean() }), req.body)
+  const { questionId, feedbackContent, hidden } = parseInput(
+    OpenAnswerBodySchema.extend({ hidden: z.boolean() }),
+    req.body
+  )
   const { survey } = await getManagedSurvey(req)
-  res.send({ count: await hideAnswers(survey, questionId, content, hidden) })
+  res.send({ hidden, count: await hideAnswers(survey, questionId, feedbackContent, hidden) })
 })
 
 router.put('/:id/delete-answer', adminAccess, async (req: AuthenticatedRequest, res: Response) => {
-  const { questionId, content } = parseInput(OpenAnswerBodySchema, req.body)
+  const { questionId, feedbackContent } = parseInput(OpenAnswerBodySchema, req.body)
   const survey = await getSurveyById(getId(req))
-  res.send({ count: await deleteAnswers(survey, questionId, content) })
+  res.send({ count: await deleteAnswers(survey, questionId, feedbackContent) })
 })
 
 router.get('/:id/logs', async (req: AuthenticatedRequest, res: Response) => {

@@ -370,6 +370,7 @@
     "hidingFeatureInfo": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa kuten opiskelijanumero tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "hidingFeatureInfo_standalone": "Jos johonkin vastaukseen on päätynyt luottamuksellista tietoa tai vastaus on muuten asiaton, voit piilottaa sen oikeanpuoleisesta silmäkuvakkeesta. Tällä on vaikutusta vain jos vastaukset on julkistettu.",
     "confirmDeleteFeedback": "Olet poistamassa opiskelijan vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
+    "confirmDeleteFeedback_standalone": "Olet poistamassa vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
     "deleteSuccess": "Vastaus \"{{content}}\" poistettu. ({{count}})",
     "chartView": "Näytä kaavionäkymä",
     "tableView": "Näytä taulukkonäkymä",
@@ -925,7 +926,6 @@
     "settingsTab": "Asetukset",
     "logsTab": "Lokit",
     "groupTitle": "Muut kyselyt",
-    "confirmDeleteAnswer": "Olet poistamassa vastausta PYSYVÄSTI admin-oikeuksilla. Haluatko varmasti poistaa vastauksen? Kirjoita \"delete\" vahvistaaksesi.",
     "noAnswersYet": "Tuloksia ei näytetä, koska kukaan ei ole vielä vastannut.",
     "questionsLockedTooltip": "Kysymykset-välilehti ei käytössä: Kyselyä ei voi enää muokata sen avauduttua."
   }
