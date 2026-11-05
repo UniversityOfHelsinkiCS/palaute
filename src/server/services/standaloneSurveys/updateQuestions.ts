@@ -17,8 +17,25 @@ export type QuestionInput = {
   visibility: StandaloneQuestionVisibility
 }
 
+const changesContent = (questions: QuestionInput[], existing: StandaloneSurveyQuestion[]) =>
+  questions.length !== existing.length ||
+  questions.some((input, index) => {
+    const { questionId, question } = existing[index]
+    return (
+      input.id !== questionId ||
+      input.type !== question?.type ||
+      input.required !== question?.required ||
+      !_.isEqual(input.data, question?.data)
+    )
+  })
+
 export const updateQuestions = async (survey: StandaloneSurvey, questions: QuestionInput[], user: User) => {
   const existing = survey.surveyQuestions ?? []
+
+  if (survey.opensAt <= new Date() && !user.isAdmin && changesContent(questions, existing)) {
+    throw ApplicationError.Forbidden('Only the visibility of questions can be changed once the survey has opened')
+  }
+
   const existingIds = existing.map(sq => sq.questionId)
   const inputIds = questions.flatMap(q => (q.id ? [q.id] : []))
 

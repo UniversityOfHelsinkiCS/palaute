@@ -69,7 +69,7 @@ Management routes, by id (admin or responsible user):
 
 - `GET /standalone-surveys`: surveys the user is responsible for (for My surveys)
 - `GET /standalone-surveys/:id`, `PUT /standalone-surveys/:id`: name and dates
-- `PUT /standalone-surveys/:id/questions`: questions, order and visibility
+- `PUT /standalone-surveys/:id/questions`: questions, order and visibility. Once the survey has opened, non-admins can only change visibility.
 - `PUT /standalone-surveys/:id/responsible-users`
 - `GET /standalone-surveys/:id/results`: all questions, shuffled
 - `PUT /standalone-surveys/:id/hide-answer`, `PUT /standalone-surveys/:id/delete-answer` (admin only)
