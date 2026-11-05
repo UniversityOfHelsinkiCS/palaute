@@ -56,7 +56,9 @@ const answerOnPage = async (page: Page, token: string) => {
 }
 
 test.describe('Standalone surveys', () => {
-  test('admin creates a survey and adds questions', async ({ page, loginAs }) => {
+  test('admin creates a survey and adds questions', async ({ page, loginAs, api: testApi }) => {
+    // The user search only finds employees, which Jami learns about on login
+    await testApi.login(teacher)
     await loginAs(admin)
     await page.goto('/admin/standalone-surveys')
     await contains(page, 'Create survey', 'button').click()
@@ -127,7 +129,7 @@ test.describe('Standalone surveys', () => {
 
     await loginAs(teacher)
     await page.goto('/courses')
-    await contains(page, 'Staff survey').click()
+    await page.locator(`a[href="/standalone-surveys/${id}"]`).click()
     await expect(page).toHaveURL(new RegExp(`/standalone-surveys/${id}`))
     await page.goto(`/standalone-surveys/${id}/results`)
     await expect(contains(page, '1 answer')).toBeVisible()
