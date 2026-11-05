@@ -27,33 +27,33 @@ const SurveyResults = ({
 
   return (
     <Box id="feedback-target-tab-content">
-      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' }}>
-        <Typography>{t('standaloneSurvey:responseCount', { count: responseCount })}</Typography>
-        {exportMenu}
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 2 }}>
+        <Typography sx={{ mr: 'auto' }}>{t('standaloneSurvey:responseCount', { count: responseCount })}</Typography>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+          {responseCount > 0 && (
+            <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />
+          )}
+          {exportMenu}
+        </Box>
       </Box>
       {responseCount === 0 ? (
         <Alert severity="info" sx={{ mt: 2 }}>
           {t('standaloneSurvey:noAnswersYet')}
         </Alert>
       ) : (
-        <>
-          <Box sx={{ mt: 2 }}>
-            <ChartTableToggle showTable={showTable} setShowTable={setShowTable} />
-          </Box>
-          <QuestionResults
-            publicityConfigurableQuestionIds={isResponsibleUser ? questions.map(q => q.id) : []}
-            publicQuestionIds={publicQuestionIds}
-            questions={questions}
-            feedbacks={results.feedbacks}
-            isResponsibleTeacher={isResponsibleUser}
-            isOrganisationUser={false}
-            isOpen={isOpen}
-            feedbackCount={responseCount}
-            savePublicQuestionIds={savePublicQuestionIds}
-            openAnswerActions={openAnswerActions}
-            showTable={showTable}
-          />
-        </>
+        <QuestionResults
+          publicityConfigurableQuestionIds={isResponsibleUser ? questions.map(q => q.id) : []}
+          publicQuestionIds={publicQuestionIds}
+          questions={questions}
+          feedbacks={results.feedbacks}
+          isResponsibleTeacher={isResponsibleUser}
+          isOrganisationUser={false}
+          isOpen={isOpen}
+          feedbackCount={responseCount}
+          savePublicQuestionIds={savePublicQuestionIds}
+          openAnswerActions={openAnswerActions}
+          showTable={showTable}
+        />
       )}
     </Box>
   )
