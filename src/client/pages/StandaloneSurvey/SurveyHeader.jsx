@@ -10,7 +10,7 @@ const SurveyHeader = ({ survey, children }) => {
   const name = getLanguageValue(survey.name, i18n.language)
 
   return (
-    <Box sx={{ mb: '3rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+    <Box sx={{ mb: '2rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
       <Title>{name}</Title>
       <Typography variant="h4" component="h1">
         {name}

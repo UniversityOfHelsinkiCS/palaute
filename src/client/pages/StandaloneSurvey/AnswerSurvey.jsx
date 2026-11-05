@@ -130,20 +130,20 @@ const AnswerSurvey = () => {
         )}
       </SurveyHeader>
 
-      <FeedbackTargetTabsContainer>
-        <FeedbackTargetTab
-          label={survey.response && isOpen ? t('standaloneSurvey:editAnswerTab') : t('feedbackTargetView:surveyTab')}
-          to={basePath}
-          icon={survey.response && isOpen ? <EditOutlined /> : <LiveHelpOutlined />}
-        />
-        {survey.resultsVisible && (
+      {survey.resultsVisible && (
+        <FeedbackTargetTabsContainer>
+          <FeedbackTargetTab
+            label={isOpen ? t('standaloneSurvey:editAnswerTab') : t('feedbackTargetView:surveyTab')}
+            to={basePath}
+            icon={isOpen ? <EditOutlined /> : <LiveHelpOutlined />}
+          />
           <FeedbackTargetTab
             label={t('feedbackTargetView:feedbacksTab')}
             to={`${basePath}/results`}
             icon={<PollOutlined />}
           />
-        )}
-      </FeedbackTargetTabsContainer>
+        </FeedbackTargetTabsContainer>
+      )}
 
       <Routes>
         <Route path="/" element={<AnswerForm survey={survey} token={token} basePath={basePath} />} />
