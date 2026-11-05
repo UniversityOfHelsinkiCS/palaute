@@ -2,6 +2,7 @@ import { Alert, Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import ChartTableToggle, { useShowTable } from '../FeedbackTarget/tabs/Results/ChartTableToggle'
 import QuestionResults from '../FeedbackTarget/tabs/Results/QuestionResults'
 import useChartConfig from '../FeedbackTarget/tabs/Results/QuestionResults/useChartConfig'
 
@@ -17,6 +18,7 @@ const SurveyResults = ({
   exportMenu,
 }) => {
   const { t } = useTranslation()
+  const [showTable, setShowTable] = useShowTable()
   useChartConfig()
 
   if (isLoading) return <LoadingProgress />
@@ -34,18 +36,24 @@ const SurveyResults = ({
           {t('standaloneSurvey:noAnswersYet')}
         </Alert>
       ) : (
-        <QuestionResults
-          publicityConfigurableQuestionIds={isResponsibleUser ? questions.map(q => q.id) : []}
-          publicQuestionIds={publicQuestionIds}
-          questions={questions}
-          feedbacks={results.feedbacks}
-          isResponsibleTeacher={isResponsibleUser}
-          isOrganisationUser={false}
-          isOpen={isOpen}
-          feedbackCount={responseCount}
-          savePublicQuestionIds={savePublicQuestionIds}
-          openAnswerActions={openAnswerActions}
-        />
+        <>
+          <Box sx={{ mt: 2 }}>
+            <ChartTableToggle showTable={showTable} setShowTable={setShowTable} />
+          </Box>
+          <QuestionResults
+            publicityConfigurableQuestionIds={isResponsibleUser ? questions.map(q => q.id) : []}
+            publicQuestionIds={publicQuestionIds}
+            questions={questions}
+            feedbacks={results.feedbacks}
+            isResponsibleTeacher={isResponsibleUser}
+            isOrganisationUser={false}
+            isOpen={isOpen}
+            feedbackCount={responseCount}
+            savePublicQuestionIds={savePublicQuestionIds}
+            openAnswerActions={openAnswerActions}
+            showTable={showTable}
+          />
+        </>
       )}
     </Box>
   )
