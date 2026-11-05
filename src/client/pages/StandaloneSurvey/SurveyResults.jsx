@@ -1,4 +1,4 @@
-import { Alert, Box, Typography } from '@mui/material'
+import { Alert, Box, Chip, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { LoadingProgress } from '../../components/common/LoadingProgress'
@@ -28,7 +28,15 @@ const SurveyResults = ({
   return (
     <Box id="feedback-target-tab-content">
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 2 }}>
-        <Typography sx={{ mr: 'auto' }}>{t('standaloneSurvey:responseCount', { count: responseCount })}</Typography>
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 'auto' }}>
+          <Typography>{t('feedbackTargetView:respondents')}:</Typography>
+          <Chip
+            label={responseCount}
+            color={responseCount ? 'primary' : 'default'}
+            variant={responseCount ? 'filled' : 'outlined'}
+            sx={{ px: '6px' }}
+          />
+        </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
           {responseCount > 0 && (
             <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />

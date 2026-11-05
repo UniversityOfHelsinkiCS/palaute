@@ -132,7 +132,7 @@ test.describe('Standalone surveys', () => {
     await page.locator(`a[href="/standalone-surveys/${id}"]`).click()
     await expect(page).toHaveURL(new RegExp(`/standalone-surveys/${id}`))
     await page.goto(`/standalone-surveys/${id}/results`)
-    await expect(contains(page, '1 answer')).toBeVisible()
+    await expect(page.getByText('Respondents:').locator('..').getByText('1', { exact: true })).toBeVisible()
   })
 
   test('hidden answers stay hidden when the respondent edits their answer', async ({ request }) => {
