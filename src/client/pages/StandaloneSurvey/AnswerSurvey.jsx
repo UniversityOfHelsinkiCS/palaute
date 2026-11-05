@@ -88,7 +88,7 @@ const AnswerForm = ({ survey, token, basePath }) => {
         validate={makeValidate(survey.questions)}
         onSubmit={handleSubmit}
         disabled={!canAnswer}
-        showSubmitButton={canAnswer}
+        showSubmitButton
         questions={survey.questions}
         onOpenPrivacyDialog={event => {
           event.preventDefault()

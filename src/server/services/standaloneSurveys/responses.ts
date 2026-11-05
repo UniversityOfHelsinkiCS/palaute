@@ -24,7 +24,11 @@ export const saveResponse = async (survey: StandaloneSurvey, user: User, data: Q
     defaults: { standaloneSurveyId: survey.id, userId: user.id, data: cleanData },
   })
   if (!created) {
-    response.data = cleanData
+    const isHidden = (answer: QuestionAnswer) =>
+      response.data.some(
+        previous => previous.hidden && previous.questionId === answer.questionId && previous.data === answer.data
+      )
+    response.data = cleanData.map(answer => (isHidden(answer) ? { ...answer, hidden: true } : answer))
     await response.save()
   }
 

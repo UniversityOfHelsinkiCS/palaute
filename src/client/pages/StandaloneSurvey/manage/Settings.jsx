@@ -2,6 +2,7 @@ import { Box, Grid2 as Grid, Paper, Typography } from '@mui/material'
 import { endOfDay, isSameDay, startOfDay } from 'date-fns'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
+import { useNavigate } from 'react-router-dom'
 
 import FormikDatePicker from '../../../components/common/FormikDatePicker'
 import FormikLocalesFieldEditor from '../../../components/common/FormikLocalesFieldEditor'
@@ -50,7 +51,7 @@ const NameAndPeriod = ({ survey, isOpen, isOver }) => {
       onSubmit={async (values, actions) => {
         if (await save(values)) actions.resetForm({ values })
       }}
-      validate={validateNameAndPeriod(isOpen, isOver)}
+      validate={validateNameAndPeriod(isOpen || isOver, isOver)}
       enableReinitialize
     >
       {({ dirty, isSubmitting }) => (
@@ -82,8 +83,12 @@ const NameAndPeriod = ({ survey, isOpen, isOver }) => {
 
 const ResponsibleUsers = ({ survey }) => {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const updateResponsibleUsers = useUpdateResponsibleUsers(survey.id)
-  const save = useInteractiveMutation(users => updateResponsibleUsers.mutateAsync({ userIds: users.map(u => u.id) }))
+  const save = useInteractiveMutation(async users => {
+    const updated = await updateResponsibleUsers.mutateAsync({ userIds: users.map(u => u.id) })
+    if (!updated.access.canManage) navigate('/courses')
+  })
 
   return (
     <Formik
