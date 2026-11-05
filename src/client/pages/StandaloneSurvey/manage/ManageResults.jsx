@@ -1,4 +1,5 @@
 import { useMutation } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -12,7 +13,10 @@ import SurveyResults from '../SurveyResults'
 import { toQuestionInputs, withPublicity } from './EditQuestions'
 
 const getFilename = (survey, language) =>
-  `${getLanguageValue(survey.name, language)}_${survey.opensAt.slice(0, 10)}`.replace(/[^\p{L}\p{N}_-]+/gu, '_')
+  `${getLanguageValue(survey.name, language)}_${format(new Date(survey.opensAt), 'yyyy-MM-dd')}`.replace(
+    /[^\p{L}\p{N}_-]+/gu,
+    '_'
+  )
 
 const useOpenAnswerActions = survey => {
   const { t } = useTranslation()
