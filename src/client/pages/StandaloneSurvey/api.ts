@@ -2,6 +2,7 @@ import type { LocalizedString } from '@common/types/common'
 import type { Question, QuestionAnswer } from '@common/types/question'
 
 import { useMutation, useQuery } from '@tanstack/react-query'
+import { isAxiosError } from 'axios'
 
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
@@ -52,21 +53,26 @@ export type SurveyListItem = {
   responseCount: number
 }
 
-const get = async <T>(url: string) => (await apiClient.get<T>(url)).data
+const retryUnlessRefused = (failureCount: number, error: Error) =>
+  failureCount < 3 && !(isAxiosError(error) && error.response && error.response.status < 500)
+
+const useGet = <T>(queryKey: string[], url: string, enabled = true) =>
+  useQuery({
+    queryKey,
+    queryFn: async () => (await apiClient.get<T>(url)).data,
+    retry: retryUnlessRefused,
+    enabled,
+  })
 
 const answerKey = (token: string) => ['standaloneSurveyAnswer', token]
 const answerResultsKey = (token: string) => ['standaloneSurveyAnswerResults', token]
 const surveyKey = (id: number | string) => ['standaloneSurvey', String(id)]
 
 export const useAnswerSurvey = (token: string) =>
-  useQuery({ queryKey: answerKey(token), queryFn: () => get<AnswerSurvey>(`/standalone-surveys/answer/${token}`) })
+  useGet<AnswerSurvey>(answerKey(token), `/standalone-surveys/answer/${token}`)
 
 export const useAnswerResults = (token: string, enabled: boolean) =>
-  useQuery({
-    queryKey: answerResultsKey(token),
-    queryFn: () => get<ResultsData>(`/standalone-surveys/answer/${token}/results`),
-    enabled,
-  })
+  useGet<ResultsData>(answerResultsKey(token), `/standalone-surveys/answer/${token}/results`, enabled)
 
 export const useSaveResponse = (token: string) =>
   useMutation({
@@ -88,19 +94,13 @@ export const useDeleteResponse = (token: string) =>
   })
 
 export const useManagedSurvey = (id: number | string) =>
-  useQuery({ queryKey: surveyKey(id), queryFn: () => get<ManagedSurvey>(`/standalone-surveys/${id}`) })
+  useGet<ManagedSurvey>(surveyKey(id), `/standalone-surveys/${id}`)
 
 export const useManagedResults = (id: number | string) =>
-  useQuery({
-    queryKey: ['standaloneSurveyResults', String(id)],
-    queryFn: () => get<ResultsData>(`/standalone-surveys/${id}/results`),
-  })
+  useGet<ResultsData>(['standaloneSurveyResults', String(id)], `/standalone-surveys/${id}/results`)
 
 export const useSurveyLogs = (id: number | string) =>
-  useQuery({
-    queryKey: ['standaloneSurveyLogs', String(id)],
-    queryFn: () => get<any[]>(`/standalone-surveys/${id}/logs`),
-  })
+  useGet<any[]>(['standaloneSurveyLogs', String(id)], `/standalone-surveys/${id}/logs`)
 
 const useSurveyUpdate = <T>(id: number | string, path: string) =>
   useMutation({
@@ -127,11 +127,9 @@ export const useUpdateQuestions = (id: number | string) =>
 export const useUpdateResponsibleUsers = (id: number | string) =>
   useSurveyUpdate<{ userIds: string[] }>(id, '/responsible-users')
 
-export const useMySurveys = () =>
-  useQuery({ queryKey: ['standaloneSurveys'], queryFn: () => get<SurveyListItem[]>('/standalone-surveys') })
+export const useMySurveys = () => useGet<SurveyListItem[]>(['standaloneSurveys'], '/standalone-surveys')
 
-export const useAllSurveys = () =>
-  useQuery({ queryKey: ['standaloneSurveysAll'], queryFn: () => get<SurveyListItem[]>('/standalone-surveys/all') })
+export const useAllSurveys = () => useGet<SurveyListItem[]>(['standaloneSurveysAll'], '/standalone-surveys/all')
 
 export const useCreateSurvey = () =>
   useMutation({
