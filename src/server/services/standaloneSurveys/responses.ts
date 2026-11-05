@@ -9,6 +9,8 @@ import { getPublicQuestionIds, getQuestions } from './getSurvey'
 export const getOwnResponse = (survey: StandaloneSurvey, user: User) =>
   StandaloneSurveyResponse.findOne({ where: { standaloneSurveyId: survey.id, userId: user.id } })
 
+const isBlank = (answer: QuestionAnswer['data']) => (Array.isArray(answer) ? answer.length === 0 : !answer.trim())
+
 const assertCanAnswer = (survey: StandaloneSurvey) => {
   if (!survey.isOpen()) throw ApplicationError.Forbidden('Survey is not open')
 }
@@ -18,6 +20,7 @@ export const saveResponse = async (survey: StandaloneSurvey, user: User, data: Q
 
   const cleanData = data.map(({ questionId, data: answer }) => ({ questionId, data: answer }))
   if (!validateAnswers(cleanData, getQuestions(survey))) throw ApplicationError.BadRequest('Form data not valid')
+  if (cleanData.every(({ data: answer }) => isBlank(answer))) throw ApplicationError.BadRequest('Answer is empty')
 
   const [response, created] = await StandaloneSurveyResponse.findOrCreate({
     where: { standaloneSurveyId: survey.id, userId: user.id },

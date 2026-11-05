@@ -172,6 +172,19 @@ test.describe('Standalone surveys', () => {
     expect((await surveys.answer(token, answer, student)).status).toBe(400)
   })
 
+  test('a blank response is refused', async ({ request }) => {
+    const surveys = api(request)
+    const id = await surveys.create()
+    const { body } = await surveys.setQuestions(id, [{ ...likert, required: false }, open])
+    const [likertId, openId] = body.questions.map((q: { id: number }) => q.id)
+
+    const answer = [
+      { questionId: likertId, data: '' },
+      { questionId: openId, data: '  ' },
+    ]
+    expect((await surveys.answer(body.token, answer, student)).status).toBe(400)
+  })
+
   test('an open question only accepts text', async ({ request }) => {
     const surveys = api(request)
     const { token, likertId, openId } = await setupSurvey(request)
