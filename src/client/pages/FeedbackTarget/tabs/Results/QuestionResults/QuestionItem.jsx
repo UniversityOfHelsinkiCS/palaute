@@ -6,9 +6,9 @@ import { useTranslation } from 'react-i18next'
 
 import Instructions from '../../../../../components/common/Instructions'
 import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
-import useQuestionPublicityMutation from '../../../../../hooks/useQuestionPublicityMutation'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { boxPrintStyle } from '../../../../../util/printStyle'
+import { useTranslationContext } from '../../../../../util/translationContext'
 import AverageResult from './AverageResult'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
@@ -25,13 +25,18 @@ const componentByType = {
 
 const VisibilityInfoBox = ({ isPublic }) => {
   const { t } = useTranslation()
+  const context = useTranslationContext()
 
   const content = (
     <>
-      <span>{isPublic ? t('feedbackTargetResults:unpublishingInfo') : t('feedbackTargetResults:publishingInfo')}</span>
+      <span>
+        {isPublic
+          ? t('feedbackTargetResults:unpublishingInfo', { context })
+          : t('feedbackTargetResults:publishingInfo', { context })}
+      </span>
       <br />
       <br />
-      <span>{t('feedbackTargetResults:hidingFeatureInfo')}</span>
+      <span>{t('feedbackTargetResults:hidingFeatureInfo', { context })}</span>
     </>
   )
 
@@ -51,16 +56,12 @@ const QuestionItem = ({
   publicQuestionIds,
   feedbackCount,
   disabled,
-  feedbackTargetId,
+  savePublicQuestionIds,
+  openAnswerActions,
   showTable,
 }) => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const mutation = useQuestionPublicityMutation({
-    resource: 'feedbackTarget',
-    resourceId: feedbackTargetId,
-  })
 
   const onPublicityToggle = React.useCallback(
     async isPublic => {
@@ -69,13 +70,13 @@ const QuestionItem = ({
         : publicQuestionIds.filter(id => id !== question.id)
 
       try {
-        await mutation.mutateAsync(newPublicQuestionIds)
+        await savePublicQuestionIds(newPublicQuestionIds)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       } catch {
         enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
       }
     },
-    [publicQuestionIds]
+    [publicQuestionIds, savePublicQuestionIds]
   )
 
   const handlePublicityToggle = isPublic => {
@@ -93,7 +94,12 @@ const QuestionItem = ({
 
   const Component = componentByType[question.type]
   const content = Component ? (
-    <Component question={question} feedbackCount={feedbackCount} showTable={showTable} />
+    <Component
+      question={question}
+      feedbackCount={feedbackCount}
+      showTable={showTable}
+      openAnswerActions={openAnswerActions}
+    />
   ) : null
 
   const isPublic = publicQuestionIds.includes(question.id)

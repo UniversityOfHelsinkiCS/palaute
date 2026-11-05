@@ -5,6 +5,7 @@ import { Feedback, UserFeedbackTarget, FeedbackTarget } from '../../models'
 import { FeedbackData } from '../../models/feedback'
 import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
+import { removeOpenAnswers, setOpenAnswersHidden } from '../../util/openAnswers'
 import feedbackTargetCache from './feedbackTargetCache'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
@@ -73,21 +74,13 @@ const hideFeedback = async ({ feedbackTargetId, questionId, hidden, user, feedba
       return { feedback, matchedCount: 0, changedCount: 0 }
     }
 
-    let matchedCount = 0
-    let changedCount = 0
-
-    feedback.data = feedback.data.map(answer => {
-      if (answer.data === feedbackContent && answer.questionId === questionId) {
-        matchedCount += 1
-
-        const isCurrentlyHidden = answer.hidden === true
-        if (isCurrentlyHidden !== hidden) {
-          changedCount += 1
-          return { ...answer, hidden }
-        }
-      }
-      return answer
-    })
+    const { data, matchedCount, changedCount } = setOpenAnswersHidden(
+      feedback.data,
+      questionId,
+      feedbackContent,
+      hidden
+    )
+    feedback.data = data
 
     return { feedback, matchedCount, changedCount }
   })
@@ -144,16 +137,10 @@ const adminDeleteFeedback = async ({
     .map(feedback => {
       if (!Array.isArray(feedback.data)) return { updated: false }
 
-      let updated = false
-      feedback.data = feedback.data.filter(answer => {
-        if (answer.data === feedbackContent && answer.questionId === questionId) {
-          updated = true
-          return false
-        }
-        return true
-      })
+      const { data, removed } = removeOpenAnswers(feedback.data, questionId, feedbackContent)
+      feedback.data = data
 
-      return { updated, feedback }
+      return { updated: removed, feedback }
     })
     .filter(({ updated }) => updated)
     .map(({ feedback }) => feedback)

@@ -15,6 +15,8 @@ import MyTeaching from './MyTeaching/MyTeaching'
 import NorppaFeedback from './NorppaFeedback'
 import Organisation from './Organisation'
 import Search from './Search/Search'
+import AnswerSurvey from './StandaloneSurvey/AnswerSurvey'
+import ManageSurvey from './StandaloneSurvey/manage/ManageSurvey'
 
 // Lazy, so the guide's text is loaded only by those who open it
 const UserGuide = lazy(() => import('./UserGuide'))
@@ -59,6 +61,9 @@ const Router = () => (
         <Route path="/cur/:id/*" element={<CourseRealisation />} />
         <Route path="/norppa-feedback" element={<NorppaFeedback />} />
         {USER_GUIDE_ENABLED && <Route path="/guide/:slug?" element={<UserGuide />} />}
+        <Route path="/survey/:token" element={<AnswerSurvey />} />
+        <Route path="/survey/:token/:slug/*" element={<AnswerSurvey />} />
+        <Route path="/standalone-surveys/:id/*" element={<ManageSurvey />} />
         <Route path="/admin/*" element={<Admin />} />
         <Route path="*" element={<Home />} />
       </Routes>

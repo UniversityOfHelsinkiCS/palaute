@@ -7,13 +7,7 @@ import type {
 
 import z from 'zod/v4'
 
-import { ApplicationError } from '../../util/ApplicationError'
-
-const parse = <T extends z.ZodType>(schema: T, input: unknown): z.output<T> => {
-  const result = schema.safeParse(input)
-  if (!result.success) throw ApplicationError.BadRequest(z.prettifyError(result.error))
-  return result.data
-}
+import { parseInput } from '../../util/parseInput'
 
 const day = z.iso.date()
 
@@ -46,7 +40,7 @@ const ConversationsQuerySchema = z
   .refine(inOrder, 'from must not be after to')
 
 export const parseConversationsQuery = (query: unknown): GetHelpChatbotConversationsQuery =>
-  parse(ConversationsQuerySchema, query)
+  parseInput(ConversationsQuerySchema, query)
 
 const ConversationKeySchema = z.object({
   conversationId: z.string().min(1).max(100),
@@ -54,7 +48,7 @@ const ConversationKeySchema = z.object({
 })
 
 export const parseConversationKey = (query: unknown): { conversationId: string; userId: string | null } => {
-  const { conversationId, userId } = parse(ConversationKeySchema, query)
+  const { conversationId, userId } = parseInput(ConversationKeySchema, query)
   return { conversationId, userId: userId ?? null }
 }
 
@@ -68,7 +62,8 @@ const FeedbackQuerySchema = z
   })
   .refine(inOrder, 'from must not be after to')
 
-export const parseFeedbackQuery = (query: unknown): GetHelpChatbotFeedbackQuery => parse(FeedbackQuerySchema, query)
+export const parseFeedbackQuery = (query: unknown): GetHelpChatbotFeedbackQuery =>
+  parseInput(FeedbackQuerySchema, query)
 
 const UsageQuerySchema = z
   .object({
@@ -78,8 +73,8 @@ const UsageQuerySchema = z
   })
   .refine(inOrder, 'from must not be after to')
 
-export const parseUsageQuery = (query: unknown): GetHelpChatbotUsageQuery => parse(UsageQuerySchema, query)
+export const parseUsageQuery = (query: unknown): GetHelpChatbotUsageQuery => parseInput(UsageQuerySchema, query)
 
 const ReviewedBodySchema = z.object({ reviewed: z.boolean() })
 
-export const parseReviewedBody = (body: unknown): PutHelpChatbotReviewedBody => parse(ReviewedBodySchema, body)
+export const parseReviewedBody = (body: unknown): PutHelpChatbotReviewedBody => parseInput(ReviewedBodySchema, body)

@@ -13,11 +13,9 @@ const styles = {
     marginBottom: theme => theme.spacing(1),
   },
   questionContainer: theme => ({
-    margin: '0.5rem',
-    marginLeft: '1rem',
+    marginY: '0.5rem',
     [theme.breakpoints.down('md')]: {
-      margin: 0,
-      marginLeft: 0,
+      marginY: 0,
     },
   }),
 }
