@@ -906,7 +906,7 @@
     "notFound": "Didn't find what you were looking for?"
   },
   "standaloneSurvey": {
-    "dates": "Open {{opensAt}}–{{closesAt}}",
+    "dates": "Answering period {{opensAt}}–{{closesAt}}",
     "manage": "Manage survey",
     "editAnswerTab": "Edit answer",
     "responseCount_one": "{{count}} answer",

@@ -891,7 +891,7 @@
     "notFound": "Hittade du inte det du letade efter?"
   },
   "standaloneSurvey": {
-    "dates": "Öppen {{opensAt}}–{{closesAt}}",
+    "dates": "Svarstid {{opensAt}}–{{closesAt}}",
     "manage": "Hantera enkäten",
     "editAnswerTab": "Redigera svar",
     "responseCount_one": "{{count}} svar",

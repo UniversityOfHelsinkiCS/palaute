@@ -901,7 +901,7 @@
     "notFound": "Etkö löytänyt etsimääsi?"
   },
   "standaloneSurvey": {
-    "dates": "Avoinna {{opensAt}}–{{closesAt}}",
+    "dates": "Vastausaika {{opensAt}}–{{closesAt}}",
     "manage": "Hallinnoi kyselyä",
     "editAnswerTab": "Muokkaa vastausta",
     "responseCount_one": "{{count}} vastaus",
