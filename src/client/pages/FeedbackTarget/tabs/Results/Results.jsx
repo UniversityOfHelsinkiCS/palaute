@@ -1,12 +1,13 @@
 import BarChartIcon from '@mui/icons-material/BarChart'
 import TableRowsIcon from '@mui/icons-material/TableRows'
 import { Box, Alert, Paper, Tooltip } from '@mui/material'
-import React, { useRef, useState, useEffect, useMemo } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useInView } from 'react-intersection-observer'
 
 import { NorButton } from '../../../../components/common/NorButton'
 import useFeedbackTargetFeedbacks from '../../../../hooks/useFeedbackTargetFeedbacks'
+import useOpenAnswerActions from '../../../../hooks/useOpenAnswerActions'
 import useQuestionPublicityMutation from '../../../../hooks/useQuestionPublicityMutation'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
@@ -19,8 +20,6 @@ import GroupSelector from './GroupSelector'
 import QuestionResults from './QuestionResults'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useChartConfig from './QuestionResults/useChartConfig'
-import useDeleteOpenFeedback from './QuestionResults/useDeleteOpenFeedback'
-import useUpdateOpenFeedbackVisibility from './QuestionResults/useUpdateOpenFeedbackVisibility'
 import { getCourseStartDate } from './utils'
 
 const NotEnoughFeedbacks = ({ t }) => (
@@ -158,20 +157,17 @@ const Results = () => {
 
   useChartConfig()
 
-  const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher } = useFeedbackTargetContext()
+  const { feedbackTarget, isOrganisationReader, isResponsibleTeacher, isTeacher, isOrganisationAdmin, isAdmin } =
+    useFeedbackTargetContext()
   const { feedbackTargetData, isLoading } = useFeedbackTargetFeedbacks(id, groupId)
   const publicityMutation = useQuestionPublicityMutation({ resource: 'feedbackTarget', resourceId: id })
-  const { canHide, toggleVisibility } = useUpdateOpenFeedbackVisibility()
-  const { canDelete, deleteAnswer } = useDeleteOpenFeedback()
-  const openAnswerActions = useMemo(
-    () => ({
-      canHide,
-      toggleVisibility: feedback => toggleVisibility(feedback, id),
-      canDelete,
-      deleteAnswer,
-    }),
-    [canHide, toggleVisibility, id, canDelete, deleteAnswer]
-  )
+  const openAnswerActions = useOpenAnswerActions({
+    hidePath: `/feedback-targets/${feedbackTarget.id}/hide-feedback`,
+    deletePath: `/feedback-targets/${feedbackTarget.id}/delete-feedback`,
+    queryKey: ['feedbackTargetFeedbacks', String(feedbackTarget.id)],
+    canHide: isTeacher || isOrganisationAdmin,
+    canDelete: isAdmin,
+  })
 
   const {
     questions,
