@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../../../components/common/NorButton'
+import { mergeSx } from '../../../../util/sx'
 
 export const useShowTable = () => {
   const [showTable, setShowTable] = useState(false)
@@ -31,7 +32,7 @@ export const useShowTable = () => {
   return [showTable, setShowTable]
 }
 
-const ChartTableToggle = ({ showTable, setShowTable }) => {
+const ChartTableToggle = ({ showTable, setShowTable, sx, ...props }) => {
   const { t } = useTranslation()
 
   return (
@@ -39,10 +40,10 @@ const ChartTableToggle = ({ showTable, setShowTable }) => {
       <NorButton
         id="chart-table-toggle-button"
         onClick={() => setShowTable(prev => !prev)}
-        fullWidth
         icon={showTable ? <BarChartIcon /> : <TableRowsIcon />}
-        sx={{ mb: 4, py: 1, '@media print': { display: 'none' } }}
+        sx={mergeSx({ '@media print': { display: 'none' } }, sx)}
         aria-label={`${showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}. ${t('feedbackTargetResults:keyboardShortcut')}`}
+        {...props}
       >
         {showTable ? t('feedbackTargetResults:chartView') : t('feedbackTargetResults:tableView')}
       </NorButton>

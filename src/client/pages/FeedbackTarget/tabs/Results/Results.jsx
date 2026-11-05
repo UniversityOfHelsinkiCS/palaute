@@ -221,7 +221,9 @@ const Results = () => {
 
         {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
-        {showFeedback && <ChartTableToggle showTable={showTable} setShowTable={setShowTable} />}
+        {showFeedback && (
+          <ChartTableToggle showTable={showTable} setShowTable={setShowTable} fullWidth sx={{ mb: 4, py: 1 }} />
+        )}
 
         {showFeedback && (
           <FeedbackChart
