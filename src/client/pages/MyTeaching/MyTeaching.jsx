@@ -165,7 +165,7 @@ const MyTeaching = () => {
   const { courseUnits, isLoading } = useTeacherCourseUnits(queryParams)
   const { courseUnits: orgSurveyCourseUnits, isLoading: isOrgSurveysLoading } =
     useTeacherOrganisatioSurveys(queryParams)
-  const { surveys: standaloneSurveys } = useMySurveysWithStatus(status)
+  const { surveys: standaloneSurveys } = useMySurveysWithStatus(status, useYearFilter ? dateRange : null)
 
   const getPageTitle = () => {
     const baseTitle = t('teacherView:mainHeading')
@@ -219,7 +219,7 @@ const MyTeaching = () => {
       <Box role="tabpanel" id={`tabpanel-${status}`} aria-labelledby={`tab-${status}`}>
         {isLoading && isOrgSurveysLoading && <CourseUnitGroupSkeleton />}
 
-        {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && standaloneSurveys.length === 0 && (
+        {orgSurveyCourseUnits?.length === 0 && courseUnits?.length === 0 && standaloneSurveys?.length === 0 && (
           <Alert data-cy="my-teaching-no-courses" severity="info">
             {status === 'ended' && !showAllYears ? t('teacherView:noFilteredCourses') : t('teacherView:noCourses')}
           </Alert>
@@ -234,7 +234,7 @@ const MyTeaching = () => {
           />
         )}
 
-        {standaloneSurveys.length > 0 && <StandaloneSurveyGroup surveys={standaloneSurveys} />}
+        {standaloneSurveys?.length > 0 && <StandaloneSurveyGroup surveys={standaloneSurveys} />}
 
         {orgSurveyCourseUnits?.length > 0 && (
           <RenderCourseUnitGroup

@@ -115,21 +115,22 @@ const getPreferredTab = (user: User, fbts: FeedbackTarget[], hasSummaryAccess: b
  * Compute user preferences
  */
 export const getUserPreferences = async (user: User) => {
-  const teachedFbts = await getTeachedFeedbackTargets(user)
-  const userIsTeacherOnSomeCourse = await user.isTeacher()
+  const [teachedFbts, userIsTeacherOnSomeCourse, standaloneSurveyCount] = await Promise.all([
+    getTeachedFeedbackTargets(user),
+    user.isTeacher(),
+    StandaloneSurveyResponsibleUser.count({ where: { userId: user.id } }),
+  ])
 
   const hasSummaryAccess =
     (user.isEmployee && teachedFbts.length > 0) ||
     userIsTeacherOnSomeCourse ||
     user.isAdmin ||
     !_.isEmpty(user?.organisationAccess)
-  const isStandaloneSurveyResponsible =
-    (await StandaloneSurveyResponsibleUser.count({ where: { userId: user.id } })) > 0
   const hasCourseAccess =
     (user.isEmployee && teachedFbts.length > 0) ||
     userIsTeacherOnSomeCourse ||
     user.isAdmin ||
-    isStandaloneSurveyResponsible
+    standaloneSurveyCount > 0
   const preferredTab = getPreferredTab(user, teachedFbts, hasSummaryAccess)
   const summaryView = hasSummaryAccess ? await getPreferredSummaryView(user) : null
 
