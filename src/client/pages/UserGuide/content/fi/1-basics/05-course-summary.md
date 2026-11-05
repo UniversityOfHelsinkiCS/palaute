@@ -4,22 +4,22 @@ description: Kurssikyselyiden tunnusluvut omilta kursseiltasi tai koulutusohjelm
 
 # Kurssiyhteenveto
 
-Kurssiyhteenvedossa ovat kurssikyselyjen tilastot: yliopistotason asteikkokysymysten keskiarvot, vastanneiden määrä ja se, moniko kurssi on saanut vastapalautteen. Opettajat näkevät omat kurssinsa ja koulutusohjelmien henkilökunta koulutusohjelmiensa ja tiedekuntiensa kurssit.
+Kurssiyhteenvedossa ovat kurssikyselyjen tilastot: yliopistotason asteikkokysymysten keskiarvot, vastanneiden lukumäärä ja annettujen vastapalautteiden lukumäärä. Opettajat näkevät omat kurssinsa ja koulutusohjelmien henkilökunta koulutusohjelmiensa ja tiedekuntiensa kurssit.
 
 Avaa ylävalikosta [[navBar:courseSummary]]. Siinä on kaksi näkymää:
 
 - [[courseSummary:myCourses]]: kurssit, joilla olet vastuuopettaja tai opettaja, organisaatioittain.
-- [[courseSummary:myOrganisations]]: koulutusohjelmat, tiedekunnat ja muut organisaatiot, joihin sinulla on [oikeudet](/guide/roles#organisation-rights), ja niiden opintojaksot. Näkyy vain, jos sinulla on tällaisia oikeuksia.
+- [[courseSummary:myOrganisations]]: koulutusohjelmat, tiedekunnat ja muut organisaatiot, joihin sinulla on [oikeudet](/guide/roles#organisation-rights), ja niiden opintojaksot. (Näkyy vain, jos sinulla on tällaisia oikeuksia.)
 
-Koulutusohjelman oma yhteenveto on lisäksi sen sivulla [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelman sivu](/guide/programme-page#programme-page).
+Koulutusohjelman oma yhteenveto on koulutusohjelman sivulla, [[organisationSettings:summaryTab]]-välilehdellä, ja siinä ovat mukana myös koulutusohjelman omat asteikkokysymykset. Katso [Koulutusohjelman sivu](/guide/programme-page#programme-page).
 
-Avaamalla organisaation näet sen alla olevat rivit. Opintojakson nimestä pääset sen sivulle, jossa on rivi jokaiselle toteutukselle; toteutuksesta pääset sen kyselyn vastauksiin.
+Hierarkia navigoinnin tueksi: avaamalla organisaation näet sen alla olevat opintojaksot ja niitä klikkaamalla aukeaa kaikki opintojakson toteutukset. Toteutusta klikkaamalla pääset ko. toteutuksen palautelomakkeen vastauksiin.
 
 [[video:course-summary]]
 
 ## Mitä luvut kertovat {#figures}
 
-Jokaisella rivillä on nämä sarakkeet:
+Sarakkeet:
 
 - _Sarake jokaiselle yliopistotason asteikkokysymykselle_ (ja koulutusohjelman sivulla jokaiselle sen asteikkokysymykselle): vastausten keskiarvo asteikolla 1–5. Vastausta ”en osaa sanoa” ei lasketa mukaan. Kysymyksen näet viemällä osoittimen sarakkeen otsikon päälle.
 - _Työmäärä_: nuoli kertoo, kokivatko opiskelijat työmäärän raskaaksi vai kevyeksi opintopisteisiin nähden. Vastausten jakauman näet viemällä osoittimen sen päälle.
@@ -28,7 +28,7 @@ Jokaisella rivillä on nämä sarakkeet:
 - [[courseSummary:feedbackResponsePercentage]]: niiden kurssitoteutusten osuus, jotka ovat saaneet vastapalautteen.
 - [[courseSummary:censoredCount]]: vastaukset, jotka kurssin vastuuopettajat tai koulutusohjelman hallinnoijat ovat piilottaneet. Näkyy vain organisaation hallinnoijille.
 
-Keskiarvon väri kertoo, kuinka korkea se on: matalat keskiarvot ovat punaisia, keskitason keltaisia ja korkeat vihreitä. Vaalea solu tarkoittaa, ettei vastauksia ole.
+Keskiarvon väri ja sävy kertoo, kuinka korkea se on: matalat keskiarvot ovat punaisia, keskitason keltaisia ja korkeat vihreitä. Vaalea solu tarkoittaa, ettei vastauksia ole.
 
 Opintojakson, koulutusohjelman tai tiedekunnan luvut lasketaan kaikkien sen kurssitoteutusten vastauksista, ei keskiarvojen keskiarvona.
 
@@ -57,7 +57,7 @@ Ajanjakson vieressä olevasta valikosta valitset, ovatko avoimen yliopiston kurs
 
 [[video:course-summary-download]]
 
-Kurssiyhteenvedon sivulta ladattuun tiedostoon tulevat organisaatiosi ja omat kurssisi. Koulutusohjelman [[organisationSettings:summaryTab]]-välilehdeltä ladattuun tulee vain kyseinen koulutusohjelma, ja mukana ovat myös sen omat kysymykset.
+Kurssiyhteenvedon sivulta ladattuun tiedostoon tulevat organisaatiosi ja omat kurssisi. Koulutusohjelman [[organisationSettings:summaryTab]]-välilehdeltä ladattuun tiedostoon tulee vain kyseinen koulutusohjelma, ja mukana ovat myös sen omat kysymykset.
 
 Yksittäisen kyselyn vastaukset ladataan sen [[feedbackTargetView:feedbacksTab]]-välilehdeltä; katso [Vastausten lataaminen](/guide/results#download).
 
