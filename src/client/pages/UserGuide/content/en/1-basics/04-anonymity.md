@@ -16,7 +16,7 @@ All feedback is anonymous.
 
 A question's type can be [[common:public]] or [[common:notPublic]].
 
-- Responsible teachers, administrative persons and degree programme staff with admin rights (the programme director and feedback liaisons) see the answers to all questions.
+- Responsible teachers, administrative persons and degree programme staff with admin rights (e.g. the programme director and feedback liaisons) see the answers to all questions.
 - Teachers, programme staff with read rights and students see only the answers to public questions. Students see them once they have answered themselves, or after the survey has closed.
 
 See [Roles and rights](/guide/roles#course-roles) for who has which role.

@@ -16,7 +16,7 @@ Palaute annetaan aina nimettömänä.
 
 Kysymyksen tyyppi voi olla [[common:public]] tai [[common:notPublic]].
 
-- Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet (koulutusohjelmajohtaja ja palautevastaava), näkevät kaikkien kysymysten vastaukset.
+- Vastuuopettajat, hallintohenkilöt ja koulutusohjelman henkilöt, joilla on admin-oikeudet (esim. koulutusohjelmajohtaja ja palautevastaava), näkevät kaikkien kysymysten vastaukset.
 - Opettajat, opiskelijat ja ne koulutusohjelman henkilöt, joilla on lukuoikeudet, näkevät vain julkisten kysymysten vastaukset. Opiskelijat näkevät ne vastattuaan itse tai kyselyn sulkeuduttua.
 
 Roolit on kuvattu sivulla [Roolit ja oikeudet](/guide/roles#course-roles).
