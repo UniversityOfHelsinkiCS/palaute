@@ -8,7 +8,7 @@ A course survey always has the university level questions and possibly questions
 
 ## Editing the questions {#edit-questions}
 
-You can edit the questions only until the survey opens. After that the [[feedbackTargetView:surveyQuestionsTab]] tab is greyed out, so that all students answer the same questions, and once the survey has closed, the tab is gone.
+You can edit the questions until the course feedback survey opens. After that the [[feedbackTargetView:surveyQuestionsTab]] tab is greyed out and the questions can no longer be edited. Once the survey has closed, the tab is gone.
 
 To add a question:
 
@@ -21,7 +21,7 @@ To add a question:
 
 [[video:edit-questions]]
 
-The question is saved right away. There's nothing else to save or publish: the questions in the editor when the survey opens are the ones students get.
+If you add only one language version, everyone answering gets the survey in that language, whatever language they use Norppa in.
 
 To change a question, click its [[common:edit]] button. To remove several questions at once, use [[questionEditor:removeMany]] below the questions.
 
@@ -31,20 +31,20 @@ The editing dialog of a scale or choice question also lets you choose whether it
 
 Who can edit the questions:
 
-- Course survey: the course's responsible teachers and administrative persons, and the admins of the course's degree programme. See [Roles and rights](/guide/roles#course-roles).
+- Course unit (course) survey: the course's responsible teachers and administrative persons, and the admins of the course's degree programme. See [Roles and rights](/guide/roles#course-roles).
 - Interim feedback: the course's responsible teachers and the programme's admins.
-- Programme survey: its responsible persons and the programme's admins.
+- Programme survey: the survey's responsible persons and the programme's admins.
 
 ## Question types {#question-types}
 
-There are four question types: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] and [[questionEditor:multipleChoiceQuestion]]. Scale questions are answered from 1 to 5, or _N/A_. The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
+There are four question types: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] and [[questionEditor:multipleChoiceQuestion]]. Scale of values questions are answered from 1 to 5, or _N/A_. The numbers have no labels, so say in the question or its description what 1 and 5 mean, e.g. 1 = completely disagree, 5 = completely agree.
 
 ## Copying questions from another survey {#copy-questions}
 
 To copy your own questions from another course survey into a course survey:
 
 1. On the [[feedbackTargetView:surveyQuestionsTab]] tab, click [[editFeedbackTarget:copyFromCourseButton]].
-2. Choose the course in the course field. It lists the courses you teach.
+2. You see the courses you teach. Choose the course you want.
 3. The course's realisations that you've taught and that have their own questions are listed with their question counts. Hover over a realisation to see its questions.
 4. Click [[editFeedbackTarget:copyQuestionsButton]] next to the realisation.
 
@@ -52,7 +52,7 @@ To copy your own questions from another course survey into a course survey:
 
 The questions are added after your existing questions and saved at once. Only the teacher's own questions are copied, not the university level or programme questions. Copied questions aren't public until you make them public.
 
-In interim feedback and programme surveys, [[editFeedbackTarget:copyFromCourseButton]] lists programme surveys instead: those of the degree programmes and faculties where you have admin rights. There's also [[editFeedbackTarget:copyUniversityQuestions]], which adds the university level questions as your own questions, so you can edit or remove them.
+In interim feedback and programme surveys, [[editFeedbackTarget:copyFromCourseButton]] lists programme surveys instead: those of the degree programmes and faculties where you have admin rights. There's also [[editFeedbackTarget:copyUniversityQuestions]], which you can use to add the university level questions if you want.
 
 ## Questions from the previous realisation {#carry-over}
 

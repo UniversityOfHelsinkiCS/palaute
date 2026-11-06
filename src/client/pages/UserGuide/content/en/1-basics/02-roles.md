@@ -10,7 +10,7 @@ Norppa has different user roles. Those related to a course come directly from Si
 
 Norppa reads each course realisation's teachers and their roles from Sisu. The course's page in Norppa lists them under [[feedbackTargetView:responsibleTeachers]], [[feedbackTargetView:teachers]] and [[feedbackTargetView:administrativePersons]].
 
-- _Responsible teacher_: the Sisu roles responsible teacher and contact person. A responsible teacher can:
+- _Responsible teacher_: the Sisu roles "responsible teacher" and "contact person". A responsible teacher can:
   - edit the survey's questions and change its dates
   - read all the answers, hide open answers and see who has answered
   - send reminder emails to students

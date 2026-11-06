@@ -4,22 +4,22 @@ description: The feedback statistics of course surveys on your own courses or yo
 
 # Course summary
 
-The course summary collects the feedback statistics of course surveys: the averages of the university level scale questions, how many students answered and how many courses got counter feedback. Teachers see their own courses, programme staff the courses of their programmes and faculties.
+The course summary collects the feedback statistics of course surveys: the averages of the university level scale questions, the number of students who answered and the number of counter feedback responses given. Teachers see their own courses, programme staff the courses of their programmes and faculties.
 
 Open [[navBar:courseSummary]] in the top menu. It has two views:
 
 - [[courseSummary:myCourses]]: the courses where you're a responsible teacher or a teacher, grouped by organisation.
-- [[courseSummary:myOrganisations]]: the degree programmes, faculties and other organisations you have [rights](/guide/roles#organisation-rights) to, with their course units. Shown only if you have such rights.
+- [[courseSummary:myOrganisations]]: the degree programmes, faculties and other organisations you have [rights](/guide/roles#organisation-rights) to, with their course units. (Shown only if you have such rights.)
 
-A programme's own summary is also on its page, on the [[organisationSettings:summaryTab]] tab; there the programme's own scale questions are included too. See [The programme's page](/guide/programme-page#programme-page).
+A programme's own summary is on the programme's page, on the [[organisationSettings:summaryTab]] tab; there the programme's own scale questions are included too. See [The programme's page](/guide/programme-page#programme-page).
 
-Open an organisation to see the rows under it. Clicking a course unit opens its page, with a row for each realisation; from a realisation you get to its survey's answers.
+To navigate the hierarchy, open an organisation to see its course units, and click one to open all of its realisations. Clicking a realisation takes you to its survey's answers.
 
 [[video:course-summary]]
 
 ## What the figures show {#figures}
 
-Each row has these columns:
+The columns:
 
 - _One column for each university level scale question_ (and on a programme's page, for each of its scale questions): the average answer on the scale 1-5. "Cannot answer" isn't counted. Hold the pointer over a column heading to see the question.
 - _Workload_: an arrow showing whether students found the workload heavy or light compared to the credits. Hold the pointer over it to see how the answers were distributed.
@@ -28,7 +28,7 @@ Each row has these columns:
 - [[courseSummary:feedbackResponsePercentage]]: the share of course realisations that got counter feedback.
 - [[courseSummary:censoredCount]]: answers hidden by the course's responsible teachers or the programme's admins. Shown only to the organisation's admins.
 
-The colour of an average shows how high it is: red for low averages, through yellow, to green for high ones. A pale cell means there are no answers.
+The colour and shade of an average show how high it is: red for low averages, through yellow, to green for high ones. A pale cell means there are no answers.
 
 The figures of a course unit, programme or faculty are calculated from the answers to all of its course realisations, not as an average of averages.
 

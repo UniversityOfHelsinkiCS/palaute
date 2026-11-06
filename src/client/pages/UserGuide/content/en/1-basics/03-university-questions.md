@@ -8,7 +8,7 @@ The university level questions are the university's shared questions and are the
 
 ## The questions {#questions}
 
-In surveys that open on 2 August 2026 or later, students first answer five statements on a scale of 1-5, where 1 is _completely disagree_ and 5 _completely agree_. A student who can't answer can choose _cannot answer_.
+The current university level questions were taken into use in August 2026. Students first answer five statements on a scale of 1-5, where 1 is _completely disagree_ and 5 _completely agree_. A student who can't answer can choose _cannot answer_.
 
 1. The course structure and schedule were clear.
 2. The intended learning outcomes of the course were clearly communicated.
@@ -20,9 +20,11 @@ In the sixth question, the student chooses whether _the workload in relation to 
 
 These six questions must be answered before the feedback can be sent. The seventh question, _Additional comments_, is open and optional, and it's always the survey's last question.
 
+In the course summary, the columns are the questions in use at the start of the chosen period; see [What the figures show](/guide/course-summary#figures).
+
 ## The change in August 2026 {#new-questions}
 
-In 2021-2026, Norppa had the following questions:
+In 2021-2026, Norppa had the following university level questions:
 
 _The learning objectives were clear to me_, _The course activities supported my learning_, _The course materials supported my learning_ and _The methods used to assess the course measure my learning_. The workload question was the same as now, and at the end was the open question _Any additional comments or suggestions_.
 

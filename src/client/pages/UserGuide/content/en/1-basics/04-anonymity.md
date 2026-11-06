@@ -16,7 +16,7 @@ All feedback is anonymous.
 
 A question's type can be [[common:public]] or [[common:notPublic]].
 
-- Responsible teachers, administrative persons and degree programme staff with admin rights see the answers to all questions.
+- Responsible teachers, administrative persons and degree programme staff with admin rights (the programme director and feedback liaisons) see the answers to all questions.
 - Teachers, programme staff with read rights and students see only the answers to public questions. Students see them once they have answered themselves, or after the survey has closed.
 
 See [Roles and rights](/guide/roles#course-roles) for who has which role.
@@ -34,12 +34,12 @@ A responsible teacher can change whether the other questions are public on their
 
 ## Courses with fewer than 5 students {#small-courses}
 
-On a small course, a student's answers could be recognised even without a name. So if fewer than 5 students are enrolled, the survey works differently:
+On a small course, a student may be very easy to identify. So if fewer than 5 students are enrolled, the survey works differently:
 
 - When a student opens the survey, a warning tells them that their answers could be linked to them. They can cancel or continue.
 - To submit, the student must tick a box agreeing that the teacher can see their answers even though few students are enrolled.
 - Only the course's responsible teachers and administrative persons see the answers. Students, other teachers and programme staff see a note that the results aren't shown.
-- The reminder email a week before opening tells the responsible teachers that the course is small.
+- The reminder email a week before the survey opens tells the responsible teachers that the course is small.
 
 The limit counts the students enrolled in Norppa, not the answers. It applies to all survey types.
 
