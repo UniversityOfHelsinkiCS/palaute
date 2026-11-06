@@ -1,5 +1,7 @@
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import { enUS, fiFI, svSE } from '@mui/x-date-pickers/locales'
+import { enUS } from '@mui/x-date-pickers/locales/enUS'
+import { fiFI } from '@mui/x-date-pickers/locales/fiFI'
+import { svSE } from '@mui/x-date-pickers/locales/svSE'
 import { LocalizationProvider as MuiLocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import fiLocale from 'date-fns/locale/fi'
 import svLocale from 'date-fns/locale/sv'

@@ -1,6 +1,8 @@
 import type { LocalizedString } from '@common/types/common'
 
-import { fi, sv, enGB as en } from 'date-fns/locale'
+import en from 'date-fns/locale/en-GB'
+import fi from 'date-fns/locale/fi'
+import sv from 'date-fns/locale/sv'
 import i18next from 'i18next'
 
 export const getLanguageValue = (values: LocalizedString, preferred: string) => {
