@@ -35,7 +35,7 @@ Vastuuopettaja voi kurssipalautekyselyn tilasta (tuleva, aktiivinen päättynyt)
 - Kun kysely on auki, voit muuttaa vain päättymispäivämäärää. Voit jatkaa kyselyä esimerkiksi arvioinnin jälkeiseen aikaan tai asettaa päättymispäivämääräksi kuluvan päivän, jolloin kysely sulkeutuu tänään klo 23.59. Painiketta, joka sulkisi kyselyn heti, ei ole.
 - Kun kysely on sulkeutunut, päivämääriä ei voi enää muuttaa. Vain tuki voi avata sulkeutuneen kurssikyselyn uudelleen; katso [Tuki](/guide/help#support).
 
-> **Huom.** Välipalautteet ja koulutusohjelman kyselyt eivät seuraa Sisua, ja niiden päivämääriä voi muuttaa toisella tavalla kyselyn tilasta riippumatta. Katso [Välipalaute](/guide/during-the-course#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).
+> **Huom.** Välipalautteet ja koulutusohjelman palautekyselyt eivät ole sidottuja Sisuun, ja niiden päivämääriä voi muuttaa toisella tavalla kyselyn tilasta riippumatta. Katso [Välipalaute](/guide/during-the-course#interim-feedback) ja [Koulutusohjelman kyselyn muokkaaminen](/guide/programme-surveys#edit).
 
 ## Kyselyn avaaminen heti {#open-now}
 
