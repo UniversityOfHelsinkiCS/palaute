@@ -1,4 +1,5 @@
-import { FileCopyOutlined, Email } from '@mui/icons-material'
+import Email from '@mui/icons-material/Email'
+import FileCopyOutlined from '@mui/icons-material/FileCopyOutlined'
 import { Box, Chip, Paper, Typography, Alert } from '@mui/material'
 import { differenceInHours, format } from 'date-fns'
 import { useSnackbar } from 'notistack'

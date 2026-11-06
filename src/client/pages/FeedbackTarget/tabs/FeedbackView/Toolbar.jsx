@@ -1,4 +1,4 @@
-import { Edit } from '@mui/icons-material'
+import Edit from '@mui/icons-material/Edit'
 import { Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'

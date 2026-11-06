@@ -1,7 +1,7 @@
 import type { Theme } from '@mui/material'
 import type { SystemStyleObject } from '@mui/system'
 
-import { ErrorOutline } from '@mui/icons-material'
+import ErrorOutline from '@mui/icons-material/ErrorOutline'
 import { Box, useMediaQuery } from '@mui/material'
 import { keyframes } from '@mui/material/styles'
 import { visuallyHidden } from '@mui/utils'

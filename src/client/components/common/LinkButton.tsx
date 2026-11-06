@@ -1,6 +1,6 @@
 import type { ButtonProps, SxProps, Theme } from '@mui/material'
 
-import { OpenInNew } from '@mui/icons-material'
+import OpenInNew from '@mui/icons-material/OpenInNew'
 import { Button, Link as MuiLink, Box } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import React from 'react'

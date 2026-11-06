@@ -1,7 +1,7 @@
-import { PersonOutlined } from '@mui/icons-material'
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown'
 import MailOutlineIcon from '@mui/icons-material/MailOutline'
 import MenuIcon from '@mui/icons-material/Menu'
+import PersonOutlined from '@mui/icons-material/PersonOutlined'
 import {
   AppBar,
   Toolbar,

@@ -1,4 +1,5 @@
-import { ArrowDropDown, ArrowDropUp } from '@mui/icons-material'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import ArrowDropUp from '@mui/icons-material/ArrowDropUp'
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 

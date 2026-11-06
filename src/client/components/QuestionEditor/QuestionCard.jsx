@@ -1,4 +1,6 @@
-import { DeleteOutlined, EditOutlined, FileCopyOutlined } from '@mui/icons-material'
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
+import EditOutlined from '@mui/icons-material/EditOutlined'
+import FileCopyOutlined from '@mui/icons-material/FileCopyOutlined'
 import {
   Card,
   CardContent,

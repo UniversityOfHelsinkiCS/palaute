@@ -1,4 +1,4 @@
-import { Download } from '@mui/icons-material'
+import Download from '@mui/icons-material/Download'
 import { Menu, Box } from '@mui/material'
 import React, { useId, useState } from 'react'
 

@@ -1,4 +1,5 @@
-import { PushPin, PushPinOutlined } from '@mui/icons-material'
+import PushPin from '@mui/icons-material/PushPin'
+import PushPinOutlined from '@mui/icons-material/PushPinOutlined'
 import { Box, IconButton, Tooltip } from '@mui/material'
 import { orderBy } from 'lodash-es'
 import React from 'react'

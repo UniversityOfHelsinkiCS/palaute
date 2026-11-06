@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material'
+import Add from '@mui/icons-material/Add'
 import { Menu, MenuItem, Box } from '@mui/material'
 import { FieldArray, Form, Formik, useField } from 'formik'
 import React, { useState, useRef, useId } from 'react'

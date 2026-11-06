@@ -1,7 +1,7 @@
 import type { KeyboardEvent, RefObject } from 'react'
 
 import { MAX_QUESTION_LENGTH } from '@common/helpChatbot'
-import { ArrowUpward } from '@mui/icons-material'
+import ArrowUpward from '@mui/icons-material/ArrowUpward'
 import { Box, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { useId } from 'react'

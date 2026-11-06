@@ -1,4 +1,4 @@
-import { Edit } from '@mui/icons-material'
+import Edit from '@mui/icons-material/Edit'
 import {
   Switch,
   Box,

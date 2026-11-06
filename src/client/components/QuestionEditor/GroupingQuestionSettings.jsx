@@ -1,4 +1,6 @@
-import { Add, ExpandMore, InfoOutlined } from '@mui/icons-material'
+import Add from '@mui/icons-material/Add'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import {
   Accordion,
   AccordionDetails,

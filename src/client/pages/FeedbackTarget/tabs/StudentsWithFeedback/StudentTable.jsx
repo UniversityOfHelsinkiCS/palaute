@@ -1,4 +1,4 @@
-import { Download } from '@mui/icons-material'
+import Download from '@mui/icons-material/Download'
 import CopyIcon from '@mui/icons-material/FileCopyOutlined'
 import { Table, TableRow, TableCell, TableBody, TableHead, TableSortLabel, Box, TableContainer } from '@mui/material'
 import { parseISO, format } from 'date-fns'

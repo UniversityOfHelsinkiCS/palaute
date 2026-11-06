@@ -1,4 +1,4 @@
-import { Close } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
 import { Box, Checkbox, Chip, FormControl, IconButton, InputLabel, ListItemText, MenuItem, Select } from '@mui/material'
 
 import { generate } from '../../util/randomColor'

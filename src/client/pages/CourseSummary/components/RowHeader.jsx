@@ -1,4 +1,4 @@
-import { ChevronRight } from '@mui/icons-material'
+import ChevronRight from '@mui/icons-material/ChevronRight'
 import { Box, ButtonBase } from '@mui/material'
 import { Link as RouterLink } from 'react-router-dom'
 

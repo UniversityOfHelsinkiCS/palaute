@@ -1,11 +1,9 @@
-import {
-  AccountBalanceOutlined,
-  ArticleOutlined,
-  HelpOutline,
-  LightbulbOutlined,
-  OndemandVideoOutlined,
-  SchoolOutlined,
-} from '@mui/icons-material'
+import AccountBalanceOutlined from '@mui/icons-material/AccountBalanceOutlined'
+import ArticleOutlined from '@mui/icons-material/ArticleOutlined'
+import HelpOutline from '@mui/icons-material/HelpOutline'
+import LightbulbOutlined from '@mui/icons-material/LightbulbOutlined'
+import OndemandVideoOutlined from '@mui/icons-material/OndemandVideoOutlined'
+import SchoolOutlined from '@mui/icons-material/SchoolOutlined'
 
 const ICONS: Record<string, typeof ArticleOutlined> = {
   basics: LightbulbOutlined,

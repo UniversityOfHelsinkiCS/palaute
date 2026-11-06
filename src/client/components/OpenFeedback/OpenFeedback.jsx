@@ -1,4 +1,6 @@
-import { DeleteForever, Visibility, VisibilityOff } from '@mui/icons-material'
+import DeleteForever from '@mui/icons-material/DeleteForever'
+import Visibility from '@mui/icons-material/Visibility'
+import VisibilityOff from '@mui/icons-material/VisibilityOff'
 import { Box, IconButton, Tooltip, Typography } from '@mui/material'
 import { grey } from '@mui/material/colors'
 import { useTranslation } from 'react-i18next'

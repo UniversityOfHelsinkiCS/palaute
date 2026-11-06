@@ -1,4 +1,4 @@
-import { WarningAmber } from '@mui/icons-material'
+import WarningAmber from '@mui/icons-material/WarningAmber'
 import { Box, CircularProgress, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,4 +1,7 @@
-import { Close, CloseFullscreen, OpenInFull, RestartAlt } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
+import CloseFullscreen from '@mui/icons-material/CloseFullscreen'
+import OpenInFull from '@mui/icons-material/OpenInFull'
+import RestartAlt from '@mui/icons-material/RestartAlt'
 import { Box, IconButton, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 

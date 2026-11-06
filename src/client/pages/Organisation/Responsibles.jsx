@@ -1,4 +1,8 @@
-import { ArrowDropDown, Menu as MenuIcon, KeyboardArrowDown, KeyboardArrowUp, Download } from '@mui/icons-material'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import Download from '@mui/icons-material/Download'
+import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown'
+import KeyboardArrowUp from '@mui/icons-material/KeyboardArrowUp'
+import MenuIcon from '@mui/icons-material/Menu'
 import {
   Box,
   Typography,

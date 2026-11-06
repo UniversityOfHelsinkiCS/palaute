@@ -1,4 +1,4 @@
-import { InfoOutlined } from '@mui/icons-material'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import { Box, Typography, Tooltip, Skeleton, IconButton } from '@mui/material'
 import { format, isValid } from 'date-fns'
 import { orderBy } from 'lodash-es'

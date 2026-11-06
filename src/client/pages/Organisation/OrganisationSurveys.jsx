@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material'
+import Add from '@mui/icons-material/Add'
 import { Alert, Box } from '@mui/material'
 import { addDays } from 'date-fns'
 import { useSnackbar } from 'notistack'

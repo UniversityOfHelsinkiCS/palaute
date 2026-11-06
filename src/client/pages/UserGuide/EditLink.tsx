@@ -1,4 +1,4 @@
-import { EditOutlined } from '@mui/icons-material'
+import EditOutlined from '@mui/icons-material/EditOutlined'
 import { IconButton, Tooltip } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 

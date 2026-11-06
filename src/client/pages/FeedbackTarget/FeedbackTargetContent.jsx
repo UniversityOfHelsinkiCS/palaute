@@ -1,14 +1,12 @@
-import {
-  EditOutlined,
-  ListOutlined,
-  LiveHelpOutlined,
-  PeopleOutlined,
-  PollOutlined,
-  ShareOutlined,
-  ReviewsOutlined,
-  ForumOutlined,
-  VisibilityOutlined,
-} from '@mui/icons-material'
+import EditOutlined from '@mui/icons-material/EditOutlined'
+import ForumOutlined from '@mui/icons-material/ForumOutlined'
+import ListOutlined from '@mui/icons-material/ListOutlined'
+import LiveHelpOutlined from '@mui/icons-material/LiveHelpOutlined'
+import PeopleOutlined from '@mui/icons-material/PeopleOutlined'
+import PollOutlined from '@mui/icons-material/PollOutlined'
+import ReviewsOutlined from '@mui/icons-material/ReviewsOutlined'
+import ShareOutlined from '@mui/icons-material/ShareOutlined'
+import VisibilityOutlined from '@mui/icons-material/VisibilityOutlined'
 /** @jsxImportSource @emotion/react */
 import { Alert, Box, Link } from '@mui/material'
 import { useTranslation } from 'react-i18next'

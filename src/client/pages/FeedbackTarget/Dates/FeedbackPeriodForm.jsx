@@ -1,4 +1,4 @@
-import { WarningAmber } from '@mui/icons-material'
+import WarningAmber from '@mui/icons-material/WarningAmber'
 import { Box, Link, Alert, DialogActions, DialogContent } from '@mui/material'
 import { Formik, Form } from 'formik'
 import { useState, useRef } from 'react'

@@ -1,5 +1,5 @@
 import { Question } from '@common/types/question'
-import { DeleteOutlined } from '@mui/icons-material'
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
 import { Dialog, DialogTitle, DialogContent, DialogActions, FormGroup, FormControlLabel, Checkbox } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

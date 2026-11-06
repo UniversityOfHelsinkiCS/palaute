@@ -1,4 +1,5 @@
-import { Download, Close } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
+import Download from '@mui/icons-material/Download'
 import {
   Checkbox,
   CircularProgress,

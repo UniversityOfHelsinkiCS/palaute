@@ -1,7 +1,7 @@
 import type { BannerData } from '@common/types/banner'
 import type { LanguageId } from '@common/types/common'
 
-import { Close } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
 import { Box, Grid2 as Grid, Paper } from '@mui/material'
 
 import { getLanguageValue } from '../../util/languageUtils'

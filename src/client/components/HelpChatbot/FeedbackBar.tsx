@@ -1,7 +1,11 @@
 import type { SvgIconComponent } from '@mui/icons-material'
 
 import { MAX_FEEDBACK_COMMENT_LENGTH } from '@common/helpChatbot'
-import { ErrorOutline, ThumbDown, ThumbDownOutlined, ThumbUp, ThumbUpOutlined } from '@mui/icons-material'
+import ErrorOutline from '@mui/icons-material/ErrorOutline'
+import ThumbDown from '@mui/icons-material/ThumbDown'
+import ThumbDownOutlined from '@mui/icons-material/ThumbDownOutlined'
+import ThumbUp from '@mui/icons-material/ThumbUp'
+import ThumbUpOutlined from '@mui/icons-material/ThumbUpOutlined'
 import { Box, IconButton, OutlinedInput, Tooltip } from '@mui/material'
 import { useEffect, useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

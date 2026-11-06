@@ -1,6 +1,9 @@
 import type { ReactNode } from 'react'
 
-import { ChevronRight, ExpandLess, ExpandMore, HomeOutlined } from '@mui/icons-material'
+import ChevronRight from '@mui/icons-material/ChevronRight'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import HomeOutlined from '@mui/icons-material/HomeOutlined'
 import { Box, Link } from '@mui/material'
 import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,4 +1,4 @@
-import { Add } from '@mui/icons-material'
+import Add from '@mui/icons-material/Add'
 import CloseIcon from '@mui/icons-material/Close'
 import { IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
 import { FieldArray, useField } from 'formik'

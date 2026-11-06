@@ -1,6 +1,7 @@
 import type { Survey } from '@common/types/survey'
 
-import { FileCopyOutlined, Circle } from '@mui/icons-material'
+import Circle from '@mui/icons-material/Circle'
+import FileCopyOutlined from '@mui/icons-material/FileCopyOutlined'
 import {
   Dialog,
   DialogTitle,

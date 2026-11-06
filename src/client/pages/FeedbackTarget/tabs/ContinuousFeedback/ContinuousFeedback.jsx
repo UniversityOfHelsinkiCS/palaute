@@ -1,5 +1,5 @@
 import { keyframes } from '@emotion/react'
-import { DeleteForever } from '@mui/icons-material'
+import DeleteForever from '@mui/icons-material/DeleteForever'
 import { Box, Typography, Alert, IconButton } from '@mui/material'
 import { format } from 'date-fns'
 import { useState } from 'react'

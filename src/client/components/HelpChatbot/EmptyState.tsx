@@ -1,4 +1,4 @@
-import { InfoOutlined } from '@mui/icons-material'
+import InfoOutlined from '@mui/icons-material/InfoOutlined'
 import { Box, useMediaQuery } from '@mui/material'
 import { keyframes } from '@mui/material/styles'
 import { useState } from 'react'

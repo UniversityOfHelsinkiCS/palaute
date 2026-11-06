@@ -1,4 +1,4 @@
-import { KeyboardReturn } from '@mui/icons-material'
+import KeyboardReturn from '@mui/icons-material/KeyboardReturn'
 import {
   Accordion,
   AccordionActions,

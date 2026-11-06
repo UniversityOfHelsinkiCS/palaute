@@ -1,6 +1,7 @@
 import type { GetHelpChatbotFeedbackQuery, HelpChatbotRatingFilter } from '@common/types/helpChatbotAdmin'
 
-import { ThumbDownOutlined, ThumbUpOutlined } from '@mui/icons-material'
+import ThumbDownOutlined from '@mui/icons-material/ThumbDownOutlined'
+import ThumbUpOutlined from '@mui/icons-material/ThumbUpOutlined'
 import {
   Alert,
   Box,

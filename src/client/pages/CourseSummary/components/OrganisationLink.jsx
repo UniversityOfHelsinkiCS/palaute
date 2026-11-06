@@ -1,4 +1,5 @@
-import { Search, SettingsOutlined } from '@mui/icons-material'
+import Search from '@mui/icons-material/Search'
+import SettingsOutlined from '@mui/icons-material/SettingsOutlined'
 import { Box, IconButton, Tooltip } from '@mui/material'
 import { format, isValid } from 'date-fns'
 import { useTranslation } from 'react-i18next'

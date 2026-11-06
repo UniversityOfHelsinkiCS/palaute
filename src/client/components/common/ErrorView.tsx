@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { KeyboardReturnOutlined } from '@mui/icons-material'
+import KeyboardReturnOutlined from '@mui/icons-material/KeyboardReturnOutlined'
 import { Alert, Box, Link as MuiLink, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'

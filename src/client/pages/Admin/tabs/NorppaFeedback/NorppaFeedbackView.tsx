@@ -1,4 +1,5 @@
-import { AddAlertOutlined, Undo } from '@mui/icons-material'
+import AddAlertOutlined from '@mui/icons-material/AddAlertOutlined'
+import Undo from '@mui/icons-material/Undo'
 import { Box, Paper, Typography, IconButton, FormControlLabel, Checkbox, Alert } from '@mui/material'
 import { format } from 'date-fns'
 import { useSnackbar } from 'notistack'

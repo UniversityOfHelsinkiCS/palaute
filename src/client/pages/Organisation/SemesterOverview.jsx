@@ -1,4 +1,8 @@
-import { ArrowDropDown, CalendarTodayOutlined, ChevronRight, Menu, List } from '@mui/icons-material'
+import ArrowDropDown from '@mui/icons-material/ArrowDropDown'
+import CalendarTodayOutlined from '@mui/icons-material/CalendarTodayOutlined'
+import ChevronRight from '@mui/icons-material/ChevronRight'
+import List from '@mui/icons-material/List'
+import Menu from '@mui/icons-material/Menu'
 import {
   Box,
   Link as MuiLink,

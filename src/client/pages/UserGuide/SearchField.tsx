@@ -1,6 +1,7 @@
 import type { FormEvent } from 'react'
 
-import { Clear, Search } from '@mui/icons-material'
+import Clear from '@mui/icons-material/Clear'
+import Search from '@mui/icons-material/Search'
 import { Box, IconButton, InputAdornment, TextField } from '@mui/material'
 import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'

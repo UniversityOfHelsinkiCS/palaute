@@ -1,4 +1,4 @@
-import { SettingsOutlined } from '@mui/icons-material'
+import SettingsOutlined from '@mui/icons-material/SettingsOutlined'
 import { Dialog, DialogTitle } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next'

@@ -1,4 +1,4 @@
-import { ExpandMore } from '@mui/icons-material'
+import ExpandMore from '@mui/icons-material/ExpandMore'
 import { Accordion, AccordionDetails, AccordionSummary, Box } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 

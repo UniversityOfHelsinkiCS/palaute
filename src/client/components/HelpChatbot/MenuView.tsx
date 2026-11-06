@@ -1,7 +1,8 @@
 import type { SxProps, Theme } from '@mui/material'
 import type { Ref } from 'react'
 
-import { Close, MenuBookOutlined } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
+import MenuBookOutlined from '@mui/icons-material/MenuBookOutlined'
 import { Box, IconButton, Link, Tooltip } from '@mui/material'
 import { useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'

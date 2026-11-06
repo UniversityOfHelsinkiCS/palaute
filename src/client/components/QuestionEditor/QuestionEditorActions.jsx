@@ -1,4 +1,5 @@
-import { FileCopyOutlined, DeleteOutlined } from '@mui/icons-material'
+import DeleteOutlined from '@mui/icons-material/DeleteOutlined'
+import FileCopyOutlined from '@mui/icons-material/FileCopyOutlined'
 import { Box } from '@mui/material'
 import { useField } from 'formik'
 import { useSnackbar } from 'notistack'

@@ -1,4 +1,4 @@
-import { SettingsOutlined } from '@mui/icons-material'
+import SettingsOutlined from '@mui/icons-material/SettingsOutlined'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'

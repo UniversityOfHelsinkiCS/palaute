@@ -1,4 +1,4 @@
-import { SettingsBackupRestore } from '@mui/icons-material'
+import SettingsBackupRestore from '@mui/icons-material/SettingsBackupRestore'
 import { Box, IconButton } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import React from 'react'

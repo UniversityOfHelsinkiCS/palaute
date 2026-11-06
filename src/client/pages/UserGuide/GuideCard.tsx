@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react'
 
-import { ArrowForward } from '@mui/icons-material'
+import ArrowForward from '@mui/icons-material/ArrowForward'
 import { Box, Link, Typography } from '@mui/material'
 import { useId } from 'react'
 import { Link as RouterLink } from 'react-router-dom'

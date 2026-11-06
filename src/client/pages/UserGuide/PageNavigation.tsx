@@ -1,4 +1,5 @@
-import { ArrowBack, ArrowForward } from '@mui/icons-material'
+import ArrowBack from '@mui/icons-material/ArrowBack'
+import ArrowForward from '@mui/icons-material/ArrowForward'
 import { Box, Link } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
 import { useTranslation } from 'react-i18next'

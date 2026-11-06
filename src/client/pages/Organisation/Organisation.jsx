@@ -1,12 +1,10 @@
-import {
-  CalendarTodayOutlined,
-  CommentOutlined,
-  LiveHelpOutlined,
-  PollOutlined,
-  SettingsOutlined,
-  DynamicFormOutlined,
-  PeopleOutlined,
-} from '@mui/icons-material'
+import CalendarTodayOutlined from '@mui/icons-material/CalendarTodayOutlined'
+import CommentOutlined from '@mui/icons-material/CommentOutlined'
+import DynamicFormOutlined from '@mui/icons-material/DynamicFormOutlined'
+import LiveHelpOutlined from '@mui/icons-material/LiveHelpOutlined'
+import PeopleOutlined from '@mui/icons-material/PeopleOutlined'
+import PollOutlined from '@mui/icons-material/PollOutlined'
+import SettingsOutlined from '@mui/icons-material/SettingsOutlined'
 import { Box, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Route, useParams, Routes, Navigate, useMatch } from 'react-router-dom'

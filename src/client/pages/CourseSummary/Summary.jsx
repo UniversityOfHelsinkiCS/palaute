@@ -1,4 +1,5 @@
-import { BarChartOutlined, School } from '@mui/icons-material'
+import BarChartOutlined from '@mui/icons-material/BarChartOutlined'
+import School from '@mui/icons-material/School'
 import { Box, Typography, Alert } from '@mui/material'
 import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'

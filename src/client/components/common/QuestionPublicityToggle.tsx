@@ -1,4 +1,5 @@
-import { Close, Edit } from '@mui/icons-material'
+import Close from '@mui/icons-material/Close'
+import Edit from '@mui/icons-material/Edit'
 import {
   Box,
   Chip,
