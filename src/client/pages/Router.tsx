@@ -1,22 +1,36 @@
 import { Container, type SxProps, type Theme } from '@mui/material'
-import { Suspense, lazy } from 'react'
+import { type ComponentType, Suspense, lazy } from 'react'
 import { Navigate, Route, Routes } from 'react-router-dom'
 
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import { PUBLIC_COURSE_BROWSER_ENABLED, USER_GUIDE_ENABLED } from '../util/common'
 
-const Admin = lazy(() => import('./Admin'))
-const CourseRealisation = lazy(() => import('./CourseRealisation'))
-const Summary = lazy(() => import('./CourseSummary/Summary'))
-const FeedbackTarget = lazy(() => import('./FeedbackTarget'))
-const MyFeedbacks = lazy(() => import('./MyFeedbacks'))
-const MyOrganisations = lazy(() => import('./MyOrganisations/MyOrganisations'))
-const MyTeaching = lazy(() => import('./MyTeaching/MyTeaching'))
-const NorppaFeedback = lazy(() => import('./NorppaFeedback'))
-const Organisation = lazy(() => import('./Organisation'))
-const Search = lazy(() => import('./Search/Search'))
-const UserGuide = lazy(() => import('./UserGuide'))
+const RELOADED_AT_KEY = 'chunkReloadedAt'
+
+// After a deploy, an open tab asks for chunks that no longer exist. Reload once to get the new ones.
+const lazyPage = <T extends ComponentType<any>>(load: () => Promise<{ default: T }>) =>
+  lazy(() =>
+    load().catch(error => {
+      const reloadedAt = Number(sessionStorage.getItem(RELOADED_AT_KEY))
+      if (Date.now() - reloadedAt < 10_000) throw error
+      sessionStorage.setItem(RELOADED_AT_KEY, String(Date.now()))
+      window.location.reload()
+      return new Promise<never>(() => {})
+    })
+  )
+
+const Admin = lazyPage(() => import('./Admin'))
+const CourseRealisation = lazyPage(() => import('./CourseRealisation'))
+const Summary = lazyPage(() => import('./CourseSummary/Summary'))
+const FeedbackTarget = lazyPage(() => import('./FeedbackTarget'))
+const MyFeedbacks = lazyPage(() => import('./MyFeedbacks'))
+const MyOrganisations = lazyPage(() => import('./MyOrganisations/MyOrganisations'))
+const MyTeaching = lazyPage(() => import('./MyTeaching/MyTeaching'))
+const NorppaFeedback = lazyPage(() => import('./NorppaFeedback'))
+const Organisation = lazyPage(() => import('./Organisation'))
+const Search = lazyPage(() => import('./Search/Search'))
+const UserGuide = lazyPage(() => import('./UserGuide'))
 
 const containerStyle: SxProps<Theme> = theme => ({
   padding: '2rem',
