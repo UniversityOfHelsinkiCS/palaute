@@ -44,7 +44,7 @@ Kysymystyyppejä on neljä: [[questionEditor:likertQuestion]], [[questionEditor:
 Omien kysymysten kopioiminen toisen kurssin kyselystä:
 
 1. Valitse [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä [[editFeedbackTarget:copyFromCourseButton]].
-2. Näet kurssit, joita opetata. Valitse haluamasi kurssi.
+2. Näet kurssit, joita opetat. Valitse haluamasi kurssi.
 3. Näkyviin tulevat kurssin toteutukset, joita olet opettanut ja joilla on omia kysymyksiä, sekä niiden kysymysten määrät. Näet toteutuksen kysymykset viemällä hiiren sen päälle.
 4. Valitse toteutuksen kohdalta [[editFeedbackTarget:copyQuestionsButton]].
 
