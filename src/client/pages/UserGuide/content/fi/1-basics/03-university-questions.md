@@ -8,7 +8,7 @@ Yliopistotason kysymykset ovat yliopiston yhteisiä kysymyksiä ja ovat samat ka
 
 ## Kysymykset {#questions}
 
-Nykyiset HY kysymykset otettiin käyttöön elokuussa 2026. Opiskelija vastaa ensin viiteen väittämään asteikolla 1–5, jossa 1 on _täysin eri mieltä_ ja 5 _täysin samaa mieltä_. Jos opiskelija ei osaa vastata, hän voi valita _en osaa sanoa_.
+Nykyiset HY-kysymykset otettiin käyttöön elokuussa 2026. Opiskelija vastaa ensin viiteen väittämään asteikolla 1–5, jossa 1 on _täysin eri mieltä_ ja 5 _täysin samaa mieltä_. Jos opiskelija ei osaa vastata, hän voi valita _en osaa sanoa_.
 
 1. Kurssin rakenne ja aikataulu olivat selkeät.
 2. Kurssilla oli selvästi esitetty se, mitä meidän tulisi oppia.

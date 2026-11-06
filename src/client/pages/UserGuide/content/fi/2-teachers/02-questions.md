@@ -8,7 +8,7 @@ Kurssikyselyssä on aina yliopistotason kysymykset ja mahdollisesti koulutusohje
 
 ## Kysymysten muokkaaminen {#edit-questions}
 
-Voit muokata kysymyksiä kunnes kurssipalautekysely avautuu. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, eikä kysymyksiä pysty enää muokkaamaan. Kun kysely on sulkeutunut, välilehteä ei enää näy.
+Voit muokata kysymyksiä, kunnes kurssipalautekysely avautuu. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, eikä kysymyksiä pysty enää muokkaamaan. Kun kysely on sulkeutunut, välilehteä ei enää näy.
 
 Kysymyksen lisääminen:
 
@@ -21,7 +21,7 @@ Kysymyksen lisääminen:
 
 [[video:edit-questions]]
 
-Jos lisäät vain yhden kieliversion, kaikki vastaajat saavat kyselyn tällä kielellä, riippumatta siitä, mikä heidän asiointikieli Norpassa on.
+Jos lisäät vain yhden kieliversion, kaikki vastaajat saavat kyselyn tällä kielellä, riippumatta siitä, mikä heidän asiointikielensä Norpassa on.
 
 Kysymystä muokataan sen [[common:edit]]-painikkeella. Useamman kysymyksen voit poistaa kerralla kysymysten alla olevalla [[questionEditor:removeMany]]-painikkeella.
 

@@ -10,11 +10,11 @@ Norppa luo kurssipalautekyselyn automaattisesti, ja kysely myös avautuu ja sulk
 
 Oletuksena kurssipalautekysely avautuu kurssin viimeistä päivää seuraavana päivänä klo 00.00 ja sulkeutuu 14 päivää myöhemmin klo 23.59, joten se on auki noin kaksi viikkoa. Jos kurssin viimeinen päivä on esimerkiksi 12. joulukuuta, kysely on auki 13.–27. joulukuuta.
 
-Norppa näyttää sekä kurssin päivämäärät (SISU:sta): [[feedbackTargetView:coursePeriod]] että palautekyselyn päivämäärät: [[feedbackTargetView:feedbackPeriod]].
+Norppa näyttää sekä kurssin päivämäärät (Sisusta): [[feedbackTargetView:coursePeriod]] että palautekyselyn päivämäärät: [[feedbackTargetView:feedbackPeriod]].
 
 - Opintokohteen (kurssin) päivämäärät Sisussa määrittävät kurssipalautekyselyn aikataulun. Jos kurssin päivämäärät Sisussa jatkuvat luento-opetuksen jälkeen, esimerkiksi tenttiin asti, kysely avautuu vastaavasti myöhemmin.
-- Opintokohteen (kurssin) päivämäärien muuttaminen SISU:ssa muuttaa myös kurssipalautekyselyn päivämääriä automaattisesti
-- jos opettaja muuttaa kurssipalautelomakkeen päivämääriä manuaalisesti Norpassa, Sisu:n muutokset eivät enää vaikuta
+- Opintokohteen (kurssin) päivämäärien muuttaminen Sisussa muuttaa myös kurssipalautekyselyn päivämääriä automaattisesti.
+- Jos opettaja muuttaa kurssipalautelomakkeen päivämääriä manuaalisesti Norpassa, Sisun muutokset eivät enää vaikuta.
 
 Noin viikkoa ennen kyselyn avautumista vastuuopettajat ja hallintohenkilöt saavat sähköpostin, jossa on kyselyn päivämäärät, linkki sen muokkaamiseen ja opettajien siihen mennessä lisäämät kysymykset. Sähköpostissa on myös maininta, jos kurssille on ilmoittautunut alle viisi opiskelijaa; katso [Alle viiden opiskelijan kurssit](/guide/anonymity#small-courses).
 
@@ -29,7 +29,7 @@ Kurssin vastuuopettajana tai hallintohenkilönä voit muuttaa kurssipalautekysel
 
 [[video:change-dates]]
 
-Vastuuopettaja voi kurssipalautekyselyn tilasta (tuleva, aktiivinen päättynyt) riippuen muokata seuraavia asetuksia:
+Vastuuopettaja voi kurssipalautekyselyn tilasta (tuleva, aktiivinen, päättynyt) riippuen muokata seuraavia asetuksia:
 
 - Ennen avautumista voit muuttaa avautumis- ja päättymispäivämääriä. Avautumispäivä ei voi olla menneisyydessä, ja kyselyn pitää olla auki vähintään vuorokauden, joten sulkeutumispäivän on oltava aikaisintaan avautumispäivää seuraava päivä.
 - Kun kysely on auki, voit muuttaa vain päättymispäivämäärää. Voit jatkaa kyselyä esimerkiksi arvioinnin jälkeiseen aikaan tai asettaa päättymispäivämääräksi kuluvan päivän, jolloin kysely sulkeutuu tänään klo 23.59. Painiketta, joka sulkisi kyselyn heti, ei ole.
@@ -68,7 +68,7 @@ Kurssikysely luodaan automaattisesti opintokohteille (kursseille), joiden toteut
 
 <!-- Sisu-koodit: urn:code:course-unit-realisation-type:teaching-participation-lab, -online, -field-course, -project, -lectures, -small-group, -seminar, -blended, -contact, -distance; Kielikeskukselle (hy-org-1000003401) myös independent-work-project. Lähde: validRealisationTypes, norppa-updater, updateCoursesAndTeacherFeedbackTargets.js. -->
 
-Muille toteutustyypeille, kuten tenteille, opinnäytteille, esseille, itsenäiselle työskentelylle ja harjoittelulle kurssipalautekysely voidaan avata erikseen tuen kautta: [norppa@helsinki.fi](mailto:norppa@helsinki.fi).
+Muille toteutustyypeille, kuten tenteille, opinnäytteille, esseille, itsenäiselle työskentelylle ja harjoittelulle, kurssipalautekysely voidaan avata erikseen tuen kautta: [norppa@helsinki.fi](mailto:norppa@helsinki.fi).
 
 Kyselyä ei tule myöskään, jos toteutus on Sisussa luonnostilassa, peruttu, arkistoitu tai jos sitä ei ole liitetty opintojaksoon.
 
