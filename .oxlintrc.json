@@ -27,6 +27,28 @@
     "import/no-named-as-default-member": "off",
     "import/no-unassigned-import": "off",
     "import/no-cycle": "error",
+    "no-restricted-imports": [
+      "error",
+      {
+        "paths": [
+          {
+            "name": "@mui/icons-material",
+            "message": "Import each icon by path, e.g. '@mui/icons-material/Close'. The barrel slows down dev page loads.",
+            "allowTypeImports": true
+          },
+          {
+            "name": "date-fns/locale",
+            "message": "Import each locale by path, e.g. 'date-fns/locale/fi'.",
+            "allowTypeImports": true
+          },
+          {
+            "name": "@mui/x-date-pickers/locales",
+            "message": "Import each locale by path, e.g. '@mui/x-date-pickers/locales/fiFI'.",
+            "allowTypeImports": true
+          }
+        ]
+      }
+    ],
     "no-fallthrough": "error",
     "no-case-declarations": "error",
     "no-redeclare": "error",
