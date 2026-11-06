@@ -8,7 +8,7 @@ Kurssikyselyssä on aina yliopistotason kysymykset ja mahdollisesti koulutusohje
 
 ## Kysymysten muokkaaminen {#edit-questions}
 
-Voit muokata kysymyksiä vain siihen asti, kun kysely avautuu. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, jotta kaikki opiskelijat vastaavat samoihin kysymyksiin. Kun kysely on sulkeutunut, välilehteä ei enää näy.
+Voit muokata kysymyksiä kunnes kurssipalautekysely avautuu. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, eikä kysymyksiä pysty enää muokkaamaan. Kun kysely on sulkeutunut, välilehteä ei enää näy.
 
 Kysymyksen lisääminen:
 
@@ -21,7 +21,7 @@ Kysymyksen lisääminen:
 
 [[video:edit-questions]]
 
-Kysymys tallentuu heti. Mitään muuta ei tarvitse tallentaa tai julkaista: opiskelijat saavat ne kysymykset, jotka kyselyssä on sen auetessa.
+Jos lisäät vain yhden kieliversion, kaikki vastaajat saavat kyselyn tällä kielellä, riippumatta siitä, mikä heidän asiointikieli Norpassa on.
 
 Kysymystä muokataan sen [[common:edit]]-painikkeella. Useamman kysymyksen voit poistaa kerralla kysymysten alla olevalla [[questionEditor:removeMany]]-painikkeella.
 
@@ -31,20 +31,20 @@ Arvoasteikko- ja monivalintakysymyksen muokkausikkunassa voit myös valita, ovat
 
 Kysymyksiä voivat muokata:
 
-- kurssin kysely: kurssin vastuuopettajat ja hallintohenkilöt sekä kurssin koulutusohjelman hallinnoijat (ks. [Roolit ja oikeudet](/guide/roles#course-roles))
+- opintokohteen (kurssin) kysely: kurssin vastuuopettajat ja hallintohenkilöt sekä kurssin koulutusohjelman hallinnoijat (ks. [Roolit ja oikeudet](/guide/roles#course-roles))
 - välipalaute: kurssin vastuuopettajat ja koulutusohjelman hallinnoijat
-- koulutusohjelman kysely: sen vastuuhenkilöt ja koulutusohjelman hallinnoijat.
+- koulutusohjelman kysely: kyselyn vastuuhenkilöt ja koulutusohjelman hallinnoijat.
 
 ## Kysymystyypit {#question-types}
 
-Kysymystyyppejä on neljä: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] ja [[questionEditor:multipleChoiceQuestion]]. Asteikkokysymyksiin vastataan asteikolla 1–5 tai vaihtoehdolla _eos_ (en osaa sanoa). Numeroilla ei ole selitteitä, joten kerro kysymyksessä tai sen kuvauksessa, mitä 1 ja 5 tarkoittavat, esimerkiksi 1 = täysin eri mieltä, 5 = täysin samaa mieltä.
+Kysymystyyppejä on neljä: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] ja [[questionEditor:multipleChoiceQuestion]]. Arvoasteikkokysymyksiin vastataan asteikolla 1–5 tai vaihtoehdolla _eos_ (en osaa sanoa). Numeroilla ei ole selitteitä, joten kerro kysymyksessä tai sen kuvauksessa, mitä 1 ja 5 tarkoittavat, esimerkiksi 1 = täysin eri mieltä, 5 = täysin samaa mieltä.
 
 ## Kysymysten kopioiminen toisesta kyselystä {#copy-questions}
 
 Omien kysymysten kopioiminen toisen kurssin kyselystä:
 
 1. Valitse [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä [[editFeedbackTarget:copyFromCourseButton]].
-2. Valitse kurssi kurssikentästä. Siinä ovat kurssit, joita opetat.
+2. Näet kurssit, joita opetata. Valitse haluamasi kurssi.
 3. Näkyviin tulevat kurssin toteutukset, joita olet opettanut ja joilla on omia kysymyksiä, sekä niiden kysymysten määrät. Näet toteutuksen kysymykset viemällä hiiren sen päälle.
 4. Valitse toteutuksen kohdalta [[editFeedbackTarget:copyQuestionsButton]].
 
@@ -52,7 +52,7 @@ Omien kysymysten kopioiminen toisen kurssin kyselystä:
 
 Kysymykset lisätään omien kysymystesi perään ja tallennetaan heti. Vain opettajan omat kysymykset kopioituvat, eivät yliopistotason tai koulutusohjelman kysymykset. Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
 
-Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelman kyselyt niistä koulutusohjelmista ja tiedekunnista, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, joka lisää yliopistotason kysymykset omiksi kysymyksiksesi, joten voit muokata tai poistaa niitä.
+Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelman kyselyt niistä koulutusohjelmista ja tiedekunnista, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, josta voi halutessaan lisätä yliopistotason kysymykset.
 
 ## Kysymykset edelliseltä toteutukselta {#carry-over}
 
