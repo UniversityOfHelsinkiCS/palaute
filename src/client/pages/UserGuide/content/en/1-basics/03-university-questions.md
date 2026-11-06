@@ -28,8 +28,6 @@ In 2021-2026, Norppa had the following university level questions:
 
 _The learning objectives were clear to me_, _The course activities supported my learning_, _The course materials supported my learning_ and _The methods used to assess the course measure my learning_. The workload question was the same as now, and at the end was the open question _Any additional comments or suggestions_.
 
-In the course summary, the columns are the questions in use at the start of the chosen period; see [What the figures show](/guide/course-summary#figures).
-
 ## In surveys and results {#in-surveys}
 
 - In a course survey's question editor, the university level questions are at the top, marked [[questionEditor:universityQuestion]], and they can't be edited or removed. See [Fixed questions](/guide/questions#fixed-questions).

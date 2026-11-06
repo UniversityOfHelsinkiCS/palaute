@@ -28,8 +28,6 @@ Norpassa oli vuosina 2021-2026 seuraavat HY-tason kysymykset:
 
 _Osaamistavoitteet olivat selvät_, _Toteutustapa tuki oppimistani_, _Materiaalit tukivat oppimistani_ ja _Kurssilla käytettävät arviointimenetelmät mittaavat oppimistani_. Työmääräkysymys oli sama kuin nyt, ja lopussa oli avoin kysymys _Muita huomioita_.
 
-Kurssiyhteenvedossa sarakkeina ovat ne kysymykset, jotka olivat käytössä valitun ajanjakson alussa; katso [Mitä luvut kertovat](/guide/course-summary#figures).
-
 ## Kysymykset kyselyssä ja tuloksissa {#in-surveys}
 
 - Kurssikyselyn kysymyseditorissa yliopistotason kysymykset ovat ylimpänä tunnisteella [[questionEditor:universityQuestion]], eikä niitä voi muokata tai poistaa. Katso [Valmiit kysymykset](/guide/questions#fixed-questions).
