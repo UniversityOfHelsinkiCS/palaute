@@ -5,18 +5,17 @@ import { Navigate, Route, Routes } from 'react-router-dom'
 import { LoadingProgress } from '../components/common/LoadingProgress'
 import useAuthorizedUser from '../hooks/useAuthorizedUser'
 import { PUBLIC_COURSE_BROWSER_ENABLED, USER_GUIDE_ENABLED } from '../util/common'
-import Admin from './Admin'
-import CourseRealisation from './CourseRealisation'
-import Summary from './CourseSummary/Summary'
-import FeedbackTarget from './FeedbackTarget'
-import MyFeedbacks from './MyFeedbacks'
-import MyOrganisations from './MyOrganisations/MyOrganisations'
-import MyTeaching from './MyTeaching/MyTeaching'
-import NorppaFeedback from './NorppaFeedback'
-import Organisation from './Organisation'
-import Search from './Search/Search'
 
-// Lazy, so the guide's text is loaded only by those who open it
+const Admin = lazy(() => import('./Admin'))
+const CourseRealisation = lazy(() => import('./CourseRealisation'))
+const Summary = lazy(() => import('./CourseSummary/Summary'))
+const FeedbackTarget = lazy(() => import('./FeedbackTarget'))
+const MyFeedbacks = lazy(() => import('./MyFeedbacks'))
+const MyOrganisations = lazy(() => import('./MyOrganisations/MyOrganisations'))
+const MyTeaching = lazy(() => import('./MyTeaching/MyTeaching'))
+const NorppaFeedback = lazy(() => import('./NorppaFeedback'))
+const Organisation = lazy(() => import('./Organisation'))
+const Search = lazy(() => import('./Search/Search'))
 const UserGuide = lazy(() => import('./UserGuide'))
 
 const containerStyle: SxProps<Theme> = theme => ({
