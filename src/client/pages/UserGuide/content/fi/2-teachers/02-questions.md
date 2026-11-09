@@ -56,11 +56,11 @@ Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCo
 
 ## Kysymykset edelliseltä toteutukselta {#carry-over}
 
-Kun uuden kurssitoteutuksen kysely luodaan Norppaan, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta.  Jos et halua kopioituja kysymyksiä uuteen kyselyyn, voit poistaa ne tavalliseen tapaan.
+Kun uuden kurssitoteutuksen kysely luodaan Norppaan, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta. Jos et halua kopioituja kysymyksiä uuteen kyselyyn, voit poistaa ne tavalliseen tapaan.
 
 - Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
 - Myös ryhmittelykysymys kopioituu. Tarkista, että sen vaihtoehdot vastaavat tämän toteutuksen ryhmiä.
-- Tietyissä erityistapauksissa kysymyksiä ei voida kopioida automaattisesti, mutta voit tarvittaessa kopioida kysymykset itse.Koskee vain kurssien kyselyjä. Kun uuden kurssitoteutuksen kysely avataan Norpassa ensimmäisen kerran, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta. Tämä tapahtuu viimeistään viikkoa ennen kyselyn aukeamista, kun vastuuopettajat saavat muistutusviestinsä.
+- Tietyissä erityistapauksissa kysymyksiä ei voida kopioida automaattisesti, mutta voit tarvittaessa kopioida kysymykset itse.
 
 [Kysymysten kopiointi](#copy-questions).
 
@@ -79,7 +79,7 @@ Kysely opiskelijan silmin:
 
 ## Ryhmät {#groups}
 
-Jos kurssille on Sisussa määritelty opetusryhmiä, esimerkiksi harjoitusryhmiä, Norppa perii tämän tiedon automaattisesti SISU:sta. Jos kurssin kyselyllä on vähintään kaksi Sisun ryhmää, vastauksia voi tarkastella ryhmittäin [[feedbackTargetView:feedbacksTab]]-välilehdellä. Ryhmät, niiden opiskelijamäärät ja opettajat näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunassa kohdassa [[groups:groupingInfo]].
+Jos kurssille on Sisussa määritelty opetusryhmiä, esimerkiksi harjoitusryhmiä, Norppa perii tämän tiedon automaattisesti Sisusta. Jos kurssin kyselyllä on vähintään kaksi Sisun ryhmää, vastauksia voi tarkastella ryhmittäin [[feedbackTargetView:feedbacksTab]]-välilehdellä. Ryhmät, niiden opiskelijamäärät ja opettajat näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunassa kohdassa [[groups:groupingInfo]].
 
 Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ryhmittelykysymys_. Sen voi lisätä minkä tahansa tyyppiseen kyselyyn:
 
@@ -105,7 +105,7 @@ Kysymyksistä on kaksi versiota: 2021-2026 käytössä olleet sekä 2026 syksyst
 
 Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiä ja nämä tulevat automaattisesti mukaan ohjelman kaikkien opintojaksojen kurssipalautekyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä näkee niiden lukumäärän ja organisaation.
 
-Opettaja ei voi muokata tai poistaa koulutusohjelman kysymyksiä. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä. Koulutusohjelman henkilöstö (koulutusohjelmajohtaja ja palautevastaava(t)) voivat lisätä ja muokata näitä kysymyksiä koulutusohjelman sivulla; katso [Koulutusohjelman kysymykset](/guide/programme-questions).
+Opettaja ei voi muokata tai poistaa koulutusohjelman kysymyksiä. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä. Koulutusohjelman henkilöstö (koulutusohjelmajohtaja ja palautevastaava(t)) voi lisätä ja muokata näitä kysymyksiä koulutusohjelman sivulla; katso [Koulutusohjelman kysymykset](/guide/programme-questions).
 
 ## Kysymysten järjestys opiskelijalle {#question-order}
 

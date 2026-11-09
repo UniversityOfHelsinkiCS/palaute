@@ -27,7 +27,7 @@ Jos kurssille on ilmoittautunut alle viisi opiskelijaa, tulokset näkyvät vain 
 
 ## Vastausten näkyvyyden muuttaminen {#visibility}
 
-Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]]. Vastuuopettajat, hallintohenkilöt sekä koulutusohjelman adminit (koulutsohjelmajohtaja ja palautevastaava) näkevät kaikki vastaukset. Muut opettajat, koulutusohjelman lukuoikeuksilla olevat ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Katso: [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
+Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]]. Vastuuopettajat, hallintohenkilöt sekä koulutusohjelman adminit (koulutusohjelmajohtaja ja palautevastaava) näkevät kaikki vastaukset. Muut opettajat, koulutusohjelman lukuoikeuksilla olevat ja opiskelijat näkevät vain julkisten kysymysten vastaukset. Katso: [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 
 Kysymyksen näkyvyyden muuttaminen:
 
@@ -38,7 +38,7 @@ Kysymyksen näkyvyyden muuttaminen:
 
 Ennen kyselyn avautumista asteikko- ja valintakysymysten näkyvyyden voi asettaa myös [kysymyksiä muokatessa](/guide/questions#edit-questions).
 
-Avoimen kysymyksen voi asettaa julkiseksi vasta kyselyn sulkeuduttua, koska vastauksissa saattaa olla arkaluonteisia- tai henkilötietoja. Norppa pyytää vahvistamaan, että tämä on tarkistettu, ennenkuin vastaukset muutetaan julkisiksi.
+Avoimen kysymyksen voi asettaa julkiseksi vasta kyselyn sulkeuduttua, koska vastauksissa saattaa olla arkaluonteisia tietoja tai henkilötietoja. Norppa pyytää vahvistamaan, että tämä on tarkistettu, ennen kuin vastaukset muutetaan julkisiksi.
 
 Yliopiston ja koulutusohjelman julkisiksi asettamien kysymysten näkyvyyttä et voi muuttaa.
 
@@ -59,11 +59,11 @@ Vastauksia ei voi poistaa. Jos vastaus on poistettava kokonaan, ota yhteyttä [t
 
 ## Ketkä ovat vastanneet {#who-answered}
 
-[[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä on luettelo kurssin opiskelijoista (eli potentiaalisesta vastaajajoukosta). Lista näkevät vastuuopettajat ja koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
+[[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä on luettelo kurssin opiskelijoista (eli potentiaalisesta vastaajajoukosta). Listan näkevät vastuuopettajat ja koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
 
-Opiskelijan ([[common:feedbackGiven]] tai [[common:feedbackNotGiven]]), näytetään vain, kun kysely on sulkeutunut, vähintään viisi opiskelijaa on vastannut ja kurssin koulutusohjelma on sallinut toiminnallisuuden teknisesti, koulutusohjelman asetuksissa. Muuten sarakkeessa lukee [[common:feedbackHidden]]. Luettelosta ei koskaan näe, kuka vastasi mitäkin. Katso tarkemmin [Ketkä ovat vastanneet](/guide/anonymity#who-answered).
+Opiskelijan vastaustila ([[common:feedbackGiven]] tai [[common:feedbackNotGiven]]) näytetään vain, kun kysely on sulkeutunut, vähintään viisi opiskelijaa on vastannut ja kurssin koulutusohjelma on sallinut toiminnallisuuden teknisesti, koulutusohjelman asetuksissa. Muuten sarakkeessa lukee [[common:feedbackHidden]]. Luettelosta ei koskaan näe, kuka vastasi mitäkin. Katso tarkemmin [Ketkä ovat vastanneet](/guide/anonymity#who-answered).
 
-[[feedbackTargetView:copyStudentNumbers]] kopioi opiskelijanumerot esimerkiksi sähköpostiin liitettäviksi. [[common:exportXLSX]] lataa excel-tiedoston vastanneista.
+[[feedbackTargetView:copyStudentNumbers]] kopioi opiskelijanumerot esimerkiksi sähköpostiin liitettäviksi. [[common:exportXLSX]] lataa Excel-tiedoston vastanneista.
 
 ## Vastausten lataaminen {#download}
 

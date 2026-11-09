@@ -8,7 +8,7 @@ Opiskelijat saavat sähköpostin, kun kurssipalautekysely avautuu. Opettaja voi 
 
 ## Mitä sähköpostiviestejä opiskelijat saavat {#student-emails}
 
-- Kurssikyselyn avautumispäivänä opiskelijat saavat sähköpostin, jossa on linkki kyselyyn ja sen sulkeutumispäivä. Norppa lähettää sen päivittäisessä postituksessa klo 11.15. Myöhemmin ilmoittautuneet saavat viestin vastaavasti myöhemmin; kyselyn ollessa auki.
+- Kurssikyselyn avautumispäivänä opiskelijat saavat sähköpostin, jossa on linkki kyselyyn ja sen sulkeutumispäivä. Norppa lähettää sen päivittäisessä postituksessa klo 11.15. Myöhemmin ilmoittautuneet saavat viestin vastaavasti myöhemmin kyselyn ollessa auki.
 - Jos avaat kyselyn [[editFeedbackTarget:openImmediately]]-painikkeella, viesti lähtee heti; katso [Kyselyn avaaminen heti](/guide/schedule#open-now).
 - Välipalautteesta ja koulutusohjelman kyselystä opiskelijat eivät saa sähköpostia automaattisesti, joten opettajan pitää jakaa erikseen näiden linkki ja muistutusviesti.
 

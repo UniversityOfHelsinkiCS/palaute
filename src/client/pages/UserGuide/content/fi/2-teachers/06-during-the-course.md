@@ -4,11 +4,11 @@ description: Jatkuva palaute ja välipalaute, joilla kuulet opiskelijoita jo kur
 
 # Jatkuva palaute ja välipalaute
 
-Kurssin loppuun sijoittuvan kurssipalautekyselyn lisäksi opettaja voi kerätä kurssin aikana palautetta kahdella tavalla. Kurssin vastuuopettaja voi aktivoida "jatkuvan palautteen", joka on matalankynnyksen sähköposti-pohjainen pikapalaute opettajan ja opiskelijoiden välillä. Lisäksi opettaja voi kerätä esim. kurssin puolivälissä  välipalautetta erillisellä kyselylomakkeella. Nämä ominaisuudet on käytettävissä vain tavallisen kurssipalautekyselyn puitteissa (ei koulutusohjelman omissa kyselyissä).
+Kurssin loppuun sijoittuvan kurssipalautekyselyn lisäksi opettaja voi kerätä kurssin aikana palautetta kahdella tavalla. Kurssin vastuuopettaja voi aktivoida "jatkuvan palautteen", joka on matalan kynnyksen sähköpostipohjainen pikapalaute opettajan ja opiskelijoiden välillä. Lisäksi opettaja voi kerätä esim. kurssin puolivälissä välipalautetta erillisellä kyselylomakkeella. Nämä ominaisuudet ovat käytettävissä vain tavallisen kurssipalautekyselyn puitteissa (ei koulutusohjelman omissa kyselyissä).
 
 ## Jatkuva palaute {#continuous-feedback}
 
-Jatkuva palaute annetaan Norpassa (järjestelmässä) ja siinä opiskelijat voivat kirjoittaa kurssista vapaamuotoista palautetta milloin tahansa kurssin aikana (ennen kurssipalautteen avautumista). Se on pois päältä, kunnes vastuuopettaja tai koulutusohjelman admin (koulutusohjelman johtaja tai palautevastaava) ottaa sen käyttöön:
+Jatkuva palaute annetaan Norpassa (järjestelmässä) ja siinä opiskelijat voivat kirjoittaa kurssista vapaamuotoista palautetta milloin tahansa kurssin aikana (ennen kurssipalautteen avautumista). Se on pois päältä, kunnes vastuuopettaja tai koulutusohjelman admin (koulutusohjelman johtaja tai palautevastaava) ottaa sen käyttöön.
 
 Jatkuvan palautteen aktivointi:
 
@@ -58,7 +58,7 @@ Välipalautteen luominen (vastuuopettajat):
 
 [[video:interim-feedback]]
 
-Välipalautteessa ei ole yliopistotason eikä koulutusohjelman kysymyksiä. Jos haluat yliopistotason kysymykset mukaan, lisää ne painikkeella [[editFeedbackTarget:copyUniversityQuestions]]. Kuten kurssipalautlomakkeella, kysymykset lukittuvat, kun välipalaute avautuu.
+Välipalautteessa ei ole yliopistotason eikä koulutusohjelman kysymyksiä. Jos haluat yliopistotason kysymykset mukaan, lisää ne painikkeella [[editFeedbackTarget:copyUniversityQuestions]]. Kuten kurssipalautelomakkeella, kysymykset lukittuvat, kun välipalaute avautuu.
 
 Välipalaute avautuu aukeamispäivänä klo 0.00 ja menee kiinni sulkeutumispäivänä klo 23.59.
 

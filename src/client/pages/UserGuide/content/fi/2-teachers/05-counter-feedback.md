@@ -40,7 +40,7 @@ Jos tallensit vastapalautteen ilman sähköpostia, voit lähettää sen myöhemm
 - [[teacherView:feedbackResponseNotSent]]: vastapalaute on tallennettu, mutta sähköpostia ei ole lähetetty.
 - [[teacherView:feedbackResponseGiven]]: vastapalaute on tallennettu ja lähetetty sähköpostilla.
 
-[[teacherView:endedSurveys]]-välilehden luku kertoo kuinka monelta kurssilta vastapalaute puuttuu.
+[[teacherView:endedSurveys]]-välilehden luku kertoo, kuinka monelta kurssilta vastapalaute puuttuu.
 
 ## Miten opiskelijat näkevät vastapalautteen {#students-see}
 

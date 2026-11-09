@@ -74,7 +74,7 @@
 
 [[video:write-counter-feedback]]
 
-## Palaute kurssin aikana {#during-the-course}
+## Jatkuva palaute ja välipalaute {#during-the-course}
 
 ### Jatkuvan palautteen ottaminen käyttöön
 
