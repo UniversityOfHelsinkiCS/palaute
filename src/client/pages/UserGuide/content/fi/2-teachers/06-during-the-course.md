@@ -45,31 +45,33 @@ Kun kurssi on käynnissä ja jatkuva palaute on päällä, [[navBar:myCourses]]-
 
 ## Välipalaute {#interim-feedback}
 
-Välipalaute on erillinen kysely omilla kysymyksilläsi, esimerkiksi kurssin puolivälissä. Välipalautteita voi luoda useita. Norppa kopioi välipalautteeseen kurssin opiskelijat ja opettajat, kun luot sen.
+Välipalaute on erillinen, kurssipalautekyselyä vastaava kysely, mutta omilla kysymyksilläsi, esimerkiksi kurssin puolivälissä. Välipalautteita voi luoda useita. Norppa kopioi välipalautteeseen kurssin opiskelijat ja opettajat, kun luot sen.
 
 Välipalautteen luominen (vastuuopettajat):
 
 1. Valitse kurssi [[navBar:myCourses]]-sivulta.
 2. Avaa [[feedbackTargetView:interimFeedbackTab]]-välilehti.
 3. Klikkaa [[interimFeedback:addSurvey]].
-4. Anna sille nimi ainakin yhdellä kielellä sekä päivämäärät kenttiin [[interimFeedback:startDate]] ja [[interimFeedback:endDate]].
+4. Anna välipalautteelle nimi ainakin yhdellä kielellä sekä päivämäärät kenttiin [[interimFeedback:startDate]] ja [[interimFeedback:endDate]].
 5. Klikkaa [[common:save]]. Uusi välipalaute avautuu [[feedbackTargetView:surveyQuestionsTab]]-välilehdelle.
 6. Lisää kysymyksesi. Katso [kysymysten muokkaaminen](/guide/questions#edit-questions).
 
 [[video:interim-feedback]]
 
-Välipalautteessa ei ole yliopistotason eikä koulutusohjelman kysymyksiä. Jos haluat yliopistotason kysymykset mukaan, lisää ne painikkeella [[editFeedbackTarget:copyUniversityQuestions]]. Kuten kurssipalautteessa, kysymykset lukittuvat, kun välipalaute avautuu.
+Välipalautteessa ei ole yliopistotason eikä koulutusohjelman kysymyksiä. Jos haluat yliopistotason kysymykset mukaan, lisää ne painikkeella [[editFeedbackTarget:copyUniversityQuestions]]. Kuten kurssipalautlomakkeella, kysymykset lukittuvat, kun välipalaute avautuu.
 
-Välipalaute avautuu ensimmäisenä päivänään klo 0.00 ja sulkeutuu viimeisenä päivänään klo 23.59. Nimen tai päivämäärien muuttaminen: avaa välipalaute painikkeella [[interimFeedback:viewFeedback]] ja klikkaa [[interimFeedback:editSurvey]]. Voit tehdä tämän milloin tahansa, esimerkiksi jatkaaksesi välipalautetta tai avataksesi sen uudelleen sen sulkeuduttua.
+Välipalaute avautuu aukeamispäivänä klo 0.00 ja menee kiinni sulkeutumispäivänä klo 23.59.
+
+Nimen tai päivämäärien muuttaminen: avaa välipalaute painikkeella [[interimFeedback:viewFeedback]] ja klikkaa [[interimFeedback:editSurvey]]. Voit tehdä tämän milloin tahansa, esimerkiksi jatkaaksesi välipalautetta tai avataksesi sen uudelleen sen sulkeuduttua.
 
 ### Vastausten kerääminen
 
-Norppa ei lähetä välipalautteesta sähköposteja opiskelijoille eikä opettajille. Opiskelijat näkevät välipalautteen [[navBar:myFeedbacks]]-sivulla sen ollessa auki, mutta he eivät tiedä siitä, ellet kerro. Kun välipalaute on auki, lähetä muistutusviesti sen [[feedbackTargetView:shareTab]]-välilehdeltä painikkeella [[feedbackTargetResults:sendReminder]] tai jaa sen linkki. Katso [kyselyn jakaminen](/guide/collecting-answers#share-link).
+Norppa ei lähetä välipalautteesta automaattisesti sähköposteja opiskelijoille eikä opettajille. Kun välipalaute on auki, lähetä muistutusviesti [[feedbackTargetView:shareTab]]-välilehdeltä painikkeella [[feedbackTargetResults:sendReminder]] tai jaa sen linkki esim. sähköpostitse. Katso [kyselyn jakaminen](/guide/collecting-answers#share-link). Opiskelijat näkevät välipalautteen [[navBar:myFeedbacks]]-sivulla.
 
 Kun välipalaute on auki, [[navBar:myCourses]]-sivulla kurssin kohdalla näkyy [[teacherView:interimFeedbackOpen]]-merkki.
 
 ### Tulokset ja poistaminen
 
-Välipalautteen [[interimFeedback:viewResults]] avaa sen vastaukset, kun vastauksia on. Ne toimivat kuten kurssipalautteessa: katso [tulokset](/guide/results). Kun välipalaute on sulkeutunut, siihen voi kirjoittaa [vastapalautteen](/guide/counter-feedback). Välipalaute ei näy [[navBar:courseSummary]]-sivulla.
+Välipalautteen [[interimFeedback:viewResults]] näyttää kertyneet vastaukset. Ne toimivat teknisesti samoin kuin kurssipalautteessa: katso [tulokset](/guide/results). Kun välipalaute on sulkeutunut, vastuuopettaja voi lähettää siihen liittyen [vastapalautteen](/guide/counter-feedback). Välipalaute ei näy [[navBar:courseSummary]]-sivulla.
 
-Välipalautteen poistaminen: klikkaa sen kohdalla [[interimFeedback:remove]] ja vahvista. Välipalautteen voi poistaa vain, jos siihen ei ole vastattu.
+Välipalautteen poistaminen: klikkaa [[interimFeedback:remove]] ja vahvista. Välipalautteen voi poistaa vain, jos siihen ei ole vastattu.
