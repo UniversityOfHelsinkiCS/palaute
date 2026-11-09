@@ -56,32 +56,30 @@ Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCo
 
 ## Kysymykset edelliseltä toteutukselta {#carry-over}
 
-Koskee vain kurssien kyselyjä. Kun uuden kurssitoteutuksen kysely avataan Norpassa ensimmäisen kerran, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta. Tämä tapahtuu viimeistään viikkoa ennen kyselyn aukeamista, kun vastuuopettajat saavat muistutusviestinsä.
+Kun uuden kurssitoteutuksen kysely luodaan Norppaan, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta.  Jos et halua kopioituja kysymyksiä uuteen kyselyyn, voit poistaa ne tavalliseen tapaan.
 
-- Edellinen toteutus on viimeisin tätä toteutusta aiemmin alkanut toteutus, jolla on tämän kanssa ainakin yksi yhteinen opettaja missä tahansa opettajaroolissa.
-- Kopio tehdään vain kerran. Sen jälkeen kummankaan kyselyn muutokset eivät vaikuta toiseen.
 - Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
 - Myös ryhmittelykysymys kopioituu. Tarkista, että sen vaihtoehdot vastaavat tämän toteutuksen ryhmiä.
-- Poista tarpeettomat kysymykset tavalliseen tapaan.
+- Tietyissä erityistapauksissa kysymyksiä ei voida kopioida automaattisesti, mutta voit tarvittaessa kopioida kysymykset itse.Koskee vain kurssien kyselyjä. Kun uuden kurssitoteutuksen kysely avataan Norpassa ensimmäisen kerran, Norppa kopioi siihen opettajan omat kysymykset saman opintojakson edelliseltä toteutukselta. Tämä tapahtuu viimeistään viikkoa ennen kyselyn aukeamista, kun vastuuopettajat saavat muistutusviestinsä.
 
-Mitään ei kopioidu, jos millään aiemmalla toteutuksella ei ole yhteistä opettajaa tämän kanssa tai jos opintojaksosta on Sisussa uusi versio, esimerkiksi uudelle opetussuunnitelmakaudelle. [Kopioi kysymykset silloin itse](#copy-questions).
+[Kysymysten kopiointi](#copy-questions).
 
 ## Kieliversiot ja esikatselu {#languages}
 
-Opiskelija näkee kyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin niiden kielten kentät, joita opiskelijasi käyttävät. Jos kenttä on tyhjä, sitä kieltä käyttävät opiskelijat näkevät kysymyksen jollain toisella kielellä.
+Opiskelija näkee kurssipalautekyselyn sillä kielellä, jolla hän käyttää Norppaa: suomeksi, ruotsiksi tai englanniksi. Siksi kysymyseditorissa on jokaiselle kielelle oma kenttänsä rinnakkain. Täytä ainakin niiden kielten kentät, joita opiskelijasi käyttävät. Jos jokin kieliversio jää tyhjäksi, opiskelijat näkevät kyselyn toisella kielellä.
 
-Kyselyn näkeminen opiskelijan silmin:
+Kysely opiskelijan silmin:
 
 1. Valitse kieli [[feedbackTargetView:surveyQuestionsTab]]-välilehden alareunan [[editFeedbackTarget:translationLanguage]]-valikosta. Kysymyseditorin kysymykset vaihtuvat tälle kielelle.
 2. Valitse [[editFeedbackTarget:showPreview]].
 
 [[video:preview-survey]]
 
-[[common:preview]]-välilehdellä näkyy koko kysely siinä järjestyksessä kuin opiskelija sen näkee. Opettaja ei voi lähettää sitä. Vastuuopettaja pääsee takaisin muokkaamaan [[feedbackView:editSurvey]]-painikkeella.
+[[common:preview]]-välilehdellä näkyy koko kysely siten kuin opiskelija sen näkee.
 
 ## Ryhmät {#groups}
 
-Jos kurssille on Sisussa määritelty opetusryhmiä, esimerkiksi harjoitusryhmiä, Norppa tietää, mihin ryhmään kukin opiskelija kuuluu. Jos kurssin kyselyllä on vähintään kaksi Sisun ryhmää, vastauksia voi tarkastella ryhmittäin [[feedbackTargetView:feedbacksTab]]-välilehdellä ilman, että sinun tarvitsee tehdä mitään. Ryhmät, niiden opiskelijamäärät ja opettajat näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunassa kohdassa [[groups:groupingInfo]].
+Jos kurssille on Sisussa määritelty opetusryhmiä, esimerkiksi harjoitusryhmiä, Norppa perii tämän tiedon automaattisesti SISU:sta. Jos kurssin kyselyllä on vähintään kaksi Sisun ryhmää, vastauksia voi tarkastella ryhmittäin [[feedbackTargetView:feedbacksTab]]-välilehdellä. Ryhmät, niiden opiskelijamäärät ja opettajat näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunassa kohdassa [[groups:groupingInfo]].
 
 Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ryhmittelykysymys_. Sen voi lisätä minkä tahansa tyyppiseen kyselyyn:
 
@@ -91,9 +89,9 @@ Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ry
 
 [[video:grouping-question]]
 
-Ryhmittelykysymys on pakollinen, se on aina opiskelijan ensimmäinen kysymys, eivätkä sen vastaukset ole julkisia. Kyselyssä voi olla vain yksi ryhmittelykysymys, ja se korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
+Ryhmittelykysymys on vastaajalle pakollinen, kyselyn ensimmäinen kysymys ja sen vastaukset eivät ole julkisia. Kurssipalautekyselyssä voi olla vain yksi ryhmittelykysymys, ja jos opettaja on luonut sen itse, tämä ryhmittely korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
 
-Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa vastauksia saaneessa ryhmässä on vähintään viisi vastaajaa (ks. [Ryhmien vastaukset](/guide/anonymity#groups)). Pidä siis vaihtoehtoja vähän.
+Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa vastauksia saaneessa ryhmässä on vähintään viisi vastaajaa (ks. [Ryhmien vastaukset](/guide/anonymity#groups)).
 
 ## Valmiit kysymykset {#fixed-questions}
 
@@ -101,13 +99,11 @@ Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokais
 
 Yliopisto on määrittänyt nämä kysymykset kaikkiin kurssien kyselyihin. Ne ovat samat kaikilla kursseilla, eikä niitä voi muokata tai poistaa. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:universityQuestion]], ja ne näkyvät [[feedbackTargetView:surveyQuestionsTab]]-välilehden alussa.
 
-Kysymykset vaihtuivat elokuussa 2026: kysely saa ne kysymykset, jotka ovat käytössä sen avautumispäivänä. Katso [Yliopistotason kysymykset](/guide/university-questions), mitä kysymykset ovat ja mitä vaihtuminen tarkoittaa.
-
-Välipalautteessa ja koulutusohjelman kyselyssä niitä ei ole, mutta voit [kopioida ne niihin](#copy-questions).
+Kysymyksistä on kaksi versiota: 2021-2026 käytössä olleet sekä 2026 syksystä lähtien käytössä olevat. Katso [Yliopistotason kysymykset](/guide/university-questions). Välipalautteessa ja koulutusohjelman kyselyssä ei ole HY-yhteisiä kysymyksiä, mutta voit halutessasi [kopioida ne mukaan](#copy-questions).
 
 ### Koulutusohjelman kysymykset {#programme-questions}
 
-Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiään kaikkien opintojaksojensa kyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunan laatikko kertoo, montako niitä on ja mikä organisaatio ne on lisännyt.
+Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiä ja nämä tulevat automaattisesti mukaan ohjelman kaikkien opintojaksojen kurssipalautekyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunan laatikko kertoo, montako niitä on ja mikä organisaatio ne on lisännyt.
 
 Et voi muokata tai poistaa koulutusohjelman kysymyksiä. Jos jokin niistä ei sovi kurssillesi, ota yhteyttä koulutusohjelmaan. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä.
 
