@@ -2,40 +2,44 @@
 description: Jatkuva palaute ja välipalaute, joilla kuulet opiskelijoita jo kurssin aikana.
 ---
 
-# Palaute kurssin aikana
+# Jatkuva palaute ja välipalaute
 
-Kurssipalautekysely avautuu vasta kurssin päätyttyä. Jos haluat kuulla opiskelijoita jo kurssin aikana, voit vastuuopettajana käyttää jatkuvaa palautetta, välipalautetta tai molempia. Kumpikaan ei vaikuta itse kurssipalautteeseen, eikä kumpaakaan ole koulutusohjelman kyselyissä.
+Kurssin loppuun sijoittuvan kurssipalautekyselyn lisäksi opettaja voi kerätä kurssin aikana palautetta kahdella tavalla. Kurssin vastuuopettaja voi aktivoida "jatkuvan palautteen", joka on matalankynnyksen sähköposti-pohjainen pikapalaute opettajan ja opiskelijoiden välillä. Lisäksi opettaja voi kerätä esim. kurssin puolivälissä  välipalautetta erillisellä kyselylomakkeella. Nämä ominaisuudet on käytettävissä vain tavallisen kurssipalautekyselyn puitteissa (ei koulutusohjelman omissa kyselyissä).
 
 ## Jatkuva palaute {#continuous-feedback}
 
-Jatkuvan palautteen avulla opiskelijat voivat kirjoittaa kurssista vapaamuotoista palautetta milloin tahansa ennen kurssipalautteen avautumista. Se on pois päältä, kunnes vastuuopettaja tai koulutusohjelman admin ottaa sen käyttöön:
+Jatkuva palaute annetaan Norpassa (järjestelmässä) ja siinä opiskelijat voivat kirjoittaa kurssista vapaamuotoista palautetta milloin tahansa kurssin aikana (ennen kurssipalautteen avautumista). Se on pois päältä, kunnes vastuuopettaja tai koulutusohjelman admin (koulutusohjelman johtaja tai palautevastaava) ottaa sen käyttöön:
+
+Jatkuvan palautteen aktivointi:
 
 1. Valitse kurssi [[navBar:myCourses]]-sivulta.
 2. Avaa [[feedbackTargetView:continuousFeedbackTab]]-välilehti.
 3. Kytke päälle [[feedbackTargetView:activateContinuousFeedback]].
 4. Jos haluat sähköpostia uudesta palautteesta, kytke päälle [[feedbackTargetView:activateContinuousFeedbackDigest]].
-5. Halutessasi kirjoita opiskelijoille teksti kenttään [[feedbackTargetView:continuousFeedbackPreambleLabel]], esimerkiksi mistä toivot palautetta, ja klikkaa [[common:save]]. Teksti näkyy palautelomakkeella.
+5. Kirjoita opiskelijoille sopiva johdanto kenttään [[feedbackTargetView:continuousFeedbackPreambleLabel]], esimerkiksi mistä toivot palautetta, ja klikkaa [[common:save]]. Johdanto näkyy palautelomakkeella.
 
 [[video:continuous-feedback]]
 
-Valinnat tallentuvat heti. Norppa ei kerro jatkuvasta palautteesta opiskelijoille, joten kerro siitä heille itse. He löytävät kurssin [[navBar:myFeedbacks]]-sivun [[userFeedbacks:continuousFeedbackTab]]-välilehdeltä ja kirjoittavat palautteensa painikkeella [[userFeedbacks:giveContinuousFeedback]].
+Valinnat tallentuvat heti, mutta Norppa ei infoa opiskelijoita jatkuvasta palautteesta automaattisesti, joten siitä on hyvä informoida erikseen. Opiskelijat löytävät kurssin [[navBar:myFeedbacks]]-sivun [[userFeedbacks:continuousFeedbackTab]]-välilehdeltä ja kirjoittavat palautteensa kohdassa [[userFeedbacks:giveContinuousFeedback]].
 
-Opiskelijat voivat antaa jatkuvaa palautetta kurssipalautteen avautumiseen asti. Sen jälkeenkin jo annettu palaute säilyy.
+Opiskelijat voivat antaa jatkuvaa palautetta kurssipalautteen avautumiseen asti. Annettu palaute tallentuu Norppaan.
 
 ### Päivittäinen sähköposti
 
-Kun [[feedbackTargetView:activateContinuousFeedbackDigest]] on päällä, kurssin vastuuopettajat saavat joka aamu klo 8 sähköpostin, jossa on edellisen vuorokauden aikana annettu jatkuva palaute. Jos uutta palautetta ei ole tullut, viestiä ei lähetetä. Palautetta, joka on annettu sähköpostin ollessa pois päältä, ei lähetetä jälkikäteen, mutta voit aina lukea sen välilehdeltä.
+Kun [[feedbackTargetView:activateContinuousFeedbackDigest]] on päällä, kurssin vastuuopettajat saavat joka aamu sähköpostin, jossa on edellisen vuorokauden aikana annettu jatkuva palaute. Jos uutta palautetta ei ole tullut, viestiä ei lähetetä. Palautetta, joka on annettu sähköpostin ollessa pois päältä, ei lähetetä jälkikäteen, mutta se tallentuu Norppaan.
 
 ### Lukeminen ja vastaaminen
 
-[[feedbackTargetView:continuousFeedbackTab]]-välilehdellä on kaikki palaute otsikon [[feedbackTargetView:continuousFeedbackGiven]] alla uusin ensin. Palautteeseen vastaaminen:
+[[feedbackTargetView:continuousFeedbackTab]]-välilehdellä on kaikki annettu jatkuva palaute otsikon [[feedbackTargetView:continuousFeedbackGiven]] alla.
 
-1. Klikkaa palautteen alla [[feedbackTargetView:respondContinuousFeedback]].
+Palautteeseen vastaaminen:
+
+1. Klikkaa [[feedbackTargetView:respondContinuousFeedback]].
 2. Kirjoita vastauksesi ja klikkaa [[common:send]].
 
-Vastauksesi näkee vain palautteen antanut opiskelija. Hän näkee sen Norpassa ja saa sen sähköpostilla. Voit muuttaa vastausta myöhemmin painikkeella [[common:edit]], mutta muutoksista ei lähetetä sähköpostia.
+Opettajan antaman vastauksen näkee vain palautteen antanut opiskelija. Opiskelija saa vastauksen sähköpostitse ja se näkyy myös Norpassa. Voit muuttaa vastausta myöhemmin painikkeella [[common:edit]], mutta muutoksista ei lähetetä sähköpostia.
 
-Jatkuva palaute on nimetöntä: Norppa ei näytä, kuka sen antoi. Sitä voivat lukea vastuuopettajat ja koulutusohjelman adminit, mutta eivät opettajat, joilla ei ole vastuuopettajan roolia. Palautetta ei voi poistaa.
+Jatkuva palaute on nimetöntä: Norppa ei näytä, kuka sen antoi. Sitä voivat lukea vastuuopettajat ja koulutusohjelman adminit (koulutusohjelmajohtaja ja palautevastaava), mutta eivät opettajat (joilla ei ole vastuuopettajan roolia). Palautetta ei voi poistaa.
 
 Kun kurssi on käynnissä ja jatkuva palaute on päällä, [[navBar:myCourses]]-sivulla kurssin kohdalla näkyy [[teacherView:continuousFeedback]]-merkki.
 
