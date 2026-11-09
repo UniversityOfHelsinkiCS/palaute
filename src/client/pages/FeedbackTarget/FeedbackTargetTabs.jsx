@@ -16,6 +16,7 @@ export const FeedbackTargetTab = ({
   tooltip,
   id,
   onFocus,
+  matchPaths: _matchPaths, // Tab containers use this, but it's kept out of the props passed to Tab
   ...props
 }) => {
   const descriptionId = useId()
@@ -30,8 +31,6 @@ export const FeedbackTargetTab = ({
     label
   )
 
-  // Hidden content is left out of the tab's name but can still be referenced by aria-describedby.
-  // It must stay inside the tab, because MUI Tabs locates tabs by their index among the tablist's DOM children.
   const labelWithDescription = tooltipTitle ? (
     <>
       {content}
@@ -93,27 +92,75 @@ export const FeedbackTargetTab = ({
   return tab
 }
 
-export const FeedbackTargetTabsContainer = ({ children }) => {
+const useSelectedTab = children => {
   const { pathname } = useLocation()
   const path = stripSearch(pathname)
 
   const validChildren = useMemo(() => React.Children.toArray(children).filter(React.isValidElement), [children])
 
-  const { currentValue, childrenWithValue } = useMemo(() => {
-    const tabOrder = validChildren.map(child => stripSearch(child.props.to))
-    const index = tabOrder.indexOf(path)
+  return useMemo(() => {
+    // A tab that groups inner tabs is selected on the paths of all of them
+    const index = validChildren.findIndex(child =>
+      (child.props.matchPaths ?? [child.props.to]).map(stripSearch).includes(path)
+    )
     const currentValue = index < 0 ? 0 : index
 
     const childrenWithValue = validChildren.map((child, idx) => React.cloneElement(child, { value: idx }))
 
     return { currentValue, childrenWithValue }
   }, [validChildren, path])
+}
+
+const indicatorStyles = {
+  '& .MuiTabs-indicatorSpan': {
+    mt: '-0.25rem',
+    mb: '0.05rem',
+    width: '86%',
+    backgroundColor: theme => theme.palette.primary.main,
+    transition: 'none',
+  },
+  '& .MuiTabs-indicator': {
+    display: 'flex',
+    justifyContent: 'center',
+    backgroundColor: 'transparent',
+    transition: 'none',
+  },
+}
+
+const indicatorSlotProps = { children: <span className="MuiTabs-indicatorSpan" /> }
+
+const scrollButtonStyles = {
+  '& .MuiTabs-scrollButtons': {
+    width: '28px',
+  },
+}
+
+export const FeedbackTargetInnerTabsContainer = ({ children, ...props }) => {
+  const { currentValue, childrenWithValue } = useSelectedTab(children)
+
+  return (
+    <Tabs
+      value={currentValue}
+      variant="scrollable"
+      scrollButtons="auto"
+      allowScrollButtonsMobile
+      sx={{ mb: 3, borderBottom: 1, borderColor: 'divider', ...indicatorStyles, ...scrollButtonStyles }}
+      slotProps={{ indicator: indicatorSlotProps, scroller: { tabIndex: -1 } }}
+      {...props}
+    >
+      {childrenWithValue}
+    </Tabs>
+  )
+}
+
+export const FeedbackTargetTabsContainer = ({ children, ...props }) => {
+  const { currentValue, childrenWithValue } = useSelectedTab(children)
 
   return (
     <Box
       sx={{
         '@media print': { display: 'none' },
-        mb: '2rem',
+        mb: '1rem',
         borderRadius: '0.8rem',
         boxShadow: 2,
       }}
@@ -125,32 +172,20 @@ export const FeedbackTargetTabsContainer = ({ children }) => {
           scrollButtons="auto"
           allowScrollButtonsMobile
           sx={{
-            px: 0.2,
+            pt: 0.5,
+            px: 1,
             '& .MuiTabs-flexContainer': {
               alignItems: 'stretch',
               ml: 0,
             },
-            '& .MuiTabs-indicatorSpan': {
-              mt: '-0.25rem',
-              mb: '0.05rem',
-              width: '86%',
-              backgroundColor: theme => theme.palette.primary.main,
-              transition: 'none',
-            },
-            '& .MuiTabs-indicator': {
-              display: 'flex',
-              justifyContent: 'center',
-              backgroundColor: 'transparent',
-              transition: 'none',
-            },
-            '& .MuiTabs-scrollButtons': {
-              width: '28px',
-            },
+            ...indicatorStyles,
+            ...scrollButtonStyles,
           }}
           slotProps={{
-            indicator: { children: <span className="MuiTabs-indicatorSpan" /> },
+            indicator: indicatorSlotProps,
             scroller: { tabIndex: -1 },
           }}
+          {...props}
         >
           {childrenWithValue}
         </Tabs>
