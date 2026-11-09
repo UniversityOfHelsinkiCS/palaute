@@ -1,139 +1,49 @@
 # Standalone surveys
 
-Surveys that aren't tied to courses, meant as an alternative to E-lomake. Admins create them, and the people who should answer get a secret link from outside Norppa. Answering requires Shibboleth login.
+Surveys that aren't tied to a course, as an alternative to E-lomake. An admin creates the survey and names its responsible persons, who edit it and see the results. The people who should answer get a secret link from outside Norppa and log in with Shibboleth to answer.
 
-Status: implemented on master (not pushed). The e2e spec hasn't been run yet.
+## Behaviour
 
-## Decisions
+- Only admins create and delete surveys, and they can do everything else too. A survey with answers can't be deleted.
+- Responsible persons ("Vastuuhenkilöt" / "Ansvariga personer" / "Responsible persons", `responsible_users` in code) edit the survey and its responsible persons, see all results and hide open answers. Only admins can delete an open answer's text. There's always at least one responsible person.
+- Responsible persons find their surveys on Kyselyni (`/courses`) under "Muut kyselyt". Being one is enough to get the Kyselyni menu item (`src/server/services/users/preferences.ts`).
+- Respondents reach a survey only through its link, `/survey/<token>/<slug>`. Anyone who can log in with Shibboleth can answer, including people with no Sisu data: login creates a Norppa user for them. The token is 12 random characters and never changes. The slug is made from the Finnish name and is only for reading: a wrong or missing slug redirects to the current one.
+- Answering is open between `opens_at` and `closes_at`. There's no disabled state: a survey is stopped by moving `closes_at`. Once a survey has opened, only admins can change `opens_at` or the questions' content; responsible persons can still change question visibility.
+- One answer per person, with at least one question answered. It can be edited and removed while the survey is open.
+- `user_id` is stored with each answer only to enforce one answer per person. Nobody can see who answered.
+- Results have no minimum answer count. Answers are shuffled per question, as for courses.
+- A question's results are `PUBLIC` or `PRIVATE`. Respondents see `PUBLIC` results while the survey is open only after answering, and after it closes anyone with the link sees them.
+- No emails.
+- Names and questions in fi/sv/en, falling back like courses. Question types are the course ones minus `GROUPING`; intro text is a `TEXT` question.
 
-- Separate tables. No fake course, course realisation or feedback target.
-- Only admins create surveys. Admins see and can do everything.
-- Responsible users ("Responsible persons" / "Vastuuhenkilöt" / "Ansvariga personer" in the UI) edit the survey and see results. Responsible users and admins add and remove them, and there's always at least one. The creating admin is prefilled in the creation form and can be removed.
-- Responsible users find their surveys on "My surveys" (`/courses`, `MyTeaching`) under their own heading. Respondents reach a survey only through its link. Answered surveys aren't listed anywhere, because My feedback only exists for students.
-- The link carries a random token that never changes. There's no disabled state. A survey is stopped by setting `closes_at` to now.
-- One answer per person, with at least one question answered. Answers can be edited and deleted until the survey closes.
-- No list of who answered. `user_id` is stored only to prevent duplicates and allow editing.
-- No minimum answer count for results. Answers are shuffled per question, as for courses.
-- `PUBLIC` question results: while open, only to people who have answered; after close, anyone with the link. Checked on the server.
-- No emails of any kind.
-- All of fi/sv/en. Missing translations fall back like courses. Intro text is a `TEXT` question.
-- Question types are the same as courses, minus `GROUPING`. Editing questions locks the same way as courses.
-- Admins can delete a survey only when it has no answers.
-- `closes_at` can be changed at any time. `opens_at` is locked once the survey is open.
-- Generic privacy notice.
-- Login creates a Norppa user for people without Sisu data, so everyone who logs in can answer.
-- No feature flag. Nothing shows up until an admin creates a survey.
+## Code
 
-Out of scope for now: copying surveys, counter feedback, a list of who answered, summaries.
+- Server: `src/server/routes/standaloneSurveys/` (mounted at `/standalone-surveys`) and `src/server/services/standaloneSurveys/`.
+- Client: `src/client/pages/StandaloneSurvey/`. `AnswerSurvey.jsx` is the respondent page, `manage/` the management page at `/standalone-surveys/:id`, and `StandaloneSurveyGroup.jsx` the section on Kyselyni. The admin tab is `src/client/pages/Admin/tabs/StandaloneSurveys/`.
+- Migration: `src/server/migrations/20261103_00_create_standalone_surveys.js`.
+- E2E: `e2e/specs/standaloneSurvey.spec.ts`.
 
-## Schema
+Respondent routes use the token (`/standalone-surveys/answer/:token/...`) and never return user ids, other answers' ids or timestamps. Management routes use the survey id and check `assertCanManage` in `access.ts`.
 
-One migration, `src/server/migrations/<date>_00_create_standalone_surveys.js`, creates all tables. Models go in `src/server/models/`, with associations in `src/server/models/index.ts`.
+## Data
 
-| Table                                 | Columns                                                                                                                                                                                              |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `standalone_surveys`                  | `id`, `name` JSONB, `token` VARCHAR UNIQUE, `opens_at`, `closes_at` (both NOT NULL), `created_by_user_id` FK users, timestamps                                                                       |
-| `standalone_survey_questions`         | `id`, `standalone_survey_id` FK CASCADE, `question_id` FK questions UNIQUE, `position` INTEGER, `visibility` ENUM('PUBLIC', 'PRIVATE') default `PRIVATE`, timestamps. INDEX (`standalone_survey_id`) |
-| `standalone_survey_responsible_users` | `id`, `standalone_survey_id` FK CASCADE, `user_id` FK users, timestamps. UNIQUE (`standalone_survey_id`, `user_id`), INDEX (`user_id`)                                                               |
-| `standalone_survey_responses`         | `id`, `standalone_survey_id` FK CASCADE, `user_id` FK users, `data` JSONB (`QuestionAnswer[]`, same as `feedbacks.data`), timestamps. UNIQUE (`standalone_survey_id`, `user_id`)                     |
-| `standalone_survey_logs`              | `id`, `standalone_survey_id` FK CASCADE, `user_id` FK users, `data` JSONB, timestamps. INDEX (`standalone_survey_id`)                                                                                |
+| Table                                 | Holds                                                                                                            |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `standalone_surveys`                  | `name` (JSONB), `token`, `opens_at`, `closes_at`, `created_by_user_id`                                           |
+| `standalone_survey_questions`         | Links a row in the shared `questions` table to a survey, with `position` and `visibility` (`PUBLIC` / `PRIVATE`) |
+| `standalone_survey_responsible_users` | Survey and user, unique together                                                                                 |
+| `standalone_survey_responses`         | Survey, user and `data` (`QuestionAnswer[]`, same shape as `feedbacks.data`), unique per survey and user         |
+| `standalone_survey_logs`              | Changes to name, dates, questions and responsible persons                                                        |
 
-Removing a question from a survey deletes its `standalone_survey_questions` row but keeps the `questions` row, because answers refer to it by id.
+Removing a question deletes only its `standalone_survey_questions` row; the `questions` row stays because answers refer to it by id. When a respondent edits their answer, open answers a manager has hidden stay hidden as long as their text is unchanged.
 
-## Access
+## Shared with course feedback
 
-|                                                | Admin | Responsible user | Has answered | Has the link |
-| ---------------------------------------------- | ----- | ---------------- | ------------ | ------------ |
-| Create, list all, delete (no answers)          | yes   |                  |              |              |
-| Edit name, dates, questions, responsible users | yes   | yes              |              |              |
-| See all results, hide open answers, export     | yes   | yes              |              |              |
-| Delete open answer content                     | yes   |                  |              |              |
-| Answer, edit and delete own answer while open  | yes   | yes              | yes          | yes          |
-| See `PUBLIC` results while open                | yes   | yes              | yes          |              |
-| See `PUBLIC` results after close               | yes   | yes              | yes          | yes          |
+The respondent form, results, question editor and export are the course components, made independent of `FeedbackTargetContext`. Changes to these affect both:
 
-Management endpoints use the survey's `id`. Respondent endpoints use the `token` and never return `user_id`s, `id`s of other answers or timestamps.
+- `FormContainer`, `FeedbackForm` and `ErrorSummary` in `src/client/pages/FeedbackTarget/tabs/FeedbackView/`. Standalone passes `showInfo={false}`.
+- `QuestionResults` and its children: publicity and open-answer actions come in as props. `useOpenAnswerActions` (`src/client/hooks/`) does the hiding and deleting for both.
+- `ChartTableToggle`, `ExportFeedbacksMenu` and `QuestionEditor`.
+- On the server, in `src/server/util/`: `validateAnswers` (`feedbackValidator.ts`), `shuffleFeedbacks.ts` and `openAnswers.ts` (hiding and deleting open answers by their text).
 
-## Server
-
-New code in `src/server/services/standaloneSurveys/` and `src/server/routes/standaloneSurveys/`, mounted as `/standalone-surveys` in `src/server/routes/routes.ts`.
-
-Respondent routes, by token:
-
-- `GET /standalone-surveys/answer/:token`: name, dates, questions, the user's own answer, and whether results are visible
-- `PUT /standalone-surveys/answer/:token/response`: create or update the own answer. Checks: survey open, answers valid.
-- `DELETE /standalone-surveys/answer/:token/response`
-- `GET /standalone-surveys/answer/:token/results`: shuffled `PUBLIC` results, by the rules above
-
-Management routes, by id (admin or responsible user):
-
-- `GET /standalone-surveys`: surveys the user is responsible for (for My surveys)
-- `GET /standalone-surveys/:id`, `PUT /standalone-surveys/:id`: name and dates
-- `PUT /standalone-surveys/:id/questions`: questions, order and visibility. Once the survey has opened, non-admins can only change visibility.
-- `PUT /standalone-surveys/:id/responsible-users`
-- `GET /standalone-surveys/:id/results`: all questions, shuffled
-- `PUT /standalone-surveys/:id/hide-answer`, `PUT /standalone-surveys/:id/delete-answer` (admin only)
-- `GET /standalone-surveys/:id/logs`
-
-Admin routes:
-
-- `GET /standalone-surveys/all`, `POST /standalone-surveys`, `DELETE /standalone-surveys/:id`
-
-An access helper returns `{ isAdmin, isResponsibleUser }` for a user and survey, and every management route checks it. Changes to name, dates, questions and responsible users are logged.
-
-## Client
-
-New code in `src/client/pages/StandaloneSurvey/`.
-
-- `/survey/:token/:slug`: the respondent page. The slug comes from the name (Finnish first) and is only for reading; a wrong or missing slug redirects to the current one. `FeedbackForm` and `ErrorSummary` reused, without the privacy info alert, plus results (`QuestionResults` with `ChartTableToggle`) when visible.
-- `/standalone-surveys/:id/*`: the management page, built from the same layout and tab components as `/targets/:id`. Tabs: Survey (preview), Results, Edit (name, dates, `QuestionEditor`), Responsible persons, Share (copy link), Logs.
-- Admin panel: a new "Standalone surveys" tab in `src/client/pages/Admin/Admin.jsx` with the list of all surveys and the creation form. The responsible persons picker reuses `ResponsibleTeachersSelector` from `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`.
-- My surveys (`src/client/pages/MyTeaching/`): a heading listing the surveys the user is responsible for, shown only when there are any.
-
-`QuestionEditor` is already configured through props: without `groupingQuestionSettings` and `copyFromCourseDialog` it offers no grouping or copying. `FeedbackChart` isn't used, because its response rate needs an expected respondent count. The results page shows the answer count instead.
-
-New translations go in `public/locales/{fi,sv,en}/translation.json` under their own namespace. Existing keys are reused where the wording fits.
-
-## Changes to existing code
-
-Each change is its own commit, made before the code that needs it, and course behaviour must stay the same.
-
-1. `src/server/services/feedbackTargets/getFeedbacks.ts`: move `shuffleFeedbacks` to a shared util and export it.
-2. `src/server/util/feedbackValidator.ts`: split `validateFeedback(data, feedbackTarget)` into a function that validates answers against a list of questions, plus the existing course wrapper that loads the course's questions.
-3. `src/client/pages/FeedbackTarget/tabs/FeedbackView/utils.js`: `getInitialValues(feedbackTarget)` takes the questions and the existing answer instead of a feedback target.
-4. `src/client/pages/FeedbackTarget/tabs/Results/QuestionResults/`: `OpenResults`, `useUpdateOpenFeedbackVisibility`, `useDeleteOpenFeedback` and `QuestionItem` stop reading `FeedbackTargetContext` and calling `/feedback-targets` endpoints themselves. `QuestionResults` takes the hide, delete and publicity handlers as props, and the course results page passes the current ones.
-5. `src/client/pages/FeedbackTarget/tabs/Results/ExportFeedbacksMenu.jsx`: take the file name as a prop instead of building it from the course code and start date.
-6. `src/server/services/feedbackTargets/hideFeedback.ts`: the part that hides or removes matching open answers is extracted to `src/server/util/openAnswers.ts`.
-7. `src/client/pages/FeedbackTarget/tabs/FeedbackView/FeedbackView.jsx`: `FormContainer` moved to its own file, with a `showInfo` prop for leaving out the info alert.
-8. `src/client/pages/Organisation/OrganisationSurveyEditor.jsx`: `ResponsibleTeachersSelector` is exported and uses its `name` prop instead of a hard-coded `teachers` field.
-9. `ShareItem` (Share tab) and `getLogMessage` (Logs tab) are exported.
-10. `src/server/services/users/preferences.ts`: responsible users of standalone surveys get the My surveys menu item.
-11. `MyTeaching.jsx` renders the standalone survey section.
-
-The shared components stay in `src/client/pages/FeedbackTarget/`, because the guest pages already import them from there.
-
-## Order
-
-Each step is committed to master. The work isn't visible to users until the admin tab lands.
-
-1. Migration, models, associations
-2. Server refactors 1–2
-3. Server: access helper, admin routes, management routes, respondent routes
-4. Test data seeding for the new tables in `src/server/test/`
-5. Client refactors 3–7
-6. Client: respondent page
-7. Client: management page
-8. Client: admin tab, My surveys heading
-9. Playwright spec `e2e/specs/standaloneSurvey.spec.ts`
-
-## Tests
-
-The Playwright spec covers:
-
-- An admin creates a survey and a responsible user edits its questions.
-- A respondent answers through the link, edits and deletes the answer, and can't answer twice.
-- `PUBLIC` results visibility while open and after close.
-- Answering is refused before `opens_at` and after `closes_at`.
-- A responsible user of one survey can't open another survey's management routes.
-
-The existing specs must keep passing, especially `feedbackResults.spec.ts`, `teacherview.spec.ts` and `organisationSurvey.spec.ts`, which cover the refactored components.
+Where the course wording doesn't fit, the shared components use the i18next context `standalone`: `TranslationContextProvider value="standalone"` in `src/client/util/translationContext.ts` makes `t(key, { context })` pick `key_standalone` when it exists. Standalone-only texts are in the `standaloneSurvey` namespace.
