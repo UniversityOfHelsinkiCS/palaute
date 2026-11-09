@@ -103,20 +103,18 @@ Kysymyksistä on kaksi versiota: 2021-2026 käytössä olleet sekä 2026 syksyst
 
 ### Koulutusohjelman kysymykset {#programme-questions}
 
-Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiä ja nämä tulevat automaattisesti mukaan ohjelman kaikkien opintojaksojen kurssipalautekyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehden yläreunan laatikko kertoo, montako niitä on ja mikä organisaatio ne on lisännyt.
+Koulutusohjelma tai tiedekunta voi lisätä omia kysymyksiä ja nämä tulevat automaattisesti mukaan ohjelman kaikkien opintojaksojen kurssipalautekyselyihin. Kysymyseditorissa ne on merkitty tunnisteella [[questionEditor:programmeQuestion]], ja [[feedbackTargetView:surveyQuestionsTab]]-välilehdellä näkee niiden lukumäärän ja organisaation.
 
-Et voi muokata tai poistaa koulutusohjelman kysymyksiä. Jos jokin niistä ei sovi kurssillesi, ota yhteyttä koulutusohjelmaan. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä.
-
-Koulutusohjelman henkilöstö lisää ja muokkaa näitä kysymyksiä koulutusohjelman sivulla; katso [Koulutusohjelman kysymykset](/guide/programme-questions).
+Opettaja ei voi muokata tai poistaa koulutusohjelman kysymyksiä. Välipalautteessa ja koulutusohjelman kyselyssä ei ole koulutusohjelman kysymyksiä. Koulutusohjelman henkilöstö (koulutusohjelmajohtaja ja palautevastaava(t)) voivat lisätä ja muokata näitä kysymyksiä koulutusohjelman sivulla; katso [Koulutusohjelman kysymykset](/guide/programme-questions).
 
 ## Kysymysten järjestys opiskelijalle {#question-order}
 
-Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman kysymykset ja lopuksi omat kysymyksesi. Opiskelija näkee ne tässä järjestyksessä:
+Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman kysymykset ja lopuksi opettajan omat kysymykset. Opiskelija näkee ne tässä järjestyksessä:
 
 1. Ryhmittelykysymys, jos kyselyssä on sellainen (ks. [Ryhmät](#groups)).
 2. Yliopistotason asteikko- ja monivalintakysymykset.
 3. Koulutusohjelman asteikko- ja monivalintakysymykset.
-4. Omat kysymyksesi ja tekstiosiosi siinä järjestyksessä, johon olet ne laittanut.
+4. Kurssin (opettajan) omat kysymykset ja tekstiosiot siinä järjestyksessä, kuin ne on laitettu.
 5. Koulutusohjelman avoimet kysymykset.
 6. Yliopistotason avoin kysymys _Muita huomioita_, joka on aina viimeisenä.
 
