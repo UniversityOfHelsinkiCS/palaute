@@ -51,6 +51,6 @@ Viesti lähtee kaikille kyselyn opiskelijoille, jotka eivät ole vielä vastanne
 - Kyselyn ollessa auki opiskelija voi muokata tai poistaa vastauksensa kohdassa [[navBar:myFeedbacks]].
 - Vastattuaan opiskelija näkee yhteenvedon julkisten kysymysten siihen mennessä annetuista vastauksista. Katso [Vastausten näkyvyys eri käyttäjille](/guide/anonymity#public-answers).
 - Jos kurssi on pieni, eli sille on ilmoittautunut alle viisi opiskelijaa, opiskelijaa varoitetaan ennen vastaamista, että vastaukset voi olla mahdollista yhdistää häneen. Katso [Alle viiden opiskelijan kurssit](/guide/anonymity#small-courses).
-- Vastaaminen on nimetöntä, joten et voi palkita yksittäisiä opiskelijoita vastaamisesta. Mitä voit nähdä, kerrotaan kohdassa [Ketkä ovat vastanneet](/guide/results#who-answered).
+- Vastaaminen on nimetöntä, mutta jos vähintään viisi on vastannut, opettaja saa tämän tiedon ja voi palkita nämä opiskelijat esim. lisäpisteellä tenttiin. Katso tarkemmin: [ketkä ovat vastanneet](/guide/results#who-answered).
 
 Opettaja ei voi vastata oman kurssinsa kyselyyn, vaan näkee sen [[common:preview]]-näkymänä.
