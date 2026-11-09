@@ -14,6 +14,7 @@ gitignored/
 **/coverage/
 **/.eslintcache
 **/.DS_Store
+**/.claude
 **/CLAUDE.md
 **/GEMINI.md
 **/AGENTS.md
