@@ -1,4 +1,5 @@
 ---
+name: täsäfy
 description: Converts the given file from CommonJS to TypeScript module syntax.
 ---
 
@@ -7,7 +8,7 @@ Convert the given file or directory from CommonJS to TypeScript module syntax.
 
 It is critical that the functionality of the file is preserved. If you make significant changes to the code, inform the user and ask for their approval.
 
-The file or directory to convert is provided as the argument to this command. Find it from the project structure and convert it. If the path is ambiguous, ask for clarification. The file may be from the React frontend or the Express NodeJS backend.
+The file or directory to convert is provided as the argument to this skill. Find it from the project structure and convert it. If the path is ambiguous, ask for clarification. The file may be from the React frontend or the Express NodeJS backend.
 
 ## General rules
 
