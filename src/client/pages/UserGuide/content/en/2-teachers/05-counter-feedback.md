@@ -6,7 +6,7 @@ description: Your reply to the students' feedback: writing it and sending it by 
 
 Counter feedback is your reply to the students about their feedback. It shows them their feedback was read, which encourages them to keep giving it. There's one counter feedback per survey, shared by all its students. It works the same way in course surveys, interim feedback and programme surveys.
 
-The length is up to you. You can, for example, thank the students, sum up the feedback, comment on the points you found most important, and tell what you'll change in your teaching. Concrete changes are the most valuable part for students.
+The length is up to you. You can, for example, thank the students, sum up the feedback, comment on the points you found most important, and tell what you'll change in your teaching. What students value most is knowing about the concrete changes made based on their feedback.
 
 ## Writing counter feedback {#write}
 
@@ -15,7 +15,7 @@ As the survey's responsible teacher, you can write counter feedback after the su
 1. Go to [[navBar:myCourses]] and choose the course. The [[teacherView:feedbackResponseMissing]] chip next to the course takes you straight to step 3.
 2. Open the [[feedbackTargetView:giveFeedbackResponseTab]] tab.
 3. Write the text in the [[feedbackResponse:responseLabel]] field. It supports Markdown, e.g. headings, lists, bold and links. The [[feedbackResponse:previewLabel]] below shows how it will look.
-4. Leave [[feedbackResponse:checkboxSendEmail]] ticked if you want to email it to the students, or untick it to only save it.
+4. Tick [[feedbackResponse:checkboxSendEmail]] if you want to email it to the students, or untick it to only save it.
 5. Click [[feedbackResponse:dialogSendEmailSubmit]] and confirm, or [[feedbackResponse:dialogSaveSubmit]] if you unticked the checkbox.
 
 [[video:write-counter-feedback]]
@@ -26,7 +26,7 @@ The day after a course survey or programme survey closes, its responsible teache
 
 ## Sending it by email {#send-email}
 
-The email goes to all the survey's students, not only those who answered. It contains the counter feedback and a link to the survey's answers.
+The counter feedback email goes to all the survey's students, not only those who answered. It contains the counter feedback and a link to the survey's answers.
 
 The email can be sent only once. After that, the checkbox says [[feedbackResponse:emailSent]] and the tab is called [[feedbackTargetView:editFeedbackResponseTab]]. You can still edit the text: students see the new version in Norppa, but no new email is sent.
 
@@ -40,12 +40,12 @@ In [[navBar:myCourses]], a chip next to an ended survey shows the state of its c
 - [[teacherView:feedbackResponseNotSent]]: the counter feedback is saved, but the email hasn't been sent.
 - [[teacherView:feedbackResponseGiven]]: the counter feedback is saved and emailed.
 
-The number on the [[teacherView:endedSurveys]] tab tells how many of your ended courses are missing counter feedback.
+The number on the [[teacherView:endedSurveys]] tab tells how many courses are missing counter feedback.
 
-## How students see it {#students-see}
+## How students see the counter feedback {#students-see}
 
-After the survey has closed, students see the counter feedback on the survey's [[feedbackTargetView:feedbacksTab]] tab, under [[feedbackTargetResults:responseHeading]], above the answers. It's shown there only if the survey got answers.
+After the survey has closed, students see the counter feedback on the survey's [[feedbackTargetView:feedbacksTab]] tab, under [[feedbackTargetResults:responseHeading]] (if they've answered the course survey).
 
-In [[navBar:myFeedbacks]], students see [[userFeedbacks:feedbackResponseGiven]] on the survey. If you sent the email, they also get the text by email.
+In [[navBar:myFeedbacks]], students see [[userFeedbacks:feedbackResponseGiven]] on the survey. If you sent the email, they also get the counter feedback by email.
 
 To share it another way, e.g. in the course's learning environment, copy the [[feedbackTargetView:studentResultsLinkTitle]] from the survey's [[feedbackTargetView:shareTab]] tab. The link is there once the survey has closed.

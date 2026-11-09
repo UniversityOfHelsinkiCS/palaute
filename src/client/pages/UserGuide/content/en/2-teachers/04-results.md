@@ -4,7 +4,7 @@ description: Reading the answers, their visibility, hiding open answers and down
 
 # Results
 
-A survey's answers are on its [[feedbackTargetView:feedbacksTab]] tab from the first answer on, so you can follow them while the survey is open. Results work the same way in course surveys, interim feedback and programme surveys.
+A survey's answers are on its [[feedbackTargetView:feedbacksTab]] tab from the first answer on, so they can be followed while the survey is open. Results work the same way in course surveys, interim feedback and programme surveys.
 
 ## Viewing the answers {#view-answers}
 
@@ -19,15 +19,15 @@ The tab shows:
 - Under [[questionResults:multipleChoiceQuestions]], how the answers to each scale and choice question are distributed. Scale questions also show their mean, in which [[feedbackView:dontKnowOption]] answers aren't counted. The workload question shows an arrow pointing to the side its answers lean to.
 - Under [[questionResults:openQuestions]], the answers to the open questions, in alphabetical order.
 
-New answers appear when you reload the page. [[feedbackTargetResults:tableView]] shows the charts as tables, and [[feedbackTargetResults:chartView]] switches back.
+[[feedbackTargetResults:tableView]] shows the charts as tables, and [[feedbackTargetResults:chartView]] switches back.
 
-If the course has groups in Sisu, or the survey has a grouping question, you can look at one group's answers with [[groups:chooseGroup]] at the top of the tab. A single group's answers are shown only if every group with answers has at least 5 respondents; see [Answers by group](/guide/anonymity#groups).
+If the course has groups in Sisu, or the survey has a grouping question, you can filter the answers by group with [[groups:chooseGroup]]. A single group's answers are shown only if every group with answers has at least 5 respondents; see [Answers by group](/guide/anonymity#groups).
 
 If fewer than 5 students are enrolled on the course, the results are shown only to its responsible teachers and administrative persons. See [Courses with fewer than 5 students](/guide/anonymity#small-courses).
 
 ## Changing who sees the answers {#visibility}
 
-Each question is either [[common:public]] or [[common:notPublic]]. You, the other responsible teachers and administrative persons, and the programme's admins see all answers. Other teachers, programme staff with read rights and students see only the answers to public questions. All the rules and defaults are under [Answer visibility for different users](/guide/anonymity#public-answers).
+Each question is either [[common:public]] or [[common:notPublic]]. Responsible teachers, administrative persons and the programme's admins (programme director and feedback liaison) see all answers. Other teachers, programme staff with read rights and students see only the answers to public questions. See [Answer visibility for different users](/guide/anonymity#public-answers).
 
 To change whether a question is public:
 
@@ -38,7 +38,7 @@ To change whether a question is public:
 
 Before the survey opens, you can also set this for scale and choice questions when you [edit the questions](/guide/questions#edit-questions).
 
-An open question can be made public only after the survey has closed, as its answers may contain personal data. Norppa asks you to confirm that you've checked the answers contain no personal data or other sensitive information.
+An open question can be made public only after the survey has closed, as its answers may contain sensitive information or personal data. Norppa asks you to confirm this has been checked before the answers are made public.
 
 You can't change questions the university or the degree programme has made public.
 
@@ -59,21 +59,19 @@ You can't delete answers. If an answer must be removed entirely, contact [suppor
 
 ## Who has answered {#who-answered}
 
-The [[feedbackTargetView:studentsWithFeedbackTab]] tab lists the survey's students with their names, student numbers and email addresses. Responsible teachers and programme admins see it.
+The [[feedbackTargetView:studentsWithFeedbackTab]] tab lists the course's students (i.e. the potential respondents). Responsible teachers and programme admins (programme director, feedback liaison) see the list.
 
-Whether each student has answered ([[common:feedbackGiven]] or [[common:feedbackNotGiven]]) is shown only once the survey has closed, at least 5 students have answered, and the course's degree programme allows it. Otherwise the column shows [[common:feedbackHidden]]. The list never shows who answered what. See [Who has answered](/guide/anonymity#who-answered) for details.
+Whether each student has answered ([[common:feedbackGiven]] or [[common:feedbackNotGiven]]) is shown only once the survey has closed, at least 5 students have answered, and the course's degree programme has enabled the feature in its settings. Otherwise the column shows [[common:feedbackHidden]]. The list never shows who answered what. See [Who has answered](/guide/anonymity#who-answered) for details.
 
-[[feedbackTargetView:copyStudentNumbers]] copies the student numbers, e.g. to paste into an email. [[common:exportXLSX]] downloads the list.
+[[feedbackTargetView:copyStudentNumbers]] copies the student numbers, e.g. to paste into an email. [[common:exportXLSX]] downloads an Excel file of the respondents.
 
 ## Downloading the answers {#download}
 
 Responsible teachers and programme staff can download the answers with [[feedbackTargetResults:export]] at the top of the [[feedbackTargetView:feedbacksTab]] tab:
 
 - [[common:exportXLSX]]: a spreadsheet with a column for each question. The answers are shuffled within each column, so a row isn't one student's answers. It has no timestamps or student information.
-- [[common:exportPdf]]: opens your browser's print view of the tab as it's shown, as charts or tables. Choose to save it as a PDF there.
+- [[common:exportPdf]]: opens the browser's PDF print view, which you can save on your computer.
 
 [[video:download-answers]]
-
-You get only the answers you can see on the tab. If you have chosen a group, you get only that group's answers.
 
 For figures across courses, years and degree programmes, see [course summary](/guide/course-summary).

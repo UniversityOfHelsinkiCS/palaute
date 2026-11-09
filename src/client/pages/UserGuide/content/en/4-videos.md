@@ -74,7 +74,7 @@
 
 [[video:write-counter-feedback]]
 
-## Feedback during the course {#during-the-course}
+## Continuous and interim feedback {#during-the-course}
 
 ### Turning on continuous feedback
 

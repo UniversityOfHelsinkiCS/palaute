@@ -56,32 +56,30 @@ In interim feedback and programme surveys, [[editFeedbackTarget:copyFromCourseBu
 
 ## Questions from the previous realisation {#carry-over}
 
-Course surveys only. When a new course realisation's survey is opened in Norppa for the first time, Norppa copies the teacher's own questions from the previous realisation of the same course unit. This happens a week before the survey opens at the latest, when the responsible teachers get their reminder email.
+When a new course realisation's survey is created in Norppa, Norppa copies the teacher's own questions from the previous realisation of the same course unit. If you don't want the copied questions in the new survey, you can remove them as usual.
 
-- The previous realisation is the latest one that started before this one and has at least one teacher in common with it, in any teaching role.
-- It's a one-time copy. After it, changes to either survey don't affect the other.
 - The copied questions aren't public until you make them public.
 - A grouping question is copied too. Check that its options match this realisation's groups.
-- Remove the questions you don't need, as usual.
+- In certain special cases, the questions can't be copied automatically, but you can copy them yourself if needed.
 
-Nothing is copied if no earlier realisation has a teacher in common with this one, or if the course unit has a new version in Sisu, e.g. for a new curriculum period. Then [copy the questions yourself](#copy-questions).
+[Copying questions](#copy-questions).
 
 ## Languages and preview {#languages}
 
-Students see the survey in the language they use Norppa in: Finnish, Swedish or English. That's why the editor has a field for each language side by side. Fill in at least the languages your students use. If a field is empty, students using that language see the question in another language.
+Students see the course survey in the language they use Norppa in: Finnish, Swedish or English. That's why the editor has a field for each language side by side. Fill in at least the languages your students use. If a language version is left empty, students see the survey in another language.
 
-To see the survey as students will:
+The survey as students see it:
 
 1. At the bottom of the [[feedbackTargetView:surveyQuestionsTab]] tab, choose the language in [[editFeedbackTarget:translationLanguage]]. The questions in the editor switch to that language.
 2. Click [[editFeedbackTarget:showPreview]].
 
 [[video:preview-survey]]
 
-The [[common:preview]] tab shows the whole survey in the order students see it. Teachers can't submit it. Responsible teachers return to editing with [[feedbackView:editSurvey]].
+The [[common:preview]] tab shows the whole survey as students see it.
 
 ## Groups {#groups}
 
-If a course has study groups in Sisu, e.g. exercise groups, Norppa knows which students belong to which group. In a course survey with two or more Sisu groups, the answers can be viewed by group on the [[feedbackTargetView:feedbacksTab]] tab without you doing anything. The groups, their numbers of students and their teachers are listed under [[groups:groupingInfo]] at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab.
+If a course has study groups in Sisu, e.g. exercise groups, Norppa gets them from Sisu automatically. In a course survey with two or more Sisu groups, the answers can be viewed by group on the [[feedbackTargetView:feedbacksTab]] tab. The groups, their numbers of students and their teachers are listed under [[groups:groupingInfo]] at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab.
 
 If the course has no groups in Sisu, or they don't suit you, add a _grouping question_, in any type of survey:
 
@@ -91,9 +89,9 @@ If the course has no groups in Sisu, or they don't suit you, add a _grouping que
 
 [[video:grouping-question]]
 
-The grouping question is required, it's always the first question students see, and its answers aren't public. A survey can have only one, and it replaces the Sisu groups. To go back to the Sisu groups, remove the grouping question.
+The grouping question is required for respondents, it's the survey's first question, and its answers aren't public. A course survey can have only one, and if the teacher has created it, its grouping replaces the Sisu groups. To go back to the Sisu groups, remove the grouping question.
 
-To protect anonymity, answers are shown by group only if every group with answers has at least 5 respondents (see [Answers by group](/guide/anonymity#groups)). So keep the number of options small.
+To protect anonymity, answers are shown by group only if every group with answers has at least 5 respondents (see [Answers by group](/guide/anonymity#groups)).
 
 ## Fixed questions {#fixed-questions}
 
@@ -101,26 +99,22 @@ To protect anonymity, answers are shown by group only if every group with answer
 
 The university sets these questions for all course surveys. They're the same for every course and can't be edited or removed. In the editor they're marked [[questionEditor:universityQuestion]], and they're shown at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab.
 
-The questions changed in August 2026: a survey gets the questions in use on the day it opens. See [University level questions](/guide/university-questions) for what they are and what the change means.
-
-Interim feedback and programme surveys don't have them, but you can [add copies of them](#copy-questions).
+There are two versions of the questions: those used in 2021-2026, and those in use from autumn 2026. See [University level questions](/guide/university-questions). Interim feedback and programme surveys don't have the university-wide questions, but you can [copy them in](#copy-questions) if you want.
 
 ### Programme questions {#programme-questions}
 
-A degree programme or a faculty can add its own questions to the course surveys of all its course units. In the editor they're marked [[questionEditor:programmeQuestion]], and the box at the top of the [[feedbackTargetView:surveyQuestionsTab]] tab tells how many there are and which organisation added them.
+A degree programme or a faculty can add its own questions, and they're automatically included in the course surveys of all the programme's course units. In the editor they're marked [[questionEditor:programmeQuestion]], and the [[feedbackTargetView:surveyQuestionsTab]] tab shows how many there are and which organisation added them.
 
-You can't edit or remove programme questions. If one doesn't suit your course, contact the programme. Interim feedback and programme surveys don't have programme questions.
-
-Programme staff add and edit these questions on the programme's page; see [Programme questions](/guide/programme-questions).
+Teachers can't edit or remove programme questions. Interim feedback and programme surveys don't have programme questions. Programme staff (the programme director and feedback liaisons) can add and edit these questions on the programme's page; see [Programme questions](/guide/programme-questions).
 
 ## The order students see {#question-order}
 
-The editor lists the university level questions first, then the programme questions, then your own. Students see them in this order:
+The editor lists the university level questions first, then the programme questions, then the teacher's own. Students see them in this order:
 
 1. The grouping question, if the survey has one (see [Groups](#groups)).
 2. The university level scale and choice questions.
 3. The programme's scale and choice questions.
-4. Your own questions and text sections, in the order you've set.
+4. The course's (teacher's) own questions and text sections, in the order they've been set.
 5. The programme's open questions.
 6. The university level open question, so _Additional comments_ is always last.
 
