@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../../../../util/accessibility'
 import { localeForLanguage } from '../../../../../util/languageUtils'
+import { cardPrintStyle } from '../../../../../util/printStyle'
 import { capitalizeString } from './utils'
 
 const groupFeedbacksByDay = (feedbacks: Array<{ createdAt: string }>) => {
@@ -161,10 +162,12 @@ export const MonthlySummaries = ({
   rows,
   studentCount,
   language,
+  inTabPanel = false,
 }: {
   rows: DailyRow[]
   studentCount: number
   language: string
+  inTabPanel?: boolean
 }) => {
   const { t } = useTranslation()
   const localeCode = localeForLanguage(language)?.code
@@ -185,7 +188,12 @@ export const MonthlySummaries = ({
         const detailsId = `details-${key}`
 
         return (
-          <Accordion key={key} slotProps={{ heading: { component: 'h3' } }} sx={{ mb: 1, borderRadius: 1 }}>
+          <Accordion
+            key={key}
+            variant={inTabPanel ? 'outlined' : undefined}
+            slotProps={{ heading: { component: inTabPanel ? 'h5' : 'h3' } }}
+            sx={{ mb: 1, borderRadius: 1, ...(inTabPanel && { '&::before': { display: 'none' } }), ...cardPrintStyle }}
+          >
             <AccordionSummary
               id={summaryId}
               aria-controls={detailsId}

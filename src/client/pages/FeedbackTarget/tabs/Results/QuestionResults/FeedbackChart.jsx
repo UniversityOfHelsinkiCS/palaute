@@ -1,4 +1,5 @@
 import { Box, Typography } from '@mui/material'
+import { visuallyHidden } from '@mui/utils'
 import { addHours, startOfDay, subDays, parseISO, differenceInCalendarDays } from 'date-fns'
 import { groupBy, sortBy } from 'lodash-es'
 import 'chart.js/auto'
@@ -237,7 +238,15 @@ const buildChartConfig = (feedbacks, studentCount, opensAt, closesAt, feedbackRe
   return config
 }
 
-const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackReminderLastSentAt, showTable }) => {
+const FeedbackChart = ({
+  feedbacks,
+  studentCount,
+  opensAt,
+  closesAt,
+  feedbackReminderLastSentAt,
+  showTable,
+  inTabPanel = false,
+}) => {
   const { t, i18n } = useTranslation()
   const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
 
@@ -252,11 +261,18 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
   return (
     <Box
       data-cy="feedback-target-results-feedback-chart"
-      sx={{ my: 1 }}
+      sx={{ my: '3rem', display: 'flex', flexDirection: 'column', rowGap: '1rem' }}
       component="section"
-      aria-labelledby={showTable ? 'feedback-count-table-view-label' : undefined}
-      aria-label={showTable ? undefined : t('courseSummary:feedbackCount')}
+      aria-labelledby="feedback-count-heading"
     >
+      <Typography
+        id="feedback-count-heading"
+        component={inTabPanel ? 'h4' : 'h2'}
+        variant={inTabPanel ? 'subtitle1' : 'h6'}
+        sx={{ fontWeight: 'medium', ...(!showTable && visuallyHidden) }}
+      >
+        {t('courseSummary:feedbackCount')}
+      </Typography>
       <Box sx={{ display: showTable ? 'none' : 'flex', justifyContent: 'center', width: '100%', height: '20rem' }}>
         <Box role="img" aria-label={t('feedbackTargetResults:feedbackCountChartAriaLabel')} minWidth="80%">
           <Line {...config} />
@@ -273,9 +289,6 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
           borderRadius: 1,
         }}
       >
-        <Typography id="feedback-count-table-view-label" component="h2" variant="h6" sx={{ mt: 3 }}>
-          {t('courseSummary:feedbackCount')}
-        </Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', py: 2, mb: 1 }}>
           <Typography component="strong" sx={{ fontWeight: 'bold' }}>
             {t('feedbackTargetResults:totalCount')}: {feedbacks.length}
@@ -304,7 +317,12 @@ const FeedbackChart = ({ feedbacks, studentCount, opensAt, closesAt, feedbackRem
             return isShort ? (
               <DailyFeedbackCountTable rows={dailyRows} studentCount={studentCount} />
             ) : (
-              <MonthlySummaries rows={dailyRows} studentCount={studentCount} language={i18n.language} />
+              <MonthlySummaries
+                rows={dailyRows}
+                studentCount={studentCount}
+                language={i18n.language}
+                inTabPanel={inTabPanel}
+              />
             )
           })()}
       </Box>

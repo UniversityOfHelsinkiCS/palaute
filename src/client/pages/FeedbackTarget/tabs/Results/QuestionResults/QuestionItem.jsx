@@ -7,8 +7,8 @@ import { useTranslation } from 'react-i18next'
 import Instructions from '../../../../../components/common/Instructions'
 import QuestionPublicityToggle from '../../../../../components/common/QuestionPublicityToggle'
 import { getLanguageValue } from '../../../../../util/languageUtils'
-import { boxPrintStyle } from '../../../../../util/printStyle'
 import { useTranslationContext } from '../../../../../util/translationContext'
+import { cardPrintStyle } from '../../../../../util/printStyle'
 import AverageResult from './AverageResult'
 import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
@@ -60,6 +60,7 @@ const QuestionItem = ({
   savePublicQuestionIds,
   openAnswerActions,
   showTable,
+  inTabPanel = false,
 }) => {
   const { t, i18n } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
@@ -118,10 +119,11 @@ const QuestionItem = ({
 
   return (
     <Card
+      variant={inTabPanel ? 'outlined' : undefined}
       sx={{
         height: '100%',
         p: '1rem',
-        ...boxPrintStyle,
+        ...cardPrintStyle,
       }}
     >
       <Box
@@ -144,7 +146,7 @@ const QuestionItem = ({
                 questionLabel={label}
               />
             )}
-            <Typography id={`question-${question.id}-label`} component="h3" variant="body1">
+            <Typography id={`question-${question.id}-label`} component={inTabPanel ? 'h5' : 'h3'} variant="body1">
               {label}
             </Typography>
             {description && (

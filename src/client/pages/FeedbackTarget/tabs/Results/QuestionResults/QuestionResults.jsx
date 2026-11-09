@@ -6,11 +6,11 @@ import { useTranslation } from 'react-i18next'
 import { useTranslationContext } from '../../../../../util/translationContext'
 import QuestionItem from './QuestionItem'
 
-const QuestionSection = ({ title, count, children, ...props }) => (
+const QuestionSection = ({ title, count, inTabPanel, children, ...props }) => (
   <Box my="3rem" display="flex" flexDirection="column" rowGap="1rem" {...props}>
     <Typography
-      component="h2"
-      variant="h6"
+      component={inTabPanel ? 'h4' : 'h2'}
+      variant={inTabPanel ? 'subtitle1' : 'h6'}
       sx={{ fontWeight: 'medium', display: 'flex', gap: 2, alignItems: 'center' }}
     >
       {title}
@@ -72,6 +72,7 @@ const QuestionResults = React.memo(
     savePublicQuestionIds,
     openAnswerActions,
     showTable,
+    inTabPanel = false,
   }) => {
     const { t } = useTranslation()
     const context = useTranslationContext()
@@ -94,6 +95,7 @@ const QuestionResults = React.memo(
         <QuestionSection
           title={t('questionResults:multipleChoiceQuestions')}
           count={notOpenQuestions.length}
+          inTabPanel={inTabPanel}
           data-cy={`feedback-target-results-multiple-choice-questions-${notOpenQuestions.length}`}
           sx={{
             '@media print': {
@@ -147,6 +149,7 @@ const QuestionResults = React.memo(
                   savePublicQuestionIds={savePublicQuestionIds}
                   openAnswerActions={openAnswerActions}
                   showTable={showTable}
+                  inTabPanel={inTabPanel}
                 />
               </Box>
             ))}
@@ -157,6 +160,7 @@ const QuestionResults = React.memo(
           <QuestionSection
             title={t('questionResults:openQuestions')}
             count={openQuestions.length}
+            inTabPanel={inTabPanel}
             data-cy={`feedback-target-results-open-questions-${openQuestions.length}`}
             sx={{
               '@media print': {
@@ -188,6 +192,7 @@ const QuestionResults = React.memo(
                   feedbackCount={feedbackCount}
                   savePublicQuestionIds={savePublicQuestionIds}
                   openAnswerActions={openAnswerActions}
+                  inTabPanel={inTabPanel}
                 />
               </Box>
             ))}
