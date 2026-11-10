@@ -26,12 +26,14 @@ const QuestionPublicityToggle = ({
   questionId,
   checked,
   disabled,
+  disabledInfo,
   onChange,
   questionLabel,
 }: {
   questionId: string | number
   checked: boolean
   disabled: boolean
+  disabledInfo?: string
   onChange: (value: boolean) => void
   questionLabel?: string
 }) => {
@@ -40,7 +42,7 @@ const QuestionPublicityToggle = ({
   const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null)
 
   const tooltipText = `${checked ? t('common:publicInfo', { context }) : t('common:notPublicInfo', { context })}. ${
-    !disabled ? t('common:editable') : t('common:notEditable')
+    !disabled ? t('common:editable') : (disabledInfo ?? t('common:notEditable'))
   }`
 
   const label = t(checked ? 'common:public' : 'common:notPublic')
@@ -153,7 +155,7 @@ const QuestionPublicityToggle = ({
             {disabled && (
               <Box id="question-publicity-disabled-info" sx={{ mt: 3 }}>
                 <Typography sx={{ fontSize: '0.875rem', color: 'text.secondary' }}>
-                  {`${t('common:notEditable')} ${t('common:notEditableExtraInfo')}`}
+                  {disabledInfo ?? `${t('common:notEditable')} ${t('common:notEditableExtraInfo')}`}
                 </Typography>
               </Box>
             )}

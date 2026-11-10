@@ -64,6 +64,8 @@
     "publicInfo": "Vastaukset näkyvät kurssin opiskelijoille",
     "publicInfo_standalone": "Vastaukset näkyvät vastaajille",
     "notEditable": "Asetusta ei voi muuttaa.",
+    "editableAfterClose": "Asetusta voi muuttaa palautejakson päätyttyä.",
+    "editableAfterClose_standalone": "Asetusta voi muuttaa kyselyn päätyttyä.",
     "notEditableExtraInfo": "Näkyvyys on asetettu ylemmällä tasolla.",
     "editable": "Voit muuttaa tätä asetusta.",
     "studyTracks": "Opintosuunnat",

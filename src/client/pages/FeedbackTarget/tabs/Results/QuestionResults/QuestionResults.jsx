@@ -3,6 +3,7 @@ import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import { useTranslationContext } from '../../../../../util/translationContext'
 import QuestionItem from './QuestionItem'
 
 const QuestionSection = ({ title, count, children, ...props }) => (
@@ -73,6 +74,7 @@ const QuestionResults = React.memo(
     showTable,
   }) => {
     const { t } = useTranslation()
+    const context = useTranslationContext()
 
     const questionsWithFeedbacks = useMemo(
       () => getQuestionsWithFeedback(questions, questionOrder, feedbacks),
@@ -177,6 +179,11 @@ const QuestionResults = React.memo(
                   question={q}
                   publicQuestionIds={publicQuestionIds}
                   disabled={isOpen || !publicityConfigurableQuestionIds?.includes(q.id)}
+                  disabledInfo={
+                    isOpen && publicityConfigurableQuestionIds?.includes(q.id)
+                      ? t('common:editableAfterClose', { context })
+                      : undefined
+                  }
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
                   savePublicQuestionIds={savePublicQuestionIds}
