@@ -23,8 +23,10 @@ const closesWithin = (survey, range) => {
 }
 
 export const useMySurveysWithStatus = (status, yearRange) => {
-  const { data } = useMySurveys()
-  const surveys = data?.filter(s => matchesStatus(s, status) && (!yearRange || closesWithin(s, yearRange)))
+  const { data, isError } = useMySurveys()
+  const surveys = isError
+    ? []
+    : data?.filter(s => matchesStatus(s, status) && (!yearRange || closesWithin(s, yearRange)))
   return { surveys }
 }
 
