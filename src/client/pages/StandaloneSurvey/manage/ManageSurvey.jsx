@@ -39,7 +39,6 @@ const Preview = ({ survey }) => (
       disabled
       showSubmitButton={false}
       questions={survey.questions}
-      showInfo={false}
     />
   </Box>
 )

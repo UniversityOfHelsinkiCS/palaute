@@ -88,7 +88,6 @@ const AnswerForm = ({ survey, token, basePath }) => {
         showSubmitButton
         questions={survey.questions}
         isEdit={Boolean(survey.response)}
-        showInfo={false}
       />
 
       {canAnswer && survey.response && (
