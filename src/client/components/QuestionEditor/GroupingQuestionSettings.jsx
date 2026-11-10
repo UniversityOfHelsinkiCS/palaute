@@ -4,7 +4,9 @@ import {
   AccordionDetails,
   AccordionSummary,
   Box,
+  Divider,
   Paper,
+  Stack,
   TableContainer,
   Table,
   TableBody,
@@ -35,13 +37,15 @@ const GroupingInfo = () => {
 
   return (
     <Alert severity="info" role="presentation" sx={{ mb: 2, mt: 1 }}>
-      {t('groups:groupingInfoText', { context })
-        .split('\n\n')
-        .map(paragraph => (
-          <Typography key={paragraph} variant="body2" sx={{ mb: 1 }}>
-            {paragraph}
-          </Typography>
-        ))}
+      <Stack spacing={1}>
+        {t('groups:groupingInfoText', { context })
+          .split('\n\n')
+          .map(paragraph => (
+            <Typography key={paragraph} variant="body2">
+              {paragraph}
+            </Typography>
+          ))}
+      </Stack>
     </Alert>
   )
 }
@@ -86,12 +90,12 @@ const GroupingQuestionChips = ({ questionId, questionLabel }) => {
   const { t } = useTranslation()
 
   return (
-    <Box sx={{ pl: '1rem', pt: '1.5rem' }}>
+    <Box sx={{ px: '1.5rem', pt: '1.5rem' }}>
       <Grid
         container
         direction="row"
         spacing="0.5rem"
-        sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '1.5rem' }}
+        sx={{ justifyContent: 'space-between', alignItems: 'center', mb: '0.5rem' }}
       >
         <Grid size={{ xs: 12, sm: 4 }}>
           <Box sx={{ display: 'flex', gap: '0.5rem' }}>
@@ -165,12 +169,14 @@ const GroupingQuestionSettings = ({
         />
         <Accordion
           elevation={0}
+          disableGutters
           slotProps={{ heading: { component: 'div' } }}
-          sx={{ m: '0.5rem', p: '0.5rem', '&:before': { display: 'none' } }}
+          sx={{ mx: '1rem', '&:before': { display: 'none' } }}
         >
           <AccordionSummary
             expandIcon={<ExpandMore />}
             sx={{
+              px: '0.5rem',
               '&:hover': { backgroundColor: '#e5f6fd' },
               borderRadius: '0.5rem',
               ...focusIndicatorStyle({ backgroundColor: 'white' }),
@@ -181,16 +187,17 @@ const GroupingQuestionSettings = ({
             <InfoOutlined sx={{ mr: '0.5rem', color: '#0288d1' }} aria-hidden="true" />
             <Typography sx={{ color: '#014361' }}>{t('groups:groupingInfo')}</Typography>
           </AccordionSummary>
-          <AccordionDetails sx={{ px: '2rem' }}>
+          <AccordionDetails sx={{ px: '0.5rem', pb: 0 }}>
             <GroupingInfo />
             {groups.length > 0 && <GroupInformation groups={groups} />}
           </AccordionDetails>
         </Accordion>
+        <Divider sx={{ mx: '1.5rem', mt: '0.5rem' }} />
         <Box>
           {!groupingQuestion && (
-            <Box sx={{ p: '1.5rem' }}>
+            <Box sx={{ px: '1.5rem', pt: '1rem', pb: '1.5rem' }}>
               <Typography>{`${t('groups:noGroupingQuestion')}${automaticGroupingInfo}`}</Typography>
-              <Box sx={{ mt: '0.5rem' }}>
+              <Box sx={{ mt: '1rem' }}>
                 <NorButton ref={addButtonRef} onClick={handleAddGroupingQuestion} color="secondary" icon={<Add />}>
                   {t('groups:addGroupingQuestion')}
                 </NorButton>

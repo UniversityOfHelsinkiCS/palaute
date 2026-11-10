@@ -221,7 +221,10 @@ const QuestionCard = ({
     meta.initialValue === undefined ? t('questionEditor:addQuestionType', { type: title.toLowerCase() }) : editTitle
 
   return (
-    <Card sx={{ mt: '0.5rem', p: '0.5rem' }} elevation={isGrouping ? 0 : 2}>
+    <Card
+      sx={isGrouping ? { px: '0.5rem', pb: '0.5rem' } : { mt: '0.5rem', p: '0.5rem' }}
+      elevation={isGrouping ? 0 : 2}
+    >
       <CardContent>
         {!isGrouping && (
           <Grid
