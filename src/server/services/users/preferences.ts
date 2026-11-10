@@ -126,7 +126,7 @@ export const getUserPreferences = async (user: User) => {
     userIsTeacherOnSomeCourse ||
     user.isAdmin ||
     !_.isEmpty(user?.organisationAccess)
-  const hasCourseAccess =
+  const hasMyTeachingAccess =
     (user.isEmployee && teachedFbts.length > 0) ||
     userIsTeacherOnSomeCourse ||
     user.isAdmin ||
@@ -136,7 +136,7 @@ export const getUserPreferences = async (user: User) => {
 
   return {
     hasSummaryAccess,
-    hasCourseAccess,
+    hasMyTeachingAccess,
     summaryView,
     defaultView: preferredTab,
   }

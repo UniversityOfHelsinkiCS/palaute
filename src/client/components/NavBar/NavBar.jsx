@@ -169,7 +169,7 @@ const NavBar = ({ guest = false, reloadHome = false }) => {
 
   const preferences = authorizedUser?.preferences ?? {}
   const courseSummaryIsAccessible = preferences?.hasSummaryAccess ?? false
-  const myCoursesIsAccessible = preferences?.hasCourseAccess ?? false
+  const myCoursesIsAccessible = preferences?.hasMyTeachingAccess ?? false
   const userOrganisations = authorizedUser?.organisations ?? []
   const hasOrganisationAccess = userOrganisations.length > 0
   const allOrganisationsAreProgrammes =
