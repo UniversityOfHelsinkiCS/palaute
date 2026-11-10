@@ -72,6 +72,14 @@ Fix: don't update the dates once `opensAt` has passed.
 
 Fix: `if ((studySubGroups?.length ?? 0) <= 1) continue`, or the equivalent in a loop.
 
+### Reopening a standalone survey can publish unchecked open answers
+
+`src/server/services/standaloneSurveys/updateQuestions.ts:26-30`, `surveys.ts:61-93`
+
+Open questions can be made public only after the survey has closed, so that someone has read every answer first. Responsible persons can still move `closes_at` into the future afterwards, and answers given while the survey is open again are shown to respondents unread.
+
+Fix: leave open questions out of the public results while the survey hasn't ended, or make them private again when the survey is reopened.
+
 ### Survey questions can be changed after the survey has opened
 
 `src/server/services/feedbackTargets/update.ts:178-195`
@@ -250,7 +258,7 @@ Each of these gives the user an error when they try the action.
 | What                                 | Shown to                         | Allowed for                      | Where                                                           |
 | ------------------------------------ | -------------------------------- | -------------------------------- | --------------------------------------------------------------- |
 | Send reminder email (Share tab)      | all teachers                     | responsible teachers, org admins | `tabs/Share/Share.jsx:72-84`, `Access.ts:77`                    |
-| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `useUpdateOpenFeedbackVisibility.js:39`, `hideFeedback.ts:58`   |
+| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `Results.jsx:166`, `hideFeedback.ts:58`   |
 | Give counter feedback tab            | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:116`, `updateFeedbackResponse.ts:24` |
 | Create interim feedback              | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:121-122`, `interimFeedbacks.ts:169`  |
 | Edit interim feedback name and dates | all teachers                     | responsible teachers             | `FeedbackTargetInformation.jsx:34`, `interimFeedbacks.ts:199`   |
