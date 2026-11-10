@@ -402,6 +402,7 @@
   "groups": {
     "groupingInfo": "Grouping information",
     "groupingQuestion": "Grouping question",
+    "groupingPublicityInfo": "Visibility can be changed on the Answers tab.",
     "groupingQuestionDefaultLabel": "Choose the group(s) you attended to",
     "groupingQuestionDefaultLabel_standalone": "",
     "onlyOneGroup": " Only one Sisu group is available, so automatic grouping cannot be used.",

@@ -39,7 +39,7 @@ export const getFormInitialValues = ({
 
   const groupingQuestionsWithPublicity = groupingQuestions.map(q => ({
     ...q,
-    public: false,
+    public: publicQuestionIds.includes(q.id),
     publicityConfigurable: false,
   }))
 
