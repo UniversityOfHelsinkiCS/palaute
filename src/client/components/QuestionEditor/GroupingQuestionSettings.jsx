@@ -31,10 +31,11 @@ import { createQuestion, getQuestionLabel } from './utils'
 
 const GroupingInfo = () => {
   const { t } = useTranslation()
+  const context = useTranslationContext()
 
   return (
     <Alert severity="info" role="presentation" sx={{ mb: 2, mt: 1 }}>
-      {t('groups:groupingInfoText')
+      {t('groups:groupingInfoText', { context })
         .split('\n\n')
         .map(paragraph => (
           <Typography key={paragraph} variant="body2" sx={{ mb: 1 }}>

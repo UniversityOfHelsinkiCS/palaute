@@ -7,15 +7,19 @@ import type { StandaloneQuestionVisibility } from '../../models/standaloneSurvey
 import { sequelize } from '../../db/dbConnection'
 import { Question, StandaloneSurvey, StandaloneSurveyQuestion, User } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
+import { validateGroupingQuestions } from '../../util/groupingQuestion'
 import { createLog } from './logs'
 
 export type QuestionInput = {
   id?: number
   type: QuestionType
+  secondaryType?: QuestionSecondaryType
   required: boolean
   data: QuestionData
   visibility: StandaloneQuestionVisibility
 }
+
+const isGrouping = (question: QuestionInput) => question.secondaryType === 'GROUPING'
 
 const changesContent = (questions: QuestionInput[], existing: StandaloneSurveyQuestion[]) =>
   questions.length !== existing.length ||
@@ -24,13 +28,17 @@ const changesContent = (questions: QuestionInput[], existing: StandaloneSurveyQu
     return (
       input.id !== questionId ||
       input.type !== question?.type ||
+      isGrouping(input) !== (question?.secondaryType === 'GROUPING') ||
       input.required !== question?.required ||
       !_.isEqual(input.data, question?.data)
     )
   })
 
-export const updateQuestions = async (survey: StandaloneSurvey, questions: QuestionInput[], user: User) => {
+export const updateQuestions = async (survey: StandaloneSurvey, inputs: QuestionInput[], user: User) => {
   const existing = survey.surveyQuestions ?? []
+
+  validateGroupingQuestions(inputs)
+  const questions = _.sortBy(inputs, q => (isGrouping(q) ? 0 : 1))
 
   if (survey.opensAt <= new Date() && !user.isAdmin && changesContent(questions, existing)) {
     throw ApplicationError.Forbidden('Only the visibility of questions can be changed once the survey has opened')
@@ -58,7 +66,7 @@ export const updateQuestions = async (survey: StandaloneSurvey, questions: Quest
     for (const [position, input] of questions.entries()) {
       const values = {
         type: input.type,
-        secondaryType: null as QuestionSecondaryType,
+        secondaryType: input.secondaryType ?? null,
         required: input.required,
         data: input.data,
       }

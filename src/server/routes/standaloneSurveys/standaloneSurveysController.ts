@@ -61,6 +61,7 @@ const QuestionsBodySchema = z.object({
     z.object({
       id: z.number().int().optional(),
       type: z.enum(['TEXT', 'LIKERT', 'SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'OPEN']),
+      secondaryType: z.enum(['GROUPING']).nullish(),
       required: z.boolean(),
       data: z.record(z.string(), z.any()),
       visibility: z.enum(STANDALONE_QUESTION_VISIBILITIES),
@@ -75,6 +76,8 @@ const ResponseBodySchema = z.object({
     .array(z.object({ questionId: z.number().int(), data: z.union([z.string(), z.array(z.string())]) }))
     .refine(answers => new Set(answers.map(a => a.questionId)).size === answers.length, 'Duplicate question'),
 })
+
+const ResultsQuerySchema = z.object({ groupId: z.string().optional() })
 
 const OpenAnswerBodySchema = z.object({ questionId: z.number().int(), feedbackContent: z.string() })
 
@@ -193,8 +196,9 @@ router.put('/:id/responsible-users', async (req: AuthenticatedRequest, res: Resp
 })
 
 router.get('/:id/results', async (req: AuthenticatedRequest, res: Response) => {
+  const { groupId } = parseInput(ResultsQuerySchema, req.query)
   const { survey } = await getManagedSurvey(req)
-  res.send(await getResults(survey, { publicOnly: false }))
+  res.send(await getResults(survey, { publicOnly: false, groupId }))
 })
 
 router.put('/:id/hide-answer', async (req: AuthenticatedRequest, res: Response) => {

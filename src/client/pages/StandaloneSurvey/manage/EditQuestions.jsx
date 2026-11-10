@@ -1,3 +1,4 @@
+import { partition } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -8,9 +9,10 @@ import useInteractiveMutation from '../../../hooks/useInteractiveMutation'
 import { useUpdateQuestions } from '../api'
 
 export const toQuestionInputs = questions =>
-  questions.map(({ id, type, required, data, public: isPublic }) => ({
+  questions.map(({ id, type, secondaryType, required, data, public: isPublic }) => ({
     ...(id ? { id } : {}),
     type,
+    secondaryType: secondaryType === 'GROUPING' ? 'GROUPING' : null,
     required: Boolean(required),
     data,
     visibility: isPublic ? 'PUBLIC' : 'PRIVATE',
@@ -29,23 +31,21 @@ const EditQuestions = ({ survey }) => {
   const { enqueueSnackbar } = useSnackbar()
   const save = useSaveQuestions(survey.id)
 
-  const initialValues = useMemo(
-    () => ({
-      questions: withPublicity(survey, survey.publicQuestionIds).map(q => ({
-        ...q,
-        editable: true,
-        publicityConfigurable: true,
-      })),
-    }),
-    [survey]
-  )
+  const initialValues = useMemo(() => {
+    const [groupingQuestions, questions] = partition(
+      withPublicity(survey, survey.publicQuestionIds).map(q => ({ ...q, editable: true, publicityConfigurable: true })),
+      q => q.secondaryType === 'GROUPING'
+    )
+    const [groupingQuestion] = groupingQuestions.map(q => ({ ...q, publicityConfigurable: false }))
+    return { questions, groupingQuestion }
+  }, [survey])
 
   const handleSubmit = async values => {
     if (!validateQuestions(values)) {
       enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
       return
     }
-    await save(values.questions)
+    await save([values.groupingQuestion, ...values.questions].filter(Boolean))
   }
 
   const handlePublicityToggle = async (question, isPublic) => {
@@ -58,6 +58,8 @@ const EditQuestions = ({ survey }) => {
       initialValues={initialValues}
       handleSubmit={handleSubmit}
       handlePublicityToggle={handlePublicityToggle}
+      groupingQuestionSettings
+      groups={[]}
     />
   )
 }

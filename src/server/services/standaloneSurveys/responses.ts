@@ -3,6 +3,7 @@ import type { QuestionAnswer } from '@common/types/question'
 import { StandaloneSurvey, StandaloneSurveyResponse, User } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
 import { validateAnswers } from '../../util/feedbackValidator'
+import { getGroupingAnswers } from '../../util/groupingQuestion'
 import { getPublicFeedbacks, shuffleFeedbacks } from '../../util/shuffleFeedbacks'
 import { getPublicQuestionIds, getQuestions } from './getSurvey'
 
@@ -46,15 +47,24 @@ export const deleteResponse = async (survey: StandaloneSurvey, user: User) => {
 export const canSeePublicResults = (survey: StandaloneSurvey, hasResponded: boolean) =>
   survey.isEnded() || (survey.isOpen() && hasResponded)
 
-export const getResults = async (survey: StandaloneSurvey, { publicOnly }: { publicOnly: boolean }) => {
-  const responses = await StandaloneSurveyResponse.findAll({
+export const getResults = async (
+  survey: StandaloneSurvey,
+  { publicOnly, groupId }: { publicOnly: boolean; groupId?: string }
+) => {
+  const questions = getQuestions(survey)
+  const groupingQuestionId = questions.find(q => q.secondaryType === 'GROUPING')?.id
+
+  const allResponses = await StandaloneSurveyResponse.findAll({
     where: { standaloneSurveyId: survey.id },
     attributes: ['data'],
   })
+  // Filter before shuffling, which separates the answers of a response
+  const responses =
+    groupId && groupingQuestionId
+      ? allResponses.filter(r => getGroupingAnswers(r.data, groupingQuestionId).includes(groupId))
+      : allResponses
 
-  const questionIds = getQuestions(survey)
-    .filter(q => q.type !== 'TEXT')
-    .map(q => q.id)
+  const questionIds = questions.filter(q => q.type !== 'TEXT').map(q => q.id)
 
   const shuffled = shuffleFeedbacks(
     responses.map(r => ({ data: r.data })),
