@@ -6,30 +6,31 @@ import { useTranslation } from 'react-i18next'
 import QuestionEditor from '../../../components/QuestionEditor/QuestionEditor'
 import { validateQuestions } from '../../../components/QuestionEditor/utils'
 import useInteractiveMutation from '../../../hooks/useInteractiveMutation'
-import { useUpdateQuestions } from '../api'
+import { useUpdatePublicQuestions, useUpdateQuestions } from '../api'
 
-export const toQuestionInputs = questions =>
+const toQuestionInputs = questions =>
   questions.map(({ id, type, secondaryType, required, data, public: isPublic }) => ({
-    ...(id ? { id } : {}),
+    ...(id ? { id } : { visibility: isPublic ? 'PUBLIC' : 'PRIVATE' }),
     type,
     secondaryType: secondaryType === 'GROUPING' ? 'GROUPING' : null,
     required: Boolean(required),
     data,
-    visibility: isPublic ? 'PUBLIC' : 'PRIVATE',
   }))
 
-export const withPublicity = (survey, publicQuestionIds) =>
+const withPublicity = (survey, publicQuestionIds) =>
   survey.questions.map(q => ({ ...q, public: publicQuestionIds.includes(q.id) }))
-
-export const useSaveQuestions = surveyId => {
-  const updateQuestions = useUpdateQuestions(surveyId)
-  return useInteractiveMutation(questions => updateQuestions.mutateAsync({ questions: toQuestionInputs(questions) }))
-}
 
 const EditQuestions = ({ survey }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const save = useSaveQuestions(survey.id)
+  const updateQuestions = useUpdateQuestions(survey.id)
+  const updatePublicQuestions = useUpdatePublicQuestions(survey.id)
+  const save = useInteractiveMutation(questions =>
+    updateQuestions.mutateAsync({ questions: toQuestionInputs(questions) })
+  )
+  const savePublicQuestionIds = useInteractiveMutation(publicQuestionIds =>
+    updatePublicQuestions.mutateAsync({ publicQuestionIds })
+  )
 
   const initialValues = useMemo(() => {
     const [groupingQuestions, questions] = partition(
@@ -50,7 +51,7 @@ const EditQuestions = ({ survey }) => {
 
   const handlePublicityToggle = async (question, isPublic) => {
     const publicIds = survey.publicQuestionIds.filter(id => id !== question.id)
-    await save(withPublicity(survey, isPublic ? [...publicIds, question.id] : publicIds))
+    await savePublicQuestionIds(isPublic ? [...publicIds, question.id] : publicIds)
   }
 
   return (

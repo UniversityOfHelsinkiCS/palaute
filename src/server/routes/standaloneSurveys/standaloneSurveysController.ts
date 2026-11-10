@@ -30,7 +30,7 @@ import {
   setResponsibleUsers,
   updateSurvey,
 } from '../../services/standaloneSurveys/surveys'
-import { updateQuestions } from '../../services/standaloneSurveys/updateQuestions'
+import { updatePublicQuestions, updateQuestions } from '../../services/standaloneSurveys/updateQuestions'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { parseInput } from '../../util/parseInput'
@@ -64,10 +64,12 @@ const QuestionsBodySchema = z.object({
       secondaryType: z.enum(['GROUPING']).nullish(),
       required: z.boolean(),
       data: z.record(z.string(), z.any()),
-      visibility: z.enum(STANDALONE_QUESTION_VISIBILITIES),
+      visibility: z.enum(STANDALONE_QUESTION_VISIBILITIES).optional(),
     })
   ),
 })
+
+const PublicQuestionsBodySchema = z.object({ publicQuestionIds: z.array(z.number().int()) })
 
 const ResponsibleUsersBodySchema = z.object({ userIds: z.array(z.string()).min(1) })
 
@@ -183,6 +185,14 @@ router.put('/:id/questions', async (req: AuthenticatedRequest, res: Response) =>
   const { questions } = parseInput(QuestionsBodySchema, req.body)
   const { survey } = await getManagedSurvey(req)
   await updateQuestions(survey, questions as any, req.user)
+  const updated = await getSurveyById(survey.id)
+  res.send(toManagementJson(updated, getAccess(updated, req.user)))
+})
+
+router.put('/:id/public-questions', async (req: AuthenticatedRequest, res: Response) => {
+  const { publicQuestionIds } = parseInput(PublicQuestionsBodySchema, req.body)
+  const { survey } = await getManagedSurvey(req)
+  await updatePublicQuestions(survey, publicQuestionIds, req.user)
   const updated = await getSurveyById(survey.id)
   res.send(toManagementJson(updated, getAccess(updated, req.user)))
 })
