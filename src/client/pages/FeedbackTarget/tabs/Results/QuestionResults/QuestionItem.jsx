@@ -56,6 +56,7 @@ const QuestionItem = ({
   publicQuestionIds,
   feedbackCount,
   disabled,
+  disabledInfo,
   savePublicQuestionIds,
   openAnswerActions,
   showTable,
@@ -138,6 +139,7 @@ const QuestionItem = ({
                 questionId={question.id}
                 checked={isPublic}
                 disabled={disabled}
+                disabledInfo={disabledInfo}
                 onChange={() => handlePublicityToggle(isPublic)}
                 questionLabel={label}
               />

@@ -65,6 +65,8 @@
     "publicInfo_standalone": "Answers visible to respondents",
     "editable": "You can change this setting.",
     "notEditable": "Setting cannot be changed.",
+    "editableAfterClose": "The setting can be changed after the feedback period ends.",
+    "editableAfterClose_standalone": "The setting can be changed after the survey closes.",
     "notEditableExtraInfo": "Publicity has been set at a higher level.",
     "studyTracks": "Studytracks",
     "currentlySelected": "Currently selected",

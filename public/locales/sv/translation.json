@@ -76,6 +76,8 @@
     "sortedAscending": "Sorterat stigande",
     "sortedDescending": "Sorterat fallande",
     "notEditable": "Inställningen kan inte ändras.",
+    "editableAfterClose": "Inställningen kan ändras när responsperioden har avslutats.",
+    "editableAfterClose_standalone": "Inställningen kan ändras när enkäten har avslutats.",
     "notEditableExtraInfo": "Synligheten har ställts in på en högre nivå.",
     "feedbacksGivenRatio": "Givna återkopplingar / Antal anmälda studenter",
     "additional": "Ytterligare",
