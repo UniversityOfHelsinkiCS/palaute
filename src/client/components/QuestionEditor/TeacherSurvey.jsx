@@ -63,6 +63,7 @@ const TeacherSurvey = ({ feedbackTarget }) => {
       teacherQuestionIds={surveys.teacherSurvey.questionIds}
       copyFromCourseDialog
       groupingQuestionSettings
+      groups={feedbackTarget.groups}
       userCreated={userCreated}
       curStartDate={courseRealisation?.startDate}
     />

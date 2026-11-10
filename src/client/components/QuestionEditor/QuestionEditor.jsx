@@ -62,7 +62,14 @@ const TypeMenu = ({ id, labelledBy, anchorEl, open, onClose, onChooseType, langu
   )
 }
 
-const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, groupingQuestionSettings, editorLevel }) => {
+const QuestionEditorForm = ({
+  saveChanges,
+  handlePublicityToggle,
+  actions,
+  groupingQuestionSettings,
+  groups,
+  editorLevel,
+}) => {
   const addButtonRef = useRef()
   const textContentButtonRef = useRef()
   const { t, i18n } = useTranslation()
@@ -91,6 +98,7 @@ const QuestionEditorForm = ({ saveChanges, handlePublicityToggle, actions, group
       <Box display="flex" flexDirection="column" gap="1.5rem">
         {groupingQuestionSettings && (
           <GroupingQuestionSettings
+            groups={groups}
             onAddQuestion={q => {
               groupingQuestionHelpers.setValue(q)
               setEditingQuestionId(getQuestionId(q))
@@ -238,6 +246,7 @@ const QuestionEditor = ({
   handlePublicityToggle,
   copyFromCourseDialog,
   groupingQuestionSettings,
+  groups,
   userCreated,
   curStartDate,
   editorLevel,
@@ -258,6 +267,7 @@ const QuestionEditor = ({
           )
         }
         groupingQuestionSettings={groupingQuestionSettings}
+        groups={groups}
         editorLevel={editorLevel}
       />
     )}
