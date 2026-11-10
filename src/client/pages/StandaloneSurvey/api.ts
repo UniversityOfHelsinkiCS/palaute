@@ -1,7 +1,7 @@
 import type { LocalizedString } from '@common/types/common'
 import type { Question, QuestionAnswer } from '@common/types/question'
 
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { keepPreviousData, useMutation, useQuery, type UseQueryOptions } from '@tanstack/react-query'
 import { isAxiosError } from 'axios'
 
 import apiClient from '../../util/apiClient'
@@ -56,12 +56,12 @@ export type SurveyListItem = {
 const retryUnlessRefused = (failureCount: number, error: Error) =>
   failureCount < 3 && !(isAxiosError(error) && error.response && error.response.status < 500)
 
-const useGet = <T>(queryKey: string[], url: string, enabled = true) =>
+const useGet = <T>(queryKey: string[], url: string, options: Omit<UseQueryOptions<T>, 'queryKey'> = {}) =>
   useQuery({
     queryKey,
     queryFn: async () => (await apiClient.get<T>(url)).data,
     retry: retryUnlessRefused,
-    enabled,
+    ...options,
   })
 
 const answerKey = (token: string) => ['standaloneSurveyAnswer', token]
@@ -72,7 +72,7 @@ export const useAnswerSurvey = (token: string) =>
   useGet<AnswerSurvey>(answerKey(token), `/standalone-surveys/answer/${token}`)
 
 export const useAnswerResults = (token: string, enabled: boolean) =>
-  useGet<ResultsData>(answerResultsKey(token), `/standalone-surveys/answer/${token}/results`, enabled)
+  useGet<ResultsData>(answerResultsKey(token), `/standalone-surveys/answer/${token}/results`, { enabled })
 
 export const useSaveResponse = (token: string) =>
   useMutation({
@@ -96,8 +96,12 @@ export const useDeleteResponse = (token: string) =>
 export const useManagedSurvey = (id: number | string) =>
   useGet<ManagedSurvey>(surveyKey(id), `/standalone-surveys/${id}`)
 
-export const useManagedResults = (id: number | string) =>
-  useGet<ResultsData>(['standaloneSurveyResults', String(id)], `/standalone-surveys/${id}/results`)
+export const useManagedResults = (id: number | string, groupId: string) =>
+  useGet<ResultsData>(
+    ['standaloneSurveyResults', String(id), groupId],
+    `/standalone-surveys/${id}/results${groupId === 'ALL' ? '' : `?groupId=${encodeURIComponent(groupId)}`}`,
+    { placeholderData: keepPreviousData }
+  )
 
 export const useSurveyLogs = (id: number | string) =>
   useGet<any[]>(['standaloneSurveyLogs', String(id)], `/standalone-surveys/${id}/logs`)
@@ -113,7 +117,7 @@ const useSurveyUpdate = <T>(id: number | string, path: string) =>
     },
   })
 
-export type QuestionInput = Omit<Question, 'id' | 'secondaryType'> & {
+export type QuestionInput = Omit<Question, 'id'> & {
   id?: number
   visibility: StandaloneQuestionVisibility
 }

@@ -32,7 +32,8 @@ const api = (request: APIRequestContext) => {
       send('PUT', `/answer/${token}/response`, user, { data }),
     deleteAnswer: (token: string, user: TestUser) => send('DELETE', `/answer/${token}/response`, user),
     results: (token: string, user: TestUser) => send('GET', `/answer/${token}/results`, user),
-    managedResults: (id: number, user: TestUser = admin) => send('GET', `/${id}/results`, user),
+    managedResults: (id: number, user: TestUser = admin, groupId?: string) =>
+      send('GET', `/${id}/results${groupId ? `?groupId=${groupId}` : ''}`, user),
     hideAnswer: (id: number, questionId: number, content: string, user: TestUser = teacher) =>
       send('PUT', `/${id}/hide-answer`, user, { questionId, feedbackContent: content, hidden: true }),
   }
@@ -194,6 +195,38 @@ test.describe('Standalone surveys', () => {
       { questionId: openId, data: ['not', 'text'] },
     ]
     expect((await surveys.answer(token, answer, student)).status).toBe(400)
+  })
+
+  test('results can be filtered by the grouping question', async ({ request }) => {
+    const surveys = api(request)
+    const id = await surveys.create()
+    const grouping = {
+      type: 'SINGLE_CHOICE',
+      secondaryType: 'GROUPING',
+      required: true,
+      data: {
+        label: { en: 'Team' },
+        options: [
+          { id: 'a', label: { en: 'A' } },
+          { id: 'b', label: { en: 'B' } },
+        ],
+      },
+      visibility: 'PRIVATE',
+    }
+    const { body } = await surveys.setQuestions(id, [likert, grouping])
+    const [groupingId, likertId] = body.questions.map((q: { id: number }) => q.id)
+    expect(body.questions[0].secondaryType).toBe('GROUPING')
+
+    const answer = (group: string, value: string) => [
+      { questionId: groupingId, data: group },
+      { questionId: likertId, data: value },
+    ]
+    await surveys.answer(body.token, answer('a', '5'), student)
+    await surveys.answer(body.token, answer('b', '1'), studentHenri)
+
+    const { body: results } = await surveys.managedResults(id, admin, 'b')
+    expect(results.responseCount).toBe(1)
+    expect(results.feedbacks[0].data).toContainEqual({ questionId: likertId, data: '1' })
   })
 
   test('a closed survey can be renamed from the settings', async ({ page, loginAs, request }) => {

@@ -1,10 +1,11 @@
 import { format } from 'date-fns'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import useOpenAnswerActions from '../../../hooks/useOpenAnswerActions'
 import { getLanguageValue } from '../../../util/languageUtils'
 import ExportFeedbacksMenu from '../../FeedbackTarget/tabs/Results/ExportFeedbacksMenu'
+import GroupSelector from '../../FeedbackTarget/tabs/Results/GroupSelector'
 import { useManagedResults, useUpdateQuestions } from '../api'
 import SurveyResults from '../SurveyResults'
 import { toQuestionInputs, withPublicity } from './EditQuestions'
@@ -15,10 +16,17 @@ const getFilename = (survey, language) =>
     '_'
   )
 
+const getGroups = survey =>
+  survey.questions
+    .find(q => q.secondaryType === 'GROUPING')
+    ?.data.options.map(option => ({ id: option.id, name: option.label })) ?? []
+
 const ManageResults = ({ survey, isOpen }) => {
   const { i18n } = useTranslation()
   const exportRef = useRef(null)
-  const results = useManagedResults(survey.id)
+  const [groupId, setGroupId] = useState('ALL')
+  const results = useManagedResults(survey.id, groupId)
+  const groups = getGroups(survey)
   const updateQuestions = useUpdateQuestions(survey.id)
   const openAnswerActions = useOpenAnswerActions({
     hidePath: `/standalone-surveys/${survey.id}/hide-answer`,
@@ -41,6 +49,11 @@ const ManageResults = ({ survey, isOpen }) => {
           updateQuestions.mutateAsync({ questions: toQuestionInputs(withPublicity(survey, ids)) })
         }
         openAnswerActions={openAnswerActions}
+        groupSelector={
+          groups.length > 1 && (
+            <GroupSelector groupId={groupId} setGroupId={setGroupId} groups={groups} groupsAvailable />
+          )
+        }
         exportMenu={
           <ExportFeedbacksMenu
             questions={survey.questions}

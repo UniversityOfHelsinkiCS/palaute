@@ -16,6 +16,7 @@ const SurveyResults = ({
   savePublicQuestionIds,
   openAnswerActions,
   exportMenu,
+  groupSelector,
 }) => {
   const { t } = useTranslation()
   const [showTable, setShowTable] = useShowTable()
@@ -27,6 +28,7 @@ const SurveyResults = ({
 
   return (
     <Box id="feedback-target-tab-content">
+      {groupSelector && <Box sx={{ mb: 2 }}>{groupSelector}</Box>}
       <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: 2 }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mr: 'auto' }}>
           <Typography>{t('feedbackTargetView:respondents')}:</Typography>

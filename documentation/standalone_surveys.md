@@ -11,7 +11,7 @@ Surveys not tied to a course, as an alternative to E-lomake. An admin creates th
 - Answering is open between `opens_at` and `closes_at`; to stop a survey, move `closes_at`. Once `opens_at` has passed, only admins can change it or the questions; responsible persons can still change question visibility.
 - One answer per person, with at least one question answered. It can be edited or removed while the survey is open. `user_id` is stored only to enforce this and is never shown.
 - Questions are `PUBLIC` or `PRIVATE`. Respondents see public results after answering while the survey is open, and anyone with the link sees them once it has closed. No minimum answer count.
-- Same question types as courses, but no secondary types (`WORKLOAD`, `GROUPING`). No emails.
+- Same question types as courses. A survey can have one grouping question, as in courses but with no Sisu groups: the managers write its options. Managers can filter the results by its answer; the server filters before shuffling, which separates a response's answers. No emails.
 
 ## Code
 
@@ -35,7 +35,7 @@ Removing a question leaves its `questions` row, since answers refer to it. A hid
 
 These were made usable without a feedback target, so changes affect both:
 
-- `FormContainer` (extracted from `FeedbackView`), `QuestionResults`, `ExportFeedbacksMenu`, `ChartTableToggle`, `QuestionEditor` and `useOpenAnswerActions`
-- Server: `validateAnswers`, `shuffleFeedbacks.ts` and `openAnswers.ts` in `src/server/util/`
+- `FormContainer` (extracted from `FeedbackView`), `QuestionResults`, `ExportFeedbacksMenu`, `ChartTableToggle`, `QuestionEditor`, `GroupingQuestionSettings`, `GroupSelector` and `useOpenAnswerActions`
+- Server: `validateAnswers`, `shuffleFeedbacks.ts`, `openAnswers.ts` and `groupingQuestion.ts` in `src/server/util/`
 
 Where course wording doesn't fit, `TranslationContextProvider value="standalone"` makes shared components use a `key_standalone` translation when one exists. Standalone-only texts are in the `standaloneSurvey` namespace.
