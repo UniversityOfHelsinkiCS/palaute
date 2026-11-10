@@ -4,6 +4,7 @@ import { UserFeedbackTarget, FeedbackTarget, Feedback, CourseRealisation } from 
 import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT, SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/config'
+import { getGroupingAnswers } from '../../util/groupingQuestion'
 import { getPublicFeedbacks, shuffleFeedbacks } from '../../util/shuffleFeedbacks'
 import { getAccess } from './getAccess'
 import { getAdditionalDataFromCacheOrDb } from './getOneForUser'
@@ -12,10 +13,7 @@ const countGroupsByGroupQuestionAnswer = (studentFeedbackTargets: UserFeedbackTa
   _.countBy(
     studentFeedbackTargets
       .filter(ufbt => ufbt.feedback)
-      .flatMap(ufbt => {
-        const answers = ufbt.feedback?.data?.find(answer => answer.questionId === groupingQuestionId)?.data ?? []
-        return answers
-      })
+      .flatMap(ufbt => getGroupingAnswers(ufbt.feedback?.data, groupingQuestionId))
   )
 
 const countGroupsByGroupIds = (studentFeedbackTargets: UserFeedbackTarget[]) =>
@@ -84,8 +82,7 @@ const filterByGroupId = (
   // grouped by grouping question
   if (groupingQuestionId) {
     return studentFeedbackTargets.filter(ufbt => {
-      const groupAnswers = ufbt.feedback?.data?.find(answer => answer.questionId === groupingQuestionId)?.data ?? []
-      return groupAnswers.includes(groupId)
+      return getGroupingAnswers(ufbt.feedback?.data, groupingQuestionId).includes(groupId)
     })
   }
 

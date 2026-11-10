@@ -5,6 +5,7 @@ import _ from 'lodash'
 import { Survey, Question, FeedbackTarget } from '../../models'
 import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
+import { validateGroupingQuestions } from '../../util/groupingQuestion'
 import { logger } from '../../util/logger'
 import { createFeedbackTargetSurveyLog, createFeedbackTargetLog } from '../auditLog'
 import { updateOrganisationSurvey } from '../organisations/organisationSurveys'
@@ -58,17 +59,6 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds: number[], questions: 
   currentIds = currentIds.concat(configurable.filter(q => q.public).map(q => q.id))
 
   return _.uniq(currentIds).filter(Number)
-}
-
-const validateGroupingQuestions = (questions: any[]) => {
-  const tooManyGroupingQuestions = _.countBy(questions, 'secondaryType').GROUPING > 1
-  if (tooManyGroupingQuestions) throw ApplicationError.BadRequest('Maximum of one grouping question is allowed')
-
-  const illegalGroupingQuestion = questions.some(
-    q => q.secondaryType === 'GROUPING' && !['SINGLE_CHOICE', 'MULTIPLE_CHOICE'].includes(q.type)
-  )
-  if (illegalGroupingQuestion)
-    throw ApplicationError.BadRequest('Only single choice and multiple choice may be grouping questions')
 }
 
 const handleListOfUpdatedQuestionsAndReturnIds = async (questions: any[]) => {
