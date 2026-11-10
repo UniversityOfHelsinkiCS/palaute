@@ -86,7 +86,7 @@ const GroupInformation = ({ groups }) => {
   )
 }
 
-const GroupingQuestionChips = ({ questionId, questionLabel }) => {
+const GroupingQuestionChips = ({ questionId, isPublic, questionLabel }) => {
   const { t } = useTranslation()
 
   return (
@@ -106,8 +106,9 @@ const GroupingQuestionChips = ({ questionId, questionLabel }) => {
           {questionId && (
             <QuestionPublicityToggle
               questionId={questionId}
-              checked={false}
+              checked={isPublic}
               disabled={true}
+              disabledInfo={t('groups:groupingPublicityInfo')}
               onChange={() => {}}
               questionLabel={questionLabel}
             />
@@ -165,6 +166,7 @@ const GroupingQuestionSettings = ({
       <Box>
         <GroupingQuestionChips
           questionId={groupingQuestion?.id}
+          isPublic={Boolean(groupingQuestion?.public)}
           questionLabel={getQuestionLabel(groupingQuestion, language)}
         />
         <Accordion

@@ -391,6 +391,7 @@
   "groups": {
     "groupingInfo": "Grupperingsinformation",
     "groupingQuestion": "Grupperingsfråga",
+    "groupingPublicityInfo": "Synligheten kan ändras på fliken Responser.",
     "groupingQuestionDefaultLabel": "Välj den grupp som du deltog i",
     "groupingQuestionDefaultLabel_standalone": "",
     "onlyOneGroup": " I Sisu är endast en grupp definierad, så automatisk gruppering är inte i bruk.",

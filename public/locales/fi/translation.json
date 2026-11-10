@@ -396,6 +396,7 @@
   "groups": {
     "groupingInfo": "Tietoa ryhmittelystä",
     "groupingQuestion": "Ryhmittelykysymys",
+    "groupingPublicityInfo": "Näkyvyyttä voi muuttaa Vastaukset-välilehdellä.",
     "groupingQuestionDefaultLabel": "Valitse, mihin ryhmiin osallistuit",
     "groupingQuestionDefaultLabel_standalone": "",
     "onlyOneGroup": " Sisussa on määritelty vain yksi ryhmä, joten automaattinen ryhmittely ei ole käytössä.",
