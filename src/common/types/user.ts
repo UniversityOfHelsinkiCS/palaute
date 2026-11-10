@@ -28,7 +28,7 @@ export type GetLoginResponse = User & {
 
 export type UserPreferences = {
   hasSummaryAccess: boolean
-  hasCourseAccess: boolean
+  hasMyTeachingAccess: boolean
   summaryView: string
   defaultView: string
 }
