@@ -30,6 +30,10 @@ class StandaloneSurvey extends Model<InferAttributes<StandaloneSurvey>, InferCre
   declare surveyQuestions?: NonAttribute<StandaloneSurveyQuestion[]>
   declare responsibleUsers?: NonAttribute<StandaloneSurveyResponsibleUser[]>
 
+  hasOpened(now = new Date()): boolean {
+    return this.opensAt <= now
+  }
+
   isOpen(now = new Date()): boolean {
     return this.opensAt <= now && now < this.closesAt
   }

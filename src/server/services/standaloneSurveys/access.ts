@@ -6,7 +6,15 @@ export const getAccess = (survey: StandaloneSurvey, user: User) => {
   const isAdmin = user.isAdmin ?? false
   const isResponsibleUser = (survey.responsibleUsers ?? []).some(ru => ru.userId === user.id)
 
-  return { isAdmin, isResponsibleUser, canManage: isAdmin || isResponsibleUser }
+  const canEditBeforeOpening = isAdmin || (isResponsibleUser && !survey.hasOpened())
+
+  return {
+    isAdmin,
+    canManage: isAdmin || isResponsibleUser,
+    canEditQuestions: canEditBeforeOpening,
+    canEditOpensAt: canEditBeforeOpening,
+    canDeleteAnswers: isAdmin,
+  }
 }
 
 export const assertCanManage = (survey: StandaloneSurvey, user: User) => {

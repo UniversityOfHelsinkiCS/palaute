@@ -64,7 +64,7 @@ const NameAndPeriod = ({ survey, isOpen, isOver }) => {
                 name="opensAt"
                 label={t('editFeedbackTarget:opensAt')}
                 disablePast={!isAdmin}
-                disabled={(isOpen || isOver) && !isAdmin}
+                disabled={!survey.access.canEditOpensAt}
               />
             </Grid>
             <Grid size={{ xs: 12, md: 6 }}>

@@ -108,7 +108,7 @@ const ManageSurvey = () => {
   const isOpen = feedbackTargetIsOpen(survey)
   const isOver = feedbackTargetIsEnded(survey)
   const basePath = `/standalone-surveys/${survey.id}`
-  const questionsLocked = (isOpen || isOver) && !survey.access.isAdmin
+  const questionsLocked = !survey.access.canEditQuestions
 
   return (
     <TranslationContextProvider value="standalone">
