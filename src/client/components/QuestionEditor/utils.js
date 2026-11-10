@@ -114,10 +114,8 @@ export const questionCanMoveDown = (questions, index) => {
   return nextQuestion?.editable ?? true
 }
 
-export const validateQuestions = values => {
-  const { questions } = values
-
-  const editableQuestions = questions.filter(({ editable }) => editable)
+export const validateQuestions = ({ questions, groupingQuestion }) => {
+  const editableQuestions = [...questions, groupingQuestion].filter(question => question?.editable)
 
   for (const question of editableQuestions) {
     if (question.type === 'SINGLE_CHOICE' || question.type === 'MULTIPLE_CHOICE') {
