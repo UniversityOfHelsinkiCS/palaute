@@ -119,7 +119,7 @@ const useSurveyUpdate = <T>(id: number | string, path: string) =>
 
 export type QuestionInput = Omit<Question, 'id'> & {
   id?: number
-  visibility: StandaloneQuestionVisibility
+  visibility?: StandaloneQuestionVisibility
 }
 
 export const useUpdateSurvey = (id: number | string) =>
@@ -127,6 +127,9 @@ export const useUpdateSurvey = (id: number | string) =>
 
 export const useUpdateQuestions = (id: number | string) =>
   useSurveyUpdate<{ questions: QuestionInput[] }>(id, '/questions')
+
+export const useUpdatePublicQuestions = (id: number | string) =>
+  useSurveyUpdate<{ publicQuestionIds: number[] }>(id, '/public-questions')
 
 export const useUpdateResponsibleUsers = (id: number | string) =>
   useSurveyUpdate<{ userIds: string[] }>(id, '/responsible-users')

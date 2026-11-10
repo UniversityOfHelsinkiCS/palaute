@@ -16,44 +16,31 @@ export type QuestionInput = {
   secondaryType?: QuestionSecondaryType
   required: boolean
   data: QuestionData
-  visibility: StandaloneQuestionVisibility
+  // Only used for new questions, existing ones change it with updatePublicQuestions
+  visibility?: StandaloneQuestionVisibility
 }
 
 const isGrouping = (question: QuestionInput) => question.secondaryType === 'GROUPING'
 
-const changesContent = (questions: QuestionInput[], existing: StandaloneSurveyQuestion[]) =>
-  questions.length !== existing.length ||
-  questions.some((input, index) => {
-    const { questionId, question } = existing[index]
-    return (
-      input.id !== questionId ||
-      input.type !== question?.type ||
-      isGrouping(input) !== (question?.secondaryType === 'GROUPING') ||
-      input.required !== question?.required ||
-      !_.isEqual(input.data, question?.data)
-    )
-  })
+const assertCanPublish = (survey: StandaloneSurvey, questionTypes: QuestionType[]) => {
+  if (questionTypes.includes('OPEN') && !survey.isEnded()) {
+    throw ApplicationError.Forbidden('Open answers can be published only after the survey has closed')
+  }
+}
 
 export const updateQuestions = async (survey: StandaloneSurvey, inputs: QuestionInput[], user: User) => {
-  const existing = survey.surveyQuestions ?? []
+  if (survey.opensAt <= new Date() && !user.isAdmin) {
+    throw ApplicationError.Forbidden('Questions cannot be changed once the survey has opened')
+  }
 
   validateGroupingQuestions(inputs)
   const questions = _.sortBy(inputs, q => (isGrouping(q) ? 0 : 1))
-
-  if (survey.opensAt <= new Date() && !user.isAdmin && changesContent(questions, existing)) {
-    throw ApplicationError.Forbidden('Only the visibility of questions can be changed once the survey has opened')
-  }
-
-  const publishesOpenAnswers = questions.some(
-    q =>
-      q.type === 'OPEN' &&
-      q.visibility === 'PUBLIC' &&
-      existing.find(sq => sq.questionId === q.id)?.visibility !== 'PUBLIC'
+  assertCanPublish(
+    survey,
+    questions.filter(q => !q.id && q.visibility === 'PUBLIC').map(q => q.type)
   )
-  if (publishesOpenAnswers && !survey.isEnded()) {
-    throw ApplicationError.Forbidden('Open answers can be published only after the survey has closed')
-  }
 
+  const existing = survey.surveyQuestions ?? []
   const existingIds = existing.map(sq => sq.questionId)
   const inputIds = questions.flatMap(q => (q.id ? [q.id] : []))
 
@@ -84,25 +71,26 @@ export const updateQuestions = async (survey: StandaloneSurvey, inputs: Question
       if (input.id) {
         await Question.update(values, { where: { id: input.id }, transaction })
         await StandaloneSurveyQuestion.update(
-          { position, visibility: input.visibility },
+          { position },
           { where: { standaloneSurveyId: survey.id, questionId: input.id }, transaction }
         )
       } else {
         const question = await Question.create(values, { transaction })
         created.push(question.id)
         await StandaloneSurveyQuestion.create(
-          { standaloneSurveyId: survey.id, questionId: question.id, position, visibility: input.visibility },
+          {
+            standaloneSurveyId: survey.id,
+            questionId: question.id,
+            position,
+            visibility: input.visibility ?? 'PRIVATE',
+          },
           { transaction }
         )
       }
     }
   })
 
-  const wasPublic = existing.filter(sq => sq.visibility === 'PUBLIC').map(sq => sq.questionId)
-  const isPublic = questions.filter(q => q.id && q.visibility === 'PUBLIC').map(q => q.id!)
   const questionsById = _.keyBy(existing, 'questionId')
-  const toLogQuestion = (id: number) => ({ id, data: questionsById[id]?.question?.data })
-
   const logData: Record<string, unknown> = {}
   if (created.length > 0) {
     const first = questions.find(q => !q.id)
@@ -111,8 +99,39 @@ export const updateQuestions = async (survey: StandaloneSurvey, inputs: Question
   if (removedIds.length > 0) {
     logData.deleteQuestion = { ...questionsById[removedIds[0]]?.question?.data, id: removedIds[0] }
   }
-  const enabled = _.difference(isPublic, wasPublic)
-  const disabled = _.difference(_.intersection(wasPublic, inputIds), isPublic)
+
+  await createLog(survey.id, user, logData)
+}
+
+export const updatePublicQuestions = async (survey: StandaloneSurvey, publicQuestionIds: number[], user: User) => {
+  const surveyQuestions = survey.surveyQuestions ?? []
+  const questionsById = _.keyBy(surveyQuestions, 'questionId')
+
+  if (publicQuestionIds.some(id => !questionsById[id])) {
+    throw ApplicationError.BadRequest('Question does not belong to this survey')
+  }
+
+  const wasPublic = surveyQuestions.filter(sq => sq.visibility === 'PUBLIC').map(sq => sq.questionId)
+  const enabled = _.difference(publicQuestionIds, wasPublic)
+  const disabled = _.difference(wasPublic, publicQuestionIds)
+
+  assertCanPublish(
+    survey,
+    enabled.map(id => questionsById[id].question!.type)
+  )
+
+  await sequelize.transaction(async transaction => {
+    const setVisibility = (questionIds: number[], visibility: StandaloneQuestionVisibility) =>
+      StandaloneSurveyQuestion.update(
+        { visibility },
+        { where: { standaloneSurveyId: survey.id, questionId: questionIds }, transaction }
+      )
+    if (enabled.length > 0) await setVisibility(enabled, 'PUBLIC')
+    if (disabled.length > 0) await setVisibility(disabled, 'PRIVATE')
+  })
+
+  const toLogQuestion = (id: number) => ({ id, data: questionsById[id].question?.data })
+  const logData: Record<string, unknown> = {}
   if (enabled.length > 0) logData.enabledPublicQuestions = enabled.map(toLogQuestion)
   if (disabled.length > 0) logData.disabledPublicQuestions = disabled.map(toLogQuestion)
 

@@ -28,6 +28,8 @@ const api = (request: APIRequestContext) => {
     update: (id: number, data: unknown, user: TestUser = admin) => send('PUT', `/${id}`, user, data),
     setQuestions: (id: number, questions: unknown[], user: TestUser = admin) =>
       send('PUT', `/${id}/questions`, user, { questions }),
+    setPublicQuestions: (id: number, publicQuestionIds: number[], user: TestUser = admin) =>
+      send('PUT', `/${id}/public-questions`, user, { publicQuestionIds }),
     answer: (token: string, data: unknown[], user: TestUser) =>
       send('PUT', `/answer/${token}/response`, user, { data }),
     deleteAnswer: (token: string, user: TestUser) => send('DELETE', `/answer/${token}/response`, user),
@@ -231,21 +233,11 @@ test.describe('Standalone surveys', () => {
 
   test('open answers are published only after the survey closes', async ({ request }) => {
     const surveys = api(request)
-    const { id } = await setupSurvey(request)
-    const { body } = await surveys.get(id)
-    const questions = body.questions.map(
-      ({ id: questionId, type, required, data }: { id: number; type: string; required: boolean; data: unknown }) => ({
-        id: questionId,
-        type,
-        required,
-        data,
-        visibility: 'PUBLIC',
-      })
-    )
+    const { id, likertId, openId } = await setupSurvey(request)
 
-    expect((await surveys.setQuestions(id, questions)).status).toBe(403)
+    expect((await surveys.setPublicQuestions(id, [likertId, openId])).status).toBe(403)
     await surveys.update(id, { opensAt: subDays(new Date(), 3), closesAt: subDays(new Date(), 1) })
-    expect((await surveys.setQuestions(id, questions)).status).toBe(200)
+    expect((await surveys.setPublicQuestions(id, [likertId, openId])).status).toBe(200)
   })
 
   test('a closed survey can be renamed from the settings', async ({ page, loginAs, request }) => {
@@ -271,16 +263,13 @@ test.describe('Standalone surveys', () => {
         type,
         required,
         data,
-        visibility: body.publicQuestionIds.includes(questionId) ? 'PUBLIC' : 'PRIVATE',
       })
     )
 
     const relabelled = [{ ...current[0], data: { label: { en: 'I love my job' } } }, current[1]]
     expect((await surveys.setQuestions(id, relabelled, teacher)).status).toBe(403)
-    expect((await surveys.setQuestions(id, [current[0]], teacher)).status).toBe(403)
-    expect(
-      (await surveys.setQuestions(id, [{ ...current[0], visibility: 'PRIVATE' }, current[1]], teacher)).status
-    ).toBe(200)
+    expect((await surveys.setQuestions(id, current, teacher)).status).toBe(403)
+    expect((await surveys.setPublicQuestions(id, [], teacher)).status).toBe(200)
     expect((await surveys.setQuestions(id, relabelled, admin)).status).toBe(200)
   })
 })
