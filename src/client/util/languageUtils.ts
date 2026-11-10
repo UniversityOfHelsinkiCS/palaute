@@ -39,8 +39,8 @@ export const localeForLanguage = (lang: string) => {
   return { fi, sv, en }[lang]
 }
 
-export const getAllTranslations = (key: string) => ({
-  fi: i18next.getFixedT('fi')(key),
-  sv: i18next.getFixedT('sv')(key),
-  en: i18next.getFixedT('en')(key),
+export const getAllTranslations = (key: string, options?: { context?: string }) => ({
+  fi: i18next.getFixedT('fi')(key, options),
+  sv: i18next.getFixedT('sv')(key, options),
+  en: i18next.getFixedT('en')(key, options),
 })

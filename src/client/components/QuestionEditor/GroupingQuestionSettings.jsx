@@ -19,10 +19,10 @@ import {
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import { useFeedbackTargetContext } from '../../pages/FeedbackTarget/FeedbackTargetContext'
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { getAllTranslations, getLanguageValue } from '../../util/languageUtils'
 import { useQuestionLanguage } from '../../util/questionLanguageContext'
+import { useTranslationContext } from '../../util/translationContext'
 import { NorButton } from '../common/NorButton'
 import QuestionPublicityToggle from '../common/QuestionPublicityToggle'
 import TeacherChip from '../common/TeacherChip'
@@ -114,9 +114,9 @@ const GroupingQuestionChips = ({ questionId, questionLabel }) => {
   )
 }
 
-const createGroupingQuestion = (groups, type = 'SINGLE_CHOICE') => {
+const createGroupingQuestion = (groups, context, type = 'SINGLE_CHOICE') => {
   const data = {
-    label: getAllTranslations('groups:groupingQuestionDefaultLabel'),
+    label: getAllTranslations('groups:groupingQuestionDefaultLabel', { context }),
     options: groups.map(g => ({
       id: g.id,
       label: { fi: '', en: '', sv: '', ...g.name },
@@ -129,6 +129,7 @@ const createGroupingQuestion = (groups, type = 'SINGLE_CHOICE') => {
 }
 
 const GroupingQuestionSettings = ({
+  groups,
   onAddQuestion,
   onRemove,
   groupingQuestion,
@@ -139,12 +140,11 @@ const GroupingQuestionSettings = ({
 }) => {
   const { t } = useTranslation()
   const language = useQuestionLanguage()
-  const { feedbackTarget } = useFeedbackTargetContext()
-  const { groups } = feedbackTarget
+  const context = useTranslationContext()
   const addButtonRef = useRef(null)
 
   const handleAddGroupingQuestion = async () => {
-    const question = createGroupingQuestion(groups)
+    const question = createGroupingQuestion(groups, context)
     onAddQuestion(question)
   }
 
