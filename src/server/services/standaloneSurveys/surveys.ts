@@ -7,6 +7,7 @@ import { Op } from 'sequelize'
 import { sequelize } from '../../db/dbConnection'
 import { StandaloneSurvey, StandaloneSurveyResponse, StandaloneSurveyResponsibleUser, User } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
+import { getAccess } from './access'
 import { createLog } from './logs'
 
 const generateToken = () => randomBytes(9).toString('base64url')
@@ -65,7 +66,7 @@ export const updateSurvey = async (
   const opensAtChanged = opensAt && opensAt.getTime() !== survey.opensAt.getTime()
   const closesAtChanged = closesAt && closesAt.getTime() !== survey.closesAt.getTime()
 
-  if (opensAtChanged && survey.opensAt <= new Date() && !user.isAdmin) {
+  if (opensAtChanged && !getAccess(survey, user).canEditOpensAt) {
     throw ApplicationError.Forbidden('Opening date cannot be changed once the survey is open')
   }
 

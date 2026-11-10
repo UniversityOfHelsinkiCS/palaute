@@ -42,7 +42,13 @@ export type ManagedSurvey = {
   questions: Question[]
   publicQuestionIds: number[]
   responsibleUsers: ResponsibleUser[]
-  access: { isAdmin: boolean; isResponsibleUser: boolean; canManage: boolean }
+  access: {
+    isAdmin: boolean
+    canManage: boolean
+    canEditQuestions: boolean
+    canEditOpensAt: boolean
+    canDeleteAnswers: boolean
+  }
 }
 
 export type SurveyListItem = {

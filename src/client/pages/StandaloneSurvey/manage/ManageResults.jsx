@@ -32,7 +32,7 @@ const ManageResults = ({ survey, isOpen }) => {
     deletePath: `/standalone-surveys/${survey.id}/delete-answer`,
     queryKey: ['standaloneSurveyResults', String(survey.id)],
     canHide: true,
-    canDelete: survey.access.isAdmin,
+    canDelete: survey.access.canDeleteAnswers,
   })
 
   return (

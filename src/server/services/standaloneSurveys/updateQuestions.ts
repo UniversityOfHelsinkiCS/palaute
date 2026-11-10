@@ -8,6 +8,7 @@ import { sequelize } from '../../db/dbConnection'
 import { Question, StandaloneSurvey, StandaloneSurveyQuestion, User } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
 import { validateGroupingQuestions } from '../../util/groupingQuestion'
+import { getAccess } from './access'
 import { createLog } from './logs'
 
 export type QuestionInput = {
@@ -29,7 +30,7 @@ const assertCanPublish = (survey: StandaloneSurvey, questionTypes: QuestionType[
 }
 
 export const updateQuestions = async (survey: StandaloneSurvey, inputs: QuestionInput[], user: User) => {
-  if (survey.opensAt <= new Date() && !user.isAdmin) {
+  if (!getAccess(survey, user).canEditQuestions) {
     throw ApplicationError.Forbidden('Questions cannot be changed once the survey has opened')
   }
 
