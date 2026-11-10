@@ -50,9 +50,12 @@ const Share = ({ survey }) => {
 
   return (
     <Box id="feedback-target-tab-content" sx={{ my: 3 }}>
-      <Alert severity="info">{t('standaloneSurvey:shareInfo')}</Alert>
+      <Alert severity="info" sx={{ mb: 4 }}>
+        {t('standaloneSurvey:shareInfo')}
+      </Alert>
       <ShareItem
-        chipLabel={t('standaloneSurvey:link')}
+        title={t('standaloneSurvey:link')}
+        headingComponent="h2"
         buttonLabel={t('common:copyToClipBoard')}
         linkText={link}
         copyLink={value => {

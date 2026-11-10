@@ -14,7 +14,7 @@ export const getCourseUnitSummaryPath = feedbackTarget => {
   return summaryPath
 }
 
-export const getActiveTabName = ({ currentPath, feedbackGiven, isOpen, isStudent, feedbackResponseEmailSent }) => {
+export const getActiveTabName = ({ currentPath, feedbackGiven, isOpen, isStudent }) => {
   const { t } = useTranslation()
   const feedbackTabName = () => {
     if (feedbackGiven && isOpen) return t('feedbackTargetView:editFeedbackTab')
@@ -29,9 +29,7 @@ export const getActiveTabName = ({ currentPath, feedbackGiven, isOpen, isStudent
   const tabNames = {
     feedback: feedbackTabName(),
     edit: t('feedbackTargetView:surveyQuestionsTab'),
-    'edit-feedback-response': feedbackResponseEmailSent
-      ? t('feedbackTargetView:editFeedbackResponseTab')
-      : t('feedbackTargetView:giveFeedbackResponseTab'),
+    'edit-feedback-response': t('feedbackTargetView:feedbackResponseTab'),
     share: t('feedbackTargetView:shareTab'),
     'continuous-feedback': t('feedbackTargetView:continuousFeedbackTab'),
     'interim-feedback': t('feedbackTargetView:interimFeedbackTab'),

@@ -18,9 +18,11 @@ const Links = () => {
 
   return (
     <Box id="feedback-target-tab-content" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-      <Typography variant="h6">Students and their respective feedback links</Typography>
+      <Typography component="h4" variant="subtitle1" sx={{ fontWeight: 'medium' }}>
+        Students and their respective feedback links
+      </Typography>
       {sortedUsers.map(user => (
-        <Box key={user.studentNumber} style={{ marginTop: 5 }}>
+        <Box key={user.studentNumber} sx={{ mt: 2 }}>
           <Typography variant="body1" component="p">
             {user.firstName} {user.lastName}
           </Typography>

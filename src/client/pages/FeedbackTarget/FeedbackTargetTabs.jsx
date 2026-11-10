@@ -1,4 +1,4 @@
-import { Tab, Tooltip, Box, Paper, Tabs } from '@mui/material'
+import { Tab, Tooltip, Box, Paper, Tabs, Divider } from '@mui/material'
 import React, { useId, useMemo } from 'react'
 import { useLocation, Link } from 'react-router-dom'
 
@@ -92,6 +92,15 @@ export const FeedbackTargetTab = ({
   return tab
 }
 
+export const FeedbackTargetTabDivider = () => (
+  <Divider
+    orientation="vertical"
+    flexItem
+    aria-hidden
+    sx={{ my: 1, mx: 1, borderRightWidth: 1.5, borderColor: 'lightgray' }}
+  />
+)
+
 const useSelectedTab = children => {
   const { pathname } = useLocation()
   const path = stripSearch(pathname)
@@ -99,10 +108,12 @@ const useSelectedTab = children => {
   const validChildren = useMemo(() => React.Children.toArray(children).filter(React.isValidElement), [children])
 
   return useMemo(() => {
-    // A tab that groups inner tabs is selected on the paths of all of them
-    const index = validChildren.findIndex(child =>
-      (child.props.matchPaths ?? [child.props.to]).map(stripSearch).includes(path)
-    )
+    // A tab that groups inner tabs is selected on the paths of all of them.
+    // Children without a path, such as dividers, are never selected.
+    const index = validChildren.findIndex(child => {
+      const paths = child.props.matchPaths ?? (child.props.to ? [child.props.to] : [])
+      return paths.map(stripSearch).includes(path)
+    })
     const currentValue = index < 0 ? 0 : index
 
     const childrenWithValue = validChildren.map((child, idx) => React.cloneElement(child, { value: idx }))

@@ -1,4 +1,4 @@
-import { Card, CardContent, Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
+import { Box, Typography, Divider, FormControlLabel, Checkbox, Alert } from '@mui/material'
 import { Formik, Form, useField } from 'formik'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -61,79 +61,77 @@ const EditFeedbackResponse = () => {
   }
 
   return (
-    <Card id="feedback-target-tab-content">
-      <CardContent>
-        <Instructions title={t('feedbackResponse:instructionTitle')}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Typography variant="body2">{t('feedbackResponse:responseInstruction')}</Typography>
-            <Typography variant="body2">{t('feedbackResponse:writingInstruction')}</Typography>
-          </Box>
-        </Instructions>
-        <Box sx={{ mb: 2 }}>
-          <Alert severity="info" role="presentation">
-            {t('feedbackResponse:responseInfo')}{' '}
-            <AlertLink href={t('links:markdownHelp')} target="_blank">
-              {t('feedbackResponse:markdownLink')}
-            </AlertLink>
-          </Alert>
+    <Box id="feedback-target-tab-content">
+      <Instructions title={t('feedbackResponse:instructionTitle')}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Typography variant="body2">{t('feedbackResponse:responseInstruction')}</Typography>
+          <Typography variant="body2">{t('feedbackResponse:writingInstruction')}</Typography>
         </Box>
-        <Formik initialValues={initialValues} validateOnChange={false} onSubmit={handleSubmit}>
-          {({ isSubmitting, values }) => {
-            const edited = values.feedbackResponse !== feedbackTarget.feedbackResponse
-            return (
-              <Form id="feedback-response-form">
-                <FormikTextField
-                  label={
-                    feedbackResponseFormDisabled
-                      ? t('feedbackResponse:formDisabled')
-                      : t('feedbackResponse:responseLabel')
+      </Instructions>
+      <Box sx={{ mb: 2 }}>
+        <Alert severity="info" role="presentation">
+          {t('feedbackResponse:responseInfo')}{' '}
+          <AlertLink href={t('links:markdownHelp')} target="_blank">
+            {t('feedbackResponse:markdownLink')}
+          </AlertLink>
+        </Alert>
+      </Box>
+      <Formik initialValues={initialValues} validateOnChange={false} onSubmit={handleSubmit}>
+        {({ isSubmitting, values }) => {
+          const edited = values.feedbackResponse !== feedbackTarget.feedbackResponse
+          return (
+            <Form id="feedback-response-form">
+              <FormikTextField
+                label={
+                  feedbackResponseFormDisabled
+                    ? t('feedbackResponse:formDisabled')
+                    : t('feedbackResponse:responseLabel')
+                }
+                name="feedbackResponse"
+                minRows={10}
+                fullWidth
+                multiline
+                disabled={feedbackResponseFormDisabled}
+              />
+              <Box sx={{ my: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      data-cy="feedback-response-send-email-checkbox"
+                      color="primary"
+                      checked={sendEmail || isSent}
+                      disabled={isSent || feedbackResponseFormDisabled}
+                      onChange={({ target }) => setSendEmail(target.checked)}
+                      disableFocusRipple
+                    />
                   }
-                  name="feedbackResponse"
-                  minRows={10}
-                  fullWidth
-                  multiline
-                  disabled={feedbackResponseFormDisabled}
+                  label={isSent ? t('feedbackResponse:emailSent') : t('feedbackResponse:checkboxSendEmail')}
+                  sx={{ ml: 0, pr: 1, ...optionFocusIndicatorStyle() }}
                 />
-                <Box sx={{ my: 2, display: 'flex', flexDirection: 'column', gap: 1 }}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        data-cy="feedback-response-send-email-checkbox"
-                        color="primary"
-                        checked={sendEmail || isSent}
-                        disabled={isSent || feedbackResponseFormDisabled}
-                        onChange={({ target }) => setSendEmail(target.checked)}
-                        disableFocusRipple
-                      />
-                    }
-                    label={isSent ? t('feedbackResponse:emailSent') : t('feedbackResponse:checkboxSendEmail')}
-                    sx={{ ml: 0, pr: 1, ...optionFocusIndicatorStyle() }}
-                  />
-                  <ResponseEmailButton
-                    sendEmail={!isSent && sendEmail}
-                    disabled={
-                      feedbackResponseFormDisabled ||
-                      (!edited && !sendEmail) ||
-                      (!edited && isSent) ||
-                      isSubmitting ||
-                      !values.feedbackResponse
-                    }
-                    onSubmit={() => handleSubmit(values)}
-                  />
-                </Box>
-                <Box my={2}>
-                  <Divider />
-                </Box>
-                <Box mb={2}>
-                  <Typography color="textSecondary">{t('feedbackResponse:previewLabel')}</Typography>
-                </Box>
-                <MarkdownPreview />
-              </Form>
-            )
-          }}
-        </Formik>
-      </CardContent>
-    </Card>
+                <ResponseEmailButton
+                  sendEmail={!isSent && sendEmail}
+                  disabled={
+                    feedbackResponseFormDisabled ||
+                    (!edited && !sendEmail) ||
+                    (!edited && isSent) ||
+                    isSubmitting ||
+                    !values.feedbackResponse
+                  }
+                  onSubmit={() => handleSubmit(values)}
+                />
+              </Box>
+              <Box my={2}>
+                <Divider />
+              </Box>
+              <Box mb={2}>
+                <Typography color="textSecondary">{t('feedbackResponse:previewLabel')}</Typography>
+              </Box>
+              <MarkdownPreview />
+            </Form>
+          )
+        }}
+      </Formik>
+    </Box>
   )
 }
 

@@ -1,4 +1,4 @@
-import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
+import { Typography, Box, Alert, Stack } from '@mui/material'
 import { Formik, Form } from 'formik'
 import { useTranslation } from 'react-i18next'
 
@@ -82,25 +82,21 @@ const FormContainer = ({
                 submitCount={submitCount}
               />
             )}
-            <Card>
-              <CardContent sx={{ px: { md: 3 }, pt: { md: 3 } }}>
-                <Box mb={4}>
-                  <Alert severity="info">
-                    {t('feedbackView:feedbackInfo', { context })}
-                    {onOpenPrivacyDialog && (
-                      <>
-                        {' '}
-                        <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
-                          {t('feedbackView:feedbackInfoLink')}
-                        </AlertLink>
-                      </>
-                    )}
-                  </Alert>
-                </Box>
+            <Box sx={{ mb: 4 }}>
+              <Alert severity="info">
+                {t('feedbackView:feedbackInfo', { context })}
+                {onOpenPrivacyDialog && (
+                  <>
+                    {' '}
+                    <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
+                      {t('feedbackView:feedbackInfoLink')}
+                    </AlertLink>
+                  </>
+                )}
+              </Alert>
+            </Box>
 
-                <FeedbackForm questions={questions} name="answers" disabled={disabledProp && showSubmitButton} />
-              </CardContent>
-            </Card>
+            <FeedbackForm questions={questions} name="answers" disabled={disabledProp && showSubmitButton} />
 
             {showSubmitButton && (
               <Stack spacing={2} sx={{ mt: 2, alignItems: 'flex-start' }}>

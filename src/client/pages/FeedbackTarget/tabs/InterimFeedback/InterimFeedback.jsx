@@ -66,7 +66,7 @@ const InterimFeedback = () => {
   }
 
   return (
-    <Box id="feedback-target-tab-content" mb={6} px={1}>
+    <Box id="feedback-target-tab-content">
       <Box sx={styles.buttonContainer}>
         <NorButton
           data-cy="interim-feedbacks-add-new"

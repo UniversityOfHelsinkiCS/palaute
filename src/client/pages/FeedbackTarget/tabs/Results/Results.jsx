@@ -18,6 +18,7 @@ import GroupSelector from './GroupSelector'
 import QuestionResults from './QuestionResults'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useChartConfig from './QuestionResults/useChartConfig'
+import ResultsButtons from './ResultsButtons'
 import { getCourseStartDate } from './utils'
 
 const NotEnoughFeedbacks = ({ t }) => (
@@ -88,7 +89,7 @@ const getExportFilename = feedbackTarget => {
   return `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
 }
 
-const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef }) => {
+const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef, tableToggle }) => {
   const { ref, inView } = useInView({ initialInView: true })
 
   const { feedbackTarget } = useFeedbackTargetContext()
@@ -111,18 +112,29 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
         position: isSticky ? 'sticky' : 'initial',
         top: '-1px',
         zIndex: 100,
+        mb: 2,
       }}
     >
       <Box h="1px" ref={ref} />
       <Paper
         sx={{
           p: '1rem',
-          justifyContent: 'space-between',
           backgroundColor: isStuckTop ? 'white' : 'transparent',
           display: 'flex',
+          flexDirection: 'column',
+          gap: 2,
         }}
         elevation={isStuckTop ? 4 : 0}
       >
+        <ResultsButtons sx={{ mb: 4 }}>
+          {tableToggle}
+          <ExportFeedbacksMenu
+            questions={feedbackTarget.questions}
+            feedbacks={feedbacks}
+            filename={getExportFilename(feedbackTarget)}
+            componentRef={exportRef}
+          />
+        </ResultsButtons>
         {!isLoading && hasMultipleGroups && (
           <GroupSelector
             groupId={groupId}
@@ -132,14 +144,6 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
             studentCount={studentCount}
           />
         )}
-        <Box ml="auto">
-          <ExportFeedbacksMenu
-            questions={feedbackTarget.questions}
-            feedbacks={feedbacks}
-            filename={getExportFilename(feedbackTarget)}
-            componentRef={exportRef}
-          />
-        </Box>
       </Paper>
     </Box>
   )
@@ -188,7 +192,9 @@ const Results = () => {
   const enoughStudents = !FEEDBACK_HIDDEN_STUDENT_COUNT || studentCount >= FEEDBACK_HIDDEN_STUDENT_COUNT
 
   const feedbackHasStarted = new Date(feedbackTarget.opensAt) < new Date()
-  const filtersVisible = isOrganisationReader || isResponsibleTeacher
+  // Does not depend on the selected group, so that the group selector stays when a group has no feedback
+  const feedbackCanBeShown = enoughFeedbacks && (enoughStudents || isResponsibleTeacher)
+  const filtersVisible = (isOrganisationReader || isResponsibleTeacher) && feedbackCanBeShown
 
   const feedbacks = feedbackTargetData?.feedbacks ?? []
   const groupFeedbackCount = feedbacks.length
@@ -196,34 +202,41 @@ const Results = () => {
 
   const showFeedback = enoughFeedbacks && (enoughStudents || (feedbacks.length > 0 && isResponsibleTeacher))
 
+  const tableToggle = showFeedback && (
+    <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />
+  )
+
   return (
     <Box id="feedback-target-tab-content">
-      {filtersVisible && (
-        <FilterSection
-          isLoading={isLoading}
-          feedbackResults={feedbackTargetData}
-          groupId={groupId}
-          setGroupId={setGroupId}
-          exportRef={exportRef}
-        />
+      {isOpen && feedback && (
+        <Alert data-cy="feedback-target-results-thank-you" severity="info" sx={{ mb: 4 }}>
+          {t('feedbackTargetResults:thankYouMessage')}
+        </Alert>
       )}
 
-      {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
+      {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
 
       <Box ref={exportRef}>
-        {feedbackHasStarted && !isOpen && enoughFeedbacks && <FeedbackResponse feedbackTarget={feedbackTarget} />}
-
-        {isOpen && feedback && (
-          <Alert data-cy="feedback-target-results-thank-you" severity="info" sx={{ mb: 2 }}>
-            {t('feedbackTargetResults:thankYouMessage')}
-          </Alert>
+        {feedbackHasStarted && !isOpen && enoughFeedbacks && (
+          <FeedbackResponse feedbackTarget={feedbackTarget} inTabPanel />
         )}
 
-        {showFeedback && studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT && <SmallCourseInfo t={t} />}
+        <Box sx={{ display: 'contents', '@media print': { display: 'none' } }}>
+          {filtersVisible ? (
+            <FilterSection
+              isLoading={isLoading}
+              feedbackResults={feedbackTargetData}
+              groupId={groupId}
+              setGroupId={setGroupId}
+              exportRef={exportRef}
+              tableToggle={tableToggle}
+            />
+          ) : (
+            tableToggle && <ResultsButtons sx={{ mb: 4 }}>{tableToggle}</ResultsButtons>
+          )}
 
-        {showFeedback && (
-          <ChartTableToggle showTable={showTable} setShowTable={setShowTable} fullWidth sx={{ mb: 4, py: 1 }} />
-        )}
+          {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}
+        </Box>
 
         {showFeedback && (
           <FeedbackChart
@@ -234,6 +247,7 @@ const Results = () => {
             feedbackReminderLastSentAt={feedbackReminderLastSentAt}
             t={t}
             showTable={showTable}
+            inTabPanel
           />
         )}
 
@@ -251,6 +265,7 @@ const Results = () => {
             savePublicQuestionIds={publicityMutation.mutateAsync}
             openAnswerActions={openAnswerActions}
             showTable={showTable}
+            inTabPanel
           />
         ) : (
           <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />

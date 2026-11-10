@@ -122,11 +122,10 @@ test.describe('Responsible Teachers', () => {
 
     // Tabs
     await byDataCy(page, 'interim-feedback-target-give-feedback-tab').click()
-    await expect(byDataCy(page, 'interim-feedback-target-settings-tab')).toHaveAccessibleDescription(
-      'Questions tab disabled: Survey can no longer be edited after the feedback has opened.'
-    )
+    await expect(byDataCy(page, 'interim-feedback-target-settings-tab')).not.toBeAttached()
     await byDataCy(page, 'interim-feedback-target-share-feedback-tab').click()
     await byDataCy(page, 'interim-feedback-target-results-tab').click()
+    await byDataCy(page, 'interim-feedback-target-survey-tab').click()
     await byDataCy(page, 'interim-feedback-target-students-with-feedback-tab').click()
   })
 
@@ -160,15 +159,13 @@ test.describe('Responsible Teachers', () => {
     await page.goto(`/targets/${parentId}/interim-feedback`)
     await byDataCy(page, `interim-feedback-show-feedback-${interimFeedback.id}`).click()
 
-    // The tab is not truly disabled so that its tooltip stays keyboard accessible
-    await expect(byDataCy(page, 'interim-feedback-target-settings-tab')).toHaveAccessibleDescription(
-      'Questions tab disabled: Survey can no longer be edited after the feedback has opened.'
+    // The Edit questions tab is left out and the description of the Preview tab tells why
+    await expect(byDataCy(page, 'interim-feedback-target-settings-tab')).not.toBeAttached()
+    await expect(page.locator('[id="interim-feedback-target-tabpanel-feedback"]')).toBeAttached()
+    await expect(byDataCy(page, 'interim-feedback-target-give-feedback-tab')).toHaveAccessibleDescription(
+      'Survey can no longer be edited after the feedback has opened.'
     )
-
-    await expect(page.locator('[id="feedback-target-tabpanel-feedback"]')).toBeAttached()
-    await byDataCy(page, 'interim-feedback-target-settings-tab').click()
-    await expect(page.locator('[id="feedback-target-tabpanel-feedback"]')).toBeAttached()
-    await expect(page.locator('[id="feedback-target-tabpanel-edit"]')).not.toBeAttached()
+    await expect(page.locator('[id="interim-feedback-target-tabpanel-edit"]')).not.toBeAttached()
   })
 
   test('can create questions for interim feedbacks', async ({ page, api }) => {

@@ -1,5 +1,5 @@
 import { FileCopyOutlined, Email } from '@mui/icons-material'
-import { Box, Chip, Paper, Typography, Alert } from '@mui/material'
+import { Box, Typography, Alert } from '@mui/material'
 import { differenceInHours, format } from 'date-fns'
 import { useSnackbar } from 'notistack'
 import { useState } from 'react'
@@ -16,27 +16,31 @@ import useFeedbackTargetId from '../../useFeedbackTargetId'
 import { copyLink } from '../../utils'
 import ReminderEmailModal from './ReminderEmailModal'
 
-export const ShareItem = ({ chipLabel, buttonLabel, linkText, copyLink }) => (
-  <Paper sx={{ my: 4 }}>
-    <Box sx={{ p: 2 }}>
-      <Chip label={chipLabel} variant="outlined" />
-      <Box sx={{ display: 'flex', alignItems: 'center', mt: 1, ml: 2, flexWrap: 'wrap', gap: 1 }}>
-        <Box sx={{ fontStyle: 'italic', minWidth: 0, mr: 2 }}>
-          <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{linkText}</Typography>
-        </Box>
-        <Box>
-          <NorButton
-            icon={<FileCopyOutlined />}
-            color="secondary"
-            onClick={() => copyLink(linkText)}
-            aria-label={`${buttonLabel}: ${chipLabel}`}
-          >
-            {buttonLabel}
-          </NorButton>
-        </Box>
+const SectionHeading = ({ children, component = 'h4' }) => (
+  <Typography component={component} variant="subtitle1" sx={{ fontWeight: 'medium', mb: 1 }}>
+    {children}
+  </Typography>
+)
+
+export const ShareItem = ({ title, buttonLabel, linkText, copyLink, headingComponent }) => (
+  <Box>
+    <SectionHeading component={headingComponent}>{title}</SectionHeading>
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1.5 }}>
+      <Box sx={{ fontStyle: 'italic', minWidth: 0, maxWidth: '100%' }}>
+        <Typography sx={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>{linkText}</Typography>
+      </Box>
+      <Box>
+        <NorButton
+          icon={<FileCopyOutlined />}
+          color="secondary"
+          onClick={() => copyLink(linkText)}
+          aria-label={`${buttonLabel}: ${title}`}
+        >
+          {buttonLabel}
+        </NorButton>
       </Box>
     </Box>
-  </Paper>
+  </Box>
 )
 
 const Share = () => {
@@ -67,57 +71,69 @@ const Share = () => {
   }
 
   return (
-    <Box id="feedback-target-tab-content" sx={{ my: 3 }}>
+    <Box id="feedback-target-tab-content">
       <ReminderEmailModal open={open} onClose={closeModal} feedbackTarget={feedbackTarget} />
-      {isOpen && (
-        <Box sx={{ mb: 2, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
-          <TooltipButton
-            variant="contained"
-            color="primary"
-            onClick={openModal}
-            disabled={modalDisabled}
-            startIcon={<Email />}
-            tooltip={t('feedbackTargetResults:reminderDisabled', { cooldown: FEEDBACK_REMINDER_COOLDOWN })}
-          >
-            {t('feedbackTargetResults:sendReminder')}
-          </TooltipButton>
-          {formattedLastSentAt && (
-            <Typography component="p" variant="subtitle1" color="textSecondary">
-              {`${t('feedbackTargetResults:reminderLastSent')} ${formattedLastSentAt}. ${t(
-                'feedbackTargetResults:reminderCooldownInfo',
-                {
-                  cooldown: FEEDBACK_REMINDER_COOLDOWN,
-                }
-              )}`}
-            </Typography>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { md: '1fr 1fr' },
+          gap: 6,
+          alignItems: 'start',
+        }}
+      >
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+          {isOpen && (
+            <Box>
+              <SectionHeading>{t('feedbackTargetView:reminderEmailTitle')}</SectionHeading>
+              <Box sx={{ mt: 3, display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 1 }}>
+                <TooltipButton
+                  variant="contained"
+                  color="primary"
+                  onClick={openModal}
+                  disabled={modalDisabled}
+                  startIcon={<Email />}
+                  tooltip={t('feedbackTargetResults:reminderDisabled', { cooldown: FEEDBACK_REMINDER_COOLDOWN })}
+                >
+                  {t('feedbackTargetResults:sendReminder')}
+                </TooltipButton>
+                {formattedLastSentAt && (
+                  <Typography component="p" variant="subtitle1" color="textSecondary">
+                    {`${t('feedbackTargetResults:reminderLastSent')} ${formattedLastSentAt}. ${t(
+                      'feedbackTargetResults:reminderCooldownInfo',
+                      {
+                        cooldown: FEEDBACK_REMINDER_COOLDOWN,
+                      }
+                    )}`}
+                  </Typography>
+                )}
+              </Box>
+            </Box>
           )}
+          {isEnded && (
+            <ShareItem
+              title={t('feedbackTargetView:studentResultsLinkTitle')}
+              buttonLabel={t('common:copyToClipBoard')}
+              linkText={resultsLink}
+              copyLink={handleCopyLink}
+            />
+          )}
+          <ShareItem
+            title={t('feedbackTargetView:studentLinkTitle')}
+            buttonLabel={t('common:copyToClipBoard')}
+            linkText={feedbackLink}
+            copyLink={handleCopyLink}
+          />
         </Box>
-      )}
-      {isEnded && (
-        <ShareItem
-          chipLabel={t('feedbackTargetView:studentResultsLinkTitle')}
-          buttonLabel={t('common:copyToClipBoard')}
-          linkText={resultsLink}
-          copyLink={handleCopyLink}
-        />
-      )}
-      <ShareItem
-        chipLabel={t('feedbackTargetView:studentLinkTitle')}
-        buttonLabel={t('common:copyToClipBoard')}
-        linkText={feedbackLink}
-        copyLink={handleCopyLink}
-      />
-      <Paper sx={{ my: 4 }}>
-        <Box sx={{ p: 2 }}>
-          <Chip label={t('feedbackTargetView:studentLinkQRTitle')} variant="outlined" />
-          <Box sx={{ p: 4, display: 'flex', overflow: 'auto' }}>
-            <Box sx={{ maxWidth: '100%', overflow: 'hidden' }}>
+        <Box>
+          <SectionHeading>{t('feedbackTargetView:studentLinkQRTitle')}</SectionHeading>
+          <Box sx={{ pt: 2, pb: 3, display: 'flex', overflow: 'auto' }}>
+            <Box sx={{ ml: 2, maxWidth: '100%', overflow: 'hidden', '& svg': { display: 'block' } }}>
               <QRCode value={feedbackLink} />
             </Box>
           </Box>
           <Alert severity="info">{t('feedbackTargetView:qrCodeHelpText')}</Alert>
         </Box>
-      </Paper>
+      </Box>
     </Box>
   )
 }

@@ -1,8 +1,6 @@
 import { Divider, Box, Alert } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { useParams } from 'react-router-dom'
 
-import CardSection from '../../../../../components/common/CardSection'
 import { TeacherSurvey } from '../../../../../components/QuestionEditor'
 import { QuestionLanguageProvider } from '../../../../../util/questionLanguageContext'
 import { useFeedbackTargetContext } from '../../../FeedbackTargetContext'
@@ -24,7 +22,6 @@ const styles = {
 }
 
 const EditFeedbackTarget = () => {
-  const { id, interimFeedbackId } = useParams()
   const { i18n, t } = useTranslation()
   const { language } = i18n
 
@@ -69,13 +66,9 @@ const EditFeedbackTarget = () => {
     t('editFeedbackTarget:addAndPreviewQuestionsInfo'),
   ].join(' ')
 
-  const previewLink = interimFeedbackId
-    ? `/targets/${id}/interim-feedback/${interimFeedbackId}/feedback`
-    : `/targets/${id}/feedback`
-
   return (
     <QuestionLanguageProvider value={previewLanguage}>
-      <CardSection title={t('feedbackView:editSurvey')}>
+      <Box>
         {universityQuestionCount + programmeQuestionCount > 0 && (
           <Box sx={{ mb: 2 }}>
             <Alert severity="info">{upperLevelQuestionsInfo}</Alert>
@@ -86,13 +79,8 @@ const EditFeedbackTarget = () => {
 
         <Divider sx={styles.toolbarDivider} />
 
-        <Toolbar
-          onSave={() => {}}
-          previewLink={previewLink}
-          language={previewLanguage}
-          onLanguageChange={setPreviewLanguage}
-        />
-      </CardSection>
+        <Toolbar language={previewLanguage} onLanguageChange={setPreviewLanguage} />
+      </Box>
     </QuestionLanguageProvider>
   )
 }

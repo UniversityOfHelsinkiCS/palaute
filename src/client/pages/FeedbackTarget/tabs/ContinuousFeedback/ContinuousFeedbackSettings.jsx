@@ -4,8 +4,8 @@ import { useSnackbar } from 'notistack'
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import CardSection from '../../../../components/common/CardSection'
 import { NorButton } from '../../../../components/common/NorButton'
+import Section from '../../../../components/common/Section'
 import { switchFocusIndicatorStyle } from '../../../../util/accessibility'
 import apiClient from '../../../../util/apiClient'
 import queryClient from '../../../../util/queryClient'
@@ -130,7 +130,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
   const isSaving = mutation.isPending ?? mutation.isLoading ?? false
 
   return (
-    <CardSection title={t('feedbackTargetView:continuousFeedbackTab')}>
+    <Section title={t('common:settings')}>
       <Box mb={2}>
         <Alert severity="info">{t('feedbackTargetView:continuousFeedbackInfo')}</Alert>
       </Box>
@@ -185,7 +185,7 @@ const ContinuousFeedbackSettings = ({ feedbackTarget }) => {
           </Box>
         </Box>
       </FormGroup>
-    </CardSection>
+    </Section>
   )
 }
 

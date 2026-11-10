@@ -91,15 +91,17 @@ const expectSurveyPage = async (page: Page, feedbackCount: string, hasOrganisati
   await expect(byDataCy(page, 'feedback-target-interim-feedback-parent-link')).not.toBeAttached()
 
   await byDataCy(page, 'feedback-target-give-feedback-tab').click()
-  await expectQuestionsTabDisabled(page)
+  await expectQuestionsNotEditable(page)
   await byDataCy(page, 'feedback-target-share-feedback-tab').click()
   await byDataCy(page, 'feedback-target-results-tab').click()
+  await byDataCy(page, 'feedback-target-survey-tab').click()
   await byDataCy(page, 'feedback-target-students-with-feedback-tab').click()
 }
 
-const expectQuestionsTabDisabled = async (page: Page) => {
-  await expect(byDataCy(page, 'feedback-target-settings-tab')).toHaveAccessibleDescription(
-    'Questions tab disabled: Survey can no longer be edited after the feedback has opened.'
+const expectQuestionsNotEditable = async (page: Page) => {
+  await expect(byDataCy(page, 'feedback-target-settings-tab')).not.toBeAttached()
+  await expect(byDataCy(page, 'feedback-target-give-feedback-tab')).toHaveAccessibleDescription(
+    'Survey can no longer be edited after the feedback has opened.'
   )
 }
 
@@ -376,6 +378,7 @@ test.describe('Feedback Correspondents', () => {
     await saveSurvey(page)
 
     await byDataCy(page, 'feedback-target-results-tab').click()
+    await byDataCy(page, 'feedback-target-survey-tab').click()
     await byDataCy(page, 'feedback-target-students-with-feedback-tab').click()
     await expect(contains(page, 'henri.testaaja@helsinki.fi')).toBeAttached()
     await expect(contains(page, 'opiskelija@toska.fi')).not.toBeAttached()
@@ -420,7 +423,7 @@ test.describe('Responsible Teachers', () => {
 
   test('can not create/edit questions for ongoing organistaion survey', async ({ page }) => {
     await openSurveyFromCourses(page, survey.id)
-    await expectQuestionsTabDisabled(page)
+    await expectQuestionsNotEditable(page)
   })
 
   test('can create questions for organisation survey', async ({ page, api }) => {

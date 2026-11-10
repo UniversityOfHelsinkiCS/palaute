@@ -61,7 +61,7 @@ const InterimFeedbackItem = ({ interimFeedback }) => {
 
   return (
     <>
-      <Card sx={{ mb: 3 }}>
+      <Card variant="outlined" sx={{ mb: 3 }}>
         <CardContent>
           <Typography
             data-cy={`interim-feedback-item-title-${interimFeedback.id}`}

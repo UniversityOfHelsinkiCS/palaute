@@ -6,11 +6,11 @@ import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
-import CardSection from '../../../../components/common/CardSection'
 import ErrorView from '../../../../components/common/ErrorView'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import Markdown from '../../../../components/common/Markdown'
 import { NorButton } from '../../../../components/common/NorButton'
+import Section from '../../../../components/common/Section'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
 import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { focusIndicatorStyle } from '../../../../util/accessibility'
@@ -172,39 +172,37 @@ const ContinuousFeedback = () => {
   const isSmallCourse = studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT
 
   return (
-    <Box id="feedback-target-tab-content">
+    <Box id="feedback-target-tab-content" sx={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
       {showSettings && <ContinuousFeedbackSettings feedbackTarget={feedbackTarget} />}
 
-      <Box sx={{ my: '1rem' }}>
-        {isStudent && isOngoing && isFeedbackEnabled && (
-          <CardSection title={t('userFeedbacks:giveContinuousFeedback')} sx={{ mb: 2 }}>
-            <ContinuousFeedbackForm fewEnrolled={isSmallCourse} />
-          </CardSection>
-        )}
-        {showFeedbackList && (
-          <CardSection title={t('feedbackTargetView:continuousFeedbackGiven')}>
-            {(isTeacher || isResponsibleTeacher) && (
-              <Box sx={{ mb: 2 }}>
-                <TeacherInfo enabled={isFeedbackEnabled} hasFeedback={continuousFeedbacks?.length > 0} />
-              </Box>
-            )}
+      {isStudent && isOngoing && isFeedbackEnabled && (
+        <Section title={t('userFeedbacks:giveContinuousFeedback')}>
+          <ContinuousFeedbackForm fewEnrolled={isSmallCourse} />
+        </Section>
+      )}
+      {showFeedbackList && (
+        <Section title={t('feedbackTargetView:continuousFeedbackGiven')}>
+          {(isTeacher || isResponsibleTeacher) && (
+            <Box sx={{ mb: 2 }}>
+              <TeacherInfo enabled={isFeedbackEnabled} hasFeedback={continuousFeedbacks?.length > 0} />
+            </Box>
+          )}
 
-            {(isResponsibleTeacher || isAdmin) && isSmallCourse && <SmallCourseInfo t={t} />}
+          {(isResponsibleTeacher || isAdmin) && isSmallCourse && <SmallCourseInfo t={t} />}
 
-            {isStudent && (
-              <Box sx={{ mb: 4 }}>
-                <Alert severity="info">
-                  {!isOngoing && !continuousFeedbacks?.length
-                    ? t('feedbackTargetView:noContinuousFeedbackGivenStudentClosed')
-                    : t('feedbackTargetView:continuousFeedbackStudentInfo')}
-                </Alert>
-              </Box>
-            )}
+          {isStudent && (
+            <Box sx={{ mb: 4 }}>
+              <Alert severity="info">
+                {!isOngoing && !continuousFeedbacks?.length
+                  ? t('feedbackTargetView:noContinuousFeedbackGivenStudentClosed')
+                  : t('feedbackTargetView:continuousFeedbackStudentInfo')}
+              </Alert>
+            </Box>
+          )}
 
-            {showFeedbackList && <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />}
-          </CardSection>
-        )}
-      </Box>
+          {showFeedbackList && <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />}
+        </Section>
+      )}
     </Box>
   )
 }

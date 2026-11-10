@@ -19,27 +19,19 @@ import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
 import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedbackOpen, useSaveValues } from './utils'
 
-const FeedbackView = () => {
+const FeedbackView = ({ questionsUneditableInfo }) => {
   const navigate = useNavigate()
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-  const { id, interimFeedbackId } = useParams()
+  const { id } = useParams()
   const { authorizedUser } = useAuthorizedUser()
 
   const submitMutation = useSaveValues()
   const [privacyDialogOpen, setPrivacyDialogOpen] = useState(false)
   const [smallCourseDialogOpen, setSmallCourseDialogOpen] = useState(true)
 
-  const {
-    feedbackTarget,
-    isStudent,
-    isResponsibleTeacher,
-    isOrganisationAdmin,
-    isTeacher,
-    isLoading,
-    previewLanguage,
-    setPreviewLanguage,
-  } = useFeedbackTargetContext()
+  const { feedbackTarget, isStudent, isOrganisationAdmin, isTeacher, isLoading, previewLanguage, setPreviewLanguage } =
+    useFeedbackTargetContext()
   const studentCount = feedbackTarget.summary?.data?.studentCount
 
   if (isLoading) {
@@ -63,10 +55,6 @@ const FeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(questions, feedbackTarget.feedback)
   const validate = makeValidate(questions)
-
-  const editLink = interimFeedbackId
-    ? `/targets/${id}/interim-feedback/${interimFeedbackId}/edit`
-    : `/targets/${id}/edit`
 
   const handleSubmit = async values => {
     try {
@@ -167,14 +155,15 @@ const FeedbackView = () => {
           />
         )}
 
+        {questionsUneditableInfo && (
+          <Alert severity="warning" role="presentation" sx={{ mt: 2 }}>
+            {questionsUneditableInfo}
+          </Alert>
+        )}
+
         {showToolbar && (
-          <Box mt={2}>
-            <Toolbar
-              showEdit={isResponsibleTeacher}
-              editLink={editLink}
-              language={previewLanguage}
-              onLanguageChange={handleLanguageChange}
-            />
+          <Box sx={{ mt: 2 }}>
+            <Toolbar language={previewLanguage} onLanguageChange={handleLanguageChange} />
           </Box>
         )}
       </Box>

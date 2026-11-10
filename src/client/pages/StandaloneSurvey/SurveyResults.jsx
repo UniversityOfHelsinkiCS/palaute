@@ -5,6 +5,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import ChartTableToggle, { useShowTable } from '../FeedbackTarget/tabs/Results/ChartTableToggle'
 import QuestionResults from '../FeedbackTarget/tabs/Results/QuestionResults'
 import useChartConfig from '../FeedbackTarget/tabs/Results/QuestionResults/useChartConfig'
+import ResultsButtons from '../FeedbackTarget/tabs/Results/ResultsButtons'
 
 const SurveyResults = ({
   questions,
@@ -39,12 +40,12 @@ const SurveyResults = ({
             sx={{ px: '6px' }}
           />
         </Box>
-        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 2 }}>
+        <ResultsButtons>
           {responseCount > 0 && (
             <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />
           )}
           {exportMenu}
-        </Box>
+        </ResultsButtons>
       </Box>
       {responseCount === 0 ? (
         <Alert severity="info" sx={{ mt: 2 }}>

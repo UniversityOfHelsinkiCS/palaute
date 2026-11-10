@@ -9,7 +9,6 @@ import { CSVLink } from 'react-csv'
 import { useTranslation } from 'react-i18next'
 import { writeFileXLSX, utils } from 'xlsx'
 
-import CardSection from '../../../../components/common/CardSection'
 import { NorButton } from '../../../../components/common/NorButton'
 import { focusIndicatorStyle } from '../../../../util/accessibility'
 import { SHOW_BUTTON_DOWNLOAD_SISU_CSV } from '../../../../util/common'
@@ -25,7 +24,9 @@ const styles = {
     display: 'flex',
     flexDirection: { xs: 'column', md: 'row' },
     alignItems: 'flex-start',
+    justifyContent: { md: 'flex-end' },
     gap: '0.5rem',
+    mb: 3,
   },
   button: {
     minWidth: '170px',
@@ -198,29 +199,16 @@ const StudentTable = ({ students, feedbackTarget }) => {
   const sisufileName = `${feedbackTarget.courseUnit.courseCode}_sisu`
 
   return (
-    <CardSection
-      title={
-        <Box sx={styles.box}>
-          {t('feedbackTargetView:studentsWithFeedbackTab')}
-          <NorButton
-            color="secondary"
-            icon={<CopyIcon />}
-            onClick={handleCopyStudentNumbers}
-            sx={{ ...styles.button, ml: { xs: 0, md: 'auto' } }}
-          >
-            {t('feedbackTargetView:copyStudentNumbers')}
-          </NorButton>
-          <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
-          {SHOW_BUTTON_DOWNLOAD_SISU_CSV && courseRealisationNameFi === SISU_FEEDBACK_FT_CR_NAME_FI && (
-            <ExportSisuAttainmentCSV
-              students={sisuData}
-              fileName={sisufileName}
-              showFeedback={feedbackStatusAvailable}
-            />
-          )}
-        </Box>
-      }
-    >
+    <Box>
+      <Box sx={styles.box}>
+        <NorButton color="secondary" icon={<CopyIcon />} onClick={handleCopyStudentNumbers} sx={styles.button}>
+          {t('feedbackTargetView:copyStudentNumbers')}
+        </NorButton>
+        <ExportXLSX students={studentsData} fileName={fileName} showFeedback={feedbackStatusAvailable} />
+        {SHOW_BUTTON_DOWNLOAD_SISU_CSV && courseRealisationNameFi === SISU_FEEDBACK_FT_CR_NAME_FI && (
+          <ExportSisuAttainmentCSV students={sisuData} fileName={sisufileName} showFeedback={feedbackStatusAvailable} />
+        )}
+      </Box>
       <TableContainer>
         <Table>
           <TableHead>
@@ -275,7 +263,7 @@ const StudentTable = ({ students, feedbackTarget }) => {
           </TableBody>
         </Table>
       </TableContainer>
-    </CardSection>
+    </Box>
   )
 }
 
