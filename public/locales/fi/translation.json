@@ -154,6 +154,7 @@
     "editButton_standalone": "Muokkaa vastausta",
     "successAlert": "Palaute on annettu. Kiitos palautteestasi!",
     "feedbackInfo": "Annettu palaute näkyy opettajalle nimettömänä. Tähdellä (*) merkityt kentät ovat pakollisia.",
+    "feedbackInfo_standalone": "Vastaukset käsitellään nimettöminä. Tähdellä (*) merkityt kentät ovat pakollisia.",
     "feedbackInfoLink": "Lue lisää, miten vastauksiasi ja tietojasi käytetään.",
     "closedInfo": "Palaute on tällä hetkellä suljettu. Palautetta voi antaa välillä {{opensAt}}–{{closesAt}}",
     "feedbackInfoTitle": "Miten vastauksiani ja tietojani käytetään?",

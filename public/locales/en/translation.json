@@ -159,6 +159,7 @@
     "editButton_standalone": "Edit answer",
     "successAlert": "Feedback has been given. Thank you for your feedback!",
     "feedbackInfo": "Your name will not be shown to the teacher with your feedback. Fields marked with an asterisk (*) are required.",
+    "feedbackInfo_standalone": "Responses are handled anonymously. Fields marked with an asterisk (*) are required.",
     "feedbackInfoLink": "Read more, how your information and answers are being used.",
     "closedInfo": "This feedback is currently closed. Feedback can be given between {{opensAt}} and {{closesAt}}",
     "feedbackInfoTitle": "How are my answers used?",
