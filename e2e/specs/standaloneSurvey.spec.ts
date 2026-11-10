@@ -229,6 +229,25 @@ test.describe('Standalone surveys', () => {
     expect(results.feedbacks[0].data).toContainEqual({ questionId: likertId, data: '1' })
   })
 
+  test('open answers are published only after the survey closes', async ({ request }) => {
+    const surveys = api(request)
+    const { id } = await setupSurvey(request)
+    const { body } = await surveys.get(id)
+    const questions = body.questions.map(
+      ({ id: questionId, type, required, data }: { id: number; type: string; required: boolean; data: unknown }) => ({
+        id: questionId,
+        type,
+        required,
+        data,
+        visibility: 'PUBLIC',
+      })
+    )
+
+    expect((await surveys.setQuestions(id, questions)).status).toBe(403)
+    await surveys.update(id, { opensAt: subDays(new Date(), 3), closesAt: subDays(new Date(), 1) })
+    expect((await surveys.setQuestions(id, questions)).status).toBe(200)
+  })
+
   test('a closed survey can be renamed from the settings', async ({ page, loginAs, request }) => {
     const surveys = api(request)
     const { id } = await setupSurvey(request)
@@ -260,7 +279,7 @@ test.describe('Standalone surveys', () => {
     expect((await surveys.setQuestions(id, relabelled, teacher)).status).toBe(403)
     expect((await surveys.setQuestions(id, [current[0]], teacher)).status).toBe(403)
     expect(
-      (await surveys.setQuestions(id, [current[0], { ...current[1], visibility: 'PUBLIC' }], teacher)).status
+      (await surveys.setQuestions(id, [{ ...current[0], visibility: 'PRIVATE' }, current[1]], teacher)).status
     ).toBe(200)
     expect((await surveys.setQuestions(id, relabelled, admin)).status).toBe(200)
   })

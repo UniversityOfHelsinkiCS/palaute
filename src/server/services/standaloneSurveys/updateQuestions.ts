@@ -44,6 +44,16 @@ export const updateQuestions = async (survey: StandaloneSurvey, inputs: Question
     throw ApplicationError.Forbidden('Only the visibility of questions can be changed once the survey has opened')
   }
 
+  const publishesOpenAnswers = questions.some(
+    q =>
+      q.type === 'OPEN' &&
+      q.visibility === 'PUBLIC' &&
+      existing.find(sq => sq.questionId === q.id)?.visibility !== 'PUBLIC'
+  )
+  if (publishesOpenAnswers && !survey.isEnded()) {
+    throw ApplicationError.Forbidden('Open answers can be published only after the survey has closed')
+  }
+
   const existingIds = existing.map(sq => sq.questionId)
   const inputIds = questions.flatMap(q => (q.id ? [q.id] : []))
 
