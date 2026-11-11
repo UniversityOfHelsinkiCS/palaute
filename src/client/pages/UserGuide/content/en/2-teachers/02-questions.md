@@ -8,12 +8,12 @@ A course survey always has the university level questions and possibly questions
 
 ## Editing the questions {#edit-questions}
 
-You can edit the questions until the course feedback survey opens. After that the [[feedbackTargetView:surveyQuestionsTab]] tab is greyed out and the questions can no longer be edited. Once the survey has closed, the tab is gone.
+You can edit the questions until the course feedback survey opens. After that the [[feedbackTargetView:surveyQuestionsTab]] tab is gone and the questions can no longer be edited.
 
 To add a question:
 
 1. Open the survey from [[navBar:myCourses]].
-2. Open the [[feedbackTargetView:surveyQuestionsTab]] tab.
+2. Open the [[feedbackTargetView:surveyTab]] tab and the [[feedbackTargetView:surveyQuestionsTab]] tab below it.
 3. Below the questions, click [[questionEditor:addQuestion]] and choose the [type of question](#question-types).
 4. Write the question in the Finnish, Swedish and English fields. You can also add a [[questionEditor:description]], e.g. to explain the question.
 5. If students must answer the question, switch on [[common:required]].
@@ -70,8 +70,10 @@ Students see the course survey in the language they use Norppa in: Finnish, Swed
 
 The survey as students see it:
 
-1. At the bottom of the [[feedbackTargetView:surveyQuestionsTab]] tab, choose the language in [[editFeedbackTarget:translationLanguage]]. The questions in the editor switch to that language.
-2. Click [[editFeedbackTarget:showPreview]].
+1. Open the [[common:preview]] tab.
+2. At the bottom of the tab, choose the language in [[feedbackView:translationLanguage]].
+
+The same menu is also at the bottom of the [[feedbackTargetView:surveyQuestionsTab]] tab, where it also switches the questions in the editor to that language. Both tabs use the language you chose last.
 
 [[video:preview-survey]]
 
@@ -118,4 +120,4 @@ The editor lists the university level questions first, then the programme questi
 5. The programme's open questions.
 6. The university level open question, so _Additional comments_ is always last.
 
-To check the result, use [[editFeedbackTarget:showPreview]] (see [Languages and preview](#languages)).
+To check the result, open the [[common:preview]] tab (see [Languages and preview](#languages)).

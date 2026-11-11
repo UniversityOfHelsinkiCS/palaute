@@ -13,7 +13,7 @@ The length is up to you. You can, for example, thank the students, sum up the fe
 As the survey's responsible teacher, you can write counter feedback after the survey has closed, for 12 months.
 
 1. Go to [[navBar:myCourses]] and choose the course. The [[teacherView:feedbackResponseMissing]] chip next to the course takes you straight to step 3.
-2. Open the [[feedbackTargetView:giveFeedbackResponseTab]] tab.
+2. Open the [[feedbackTargetView:feedbackResponseTab]] tab.
 3. Write the text in the [[feedbackResponse:responseLabel]] field. It supports Markdown, e.g. headings, lists, bold and links. The [[feedbackResponse:previewLabel]] below shows how it will look.
 4. Tick [[feedbackResponse:checkboxSendEmail]] if you want to email it to the students, or untick it to only save it.
 5. Click [[feedbackResponse:dialogSendEmailSubmit]] and confirm, or [[feedbackResponse:dialogSaveSubmit]] if you unticked the checkbox.
@@ -28,7 +28,7 @@ The day after a course survey or programme survey closes, its responsible teache
 
 The counter feedback email goes to all the survey's students, not only those who answered. It contains the counter feedback and a link to the survey's answers.
 
-The email can be sent only once. After that, the checkbox says [[feedbackResponse:emailSent]] and the tab is called [[feedbackTargetView:editFeedbackResponseTab]]. You can still edit the text: students see the new version in Norppa, but no new email is sent.
+The email can be sent only once. After that, the checkbox says [[feedbackResponse:emailSent]]. You can still edit the text: students see the new version in Norppa, but no new email is sent.
 
 If you saved the counter feedback without the email, you can send it later: tick [[feedbackResponse:checkboxSendEmail]] and click [[feedbackResponse:dialogSendEmailSubmit]].
 

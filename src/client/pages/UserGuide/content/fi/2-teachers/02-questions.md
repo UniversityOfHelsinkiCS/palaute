@@ -8,12 +8,12 @@ Kurssikyselyssä on aina yliopistotason kysymykset ja mahdollisesti koulutusohje
 
 ## Kysymysten muokkaaminen {#edit-questions}
 
-Voit muokata kysymyksiä, kunnes kurssipalautekysely avautuu. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehti on harmaana, eikä kysymyksiä pysty enää muokkaamaan. Kun kysely on sulkeutunut, välilehteä ei enää näy.
+Voit muokata kysymyksiä, kunnes kurssipalautekysely avautuu. Sen jälkeen [[feedbackTargetView:surveyQuestionsTab]]-välilehteä ei enää näy, eikä kysymyksiä pysty enää muokkaamaan.
 
 Kysymyksen lisääminen:
 
 1. Avaa kysely [[navBar:myCourses]]-sivulta.
-2. Avaa [[feedbackTargetView:surveyQuestionsTab]]-välilehti.
+2. Avaa [[feedbackTargetView:surveyTab]]-välilehti ja sen alta [[feedbackTargetView:surveyQuestionsTab]]-välilehti.
 3. Valitse kysymysten alta [[questionEditor:addQuestion]] ja valitse [kysymyksen tyyppi](#question-types).
 4. Kirjoita kysymys suomeksi, ruotsiksi ja englanniksi. Voit myös lisätä kysymykselle [[questionEditor:description]]-tekstin, esimerkiksi tarkennukseksi.
 5. Jos kysymykseen on pakko vastata, kytke päälle [[common:required]].
@@ -70,8 +70,10 @@ Opiskelija näkee kurssipalautekyselyn sillä kielellä, jolla hän käyttää N
 
 Kysely opiskelijan silmin:
 
-1. Valitse kieli [[feedbackTargetView:surveyQuestionsTab]]-välilehden alareunan [[editFeedbackTarget:translationLanguage]]-valikosta. Kysymyseditorin kysymykset vaihtuvat tälle kielelle.
-2. Valitse [[editFeedbackTarget:showPreview]].
+1. Avaa [[common:preview]]-välilehti.
+2. Valitse kieli välilehden alareunan [[feedbackView:translationLanguage]]-valikosta.
+
+Sama valikko on myös [[feedbackTargetView:surveyQuestionsTab]]-välilehden alareunassa, jossa se vaihtaa myös kysymyseditorin kysymykset valitulle kielelle. Molemmat välilehdet käyttävät viimeksi valitsemaasi kieltä.
 
 [[video:preview-survey]]
 
@@ -118,4 +120,4 @@ Kysymyseditorissa ovat ensin yliopistotason kysymykset, sitten koulutusohjelman 
 5. Koulutusohjelman avoimet kysymykset.
 6. Yliopistotason avoin kysymys _Muita huomioita_, joka on aina viimeisenä.
 
-Lopputuloksen näet [[editFeedbackTarget:showPreview]]-painikkeella (ks. [Kieliversiot ja esikatselu](#languages)).
+Lopputuloksen näet [[common:preview]]-välilehdeltä (ks. [Kieliversiot ja esikatselu](#languages)).

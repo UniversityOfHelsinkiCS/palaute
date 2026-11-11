@@ -17,8 +17,8 @@ Opiskelijat saavat sähköpostin, kun kurssipalautekysely avautuu. Opettaja voi 
 Jokaisella kyselyllä on linkki, jonka kautta opiskelijat vastaavat siihen. Linkin jakaminen:
 
 1. Avaa kysely [[navBar:myCourses]]-sivulta.
-2. Avaa [[feedbackTargetView:shareTab]]-välilehti.
-3. Valitse kohdan [[feedbackTargetView:studentLinkTitle]] vierestä [[common:copyToClipBoard]].
+2. Avaa [[feedbackTargetView:surveyTab]]-välilehti ja sen alta [[feedbackTargetView:shareTab]]-välilehti.
+3. Valitse kohdan [[feedbackTargetView:studentLinkTitle]] alta [[common:copyToClipBoard]].
 
 [[video:share-link]]
 
@@ -32,7 +32,7 @@ Linkki toimii jo ennen kyselyn aukeamista, joten voit lisätä sen etukäteen es
 
 Kun kysely on auki, opettaja voi lähettää sähköpostin niille opiskelijoille, jotka eivät ole vielä vastanneet. Tämä toimii samoin kaikissa kyselytyypeissä, ja edistää vastausten saamista. Muistutuksen lähettäminen:
 
-1. Avaa kyselyn [[feedbackTargetView:shareTab]]-välilehti.
+1. Avaa [[feedbackTargetView:surveyTab]]-välilehti ja sen alta [[feedbackTargetView:shareTab]]-välilehti.
 2. Valitse [[feedbackTargetResults:sendReminder]].
 3. Muokkaa halutessasi viestiä kentässä [[feedbackTargetResults:writeAMessage]].
 4. Valitse [[feedbackTargetResults:sendReminderButton]].

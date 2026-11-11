@@ -59,7 +59,7 @@ You can't delete answers. If an answer must be removed entirely, contact [suppor
 
 ## Who has answered {#who-answered}
 
-The [[feedbackTargetView:studentsWithFeedbackTab]] tab lists the course's students (i.e. the potential respondents). Responsible teachers and programme admins (programme director, feedback liaison) see the list.
+The [[feedbackTargetView:studentsWithFeedbackTab]] tab under the [[feedbackTargetView:surveyTab]] tab lists the course's students (i.e. the potential respondents). Responsible teachers and programme admins (programme director, feedback liaison) see the list.
 
 Whether each student has answered ([[common:feedbackGiven]] or [[common:feedbackNotGiven]]) is shown only once the survey has closed, at least 5 students have answered, and the course's degree programme has enabled the feature in its settings. Otherwise the column shows [[common:feedbackHidden]]. The list never shows who answered what. See [Who has answered](/guide/anonymity#who-answered) for details.
 

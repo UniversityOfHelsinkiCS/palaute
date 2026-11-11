@@ -13,7 +13,7 @@ Vastapalautteen pituus on vapaa. Voit esimerkiksi kiittää opiskelijoita, koota
 Kyselyn vastuuopettajana voit kirjoittaa vastapalautteen 12 kuukauden kuluessa kyselyn sulkeutumisesta.
 
 1. Valitse kurssi [[navBar:myCourses]]-sivulta. Kurssin vieressä oleva [[teacherView:feedbackResponseMissing]]-merkki vie suoraan kohtaan 3.
-2. Avaa [[feedbackTargetView:giveFeedbackResponseTab]]-välilehti.
+2. Avaa [[feedbackTargetView:feedbackResponseTab]]-välilehti.
 3. Kirjoita teksti [[feedbackResponse:responseLabel]]-kenttään. Kenttä tukee Markdownia, esimerkiksi otsikoita, luetteloita, lihavointia ja linkkejä. Alla olevasta kohdasta [[feedbackResponse:previewLabel]] näet, miltä teksti näyttää.
 4. Valitse [[feedbackResponse:checkboxSendEmail]], jos haluat lähettää vastapalautteen opiskelijoille sähköpostilla, tai poista valinta, jos haluat vain tallentaa sen.
 5. Klikkaa [[feedbackResponse:dialogSendEmailSubmit]] ja vahvista, tai [[feedbackResponse:dialogSaveSubmit]], jos poistit valinnan.
@@ -28,7 +28,7 @@ Kurssipalautteen tai koulutusohjelman kyselyn sulkeutumista seuraavana päivän�
 
 Sähköposti vastapalautteesta lähtee kaikille kyselyn opiskelijoille, ei vain vastanneille. Siinä on vastapalautteen teksti ja linkki kyselyn vastauksiin.
 
-Sähköpostin voi lähettää vain kerran. Sen jälkeen valintaruudussa lukee [[feedbackResponse:emailSent]] ja välilehden nimi on [[feedbackTargetView:editFeedbackResponseTab]]. Tekstiä voi yhä muokata: opiskelijat näkevät uuden version Norpassa, mutta uutta sähköpostia ei lähetetä.
+Sähköpostin voi lähettää vain kerran. Sen jälkeen valintaruudussa lukee [[feedbackResponse:emailSent]]. Tekstiä voi yhä muokata: opiskelijat näkevät uuden version Norpassa, mutta uutta sähköpostia ei lähetetä.
 
 Jos tallensit vastapalautteen ilman sähköpostia, voit lähettää sen myöhemmin: valitse [[feedbackResponse:checkboxSendEmail]] ja klikkaa [[feedbackResponse:dialogSendEmailSubmit]].
 

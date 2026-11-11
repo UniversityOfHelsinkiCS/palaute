@@ -47,7 +47,7 @@ The programme's admins can also edit the survey and see its answers without bein
 Open the survey: in [[navBar:myCourses]] under [[teacherView:organisationSurveys]], or from the programme's [[organisationSettings:organisationSurveysTab]] tab with [[organisationSurveys:viewFeedback]].
 
 - _Name, dates, responsible persons and respondents_: click [[organisationSurveys:editSurvey]] on the survey's page, make the changes and click [[common:save]]. This works before, during and after the feedback period.
-- _Questions_: the [[feedbackTargetView:surveyQuestionsTab]] tab, until the survey opens. After that, the questions are locked.
+- _Questions_: the [[feedbackTargetView:surveyQuestionsTab]] tab below the [[feedbackTargetView:surveyTab]] tab, until the survey opens. After that, the questions are locked.
 
 To open the survey right away, set its start date to today: it opens at once, but students get no email. To reopen a closed survey, move its end date forward.
 

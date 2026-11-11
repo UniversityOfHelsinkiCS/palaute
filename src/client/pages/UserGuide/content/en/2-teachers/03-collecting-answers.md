@@ -17,8 +17,8 @@ Students get an email when the course survey opens. Teachers can share the surve
 Every survey has a link students use to answer it. To share it:
 
 1. Open the survey from [[navBar:myCourses]].
-2. Open the [[feedbackTargetView:shareTab]] tab.
-3. Next to [[feedbackTargetView:studentLinkTitle]], click [[common:copyToClipBoard]].
+2. Open the [[feedbackTargetView:surveyTab]] tab and the [[feedbackTargetView:shareTab]] tab below it.
+3. Below [[feedbackTargetView:studentLinkTitle]], click [[common:copyToClipBoard]].
 
 [[video:share-link]]
 
@@ -32,7 +32,7 @@ All the course's teachers and the programme's admins see the [[feedbackTargetVie
 
 While a survey is open, the teacher can email its students who haven't answered yet. This works the same way in all survey types, and it helps get more answers. To send one:
 
-1. Open the survey's [[feedbackTargetView:shareTab]] tab.
+1. Open the [[feedbackTargetView:surveyTab]] tab and the [[feedbackTargetView:shareTab]] tab below it.
 2. Click [[feedbackTargetResults:sendReminder]].
 3. Edit the message under [[feedbackTargetResults:writeAMessage]] if you like.
 4. Click [[feedbackTargetResults:sendReminderButton]].

@@ -59,7 +59,7 @@ Vastauksia ei voi poistaa. Jos vastaus on poistettava kokonaan, ota yhteyttä [t
 
 ## Ketkä ovat vastanneet {#who-answered}
 
-[[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä on luettelo kurssin opiskelijoista (eli potentiaalisesta vastaajajoukosta). Listan näkevät vastuuopettajat ja koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
+[[feedbackTargetView:surveyTab]]-välilehden alla olevalla [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä on luettelo kurssin opiskelijoista (eli potentiaalisesta vastaajajoukosta). Listan näkevät vastuuopettajat ja koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
 
 Opiskelijan vastaustila ([[common:feedbackGiven]] tai [[common:feedbackNotGiven]]) näytetään vain, kun kysely on sulkeutunut, vähintään viisi opiskelijaa on vastannut ja kurssin koulutusohjelma on sallinut toiminnallisuuden teknisesti, koulutusohjelman asetuksissa. Muuten sarakkeessa lukee [[common:feedbackHidden]]. Luettelosta ei koskaan näe, kuka vastasi mitäkin. Katso tarkemmin [Ketkä ovat vastanneet](/guide/anonymity#who-answered).
 

@@ -47,7 +47,7 @@ Koulutusohjelman hallinnoijat voivat muokata kyselyä ja nähdä sen vastaukset,
 Avaa kysely [[navBar:myCourses]]-sivulta kohdasta [[teacherView:organisationSurveys]] tai koulutusohjelman [[organisationSettings:organisationSurveysTab]]-välilehdeltä painikkeella [[organisationSurveys:viewFeedback]].
 
 - _Nimi, päivämäärät, vastuuhenkilöt ja vastaajat_: valitse kyselyn sivulla [[organisationSurveys:editSurvey]], tee muutokset ja valitse [[common:save]]. Tämä onnistuu ennen palautejaksoa, sen aikana ja sen jälkeen.
-- _Kysymykset_: [[feedbackTargetView:surveyQuestionsTab]]-välilehti, kunnes kysely avautuu. Sen jälkeen kysymykset on lukittu.
+- _Kysymykset_: [[feedbackTargetView:surveyQuestionsTab]]-välilehti [[feedbackTargetView:surveyTab]]-välilehden alla, kunnes kysely avautuu. Sen jälkeen kysymykset on lukittu.
 
 Jos haluat avata kyselyn heti, aseta sen alkamispäiväksi tämä päivä: kysely avautuu heti, mutta opiskelijat eivät saa sähköpostia. Päättyneen kyselyn saa avattua uudelleen siirtämällä sen päättymispäivää eteenpäin.
 

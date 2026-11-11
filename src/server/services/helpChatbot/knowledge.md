@@ -86,13 +86,17 @@ Top menu (each item is shown only to users it concerns):
 
 To find a survey's page: teachers open it from [[navBar:myCourses]]; programme staff also from the programme page's [[organisationSettings:courseRealisationsTab]] tab or from a course unit in [[navBar:courseSummary]]. [[navBar:browseCourses]] doesn't lead there.
 
-A survey's page shows its tabs according to the user's role and the survey's state:
+A survey's page shows its tabs according to the user's role and the survey's state. For staff, [[feedbackTargetView:surveyTab]] groups these inner tabs:
 
-- Teachers see the survey as [[common:preview]] and can't answer it themselves; before opening, responsible teachers get [[feedbackView:editSurvey]] there.
-- [[feedbackTargetView:surveyQuestionsTab]]: responsible teachers and programme admins, until the survey closes; disabled while it's open.
-- [[feedbackTargetView:giveFeedbackResponseTab]]: responsible teachers after the survey closes, for 12 months; called [[feedbackTargetView:editFeedbackResponseTab]] once the counter feedback email has been sent.
+- [[common:preview]]: the survey as students see it; teachers can't answer it themselves. When the user can't edit the questions, it says why (the survey has opened, or only responsible teachers can edit).
+- [[feedbackTargetView:surveyQuestionsTab]]: responsible teachers and programme admins, until the survey opens; after that it isn't shown.
+- [[feedbackTargetView:shareTab]]: all teachers. [[feedbackTargetView:studentsWithFeedbackTab]]: responsible teachers and programme admins.
+
+The other tabs:
+
+- [[feedbackTargetView:feedbacksTab]]: all teachers.
+- [[feedbackTargetView:feedbackResponseTab]]: responsible teachers and programme admins, until 12 months after the survey closes. Counter feedback can be written only after the survey has closed; before that, the form is disabled.
 - [[feedbackTargetView:continuousFeedbackTab]] and [[feedbackTargetView:interimFeedbackTab]] (course surveys only): responsible teachers.
-- [[feedbackTargetView:shareTab]] and [[feedbackTargetView:feedbacksTab]]: all teachers. [[feedbackTargetView:studentsWithFeedbackTab]]: responsible teachers and programme admins.
 
 ## Which courses get a survey
 
@@ -128,11 +132,11 @@ The course page shows [[feedbackTargetView:coursePeriod]] and [[feedbackTargetVi
 
 ## Editing the questions
 
-For all survey types, until the survey opens: the [[feedbackTargetView:surveyQuestionsTab]] tab (or [[feedbackView:editSurvey]] in [[common:preview]]). Once it opens, the questions are locked.
+For all survey types, until the survey opens: [[feedbackTargetView:surveyTab]] > [[feedbackTargetView:surveyQuestionsTab]]. Once it opens, the tab is gone and the questions are locked.
 
 - Course surveys start with the university level questions and possibly the programme's questions, which can't be edited or removed. Students see the university and programme scale and choice questions first, then the teacher's own questions, then the programme and university open questions (so the university's "additional comments" is last). A grouping question is always first.
 - [[questionEditor:addQuestion]] adds a question: [[questionEditor:likertQuestion]] (scale 1-5), [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] or [[questionEditor:multipleChoiceQuestion]]. [[questionEditor:addTextualContent]] adds a text section. Each question is saved with its own [[questionEditor:done]]. Each question can have a [[questionEditor:description]]. Questions can be marked [[common:required]], duplicated, moved and removed.
-- Language versions: the editor has Finnish, Swedish and English fields side by side. Students see the survey in their own UI language; a missing translation is shown in Finnish, or else English, or else Swedish. [[editFeedbackTarget:showPreview]] with [[editFeedbackTarget:translationLanguage]] shows each language.
+- Language versions: the editor has Finnish, Swedish and English fields side by side. Students see the survey in their own UI language; a missing translation is shown in Finnish, or else English, or else Swedish. [[editFeedbackTarget:translationLanguage]] at the bottom of the editor switches the editor's language, and the [[common:preview]] tab then shows the survey in that language.
 - Carry-over (course surveys): the first time anyone views a new realisation's survey page in Norppa (or its reminder email is sent), well before the survey opens, it copies the own questions of the latest earlier realisation of the same course unit that shares a teacher with it. After that the surveys are independent. A new version of the course unit in Sisu breaks the chain.
 - [[editFeedbackTarget:copyFromCourseButton]] copies questions and adds them after the existing ones: in course surveys from the user's other courses, in interim feedback and programme surveys from programme surveys of the programmes and faculties where the user is an admin (others get an empty list). In interim feedback and programme surveys, [[editFeedbackTarget:copyUniversityQuestions]] adds the university level questions.
 - Groups: in course surveys with two or more Sisu groups, answers can be viewed by group automatically. In any survey, [[groups:addGroupingQuestion]] adds a question where students choose their group (one per survey; it replaces the Sisu grouping). Answers per group are shown only if each group has either no answers or at least 5.
@@ -168,9 +172,9 @@ The [[feedbackTargetView:studentsWithFeedbackTab]] tab (responsible teachers and
 
 The teacher's reply to all students about the feedback, e.g. what came up and what will change. It shows students their feedback was read. The same for all survey types.
 
-- A responsible teacher writes it on the [[feedbackTargetView:giveFeedbackResponseTab]] tab after the survey has closed, for about a year. There's one shared text per survey; any responsible teacher can edit it.
+- A responsible teacher writes it on the [[feedbackTargetView:feedbackResponseTab]] tab after the survey has closed, for about a year. There's one shared text per survey; any responsible teacher can edit it.
 - The text supports Markdown (formatting and links). There's no image upload.
-- [[feedbackResponse:checkboxSendEmail]] emails it to all the survey's students, not only those who answered. The email can be sent only once; after that the tab is called [[feedbackTargetView:editFeedbackResponseTab]] and edits don't send a new email.
+- [[feedbackResponse:checkboxSendEmail]] emails it to all the survey's students, not only those who answered. The email can be sent only once; after that, edits don't send a new email.
 - Students read it on the survey's [[feedbackTargetView:feedbacksTab]] tab, under [[feedbackTargetResults:responseHeading]]. After closing, the [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentResultsLinkTitle]] to send them.
 - It was sent when the checkbox says [[feedbackResponse:emailSent]] and [[navBar:myCourses]] shows [[teacherView:feedbackResponseGiven]]. [[teacherView:feedbackResponseNotSent]] means it was saved without the email.
 - [[teacherView:feedbackResponseMissing]] is shown in [[navBar:myCourses]] for ended course and programme surveys that got answers but no counter feedback, for about a year (for interim feedback, the same chip is on its card on the course's [[feedbackTargetView:interimFeedbackTab]] tab); on the [[teacherView:upcomingSurveys]] and [[teacherView:endedSurveys]] tabs, a collapsed course unit row shows it too if any of its surveys is missing counter feedback ([[teacherView:feedbackResponseNotSent]] if all of them have it saved but not sent). In [[navBar:courseSummary]] the realisation's figure updates at once, course unit and programme totals overnight.
