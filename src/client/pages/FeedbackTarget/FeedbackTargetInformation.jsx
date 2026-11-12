@@ -1,4 +1,4 @@
-import { Box, Typography, Grid2 as Grid, Stack, Divider, Link } from '@mui/material'
+import { Alert, Box, Typography, Grid2 as Grid, Stack, Divider, Link } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 
 import { TagChip } from '../../components/common/TagChip'
@@ -71,6 +71,11 @@ const FeedbackTargetInformation = () => {
           )}
         </Box>
       </Box>
+      {!feedbackTarget.feedbackCanBeGiven && (
+        <Alert severity="error" sx={{ mb: '2rem' }}>
+          {t('feedbackTargetView:feedbackDisabled')}
+        </Alert>
+      )}
       <Divider />
       <Grid container spacing={4} size={{ xs: 12, md: 4 }} sx={{ marginTop: '2rem', marginBottom: '2rem' }}>
         <Grid

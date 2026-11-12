@@ -5,9 +5,9 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import type { GuidePage } from './content'
 
+import { BELOW_HEADER } from '../../hooks/useHeaderHeight'
 import { focusIndicatorStyle } from '../../util/accessibility'
 import useActiveSection from './useActiveSection'
-import { BELOW_HEADER } from './useHeaderHeight'
 
 const SectionLink = ({ page, id, title, active }: { page: GuidePage; id: string; title: string; active: boolean }) => (
   <li>

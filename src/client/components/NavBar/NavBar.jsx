@@ -14,6 +14,7 @@ import {
   Box,
   Container,
   Badge,
+  GlobalStyles,
   Link as MuiLink,
 } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
@@ -24,6 +25,7 @@ import { Link, useLocation, matchPath } from 'react-router-dom'
 
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import useFeedbackTargetsForStudent from '../../hooks/useFeedbackTargetsForStudent'
+import useHeaderHeight, { HEADER_BOTTOM } from '../../hooks/useHeaderHeight'
 import useIsMobile from '../../hooks/useIsMobile'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
@@ -142,11 +144,47 @@ const NavLabelWrapper = ({ renderBadge, children }) => {
   return baseElement
 }
 
+const skipToContent = event => {
+  const main = document.getElementById('main-content')
+  if (!main) return
+
+  event.preventDefault()
+  main.scrollIntoView()
+
+  const target = main.querySelector('h1') ?? main
+
+  if (!target.hasAttribute('tabindex')) {
+    target.setAttribute('tabindex', '-1')
+    target.style.outline = 'none'
+    target.addEventListener(
+      'blur',
+      () => {
+        target.removeAttribute('tabindex')
+        target.style.removeProperty('outline')
+      },
+      { once: true }
+    )
+  }
+  target.focus({ preventScroll: true })
+
+  if (target !== main) {
+    target.animate(
+      [
+        { backgroundColor: 'transparent' },
+        { backgroundColor: 'rgba(18, 76, 140, 0.2)', offset: 0.2 },
+        { backgroundColor: 'transparent' },
+      ],
+      { duration: 2000, easing: 'ease-in-out' }
+    )
+  }
+}
+
 const NavBar = ({ guest = false, reloadHome = false }) => {
   const menuButtonRef = useRef()
   const { pathname } = useLocation()
   const { t, i18n } = useTranslation()
   const isMobile = useIsMobile()
+  useHeaderHeight()
   const { feedbackTargets } = useFeedbackTargetsForStudent({ enabled: !guest })
   const { authorizedUser } = useAuthorizedUser({ enabled: !guest })
   const [seenBannerIds, setSeenBannerIds] = useLocalStorageState('seen-banner-ids', [])
@@ -347,48 +385,52 @@ const NavBar = ({ guest = false, reloadHome = false }) => {
   )
 
   return (
-    <Box
-      component="header"
-      role="banner"
-      id="header"
-      sx={{ position: 'sticky', top: 0, zIndex: theme => theme.zIndex.appBar }}
-    >
-      <div
-        id="page-start"
-        aria-hidden="true"
-        tabIndex="-1"
-        style={{ position: 'absolute', inset: '0 auto auto 0', width: 0, height: 0, overflow: 'hidden' }}
-      />
-      <MuiLink href="#main-content" sx={styles.skipLink}>
-        {t('common:skipToContent')}
-      </MuiLink>
-      <UserPermissionsWindow isOpen={permissionsWindowOpen} onClose={() => setPermissionsWindowOpen(false)} />
-      {menu}
-      <AppBar
-        component={undefined}
-        elevation={0}
-        position="relative"
-        sx={{
-          zIndex: theme => theme.zIndex.drawer + 1,
-          background: theme => theme.palette.primary.dark,
-          boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
-          borderRadius: 0,
-        }}
+    <>
+      {/* Whatever the browser scrolls into view (focus, the skip link, a screen reader's reading position)
+        stops below the sticky header instead of under it */}
+      <GlobalStyles styles={{ html: { scrollPaddingTop: HEADER_BOTTOM } }} />
+      <Box
+        component="header"
+        role="banner"
+        id="header"
+        sx={{ position: 'sticky', top: 0, zIndex: theme => theme.zIndex.appBar }}
       >
-        <Container maxWidth={false}>
-          <Toolbar sx={styles.toolbar} disableGutters>
-            <Logo guest={guest} reloadHome={reloadHome} />
-            {!isMobile && navBarLinks}
-            {isMobile ? mobileMenuButton : desktopMenuButton}
-          </Toolbar>
-        </Container>
-      </AppBar>
-      {authorizedUser?.banners
-        ?.filter(banner => !seenBannerIds?.includes(banner.id))
-        ?.map(banner => (
-          <Banner banner={banner} language={i18n.language} key={banner.id} onClose={handleBannerClose} />
-        ))}
-    </Box>
+        <div
+          id="page-start"
+          tabIndex="-1"
+          style={{ position: 'absolute', inset: '0 auto auto 0', width: 0, height: 0, overflow: 'hidden' }}
+        />
+        <MuiLink href="#main-content" onClick={skipToContent} sx={styles.skipLink}>
+          {t('common:skipToContent')}
+        </MuiLink>
+        <UserPermissionsWindow isOpen={permissionsWindowOpen} onClose={() => setPermissionsWindowOpen(false)} />
+        {menu}
+        <AppBar
+          component={undefined}
+          elevation={0}
+          position="relative"
+          sx={{
+            zIndex: theme => theme.zIndex.drawer + 1,
+            background: theme => theme.palette.primary.dark,
+            boxShadow: theme => `0px 0px 10px 1px ${theme.palette.primary.main}`,
+            borderRadius: 0,
+          }}
+        >
+          <Container maxWidth={false}>
+            <Toolbar sx={styles.toolbar} disableGutters>
+              <Logo guest={guest} reloadHome={reloadHome} />
+              {!isMobile && navBarLinks}
+              {isMobile ? mobileMenuButton : desktopMenuButton}
+            </Toolbar>
+          </Container>
+        </AppBar>
+        {authorizedUser?.banners
+          ?.filter(banner => !seenBannerIds?.includes(banner.id))
+          ?.map(banner => (
+            <Banner banner={banner} language={i18n.language} key={banner.id} onClose={handleBannerClose} />
+          ))}
+      </Box>
+    </>
   )
 }
 

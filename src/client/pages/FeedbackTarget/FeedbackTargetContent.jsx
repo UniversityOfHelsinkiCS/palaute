@@ -13,7 +13,7 @@ import {
   VisibilityOutlined,
 } from '@mui/icons-material'
 /** @jsxImportSource @emotion/react */
-import { Alert, Box, Card, CardContent, Typography } from '@mui/material'
+import { Box, Card, CardContent, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, Route, Routes, useMatch } from 'react-router-dom'
 
@@ -267,7 +267,6 @@ const FeedbackTargetContent = () => {
   return (
     <>
       <Title>{`${visibleCourseCode} ${courseName}`}</Title>
-      {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
       <FeedbackTargetInformation />
 
       <FeedbackTargetTabsContainer aria-label={t('feedbackTargetView:tabListLabel')}>

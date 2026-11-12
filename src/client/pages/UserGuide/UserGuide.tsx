@@ -8,6 +8,7 @@ import type { GuidePage } from './content'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import { BELOW_HEADER } from '../../hooks/useHeaderHeight'
 import canSeeUserGuide from './canSeeUserGuide'
 import { getGuideHome, getGuidePages } from './content'
 import GroupLanding from './GroupLanding'
@@ -17,7 +18,6 @@ import GuideMenu from './GuideMenu'
 import { PageContentsAside } from './PageContents'
 import PageNavigation from './PageNavigation'
 import SearchResults from './SearchResults'
-import useHeaderHeight, { BELOW_HEADER } from './useHeaderHeight'
 import useScrollToSection from './useScrollToSection'
 
 type GuideLayoutProps = {
@@ -33,7 +33,6 @@ type GuideLayoutProps = {
 const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) => {
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
-  useHeaderHeight()
   useScrollToSection(articleRef)
   // Previous and next stay within the page's group; landing pages and pages outside the groups have neither
   const siblings =
@@ -55,7 +54,8 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
         alignItems: 'start',
       }}
     >
-      <GlobalStyles styles={{ html: { scrollPaddingTop: BELOW_HEADER } }} />
+      {/* :root outranks the NavBar's html rule for the header alone, whichever is inserted last */}
+      <GlobalStyles styles={{ ':root': { scrollPaddingTop: BELOW_HEADER } }} />
       <Title>{title}</Title>
       <GuideMenu pages={pages} current={page} query={query} />
       {page && !page.isLanding && (

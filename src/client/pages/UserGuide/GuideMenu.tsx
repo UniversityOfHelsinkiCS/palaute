@@ -9,11 +9,11 @@ import { Link as RouterLink, useLocation } from 'react-router-dom'
 import type { GuidePage } from './content'
 
 import { NorButton } from '../../components/common/NorButton'
+import { HEADER_BOTTOM, PAGE_TOP_GAP } from '../../hooks/useHeaderHeight'
 import { FOCUS_INDICATOR_REACH, focusIndicatorStyle } from '../../util/accessibility'
 import { groupsOf } from './content'
 import PageIcon from './PageIcon'
 import SearchField from './SearchField'
-import { HEADER_BOTTOM, PAGE_TOP_GAP } from './useHeaderHeight'
 
 const list = { listStyle: 'none', m: 0, p: 0 }
 
