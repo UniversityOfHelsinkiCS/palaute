@@ -13,9 +13,9 @@ import {
   VisibilityOutlined,
 } from '@mui/icons-material'
 /** @jsxImportSource @emotion/react */
-import { Alert, Box, Card, CardContent, Link, Typography } from '@mui/material'
+import { Alert, Box, Card, CardContent, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
-import { Navigate, Outlet, Route, Routes, useMatch, useLocation } from 'react-router-dom'
+import { Navigate, Outlet, Route, Routes, useMatch } from 'react-router-dom'
 
 import ErrorView from '../../components/common/ErrorView'
 import ProtectedRoute from '../../components/common/ProtectedRoute'
@@ -51,27 +51,6 @@ import Results from './tabs/Results'
 import Settings from './tabs/Settings'
 import Share from './tabs/Share'
 import StudentsWithFeedback from './tabs/StudentsWithFeedback'
-import { getActiveTabName } from './utils'
-
-const styles = {
-  skipLink: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    zIndex: 1300,
-    px: 2,
-    py: 2,
-    bgcolor: '#01263a',
-    color: 'white',
-    // Hide visually but keep focusable
-    transform: 'translateY(-100%)',
-    '&:focus': {
-      transform: 'translateY(0)',
-      outline: '2px solid #fff',
-    },
-  },
-}
-
 const generateTabpanelId = tabId => tabId.replace('-tab-', '-tabpanel-')
 
 const TabCard = ({ tabId, children }) => (
@@ -130,7 +109,6 @@ const FeedbackTargetContent = () => {
     userCreated,
     closesAt,
   } = feedbackTarget
-  const { pathname } = useLocation()
   const fbtMatch = useMatch('/targets/:feedbackTargetId/*')
   const interimMatch = useMatch('/targets/:feedbackTargetId/interim-feedback/:interimFeedbackId/*')
   const pathnameBase = interimMatch?.pathnameBase || fbtMatch?.pathnameBase // This has to be done because of recursivity of interim feedbacks
@@ -290,14 +268,6 @@ const FeedbackTargetContent = () => {
     <>
       <Title>{`${visibleCourseCode} ${courseName}`}</Title>
       {!feedbackCanBeGiven && <Alert severity="error">{t('feedbackTargetView:feedbackDisabled')}</Alert>}
-      <Link href="#feedback-target-tab-content" sx={styles.skipLink}>
-        {`${t('feedbackTargetView:skipToSelectedTab')} ${getActiveTabName({
-          currentPath: pathname,
-          feedbackGiven,
-          isOpen,
-          isStudent,
-        })}`}
-      </Link>
       <FeedbackTargetInformation />
 
       <FeedbackTargetTabsContainer aria-label={t('feedbackTargetView:tabListLabel')}>

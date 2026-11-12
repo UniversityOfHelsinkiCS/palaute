@@ -773,7 +773,6 @@
     "feedbackResponseTabTooltip": "Motrespons kan ges först när responsperioden har avslutats. Responsperioden avslutas {{closesAt}}.",
     "interimFeedbackTab": "Mellanrespons",
     "respondents": "Respondenter",
-    "skipToSelectedTab": "Gå till vald flik:",
     "showAnswers": "Visa responser."
   },
   "noadUser": {
