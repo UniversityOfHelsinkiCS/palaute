@@ -1,4 +1,4 @@
-import { Typography, Box, Alert, Stack } from '@mui/material'
+import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
 import { Formik, Form } from 'formik'
 import { useTranslation } from 'react-i18next'
 
@@ -21,6 +21,7 @@ const FormContainer = ({
   showCannotSubmitText = false,
   showSubmitButton = true,
   isEdit = false,
+  inTabPanel = false,
 }) => {
   const { t } = useTranslation()
   const context = useTranslationContext()
@@ -72,16 +73,8 @@ const FormContainer = ({
 
         const hasErrors = submitCount > 0 && errors.answers && Object.keys(errors.answers).length > 0
 
-        return (
-          <Form>
-            {hasErrors && (
-              <ErrorSummary
-                errors={errors}
-                questions={questions}
-                onFocusField={handleFocusField}
-                submitCount={submitCount}
-              />
-            )}
+        const formContent = (
+          <>
             <Box sx={{ mb: 4 }}>
               <Alert severity="info">
                 {t('feedbackView:feedbackInfo', { context })}
@@ -97,6 +90,26 @@ const FormContainer = ({
             </Box>
 
             <FeedbackForm questions={questions} name="answers" disabled={disabledProp && showSubmitButton} />
+          </>
+        )
+
+        return (
+          <Form>
+            {hasErrors && (
+              <ErrorSummary
+                errors={errors}
+                questions={questions}
+                onFocusField={handleFocusField}
+                submitCount={submitCount}
+              />
+            )}
+            {inTabPanel ? (
+              formContent
+            ) : (
+              <Card>
+                <CardContent sx={{ px: { md: 3 }, pt: { md: 3 } }}>{formContent}</CardContent>
+              </Card>
+            )}
 
             {showSubmitButton && (
               <Stack spacing={2} sx={{ mt: 2, alignItems: 'flex-start' }}>

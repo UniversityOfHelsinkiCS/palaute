@@ -142,6 +142,7 @@ const FeedbackView = ({ questionsUneditableInfo }) => {
 
         {showForm && (
           <FormContainer
+            inTabPanel
             initialValues={initialValues}
             validate={validate}
             onSubmit={handleSubmit}
