@@ -29,7 +29,7 @@ import useHeaderHeight, { HEADER_BOTTOM } from '../../hooks/useHeaderHeight'
 import useIsMobile from '../../hooks/useIsMobile'
 import useLocalStorageState from '../../hooks/useLocalStorageState'
 import useNorppaFeedbackCount from '../../hooks/useNorppaFeedbackCount'
-import { focusIndicatorStyle } from '../../util/accessibility'
+import { focusIndicatorStyle, focusPageStart } from '../../util/accessibility'
 import { LANGUAGES, PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/common'
 import Banner from '../common/Banner'
 import Logo from './Logo'
@@ -261,7 +261,14 @@ const NavBar = ({ guest = false, reloadHome = false }) => {
   )
 
   const mobileMenuButton = (
-    <IconButton color="inherit" sx={styles.menuButton} aria-label={menuLabel} {...menuButtonProps} size="large">
+    <IconButton
+      color="inherit"
+      sx={styles.menuButton}
+      aria-label={menuLabel}
+      {...menuButtonProps}
+      size="large"
+      disableRipple
+    >
       <MenuIcon />
     </IconButton>
   )
@@ -314,12 +321,7 @@ const NavBar = ({ guest = false, reloadHome = false }) => {
           sx={[styles.link, active && styles.activeLink]}
           to={to}
           disableRipple
-          onClick={() => {
-            const pageStartElement = document.getElementById('page-start')
-            if (pageStartElement) {
-              pageStartElement.focus()
-            }
-          }} // Focus is set to page start in navigation to make use of skip link
+          onClick={focusPageStart}
         >
           <NavLabelWrapper renderBadge={badgeCount}>{label}</NavLabelWrapper>
         </ButtonBase>

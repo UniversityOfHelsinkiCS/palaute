@@ -7,6 +7,11 @@ const OUTLINE_OFFSET = 3
 // How far a focus indicator reaches outside its element
 export const FOCUS_INDICATOR_REACH = OUTLINE_WIDTH + OUTLINE_OFFSET
 
+// Move focus to the start of the page after in-app navigation so that the skip link is the next tab stop
+export const focusPageStart = () => {
+  document.getElementById('page-start')?.focus()
+}
+
 export const focusIndicatorStyle = ({
   color,
   backgroundColor,

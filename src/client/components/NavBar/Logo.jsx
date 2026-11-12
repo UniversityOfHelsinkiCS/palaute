@@ -1,30 +1,33 @@
 import Box from '@mui/material/Box'
+import ButtonBase from '@mui/material/ButtonBase'
 /** @jsxImportSource @emotion/react */
 import merge from 'lodash/merge'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import hyLogo from '../../assets/hy_logo.svg'
+import { focusIndicatorStyle, focusPageStart } from '../../util/accessibility'
 import { useUiConfig } from '../CustomUiConfigProvider'
 
 const styles = {
+  focusTarget: {
+    display: 'block',
+    padding: '7px 12px',
+    paddingLeft: '4px',
+    marginRight: 4,
+    borderRadius: '0.5rem',
+    backgroundColor: 'rgba(255, 255, 255, 0)',
+    transition: 'background-color 0.1s',
+    '&:hover': {
+      backgroundColor: 'rgba(255, 255, 255, 0.22)',
+    },
+    ...focusIndicatorStyle({ color: 'white' }),
+  },
   link: {
     alignItems: 'end',
     display: 'inline-flex',
-    marginRight: 4,
     textDecoration: 'none',
-    borderRadius: 3,
     color: 'white',
-    backgroundImage: `-webkit-linear-gradient(0deg, white 0%, white 49%, rgba(255,217,246,1) 55%, rgba(254,200,170,1) 77%, rgba(251,225,189,1) 100%);`,
-    WebkitBackgroundClip: 'text',
-    WebkitTextFillColor: 'transparent',
-    backgroundRepeat: 'no-repeat',
-    backgroundSize: '200%',
-    transition: 'background-position-x 0.15s ease-in',
-    backgroundPositionX: '0%',
-    '&:hover': {
-      backgroundPositionX: '70%',
-    },
   },
   image: {
     width: '2.5rem',
@@ -48,17 +51,20 @@ const Logo = ({ guest = false, reloadHome = false }) => {
   const customLogo = customUiConfig?.images?.logo
 
   return (
-    <Link
+    <ButtonBase
+      component={Link}
       to={guest && !reloadHome ? '/noad' : '/'}
       reloadDocument={reloadHome}
-      style={{ textDecoration: 'none' }}
       aria-label={t('navBar:norppa')}
+      disableRipple
+      onClick={focusPageStart}
+      sx={styles.focusTarget}
     >
       <Box sx={logoStyles.link}>
         <img src={customLogo || hyLogo} alt="" aria-hidden="true" style={logoStyles.image} />
         <span style={logoStyles.text}>Norppa</span>
       </Box>
-    </Link>
+    </ButtonBase>
   )
 }
 
