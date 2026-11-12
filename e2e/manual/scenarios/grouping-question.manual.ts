@@ -27,7 +27,10 @@ manualTest(
     })
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
-    await caption({ fi: 'Avataan Kysymykset-välilehti.', en: 'Open the Questions tab.' })
+    await caption({
+      fi: 'Avataan Kysely-välilehden alta Muokkaa kysymyksiä -välilehti.',
+      en: 'Open the Edit questions tab under the Survey tab.',
+    })
     await click(byDataCy(page, 'feedback-target-settings-tab'))
 
     await caption({ fi: 'Valitaan Lisää ryhmittelykysymys.', en: 'Choose Add grouping question.' })

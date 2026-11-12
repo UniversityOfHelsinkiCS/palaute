@@ -22,7 +22,10 @@ manualTest(
     })
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
-    await caption({ fi: 'Avataan Jaa-välilehti.', en: 'Open the Share tab.' })
+    await caption({
+      fi: 'Avataan Kysely-välilehden alta Jaa-välilehti.',
+      en: 'Open the Share tab under the Survey tab.',
+    })
     await click(byDataCy(page, 'feedback-target-share-feedback-tab'))
 
     await caption({

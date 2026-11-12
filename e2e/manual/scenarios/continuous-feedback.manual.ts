@@ -75,10 +75,10 @@ manualTest(
     await curtain({ fi: 'Opiskelija antaa palautetta…', en: 'A student gives feedback…' }, async () => {
       await demo.giveContinuousFeedback(student, studentFeedback)
       // Reopening the tab fetches the new feedback faster than reloading the page
-      const settingsTab = byDataCy(page, 'feedback-target-settings-tab')
+      const surveyTab = byDataCy(page, 'feedback-target-survey-tab')
       // Dispatched, so the cursor stays where the viewer last saw it
-      await settingsTab.dispatchEvent('click')
-      await expect(settingsTab).toHaveAttribute('aria-selected', 'true')
+      await surveyTab.dispatchEvent('click')
+      await expect(surveyTab).toHaveAttribute('aria-selected', 'true')
       await byDataCy(page, 'feedback-target-continuous-feedback-tab').dispatchEvent('click')
       await feedback.evaluate(element => element.scrollIntoView({ block: 'center' }))
     })

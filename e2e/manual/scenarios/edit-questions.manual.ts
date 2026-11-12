@@ -35,8 +35,8 @@ manualTest(
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
     await caption({
-      fi: 'Kysymyksiä muokataan Kysymykset-välilehdellä.',
-      en: 'Questions are edited in the Questions tab.',
+      fi: 'Kysymyksiä muokataan Kysely-välilehden alla olevalla Muokkaa kysymyksiä -välilehdellä.',
+      en: 'Questions are edited in the Edit questions tab under the Survey tab.',
     })
     await click(byDataCy(page, 'feedback-target-settings-tab'))
 
