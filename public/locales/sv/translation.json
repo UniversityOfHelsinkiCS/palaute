@@ -650,7 +650,7 @@
     "lastUpdate": "Senaste versionen {{duration}} sedan",
     "server": "Serverversion {{version}}",
     "client": "Klientversion {{version}}",
-    "toska": "Läs om Norppas utvecklare."
+    "toska": "Toska: Läs om Norppas utvecklare"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Det finns ingen respons tillgänglig för dig på denna kurs"

@@ -653,7 +653,7 @@
     "lastUpdate": "Viimeisin julkaisu {{duration}} sitten",
     "server": "Palvelinversio {{version}}",
     "client": "Selainversio {{version}}",
-    "toska": "Lue Norpan kehittäjistä."
+    "toska": "Toska: Lue Norpan kehittäjistä"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "Tällä kurssilla ei ole sinulle saatavilla olevaa palautetta"

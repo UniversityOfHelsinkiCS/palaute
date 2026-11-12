@@ -658,7 +658,7 @@
     "lastUpdate": "Latest release {{duration}} ago",
     "server": "Server version {{version}}",
     "client": "Client version {{version}}",
-    "toska": "Read about the developers of Norppa."
+    "toska": "Toska: Read about the developers of Norppa"
   },
   "courseRealisationFeedback": {
     "noFeedbackTarget": "This course does not have a feedback available to you"
