@@ -81,7 +81,16 @@ const QuestionEditorActions = ({
   )
 
   return (
-    <Box display="flex" gap="15px" alignItems="center" flexWrap="wrap">
+    <Box
+      sx={{
+        display: 'flex',
+        flexDirection: { xs: 'column', sm: 'row' },
+        alignItems: { xs: 'stretch', sm: 'center' },
+        flexWrap: 'wrap',
+        gap: '15px',
+        '& button': { width: { xs: '100%', sm: 'auto' } },
+      }}
+    >
       {copyUniversityQuestionsButton && (
         <Box>
           {!surveyIsLoading && (

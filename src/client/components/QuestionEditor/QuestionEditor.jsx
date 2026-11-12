@@ -196,40 +196,44 @@ const QuestionEditorForm = ({
                 language={i18n.language}
               />
 
-              <Box sx={{ display: 'flex' }}>
-                <Box sx={{ display: 'flex' }}>
-                  <NorButton
-                    data-cy="question-editor-add-question"
-                    id={addButtonId}
-                    aria-haspopup="true"
-                    aria-expanded={menuOpen}
-                    aria-controls={menuOpen ? typeMenuId : undefined}
-                    icon={<Add />}
-                    color="primary"
-                    onClick={() => {
-                      setMenuOpen(true)
-                      handleStopEditing()
-                    }}
-                    ref={addButtonRef}
-                    sx={{ mr: 2 }}
-                  >
-                    {t('questionEditor:addQuestion')}
-                  </NorButton>
-                  <NorButton
-                    icon={<Add />}
-                    color="primary"
-                    onClick={() => {
-                      const textContent = createQuestion({ type: 'TEXT' })
-                      arrayHelpers.push(textContent)
-                      setEditingQuestionId(getQuestionId(textContent))
-                    }}
-                    ref={textContentButtonRef}
-                    sx={{ mr: 2 }}
-                  >
-                    {t('questionEditor:addTextualContent')}
-                  </NorButton>
-                </Box>
-                {actions && <Box>{React.cloneElement(actions, { disabled: Boolean(editingQuestionId) })}</Box>}
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: { xs: 'column', sm: 'row' },
+                  flexWrap: 'wrap',
+                  gap: 2,
+                  '& button': { width: { xs: '100%', sm: 'auto' } },
+                }}
+              >
+                <NorButton
+                  data-cy="question-editor-add-question"
+                  id={addButtonId}
+                  aria-haspopup="true"
+                  aria-expanded={menuOpen}
+                  aria-controls={menuOpen ? typeMenuId : undefined}
+                  icon={<Add />}
+                  color="primary"
+                  onClick={() => {
+                    setMenuOpen(true)
+                    handleStopEditing()
+                  }}
+                  ref={addButtonRef}
+                >
+                  {t('questionEditor:addQuestion')}
+                </NorButton>
+                <NorButton
+                  icon={<Add />}
+                  color="primary"
+                  onClick={() => {
+                    const textContent = createQuestion({ type: 'TEXT' })
+                    arrayHelpers.push(textContent)
+                    setEditingQuestionId(getQuestionId(textContent))
+                  }}
+                  ref={textContentButtonRef}
+                >
+                  {t('questionEditor:addTextualContent')}
+                </NorButton>
+                {actions && React.cloneElement(actions, { disabled: Boolean(editingQuestionId) })}
               </Box>
             </>
           )}
