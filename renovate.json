@@ -14,10 +14,6 @@
       "matchPackageNames": ["node"],
       "versionCompatibility": "^(?<version>[^-]+)(?<compatibility>-.*)?$",
       "versioning": "node"
-    },
-    {
-      "matchFileNames": ["e2e/manual/tts/**"],
-      "enabled": false
     }
   ],
   "vulnerabilityAlerts": {

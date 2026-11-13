@@ -6,11 +6,8 @@ services:
       - NODE_CONFIG={"PATE_URL":"http://127.0.0.1:9","JAMI_URL":"http://127.0.0.1:9"}
 
   tts:
-    build: ./e2e/manual/tts
-    image: palaute_manual_tts
+    image: registry.version.helsinki.fi/toska/openshift/kontit/guide-video-voice:1.0.0
     profiles: [manual]
-    volumes:
-      - ./e2e/manual/tts/voices:/voices:ro
     read_only: true
     tmpfs: [/tmp]
     cap_drop: [ALL]

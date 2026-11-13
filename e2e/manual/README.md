@@ -54,19 +54,15 @@ Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.ma
 
 ## Narration
 
-The voice is [Chatterbox Multilingual](https://github.com/resemble-ai/chatterbox) (MIT), running on CPU in `tts/` with pinned weights baked into the image. It watermarks every clip inaudibly.
+The voice is the shared [guide-video-voice](https://github.com/UniversityOfHelsinkiCS/guide-video-voice) image. Pulling it needs `docker login registry.version.helsinki.fi`.
 
 - `manual:record` first runs the scenarios without video to generate the clips, then records, so generation never freezes the video.
-- Clips are cached as Opus in `.narration-cache/` by the files in `tts/`, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
+- Clips are cached as Opus in `.narration-cache/` by the voice's version, voice, language and text. Generation is seeded, so a regenerated clip sounds the same.
+- The voice's version is its image tag in `docker-compose.manual.yml`. A new version generates every clip again.
 - A full run without filters deletes clips that have not been used for a week.
-- The voice is set in `GENERATE_OPTIONS` in `tts/server.py`.
 - Abbreviations the voice reads as words, like XLSX, are spelled out in `SPELLED_OUT` in `narration.ts`.
 - Without the service (`MANUAL_TTS_URL`) only cached clips are used, the rest is silent with a warning.
-- `MANUAL_VOICE=<name>` uses `tts/voices/<name>.wav`, see `tts/voices/README.md` for consent.
-
-### Updating the packages
-
-To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies are pinned to exact versions in `tts/pyproject.toml`.
+- `MANUAL_VOICE=<name>` uses another voice in the image.
 
 ## CI
 
@@ -74,7 +70,7 @@ To update packages, run `uv lock --upgrade` in `tts/`. The direct dependencies a
 
 - When every video passed on master, they're pushed to the registry as `norppa-manual-videos:latest`.
 - Staging and releases build with the newest videos, the build's summary tells which commit they're from. To release new videos, wait for their run to pass.
-- The scenarios are split across the runners of the `record` matrix (`--shard`), which start the voice service only if clips are missing. A change in `tts/` generates them all again.
+- The scenarios are split across the runners of the `record` matrix (`--shard`), which start the voice service only if clips are missing. A new voice version generates them all again.
 - The clips are kept in the registry as `norppa-manual-narration:latest` (ORAS). They're saved after every run; unused ones are dropped only when every shard of a first attempt passed on master.
 - When every shard passes, the videos and their `index.json` files are merged.
 - A caption without a clip fails the recording.

@@ -120,7 +120,5 @@ e2e/manual/.narration-cache/
 !.env.example
 !tools/queries/*.sql
 !Tietosuojaseloste.pdf
-!e2e/manual/tts/pyproject.toml
-!e2e/manual/tts/uv.lock
 !.claude/skills/
 !.claude/settings.json

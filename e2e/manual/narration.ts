@@ -8,9 +8,13 @@ const execFileAsync = promisify(execFile)
 
 const TTS_URL = process.env.MANUAL_TTS_URL ?? 'http://localhost:5005'
 const VOICE = process.env.MANUAL_VOICE ?? 'default'
+const getVoiceVersion = async () => {
+  const compose = await fs.readFile(path.resolve(__dirname, '../../docker-compose.manual.yml'), 'utf8')
+  const version = compose.match(/guide-video-voice:([^\s@]+)/)?.[1]
+  if (!version) throw new Error('No guide-video-voice version in docker-compose.manual.yml')
+  return version
+}
 const CACHE_DIR = path.resolve(__dirname, '.narration-cache')
-// A change to the service generates the clips again
-const TTS_FILES = ['Dockerfile', 'pyproject.toml', 'uv.lock', 'server.py']
 
 type Clip = { path: string; durationMs: number }
 
@@ -126,6 +130,8 @@ const exists = async (file: string) => {
 const getHealth = async (): Promise<{
   languages: string[]
   voices: string[]
+  // Null in a locally built image
+  version: string | null
 } | null> => {
   try {
     const response = await fetch(`${TTS_URL}/health`)
@@ -141,18 +147,12 @@ const createNarrator = async (): Promise<Narrator> => {
   if (!health) console.warn(`No voice service at ${TTS_URL}, using only cached narration`)
   if (health && !health.voices.includes(VOICE))
     throw new Error(`Voice ${VOICE} not found, available: ${health.voices.join(', ')}`)
+  // Clips are cached by the version, so a new one generates them all again
+  const voiceVersion = await getVoiceVersion()
+  if (health?.version && health.version !== voiceVersion)
+    throw new Error(`The voice service is ${health.version}, but docker-compose.manual.yml has ${voiceVersion}`)
 
   await fs.mkdir(CACHE_DIR, { recursive: true })
-  const modelHash = createHash('sha256')
-  for (const file of TTS_FILES) modelHash.update(await fs.readFile(path.resolve(__dirname, 'tts', file)))
-  const model = modelHash.digest('hex').slice(0, 16)
-  // A replaced voice clip must not reuse the narration made with the old one
-  const voiceAudio =
-    VOICE === 'default'
-      ? undefined
-      : createHash('sha256')
-          .update(await fs.readFile(path.resolve(__dirname, 'tts/voices', `${VOICE}.wav`)))
-          .digest('hex')
 
   return {
     online: Boolean(health),
@@ -160,7 +160,7 @@ const createNarrator = async (): Promise<Narrator> => {
       if (health && !health.languages.includes(lang)) return null
       const text = toSpeech(caption, lang)
       const key = createHash('sha256')
-        .update(JSON.stringify({ model, voice: VOICE, voiceAudio, lang, text }))
+        .update(JSON.stringify({ voiceVersion, voice: VOICE, lang, text }))
         .digest('hex')
       const clipPath = path.join(CACHE_DIR, `${key}.opus`)
       // Clips were WAV before
