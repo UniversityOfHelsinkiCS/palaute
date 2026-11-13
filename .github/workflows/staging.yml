@@ -28,7 +28,7 @@ jobs:
     needs: test
 
     steps:
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@v7.0.1
 
       - uses: ./.github/actions/manual-videos-pull
         with:
@@ -36,7 +36,7 @@ jobs:
 
       - name: Build image
         id: build-image
-        uses: redhat-actions/buildah-build@v3
+        uses: redhat-actions/buildah-build@v3.1.0
         with:
           image: norppa
           tags: staging ${{ github.sha }}
@@ -54,7 +54,7 @@ jobs:
             --ulimit nofile=4096:4096
 
       - name: Push to version helsinki
-        uses: redhat-actions/push-to-registry@v3
+        uses: redhat-actions/push-to-registry@v3.0.0
         with:
           image: ${{ steps.build-image.outputs.image }}
           tags: ${{ steps.build-image.outputs.tags }}
