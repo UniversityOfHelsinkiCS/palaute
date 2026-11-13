@@ -258,7 +258,7 @@ Each of these gives the user an error when they try the action.
 | What                                 | Shown to                         | Allowed for                      | Where                                                           |
 | ------------------------------------ | -------------------------------- | -------------------------------- | --------------------------------------------------------------- |
 | Send reminder email (Share tab)      | all teachers                     | responsible teachers, org admins | `tabs/Share/Share.jsx:72-84`, `Access.ts:77`                    |
-| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `Results.jsx:166`, `hideFeedback.ts:58`   |
+| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `Results.jsx:166`, `hideFeedback.ts:58`                         |
 | Give counter feedback tab            | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:116`, `updateFeedbackResponse.ts:24` |
 | Create interim feedback              | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:121-122`, `interimFeedbacks.ts:169`  |
 | Edit interim feedback name and dates | all teachers                     | responsible teachers             | `FeedbackTargetInformation.jsx:34`, `interimFeedbacks.ts:199`   |
