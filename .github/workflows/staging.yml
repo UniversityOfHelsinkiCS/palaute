@@ -20,6 +20,7 @@ jobs:
     uses: ./.github/workflows/manual-videos.yml
     secrets:
       VERSION_PUSH_SECRET: ${{ secrets.VERSION_PUSH_SECRET }}
+      VERSION_PULL_SECRET: ${{ secrets.VERSION_PULL_SECRET }}
 
   build-and-push:
     if: ${{ github.actor != 'renovate[bot]' }}
@@ -31,7 +32,7 @@ jobs:
 
       - uses: ./.github/actions/manual-videos-pull
         with:
-          registry-password: ${{ secrets.VERSION_PUSH_SECRET }}
+          registry-password: ${{ secrets.VERSION_PULL_SECRET }}
 
       - name: Build image
         id: build-image

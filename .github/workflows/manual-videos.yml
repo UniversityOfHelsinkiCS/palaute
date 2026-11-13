@@ -7,6 +7,8 @@ on:
     secrets:
       VERSION_PUSH_SECRET:
         required: true
+      VERSION_PULL_SECRET:
+        required: true
 
 permissions:
   contents: read
@@ -29,7 +31,7 @@ jobs:
 
       - uses: ./.github/actions/manual-videos-setup
         with:
-          registry-password: ${{ secrets.VERSION_PUSH_SECRET }}
+          registry-password: ${{ secrets.VERSION_PULL_SECRET }}
 
       - name: Find missing narration
         id: missing

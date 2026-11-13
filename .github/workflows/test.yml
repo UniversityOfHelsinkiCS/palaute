@@ -75,7 +75,7 @@ jobs:
         with:
           registry: registry.version.helsinki.fi
           username: kontit
-          password: ${{ secrets.VERSION_PUSH_SECRET }}
+          password: ${{ secrets.VERSION_PULL_SECRET }}
 
       - name: Start the application
         uses: nick-fields/retry@ad984534de44a9489a53aefd81eb77f87c70dc60 # v4.0.0

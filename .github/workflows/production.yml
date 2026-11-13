@@ -18,7 +18,7 @@ jobs:
 
       - uses: ./.github/actions/manual-videos-pull
         with:
-          registry-password: ${{ secrets.VERSION_PUSH_SECRET }}
+          registry-password: ${{ secrets.VERSION_PULL_SECRET }}
 
       - name: Build image
         id: build-image
@@ -58,7 +58,7 @@ jobs:
         with:
           registry: registry.version.helsinki.fi
           username: kontit
-          password: ${{ secrets.VERSION_PUSH_SECRET }}
+          password: ${{ secrets.VERSION_PULL_SECRET }}
 
       - name: Pull image and create a container
         run: docker create --name palaute registry.version.helsinki.fi/toska/openshift/kontit/norppa:production
