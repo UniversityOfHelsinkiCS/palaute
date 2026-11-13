@@ -84,29 +84,31 @@ const ActionsContainer = ({ children }) => (
   </div>
 )
 
-const EditActions = ({ showRequiredToggle, name, publicityConfigurable, isPublic }) => {
+const EditActions = ({ showPublicity, showRequiredToggle, name, publicityConfigurable, isPublic }) => {
   const { t } = useTranslation()
   const context = useTranslationContext()
 
   return (
     <>
-      <Box sx={{ mr: { xs: 0, sm: '2rem' }, display: 'flex', alignItems: 'center', minHeight: '38px' }}>
-        {publicityConfigurable ? (
-          <FormikRadioButtons
-            name={`${name}.public`}
-            options={[
-              { label: t('common:publicInfo', { context }), value: true },
-              { label: t('common:notPublicInfo', { context }), value: false },
-            ]}
-            valueMapper={value => value === 'true'}
-            disabled={!publicityConfigurable}
-          />
-        ) : (
-          <Typography variant="body1" color="textSecondary">
-            {isPublic ? t('common:publicInfo', { context }) : t('common:notPublicInfo', { context })}
-          </Typography>
-        )}
-      </Box>
+      {showPublicity && (
+        <Box sx={{ mr: { xs: 0, sm: '2rem' }, display: 'flex', alignItems: 'center', minHeight: '38px' }}>
+          {publicityConfigurable ? (
+            <FormikRadioButtons
+              name={`${name}.public`}
+              options={[
+                { label: t('common:publicInfo', { context }), value: true },
+                { label: t('common:notPublicInfo', { context }), value: false },
+              ]}
+              valueMapper={value => value === 'true'}
+              disabled={!publicityConfigurable}
+            />
+          ) : (
+            <Typography variant="body1" color="textSecondary">
+              {isPublic ? t('common:publicInfo', { context }) : t('common:notPublicInfo', { context })}
+            </Typography>
+          )}
+        </Box>
+      )}
       {showRequiredToggle && <FormikSwitch label={t('common:required')} name={`${name}.required`} />}
     </>
   )
@@ -283,6 +285,7 @@ const QuestionCard = ({
               }}
             >
               <EditActions
+                showPublicity={!isText}
                 publicityConfigurable={publicityConfigurable}
                 isPublic={question.public}
                 showRequiredToggle={requiredConfigurable}
