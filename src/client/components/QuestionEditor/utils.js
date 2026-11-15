@@ -66,6 +66,12 @@ export const getQuestionLabel = (question, language) =>
   truncateAtWordBoundary(getLanguageValue(question?.data?.label ?? question?.data?.content, language))
 
 /**
+ * The label of a choice option, shortened like a question label so that it can be used in
+ * the removal confirmation.
+ */
+export const getOptionLabel = (option, language) => truncateAtWordBoundary(getLanguageValue(option?.label, language))
+
+/**
  *
  * @returns question data
  */

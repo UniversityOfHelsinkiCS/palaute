@@ -1,9 +1,10 @@
-import { Box, Grid2 as Grid, Typography } from '@mui/material'
+import { Box, Grid2 as Grid } from '@mui/material'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import FormikTextField from '../common/FormikTextField'
 import LinkButton from '../common/LinkButton'
+import LanguageFieldset from './LanguageFieldset'
 
 const LanguageOpenEditor = ({ name, language, inputRef }) => {
   const { t, i18n } = useTranslation()
@@ -53,16 +54,14 @@ const OpenEditor = forwardRef((props, ref) => {
     <Grid spacing={4} container>
       {languages.map((language, idx) => (
         <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" component="h2">
-              {language.toUpperCase()}
-            </Typography>
-          </Box>
-
-          <LanguageOpenEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+          <LanguageFieldset language={language}>
+            <LanguageOpenEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+          </LanguageFieldset>
         </Grid>
       ))}
-      <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external />
+      <Grid size={12}>
+        <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external />
+      </Grid>
     </Grid>
   )
 })

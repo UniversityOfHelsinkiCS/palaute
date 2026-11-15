@@ -1,9 +1,10 @@
-import { Box, Grid2 as Grid, Typography, Alert } from '@mui/material'
+import { Grid2 as Grid, Alert } from '@mui/material'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import AlertLink from '../common/AlertLink'
 import FormikTextField from '../common/FormikTextField'
+import LanguageFieldset from './LanguageFieldset'
 
 const LanguageTextEditor = ({ name, language, inputRef }) => {
   const { t, i18n } = useTranslation()
@@ -37,16 +38,12 @@ const TextEditor = forwardRef((props, ref) => {
     <Grid spacing={4} container>
       {languages.map((language, idx) => (
         <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-          <Box sx={{ mb: 2 }}>
-            <Typography variant="h6" component="h2">
-              {language.toUpperCase()}
-            </Typography>
-          </Box>
-
-          <LanguageTextEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+          <LanguageFieldset language={language}>
+            <LanguageTextEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+          </LanguageFieldset>
         </Grid>
       ))}
-      <Alert severity="info" sx={{ width: '100%' }}>
+      <Alert severity="info" role="presentation" sx={{ width: '100%' }}>
         {t('questionEditor:markdownSupport')}{' '}
         <AlertLink href={t('links:markdownHelp')} target="_blank">
           {t('feedbackResponse:markdownLink')}

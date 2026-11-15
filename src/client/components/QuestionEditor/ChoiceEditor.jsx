@@ -1,10 +1,10 @@
-import { Box, Grid2 as Grid, Typography } from '@mui/material'
+import { Box, Grid2 as Grid } from '@mui/material'
 import { forwardRef, useImperativeHandle, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
-import useIsMobile from '../../hooks/useIsMobile'
 import FormikTextField from '../common/FormikTextField'
 import LinkButton from '../common/LinkButton'
+import LanguageFieldset from './LanguageFieldset'
 import OptionEditor from './OptionEditor'
 
 const styles = {
@@ -50,8 +50,7 @@ const InfoEditor = ({ name, language, inputRef }) => {
 
 const ChoiceEditor = forwardRef((props, ref) => {
   const { name, languages = ['fi', 'sv', 'en'] } = props
-  const { i18n, t } = useTranslation()
-  const isMobile = useIsMobile()
+  const { t } = useTranslation()
 
   const firstInputRef = useRef(null)
   useImperativeHandle(ref, () => ({
@@ -66,44 +65,20 @@ const ChoiceEditor = forwardRef((props, ref) => {
         <Grid rowSpacing={1} columnSpacing={4} container>
           {languages.map((language, idx) => (
             <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-              <Box mb={2}>
-                <Typography variant="h6" component="h2">
-                  {language.toUpperCase()}
-                </Typography>
-              </Box>
-
-              <InfoEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+              <LanguageFieldset language={language}>
+                <InfoEditor name={name} language={language} inputRef={idx === 0 ? firstInputRef : undefined} />
+              </LanguageFieldset>
             </Grid>
           ))}
-          <LinkButton title={t('feedbackResponse:markdownLink')} to={t('links:markdownHelp')} external sx={{ mb: 2 }} />
+          <Grid size={12}>
+            <LinkButton
+              title={t('feedbackResponse:markdownLink')}
+              to={t('links:markdownHelp')}
+              external
+              sx={{ mb: 2 }}
+            />
+          </Grid>
         </Grid>
-      </Box>
-
-      <Box sx={styles.container}>
-        {!isMobile && (
-          <Box mb={2}>
-            <Grid spacing={4} container>
-              {languages.map(language => {
-                const languageT = i18n.getFixedT(language)
-
-                return (
-                  <Grid size={4} key={language}>
-                    <Typography variant="h6" component="h3">
-                      {languageT('questionEditor:options')}
-                    </Typography>
-                  </Grid>
-                )
-              })}
-            </Grid>
-          </Box>
-        )}
-        {isMobile && (
-          <Box mb={2}>
-            <Typography variant="h6" component="h3">
-              {t('questionEditor:options')}
-            </Typography>
-          </Box>
-        )}
       </Box>
 
       <OptionEditor name={`${name}.data.options`} languages={languages} />

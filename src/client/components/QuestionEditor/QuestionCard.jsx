@@ -87,6 +87,7 @@ const ActionsContainer = ({ children }) => (
 const EditActions = ({ showPublicity, showRequiredToggle, name, publicityConfigurable, isPublic }) => {
   const { t } = useTranslation()
   const context = useTranslationContext()
+  const requiredInfoId = useId()
 
   return (
     <>
@@ -95,12 +96,12 @@ const EditActions = ({ showPublicity, showRequiredToggle, name, publicityConfigu
           {publicityConfigurable ? (
             <FormikRadioButtons
               name={`${name}.public`}
+              aria-label={t('publicQuestions:title')}
               options={[
                 { label: t('common:publicInfo', { context }), value: true },
                 { label: t('common:notPublicInfo', { context }), value: false },
               ]}
               valueMapper={value => value === 'true'}
-              disabled={!publicityConfigurable}
             />
           ) : (
             <Typography variant="body1" color="textSecondary">
@@ -109,7 +110,18 @@ const EditActions = ({ showPublicity, showRequiredToggle, name, publicityConfigu
           )}
         </Box>
       )}
-      {showRequiredToggle && <FormikSwitch label={t('common:required')} name={`${name}.required`} />}
+      {showRequiredToggle && (
+        <Box sx={{ maxWidth: '24rem' }}>
+          <FormikSwitch
+            label={t('common:required')}
+            name={`${name}.required`}
+            inputProps={{ 'aria-describedby': requiredInfoId }}
+          />
+          <Typography id={requiredInfoId} variant="body2" sx={{ color: 'text.secondary' }}>
+            {t('questionEditor:requiredInfo', { context })}
+          </Typography>
+        </Box>
+      )}
     </>
   )
 }
@@ -260,6 +272,7 @@ const QuestionCard = ({
           open={isEditing}
           onClose={handleCancelEditing}
           maxWidth={false}
+          fullWidth
           aria-labelledby={dialogTitleId}
           // Move focus only after the transitions: while the dialog is open the rest of the page
           // is aria-hidden, and Firefox does not announce focus moved into hidden content
@@ -279,7 +292,8 @@ const QuestionCard = ({
               sx={{
                 display: 'flex',
                 flexDirection: { xs: 'column', sm: 'row' },
-                alignItems: { xs: 'stretch', sm: 'end' },
+                flexWrap: 'wrap',
+                alignItems: { xs: 'stretch', sm: 'flex-start' },
                 gap: '1rem',
                 width: '100%',
               }}
@@ -291,7 +305,14 @@ const QuestionCard = ({
                 showRequiredToggle={requiredConfigurable}
                 name={name}
               />
-              <Box sx={{ ml: { xs: 0, sm: 'auto' }, display: 'flex', gap: '1rem' }}>
+              <Box
+                sx={{
+                  ml: { xs: 0, sm: 'auto' },
+                  alignSelf: { xs: 'stretch', sm: 'flex-end' },
+                  display: 'flex',
+                  gap: '1rem',
+                }}
+              >
                 <NorButton data-cy="question-card-save-edit" color="primary" onClick={handleStopEditing}>
                   {t('questionEditor:done')}
                 </NorButton>
