@@ -80,7 +80,7 @@ test.describe('Teacher view', () => {
     await page.locator('[data-cy=my-teaching-ended-tab]').click()
     await expect(contains(page.locator('[data-cy="status-tab-badge"]'), '1')).toBeAttached()
     await page.locator('[data-cy=my-teaching-ended-tab]').hover()
-    await expect(contains(page, 'Ended: 1 missing counter feedbacks from the last academic year')).toBeVisible()
+    await expect(contains(page, 'Ended: 1 missing counter feedback from the last academic year')).toBeVisible()
 
     // Missing counter feedback chip on the course unit and feedback target level
     await expect(page.locator(`[data-cy="feedback-response-chip-missing-${fbtId}"]`).first()).toBeAttached()
