@@ -166,6 +166,9 @@ test.describe('Teacher view', () => {
     await page.goto(`/targets/${fbtId}/edit`)
     await contains(page, 'Add question').click()
     await page.locator('[data-cy=question-editor-type-menu-select-single-choice]').click()
+    // The dialog focuses its first input once its opening transition has ended. Wait for that,
+    // so that the focus does not move there after the failed save has moved it
+    await expect(page.locator('input[id^=choice-question-fi-questions]')).toBeFocused()
     await page.locator('input[id^=choice-question-en-questions]').fill('Choice question')
 
     // Without options the dialog stays open, and the error is read with the add option button
