@@ -21,21 +21,18 @@ export type QuestionInput = {
   visibility?: StandaloneQuestionVisibility
 }
 
-const isGrouping = (question: QuestionInput) => question.secondaryType === 'GROUPING'
-
 const assertCanPublish = (survey: StandaloneSurvey, questionTypes: QuestionType[]) => {
   if (questionTypes.includes('OPEN') && !survey.isEnded()) {
     throw ApplicationError.Forbidden('Open answers can be published only after the survey has closed')
   }
 }
 
-export const updateQuestions = async (survey: StandaloneSurvey, inputs: QuestionInput[], user: User) => {
+export const updateQuestions = async (survey: StandaloneSurvey, questions: QuestionInput[], user: User) => {
   if (!getAccess(survey, user).canEditQuestions) {
     throw ApplicationError.Forbidden('Questions cannot be changed once the survey has opened')
   }
 
-  validateGroupingQuestions(inputs)
-  const questions = _.sortBy(inputs, q => (isGrouping(q) ? 0 : 1))
+  validateGroupingQuestions(questions)
   assertCanPublish(
     survey,
     questions.filter(q => !q.id && q.visibility === 'PUBLIC').map(q => q.type)

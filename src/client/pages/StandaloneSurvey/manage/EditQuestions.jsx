@@ -1,4 +1,3 @@
-import { partition } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -32,21 +31,24 @@ const EditQuestions = ({ survey }) => {
     updatePublicQuestions.mutateAsync({ publicQuestionIds })
   )
 
-  const initialValues = useMemo(() => {
-    const [groupingQuestions, questions] = partition(
-      withPublicity(survey, survey.publicQuestionIds).map(q => ({ ...q, editable: true, publicityConfigurable: true })),
-      q => q.secondaryType === 'GROUPING'
-    )
-    const [groupingQuestion] = groupingQuestions.map(q => ({ ...q, publicityConfigurable: false }))
-    return { questions, groupingQuestion }
-  }, [survey])
+  const initialValues = useMemo(
+    () => ({
+      questions: withPublicity(survey, survey.publicQuestionIds).map(q => ({
+        ...q,
+        editable: true,
+        publicityConfigurable: q.secondaryType !== 'GROUPING',
+      })),
+      groupingQuestion: null,
+    }),
+    [survey]
+  )
 
   const handleSubmit = async values => {
     if (!validateQuestions(values)) {
       enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
       return
     }
-    await save([values.groupingQuestion, ...values.questions].filter(Boolean))
+    await save(values.questions)
   }
 
   const handlePublicityToggle = async (question, isPublic) => {
@@ -60,6 +62,7 @@ const EditQuestions = ({ survey }) => {
       handleSubmit={handleSubmit}
       handlePublicityToggle={handlePublicityToggle}
       groupingQuestionSettings
+      movableGroupingQuestion
       groups={[]}
     />
   )

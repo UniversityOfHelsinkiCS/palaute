@@ -18,7 +18,6 @@ import {
   Alert,
   Grid2 as Grid,
 } from '@mui/material'
-import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
@@ -136,18 +135,16 @@ const createGroupingQuestion = (groups, context, type = 'SINGLE_CHOICE') => {
 
 const GroupingQuestionSettings = ({
   groups,
+  groupingQuestion,
+  addButtonRef,
   onAddQuestion,
   onRemove,
-  groupingQuestion,
-  isEditing,
-  onStartEditing,
-  onStopEditing,
   onCancelEditing,
+  ...cardProps
 }) => {
   const { t } = useTranslation()
   const language = useQuestionLanguage()
   const context = useTranslationContext()
-  const addButtonRef = useRef(null)
 
   const handleAddGroupingQuestion = async () => {
     const question = createGroupingQuestion(groups, context)
@@ -209,21 +206,18 @@ const GroupingQuestionSettings = ({
         </Box>
         {groupingQuestion && (
           <QuestionCard
-            name="groupingQuestion" // Used to access the value from formik context.
+            {...cardProps}
             onRemove={() => {
               onRemove()
               // The add button only appears once the question is removed, see onCancelEditing below
               setTimeout(() => addButtonRef.current?.focus(), 100)
             }}
-            isEditing={isEditing}
-            onStopEditing={onStopEditing}
             onCancelEditing={isNew => {
               onCancelEditing(isNew)
               // The add button only appears once the question is removed, and Firefox does not
               // announce it if focused immediately, so give the accessibility tree time to update
               if (isNew) setTimeout(() => addButtonRef.current?.focus(), 100)
             }}
-            onStartEditing={onStartEditing}
           />
         )}
       </Box>

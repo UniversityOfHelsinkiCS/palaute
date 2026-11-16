@@ -35,7 +35,7 @@ import OrderButtons from './OrderButtons'
 import SingleChoicePreview from './SingleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
-import { getEmptyOptions, getQuestionLabel, hasMissingOptions, isEmptyOption } from './utils'
+import { getEmptyOptions, getQuestionId, getQuestionLabel, hasMissingOptions, isEmptyOption } from './utils'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -210,8 +210,11 @@ const QuestionCard = ({
   const [emptyOptionsRemovalConfirmed, setEmptyOptionsRemovalConfirmed] = useState(false)
   const emptyOptionCount = getEmptyOptions(question).length
 
+  // Comparing ids instead of checking for a missing initial value, because a question inserted
+  // above others takes over the index, and so the initial value, of an existing question
+  const isNew = getQuestionId(meta.initialValue) !== getQuestionId(question)
+
   const handleCancelEditing = () => {
-    const isNew = meta.initialValue === undefined
     if (!isNew) {
       helpers.setValue(meta.initialValue)
     }
@@ -222,7 +225,6 @@ const QuestionCard = ({
   }
 
   const stopEditing = () => {
-    const isNew = meta.initialValue === undefined
     setMissingOptionsErrorRequested(false)
     // A saved new question's card may be remounted, so QuestionEditor moves focus instead.
     // The grouping question card stays mounted, so its edit button can be focused
@@ -279,8 +281,7 @@ const QuestionCard = ({
 
   const dialogTitleId = useId()
   const editTitle = question.type === 'TEXT' ? t('questionEditor:editTextualContent') : t('questionEditor:editQuestion')
-  const dialogTitle =
-    meta.initialValue === undefined ? t('questionEditor:addQuestionType', { type: title.toLowerCase() }) : editTitle
+  const dialogTitle = isNew ? t('questionEditor:addQuestionType', { type: title.toLowerCase() }) : editTitle
 
   return (
     <Card
@@ -469,7 +470,7 @@ const QuestionCard = ({
                 {removeLabel}
               </NorButton>
             </Box>
-            {!isGrouping && <OrderButtons {...orderButtonsProps} />}
+            {onMoveUp && <OrderButtons {...orderButtonsProps} />}
           </ActionsContainer>
         )}
       </CardContent>

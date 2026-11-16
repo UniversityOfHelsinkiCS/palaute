@@ -69,11 +69,13 @@ const QuestionEditorForm = ({
   groupingQuestionSettings,
   groups,
   editorLevel,
+  movableGroupingQuestion,
 }) => {
   const addButtonRef = useRef()
   const textContentButtonRef = useRef()
+  const addGroupingQuestionButtonRef = useRef(null)
   const { t, i18n } = useTranslation()
-  const [questionsField] = useField('questions')
+  const [questionsField, , questionsHelpers] = useField('questions')
   const [groupingQuestionField, , groupingQuestionHelpers] = useField('groupingQuestion')
   const [menuOpen, setMenuOpen] = useState(false)
   const addButtonId = useId()
@@ -93,31 +95,53 @@ const QuestionEditorForm = ({
     handlePublicityToggle(question, isPublic)
   }
 
+  const isGroupingQuestion = question => question.secondaryType === 'GROUPING'
+
+  const groupingQuestion = movableGroupingQuestion
+    ? questionsField.value.find(isGroupingQuestion)
+    : groupingQuestionField.value
+
+  const addGroupingQuestion = question =>
+    movableGroupingQuestion
+      ? questionsHelpers.setValue([question, ...questionsField.value])
+      : groupingQuestionHelpers.setValue(question)
+
+  const removeGroupingQuestion = () =>
+    movableGroupingQuestion
+      ? questionsHelpers.setValue(questionsField.value.filter(q => !isGroupingQuestion(q)))
+      : groupingQuestionHelpers.setValue(null)
+
+  const renderGroupingQuestionSettings = cardProps => (
+    <GroupingQuestionSettings
+      groups={groups}
+      groupingQuestion={groupingQuestion}
+      addButtonRef={addGroupingQuestionButtonRef}
+      onAddQuestion={question => {
+        addGroupingQuestion(question)
+        setEditingQuestionId(getQuestionId(question))
+      }}
+      onRemove={() => {
+        removeGroupingQuestion()
+        setEditingQuestionId(null)
+        saveChanges()
+      }}
+      onCancelEditing={isNew => {
+        if (isNew) removeGroupingQuestion()
+        setEditingQuestionId(null)
+      }}
+      isEditing={editingQuestionId === getQuestionId(groupingQuestion)}
+      onStartEditing={() => setEditingQuestionId(getQuestionId(groupingQuestion))}
+      onStopEditing={handleStopEditing}
+      {...cardProps}
+    />
+  )
+
   return (
     <Form>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {groupingQuestionSettings && (
-          <GroupingQuestionSettings
-            groups={groups}
-            onAddQuestion={q => {
-              groupingQuestionHelpers.setValue(q)
-              setEditingQuestionId(getQuestionId(q))
-            }}
-            onRemove={() => {
-              groupingQuestionHelpers.setValue(null)
-              setEditingQuestionId(null)
-              saveChanges()
-            }}
-            groupingQuestion={groupingQuestionField.value}
-            isEditing={editingQuestionId === getQuestionId(groupingQuestionField.value)}
-            onStartEditing={() => setEditingQuestionId(getQuestionId(groupingQuestionField.value))}
-            onStopEditing={handleStopEditing}
-            onCancelEditing={isNew => {
-              if (isNew) groupingQuestionHelpers.setValue(null)
-              setEditingQuestionId(null)
-            }}
-          />
-        )}
+        {groupingQuestionSettings &&
+          !(movableGroupingQuestion && groupingQuestion) &&
+          renderGroupingQuestionSettings({ name: 'groupingQuestion' })}
         <FieldArray
           name="questions"
           render={arrayHelpers => (
@@ -135,50 +159,62 @@ const QuestionEditorForm = ({
                     gap: '1.5rem',
                   }}
                 >
-                  {questionsField.value.map((question, index) => (
-                    <Box component="li" key={getQuestionId(question)}>
-                      <QuestionCard
-                        name={`questions.${index}`}
-                        onRemove={() => {
-                          // Move focus out of the card before removing it, otherwise Firefox does not
-                          // announce the newly focused button
-                          getAddButtonRef(question.type).current?.focus()
-                          arrayHelpers.remove(index)
-                          handleStopEditing()
-                          saveChanges()
-                        }}
-                        onMoveUp={() => {
-                          arrayHelpers.swap(index - 1, index)
-                          saveChanges()
-                        }}
-                        onMoveDown={() => {
-                          arrayHelpers.swap(index + 1, index)
-                          saveChanges()
-                        }}
-                        onCopy={() => {
-                          arrayHelpers.insert(index + 1, copyQuestion(question))
-                          saveChanges()
-                        }}
-                        moveUpDisabled={!questionCanMoveUp(questionsField.value, index)}
-                        moveDownDisabled={!questionCanMoveDown(questionsField.value, index)}
-                        isEditing={editingQuestionId === getQuestionId(question)}
-                        onStopEditing={isNew => {
-                          handleStopEditing()
-                          if (isNew) requestAnimationFrame(() => getAddButtonRef(question.type).current?.focus())
-                        }}
-                        onCancelEditing={() => setEditingQuestionId(null)}
-                        onCancelledNewExited={() => {
-                          // Move focus out of the closed dialog before removing its card, otherwise
-                          // Firefox does not announce the newly focused button
-                          getAddButtonRef(question.type).current?.focus()
-                          arrayHelpers.remove(index)
-                        }}
-                        onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
-                        onPublicityToggle={makePublicityToggle(question)}
-                        editorLevel={editorLevel}
-                      />
-                    </Box>
-                  ))}
+                  {questionsField.value.map((question, index) => {
+                    const listCardProps = {
+                      name: `questions.${index}`,
+                      onMoveUp: () => {
+                        arrayHelpers.swap(index - 1, index)
+                        saveChanges()
+                      },
+                      onMoveDown: () => {
+                        arrayHelpers.swap(index + 1, index)
+                        saveChanges()
+                      },
+                      moveUpDisabled: !questionCanMoveUp(questionsField.value, index),
+                      moveDownDisabled: !questionCanMoveDown(questionsField.value, index),
+                    }
+
+                    return (
+                      // A stable key keeps the grouping card mounted when saving gives the question an id,
+                      // so focus can return to its edit button
+                      <Box component="li" key={isGroupingQuestion(question) ? 'grouping' : getQuestionId(question)}>
+                        {isGroupingQuestion(question) ? (
+                          renderGroupingQuestionSettings(listCardProps)
+                        ) : (
+                          <QuestionCard
+                            {...listCardProps}
+                            onRemove={() => {
+                              // Move focus out of the card before removing it, otherwise Firefox does not
+                              // announce the newly focused button
+                              getAddButtonRef(question.type).current?.focus()
+                              arrayHelpers.remove(index)
+                              handleStopEditing()
+                              saveChanges()
+                            }}
+                            onCopy={() => {
+                              arrayHelpers.insert(index + 1, copyQuestion(question))
+                              saveChanges()
+                            }}
+                            isEditing={editingQuestionId === getQuestionId(question)}
+                            onStopEditing={isNew => {
+                              handleStopEditing()
+                              if (isNew) requestAnimationFrame(() => getAddButtonRef(question.type).current?.focus())
+                            }}
+                            onCancelEditing={() => setEditingQuestionId(null)}
+                            onCancelledNewExited={() => {
+                              // Move focus out of the closed dialog before removing its card, otherwise
+                              // Firefox does not announce the newly focused button
+                              getAddButtonRef(question.type).current?.focus()
+                              arrayHelpers.remove(index)
+                            }}
+                            onStartEditing={() => setEditingQuestionId(getQuestionId(question))}
+                            onPublicityToggle={makePublicityToggle(question)}
+                            editorLevel={editorLevel}
+                          />
+                        )}
+                      </Box>
+                    )
+                  })}
                 </Box>
               )}
 
@@ -254,6 +290,7 @@ const QuestionEditor = ({
   userCreated,
   curStartDate,
   editorLevel,
+  movableGroupingQuestion = false,
 }) => (
   <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false} enableReinitialize>
     {({ handleSubmit }) => (
@@ -273,6 +310,7 @@ const QuestionEditor = ({
         groupingQuestionSettings={groupingQuestionSettings}
         groups={groups}
         editorLevel={editorLevel}
+        movableGroupingQuestion={movableGroupingQuestion}
       />
     )}
   </Formik>

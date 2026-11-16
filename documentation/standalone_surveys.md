@@ -11,7 +11,7 @@ Surveys not tied to a course, as an alternative to E-lomake. An admin creates th
 - Answering is open between `opens_at` and `closes_at`; to stop a survey, move `closes_at`. Once `opens_at` has passed, only admins can change it or the questions; responsible persons can still change question visibility.
 - One answer per person, with at least one question answered. It can be edited or removed while the survey is open. `user_id` is stored only to enforce this and is never shown.
 - Questions are `PUBLIC` or `PRIVATE`. Respondents see public results after answering while the survey is open, and anyone with the link sees them once it has closed. As for courses, open answers can be made public only after the survey has closed (enforced on the server here). No minimum answer count.
-- Same question types as courses. A survey can have one grouping question, as in courses but with no Sisu groups: the managers write its options. Managers can filter the results by its answer; the server filters before shuffling, which separates a response's answers. No emails.
+- Same question types as courses. A survey can have one grouping question, as in courses but with no Sisu groups: the managers write its options, and it can be moved like any question. Managers can filter the results by its answer; the server filters before shuffling, which separates a response's answers. No emails.
 
 ## Code
 
