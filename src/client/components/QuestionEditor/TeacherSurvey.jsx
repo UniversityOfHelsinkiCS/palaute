@@ -6,6 +6,8 @@ import { useTranslation } from 'react-i18next'
 import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 import useUpdateTeacherSurvey from '../../hooks/useUpdateTeacherSurvey'
+import { getSurveyType } from '../../util/courseIdentifiers'
+import { TranslationContextProvider } from '../../util/translationContext'
 import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
 import { validateQuestions } from './utils'
@@ -40,6 +42,8 @@ const TeacherSurvey = ({ feedbackTarget }) => {
   const { surveys, publicQuestionIds, publicityConfigurableQuestionIds, userCreated, courseRealisation } =
     feedbackTarget
 
+  const { isInterimFeedback } = getSurveyType(feedbackTarget.courseUnit, feedbackTarget)
+
   const programmeQuestions = surveys.programmeSurveys.flatMap(survey => survey.questions)
 
   const initialValues = React.useMemo(
@@ -56,17 +60,20 @@ const TeacherSurvey = ({ feedbackTarget }) => {
   )
 
   return (
-    <QuestionEditor
-      initialValues={initialValues}
-      handleSubmit={handleSubmit}
-      handlePublicityToggle={onPublicityToggle}
-      teacherQuestionIds={surveys.teacherSurvey.questionIds}
-      copyFromCourseDialog
-      groupingQuestionSettings
-      groups={feedbackTarget.groups}
-      userCreated={userCreated}
-      curStartDate={courseRealisation?.startDate}
-    />
+    // For interim feedbacks, translations with an `_interim` variant are used if available
+    <TranslationContextProvider value={isInterimFeedback ? 'interim' : undefined}>
+      <QuestionEditor
+        initialValues={initialValues}
+        handleSubmit={handleSubmit}
+        handlePublicityToggle={onPublicityToggle}
+        teacherQuestionIds={surveys.teacherSurvey.questionIds}
+        copyFromCourseDialog
+        groupingQuestionSettings
+        groups={feedbackTarget.groups}
+        userCreated={userCreated}
+        curStartDate={courseRealisation?.startDate}
+      />
+    </TranslationContextProvider>
   )
 }
 
