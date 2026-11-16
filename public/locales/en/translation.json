@@ -803,7 +803,7 @@
     "feedback": "Feedback",
     "responseWanted": "I want a response to my feedback",
     "submit": "Send feedback",
-    "confirm": "I understand that this is not counter feedback for students but feedback for the developers of Norppa",
+    "confirm": "I understand that this is not course feedback or counter feedback but feedback for the developers of Norppa",
     "title": "Give feedback to Norppa developers",
     "description": "Norppa is being developed based on the user feedback recieved. With this form you can submit free-form feedback to the developers.",
     "feedbackLengthError": "The minimum length of the feedback is one symbol",

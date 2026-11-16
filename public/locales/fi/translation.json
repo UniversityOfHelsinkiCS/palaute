@@ -798,7 +798,7 @@
     "feedback": "Palaute",
     "responseWanted": "Haluan vastauksen palautteeseen",
     "submit": "Lähetä palaute",
-    "confirm": "Ymmärrän että tämä ei ole kurssin vastapalaute opiskelijoille vaan palaute Norpan kehittäjille",
+    "confirm": "Ymmärrän, että tämä ei ole kurssipalaute tai vastapalaute vaan palaute Norpan kehittäjille",
     "title": "Anna palautetta Norpan kehittäjille",
     "description": "Norppaa kehitetään saadun käyttäjäpalautteen perusteella. Tällä lomakkeella voit halutessasi lähettää vapaamuotoista palautetta kehittäjille",
     "feedbackLengthError": "Palautteen vähimmäispituus on yksi merkki",

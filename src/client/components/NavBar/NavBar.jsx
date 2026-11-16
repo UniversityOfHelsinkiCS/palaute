@@ -296,7 +296,7 @@ const NavBar = ({ guest = false, reloadHome = false }) => {
         label: t('navBar:browseCourses'),
         to: '/search',
       },
-    (myCoursesIsAccessible || courseSummaryIsAccessible) && {
+    !guest && {
       label: t('navBar:feedback'),
       to: '/norppa-feedback',
     },
