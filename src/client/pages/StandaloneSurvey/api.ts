@@ -17,6 +17,7 @@ export type ResultsData = {
 export type AnswerSurvey = {
   id?: number
   name: LocalizedString
+  description: LocalizedString
   opensAt: string
   closesAt: string
   questions: Question[]
@@ -35,6 +36,7 @@ export type ResponsibleUser = {
 export type ManagedSurvey = {
   id: number
   name: LocalizedString
+  description: LocalizedString
   token: string
   opensAt: string
   closesAt: string

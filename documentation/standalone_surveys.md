@@ -8,6 +8,7 @@ Surveys not tied to a course, as an alternative to E-lomake. An admin creates th
 - Responsible persons edit the survey, see all results and hide open answers. Only admins delete open answers. A survey always has at least one responsible person, and being one gives the Kyselyni menu item (`preferences.ts`); their surveys are listed there under "Muut kyselyt".
 - The link is `/survey/<token>/<slug>`. The token is 12 random characters and never changes. The slug comes from the Finnish name and is cosmetic: a wrong one redirects.
 - Anyone who can log in with Shibboleth can answer. Users without Sisu data get a Norppa user on first login.
+- The survey has an optional Markdown description per language, shown above the questions on the answer page.
 - Answering is open between `opens_at` and `closes_at`; to stop a survey, move `closes_at`. Once `opens_at` has passed, only admins can change it or the questions; responsible persons can still change question visibility.
 - One answer per person, with at least one question answered. It can be edited or removed while the survey is open. `user_id` is stored only to enforce this and is never shown.
 - Questions are `PUBLIC` or `PRIVATE`. Respondents see public results after answering while the survey is open, and anyone with the link sees them once it has closed. As for courses, open answers can be made public only after the survey has closed (enforced on the server here). No minimum answer count.
@@ -23,11 +24,11 @@ Respondent routes (`/answer/:token/...`) never return user ids or anything ident
 
 ## Data
 
-- `standalone_surveys`: name, token, dates
+- `standalone_surveys`: name, description, token, dates
 - `standalone_survey_questions`: links a row in the shared `questions` table to a survey, with `position` and `visibility`
 - `standalone_survey_responsible_users`
 - `standalone_survey_responses`: `data` in the same shape as `feedbacks.data`, unique per survey and user
-- `standalone_survey_logs`: name and date changes, added and removed questions, visibility changes, responsible persons
+- `standalone_survey_logs`: name, description and date changes, added and removed questions, visibility changes, responsible persons
 
 Removing a question leaves its `questions` row, since answers refer to it. A hidden open answer stays hidden when its respondent re-saves the same text.
 

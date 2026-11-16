@@ -153,7 +153,7 @@ const OrganisationSurveyEditor = ({
 
           return (
             <Form>
-              <Box sx={{ m: 4 }}>
+              <Box sx={{ m: 4, mt: 1 }}>
                 <OrganisationSurveyForm organisationCode={organisationCode} editView={editView} />
                 <Box sx={{ mt: 4, display: 'flex', justifyContent: 'right', gap: 2 }}>
                   <NorButton

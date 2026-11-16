@@ -35,16 +35,20 @@ import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { parseInput } from '../../util/parseInput'
 
-const NameSchema = z
-  .object({
-    fi: z.string().optional(),
-    sv: z.string().optional(),
-    en: z.string().optional(),
-  })
-  .refine(name => Object.values(name).some(value => value?.trim()), 'Name is required')
+const LocalizedStringSchema = z.object({
+  fi: z.string().optional(),
+  sv: z.string().optional(),
+  en: z.string().optional(),
+})
+
+const NameSchema = LocalizedStringSchema.refine(
+  name => Object.values(name).some(value => value?.trim()),
+  'Name is required'
+)
 
 const CreateBodySchema = z.object({
   name: NameSchema,
+  description: LocalizedStringSchema.optional(),
   opensAt: z.coerce.date(),
   closesAt: z.coerce.date(),
   responsibleUserIds: z.array(z.string()).min(1),
@@ -52,6 +56,7 @@ const CreateBodySchema = z.object({
 
 const UpdateBodySchema = z.object({
   name: NameSchema.optional(),
+  description: LocalizedStringSchema.optional(),
   opensAt: z.coerce.date().optional(),
   closesAt: z.coerce.date().optional(),
 })
@@ -98,6 +103,7 @@ const getManagedSurvey = async (req: AuthenticatedRequest) => {
 const toManagementJson = (survey: Awaited<ReturnType<typeof getSurveyById>>, access: ReturnType<typeof getAccess>) => ({
   id: survey.id,
   name: survey.name,
+  description: survey.description,
   token: survey.token,
   opensAt: survey.opensAt,
   closesAt: survey.closesAt,
@@ -132,6 +138,7 @@ router.get('/answer/:token', async (req: AuthenticatedRequest, res: Response) =>
   res.send({
     id: canManage ? survey.id : undefined,
     name: survey.name,
+    description: survey.description,
     opensAt: survey.opensAt,
     closesAt: survey.closesAt,
     questions: getQuestions(survey),

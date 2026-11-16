@@ -1,9 +1,10 @@
-import { Box, Grid2 as Grid, Paper, Typography } from '@mui/material'
+import { Alert, Box, Grid2 as Grid, Paper, Typography } from '@mui/material'
 import { endOfDay, isSameDay, startOfDay } from 'date-fns'
 import { Form, Formik } from 'formik'
 import { useTranslation } from 'react-i18next'
 import { useNavigate } from 'react-router-dom'
 
+import AlertLink from '../../../components/common/AlertLink'
 import FormikDatePicker from '../../../components/common/FormikDatePicker'
 import FormikLocalesFieldEditor from '../../../components/common/FormikLocalesFieldEditor'
 import { NorButton } from '../../../components/common/NorButton'
@@ -24,6 +25,30 @@ export const validateNameAndPeriod = (isOpen, isOver) => values => {
   return errors
 }
 
+export const DescriptionEditor = () => {
+  const { t } = useTranslation()
+
+  return (
+    <>
+      <FormikLocalesFieldEditor
+        name="description"
+        localesLabelString="standaloneSurvey:description"
+        showLanguageHeading={false}
+        gutterBottom={false}
+        multiline
+      />
+      <Grid size={12}>
+        <Alert severity="info" role="presentation">
+          {t('questionEditor:markdownSupport')}{' '}
+          <AlertLink href={t('links:markdownHelp')} target="_blank">
+            {t('feedbackResponse:markdownLink')}
+          </AlertLink>
+        </Alert>
+      </Grid>
+    </>
+  )
+}
+
 const Section = ({ title, children }) => (
   <Paper sx={{ p: 3, mb: 3 }}>
     <Typography variant="h6" component="h2" sx={{ mb: 3 }}>
@@ -33,13 +58,14 @@ const Section = ({ title, children }) => (
   </Paper>
 )
 
-const NameAndPeriod = ({ survey, isOpen, isOver }) => {
+const Details = ({ survey, isOpen, isOver }) => {
   const { t } = useTranslation()
   const updateSurvey = useUpdateSurvey(survey.id)
   const save = useInteractiveMutation(values => {
     const { opensAt, closesAt } = toPeriod(values)
     return updateSurvey.mutateAsync({
       name: values.name,
+      description: values.description,
       ...(isSameDay(opensAt, new Date(survey.opensAt)) ? {} : { opensAt }),
       ...(isSameDay(closesAt, new Date(survey.closesAt)) ? {} : { closesAt }),
     })
@@ -48,7 +74,12 @@ const NameAndPeriod = ({ survey, isOpen, isOver }) => {
 
   return (
     <Formik
-      initialValues={{ name: survey.name, opensAt: new Date(survey.opensAt), closesAt: new Date(survey.closesAt) }}
+      initialValues={{
+        name: survey.name,
+        description: { fi: '', sv: '', en: '', ...survey.description },
+        opensAt: new Date(survey.opensAt),
+        closesAt: new Date(survey.closesAt),
+      }}
       onSubmit={async (values, actions) => {
         if (await save(values)) actions.resetForm({ values })
       }}
@@ -58,7 +89,8 @@ const NameAndPeriod = ({ survey, isOpen, isOver }) => {
       {({ dirty, isSubmitting }) => (
         <Form>
           <Grid spacing={4} container>
-            <FormikLocalesFieldEditor name="name" localesLabelString="standaloneSurvey:name" />
+            <FormikLocalesFieldEditor name="name" localesLabelString="standaloneSurvey:name" gutterBottom={false} />
+            <DescriptionEditor />
             <Grid size={{ xs: 12, md: 6 }}>
               <FormikDatePicker
                 name="opensAt"
@@ -124,8 +156,8 @@ const Settings = ({ survey, isOpen, isOver }) => {
 
   return (
     <Box id="feedback-target-tab-content">
-      <Section title={t('standaloneSurvey:nameAndPeriod')}>
-        <NameAndPeriod survey={survey} isOpen={isOpen} isOver={isOver} />
+      <Section title={t('standaloneSurvey:details')}>
+        <Details survey={survey} isOpen={isOpen} isOver={isOver} />
       </Section>
       <Section title={t('organisationSurveys:responsibleTeachers')}>
         <ResponsibleUsers survey={survey} />

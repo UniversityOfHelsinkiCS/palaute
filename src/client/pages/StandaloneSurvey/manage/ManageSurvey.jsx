@@ -73,6 +73,7 @@ const parseLogMessage = data => {
   const messages = []
   if (data.created) messages.push('Created survey')
   if (data.name) messages.push(`Set name to '${getLanguageValue(data.name, 'fi')}'`)
+  if (data.description) messages.push('Changed description')
   if (data.addedResponsibleUsers) messages.push(`Added responsible persons ${getUserNames(data.addedResponsibleUsers)}`)
   if (data.removedResponsibleUsers)
     messages.push(`Removed responsible persons ${getUserNames(data.removedResponsibleUsers)}`)

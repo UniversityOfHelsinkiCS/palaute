@@ -28,7 +28,7 @@ import { getLanguageValue } from '../../../../util/languageUtils'
 import { formatDate } from '../../../FeedbackTarget/tabs/FeedbackView/utils'
 import { ResponsibleTeachersSelector } from '../../../Organisation/OrganisationSurveyEditor'
 import { useAllSurveys, useCreateSurvey, useDeleteSurvey } from '../../../StandaloneSurvey/api'
-import { toPeriod, validateNameAndPeriod } from '../../../StandaloneSurvey/manage/Settings'
+import { DescriptionEditor, toPeriod, validateNameAndPeriod } from '../../../StandaloneSurvey/manage/Settings'
 
 const CreateDialog = ({ open, onClose }) => {
   const { t } = useTranslation()
@@ -42,6 +42,7 @@ const CreateDialog = ({ open, onClose }) => {
 
   const initialValues = {
     name: { fi: '', sv: '', en: '' },
+    description: { fi: '', sv: '', en: '' },
     opensAt: addDays(new Date(), 1),
     closesAt: addDays(new Date(), 15),
     responsibleUsers: authorizedUser ? [authorizedUser] : [],
@@ -58,6 +59,7 @@ const CreateDialog = ({ open, onClose }) => {
   const handleSubmit = async values => {
     const ok = await create({
       name: values.name,
+      description: values.description,
       ...toPeriod(values),
       responsibleUserIds: values.responsibleUsers.map(u => u.id),
     })
@@ -73,9 +75,10 @@ const CreateDialog = ({ open, onClose }) => {
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validate={validate} validateOnChange={false}>
         {({ isSubmitting }) => (
           <Form>
-            <Box sx={{ m: 4 }}>
+            <Box sx={{ m: 4, mt: 1 }}>
               <Grid spacing={4} container>
-                <FormikLocalesFieldEditor name="name" localesLabelString="standaloneSurvey:name" />
+                <FormikLocalesFieldEditor name="name" localesLabelString="standaloneSurvey:name" gutterBottom={false} />
+                <DescriptionEditor />
                 <Grid size={{ xs: 12, md: 6 }}>
                   <FormikDatePicker name="opensAt" label={t('editFeedbackTarget:opensAt')} disablePast />
                 </Grid>

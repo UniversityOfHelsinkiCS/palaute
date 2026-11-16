@@ -40,7 +40,7 @@ const InterimFeedbackEditor = ({ title, initialValues, validationSchema, handleS
 
           return (
             <Form>
-              <Box sx={{ m: 4 }}>
+              <Box sx={{ m: 4, mt: 1 }}>
                 <InterimFeedbackForm />
                 <Box sx={{ mt: 2, display: 'flex', justifyContent: 'right', gap: 2 }}>
                   <NorButton data-cy="interim-feedback-editor-save" disabled={disabled} color="primary" type="submit">

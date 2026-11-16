@@ -20,6 +20,7 @@ import { sequelize } from '../db/dbConnection'
 class StandaloneSurvey extends Model<InferAttributes<StandaloneSurvey>, InferCreationAttributes<StandaloneSurvey>> {
   declare id: CreationOptional<number>
   declare name: LocalizedString
+  declare description: CreationOptional<LocalizedString>
   declare token: string
   declare opensAt: Date
   declare closesAt: Date
@@ -54,6 +55,11 @@ StandaloneSurvey.init(
     name: {
       type: JSONB,
       allowNull: false,
+    },
+    description: {
+      type: JSONB,
+      allowNull: false,
+      defaultValue: {},
     },
     token: {
       type: STRING,

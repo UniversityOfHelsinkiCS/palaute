@@ -8,12 +8,18 @@ type FormikLocalesFieldEditorProps = {
   name: string
   localesLabelString: string
   languages?: string[]
+  multiline?: boolean
+  showLanguageHeading?: boolean
+  gutterBottom?: boolean
 }
 
 const FormikLocalesFieldEditor = ({
   name,
   localesLabelString,
   languages = LANGUAGES,
+  multiline = false,
+  showLanguageHeading = true,
+  gutterBottom = true,
 }: FormikLocalesFieldEditorProps) => {
   const { i18n } = useTranslation()
 
@@ -24,18 +30,22 @@ const FormikLocalesFieldEditor = ({
 
         return (
           <Grid size={{ xs: 12, sm: 12, md: 4 }} key={language}>
-            <Box mb={2}>
-              <Typography variant="h6" component="h2">
-                {language.toUpperCase()}
-              </Typography>
-            </Box>
-            <Box mb={2}>
+            {showLanguageHeading && (
+              <Box mb={2}>
+                <Typography variant="h6" component="h2">
+                  {language.toUpperCase()}
+                </Typography>
+              </Box>
+            )}
+            <Box mb={gutterBottom ? 2 : 0}>
               <FormikTextField
                 data-cy={`formik-locales-field-${language}-${name}`}
                 id={`locales-field-${language}-${name}`}
                 name={`${name}.${language}`}
                 label={t(localesLabelString)}
                 fullWidth
+                multiline={multiline}
+                minRows={multiline ? 4 : undefined}
               />
             </Box>
           </Grid>

@@ -253,6 +253,20 @@ test.describe('Standalone surveys', () => {
     await expect.poll(async () => (await surveys.get(id)).body.name.en).toBe('Staff survey 2026')
   })
 
+  test('the description is shown to respondents as markdown', async ({ page, loginAs, request }) => {
+    const { id, token } = await setupSurvey(request)
+
+    await loginAs(teacher)
+    await page.goto(`/standalone-surveys/${id}/settings`)
+    await textField(page, 'formik-locales-field-en-description').fill('Answer by **Friday**')
+    await page.locator('form').first().locator('button[type="submit"]').click()
+    await expect.poll(async () => (await api(request).get(id)).body.description.en).toBe('Answer by **Friday**')
+
+    await loginAs(student)
+    await page.goto(`/survey/${token}/henkilostokysely`)
+    await expect(byDataCy(page, 'standalone-survey-description').locator('strong')).toHaveText('Friday')
+  })
+
   test('only visibility can be changed once the survey has opened', async ({ request }) => {
     const surveys = api(request)
     const { id } = await setupSurvey(request)

@@ -24,20 +24,28 @@ const assertUsersExist = async (userIds: string[]) => {
 
 type CreateSurveyParams = {
   name: LocalizedString
+  description?: LocalizedString
   opensAt: Date
   closesAt: Date
   responsibleUserIds: string[]
   user: User
 }
 
-export const createSurvey = async ({ name, opensAt, closesAt, responsibleUserIds, user }: CreateSurveyParams) => {
+export const createSurvey = async ({
+  name,
+  description,
+  opensAt,
+  closesAt,
+  responsibleUserIds,
+  user,
+}: CreateSurveyParams) => {
   const userIds = _.uniq(responsibleUserIds)
   assertDates(opensAt, closesAt)
   await assertUsersExist(userIds)
 
   const survey = await sequelize.transaction(async transaction => {
     const created = await StandaloneSurvey.create(
-      { name, opensAt, closesAt, token: generateToken(), createdByUserId: user.id },
+      { name, description, opensAt, closesAt, token: generateToken(), createdByUserId: user.id },
       { transaction }
     )
     await StandaloneSurveyResponsibleUser.bulkCreate(
@@ -54,13 +62,14 @@ export const createSurvey = async ({ name, opensAt, closesAt, responsibleUserIds
 
 type UpdateSurveyParams = {
   name?: LocalizedString
+  description?: LocalizedString
   opensAt?: Date
   closesAt?: Date
 }
 
 export const updateSurvey = async (
   survey: StandaloneSurvey,
-  { name, opensAt, closesAt }: UpdateSurveyParams,
+  { name, description, opensAt, closesAt }: UpdateSurveyParams,
   user: User
 ) => {
   const opensAtChanged = opensAt && opensAt.getTime() !== survey.opensAt.getTime()
@@ -76,6 +85,10 @@ export const updateSurvey = async (
   if (name && !_.isEqual(name, survey.name)) {
     survey.name = name
     logData.name = name
+  }
+  if (description && !_.isEqual(description, survey.description)) {
+    survey.description = description
+    logData.description = description
   }
   if (opensAtChanged) {
     survey.opensAt = opensAt

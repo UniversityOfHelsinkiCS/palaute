@@ -6,9 +6,11 @@ import { Link, Navigate, Route, Routes, useLocation, useNavigate, useParams } fr
 
 import AlertLink from '../../components/common/AlertLink'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
+import Markdown from '../../components/common/Markdown'
 import { NorButton } from '../../components/common/NorButton'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { getLanguageValue } from '../../util/languageUtils'
 import { TranslationContextProvider } from '../../util/translationContext'
 import { FeedbackTargetTab, FeedbackTargetTabsContainer } from '../FeedbackTarget/FeedbackTargetTabs'
 import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
@@ -21,7 +23,7 @@ import SurveyResults from './SurveyResults'
 const isBlank = answer => (Array.isArray(answer) ? answer.length === 0 : !String(answer ?? '').trim())
 
 const AnswerForm = ({ survey, token, basePath }) => {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const navigate = useNavigate()
   const { enqueueSnackbar } = useSnackbar()
   const saveResponse = useSaveResponse(token)
@@ -30,6 +32,7 @@ const AnswerForm = ({ survey, token, basePath }) => {
   const isOpen = feedbackTargetIsOpen(survey)
   const isEnded = feedbackTargetIsEnded(survey)
   const canAnswer = isOpen
+  const description = getLanguageValue(survey.description, i18n.language)?.trim()
 
   const handleError = e => {
     enqueueSnackbar(e?.response?.data?.error ?? t('common:unknownError'), { variant: 'error' })
@@ -77,6 +80,12 @@ const AnswerForm = ({ survey, token, basePath }) => {
             {t('standaloneSurvey:seeResults')}
           </AlertLink>
         </Alert>
+      )}
+
+      {description && (
+        <Box sx={{ mb: 4 }} data-cy="standalone-survey-description">
+          <Markdown>{description}</Markdown>
+        </Box>
       )}
 
       <FormContainer
