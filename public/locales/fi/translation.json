@@ -141,7 +141,10 @@
     "feedbackResponseGiven": "Opettaja on antanut vastapalautteen",
     "deleted": "Palautteesi on poistettu",
     "summaryAvailableWhenEnded": "Palautteen yhteenveto on nähtävissä palautteenannon päättymisen jälkeen.",
-    "waitingBadgeLabel": "{{count}} kappaletta puuttuvia palautteita",
+    "waitingBadgeLabelOne": "{{count}} puuttuva palaute",
+    "waitingBadgeLabelMany": "{{count}} puuttuvaa palautetta",
+    "ongoingBadgeLabelOne": "{{count}} kurssi, jolla jatkuva palaute on käynnissä",
+    "ongoingBadgeLabelMany": "{{count}} kurssia, joilla jatkuva palaute on käynnissä",
     "noFeedbackGiven": "Päätöksesi olla antamatta palautetta on tallennettu",
     "noFeedbackGivenChip": "En antanut palautetta",
     "attention": "Huom!",
@@ -209,7 +212,8 @@
     "disabledCourseWarning": "Kurssin palaute ei ole käytössä",
     "survey": "Kysely",
     "surveys": "Kyselyä",
-    "endedBadgeLabel": "{{count}} kappaletta puuttuvia vastapalautteita viimeisen lukuvuoden kyselyiltä"
+    "endedBadgeLabelOne": "{{count}} puuttuva vastapalaute viimeisen lukuvuoden kyselyiltä",
+    "endedBadgeLabelMany": "{{count}} puuttuvaa vastapalautetta viimeisen lukuvuoden kyselyiltä"
   },
   "questionEditor": {
     "duplicateQuestionLabel": "Duplikoi kysymys {{label}}",

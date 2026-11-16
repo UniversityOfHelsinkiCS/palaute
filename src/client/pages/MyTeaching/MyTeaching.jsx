@@ -209,7 +209,9 @@ const MyTeaching = () => {
           label={t('teacherView:endedSurveys')}
           status="ended"
           count={tabCounts?.ended}
-          countLabel={t('teacherView:endedBadgeLabel', { count: tabCounts?.ended })}
+          countLabel={t(tabCounts?.ended === 1 ? 'teacherView:endedBadgeLabelOne' : 'teacherView:endedBadgeLabelMany', {
+            count: tabCounts?.ended,
+          })}
           badgeColor="error"
           icon={<EndedIcon />}
           iconPosition="start"

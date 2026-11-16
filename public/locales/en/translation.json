@@ -146,7 +146,10 @@
     "feedbackResponseGiven": "Teacher has given counter feedback",
     "deleted": "Your feedback has been deleted",
     "summaryAvailableWhenEnded": "Feedback summary will be available after the feedback period has ended.",
-    "waitingBadgeLabel": "{{count}} feedbacks missing",
+    "waitingBadgeLabelOne": "{{count}} feedback missing",
+    "waitingBadgeLabelMany": "{{count}} feedbacks missing",
+    "ongoingBadgeLabelOne": "{{count}} course with continuous feedback underway",
+    "ongoingBadgeLabelMany": "{{count}} courses with continuous feedback underway",
     "noFeedbackGiven": "Your decision to not give feedback has been noted",
     "noFeedbackGivenChip": "I did not give feedback",
     "attention": "Attention!",
@@ -214,7 +217,8 @@
     "disabledCourseWarning": "Feedback is disabled for this course",
     "survey": "Survey",
     "surveys": "Surveys",
-    "endedBadgeLabel": "{{count}} missing counter feedbacks from the last academic year"
+    "endedBadgeLabelOne": "{{count}} missing counter feedback from the last academic year",
+    "endedBadgeLabelMany": "{{count}} missing counter feedbacks from the last academic year"
   },
   "questionEditor": {
     "duplicateQuestionLabel": "Duplicate question {{label}}",

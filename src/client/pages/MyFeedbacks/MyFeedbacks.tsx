@@ -73,10 +73,14 @@ const MyFeedbacks = () => {
       </Typography>
 
       <StatusTabs aria-labelledby="my-feedbacks-title" status={status} tabOrder={tabOrder}>
-        {counts.ongoing && (
+        {counts.ongoing > 0 && (
           <StatusTab
             data-cy="my-feedbacks-continuous-tab"
             label={t('userFeedbacks:continuousFeedbackTab')}
+            countLabel={t(
+              counts.ongoing === 1 ? 'userFeedbacks:ongoingBadgeLabelOne' : 'userFeedbacks:ongoingBadgeLabelMany',
+              { count: counts.ongoing }
+            )}
             status="ongoing"
             count={counts.ongoing}
             badgeColor="primary"
@@ -85,7 +89,10 @@ const MyFeedbacks = () => {
         <StatusTab
           data-cy="my-feedbacks-waiting-tab"
           label={t('userFeedbacks:waitingForFeedbackTab')}
-          countLabel={t('userFeedbacks:waitingBadgeLabel', { count: counts.waiting })}
+          countLabel={t(
+            counts.waiting === 1 ? 'userFeedbacks:waitingBadgeLabelOne' : 'userFeedbacks:waitingBadgeLabelMany',
+            { count: counts.waiting }
+          )}
           status="waiting"
           count={counts.waiting}
           badgeColor="primary"
