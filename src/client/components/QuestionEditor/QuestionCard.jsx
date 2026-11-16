@@ -11,6 +11,7 @@ import {
   Divider,
   Grid2 as Grid,
   Typography,
+  useMediaQuery,
 } from '@mui/material'
 import { useField } from 'formik'
 import { useId, useRef, useState } from 'react'
@@ -229,6 +230,10 @@ const QuestionCard = ({
     }
   }
 
+  // On narrow screens the settings and buttons would leave little room for the content,
+  // so the whole dialog scrolls instead of only its content
+  const isNarrow = useMediaQuery(theme => theme.breakpoints.down('sm'))
+
   const dialogTitleId = useId()
   const editTitle = question.type === 'TEXT' ? t('questionEditor:editTextualContent') : t('questionEditor:editQuestion')
   const dialogTitle =
@@ -273,6 +278,7 @@ const QuestionCard = ({
           onClose={handleCancelEditing}
           maxWidth={false}
           fullWidth
+          scroll={isNarrow ? 'body' : 'paper'}
           aria-labelledby={dialogTitleId}
           // Move focus only after the transitions: while the dialog is open the rest of the page
           // is aria-hidden, and Firefox does not announce focus moved into hidden content
