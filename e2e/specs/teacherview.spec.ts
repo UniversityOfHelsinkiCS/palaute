@@ -162,6 +162,46 @@ test.describe('Teacher view', () => {
     await expect(contains(page, 'Test description edited')).toBeAttached()
   })
 
+  test('Choice question is not saved without options, and its empty options are removed', async ({ page }) => {
+    await page.goto(`/targets/${fbtId}/edit`)
+    await contains(page, 'Add question').click()
+    await page.locator('[data-cy=question-editor-type-menu-select-single-choice]').click()
+    await page.locator('input[id^=choice-question-en-questions]').fill('Choice question')
+
+    // Without options the dialog stays open, and the error is read with the add option button
+    const save = page.locator('[data-cy=question-card-save-edit]')
+    const addOption = page.locator('[data-cy=option-editor-add-option]')
+    await save.click()
+    await expect(addOption).toBeFocused()
+    await expect(addOption).toHaveAccessibleDescription('Choice questions require answer options')
+
+    // With only blank options, the error is read with the first option's first input
+    await addOption.click()
+    await save.click()
+    const firstOptionInput = page.locator('[data-cy="option-editor-new-option-fi-name.0"] input')
+    await expect(firstOptionInput).toBeFocused()
+    await expect(firstOptionInput).toHaveAccessibleDescription('Fill in at least one option')
+
+    // With an empty option next to a filled one, confirming removes the empty one and saves
+    await page.locator('[data-cy="option-editor-new-option-en-name.0"] input').fill('First option')
+    await addOption.click()
+    await save.click()
+    await expect(
+      contains(page, 'The question has 1 empty option that will be removed when the question is saved.')
+    ).toBeVisible()
+    // The save starts only after the confirmation has closed, so wait for the request before reloading
+    const saved = page.waitForResponse(
+      response => response.request().method() === 'PUT' && response.url().endsWith(`/feedback-targets/${fbtId}`)
+    )
+    await page.locator('[data-cy=question-card-remove-empty-options-confirm]').click()
+    await saved
+
+    await page.reload()
+    await expect(contains(page, 'First option')).toBeAttached()
+    await page.getByRole('button', { name: 'Edit question Choice question' }).click()
+    await expect(page.locator('[data-cy^="option-editor-new-option-en-name"]')).toHaveCount(1)
+  })
+
   test('Teacher can view survey results', async ({ page, api }) => {
     await api.setFeedbackActive()
     await api.giveFeedback(student)

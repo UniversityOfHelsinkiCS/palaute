@@ -1,8 +1,8 @@
 import { Add } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
-import { IconButton, Tooltip, Box, Grid2 as Grid } from '@mui/material'
+import { IconButton, Tooltip, Box, Grid2 as Grid, Typography } from '@mui/material'
 import { FieldArray, useField } from 'formik'
-import { useRef, useState } from 'react'
+import { useId, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
@@ -20,7 +20,8 @@ const styles = {
   },
 }
 
-const OptionItem = ({ name, index, languages, onRemove, isNew }) => {
+// firstInputRef and describedBy apply to the input of the first language only
+const OptionItem = ({ name, index, languages, onRemove, isNew, firstInputRef, describedBy }) => {
   const { t, i18n } = useTranslation()
 
   return (
@@ -42,6 +43,10 @@ const OptionItem = ({ name, index, languages, onRemove, isNew }) => {
                   // the user clicks the add button, not when the dialog opens.
                   // oxlint-disable-next-line jsx-a11y/no-autofocus
                   autoFocus={isNew && languageIndex === 0}
+                  inputRef={languageIndex === 0 ? firstInputRef : undefined}
+                  slotProps={
+                    languageIndex === 0 && describedBy ? { input: { 'aria-describedby': describedBy } } : undefined
+                  }
                 />
               </Grid>
             )
@@ -66,7 +71,13 @@ const OptionItem = ({ name, index, languages, onRemove, isNew }) => {
   )
 }
 
-const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
+const OptionEditor = ({
+  name,
+  languages = ['fi', 'sv', 'en'],
+  addButtonRef,
+  firstOptionInputRef,
+  showMissingOptionsError = false,
+}) => {
   const { t } = useTranslation()
   const [optionsField] = useField(name)
   const { value: options = [] } = optionsField
@@ -74,7 +85,9 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
   const [removeIndex, setRemoveIndex] = useState(null)
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
   const [removeConfirmed, setRemoveConfirmed] = useState(false)
-  const addButtonRef = useRef(null)
+  const missingOptionsErrorId = useId()
+  const hasOptions = options.length > 0
+  const missingOptionsErrorDescribedBy = showMissingOptionsError ? missingOptionsErrorId : undefined
   const language = useQuestionLanguage()
   const removeOptionLabel = removeIndex === null ? undefined : getOptionLabel(options[removeIndex], language)
 
@@ -110,6 +123,8 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
                 languages={languages}
                 onRemove={() => handleRemoveClick(index, arrayHelpers)}
                 isNew={option.id === newOptionId}
+                firstInputRef={index === 0 ? firstOptionInputRef : undefined}
+                describedBy={index === 0 ? missingOptionsErrorDescribedBy : undefined}
               />
             ))}
           </Box>
@@ -120,6 +135,7 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
             icon={<Add />}
             sx={{ mt: 1 }}
             ref={addButtonRef}
+            aria-describedby={hasOptions ? undefined : missingOptionsErrorDescribedBy}
             onClick={() => {
               const option = createOption()
               setNewOptionId(option.id)
@@ -128,6 +144,11 @@ const OptionEditor = ({ name, languages = ['fi', 'sv', 'en'] }) => {
           >
             {t('questionEditor:addOption')}
           </NorButton>
+          {showMissingOptionsError && (
+            <Typography id={missingOptionsErrorId} variant="body2" sx={{ mt: 1, color: 'error.main' }}>
+              {hasOptions ? t('questionEditor:fillInAtLeastOneOption') : t('common:choiceQuestionError')}
+            </Typography>
+          )}
 
           <ConfirmDialog
             open={removeDialogOpen}

@@ -35,7 +35,7 @@ import OrderButtons from './OrderButtons'
 import SingleChoicePreview from './SingleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
-import { getQuestionLabel } from './utils'
+import { getEmptyOptions, getQuestionLabel, hasMissingOptions, isEmptyOption } from './utils'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -203,23 +203,66 @@ const QuestionCard = ({
   const skipEditButtonFocusRef = useRef(false)
   const cancelledNewRef = useRef(false)
 
+  // Shown only after a save attempt, and hidden again as soon as an option gets some text
+  const [missingOptionsErrorRequested, setMissingOptionsErrorRequested] = useState(false)
+  const showMissingOptionsError = missingOptionsErrorRequested && hasMissingOptions(question)
+  const [emptyOptionsDialogOpen, setEmptyOptionsDialogOpen] = useState(false)
+  const [emptyOptionsRemovalConfirmed, setEmptyOptionsRemovalConfirmed] = useState(false)
+  const emptyOptionCount = getEmptyOptions(question).length
+
   const handleCancelEditing = () => {
     const isNew = meta.initialValue === undefined
     if (!isNew) {
       helpers.setValue(meta.initialValue)
     }
+    setMissingOptionsErrorRequested(false)
     skipEditButtonFocusRef.current = false
     cancelledNewRef.current = isNew
     onCancelEditing(isNew)
   }
 
-  const handleStopEditing = () => {
+  const stopEditing = () => {
     const isNew = meta.initialValue === undefined
+    setMissingOptionsErrorRequested(false)
     // A saved new question's card may be remounted, so QuestionEditor moves focus instead.
     // The grouping question card stays mounted, so its edit button can be focused
     skipEditButtonFocusRef.current = isNew && !isGrouping
     cancelledNewRef.current = false
     onStopEditing(isNew)
+  }
+
+  const handleStopEditing = () => {
+    if (hasMissingOptions(question)) {
+      setMissingOptionsErrorRequested(true)
+      // Wait for the error text to render, so that it is read as the button's description
+      requestAnimationFrame(() => editorRef.current?.focusMissingOptions?.())
+      return
+    }
+
+    if (emptyOptionCount > 0) {
+      setEmptyOptionsRemovalConfirmed(false)
+      setEmptyOptionsDialogOpen(true)
+      return
+    }
+
+    stopEditing()
+  }
+
+  const handleConfirmEmptyOptionsRemoval = () => {
+    setEmptyOptionsRemovalConfirmed(true)
+    setEmptyOptionsDialogOpen(false)
+  }
+
+  // Save only after the confirmation has closed and returned focus to the save button,
+  // so that closing the question dialog restores focus as after a normal save
+  const handleEmptyOptionsDialogExited = async () => {
+    if (!emptyOptionsRemovalConfirmed) return
+
+    await helpers.setValue({
+      ...question,
+      data: { ...question.data, options: question.data.options.filter(option => !isEmptyOption(option)) },
+    })
+    stopEditing()
   }
 
   const handleDialogExited = () => {
@@ -291,7 +334,13 @@ const QuestionCard = ({
         >
           <DialogTitle id={dialogTitleId}>{dialogTitle}</DialogTitle>
           <DialogContent>
-            <EditorComponent ref={editorRef} name={name} languages={LANGUAGES} editorLevel={editorLevel} />
+            <EditorComponent
+              ref={editorRef}
+              name={name}
+              languages={LANGUAGES}
+              editorLevel={editorLevel}
+              showMissingOptionsError={showMissingOptionsError}
+            />
           </DialogContent>
           <DialogActions sx={{ p: '1.5rem' }}>
             <Box
@@ -328,6 +377,21 @@ const QuestionCard = ({
               </Box>
             </Box>
           </DialogActions>
+          <ConfirmDialog
+            open={emptyOptionsDialogOpen}
+            onClose={() => setEmptyOptionsDialogOpen(false)}
+            onConfirm={handleConfirmEmptyOptionsRemoval}
+            onExited={handleEmptyOptionsDialogExited}
+            title={t('questionEditor:removeEmptyOptionsTitle')}
+            content={t(
+              emptyOptionCount === 1
+                ? 'questionEditor:removeEmptyOptionsConfirmationOne'
+                : 'questionEditor:removeEmptyOptionsConfirmationMany',
+              { count: emptyOptionCount }
+            )}
+            confirmLabel={t('questionEditor:removeEmptyOptionsAndSave')}
+            dataCy="question-card-remove-empty-options"
+          />
         </Dialog>
         <ConfirmDialog
           open={removeDialogOpen}

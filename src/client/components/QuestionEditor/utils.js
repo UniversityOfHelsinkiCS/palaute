@@ -120,15 +120,21 @@ export const questionCanMoveDown = (questions, index) => {
   return nextQuestion?.editable ?? true
 }
 
+const isChoiceQuestion = question => question?.type === 'SINGLE_CHOICE' || question?.type === 'MULTIPLE_CHOICE'
+
+// An option is empty when its label has no text in any language
+export const isEmptyOption = option =>
+  !Object.values(option?.label ?? {}).some(value => typeof value === 'string' && value.trim())
+
+export const getEmptyOptions = question => (question?.data?.options ?? []).filter(isEmptyOption)
+
+export const hasMissingOptions = question =>
+  isChoiceQuestion(question) && (question.data?.options ?? []).every(isEmptyOption)
+
 export const validateQuestions = ({ questions, groupingQuestion }) => {
   const editableQuestions = [...questions, groupingQuestion].filter(question => question?.editable)
 
-  for (const question of editableQuestions) {
-    if (question.type === 'SINGLE_CHOICE' || question.type === 'MULTIPLE_CHOICE') {
-      if (!question.data.options || question.data.options.length < 1) return false
-    }
-  }
-  return true
+  return !editableQuestions.some(hasMissingOptions)
 }
 
 export const copyQuestionsFromFeedbackTarget = feedbackTarget => {

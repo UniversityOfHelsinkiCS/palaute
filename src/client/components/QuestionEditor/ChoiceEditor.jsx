@@ -49,13 +49,18 @@ const InfoEditor = ({ name, language, inputRef }) => {
 }
 
 const ChoiceEditor = forwardRef((props, ref) => {
-  const { name, languages = ['fi', 'sv', 'en'] } = props
+  const { name, languages = ['fi', 'sv', 'en'], showMissingOptionsError } = props
   const { t } = useTranslation()
 
   const firstInputRef = useRef(null)
+  const addOptionButtonRef = useRef(null)
+  const firstOptionInputRef = useRef(null)
   useImperativeHandle(ref, () => ({
     focusFirst: () => {
       firstInputRef.current?.focus?.()
+    },
+    focusMissingOptions: () => {
+      ;(firstOptionInputRef.current ?? addOptionButtonRef.current)?.focus()
     },
   }))
 
@@ -81,7 +86,13 @@ const ChoiceEditor = forwardRef((props, ref) => {
         </Grid>
       </Box>
 
-      <OptionEditor name={`${name}.data.options`} languages={languages} />
+      <OptionEditor
+        name={`${name}.data.options`}
+        languages={languages}
+        addButtonRef={addOptionButtonRef}
+        firstOptionInputRef={firstOptionInputRef}
+        showMissingOptionsError={showMissingOptionsError}
+      />
     </>
   )
 })
