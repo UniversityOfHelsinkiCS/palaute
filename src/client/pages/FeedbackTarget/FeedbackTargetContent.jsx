@@ -13,7 +13,7 @@ import {
   VisibilityOutlined,
 } from '@mui/icons-material'
 /** @jsxImportSource @emotion/react */
-import { Box, Card, CardContent, Typography } from '@mui/material'
+import { Box, Card, CardContent } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import { Navigate, Outlet, Route, Routes, useMatch } from 'react-router-dom'
 
@@ -39,6 +39,7 @@ import {
   FeedbackTargetTab,
   FeedbackTargetTabDivider,
 } from './FeedbackTargetTabs'
+import TabHeading from './TabHeading'
 import ContinuousFeedback from './tabs/ContinuousFeedback'
 import EditFeedbackResponse from './tabs/EditFeedbackResponse'
 import FeedbackView from './tabs/FeedbackView'
@@ -71,17 +72,11 @@ const TabGroup = ({ groupTabId, tabs }) => (
   </TabCard>
 )
 
-const TabHeading = ({ children }) => (
-  <Typography component="h3" variant="h6" sx={{ mb: 3 }}>
-    {children}
-  </Typography>
-)
-
 const TopLevelTabPanel = ({ tabId, heading, children }) => (
   <TabCard tabId={tabId}>
     <CardContent>
       <Box sx={{ p: 2 }}>
-        <TabHeading>{heading}</TabHeading>
+        {heading && <TabHeading>{heading}</TabHeading>}
         {children}
       </Box>
     </CardContent>
