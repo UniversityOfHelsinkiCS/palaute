@@ -339,7 +339,12 @@
     "multipleChoiceQuestions": "Multiple choice questions",
     "openQuestions": "Open questions",
     "multipleChoiceScale": "1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer",
-    "publicQuestionConfirmation": "I have checked that the open answers to this question do not contain personal data or other sensitive information that cannot be published."
+    "publicQuestionConfirmation": "I have checked that the open answers to this question do not contain personal data or other sensitive information that cannot be published.",
+    "showFullText": "Show full text",
+    "showLessText": "Show less",
+    "showAllAnswers": "Show all {{count}} answers",
+    "showFewerAnswers": "Show fewer answers",
+    "noAnswers": "No answers"
   },
   "feedbackSummary": {
     "average": "Average"

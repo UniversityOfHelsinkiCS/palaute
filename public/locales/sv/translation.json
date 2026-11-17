@@ -329,7 +329,12 @@
     "multipleChoiceQuestions": "Flervalsfrågor",
     "openQuestions": "Öppna frågor",
     "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, N/A = kan inte svara",
-    "publicQuestionConfirmation": "Jag har kontrollerat att svaren på denna fråga inte innehåller personuppgifter eller annan känslig information som inte får publiceras."
+    "publicQuestionConfirmation": "Jag har kontrollerat att svaren på denna fråga inte innehåller personuppgifter eller annan känslig information som inte får publiceras.",
+    "showFullText": "Visa hela texten",
+    "showLessText": "Visa mindre",
+    "showAllAnswers": "Visa alla {{count}} svar",
+    "showFewerAnswers": "Visa färre svar",
+    "noAnswers": "Inga svar"
   },
   "feedbackSummary": {
     "average": "Medeltal"
