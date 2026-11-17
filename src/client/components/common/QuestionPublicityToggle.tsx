@@ -29,6 +29,8 @@ const QuestionPublicityToggle = ({
   disabledInfo,
   onChange,
   questionLabel,
+  size = 'medium',
+  info,
 }: {
   questionId: string | number
   checked: boolean
@@ -36,6 +38,8 @@ const QuestionPublicityToggle = ({
   disabledInfo?: string
   onChange: (value: boolean) => void
   questionLabel?: string
+  size?: 'small' | 'medium'
+  info?: React.ReactNode
 }) => {
   const { t } = useTranslation()
   const context = useTranslationContext()
@@ -82,6 +86,7 @@ const QuestionPublicityToggle = ({
             icon={!disabled ? <Edit /> : undefined}
             label={label}
             clickable
+            size={size}
             onClick={handleOpen}
             variant="outlined"
             color={disabled ? 'default' : 'primary'}
@@ -151,6 +156,8 @@ const QuestionPublicityToggle = ({
                 sx={radioButtonStyle}
               />
             </RadioGroup>
+
+            {info && <Typography sx={{ mt: 2, fontSize: '0.875rem', color: 'text.secondary' }}>{info}</Typography>}
 
             {disabled && (
               <Box id="question-publicity-disabled-info" sx={{ mt: 3 }}>

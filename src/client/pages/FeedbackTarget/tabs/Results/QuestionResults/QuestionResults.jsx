@@ -1,9 +1,9 @@
 import { Box, Typography, Chip } from '@mui/material'
-import { groupBy } from 'lodash-es'
 import React, { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { useTranslationContext } from '../../../../../util/translationContext'
+import getAnswersByQuestionId from './getAnswersByQuestionId'
 import QuestionItem from './QuestionItem'
 
 const QuestionSection = ({ title, count, inTabPanel, children, ...props }) => (
@@ -27,20 +27,7 @@ const getQuestionsWithFeedback = (questions, questionOrder, feedbacks) => {
     return []
   }
 
-  const feedbacksArray = feedbacks ?? []
-
-  const feedbackData = feedbacksArray
-    .flatMap(feedback =>
-      Array.isArray(feedback.data) ? feedback.data.map(d => ({ ...d, feedbackId: feedback.id })) : []
-    ) // filter short answers which are not a number, or answers that are blank
-    .filter(answer => {
-      const isNumber = !Number.isNaN(parseInt(answer.data, 10))
-      const isArray = Array.isArray(answer.data)
-      const arrayLength = isArray ? answer.data.length : 0
-      return isNumber || arrayLength > 0 || answer.data?.trim?.().length > 1
-    })
-
-  const feedbackDataByQuestionId = groupBy(feedbackData, ({ questionId }) => questionId ?? '_')
+  const feedbackDataByQuestionId = getAnswersByQuestionId(feedbacks)
 
   return questionOrder
     ? questionOrder

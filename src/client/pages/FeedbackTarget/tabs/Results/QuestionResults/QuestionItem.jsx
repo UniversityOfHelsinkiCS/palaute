@@ -1,7 +1,4 @@
 import { Box, Card, Typography } from '@mui/material'
-import { uniq } from 'lodash-es'
-import { useSnackbar } from 'notistack'
-import React from 'react'
 import { useTranslation } from 'react-i18next'
 
 import Instructions from '../../../../../components/common/Instructions'
@@ -14,6 +11,7 @@ import LikertResults from './LikertResults'
 import MultipleChoiceResults from './MultipleChoiceResults'
 import OpenResults from './OpenResults'
 import SingleChoiceResults from './SingleChoiceResults'
+import useQuestionPublicity from './useQuestionPublicity'
 import { getAcualAnswerCount } from './utils'
 
 const componentByType = {
@@ -63,36 +61,7 @@ const QuestionItem = ({
   inTabPanel = false,
 }) => {
   const { t, i18n } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
-
-  const onPublicityToggle = React.useCallback(
-    async isPublic => {
-      const newPublicQuestionIds = isPublic
-        ? uniq(publicQuestionIds.concat(question.id))
-        : publicQuestionIds.filter(id => id !== question.id)
-
-      try {
-        await savePublicQuestionIds(newPublicQuestionIds)
-        enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-      } catch {
-        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-      }
-    },
-    [publicQuestionIds, savePublicQuestionIds]
-  )
-
-  const handlePublicityToggle = isPublic => {
-    if (isPublic) {
-      onPublicityToggle(false)
-      return
-    }
-
-    const toggleAccepted = question.type !== 'OPEN' || window.confirm(t('questionResults:publicQuestionConfirmation'))
-
-    if (toggleAccepted) {
-      onPublicityToggle(true)
-    }
-  }
+  const { isPublic, togglePublicity } = useQuestionPublicity({ question, publicQuestionIds, savePublicQuestionIds })
 
   const Component = componentByType[question.type]
   const content = Component ? (
@@ -104,7 +73,6 @@ const QuestionItem = ({
     />
   ) : null
 
-  const isPublic = publicQuestionIds.includes(question.id)
   const acualAnswerCount = getAcualAnswerCount(question)
 
   const label = getLanguageValue(question?.data?.label, i18n.language)
@@ -142,7 +110,7 @@ const QuestionItem = ({
                 checked={isPublic}
                 disabled={disabled}
                 disabledInfo={disabledInfo}
-                onChange={() => handlePublicityToggle(isPublic)}
+                onChange={togglePublicity}
                 questionLabel={label}
               />
             )}

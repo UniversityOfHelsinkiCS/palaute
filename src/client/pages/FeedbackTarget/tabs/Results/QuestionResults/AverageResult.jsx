@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { getArrow } from '../../../../../components/SummaryResultItem/WorkloadResultItem'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import { getColor } from '../../../../../util/resultColors'
+import { mergeSx } from '../../../../../util/sx'
 
 const styles = {
   resultItem: {
@@ -19,6 +20,28 @@ const styles = {
     textAlign: 'center',
     position: 'relative',
     color: 'black',
+  },
+  // The colour shows as a thin frame around a paler centre, as thick as the padding
+  outlined: {
+    p: '2px',
+    borderRadius: 0,
+    printColorAdjust: 'exact',
+  },
+  outlinedContent: {
+    display: 'flex',
+    alignSelf: 'stretch',
+    flex: 1,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+  },
+  underlined: {
+    width: 'auto',
+    height: 'auto',
+    borderRadius: 0,
+    borderBottom: '3px solid',
+    printColorAdjust: 'exact',
+  },
+  underlinedContent: {
+    lineHeight: 1.5,
   },
   content: {
     display: 'inline-flex',
@@ -103,7 +126,8 @@ export const getMeanOption = (mean, question) => {
   return question.data.options[index]
 }
 
-const AverageResult = ({ question }) => {
+// variant: 'filled', 'outlined' or 'underlined'
+const AverageResult = ({ question, variant = 'filled', sx = {} }) => {
   const { t, i18n } = useTranslation()
   const distribution = getDistribution(question.feedbacks)
   const isWorkloadQuestion = question.secondaryType === 'WORKLOAD'
@@ -114,17 +138,28 @@ const AverageResult = ({ question }) => {
   const meanText = isWorkloadQuestion
     ? getLanguageValue(getMeanOption(mean, question)?.label, i18n.language)
     : fixedMean
+  const color = getBackgroundColor(mean, question.secondaryType)
   const screenReaderText = `${t('feedbackSummary:average')}: ${fixedMean > 0 ? meanText : t('courseSummary:noResults')}`
 
   return (
     <>
       <Box
-        sx={{ backgroundColor: getBackgroundColor(mean, question.secondaryType), ...styles.resultItem }}
+        sx={mergeSx(
+          {
+            ...styles.resultItem,
+            ...(variant === 'underlined' ? { ...styles.underlined, borderColor: color } : { backgroundColor: color }),
+            ...(variant === 'outlined' && styles.outlined),
+          },
+          sx
+        )}
         aria-hidden="true"
       >
-        {isWorkloadQuestion && (fixedMean > 0 ? getArrow(mean) : '–')}
+        {isWorkloadQuestion && variant === 'filled' && (fixedMean > 0 ? getArrow(mean) : '–')}
+        {isWorkloadQuestion && variant !== 'filled' && (
+          <Box sx={{ ...styles.content, ...styles[`${variant}Content`] }}>{fixedMean > 0 ? getArrow(mean) : '–'}</Box>
+        )}
         {!isWorkloadQuestion && (
-          <Box sx={styles.content}>
+          <Box sx={{ ...styles.content, ...styles[`${variant}Content`] }}>
             <Typography fontWeight="500">{fixedMean > 0 ? fixedMean : '–'}</Typography>
           </Box>
         )}
