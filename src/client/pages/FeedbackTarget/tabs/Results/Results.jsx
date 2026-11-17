@@ -10,6 +10,7 @@ import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import { getSafeCourseCode } from '../../../../util/courseIdentifiers'
 import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
+import TabHeading from '../../TabHeading'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
 import ChartTableToggle, { useShowTable } from './ChartTableToggle'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
@@ -91,21 +92,10 @@ const getExportFilename = feedbackTarget => {
   return `${safeCourseCode}_${getCourseStartDate(feedbackTarget)}`
 }
 
-const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, exportRef, tableToggle }) => {
+const FilterSection = ({ groupId, setGroupId, groups, groupsAvailable, studentCount }) => {
   const { ref, inView } = useInView({ initialInView: true })
 
-  const { feedbackTarget } = useFeedbackTargetContext()
-
-  const { studentCount } = feedbackTarget
-
-  const groups = getGroups(feedbackTarget)
-
-  const hasMultipleGroups = groups?.length > 1
-
-  const feedbacks = feedbackResults?.feedbacks
-  const groupsAvailable = feedbackResults?.groupsAvailable
-
-  const isSticky = hasMultipleGroups && groupsAvailable
+  const isSticky = groupsAvailable
   const isStuckTop = !inView && isSticky
 
   return (
@@ -128,24 +118,13 @@ const FilterSection = ({ isLoading, groupId, setGroupId, feedbackResults, export
         }}
         elevation={isStuckTop ? 4 : 0}
       >
-        <ResultsButtons sx={{ mb: 4 }}>
-          {tableToggle}
-          <ExportFeedbacksMenu
-            questions={feedbackTarget.questions}
-            feedbacks={feedbacks}
-            filename={getExportFilename(feedbackTarget)}
-            componentRef={exportRef}
-          />
-        </ResultsButtons>
-        {!isLoading && hasMultipleGroups && (
-          <GroupSelector
-            groupId={groupId}
-            setGroupId={setGroupId}
-            groups={groups}
-            groupsAvailable={groupsAvailable}
-            studentCount={studentCount}
-          />
-        )}
+        <GroupSelector
+          groupId={groupId}
+          setGroupId={setGroupId}
+          groups={groups}
+          groupsAvailable={groupsAvailable}
+          studentCount={studentCount}
+        />
       </Paper>
     </Box>
   )
@@ -220,12 +199,27 @@ const Results = () => {
     showTable,
   }
 
-  const tableToggle = showFeedback && (
-    <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />
+  const groups = getGroups(feedbackTarget)
+  const groupSelectorVisible = filtersVisible && !isLoading && groups.length > 1
+
+  const toolbar = (showFeedback || filtersVisible) && (
+    <ResultsButtons sx={{ '@media print': { display: 'none' } }}>
+      {showFeedback && <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />}
+      {filtersVisible && (
+        <ExportFeedbacksMenu
+          questions={questions}
+          feedbacks={feedbackTargetData?.feedbacks}
+          filename={getExportFilename(feedbackTarget)}
+          componentRef={exportRef}
+        />
+      )}
+    </ResultsButtons>
   )
 
   return (
     <Box id="feedback-target-tab-content">
+      <TabHeading actions={toolbar}>{t('feedbackTargetView:feedbacksTab')}</TabHeading>
+
       {isOpen && feedback && (
         <Alert data-cy="feedback-target-results-thank-you" severity="info" sx={{ mb: 4 }}>
           {t('feedbackTargetResults:thankYouMessage')}
@@ -240,17 +234,14 @@ const Results = () => {
         )}
 
         <Box sx={{ display: 'contents', '@media print': { display: 'none' } }}>
-          {filtersVisible ? (
+          {groupSelectorVisible && (
             <FilterSection
-              isLoading={isLoading}
-              feedbackResults={feedbackTargetData}
               groupId={groupId}
               setGroupId={setGroupId}
-              exportRef={exportRef}
-              tableToggle={tableToggle}
+              groups={groups}
+              groupsAvailable={feedbackTargetData?.groupsAvailable}
+              studentCount={feedbackTarget.studentCount}
             />
-          ) : (
-            tableToggle && <ResultsButtons sx={{ mb: 4 }}>{tableToggle}</ResultsButtons>
           )}
 
           {isTeacher && !isResponsibleTeacher && <OnlyTeacherAccess t={t} />}

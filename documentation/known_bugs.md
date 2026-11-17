@@ -187,7 +187,7 @@ Fix: update the editor with the saved questions' ids after saving.
 
 `src/server/services/surveys/teacherSurvey.ts:10-27`
 
-Carry-over clones the previous realisation's own questions with their `data`, and a grouping question's options are the previous realisation's Sisu groups (`GroupingQuestionSettings.jsx:117-128`). The new survey asks students to choose between last time's groups, and the results page finds no teachers for them (`Results.jsx:70-82`).
+Carry-over clones the previous realisation's own questions with their `data`, and a grouping question's options are the previous realisation's Sisu groups (`GroupingQuestionSettings.jsx:117-128`). The new survey asks students to choose between last time's groups, and the results page finds no teachers for them (`Results.jsx:71-83`).
 
 Fix: rebuild the options from the new realisation's groups, or leave the grouping question out of the carry-over.
 

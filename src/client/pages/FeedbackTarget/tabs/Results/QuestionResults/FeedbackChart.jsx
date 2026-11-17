@@ -261,7 +261,7 @@ const FeedbackChart = ({
   return (
     <Box
       data-cy="feedback-target-results-feedback-chart"
-      sx={{ my: '3rem', display: 'flex', flexDirection: 'column', rowGap: '1rem' }}
+      sx={{ my: inTabPanel ? 3 : '3rem', display: 'flex', flexDirection: 'column', rowGap: '1rem' }}
       component="section"
       aria-labelledby="feedback-count-heading"
     >

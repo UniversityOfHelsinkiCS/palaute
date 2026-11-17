@@ -428,7 +428,7 @@ const FeedbackTargetContent = () => {
         <Route
           path="/results"
           element={
-            <TopLevelTabPanel tabId={generateTabId('results')} heading={t('feedbackTargetView:feedbacksTab')}>
+            <TopLevelTabPanel tabId={generateTabId('results')}>
               <ProtectedRoute hasAccess={showResultsSection} redirectPath={defaultPath}>
                 <Results />
               </ProtectedRoute>

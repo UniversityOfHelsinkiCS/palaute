@@ -37,7 +37,10 @@ const FeedbackResponse = ({ feedbackTarget, inTabPanel = false }) => {
   return (
     <>
       {!inTabPanel && heading}
-      <Card variant={inTabPanel ? 'outlined' : undefined} sx={{ mb: '4rem', borderRadius: '1rem', ...cardPrintStyle }}>
+      <Card
+        variant={inTabPanel ? 'outlined' : undefined}
+        sx={{ mb: inTabPanel ? 3 : '4rem', borderRadius: '1rem', ...cardPrintStyle }}
+      >
         <CardContent>
           {inTabPanel && heading}
           {!feedbackResponse && <Alert severity="info">{t('feedbackTargetResults:noResponseInfo')}</Alert>}
