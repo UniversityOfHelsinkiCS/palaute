@@ -41,6 +41,6 @@ These were made usable without a feedback target, so changes affect both:
 - From `QuestionResults`: `useQuestionPublicity`, `getAnswersByQuestionId` and `AverageResult` (with `outlined` and `underlined` variants), plus `QuestionPublicityToggle`
 - Server: `validateAnswers`, `shuffleFeedbacks.ts`, `openAnswers.ts` and `groupingQuestion.ts` in `src/server/util/`
 
-`OrderedQuestionResults` (`src/client/pages/FeedbackTarget/tabs/Results/OrderedQuestionResults/`) takes the props of `QuestionResults`, with `baseHeadingLevel` in place of `inTabPanel`. Only standalone surveys use it for now.
+`OrderedQuestionResults` (`src/client/pages/FeedbackTarget/tabs/Results/OrderedQuestionResults/`) takes the props of `QuestionResults`, with `baseHeadingLevel` in place of `inTabPanel`. Course results use it too, with `ResultsLayoutSwitch` letting users go back to `QuestionResults` until that is removed; the choice is kept in local storage. Standalone surveys have no switch.
 
 Where course wording doesn't fit, `TranslationContextProvider value="standalone"` makes shared components use a `key_standalone` translation when one exists. Standalone-only texts are in the `standaloneSurvey` namespace.

@@ -15,10 +15,12 @@ import ChartTableToggle, { useShowTable } from './ChartTableToggle'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import FeedbackResponse from './FeedbackResponse'
 import GroupSelector from './GroupSelector'
+import OrderedQuestionResults from './OrderedQuestionResults'
 import QuestionResults from './QuestionResults'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useChartConfig from './QuestionResults/useChartConfig'
 import ResultsButtons from './ResultsButtons'
+import ResultsLayoutSwitch, { useOrderedLayout } from './ResultsLayoutSwitch'
 import { getCourseStartDate } from './utils'
 
 const NotEnoughFeedbacks = ({ t }) => (
@@ -156,6 +158,7 @@ const Results = () => {
   const exportRef = useRef(null)
   const [groupId, setGroupId] = React.useState('ALL')
   const [showTable, setShowTable] = useShowTable()
+  const [ordered, setOrdered] = useOrderedLayout()
 
   useChartConfig()
 
@@ -201,6 +204,21 @@ const Results = () => {
   const groupStudentCount = feedbackTargetData?.studentCount ?? 0
 
   const showFeedback = enoughFeedbacks && (enoughStudents || (feedbacks.length > 0 && isResponsibleTeacher))
+
+  const questionResultsProps = {
+    publicityConfigurableQuestionIds,
+    publicQuestionIds: publicQuestionIds ?? [],
+    questions,
+    questionOrder,
+    feedbacks,
+    isResponsibleTeacher,
+    isOrganisationUser: isOrganisationReader,
+    isOpen,
+    feedbackCount: groupFeedbackCount,
+    savePublicQuestionIds: publicityMutation.mutateAsync,
+    openAnswerActions,
+    showTable,
+  }
 
   const tableToggle = showFeedback && (
     <ChartTableToggle showTable={showTable} setShowTable={setShowTable} color="secondary" />
@@ -251,25 +269,19 @@ const Results = () => {
           />
         )}
 
-        {showFeedback ? (
-          <QuestionResults
-            publicityConfigurableQuestionIds={publicityConfigurableQuestionIds}
-            publicQuestionIds={publicQuestionIds ?? []}
-            questions={questions}
-            questionOrder={questionOrder}
-            feedbacks={feedbacks}
-            isResponsibleTeacher={isResponsibleTeacher}
-            isOrganisationUser={isOrganisationReader}
-            isOpen={isOpen}
-            feedbackCount={groupFeedbackCount}
-            savePublicQuestionIds={publicityMutation.mutateAsync}
-            openAnswerActions={openAnswerActions}
-            showTable={showTable}
-            inTabPanel
+        {showFeedback && <ResultsLayoutSwitch ordered={ordered} setOrdered={setOrdered} />}
+
+        {showFeedback && ordered && (
+          <OrderedQuestionResults
+            {...questionResultsProps}
+            // Under the h3 of the tab and level with the h4s of the sections above
+            baseHeadingLevel={4}
           />
-        ) : (
-          <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />
         )}
+
+        {showFeedback && !ordered && <QuestionResults {...questionResultsProps} inTabPanel />}
+
+        {!showFeedback && <FeedbackNotVisibleAlert enoughStudents={enoughStudents} enoughFeedbacks={enoughFeedbacks} />}
       </Box>
     </Box>
   )
