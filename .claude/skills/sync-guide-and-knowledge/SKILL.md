@@ -16,7 +16,7 @@ The documents are `src/server/services/helpChatbot/knowledge.md` and the guide i
 
 ## 1. Start
 
-- Run on `master` with a clean tree. `git fetch`; if `master` is behind `origin/master`, stop and ask the user to pull. Never pull, rebase or push yourself.
+- Run on `master` with a clean tree. First ask the user to confirm they've pulled master. Never pull, rebase or push yourself.
 - `python3 .claude/skills/sync-guide-and-knowledge/scripts/changes.py`. If it lists Finnish guide edits not yet mirrored into English, stop and tell the user to run clean-po-edits first.
 - It lists the commits since `last_synced` that touch more than tests, tooling, docs and admin-only code. Note the HEAD it prints: the run reviews up to it.
 
@@ -55,7 +55,6 @@ Spawn one general-purpose agent, giving it the documents' diff and not your tria
 
 - `npx vitest run src/client/pages/UserGuide src/server/services/helpChatbot`, `npm run lint -- --format=agent`, `npm run format`.
 - Write the HEAD from step 1 into `last_synced`, and commit it with the document changes: `docs: sync user guide and knowledge base with code`.
-- `git fetch`; if `origin/master` has moved, tell the user to rebase before pushing.
 
 ## 7. Report
 

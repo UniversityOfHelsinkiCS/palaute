@@ -9,7 +9,7 @@ The PO edits the Finnish user guide (`src/client/pages/UserGuide/content/fi`) an
 
 ## 1. Find what's new
 
-- `git fetch`. If local master is behind origin, stop and ask the user to pull; never pull, rebase onto, or push to origin yourself.
+- First ask the user to confirm they've pulled master. Never pull, rebase or push yourself.
 - The base is the last commit titled `docs: apply PO changes to English user guide` (`git log --format=%h -1 --grep='^docs: apply PO changes to English user guide$'`).
 - Review `git log --format='%h %an %s' <base>..HEAD` and `git diff --word-diff <base> HEAD -- src/client/pages/UserGuide/content/fi e2e/manual`. Read every hunk; nothing gets skipped.
 
