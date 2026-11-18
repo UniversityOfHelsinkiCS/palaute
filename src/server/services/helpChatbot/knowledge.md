@@ -25,7 +25,7 @@ Norppa (norppa.helsinki.fi) is the course feedback system of the University of H
 
 ## Survey types
 
-There are three kinds of surveys. When it matters, check which one the user means; many details differ.
+There are four kinds of surveys. When it matters, check which one the user means; many details differ.
 
 **Course survey**: one per course realisation, created automatically from Sisu (see "Which courses get a survey").
 
@@ -50,6 +50,15 @@ There are three kinds of surveys. When it matters, check which one the user mean
 - Listed for its responsible persons in [[navBar:myCourses]] under [[teacherView:organisationSurveys]]. The programme's admins can remove it from the programme surveys tab while it has no answers.
 
 All three work the same way in the [[feedbackTargetView:surveyQuestionsTab]], [[feedbackTargetView:shareTab]], [[feedbackTargetView:feedbacksTab]] and [[feedbackTargetView:studentsWithFeedbackTab]] tabs and in counter feedback. Only course surveys have the [[feedbackTargetView:continuousFeedbackTab]] and [[feedbackTargetView:interimFeedbackTab]] tabs.
+
+**Other survey** ([[standaloneSurvey:groupTitle]]): a survey not tied to a course or programme, e.g. a staff survey. Elsewhere in this document, "all survey types" means the three above.
+
+- Only Norppa's admins create them and delete them while they have no answers (ask support); they choose its [[organisationSurveys:responsibleTeachers]]. Responsible persons can add and remove responsible persons; at least one must remain.
+- Anyone with its link who logs in can answer, students or staff. Norppa sends no emails and has no reminder; the responsible persons share the link from its [[feedbackTargetView:shareTab]] tab themselves. The link can't be changed.
+- One answer per person. While the survey is open, the respondent can edit it or remove it with [[standaloneSurvey:deleteAnswer]].
+- Responsible persons find it in [[navBar:myCourses]] under [[standaloneSurvey:groupTitle]], in the tab matching the survey's own dates. Its page has [[common:preview]], [[feedbackTargetView:surveyQuestionsTab]], [[feedbackTargetView:feedbacksTab]], [[standaloneSurvey:settingsTab]] (name, description, dates, responsible persons), [[feedbackTargetView:shareTab]] and [[standaloneSurvey:logsTab]]. Once it has opened, the questions and the opening date are locked; the closing date can still be changed.
+- It can have a grouping question, whose options the responsible persons write. Answers by group are shown however few they are.
+- Results: responsible persons see all answers, hide open answers and set questions public as in course surveys. Respondents see the public questions' answers after answering; once it has closed, anyone with the link sees them. There's no minimum number of students or answers, no [[feedbackTargetView:studentsWithFeedbackTab]] list, no counter feedback, and it's not in [[navBar:courseSummary]].
 
 ## Roles and rights
 
@@ -76,11 +85,11 @@ Organisation rights come from the university's IAM groups, e.g. a programme dire
 
 Top menu (each item is shown only to users it concerns):
 
-- [[navBar:myCourses]]: the user's surveys as a teacher or responsible person, grouped into [[teacherView:courseSurveys]] and [[teacherView:organisationSurveys]]. The tabs follow the course's dates, not the survey's: [[teacherView:activeSurveys]] has courses that are running or have an open survey, [[teacherView:upcomingSurveys]] courses that haven't started, [[teacherView:endedSurveys]] ended courses with no open survey (with a year filter; older years are there too). Courses that need attention (an open interim feedback, running continuous feedback or missing counter feedback) are listed first, then those with an open survey. Chips show the state, e.g. [[teacherView:feedbackOpen]], [[teacherView:feedbackResponseMissing]] or [[teacherView:interimFeedbackOpen]].
+- [[navBar:myCourses]]: the user's surveys as a teacher or responsible person, grouped into [[teacherView:courseSurveys]], [[teacherView:organisationSurveys]] and [[standaloneSurvey:groupTitle]]. For courses, the tabs follow the course's dates, not the survey's: [[teacherView:activeSurveys]] has courses that are running or have an open survey, [[teacherView:upcomingSurveys]] courses that haven't started, [[teacherView:endedSurveys]] ended courses with no open survey (with a year filter; older years are there too). Courses that need attention (an open interim feedback, running continuous feedback or missing counter feedback) are listed first, then those with an open survey. Chips show the state, e.g. [[teacherView:feedbackOpen]], [[teacherView:feedbackResponseMissing]] or [[teacherView:interimFeedbackOpen]].
 - [[navBar:courseSummary]]: feedback statistics of the user's own courses and of organisations they have rights to.
 - [[navBar:myProgrammes]] or [[navBar:myOrganisations]]: the degree programmes, faculties and other organisations the user has rights to, each with its own page. The item is called [[navBar:myProgrammes]] only if all of them are bachelor's or master's programmes, otherwise [[navBar:myOrganisations]]; when telling the user to open it, name both.
 - [[navBar:browseCourses]]: lists the courses of chosen degree programmes by start date, each with a [[search:coursePageLink]] link to the course's page on studies.helsinki.fi. It's separate from feedback: no feedback or survey information and no links to Norppa's course pages.
-- [[navBar:feedback]]: feedback about Norppa itself to its developers.
+- [[navBar:feedback]]: feedback about Norppa itself to its developers. Everyone sees it, students too.
 - [[navBar:myFeedbacks]]: surveys the user can answer as a student. Staff see it when they're enrolled as a student on a course or added as a respondent to a programme survey.
 - The user menu (the user's name, top right) has [[navBar:userInformation]] and the UI language (FI/SV/EN).
 
@@ -157,12 +166,12 @@ The same for all survey types. The [[feedbackTargetView:feedbacksTab]] tab shows
 
 - Responsible teachers, administrative persons, programme admins and feedback liaisons see all answers. Teachers, programme staff with read rights and students see only questions marked [[common:public]]. Students see them after answering themselves or after the survey closes.
 - There's no other visibility setting: each question is just [[common:public]] or [[common:notPublic]].
-- Scale and choice questions are public by default; open questions and copied or carried-over questions are [[common:notPublic]]. University level scale and choice questions, and programme questions the programme has made public, are always public.
+- Scale and choice questions are public by default; open questions, the grouping question and copied or carried-over questions are [[common:notPublic]]. The grouping question's publicity can be changed only on the [[feedbackTargetView:feedbacksTab]] tab. University level scale and choice questions, and programme questions the programme has made public, are always public.
 - A responsible teacher sets a question's publicity on the [[feedbackTargetView:feedbacksTab]] tab (scale and choice questions also in the question editor). An open question can be made public only after the survey has closed, after confirming its answers contain no personal data.
 - [[feedbackTargetResults:setHidden]] (eye icon; responsible teachers and programme admins) hides an open answer from those who see only public answers. All identical answers to the question are hidden together.
 - Small courses: if fewer than 5 students are enrolled, students must tick [[feedbackView:allowSubmitCheckbox]] to submit, and results are shown only to the responsible teachers. Others see a note that results aren't shown. The limit counts enrolled students in Norppa, not answers.
 - Open answers are listed in alphabetical order, and each question's answers are shuffled separately in the download, so one student's answers can't be linked together.
-- The tab shows each question's distribution, with chart and table views, the mean of scale questions and the workload question, and the daily number of answers.
+- The tab shows each question's distribution, with chart and table views, the mean of scale questions and the workload question, and the daily number of answers. The questions are in the same order as students see them, with the survey's text sections. [[feedbackTargetResults:useClassicLayout]] switches to the earlier layout, where scale and choice questions come first and open questions after them; the tab opens in the new layout every time.
 
 ### Who has answered
 

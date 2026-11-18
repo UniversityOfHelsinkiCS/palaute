@@ -16,8 +16,8 @@ Kyselyn vastaukset näkyvät [[feedbackTargetView:feedbacksTab]]-välilehdellä 
 Välilehdellä näet:
 
 - Vastausten kertymän päivittäin osuutena kyselyn opiskelijoista. Kaavioon on merkitty kyselyn avautumis- ja sulkeutumispäivä sekä viimeisin muistutusviesti.
-- Otsikon [[questionResults:multipleChoiceQuestions]] alla kunkin asteikko- ja valintakysymyksen vastausjakauman. Asteikkokysymyksistä näytetään myös keskiarvo, johon [[feedbackView:dontKnowOption]]-vastauksia ei lasketa. Työmääräkysymyksessä nuoli osoittaa, kumpaan suuntaan vastaukset painottuvat.
-- Otsikon [[questionResults:openQuestions]] alla avointen kysymysten vastaukset aakkosjärjestyksessä.
+- Kunkin asteikko- ja valintakysymyksen vastausjakauman. Asteikkokysymyksistä näytetään myös keskiarvo, johon [[feedbackView:dontKnowOption]]-vastauksia ei lasketa. Työmääräkysymyksessä nuoli osoittaa, kumpaan suuntaan vastaukset painottuvat.
+- Avointen kysymysten vastaukset aakkosjärjestyksessä.
 
 [[feedbackTargetResults:tableView]] näyttää kaaviot taulukkoina ja [[feedbackTargetResults:chartView]] palauttaa kaaviot.
 
@@ -31,7 +31,7 @@ Jokainen kysymys on joko [[common:public]] tai [[common:notPublic]]. Vastuuopett
 
 Kysymyksen näkyvyyden muuttaminen:
 
-1. Klikkaa [[feedbackTargetView:feedbacksTab]]-välilehdellä kysymyksen yläpuolelta [[common:public]] tai [[common:notPublic]].
+1. Klikkaa [[feedbackTargetView:feedbacksTab]]-välilehdellä kysymyksen alta [[common:public]] tai [[common:notPublic]].
 2. Valitse [[common:publicInfo]] tai [[common:notPublicInfo]]. Muutos tallentuu heti.
 
 [[video:answer-visibility]]

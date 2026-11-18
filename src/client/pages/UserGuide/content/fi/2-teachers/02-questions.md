@@ -91,7 +91,7 @@ Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ry
 
 [[video:grouping-question]]
 
-Ryhmittelykysymys on vastaajalle pakollinen, kyselyn ensimmäinen kysymys ja sen vastaukset eivät ole julkisia. Kurssipalautekyselyssä voi olla vain yksi ryhmittelykysymys, ja jos opettaja on luonut sen itse, tämä ryhmittely korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
+Ryhmittelykysymys on vastaajalle pakollinen, kyselyn ensimmäinen kysymys eikä se ole oletuksena julkinen. Kurssipalautekyselyssä voi olla vain yksi ryhmittelykysymys, ja jos opettaja on luonut sen itse, tämä ryhmittely korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
 
 Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa vastauksia saaneessa ryhmässä on vähintään viisi vastaajaa (ks. [Ryhmien vastaukset](/guide/anonymity#groups)).
 

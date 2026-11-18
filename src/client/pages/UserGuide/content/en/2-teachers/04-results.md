@@ -16,8 +16,8 @@ A survey's answers are on its [[feedbackTargetView:feedbacksTab]] tab from the f
 The tab shows:
 
 - How the number of answers has grown day by day, as a share of the survey's students. The opening and closing dates and the last reminder email are marked on the chart.
-- Under [[questionResults:multipleChoiceQuestions]], how the answers to each scale and choice question are distributed. Scale questions also show their mean, in which [[feedbackView:dontKnowOption]] answers aren't counted. The workload question shows an arrow pointing to the side its answers lean to.
-- Under [[questionResults:openQuestions]], the answers to the open questions, in alphabetical order.
+- How the answers to each scale and choice question are distributed. Scale questions also show their mean, in which [[feedbackView:dontKnowOption]] answers aren't counted. The workload question shows an arrow pointing to the side its answers lean to.
+- The answers to the open questions, in alphabetical order.
 
 [[feedbackTargetResults:tableView]] shows the charts as tables, and [[feedbackTargetResults:chartView]] switches back.
 
@@ -31,7 +31,7 @@ Each question is either [[common:public]] or [[common:notPublic]]. Responsible t
 
 To change whether a question is public:
 
-1. On the [[feedbackTargetView:feedbacksTab]] tab, click [[common:public]] or [[common:notPublic]] above the question.
+1. On the [[feedbackTargetView:feedbacksTab]] tab, click [[common:public]] or [[common:notPublic]] under the question.
 2. Choose [[common:publicInfo]] or [[common:notPublicInfo]]. The change is saved at once.
 
 [[video:answer-visibility]]
