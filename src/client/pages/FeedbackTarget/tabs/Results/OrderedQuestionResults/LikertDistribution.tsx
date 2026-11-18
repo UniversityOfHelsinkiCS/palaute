@@ -134,7 +134,13 @@ const LikertDistribution = ({ question, counts, maxShare }: LikertDistributionPr
     <Box
       role="img"
       aria-label={label}
-      sx={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr)) 1.5rem 3.5rem', alignItems: 'end' }}
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(5, minmax(0, 1fr)) 1.5rem 3.5rem',
+        alignItems: 'end',
+        // Inherited, so that the scale line and the grid lines print too
+        printColorAdjust: 'exact',
+      }}
     >
       {LIKERT_VALUES.map(column)}
       {column(0)}
