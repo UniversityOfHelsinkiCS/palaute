@@ -8,7 +8,7 @@ Each degree programme and faculty has its own "dashboard" in Norppa, a page wher
 
 ## Opening the page and its tabs {#programme-page}
 
-Open [[navBar:myProgrammes]] in the top menu, or [[navBar:myOrganisations]] if you have rights to several programmes. If neither is available, you have no rights to any programme; see [Rights in a degree programme or faculty](/guide/roles#organisation-rights).
+Open [[navBar:myProgrammes]] in the top menu, or [[navBar:myOrganisations]] if you also have rights to something other than degree programmes (such as a faculty). If neither is available, you have no rights to any programme; see [Rights in a degree programme or faculty](/guide/roles#organisation-rights).
 
 With read rights (the narrower right) you see:
 

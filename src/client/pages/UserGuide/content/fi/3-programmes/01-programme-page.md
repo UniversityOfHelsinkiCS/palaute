@@ -8,7 +8,7 @@ Jokaisella koulutusohjelmalla ja tiedekunnalla on Norpassa oma "hallintapaneeli"
 
 ## Sivun avaaminen ja välilehdet {#programme-page}
 
-Avaa ylävalikosta [[navBar:myProgrammes]] tai [[navBar:myOrganisations]], jos sinulla on oikeuksia useampaan koulutusohjelmaan. Jos nämä eivät ole valittavissa, sinulla ei ole oikeuksia yhteenkään koulutusohjelmaan; katso [Oikeudet koulutusohjelmassa tai tiedekunnassa](/guide/roles#organisation-rights).
+Avaa ylävalikosta [[navBar:myProgrammes]] tai [[navBar:myOrganisations]], jos sinulla on oikeuksia muuhunkin kuin koulutusohjelmiin (esimerkiksi tiedekuntaan). Jos nämä eivät ole valittavissa, sinulla ei ole oikeuksia yhteenkään koulutusohjelmaan; katso [Oikeudet koulutusohjelmassa tai tiedekunnassa](/guide/roles#organisation-rights).
 
 Lukuoikeuksilla (suppeampi oikeus) näet:
 
