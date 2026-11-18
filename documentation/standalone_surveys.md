@@ -1,46 +1,29 @@
 # Standalone surveys
 
-Surveys not tied to a course, as an alternative to E-lomake. An admin creates the survey and picks its responsible persons (`responsible_users`). Respondents get a secret link from outside Norppa and log in with Shibboleth.
+Surveys not tied to a course, as an alternative to E-lomake. Respondents get a secret link from outside Norppa and log in with Shibboleth.
 
 ## Behaviour
 
-- Admins create and delete surveys and can do everything else. A survey with answers can't be deleted.
-- Responsible persons edit the survey, see all results and hide open answers. Only admins delete open answers. A survey always has at least one responsible person, and being one gives the Kyselyni menu item (`preferences.ts`); their surveys are listed there under "Muut kyselyt".
-- The link is `/survey/<token>/<slug>`. The token is 12 random characters and never changes. The slug comes from the Finnish name and is cosmetic: a wrong one redirects.
+- Admins create and delete surveys (not once answered) and pick the responsible persons (at least one). Responsible persons edit the survey, see all results and hide open answers. Their surveys are listed in Kyselyni.
+- The link is `/survey/<token>/<slug>`. The token never changes; the slug comes from the Finnish name and is cosmetic, so a wrong one redirects.
 - Anyone who can log in with Shibboleth can answer. Users without Sisu data get a Norppa user on first login.
-- The survey has an optional Markdown description per language, shown above the questions on the answer page.
-- Answering is open between `opens_at` and `closes_at`; to stop a survey, move `closes_at`. Once `opens_at` has passed, only admins can change it or the questions; responsible persons can still change question visibility.
-- One answer per person, with at least one question answered. It can be edited or removed while the survey is open. `user_id` is stored only to enforce this and is never shown.
-- Questions are `PUBLIC` or `PRIVATE`. Respondents see public results after answering while the survey is open, and anyone with the link sees them once it has closed. As for courses, open answers can be made public only after the survey has closed (enforced on the server here). No minimum answer count.
-- The answers page shows text sections and questions in survey order (`OrderedQuestionResults`), each question on the left and its answers on the right, with a line after each question: text sections muted and collapsed when long, choice options as bars with count and share, Likert questions as a column for each of 1–5 and eos on a height scale shared by the consecutive Likert questions, with the mean pointing at its place on the 1–5 scale under the columns, and open questions with four answers and a fading fifth until expanded. The table view shows each choice and Likert question as a table of its options, the Likert mean in the last row. Responsible persons get the same layout as respondents, plus the publicity chip under each question and an eye icon by each open answer for hiding it. Respondents see every text section but only the public questions.
-- Same question types as courses. A survey can have one grouping question, as in courses but with no Sisu groups: the managers write its options, and it can be moved like any question. Managers can filter the results by its answer; the server filters before shuffling, which separates a response's answers. No emails.
+- Answering is open between `opens_at` and `closes_at`. Once `opens_at` has passed, only admins can change it or the questions; responsible persons can still change question visibility.
+- One answer per person, editable or removable while open. `user_id` is stored only to enforce this and is never exposed.
+- Questions are `PUBLIC` or `PRIVATE`. Respondents see public results after answering, and anyone with the link sees them once the survey has closed. Open answers can be made public only after closing, enforced on the server. No minimum answer count, no emails.
+- One optional grouping question, with options written by the managers instead of Sisu groups. Results can be filtered by it; the server filters before shuffling, so a response's answers still can't be linked.
 
 ## Code
 
-- Server: `src/server/routes/standaloneSurveys/` and `src/server/services/standaloneSurveys/`
-- Client: `src/client/pages/StandaloneSurvey/` (`AnswerSurvey.jsx` respondent page, `manage/` management page) and the admin tab `src/client/pages/Admin/tabs/StandaloneSurveys/`
+- Server: `src/server/routes/standaloneSurveys/`, `src/server/services/standaloneSurveys/`
+- Client: `src/client/pages/StandaloneSurvey/` and the admin tab `src/client/pages/Admin/tabs/StandaloneSurveys/`
 - Migration `20261103_00_create_standalone_surveys.js`, e2e `e2e/specs/standaloneSurvey.spec.ts`
 
 Respondent routes (`/answer/:token/...`) never return user ids or anything identifying an answer. Management routes (`/:id/...`) go through `assertCanManage`.
 
-## Data
-
-- `standalone_surveys`: name, description, token, dates
-- `standalone_survey_questions`: links a row in the shared `questions` table to a survey, with `position` and `visibility`
-- `standalone_survey_responsible_users`
-- `standalone_survey_responses`: `data` in the same shape as `feedbacks.data`, unique per survey and user
-- `standalone_survey_logs`: name, description and date changes, added and removed questions, visibility changes, responsible persons
-
-Removing a question leaves its `questions` row, since answers refer to it. A hidden open answer stays hidden when its respondent re-saves the same text.
+Questions are rows in the shared `questions` table, linked through `standalone_survey_questions`. Removing a question leaves its `questions` row, since answers refer to it. `standalone_survey_responses.data` has the same shape as `feedbacks.data`. A hidden open answer stays hidden when its respondent re-saves the same text.
 
 ## Shared with course feedback
 
-These were made usable without a feedback target, so changes affect both:
+Many components and server utils were made to work without a feedback target, e.g. `FormContainer`, `QuestionEditor`, `OrderedQuestionResults`, `useOpenAnswerActions`, `validateAnswers` and `shuffleFeedbacks`. Changes to them affect both.
 
-- `FormContainer` (extracted from `FeedbackView`), `ExportFeedbacksMenu`, `ChartTableToggle`, `QuestionEditor`, `GroupingQuestionSettings`, `GroupSelector` and `useOpenAnswerActions`
-- From `QuestionResults`: `useQuestionPublicity`, `getAnswersByQuestionId` and `AverageResult` (with `outlined` and `underlined` variants), plus `QuestionPublicityToggle`
-- Server: `validateAnswers`, `shuffleFeedbacks.ts`, `openAnswers.ts` and `groupingQuestion.ts` in `src/server/util/`
-
-`OrderedQuestionResults` (`src/client/pages/FeedbackTarget/tabs/Results/OrderedQuestionResults/`) takes the props of `QuestionResults`, with `baseHeadingLevel` in place of `inTabPanel`. Course results use it too, with `ResultsLayoutSwitch` letting users go back to `QuestionResults` until that is removed; the choice is kept in local storage. Standalone surveys have no switch.
-
-Where course wording doesn't fit, `TranslationContextProvider value="standalone"` makes shared components use a `key_standalone` translation when one exists. Standalone-only texts are in the `standaloneSurvey` namespace.
+`TranslationContextProvider value="standalone"` makes shared components use a `key_standalone` translation when one exists. Standalone-only texts are in the `standaloneSurvey` namespace.
