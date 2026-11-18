@@ -34,3 +34,4 @@ The PO edits the Finnish user guide (`src/client/pages/UserGuide/content/fi`) an
 - `npx vitest run src/client/pages/UserGuide`, `npm run lint -- --format=agent`, `npm run format`.
 - The user accepts the PO's content choices. Only flag content that's critically wrong, such as wrong information on who can see answers or on anonymity, with a suggested one-line fix; don't apply it unasked.
 - Report the commits made, and note that nothing was pushed.
+- End by asking the developer to review the Finnish fixes and the English changes carefully before pushing. Fold the changes they ask for into the last commit.

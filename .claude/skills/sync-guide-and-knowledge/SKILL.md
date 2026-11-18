@@ -60,3 +60,4 @@ Spawn one general-purpose agent, giving it the documents' diff and not your tria
 
 - Each change with its commits: the edit made (file and section), or no doc impact and why. New and removed sections separately.
 - Captions to update, the fact-check's outcome, the commit, and that nothing was pushed.
+- End by asking the developer to review the guide changes carefully before pushing. Fold the changes they ask for into the sync commit.
