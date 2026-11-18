@@ -14,8 +14,7 @@ const rowSx = {
   display: 'grid',
   alignItems: 'start',
   columnGap: SECTION_GAP,
-  rowGap: 0.75,
-  py: 1.25,
+  rowGap: 1.5,
   gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: `${QUESTION_COLUMN} minmax(0, 1fr)` },
 }
 
@@ -46,7 +45,8 @@ const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds
       aria-label={t('feedbackView:dataTableCaption')}
       className={BLOCK_CLASS}
       sx={{
-        '& > [role="row"] + [role="row"]': { borderTop: '1px solid', borderColor: 'divider' },
+        // As far apart as the questions of other kinds are
+        '& > [role="row"] + [role="row"]': { borderTop: '1px solid', borderColor: 'divider', mt: 3, pt: 3 },
         '@media print': { breakInside: 'avoid' },
       }}
     >
