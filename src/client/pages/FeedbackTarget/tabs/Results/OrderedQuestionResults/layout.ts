@@ -13,5 +13,8 @@ export const COUNT_COLUMNS = COUNT_COLUMN_WIDTHS.join(' ')
 // The count and share columns and the gap between them, COLUMN_GAP being in theme spacing units of 8px
 export const NUMBERS_WIDTH = `calc(${COUNT_COLUMN_WIDTHS.join(' + ')} + ${COLUMN_GAP * 8}px)`
 
+// Ends a chart where the option bars of choice questions do, leaving the space after them to numbers
+export const CHART_SX = { pr: { md: `calc(${NUMBERS_WIDTH} + ${COLUMN_GAP * 8}px)` } }
+
 // Marks the question blocks, so that the list can draw a line after each of them
 export const BLOCK_CLASS = 'result-block'
