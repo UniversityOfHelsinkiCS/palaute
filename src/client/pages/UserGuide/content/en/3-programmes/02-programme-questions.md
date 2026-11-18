@@ -4,13 +4,13 @@ description: The questions a programme adds to all of its course surveys.
 
 # Programme questions
 
-Programme questions are added to the course surveys of all the course units that belong to the programme in Sisu, after the university level questions. Teachers see them in their survey but can't edit or remove them. The programme's admins add and edit them.
+Programme questions are added to the course survey of every course unit of the programme. They come after the university level questions. Teachers see them in their survey but can't edit or remove them. The programme's admins (programme director, feedback liaison) add and edit them.
 
-> **Note:** A change shows at once in every course survey of the programme, _also in surveys that are already open or have closed_. Changing a question's wording changes it in surveys that already have answers to it, and removing a question removes it from them. So add programme questions before the semester's surveys open, and add a new question rather than change the meaning of an old one.
+> **Note:** A change shows at once in every course survey of the programme, _also in surveys that are already open or have closed_. Changing a question's wording changes it in ongoing surveys too (which may already have answers to it), and removing a question removes it from them. So add programme questions before the semester's surveys open, and add a new question rather than change the meaning of an old one.
 
 ## Adding questions {#add}
 
-1. On the programme's page, open the [[organisationSettings:surveyTab]] tab (on a faculty's page [[organisationSettings:surveyFacultyTab]]). The university level questions are at the top; they can't be changed here.
+1. On the programme's page, open the [[organisationSettings:surveyTab]] tab (on a faculty's page [[organisationSettings:surveyFacultyTab]]). The university level questions are at the top; they can't be changed.
 2. Click [[questionEditor:addQuestion]] and choose the question type, or [[questionEditor:addTextualContent]] for a text section.
 3. Write the question in Finnish, Swedish and English, and click [[questionEditor:done]].
 4. The first time you save, Norppa reminds you that the questions are shared by the whole programme. Confirm.
