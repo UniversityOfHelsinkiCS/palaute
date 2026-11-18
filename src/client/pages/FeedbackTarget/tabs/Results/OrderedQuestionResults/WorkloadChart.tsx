@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 import type { ResultQuestion } from './blocks'
 
 import { getWorkloadColor } from '../../../../../util/resultColors'
+import { getMean, getMeanOption } from '../QuestionResults/AverageResult'
 import { formatPercent, getOptionCounts } from './counts'
 
 const RADIUS = 150
@@ -38,11 +39,11 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
 
   const total = options.reduce((sum, option) => sum + option.count, 0)
   const wedgeAngle = 180 / options.length
-  // The first option is 1
-  const mean = total > 0 ? options.reduce((sum, option, index) => sum + (index + 1) * option.count, 0) / total : null
-  const meanOption = mean === null ? null : options[Math.round(mean) - 1]
+  const mean = getMean(question)
+  const meanOptionId = mean > 0 ? getMeanOption(mean, question)?.id : undefined
+  const meanOption = options.find(option => option.id === meanOptionId)
   // The options run from the right end, so the heaviest is on the right
-  const needleAngle = mean === null ? null : (mean - 0.5) * wedgeAngle
+  const needleAngle = mean > 0 ? (mean - 0.5) * wedgeAngle : null
 
   const label = [
     ...options.map(option => `${option.label}: ${option.count}`),

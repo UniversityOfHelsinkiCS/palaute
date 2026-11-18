@@ -78,7 +78,7 @@ const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds
               <LikertDistribution counts={counts} maxShare={maxShare} />
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-              <AverageResult question={question} variant="outlined" sx={{ width: '3rem', height: '3rem' }} />
+              <AverageResult question={question} variant="outlined" />
               {/* Lines up with the value labels of the chart */}
               <Box aria-hidden="true" sx={{ typography: 'caption', color: 'text.secondary', lineHeight: 1.3 }}>
                 {t('feedbackSummary:average')}

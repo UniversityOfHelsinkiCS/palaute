@@ -8,14 +8,9 @@ import { useTranslation } from 'react-i18next'
 import type { ResultQuestion } from './blocks'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
+import { getTableAriaDescriptionKey } from '../QuestionResults/AccessibleChartTable'
 import { formatPercent } from './counts'
 import { COLUMN_GAP } from './layout'
-
-const ARIA_KEY_BY_TYPE: Record<string, string> = {
-  LIKERT: 'feedbackTargetResults:likertQuestionAriaDescription',
-  MULTIPLE_CHOICE: 'feedbackTargetResults:multipleChoiceQuestionAriaDescription',
-  SINGLE_CHOICE: 'feedbackTargetResults:singleChoiceQuestionAriaDescription',
-}
 
 const rowSx = {
   display: 'grid',
@@ -43,7 +38,7 @@ const AnswerTable = ({ question, rows, feedbackCount, mean }: AnswerTableProps) 
   return (
     <>
       <Box id={descriptionId} sx={visuallyHidden}>
-        {t(ARIA_KEY_BY_TYPE[question.type] ?? 'feedbackTargetResults:questionAriaDescription', {
+        {t(getTableAriaDescriptionKey(question.type), {
           question: getLanguageValue(question.data.label, i18n.language),
         })}
       </Box>

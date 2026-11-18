@@ -9,6 +9,8 @@ const ariaKeyByType = {
   SINGLE_CHOICE: 'feedbackTargetResults:singleChoiceQuestionAriaDescription',
 }
 
+export const getTableAriaDescriptionKey = type => ariaKeyByType[type] ?? 'feedbackTargetResults:questionAriaDescription'
+
 const AccessibleChartTable = ({ labels, data, totalFeedbacks, question }) => {
   const { t, i18n } = useTranslation()
 
@@ -23,7 +25,7 @@ const AccessibleChartTable = ({ labels, data, totalFeedbacks, question }) => {
             backgroundColor: 'action.hover',
           },
         }}
-        aria-description={t(ariaKeyByType[question?.type] ?? 'feedbackTargetResults:questionAriaDescription', {
+        aria-description={t(getTableAriaDescriptionKey(question?.type), {
           question: questionLabel,
         })}
       >

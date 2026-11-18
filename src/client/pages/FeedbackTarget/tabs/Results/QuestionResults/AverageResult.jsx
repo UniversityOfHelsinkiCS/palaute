@@ -1,11 +1,11 @@
 import { Box, Typography } from '@mui/material'
 import { visuallyHidden } from '@mui/utils'
-import { countBy, round } from 'lodash-es'
+import { countBy, round, sum } from 'lodash-es'
 import { useTranslation } from 'react-i18next'
 
 import { getArrow } from '../../../../../components/SummaryResultItem/WorkloadResultItem'
 import { getLanguageValue } from '../../../../../util/languageUtils'
-import { getColor } from '../../../../../util/resultColors'
+import { getColor, getWorkloadColor } from '../../../../../util/resultColors'
 import { mergeSx } from '../../../../../util/sx'
 
 const styles = {
@@ -54,54 +54,20 @@ const styles = {
 
 const getDistribution = feedbacks => countBy(feedbacks, f => String(f.data))
 
-const getLikertMean = distribution => {
-  const entries = [
-    distribution['1'] || 0,
-    distribution['2'] || 0,
-    distribution['3'] || 0,
-    distribution['4'] || 0,
-    distribution['5'] || 0,
-  ]
+// The first value is 1
+const getWeightedMean = counts => {
+  const total = sum(counts)
+  if (total === 0) return 0
 
-  // hack to convert possible strings to numbers when doing math
-  const totalCount = -(-entries[0] - entries[1] - entries[2] - entries[3] - entries[4])
-
-  if (totalCount === 0) return 0
-
-  let sum = 0
-  for (let i = 0; i < entries.length; i++) {
-    const count = entries[i]
-    const value = i + 1
-    sum += value * count
-  }
-
-  return round(sum / totalCount, 2)
+  return round(counts.reduce((acc, count, index) => acc + (index + 1) * count, 0) / total, 2)
 }
 
-const getSingleChoiceMean = (distribution, question) => {
-  const entries = []
+const getLikertMean = distribution => getWeightedMean([1, 2, 3, 4, 5].map(value => distribution[value] ?? 0))
 
-  for (let i = 0; i < question.data.options.length; i++) {
-    const optionId = question.data.options[i].id
-    entries.push(distribution[optionId] || 0)
-  }
+const getSingleChoiceMean = (distribution, question) =>
+  getWeightedMean(question.data.options.map(option => distribution[option.id] ?? 0))
 
-  // hack to convert possible strings to numbers when doing math
-  const totalCount = -(-entries[0] - entries[1] - entries[2] - entries[3] - entries[4])
-
-  if (totalCount === 0) return 0
-
-  let sum = 0
-  for (let i = 0; i < entries.length; i++) {
-    const count = entries[i]
-    const value = i + 1
-    sum += value * count
-  }
-
-  return round(sum / totalCount, 2)
-}
-
-const getMean = (question, distribution) => {
+const getMeanOfDistribution = (question, distribution) => {
   switch (question.type) {
     case 'LIKERT':
       return getLikertMean(distribution)
@@ -112,10 +78,8 @@ const getMean = (question, distribution) => {
   }
 }
 
-const getBackgroundColor = (mean, questionSecondaryType) => {
-  const meanValue = questionSecondaryType === 'WORKLOAD' ? 5.0 - Math.abs((mean - 3) * 2.0) : mean
-  return getColor(meanValue)
-}
+// 0 when there are no answers
+export const getMean = question => getMeanOfDistribution(question, getDistribution(question.feedbacks))
 
 export const getMeanOption = (mean, question) => {
   if (!question?.data?.options?.length) return null
@@ -129,16 +93,15 @@ export const getMeanOption = (mean, question) => {
 // variant: 'filled', 'outlined' or 'underlined'
 const AverageResult = ({ question, variant = 'filled', sx = {} }) => {
   const { t, i18n } = useTranslation()
-  const distribution = getDistribution(question.feedbacks)
   const isWorkloadQuestion = question.secondaryType === 'WORKLOAD'
 
-  const mean = getMean(question, distribution)
+  const mean = getMean(question)
   const fixedMean = mean?.toFixed(2) || 0
 
   const meanText = isWorkloadQuestion
     ? getLanguageValue(getMeanOption(mean, question)?.label, i18n.language)
     : fixedMean
-  const color = getBackgroundColor(mean, question.secondaryType)
+  const color = isWorkloadQuestion ? getWorkloadColor(mean) : getColor(mean)
   const screenReaderText = `${t('feedbackSummary:average')}: ${fixedMean > 0 ? meanText : t('courseSummary:noResults')}`
 
   return (
