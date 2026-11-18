@@ -12,6 +12,7 @@ import feedbackTargetIsOpen from '../../../../util/feedbackTargetIsOpen'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import TabHeading from '../../TabHeading'
 import useFeedbackTargetId from '../../useFeedbackTargetId'
+import { getQuestions } from '../FeedbackView/utils'
 import ChartTableToggle, { useShowTable } from './ChartTableToggle'
 import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import FeedbackResponse from './FeedbackResponse'
@@ -199,6 +200,9 @@ const Results = () => {
     showTable,
   }
 
+  // The order in which the students answered the questions, which can differ from that of the editor
+  const surveyOrder = getQuestions(feedbackTarget).map(question => question.id)
+
   const groups = getGroups(feedbackTarget)
   const groupSelectorVisible = filtersVisible && !isLoading && groups.length > 1
 
@@ -265,6 +269,7 @@ const Results = () => {
         {showFeedback && ordered && (
           <OrderedQuestionResults
             {...questionResultsProps}
+            questionOrder={surveyOrder.length > 0 ? surveyOrder : questionOrder}
             // Under the h3 of the tab and level with the h4s of the sections above
             baseHeadingLevel={4}
           />
