@@ -7,6 +7,7 @@ import type { ResultQuestion } from './blocks'
 import { getWorkloadColor } from '../../../../../util/resultColors'
 import { getMean, getMeanOption } from '../QuestionResults/AverageResult'
 import { formatPercent, getOptionCounts } from './counts'
+import { CHART_SX } from './layout'
 
 const RADIUS = 150
 // Room for the labels beside and above the half circle
@@ -57,6 +58,7 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
       sx={{
         display: 'flex',
         justifyContent: 'center',
+        ...CHART_SX,
         printColorAdjust: 'exact',
         '@media print': { breakInside: 'avoid' },
       }}
