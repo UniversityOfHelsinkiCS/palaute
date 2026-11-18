@@ -76,7 +76,7 @@ const AnswerTable = ({ question, rows, feedbackCount, mean }: AnswerTableProps) 
         {mean && (
           <Box role="row" sx={[rowSx, { alignItems: 'center' }]}>
             <Typography role="rowheader">{t('feedbackSummary:average')}</Typography>
-            <Box role="cell" sx={{ gridColumn: '2 / -1', justifySelf: 'end' }}>
+            <Box role="cell" aria-colspan={2} sx={{ gridColumn: '2 / -1', justifySelf: 'end' }}>
               {mean}
             </Box>
           </Box>

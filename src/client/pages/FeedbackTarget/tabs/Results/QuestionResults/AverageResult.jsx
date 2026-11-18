@@ -91,7 +91,8 @@ export const getMeanOption = (mean, question) => {
 }
 
 // variant: 'filled', 'outlined' or 'underlined'
-const AverageResult = ({ question, variant = 'filled', sx = {} }) => {
+// labelled: false when the surroundings already say that this is the average
+const AverageResult = ({ question, variant = 'filled', labelled = true, sx = {} }) => {
   const { t, i18n } = useTranslation()
   const isWorkloadQuestion = question.secondaryType === 'WORKLOAD'
 
@@ -102,7 +103,8 @@ const AverageResult = ({ question, variant = 'filled', sx = {} }) => {
     ? getLanguageValue(getMeanOption(mean, question)?.label, i18n.language)
     : fixedMean
   const color = isWorkloadQuestion ? getWorkloadColor(mean) : getColor(mean)
-  const screenReaderText = `${t('feedbackSummary:average')}: ${fixedMean > 0 ? meanText : t('courseSummary:noResults')}`
+  const value = fixedMean > 0 ? meanText : t('courseSummary:noResults')
+  const screenReaderText = labelled ? `${t('feedbackSummary:average')}: ${value}` : value
 
   return (
     <>

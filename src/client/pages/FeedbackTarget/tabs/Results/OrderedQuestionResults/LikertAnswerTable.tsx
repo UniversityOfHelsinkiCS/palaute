@@ -18,7 +18,7 @@ const LikertAnswerTable = ({ question, feedbackCount }: { question: ResultQuesti
         ...LIKERT_VALUES.map(value => ({ id: value, label: String(value), count: counts[value] })),
         { id: 0, label: t('feedbackView:dontKnowOption'), count: counts[0] },
       ]}
-      mean={<AverageResult question={question} variant="underlined" />}
+      mean={<AverageResult question={question} variant="underlined" labelled={false} />}
     />
   )
 }
