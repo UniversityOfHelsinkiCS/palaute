@@ -174,11 +174,13 @@ const QuestionEditorForm = ({
                       moveDownDisabled: !questionCanMoveDown(questionsField.value, index),
                     }
 
+                    const isMovableGroupingQuestion = movableGroupingQuestion && isGroupingQuestion(question)
+
                     return (
                       // A stable key keeps the grouping card mounted when saving gives the question an id,
                       // so focus can return to its edit button
-                      <Box component="li" key={isGroupingQuestion(question) ? 'grouping' : getQuestionId(question)}>
-                        {isGroupingQuestion(question) ? (
+                      <Box component="li" key={isMovableGroupingQuestion ? 'grouping' : getQuestionId(question)}>
+                        {isMovableGroupingQuestion ? (
                           renderGroupingQuestionSettings(listCardProps)
                         ) : (
                           <QuestionCard
