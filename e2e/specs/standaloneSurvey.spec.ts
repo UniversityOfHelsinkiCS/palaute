@@ -216,8 +216,8 @@ test.describe('Standalone surveys', () => {
       visibility: 'PRIVATE',
     }
     const { body } = await surveys.setQuestions(id, [likert, grouping])
-    const [groupingId, likertId] = body.questions.map((q: { id: number }) => q.id)
-    expect(body.questions[0].secondaryType).toBe('GROUPING')
+    const [likertId, groupingId] = body.questions.map((q: { id: number }) => q.id)
+    expect(body.questions[1].secondaryType).toBe('GROUPING')
 
     const answer = (group: string, value: string) => [
       { questionId: groupingId, data: group },
