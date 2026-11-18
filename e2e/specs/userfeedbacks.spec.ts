@@ -52,7 +52,7 @@ test.describe('User feedbacks view', () => {
 
     await loginAs(teacher)
     await page.goto(`/targets/${fbtId}/results`)
-    await page.locator('[data-testid="VisibilityIcon"]').click()
+    await page.getByRole('button', { name: 'Hide this answer' }).first().click()
     await expect(contains(page, 'This answer is hidden')).toBeAttached()
 
     await loginAs(student)
