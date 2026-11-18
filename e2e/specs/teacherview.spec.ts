@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 
 import { student, teacher } from '../fixtures/headers'
-import { contains, expect, test } from '../support/test'
+import { byDataCy, contains, expect, test } from '../support/test'
 
 const openCourseUnit = async (page: Page, tab: 'active' | 'ended') => {
   await page.goto('/courses')
@@ -213,6 +213,6 @@ test.describe('Teacher view', () => {
     await page.locator(`a[href*="/targets/${fbtId}"]`).first().click()
     await page.goto(`/targets/${fbtId}/results`)
     await contains(page, 'Feedback').click()
-    await expect(contains(page, 'Multiple choice questions')).toBeAttached()
+    await expect(byDataCy(page, 'ordered-question-results')).toBeAttached()
   })
 })

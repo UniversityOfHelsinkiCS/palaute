@@ -207,7 +207,7 @@ test.describe('Students', () => {
     // New tabs appear once feedback is given
     await expect(byDataCy(page, 'interim-feedback-target-edit-feedback-tab')).toBeAttached()
     await byDataCy(page, 'interim-feedback-target-results-tab').click()
-    await expect(contains(page, 'Multiple choice questions')).toBeAttached()
+    await expect(byDataCy(page, 'ordered-question-results')).toBeAttached()
     await expect(page).toHaveURL(/\/results/)
 
     // Edit answer

@@ -1,7 +1,7 @@
 import type { Page } from '@playwright/test'
 
 import { teacher, student } from '../fixtures/headers'
-import { answerFeedbackForm, contains, expect, test } from '../support/test'
+import { answerFeedbackForm, byDataCy, contains, expect, test } from '../support/test'
 
 const notificationBadge = (page: Page) =>
   page.locator('[data-cy="navbar-link-My feedback"] > [data-cy="navbar-notification-badge"]')
@@ -40,7 +40,7 @@ test.describe('User feedbacks view', () => {
     await page.locator('[data-cy=feedback-view-give-feedback]').click()
 
     await expect(page.locator('[data-cy="feedback-target-results-tab"]')).toBeAttached()
-    await expect(contains(page, 'Multiple choice questions')).toBeAttached()
+    await expect(byDataCy(page, 'ordered-question-results')).toBeAttached()
   })
 
   test('Teacher can censor a feedback', async ({ page, api, loginAs }) => {

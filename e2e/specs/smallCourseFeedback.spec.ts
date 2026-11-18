@@ -1,5 +1,5 @@
 import { teacher, student } from '../fixtures/headers'
-import { answerFeedbackForm, contains, expect, test } from '../support/test'
+import { answerFeedbackForm, byDataCy, contains, expect, test } from '../support/test'
 
 test.describe('When course has only one enrolled student', () => {
   let fbtId: number
@@ -76,14 +76,14 @@ test.describe('When course has only one enrolled student', () => {
               'The teacher can see the feedback if the student has given their consent.'
           )
         ).toBeAttached()
-        await expect(contains(page, 'Multiple choice questions')).not.toBeAttached()
+        await expect(byDataCy(page, 'ordered-question-results')).not.toBeAttached()
       })
 
       test('Teacher should see feedback results', async ({ page, loginAs }) => {
         await expect(contains(page, 'Feedback has been given. Thank you for your feedback!')).toBeAttached()
         await loginAs(teacher)
         await page.goto(`/targets/${fbtId}/results`)
-        await expect(contains(page, 'Multiple choice questions')).toBeAttached()
+        await expect(byDataCy(page, 'ordered-question-results')).toBeAttached()
         await expect(contains(page, 'Test question 1')).toBeAttached()
       })
     })
