@@ -32,13 +32,14 @@ const chartCellSx = {
 
 type LikertTableProps = {
   questions: ResultQuestion[]
+  headingLevel: number
   feedbackCount: number
   publicQuestionIds: number[]
   publicity?: PublicitySettings
 }
 
 // Consecutive Likert questions, each with a column chart of its answers and its mean
-const LikertTable = ({ questions, feedbackCount, publicQuestionIds, publicity }: LikertTableProps) => {
+const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds, publicity }: LikertTableProps) => {
   const { t } = useTranslation()
 
   const rows = questions.map(question => ({ question, counts: getLikertCounts(question) }))
@@ -63,7 +64,12 @@ const LikertTable = ({ questions, feedbackCount, publicQuestionIds, publicity }:
       {rows.map(({ question, counts }) => (
         <Box key={question.id} role="row" sx={rowSx}>
           <Box role="rowheader" sx={{ minWidth: 0 }}>
-            <QuestionLabel question={question} isPublic={publicQuestionIds.includes(question.id)} publicity={publicity}>
+            <QuestionLabel
+              question={question}
+              headingLevel={headingLevel}
+              isPublic={publicQuestionIds.includes(question.id)}
+              publicity={publicity}
+            >
               <AnswerCount question={question} feedbackCount={feedbackCount} />
             </QuestionLabel>
           </Box>

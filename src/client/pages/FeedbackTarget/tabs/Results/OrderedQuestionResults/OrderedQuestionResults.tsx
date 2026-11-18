@@ -106,6 +106,7 @@ const OrderedQuestionResults = ({
             <LikertTable
               key={block.key}
               questions={block.questions}
+              headingLevel={block.headingLevel}
               feedbackCount={feedbackCount}
               publicQuestionIds={publicQuestionIds}
               publicity={publicity}
