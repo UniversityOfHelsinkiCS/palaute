@@ -76,7 +76,7 @@ const Details = ({ survey, isOpen, isOver }) => {
     <Formik
       initialValues={{
         name: survey.name,
-        description: { fi: '', sv: '', en: '', ...survey.description },
+        description: survey.description,
         opensAt: new Date(survey.opensAt),
         closesAt: new Date(survey.closesAt),
       }}

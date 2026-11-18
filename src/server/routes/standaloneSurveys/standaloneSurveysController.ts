@@ -36,15 +36,12 @@ import { ApplicationError } from '../../util/ApplicationError'
 import { parseInput } from '../../util/parseInput'
 
 const LocalizedStringSchema = z.object({
-  fi: z.string().optional(),
-  sv: z.string().optional(),
-  en: z.string().optional(),
+  fi: z.string().trim().optional(),
+  sv: z.string().trim().optional(),
+  en: z.string().trim().optional(),
 })
 
-const NameSchema = LocalizedStringSchema.refine(
-  name => Object.values(name).some(value => value?.trim()),
-  'Name is required'
-)
+const NameSchema = LocalizedStringSchema.refine(name => Object.values(name).some(Boolean), 'Name is required')
 
 const CreateBodySchema = z.object({
   name: NameSchema,
