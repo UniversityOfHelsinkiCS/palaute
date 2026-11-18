@@ -4,13 +4,13 @@ description: Kysymykset, jotka koulutusohjelma lisää kaikkiin kurssiensa kysel
 
 # Koulutusohjelman kysymykset
 
-Koulutusohjelman kysymykset lisätään kaikkien niiden opintojaksojen kurssikyselyihin, jotka kuuluvat Sisussa koulutusohjelmalle. Ne tulevat yliopistotason kysymysten jälkeen. Opettajat näkevät ne kyselyssään, mutta eivät voi muokata tai poistaa niitä. Kysymyksiä lisäävät ja muokkaavat koulutusohjelman hallinnoijat.
+Koulutusohjelman kysymykset lisätään jokaiseenn koulutusohjelman opintojakson kurssikyselyyn. Ne tulevat yliopistotason kysymysten jälkeen. Opettajat näkevät ne kyselyssään, mutta eivät voi muokata tai poistaa niitä. Kysymyksiä lisäävät ja muokkaavat koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
 
-> **Huom.** Muutos näkyy heti kaikissa koulutusohjelman kurssikyselyissä, _myös jo avautuneissa ja päättyneissä_. Jos muutat kysymyksen sanamuotoa, se muuttuu myös kyselyissä, joissa siihen on jo vastattu, ja poistettu kysymys katoaa niistäkin. Lisää siis koulutusohjelman kysymykset ennen kuin lukukauden kyselyt avautuvat, ja lisää mieluummin uusi kysymys kuin muuta vanhan merkitystä.
+> **Huom.** Muutos näkyy heti kaikissa koulutusohjelman kurssikyselyissä, _myös jo avautuneissa ja päättyneissä_. Jos muutat kysymyksen sanamuotoa, se muuttuu myös käynnissä olevissa kyselyissä (joihin on mahdollisesti jo vastattu), ja poistettu kysymys katoaa niistäkin. Lisää siis koulutusohjelman kysymykset ennen kuin lukukauden kyselyt avautuvat, ja lisää mieluummin uusi kysymys kuin muuta vanhan merkitystä.
 
 ## Kysymysten lisääminen {#add}
 
-1. Avaa koulutusohjelman sivulla [[organisationSettings:surveyTab]]-välilehti (tiedekunnan sivulla [[organisationSettings:surveyFacultyTab]]). Ylimpänä ovat yliopistotason kysymykset, joita ei voi muuttaa täällä.
+1. Avaa koulutusohjelman sivulla [[organisationSettings:surveyTab]]-välilehti (tiedekunnan sivulla [[organisationSettings:surveyFacultyTab]]). Ylimpänä ovat yliopistotason kysymykset, joita ei voi muuttaa.
 2. Valitse [[questionEditor:addQuestion]] ja kysymystyyppi, tai [[questionEditor:addTextualContent]], jos haluat lisätä tekstiosion.
 3. Kirjoita kysymys suomeksi, ruotsiksi ja englanniksi ja valitse [[questionEditor:done]].
 4. Kun tallennat ensimmäisen kerran, Norppa muistuttaa, että kysymykset ovat koko koulutusohjelman yhteisiä. Vahvista.
