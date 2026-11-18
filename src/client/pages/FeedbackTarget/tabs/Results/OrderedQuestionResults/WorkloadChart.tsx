@@ -8,6 +8,7 @@ import { getWorkloadColor } from '../../../../../util/resultColors'
 import { getMean, getMeanOption } from '../QuestionResults/AverageResult'
 import { formatPercent, getOptionCounts } from './counts'
 import { CHART_SX } from './layout'
+import { ASCENT, FONT_SIZE, LABEL_HEIGHT, layoutLabels, LINE_HEIGHT, toRadians } from './workloadLabels'
 
 const RADIUS = 150
 // Room for the labels beside and above the half circle
@@ -20,9 +21,19 @@ const CENTER_X = RADIUS + SIDE
 const CENTER_Y = TOP + RADIUS
 
 // Angles in degrees, 180 being the left end of the half circle and 0 the right
-const point = (radius: number, angle: number) => {
-  const radians = (angle * Math.PI) / 180
-  return [CENTER_X + radius * Math.cos(radians), CENTER_Y - radius * Math.sin(radians)]
+const point = (radius: number, angle: number) => [
+  CENTER_X + radius * Math.cos(toRadians(angle)),
+  CENTER_Y - radius * Math.sin(toRadians(angle)),
+]
+
+let measuringContext: CanvasRenderingContext2D | null | undefined
+
+// The width of the text in pixels, 0 when it cannot be measured
+const measureText = (text: string, font: string) => {
+  if (measuringContext === undefined) measuringContext = document.createElement('canvas').getContext('2d')
+  if (!measuringContext) return 0
+  measuringContext.font = font
+  return measuringContext.measureText(text).width
 }
 
 const wedgePath = (radius: number, from: number, to: number) => {
@@ -45,6 +56,20 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
   const meanOption = options.find(option => option.id === meanOptionId)
   // The options run from the right end, so the heaviest is on the right
   const needleAngle = mean > 0 ? (mean - 0.5) * wedgeAngle : null
+
+  const labels = options.map(option => ({
+    text: option.label,
+    countText: `${option.count} (${formatPercent(option.count, total)})`,
+    fontWeight: option === meanOption ? theme.typography.fontWeightMedium : undefined,
+  }))
+  const labelPositions = layoutLabels(
+    RADIUS,
+    labels.map(({ text, countText, fontWeight }) =>
+      [text, countText].map(line =>
+        measureText(line, `${fontWeight ?? 400} ${FONT_SIZE}px ${theme.typography.fontFamily}`)
+      )
+    )
+  )
 
   const label = [
     ...options.map(option => `${option.label}: ${option.count}`),
@@ -75,12 +100,9 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
           const from = to + wedgeAngle
           const color = getWorkloadColor(index + 1)
           const share = total > 0 ? option.count / total : 0
-          const middle = (from + to) / 2
-          const [labelX, labelY] = point(RADIUS + 10, middle)
-          const cos = Math.cos((middle * Math.PI) / 180)
-          const anchor = cos < -0.3 ? 'end' : cos > 0.3 ? 'start' : 'middle'
-          // The label above the top wedge stacks upwards, the others sit beside their wedge
-          const firstLineY = anchor === 'middle' ? labelY - 20 : labelY - 4
+          const { text, countText, fontWeight } = labels[index]
+          const labelX = CENTER_X + labelPositions[index].x
+          const firstLineY = CENTER_Y - labelPositions[index].y - LABEL_HEIGHT / 2 + ASCENT
 
           return (
             <g key={option.id}>
@@ -88,17 +110,17 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
               {share > 0 && <path d={wedgePath(Math.sqrt(share) * RADIUS, from, to)} fill={color} />}
               <text
                 x={labelX}
-                textAnchor={anchor}
+                textAnchor="middle"
                 fontFamily={theme.typography.fontFamily}
-                fontSize={13}
+                fontSize={FONT_SIZE}
                 fill={option === meanOption ? theme.palette.text.primary : theme.palette.text.secondary}
-                fontWeight={option === meanOption ? theme.typography.fontWeightMedium : undefined}
+                fontWeight={fontWeight}
               >
                 <tspan x={labelX} y={firstLineY}>
-                  {option.label}
+                  {text}
                 </tspan>
-                <tspan x={labelX} y={firstLineY + 15} fill={theme.palette.text.primary}>
-                  {`${option.count} (${formatPercent(option.count, total)})`}
+                <tspan x={labelX} y={firstLineY + LINE_HEIGHT} fill={theme.palette.text.primary}>
+                  {countText}
                 </tspan>
               </text>
             </g>
