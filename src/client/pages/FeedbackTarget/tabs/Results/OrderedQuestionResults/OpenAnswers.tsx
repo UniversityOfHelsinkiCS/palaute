@@ -46,7 +46,7 @@ const actionSx = { mt: -0.5, '@media print': { display: 'none' }, ...focusIndica
 type OpenAnswersProps = {
   question: ResultQuestion
   openAnswerActions?: OpenAnswerActions
-  // Whether the answer after the initial ones fades out as a hint of the rest
+  // Fades out the first collapsed answer as a hint of the rest
   peek?: boolean
 }
 
@@ -57,7 +57,7 @@ const OpenAnswers = ({ question, openAnswerActions, peek = true }: OpenAnswersPr
   const [expanded, setExpanded] = useState(false)
   const firstRevealedRef = useRef<HTMLLIElement>(null)
 
-  // The revealed answers come before the button, where a screen reader user would not look for them
+  // The revealed answers come before the button, where screen reader users would not look for them
   useEffect(() => {
     if (expanded) firstRevealedRef.current?.focus()
   }, [expanded])

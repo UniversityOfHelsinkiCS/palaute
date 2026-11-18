@@ -21,7 +21,6 @@ const styles = {
     position: 'relative',
     color: 'black',
   },
-  // The colour shows as a thin frame around a paler centre, as thick as the padding
   outlined: {
     p: '2px',
     borderRadius: 0,
@@ -54,7 +53,6 @@ const styles = {
 
 const getDistribution = feedbacks => countBy(feedbacks, f => String(f.data))
 
-// The first value is 1
 const getWeightedMean = counts => {
   const total = sum(counts)
   if (total === 0) return 0
@@ -78,7 +76,6 @@ const getMeanOfDistribution = (question, distribution) => {
   }
 }
 
-// 0 when there are no answers
 export const getMean = question => getMeanOfDistribution(question, getDistribution(question.feedbacks))
 
 export const getMeanOption = (mean, question) => {
@@ -90,8 +87,6 @@ export const getMeanOption = (mean, question) => {
   return question.data.options[index]
 }
 
-// variant: 'filled', 'outlined' or 'underlined'
-// labelled: false when the surroundings already say that this is the average
 const AverageResult = ({ question, variant = 'filled', labelled = true, sx = {} }) => {
   const { t, i18n } = useTranslation()
   const isWorkloadQuestion = question.secondaryType === 'WORKLOAD'

@@ -4,8 +4,7 @@ import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../../../components/common/NorButton'
 
-// Whether the answers are in survey order (OrderedQuestionResults) rather than the old layout (QuestionResults).
-// Not remembered, so that the new layout is what everyone gets each time.
+// Not remembered, so that everyone gets the new layout each time
 export const useOrderedLayout = () => useState(true)
 
 const ResultsLayoutSwitch = ({ ordered, setOrdered }) => {

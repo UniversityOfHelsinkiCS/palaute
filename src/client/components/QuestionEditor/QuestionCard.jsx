@@ -210,8 +210,8 @@ const QuestionCard = ({
   const [emptyOptionsRemovalConfirmed, setEmptyOptionsRemovalConfirmed] = useState(false)
   const emptyOptionCount = getEmptyOptions(question).length
 
-  // Comparing ids instead of checking for a missing initial value, because a question inserted
-  // above others takes over the index, and so the initial value, of an existing question
+  // Not a missing initial value: a question inserted above others takes over the initial value
+  // of the one it displaced
   const isNew = getQuestionId(meta.initialValue) !== getQuestionId(question)
 
   const handleCancelEditing = () => {

@@ -11,7 +11,6 @@ const hasContent = ({ data }: QuestionAnswer) => {
   return !Number.isNaN(parseInt(data, 10)) || (typeof data === 'string' && data.trim().length > 1)
 }
 
-// Blank answers and open answers of one character are left out
 const getAnswersByQuestionId = (feedbacks: Feedback[] | undefined): Record<string, GroupedAnswer[]> => {
   const answers = (feedbacks ?? [])
     .flatMap(feedback =>

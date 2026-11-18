@@ -32,7 +32,6 @@ type OrderedQuestionResultsProps = {
   baseHeadingLevel?: number
 }
 
-// Takes the props of QuestionResults, but shows text sections and questions in survey order
 const OrderedQuestionResults = ({
   questions,
   questionOrder,

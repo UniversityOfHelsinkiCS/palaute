@@ -20,7 +20,6 @@ type QuestionBlockProps = {
   children: ReactNode
 }
 
-// The question on the left and its answers on the right, stacked on narrow screens
 const QuestionBlock = ({
   question,
   headingLevel,

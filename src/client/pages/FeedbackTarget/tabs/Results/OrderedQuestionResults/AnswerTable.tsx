@@ -26,11 +26,9 @@ type AnswerTableProps = {
   question: ResultQuestion
   rows: { id: string | number; label: string; count: number }[]
   feedbackCount: number
-  // Shown as the last row
   mean?: ReactNode
 }
 
-// The answers of a choice or Likert question as a table of options
 const AnswerTable = ({ question, rows, feedbackCount, mean }: AnswerTableProps) => {
   const { t, i18n } = useTranslation()
   const descriptionId = useId()

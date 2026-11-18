@@ -12,14 +12,12 @@ import QuestionPublicity from './QuestionPublicity'
 
 type QuestionLabelProps = {
   question: ResultQuestion
-  // Rendered as a heading when given
   headingLevel?: number
   isPublic: boolean
   publicity?: PublicitySettings
   children?: ReactNode
 }
 
-// The contents of the question column: label, description and the publicity of the question
 const QuestionLabel = ({ question, headingLevel, isPublic, publicity, children }: QuestionLabelProps) => {
   const { i18n } = useTranslation()
   const description = getLanguageValue(question.data.description, i18n.language)

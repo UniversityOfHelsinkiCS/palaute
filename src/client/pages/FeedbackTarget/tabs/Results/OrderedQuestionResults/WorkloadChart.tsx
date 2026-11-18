@@ -28,7 +28,6 @@ const point = (radius: number, angle: number) => [
 
 let measuringContext: CanvasRenderingContext2D | null | undefined
 
-// The width of the text in pixels, 0 when it cannot be measured
 const measureText = (text: string, font: string) => {
   if (measuringContext === undefined) measuringContext = document.createElement('canvas').getContext('2d')
   if (!measuringContext) return 0
@@ -42,8 +41,7 @@ const wedgePath = (radius: number, from: number, to: number) => {
   return `M ${CENTER_X} ${CENTER_Y} L ${startX} ${startY} A ${radius} ${radius} 0 0 1 ${endX} ${endY} Z`
 }
 
-// The options from lightest to heaviest as wedges of a half circle, each filled so that the filled area is its share
-// of the answers, with a needle pointing at the mean
+// Each wedge is filled so that the filled area, not the radius, is its share of the answers
 const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
   const { t, i18n } = useTranslation()
   const theme = useTheme()
@@ -54,7 +52,6 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
   const mean = getMean(question)
   const meanOptionId = mean > 0 ? getMeanOption(mean, question)?.id : undefined
   const meanOption = options.find(option => option.id === meanOptionId)
-  // The options run from the right end, so the heaviest is on the right
   const needleAngle = mean > 0 ? (mean - 0.5) * wedgeAngle : null
 
   const labels = options.map(option => ({
@@ -126,7 +123,6 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
             </g>
           )
         })}
-        {/* Lines between the wedges */}
         {options.slice(1).map((option, index) => {
           const [x, y] = point(RADIUS, 180 - (index + 1) * wedgeAngle)
           return (

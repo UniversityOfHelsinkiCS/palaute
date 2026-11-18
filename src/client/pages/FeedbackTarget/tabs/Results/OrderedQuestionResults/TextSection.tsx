@@ -14,7 +14,6 @@ import { getLanguageValue } from '../../../../../util/languageUtils'
 import { getHeadingLevel } from './blocks'
 
 const COLLAPSED_HEIGHT = 112
-// Text only slightly taller than the collapsed height is shown in full
 const COLLAPSE_SLACK = 40
 
 const HEADING_STYLES: Pick<TypographyProps, 'variant' | 'fontSize'>[] = [

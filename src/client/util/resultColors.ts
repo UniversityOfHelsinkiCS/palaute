@@ -18,5 +18,5 @@ const getColorIndex = (mean: number) => {
 
 export const getColor = (mean: number) => SUMMARY_COLORS[getColorIndex(mean)]
 
-// As in the course summary, the middle option of the workload question is the best and both ends the worst
+// The middle option is the best and both ends the worst
 export const getWorkloadColor = (mean: number) => getColor(5 - Math.abs(mean - 3) * 2)

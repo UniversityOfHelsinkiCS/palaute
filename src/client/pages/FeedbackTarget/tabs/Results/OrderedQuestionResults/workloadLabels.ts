@@ -10,7 +10,6 @@ export const LABEL_HEIGHT = ASCENT + LINE_HEIGHT + DESCENT
 const LINE_HALF_HEIGHT = (ASCENT + DESCENT) / 2
 // Upwards from the middle of a label to the middle of each of its two lines
 const LINE_OFFSETS = [LABEL_HEIGHT / 2 - LINE_HALF_HEIGHT, LINE_HALF_HEIGHT - LABEL_HEIGHT / 2]
-// Between the arc and the nearest point of each label
 const LABEL_GAP = 10
 
 type Box = { x: number; y: number; halfWidth: number; halfHeight: number }
@@ -70,9 +69,8 @@ const balancedAngle = (
   })
 }
 
-// The middle of the label of each option, given the widths of its two lines. Each label points at the middle of its
-// wedge, except that of five options, the diagonal ones move along the arc to be as far from the top label as from
-// the outer one.
+// The middle of each label, given the widths of its two lines. With five options, the diagonal labels move along the
+// arc to be as far from the top label as from the outer one.
 export const layoutLabels = (radius: number, lineWidths: number[][]) => {
   const wedgeAngle = 180 / lineWidths.length
   const angles = lineWidths.map((_, index) => (index + 0.5) * wedgeAngle)

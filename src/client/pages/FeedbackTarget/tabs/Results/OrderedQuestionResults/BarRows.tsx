@@ -13,7 +13,6 @@ export type BarRow = {
 
 const numberSx = { m: 0, textAlign: 'right', whiteSpace: 'nowrap', fontVariantNumeric: 'tabular-nums' }
 
-// Every row is a full-width track with its label on it, filled by the share of respondents
 const BarRows = ({ rows, feedbackCount }: { rows: BarRow[]; feedbackCount: number }) => (
   <Box
     component="dl"

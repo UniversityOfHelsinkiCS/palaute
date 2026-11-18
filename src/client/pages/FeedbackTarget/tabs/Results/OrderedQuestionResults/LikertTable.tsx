@@ -26,7 +26,6 @@ type LikertTableProps = {
   publicity?: PublicitySettings
 }
 
-// Consecutive Likert questions, each with a chart of its answers and its mean
 const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds, publicity }: LikertTableProps) => {
   const { t } = useTranslation()
 
@@ -45,7 +44,6 @@ const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds
       aria-label={t('feedbackView:dataTableCaption')}
       className={BLOCK_CLASS}
       sx={{
-        // As far apart as the questions of other kinds are
         '& > [role="row"] + [role="row"]': { borderTop: '1px solid', borderColor: 'divider', mt: 3, pt: 3 },
         '@media print': { breakInside: 'avoid' },
       }}
