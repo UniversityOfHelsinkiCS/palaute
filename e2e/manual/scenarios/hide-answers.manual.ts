@@ -27,12 +27,7 @@ manualTest(
     await caption({ fi: 'Avataan Vastaukset-välilehti.', en: 'Open the Answers tab.' })
     await click(byDataCy(page, 'feedback-target-results-tab'))
 
-    // The innermost box with both the answer and its buttons
-    const answer = page
-      .locator('div')
-      .filter({ hasText: ANSWER })
-      .filter({ has: page.getByRole('button', { name: t('feedbackTargetResults:setHidden') }) })
-      .last()
+    const answer = page.getByRole('listitem').filter({ hasText: ANSWER })
     await caption({
       fi: 'Etsitään vastaus avoimista kysymyksistä.',
       en: 'Find the answer under the open questions.',

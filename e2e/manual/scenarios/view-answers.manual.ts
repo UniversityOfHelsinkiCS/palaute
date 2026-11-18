@@ -6,7 +6,7 @@ import { teacher } from '../users'
 manualTest(
   'Vastausten katsominen',
   { annotation: { type: 'en', description: 'Viewing the answers' } },
-  async ({ page, demo, loginAs, caption, hover, click, scrollTo, pause, t }) => {
+  async ({ page, demo, loginAs, caption, hover, click, scrollTo, pause, t, localize }) => {
     await demo.seed('feedbackOpen', { feedback: true })
     const fbtId = demo.fbtId
     await loginAs(teacher)
@@ -35,12 +35,15 @@ manualTest(
     await hover(byDataCy(page, 'feedback-target-results-feedback-chart'))
     await pause(1500)
 
-    const multipleChoice = page.locator('[data-cy^="feedback-target-results-multiple-choice-questions"]')
+    await caption({
+      fi: 'Sen alla ovat kysymykset samassa järjestyksessä kuin kyselyssä.',
+      en: 'Below it are the questions, in the same order as in the survey.',
+    })
     await caption({
       fi: 'Asteikko- ja valintakysymysten vastausjakaumat näytetään kaavioina. Keskiarvoon ei lasketa ”ei osaa sanoa” -vastauksia.',
       en: 'The scale and choice questions show how the answers are spread, as charts. The average leaves out “don’t know” answers.',
     })
-    await hover(multipleChoice.first())
+    await hover(page.getByRole('table', { name: t('feedbackView:dataTableCaption') }).first())
     await pause(1500)
 
     await caption({
@@ -54,12 +57,26 @@ manualTest(
     )
     await pause(1500)
 
-    await caption({
-      fi: 'Avointen kysymysten vastaukset ovat sivun lopussa aakkosjärjestyksessä.',
-      en: 'The answers to open questions are at the end of the page, in alphabetical order.',
+    const openQuestion = page.getByRole('region', {
+      name: localize({ fi: 'Muita huomioita (avoin kysymys)', en: 'Additional comments (open-ended question)' }),
     })
-    await scrollTo(page.locator('[data-cy^="feedback-target-results-open-questions"]').first())
-    await expect(contains(page, 'Hyvä ja selkeä kurssi, kiitos!')).toBeVisible()
+    await caption({
+      fi: 'Avointen kysymysten vastaukset ovat aakkosjärjestyksessä. Niistä näytetään ensin muutama.',
+      en: 'The answers to open questions are in alphabetical order. A few of them show first.',
+    })
+    await scrollTo(openQuestion)
+    await pause(1000)
+
+    await caption({
+      fi: 'Loput saa näkyviin vastausten alta.',
+      en: 'You can show the rest below the answers.',
+    })
+    await click(
+      openQuestion.getByRole('button', {
+        name: new RegExp(`^${t('questionResults:showAllAnswers').split('{{count}}')[0]}`),
+      })
+    )
+    await expect(contains(openQuestion, 'Viikkotehtäviä oli paljon muiden kurssien rinnalla.')).toBeVisible()
     await pause(1500)
 
     await caption({

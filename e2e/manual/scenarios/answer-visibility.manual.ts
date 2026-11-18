@@ -6,7 +6,7 @@ import { teacher } from '../users'
 manualTest(
   'Vastausten näkyvyyden muuttaminen',
   { annotation: { type: 'en', description: 'Changing who sees the answers' } },
-  async ({ page, demo, loginAs, caption, click, scrollTo, pause, t }) => {
+  async ({ page, demo, loginAs, caption, click, scrollTo, pause, t, localize }) => {
     await demo.seed('feedbackClosed', { feedback: true })
     const fbtId = demo.fbtId
     await loginAs(teacher)
@@ -25,13 +25,15 @@ manualTest(
     await caption({ fi: 'Avataan Vastaukset-välilehti.', en: 'Open the Answers tab.' })
     await click(byDataCy(page, 'feedback-target-results-tab'))
 
-    const openQuestions = page.locator('[data-cy^="feedback-target-results-open-questions"]').first()
-    const notPublic = openQuestions.getByRole('button', { name: new RegExp(`^${t('common:notPublic')}:`) }).first()
-    await caption({
-      fi: 'Jokaisen kysymyksen yläpuolella näkyy, onko se julkinen. Avataan avoimen kysymyksen valinta.',
-      en: 'Above each question, you can see whether it is public. Open the setting of the open question.',
+    const openQuestion = page.getByRole('region', {
+      name: localize({ fi: 'Muita huomioita (avoin kysymys)', en: 'Additional comments (open-ended question)' }),
     })
-    await scrollTo(openQuestions)
+    const notPublic = openQuestion.getByRole('button', { name: new RegExp(`^${t('common:notPublic')}:`) })
+    await caption({
+      fi: 'Jokaisen kysymyksen alla näkyy, onko se julkinen. Avataan avoimen kysymyksen valinta.',
+      en: 'Under each question, you can see whether it is public. Open the setting of the open question.',
+    })
+    await scrollTo(openQuestion)
     await click(notPublic)
 
     await caption({
@@ -47,9 +49,7 @@ manualTest(
     // The browser's own confirmation isn't in the recording
     await click(page.getByRole('radio', { name: t('common:publicInfo') }))
     await page.keyboard.press('Escape')
-    await expect(
-      openQuestions.getByRole('button', { name: new RegExp(`^${t('common:public')}:`) }).first()
-    ).toBeVisible()
+    await expect(openQuestion.getByRole('button', { name: new RegExp(`^${t('common:public')}:`) })).toBeVisible()
 
     await caption({
       fi: 'Valmista! Kysymys on nyt julkinen, ja muutos tallentui heti.',
