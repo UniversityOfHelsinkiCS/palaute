@@ -1,11 +1,12 @@
 import { Box, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import { NorButton } from '../../../../components/common/NorButton'
-import useLocalStorageState from '../../../../hooks/useLocalStorageState'
 
-// Whether the answers are in survey order (OrderedQuestionResults) rather than the old layout (QuestionResults)
-export const useOrderedLayout = () => useLocalStorageState('orderedResultsLayout', true)
+// Whether the answers are in survey order (OrderedQuestionResults) rather than the old layout (QuestionResults).
+// Not remembered, so that the new layout is what everyone gets each time.
+export const useOrderedLayout = () => useState(true)
 
 const ResultsLayoutSwitch = ({ ordered, setOrdered }) => {
   const { t } = useTranslation()
