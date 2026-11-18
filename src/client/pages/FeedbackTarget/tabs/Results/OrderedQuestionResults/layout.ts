@@ -8,9 +8,9 @@ export const COLUMN_GAP = 2
 export const SECTION_GAP = 3
 
 // The count and share of each option
-const COUNT_COLUMN_WIDTHS = ['2.75rem', '3.25rem']
+const COUNT_COLUMN_WIDTHS = ['2.5rem', '3rem']
 export const COUNT_COLUMNS = COUNT_COLUMN_WIDTHS.join(' ')
-// From the end of an option's bar to the right edge, COLUMN_GAP being in theme spacing units of 8px
+// The count and share columns and the gap between them, COLUMN_GAP being in theme spacing units of 8px
 export const NUMBERS_WIDTH = `calc(${COUNT_COLUMN_WIDTHS.join(' + ')} + ${COLUMN_GAP * 8}px)`
 
 // Marks the question blocks, so that the list can draw a line after each of them
