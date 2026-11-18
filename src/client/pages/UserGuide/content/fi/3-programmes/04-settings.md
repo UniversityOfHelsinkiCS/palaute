@@ -4,11 +4,11 @@ description: Palautevastaavat, vastanneiden näkyvyys ja palautteen poistaminen 
 
 # Koulutusohjelman asetukset
 
-Koulutusohjelman sivun [[organisationSettings:settingsTab]]-välilehdellä (vain hallinnoijat) ovat palautevastaavat, [[organisationSettings:generalSettings]] ja [[organisationSettings:courseSettings]]. Jokainen muutos tallentuu heti.
+Koulutusohjelman [[organisationSettings:settingsTab]]-välilehdellä (näkyy vain admineille, eli koulutusohjelmajohtajille ja palautevastaaville) on listattu palautevastaavat, [[organisationSettings:generalSettings]] ja [[organisationSettings:courseSettings]]. Jokainen muutos tallentuu heti.
 
 ## Palautevastaavan lisääminen {#feedback-liaison}
 
-Palautevastaava saa koulutusohjelman hallinnointioikeudet Norpassa: hän näkee kaikki sen kurssien vastaukset ja voi tehdä kaiken, mitä koulutusohjelman hallinnoijat voivat. Koulutusohjelman hallinnoijat lisäävät palautevastaavat:
+Palautevastaava lisätään Norpassa. Palautevastaava saa koulutusohjelman (admin- eli) hallinnointioikeudet.
 
 1. Avaa koulutusohjelman sivulla [[organisationSettings:settingsTab]]-välilehti.
 2. Kirjoita kohtaan [[organisationSettings:newCorrespondent]] vähintään viisi merkkiä henkilön sähköpostiosoitteesta tai nimestä.
@@ -20,18 +20,18 @@ Haku löytää vain yliopiston henkilökuntaa. Jos henkilöä ei löydy, pyydä 
 
 ## Vastanneiden näkyvyys {#student-list}
 
-Kyselyn [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä kurssin vastuuopettajat näkevät listan sen opiskelijoista. Kohdassa [[organisationSettings:studentListVisibility]] valitset, näkyykö listassa myös se, _kuka on vastannut_:
+Kyselyn [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä kurssin vastuuopettajat näkevät listan sen opiskelijoista. Kolutusohjelman adminit (koulutusohjelmajohtaja ja palautevastaava) voivat valita kohdassa [[organisationSettings:studentListVisibility]], näkyykö listassa myös se, _kuka on vastannut_:
 
 - [[organisationSettings:studentListVisible]]: näkyy kaikilla koulutusohjelman kursseilla.
 - [[organisationSettings:studentListHidden]]: ei näy millään kurssilla.
-- [[organisationSettings:studentListByCourse]]: kohtaan [[organisationSettings:courseSettings]] tulee jokaiselle opintojaksolle kytkin [[organisationSettings:courseStudentListVisible]]. Kytke se päälle niillä kursseilla, joilla tieto näytetään.
+- [[organisationSettings:studentListByCourse]]: kohtaan [[organisationSettings:courseSettings]] tulee jokaiselle opintojaksolle kytkin [[organisationSettings:courseStudentListVisible]]. Kytke se päälle niillä kursseilla, joilla tieto halutaan näyttään.
 
-Asetus koskee opintojaksoja, joiden ensisijainen organisaatio koulutusohjelma on. Jos opintojakso kuuluu useaan koulutusohjelmaan, ratkaisee ensisijaisen koulutusohjelman asetus.
+Asetus koskee opintojaksoja, joiden ensisijainen organisaatio koulutusohjelma on. Jos opintojakso kuuluu useaan koulutusohjelmaan, ensisijainen koulutusohjelma voi tehdä asetuksen.
 
-Silloinkin kun näyttäminen on sallittu, tieto näkyy vain, kun kysely on sulkeutunut ja vähintään viisi opiskelijaa on vastannut; katso [Ketkä ovat vastanneet](/guide/anonymity#who-answered).
+Jos vastanneiden näkyvyys -asetus on päällä, tieto näkyy, kun kysely on sulkeutunut ja vähintään viisi opiskelijaa on vastannut; katso [Ketkä ovat vastanneet](/guide/anonymity#who-answered).
 
 ## Palautteen poistaminen käytöstä kurssilta {#disable-feedback}
 
-Kohdassa [[organisationSettings:courseSettings]] jokaisella koulutusohjelman opintojaksolla on kytkin [[organisationSettings:feedbackEnabled]]. Etsi kurssi kentällä [[organisationSettings:findByCourseUnit]] ja kytke se pois päältä, esimerkiksi jos kurssin palaute kerätään muulla tavalla.
+Kohdassa [[organisationSettings:courseSettings]] jokaisella koulutusohjelman opintojaksolla on kytkin [[organisationSettings:feedbackEnabled]]. Etsi kurssi kentällä [[organisationSettings:findByCourseUnit]] ja kytke palautteen keruu pois päältä, esimerkiksi jos kurssin palaute kerätään muulla tavalla.
 
-Kytkin koskee opintojakson kaikkia toteutuksia. Kurssin opettajat näkevät silloin [[navBar:myCourses]]-sivulla ilmoituksen [[teacherView:disabledCourseWarning]] ja kurssin sivulla ilmoituksen [[feedbackTargetView:feedbackDisabled]]. Opiskelijat eivät pääse kyselyyn, eikä Norppa lähetä siitä sähköposteja. Kun kytket kytkimen takaisin päälle, palautetta kerätään taas.
+Kytkin koskee opintojakson kaikkia toteutuksia. Kurssin opettajat näkevät silloin [[navBar:myCourses]]-sivulla ilmoituksen [[teacherView:disabledCourseWarning]] ja kurssin sivulla ilmoituksen [[feedbackTargetView:feedbackDisabled]]. Opiskelijat eivät pääse kyselyyn, eikä Norppa lähetä siitä sähköposteja. Kun kytket kytkimen takaisin päälle, palaute on jälleen normaalisti käytössä.
