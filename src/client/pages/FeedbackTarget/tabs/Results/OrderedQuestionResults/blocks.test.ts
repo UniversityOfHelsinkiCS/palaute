@@ -105,6 +105,32 @@ describe('buildBlocks', () => {
 
     expect(blocks.map(block => ('headingLevel' in block ? block.headingLevel : null))).toEqual([2, 2, 4, 2, 4, 2, 6])
   })
+
+  it('finds the headings that the markdown renders', () => {
+    const levelAfter = (content: string) => build([text(1, content), question(2, 'OPEN')])[1].headingLevel
+
+    expect(levelAfter('## Part\n\n```\n# not a heading\n```')).toBe(4)
+    expect(levelAfter('    # indented code')).toBe(2)
+    expect(levelAfter('#hashtag')).toBe(2)
+    expect(levelAfter('### Sub\n\nPart 2\n======')).toBe(3)
+    expect(levelAfter('Part 2\n------')).toBe(4)
+    expect(levelAfter('> ## Quoted')).toBe(4)
+    expect(levelAfter('- ### Listed')).toBe(5)
+  })
+
+  it('handles surveys without questions', () => {
+    expect(build([])).toEqual([])
+    expect(build(undefined as unknown as Question[])).toEqual([])
+    expect(shape(build([text(1, 'Only text'), text(2, 'More text')]))).toEqual(['TEXT:1', 'TEXT:2'])
+  })
+
+  it('merges Likert questions around a hidden question', () => {
+    const blocks = build([question(1, 'LIKERT'), question(2, 'OPEN'), question(3, 'LIKERT')], {
+      isVisible: q => q.id !== 2,
+    })
+
+    expect(shape(blocks)).toEqual([[1, 3]])
+  })
 })
 
 describe('counts', () => {

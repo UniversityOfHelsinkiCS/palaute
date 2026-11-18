@@ -1,5 +1,7 @@
 import type { Question } from '@common/types/question'
 
+import { fromMarkdown } from 'mdast-util-from-markdown'
+
 import type { GroupedAnswer } from '../QuestionResults/getAnswersByQuestionId'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
@@ -24,10 +26,19 @@ type Options = {
 }
 
 const MAX_HEADING_LEVEL = 6
-const MARKDOWN_HEADING = /^ {0,3}(#{1,6})\s/gm
 
-const getLastHeadingDepth = (markdown: string) =>
-  [...markdown.matchAll(MARKDOWN_HEADING)].map(match => match[1].length).at(-1)
+type MarkdownNode = ReturnType<typeof fromMarkdown> | ReturnType<typeof fromMarkdown>['children'][number]
+
+// Parsed as react-markdown parses it, so that the headings found are the ones TextSection renders
+const getLastHeadingDepth = (markdown: string) => {
+  let depth: number | undefined
+  const visit = (node: MarkdownNode) => {
+    if (node.type === 'heading') depth = node.depth
+    else if ('children' in node) node.children.forEach(visit)
+  }
+  visit(fromMarkdown(markdown))
+  return depth
+}
 
 // A markdown heading of the given depth, in a text section whose top-level headings are at baseLevel
 export const getHeadingLevel = (baseLevel: number, depth: number) => Math.min(MAX_HEADING_LEVEL, baseLevel + depth - 1)
