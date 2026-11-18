@@ -20,11 +20,11 @@ Haku löytää vain yliopiston henkilökuntaa. Jos henkilöä ei löydy, pyydä 
 
 ## Vastanneiden näkyvyys {#student-list}
 
-Kyselyn [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä kurssin vastuuopettajat näkevät listan sen opiskelijoista. Kolutusohjelman adminit (koulutusohjelmajohtaja ja palautevastaava) voivat valita kohdassa [[organisationSettings:studentListVisibility]], näkyykö listassa myös se, _kuka on vastannut_:
+Kyselyn [[feedbackTargetView:studentsWithFeedbackTab]]-välilehdellä kurssin vastuuopettajat näkevät listan sen opiskelijoista. Koulutusohjelman adminit (koulutusohjelmajohtaja ja palautevastaava) voivat valita kohdassa [[organisationSettings:studentListVisibility]], näkyykö listassa myös se, _kuka on vastannut_:
 
 - [[organisationSettings:studentListVisible]]: näkyy kaikilla koulutusohjelman kursseilla.
 - [[organisationSettings:studentListHidden]]: ei näy millään kurssilla.
-- [[organisationSettings:studentListByCourse]]: kohtaan [[organisationSettings:courseSettings]] tulee jokaiselle opintojaksolle kytkin [[organisationSettings:courseStudentListVisible]]. Kytke se päälle niillä kursseilla, joilla tieto halutaan näyttään.
+- [[organisationSettings:studentListByCourse]]: kohtaan [[organisationSettings:courseSettings]] tulee jokaiselle opintojaksolle kytkin [[organisationSettings:courseStudentListVisible]]. Kytke se päälle niillä kursseilla, joilla tieto halutaan näyttää.
 
 Asetus koskee opintojaksoja, joiden ensisijainen organisaatio koulutusohjelma on. Jos opintojakso kuuluu useaan koulutusohjelmaan, ensisijainen koulutusohjelma voi tehdä asetuksen.
 

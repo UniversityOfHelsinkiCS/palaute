@@ -4,7 +4,7 @@ description: Koulutusohjelman tai tiedekunnan omat kyselyt, kuten lukukausipalau
 
 # Koulutusohjelman kyselyt
 
-Koulutusohjelman kysely on "organisaatiotason" kysely. Organisaation kyselyn voi tehdä koulutusohjelma tai tiedekunta tasolle ja se tehdään alusta alkaen itse, valituille opiskelijoille. Esimerkiksi: lukukausipalaute, opintosuunnan palaute tai usean kurssin yhteinen palaute. Tällainen kysely ei sisällä oletusarvoisesti yliopistotason tai koulutusohjelman kysymyksiä, mutta voit lisätä ne halutessasi mukaan.
+Koulutusohjelman kysely on "organisaatiotason" kysely. Organisaation kyselyn voi tehdä koulutusohjelma- tai tiedekuntatasolle ja se tehdään alusta alkaen itse, valituille opiskelijoille. Esimerkiksi: lukukausipalaute, opintosuunnan palaute tai usean kurssin yhteinen palaute. Tällainen kysely ei sisällä oletusarvoisesti yliopistotason tai koulutusohjelman kysymyksiä, mutta voit lisätä ne halutessasi mukaan.
 
 Koulutusohjelman kyselyitä voivat tehdä koulutusohjelman adminit (koulutusohjelmajohtaja tai palautevastaava). Ne toimivat teknisesti kuin kurssikyselyt: aukiolopäivämäärät, kysymykset, jakaminen, vastaukset ja vastapalaute. Kyselyn [vastuuhenkilöillä](#responsible-persons) on vastaavat oikeudet kuin vastuuopettajalla, eli tarkemmat ohjeet ovat samat kuin _Vastuuopettajalle_: [Kysymykset](/guide/questions), [Vastausten kerääminen](/guide/collecting-answers), [Tulokset](/guide/results) ja [Vastapalaute](/guide/counter-feedback).
 
@@ -14,7 +14,7 @@ Koulutusohjelman kyselyitä voivat tehdä koulutusohjelman adminit (koulutusohje
 2. Valitse [[organisationSurveys:addSurvey]].
 3. Anna kyselylle nimi kohtaan [[organisationSurveys:newSurveyName]] vähintään yhdellä kielellä.
 4. Valitse päivämäärät [[organisationSurveys:startDate]] ja [[organisationSurveys:endDate]]. Kysely avautuu klo 0.00 ja sulkeutuu viimeisenä päivänä klo 23.59. Se voi olla auki halutun ajan, esimerkiksi koko lukukauden.
-5. Lisää [[organisationSurveys:responsibleTeachers]] (katso [Vastuuhenkilöt](#responsible-persons)). (kyselyn luojalla on automaattisesti hallintahenkilö-oikeudet)
+5. Lisää [[organisationSurveys:responsibleTeachers]] (katso [Vastuuhenkilöt](#responsible-persons)). (Kyselyn luojalla on automaattisesti hallintohenkilöoikeudet.)
 6. Lisää vastaajat (katso [Vastaajat](#respondents)).
 7. Valitse [[common:save]]. Norppa avaa uuden kyselyn [[feedbackTargetView:surveyQuestionsTab]]-välilehden.
 8. Lisää kysymykset kuten mihin tahansa kyselyyn; katso [Kysymysten muokkaaminen](/guide/questions#edit-questions). [[editFeedbackTarget:copyFromCourseButton]] kopioi kysymyksiä muista koulutusohjelman kyselyistä, ja [[editFeedbackTarget:copyUniversityQuestions]] lisää yliopistotason kysymykset, jos haluat ne mukaan.
@@ -27,7 +27,7 @@ Valmista tuli ja kysely avautuu itsestään avautumispäivänä (voit halutessas
 
 ## Vastaajat {#respondents}
 
-Kyselyyn voivat vastata vain siihen lisätyt opiskelijat. He näkevät kyselynn [[navBar:myFeedbacks]]-sivulla, kyselyn ollessa auki. Opiskelijoita voi lisätä kahdella tavalla, joita voi myös yhdistää:
+Kyselyyn voivat vastata vain siihen lisätyt opiskelijat. He näkevät kyselyn [[navBar:myFeedbacks]]-sivulla, kyselyn ollessa auki. Opiskelijoita voi lisätä kahdella tavalla, joita voi myös yhdistää:
 
 - _Opiskelijanumerot_: liitä tai kirjoita ne kenttään [[organisationSurveys:students]] pilkuilla, puolipisteillä, välilyönneillä tai rivinvaihdoilla eroteltuina (esimerkiksi Excelistä kopioitu sarake). Kun tallennat, Norppa merkitsee punaisella opiskelijanumerot, joita se ei tunnista, eikä tallenna ennen kuin korjaat tai poistat ne.
 - _Kurssien opiskelijat_: valitse kohdan [[organisationSurveys:addCourses]] vierestä ajanjakso, hae koulutusohjelman kurssitoteutuksia nimellä tai koodilla ja valitse (jokaisen kurssin kohdalla näkyy sen opiskelijamäärä).
@@ -53,11 +53,11 @@ Jos haluat avata kyselyn heti, aseta sen alkamispäiväksi tämä päivä: kysel
 
 ### Muistutusviestin lähettäminen {#reminders}
 
-Norppa ei itse lähetä opiskelijoille sähköpostia organisaatio-tason kyselystä. Kun kysely on auki, vastuuhenkilö tai koulutusohjelman hallinnoija voi [lähettää muistutusviestin](/guide/collecting-answers#send-reminder) kyselyn [[feedbackTargetView:shareTab]]-välilehdeltä opiskelijoille, jotka eivät ole vielä vastanneet.
+Norppa ei itse lähetä opiskelijoille sähköpostia organisaatiotason kyselystä. Kun kysely on auki, vastuuhenkilö tai koulutusohjelman hallinnoija voi [lähettää muistutusviestin](/guide/collecting-answers#send-reminder) kyselyn [[feedbackTargetView:shareTab]]-välilehdeltä opiskelijoille, jotka eivät ole vielä vastanneet.
 
 ## Tulokset {#results}
 
-Vastaukset kertyvät kyselyn [[feedbackTargetView:feedbacksTab]]-välilehdelle ja niitä voi tarkastella aukeamispäivästä lähtien. Polku: koulutusohjelman [[organisationSettings:organisationSurveysTab]]-välilehti -> (valitse kysely ja) -> näytä [[organisationSurveys:viewResults]]. Vastaus-osio toimii teknisesti kuten kurssikyselyissä; katso [Tulokset](/guide/results).
+Vastaukset kertyvät kyselyn [[feedbackTargetView:feedbacksTab]]-välilehdelle ja niitä voi tarkastella aukeamispäivästä lähtien. Polku: koulutusohjelman [[organisationSettings:organisationSurveysTab]]-välilehti -> (valitse kysely ja) -> [[organisationSurveys:viewResults]]. Vastaus-osio toimii teknisesti kuten kurssikyselyissä; katso [Tulokset](/guide/results).
 
 Kun kysely on päättynyt, vastuuhenkilöt voivat kirjoittaa opiskelijoille vastapalautteen. Jos kyselyyn on vastattu, mutta vastapalautetta ei ole kirjoitettu, vastuuhenkilöt saavat muistutusviestin päättymistä seuraavana päivänä, ja [[navBar:myCourses]]-sivulla näkyy [[teacherView:feedbackResponseMissing]]. Katso [Vastapalaute](/guide/counter-feedback).
 

@@ -4,7 +4,7 @@ description: Kysymykset, jotka koulutusohjelma lisää kaikkiin kurssiensa kysel
 
 # Koulutusohjelman kysymykset
 
-Koulutusohjelman kysymykset lisätään jokaiseenn koulutusohjelman opintojakson kurssikyselyyn. Ne tulevat yliopistotason kysymysten jälkeen. Opettajat näkevät ne kyselyssään, mutta eivät voi muokata tai poistaa niitä. Kysymyksiä lisäävät ja muokkaavat koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
+Koulutusohjelman kysymykset lisätään jokaiseen koulutusohjelman opintojakson kurssikyselyyn. Ne tulevat yliopistotason kysymysten jälkeen. Opettajat näkevät ne kyselyssään, mutta eivät voi muokata tai poistaa niitä. Kysymyksiä lisäävät ja muokkaavat koulutusohjelman adminit (koulutusohjelmajohtaja, palautevastaava).
 
 > **Huom.** Muutos näkyy heti kaikissa koulutusohjelman kurssikyselyissä, _myös jo avautuneissa ja päättyneissä_. Jos muutat kysymyksen sanamuotoa, se muuttuu myös käynnissä olevissa kyselyissä (joihin on mahdollisesti jo vastattu), ja poistettu kysymys katoaa niistäkin. Lisää siis koulutusohjelman kysymykset ennen kuin lukukauden kyselyt avautuvat, ja lisää mieluummin uusi kysymys kuin muuta vanhan merkitystä.
 

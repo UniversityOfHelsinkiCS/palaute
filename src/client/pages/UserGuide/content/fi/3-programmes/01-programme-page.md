@@ -4,11 +4,11 @@ description: Koulutusohjelman tai tiedekunnan sivu, jolla seuraat sen kurssien p
 
 # Koulutusohjelman sivu
 
-Jokaisella koulutusohjelmalla ja tiedekunnalla on Norpassa oma "hallintapaneeli", eli sivu, josta voi seurata kertynyttä palautetta. Koulutusohjelman adminit (johtaja ja palautevastaava) voivat säätää asetuksia ja luoda omia [koulutusohjelmakohtaisia kysymyksiä, jotka kysytään kaikilta koulutusohjelman kursseilta](/guide/programme-questions) tai tehdä omia ["organisaatiotason" palautekyselyitä](/guide/settings)[koulutusohjelman kyselyitä](/guide/programme-surveys).
+Jokaisella koulutusohjelmalla ja tiedekunnalla on Norpassa oma "hallintapaneeli", eli sivu, josta voi seurata kertynyttä palautetta. Koulutusohjelman adminit (johtaja ja palautevastaava) voivat säätää [asetuksia](/guide/settings) ja luoda omia [koulutusohjelmakohtaisia kysymyksiä, jotka kysytään kaikilta koulutusohjelman kursseilta](/guide/programme-questions) tai tehdä omia ["organisaatiotason" palautekyselyitä](/guide/programme-surveys).
 
 ## Sivun avaaminen ja välilehdet {#programme-page}
 
-Avaa ylävalikosta [[navBar:myProgrammes]] tai [[navBar:myOrganisations]], jos sinulla on oikeuksia useampaan koulutusohjelmaan. Jos nämä eivät valittavissa, sinulla ei ole oikeuksia yhteenkään koulutusohjelmaan; katso [Oikeudet koulutusohjelmassa tai tiedekunnassa](/guide/roles#organisation-rights).
+Avaa ylävalikosta [[navBar:myProgrammes]] tai [[navBar:myOrganisations]], jos sinulla on oikeuksia useampaan koulutusohjelmaan. Jos nämä eivät ole valittavissa, sinulla ei ole oikeuksia yhteenkään koulutusohjelmaan; katso [Oikeudet koulutusohjelmassa tai tiedekunnassa](/guide/roles#organisation-rights).
 
 Lukuoikeuksilla (suppeampi oikeus) näet:
 
@@ -16,7 +16,7 @@ Lukuoikeuksilla (suppeampi oikeus) näet:
 - [[organisationSettings:courseRealisationsTab]]: koulutusohjelman valitun ajanjakson kurssitoteutukset, niiden kurssi- ja palautejaksot, vastausmäärät ja vastuuopettajat. Valitsemalla kurssin pääset sen kyselyyn.
 - [[organisationSettings:responsiblesTab]]: koulutusohjelman opettajat ja kunkin kurssien määrä valitulla ajanjaksolla. Listan saa ladattua painikkeella [[common:exportXLSX]].
 
-Hallinnoijaoikeuksilla (laajemmpi oikeus: koulutusohjelman johtajat, muuta IAM-ryhmien kautta hallinnointioikeudet saaneet ja palautevastaavat):
+Hallinnoijaoikeuksilla (laajempi oikeus: koulutusohjelman johtajat, muut IAM-ryhmien kautta hallinnointioikeudet saaneet ja palautevastaavat):
 
 - [[organisationSettings:settingsTab]]: palautevastaavat, vastanneiden näkyvyys ja se, millä kursseilla palautetta kerätään. Katso [Koulutusohjelman asetukset](/guide/settings).
 - [[organisationSettings:openQuestionsTab]]: kaikkien koulutusohjelman kurssien avointen kysymysten vastaukset. Katso [Avoimet kysymykset](#open-questions).
@@ -36,12 +36,12 @@ Hallinnoijat näkevät kaikki koulutusohjelman kurssien vastaukset, kun taas luk
 
 ## Kurssikyselyt hallinnoijana {#course-surveys}
 
-Admin-oikeuksilla (koulutusohjelman johtaja, palautevastaava) voit hallinoidea myös koulutusohjelmasi yksittäisiä kurssikyselyitä. Avaa kysely [[organisationSettings:courseRealisationsTab]]-välilehdeltä valitsemalla kurssi. Voit:
+Admin-oikeuksilla (koulutusohjelman johtaja, palautevastaava) voit hallinnoida myös koulutusohjelmasi yksittäisiä kurssikyselyitä. Avaa kysely [[organisationSettings:courseRealisationsTab]]-välilehdeltä valitsemalla kurssi. Voit:
 
 - muokata kysymyksiä ennen kyselyn avautumista; katso [Kysymysten muokkaaminen](/guide/questions#edit-questions)
 - piilottaa avoimia vastauksia; katso [Avointen vastausten piilottaminen](/guide/results#hide-answers)
 - lähettää muistutusviestejä; katso [Muistutusviestin lähettäminen](/guide/collecting-answers#send-reminder)
-- nähdä, ketkä ovat vastanneet (mutta ei sitä, kuka vastannut mitäkin); katso [Ketkä ovat vastanneet](/guide/results#who-answered)
+- nähdä, ketkä ovat vastanneet (mutta ei sitä, kuka on vastannut mitäkin); katso [Ketkä ovat vastanneet](/guide/results#who-answered)
 - ottaa jatkuvan palautteen käyttöön ja lukea sitä; katso [Jatkuva palaute](/guide/during-the-course#continuous-feedback).
 
 Koulutusohjelman oikeudet eivät tee sinusta kurssin opettajaa: kurssikyselyn päivämäärien muuttamiseen tai vastapalautteen kirjoittamiseen tarvitset vastuuopettajan roolin Sisussa. Samoin vain vastuuopettajat voivat muuttaa kysymysten näkyvyyttä, luoda välipalautteita ja vastata jatkuvaan palautteeseen.
