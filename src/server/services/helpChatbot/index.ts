@@ -5,6 +5,7 @@ import { ANTHROPIC_API_KEY, AZURE_API_KEY, AZURE_RESOURCE, HELP_CHATBOT_MODEL, i
 import { getAnthropicCompletion } from './anthropicCompletion'
 import { getAzureCompletion } from './azureCompletion'
 import { getMockCompletion } from './mockCompletion'
+import { fixNorppaSpelling } from './spelling'
 
 export type { Completion } from './completion'
 export { noAnswer } from './completion'
@@ -29,10 +30,15 @@ export const getDeployment = () => {
   return backend === 'azure' || backend === 'anthropic' ? HELP_CHATBOT_MODEL : backend
 }
 
-export const getCompletion = async (request: CompletionRequest, signal: AbortSignal): Promise<Completion> => {
+const getBackendCompletion = (request: CompletionRequest, signal: AbortSignal): Promise<Completion> => {
   const backend = getBackend()
   if (backend === 'azure') return getAzureCompletion(request, signal)
   if (backend === 'anthropic') return getAnthropicCompletion(request, signal)
   if (backend === 'mock') return getMockCompletion(request, signal)
   throw new ApplicationError('The help chatbot is not configured', 503)
+}
+
+export const getCompletion = async (request: CompletionRequest, signal: AbortSignal): Promise<Completion> => {
+  const completion = await getBackendCompletion(request, signal)
+  return { ...completion, content: fixNorppaSpelling(completion.content) }
 }

@@ -23,6 +23,8 @@ Azure OpenAI, deployment `HELP_CHATBOT_MODEL` (default `gpt-5-mini`), with the s
 
 In `knowledge.md`, `[[section:key]]` becomes the UI label in the user's language (`[[section:key|fi]]` in the given one, `[[section:key|count=5]]` filling the label's `{{count}}`), so answers quote what users see on screen. A missing key or an unfilled placeholder fails the tests. HTML comments are notes for editors and never reach the model. The file is read from the source tree at runtime, as `tsc` doesn't copy it to `build/`. Its own header comment has the rules for editing it.
 
+Every answer goes through `spelling.ts`, which fixes how the model inflects Norppa in Finnish (Norppassa → Norpassa); prompt rules didn't stop it. Streaming would have to hold back a word starting with "Norpp" until it ends.
+
 ## Saved turns
 
 - **The server keeps the history.** The client sends `previousTurnId`, the last answer it showed, and the server follows `previous_turn_id` back through the conversation's answered turns. Failed questions, retries and answers the user never saw aren't on that chain, so the model never sees them.
