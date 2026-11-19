@@ -30,7 +30,7 @@ const question = (id: number, type: 'LIKERT' | 'SINGLE_CHOICE' | 'MULTIPLE_CHOIC
 })
 
 const build = (questions: Question[], options: Partial<Parameters<typeof buildBlocks>[0]> = {}) =>
-  buildBlocks({ questions, feedbacks: [], isVisible: () => true, language: 'fi', baseHeadingLevel: 2, ...options })
+  buildBlocks({ questions, feedbacks: [], isVisible: () => true, ...options })
 
 const shape = (blocks: ReturnType<typeof buildBlocks>) =>
   blocks.map(block => (block.type === 'LIKERT' ? block.questions.map(q => q.id) : `${block.type}:${block.question.id}`))
@@ -90,32 +90,6 @@ describe('buildBlocks', () => {
 
     expect(likert.type === 'LIKERT' && likert.questions[0].feedbacks.map(f => f.data)).toEqual(['4'])
     expect(open.type === 'OPEN' && open.question.feedbacks.map(f => f.data)).toEqual(['Good course'])
-  })
-
-  it('puts question headings one level below the latest text heading', () => {
-    const blocks = build([
-      question(1, 'OPEN'),
-      text(2, '# Welcome\n\nBody\n\n## Part 1'),
-      question(3, 'OPEN'),
-      text(4, 'No heading here'),
-      question(5, 'SINGLE_CHOICE'),
-      text(6, '###### Deep'),
-      question(7, 'OPEN'),
-    ])
-
-    expect(blocks.map(block => ('headingLevel' in block ? block.headingLevel : null))).toEqual([2, 2, 4, 2, 4, 2, 6])
-  })
-
-  it('finds the headings that the markdown renders', () => {
-    const levelAfter = (content: string) => build([text(1, content), question(2, 'OPEN')])[1].headingLevel
-
-    expect(levelAfter('## Part\n\n```\n# not a heading\n```')).toBe(4)
-    expect(levelAfter('    # indented code')).toBe(2)
-    expect(levelAfter('#hashtag')).toBe(2)
-    expect(levelAfter('### Sub\n\nPart 2\n======')).toBe(3)
-    expect(levelAfter('Part 2\n------')).toBe(4)
-    expect(levelAfter('> ## Quoted')).toBe(4)
-    expect(levelAfter('- ### Listed')).toBe(5)
   })
 
   it('handles surveys without questions', () => {

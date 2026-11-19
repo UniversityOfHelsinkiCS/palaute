@@ -2,7 +2,6 @@ import type { Question } from '@common/types/question'
 
 import { Box } from '@mui/material'
 import { useMemo } from 'react'
-import { useTranslation } from 'react-i18next'
 
 import type { OpenAnswerActions } from './OpenAnswers'
 import type { PublicitySettings } from './QuestionPublicity'
@@ -47,7 +46,6 @@ const OrderedQuestionResults = ({
   showTable,
   baseHeadingLevel = 2,
 }: OrderedQuestionResultsProps) => {
-  const { i18n } = useTranslation()
   const canSeeAll = isResponsibleTeacher || isOrganisationUser
 
   const blocks = useMemo(
@@ -57,10 +55,8 @@ const OrderedQuestionResults = ({
         questionOrder,
         feedbacks,
         isVisible: question => canSeeAll || publicQuestionIds.includes(question.id),
-        language: i18n.language,
-        baseHeadingLevel,
       }),
-    [questions, questionOrder, feedbacks, canSeeAll, publicQuestionIds, i18n.language, baseHeadingLevel]
+    [questions, questionOrder, feedbacks, canSeeAll, publicQuestionIds]
   )
 
   const publicity: PublicitySettings | undefined = isResponsibleTeacher
@@ -82,7 +78,7 @@ const OrderedQuestionResults = ({
     >
       {blocks.map(block => {
         if (block.type === 'TEXT') {
-          return <TextSection key={block.key} question={block.question} headingLevel={block.headingLevel} />
+          return <TextSection key={block.key} question={block.question} />
         }
 
         if (block.type === 'LIKERT' && showTable) {
@@ -90,7 +86,7 @@ const OrderedQuestionResults = ({
             <QuestionBlock
               key={question.id}
               question={question}
-              headingLevel={block.headingLevel}
+              headingLevel={baseHeadingLevel}
               feedbackCount={feedbackCount}
               isPublic={publicQuestionIds.includes(question.id)}
               publicity={publicity}
@@ -105,7 +101,7 @@ const OrderedQuestionResults = ({
             <LikertTable
               key={block.key}
               questions={block.questions}
-              headingLevel={block.headingLevel}
+              headingLevel={baseHeadingLevel}
               feedbackCount={feedbackCount}
               publicQuestionIds={publicQuestionIds}
               publicity={publicity}
@@ -119,7 +115,7 @@ const OrderedQuestionResults = ({
           <QuestionBlock
             key={block.key}
             question={question}
-            headingLevel={block.headingLevel}
+            headingLevel={baseHeadingLevel}
             feedbackCount={feedbackCount}
             isPublic={publicQuestionIds.includes(question.id)}
             publicity={publicity}
