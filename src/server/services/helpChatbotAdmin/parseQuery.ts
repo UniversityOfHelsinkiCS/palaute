@@ -34,7 +34,6 @@ const ConversationsQuerySchema = z
     search: textParam,
     feedback: z.enum(['any', 'down', 'comment', 'up', 'none']).optional(),
     problems: z.enum(['any', 'empty', 'failed', 'aborted', 'cutOff']).optional(),
-    user: textParam,
     offset: z.coerce.number().int().min(0).max(1_000_000).optional(),
   })
   .refine(inOrder, 'from must not be after to')

@@ -45,7 +45,7 @@ const ConversationDetail = ({ conversationKey, highlightedTurnId }: Conversation
   const versions = unique(turns.map(turn => shortSha(turn.gitSha)))
   const models = unique(turns.flatMap(turn => (turn.model ? [turn.model] : [])))
   // The first turn's metadata is the conversation's; a turn shows only what differs from it
-  const firstMetadata = describeMetadata(first.metadata, first.impersonatedUsername)
+  const firstMetadata = describeMetadata(first.metadata)
 
   const copy = async (text: string, what: string) => {
     try {
@@ -61,7 +61,7 @@ const ConversationDetail = ({ conversationKey, highlightedTurnId }: Conversation
       <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between', gap: 1.5, p: '14px 16px' }}>
         <Box>
           <Typography id="help-chatbot-conversation-title" component="h2" sx={{ fontSize: 17, fontWeight: 700 }}>
-            {formatDateTime(first.createdAt)} · {conversation.username ?? 'unknown user'}
+            {formatDateTime(first.createdAt)}
           </Typography>
           {firstMetadata.length > 0 && <Typography variant="body2">{formatEntries(firstMetadata)}</Typography>}
           <Typography variant="body2" color="text.secondary">
@@ -102,7 +102,7 @@ const ConversationDetail = ({ conversationKey, highlightedTurnId }: Conversation
             ref={turn.id === highlightedTurnId ? highlightedRef : undefined}
             turn={turn}
             highlighted={turn.id === highlightedTurnId}
-            metadataChanges={metadataChanges(describeMetadata(turn.metadata, turn.impersonatedUsername), firstMetadata)}
+            metadataChanges={metadataChanges(describeMetadata(turn.metadata), firstMetadata)}
           />
         ))}
       </Box>

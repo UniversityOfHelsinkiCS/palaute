@@ -44,7 +44,6 @@ export type GetHelpChatbotConversationsQuery = HelpChatbotDateRange & {
   search?: string
   feedback?: HelpChatbotFeedbackFilter
   problems?: HelpChatbotProblemFilter
-  user?: string
   offset?: number
 }
 
@@ -52,11 +51,9 @@ export type GetHelpChatbotConversationsQuery = HelpChatbotDateRange & {
 export type HelpChatbotConversationSummary = {
   conversationId: string
   userId: string | null
-  username: string | null
   startedAt: string
   // The first turn's
   metadata: HelpChatbotSavedMetadata
-  impersonatedUsername: string | null
   firstQuestion: string | null
   questions: number
   up: number
@@ -86,7 +83,6 @@ export type HelpChatbotTurnDetails = {
   question: string | null
   answer: string | null
   metadata: HelpChatbotSavedMetadata
-  impersonatedUsername: string | null
   finishReason: string | null
   deployment: string | null
   model: string | null
@@ -113,7 +109,6 @@ export type HelpChatbotTurnDetails = {
 export type GetHelpChatbotConversationResponse = {
   conversationId: string
   userId: string | null
-  username: string | null
   turns: HelpChatbotTurnDetails[]
 }
 
@@ -130,7 +125,6 @@ export type HelpChatbotFeedbackItem = {
   turnId: string
   conversationId: string
   userId: string | null
-  username: string | null
   createdAt: string
   metadata: HelpChatbotSavedMetadata
   status: HelpChatbotTurnStatus

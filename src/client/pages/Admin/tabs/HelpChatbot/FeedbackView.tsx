@@ -129,7 +129,6 @@ const FeedbackView = () => {
                     <TableCell sx={{ width: 140 }}>When</TableCell>
                     <TableCell sx={{ width: '26%' }}>Feedback</TableCell>
                     <TableCell>Question and answer</TableCell>
-                    <TableCell sx={{ width: 110 }}>User</TableCell>
                     <TableCell sx={{ width: 90 }}>Version</TableCell>
                     <TableCell sx={{ width: 170 }}>Actions</TableCell>
                   </TableRow>
@@ -183,7 +182,6 @@ const FeedbackView = () => {
                           </Box>
                         )}
                       </TableCell>
-                      <TableCell sx={{ color: 'inherit' }}>{item.username ?? 'unknown'}</TableCell>
                       <TableCell sx={{ color: 'inherit', fontFamily: 'monospace' }}>{shortSha(item.gitSha)}</TableCell>
                       <TableCell>
                         <Link

@@ -49,11 +49,10 @@ export const conversationToMarkdown = (
 ) => {
   const turns = conversation.turns.filter(turn => includeOutsideHistory || turn.inHistory)
   const first = conversation.turns[0]
-  const firstMetadata = describeMetadata(first.metadata, first.impersonatedUsername)
+  const firstMetadata = describeMetadata(first.metadata)
   const header = [
     `# NorppAI conversation, ${formatDateTime(first.createdAt)}`,
     '',
-    `- User: ${conversation.username ?? 'unknown'}`,
     ...firstMetadata.map(({ label, value }) => `- ${label}: ${value}`),
     `- Version: ${[...new Set(conversation.turns.map(turn => shortSha(turn.gitSha)))].join(', ')}`,
   ]
@@ -69,7 +68,7 @@ export const conversationToMarkdown = (
     const followsNote =
       turn.followsNumber !== null && turn.followsNumber !== turn.number - 1 ? `Follows #${turn.followsNumber}.` : null
     const retryNote = turn.retriedAsNumber === null ? null : `Asked again as #${turn.retriedAsNumber}.`
-    const changes = metadataChanges(describeMetadata(turn.metadata, turn.impersonatedUsername), firstMetadata)
+    const changes = metadataChanges(describeMetadata(turn.metadata), firstMetadata)
     const metadataNote = changes.length > 0 ? `${formatEntries(changes)}.` : null
     const lines = [
       `## #${turn.number}, ${formatTime(turn.createdAt)}`,

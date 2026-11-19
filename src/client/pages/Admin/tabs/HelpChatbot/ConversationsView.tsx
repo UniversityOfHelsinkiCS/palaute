@@ -46,7 +46,6 @@ const ConversationsView = () => {
     search: get('q'),
     feedback: isOneOf(FEEDBACK_OPTIONS, feedback) ? feedback : undefined,
     problems: isOneOf(PROBLEM_OPTIONS, problems) ? problems : undefined,
-    user: get('user'),
   }
 
   const conversationId = get('c')
@@ -59,7 +58,6 @@ const ConversationsView = () => {
       to: undefined,
       feedback: undefined,
       problems: undefined,
-      user: undefined,
     })
 
   return (
@@ -122,13 +120,6 @@ const ConversationsView = () => {
             </MenuItem>
           ))}
         </TextField>
-        <DebouncedTextField
-          label="User"
-          size="small"
-          value={query.user ?? ''}
-          onChange={user => set({ user: user || undefined })}
-          sx={{ width: 150 }}
-        />
         <NorButton color="secondary" onClick={clear}>
           Clear filters
         </NorButton>

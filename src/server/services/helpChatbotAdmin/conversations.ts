@@ -39,15 +39,6 @@ export const getConversations = async (
     conversationConditions.add('c.matches_search')
     replacements.search = containsPattern(query.search)
   }
-  // Looked up first, so conversations aren't joined with every user before filtering
-  if (query.user) {
-    const users = await select<{ id: string }>('SELECT id FROM users WHERE username ILIKE :user LIMIT 1000', {
-      user: containsPattern(query.user),
-    })
-    if (users.length === 0) return { conversations: [], total: 0, totalQuestions: 0 }
-    conversationConditions.add('c.matches_user')
-    replacements.userIds = users.map(({ id }) => id)
-  }
   const feedbackCondition = {
     any: null,
     down: 'c.down > 0',
@@ -65,7 +56,7 @@ export const getConversations = async (
   }[query.problems ?? 'any']
   if (problemCondition) conversationConditions.add(problemCondition)
 
-  // The page is picked from the aggregates alone: looking up first questions and usernames for every conversation
+  // The page is picked from the aggregates alone: looking up first questions for every conversation
   // made 90-day lists slow
   const rows = await select<ConversationRow>(
     `
@@ -85,8 +76,7 @@ export const getConversations = async (
         count(*) FILTER (WHERE t.status = 'answered' AND t.finish_reason = 'length') AS cut_off,
         coalesce(sum(t.prompt_tokens + t.completion_tokens), 0) AS total_tokens,
         coalesce(sum(t.input_cost + t.cached_cost + t.output_cost + t.reasoning_cost), 0) AS cost,
-        ${query.search ? 'bool_or(t.question ILIKE :search OR t.answer ILIKE :search)' : 'TRUE'} AS matches_search,
-        ${query.user ? "bool_or(t.user_id IN (:userIds) OR t.metadata->>'impersonatedUserId' IN (:userIds))" : 'TRUE'} AS matches_user
+        ${query.search ? 'bool_or(t.question ILIKE :search OR t.answer ILIKE :search)' : 'TRUE'} AS matches_search
       FROM turns t
       GROUP BY t.conversation_id, t.user_id
     ),
@@ -100,8 +90,6 @@ export const getConversations = async (
     SELECT
       c.conversation_id AS "conversationId",
       c.user_id AS "userId",
-      u.username AS "username",
-      iu.username AS "impersonatedUsername",
       c.started_at AS "startedAt",
       first.metadata AS "metadata",
       first.question AS "firstQuestion",
@@ -119,8 +107,6 @@ export const getConversations = async (
       ORDER BY f.created_at
       LIMIT 1
     ) first
-    LEFT JOIN users u ON u.id = c.user_id
-    LEFT JOIN users iu ON iu.id = first.metadata->>'impersonatedUserId'
     ORDER BY c.started_at DESC, c.conversation_id, c.user_id
     `,
     { ...turns.replacements, ...conversationConditions.replacements, ...replacements }
@@ -173,7 +159,6 @@ type TurnRow = Omit<
   createdAt: Date
   feedbackReviewedAt: Date | null
   cost: Numeric | null
-  username: string | null
 }
 
 // A 404 if the conversation has no turns
@@ -191,15 +176,13 @@ export const getConversation = async (
     WITH ${turns.sql}
     SELECT
       t.id, t.previous_turn_id AS "previousTurnId", t.created_at AS "createdAt", t.status, t.metadata,
-      t.question, t.answer, u.username, iu.username AS "impersonatedUsername",
+      t.question, t.answer,
       t.finish_reason AS "finishReason", t.deployment, t.model, t.git_sha AS "gitSha",
       t.prompt_tokens AS "promptTokens", t.cached_tokens AS "cachedTokens",
       t.completion_tokens AS "completionTokens", t.reasoning_tokens AS "reasoningTokens",
       t.duration_ms AS "durationMs", t.input_cost + t.cached_cost + t.output_cost + t.reasoning_cost AS "cost",
       t.rating, t.feedback_comment AS "feedbackComment", t.feedback_reviewed_at AS "feedbackReviewedAt"
     FROM turns t
-    LEFT JOIN users u ON u.id = t.user_id
-    LEFT JOIN users iu ON iu.id = t.metadata->>'impersonatedUserId'
     ORDER BY t.created_at, t.id
     `,
     turns.replacements
@@ -209,9 +192,8 @@ export const getConversation = async (
   return {
     conversationId,
     userId,
-    username: rows[0].username,
     turns: annotateTurns(rows).map(
-      ({ previousTurnId, username, createdAt, feedbackReviewedAt, cost, ...turn }): HelpChatbotTurnDetails => ({
+      ({ previousTurnId, createdAt, feedbackReviewedAt, cost, ...turn }): HelpChatbotTurnDetails => ({
         ...turn,
         createdAt: toIso(createdAt),
         feedbackReviewedAt: feedbackReviewedAt === null ? null : toIso(feedbackReviewedAt),

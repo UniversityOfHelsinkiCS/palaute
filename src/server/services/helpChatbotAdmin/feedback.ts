@@ -30,12 +30,11 @@ export const getFeedback = async (query: GetHelpChatbotFeedbackQuery): Promise<G
   const rows = await select<FeedbackRow>(
     `
     SELECT
-      t.id AS "turnId", t.conversation_id AS "conversationId", t.user_id AS "userId", u.username,
+      t.id AS "turnId", t.conversation_id AS "conversationId", t.user_id AS "userId",
       t.created_at AS "createdAt", t.metadata, t.status, t.finish_reason AS "finishReason", t.rating,
       t.feedback_comment AS "comment", t.feedback_reviewed_at AS "reviewedAt", t.question, t.answer,
       t.git_sha AS "gitSha"
     FROM help_chatbot_turns t
-    LEFT JOIN users u ON u.id = t.user_id
     WHERE ${conditions.toSql()}
     ORDER BY t.created_at DESC, t.id
     LIMIT :limit

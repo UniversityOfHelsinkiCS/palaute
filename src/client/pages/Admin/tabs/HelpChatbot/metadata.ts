@@ -16,16 +16,13 @@ const keyOrder = (key: string) => {
   return known === -1 ? Infinity : known
 }
 
-export const describeMetadata = (
-  metadata: HelpChatbotSavedMetadata,
-  impersonatedUsername: string | null
-): MetadataEntry[] =>
+export const describeMetadata = (metadata: HelpChatbotSavedMetadata): MetadataEntry[] =>
   Object.entries(metadata)
     .sort(([a], [b]) => keyOrder(a) - keyOrder(b) || a.localeCompare(b))
     .map(([key, value]) => ({
       key,
       label: LABELS[key] ?? key,
-      value: key === 'impersonatedUserId' && impersonatedUsername ? impersonatedUsername : formatValue(value),
+      value: key === 'impersonatedUserId' ? 'another user' : formatValue(value),
     }))
 
 // A key only `base` has shows as "none"

@@ -29,6 +29,7 @@ In `knowledge.md`, `[[section:key]]` becomes the UI label in the user's language
 - A conversation is identified by `conversation_id` **and** `user_id`, because the client makes up the id.
 - A row is inserted as `pending` before the model is called. If that insert fails, the model isn't called. A row stuck at `pending` means the server stopped mid-request or couldn't save the answer; those tokens were billed but aren't recorded.
 - `user_id` is whoever typed: during "login as", the admin. `metadata.impersonatedUserId` holds the user they were viewing as.
+- The viewer doesn't show who asked: no usernames, and no filtering by user.
 - **Tokens:** `cached_tokens` is part of `prompt_tokens`, and `reasoning_tokens` part of `completion_tokens`, so don't add them up. Prices go by `model` (the version Azure reports), not `deployment`. To change a price in `services/helpChatbotAdmin/prices.ts`, add an entry rather than editing the old one, as each turn is priced with the price valid when it was asked.
 - **Privacy:** conversation content is saved only in this table. The logs get metadata only, and Sentry drops request bodies on `/help-chatbot/` URLs. No retention period has been decided; the content columns are nullable, so old rows can be cleared without losing the usage data.
 
@@ -37,7 +38,7 @@ In `knowledge.md`, `[[section:key]]` becomes the UI label in the user's language
 With 200 000 turns, most views loaded in under 1.5 s, but searching (`ILIKE '%…%'`) took 6–7 s over 90 days. Add a `pg_trgm` GIN index on `question` and `answer` if that becomes a problem. The queries were tuned against those measurements, so don't undo these choices:
 
 - The price join matches models with `LIKE`, not a regex, and costs are floats.
-- The conversation list picks its page from the aggregates before looking up first questions and usernames.
+- The conversation list picks its page from the aggregates before looking up first questions.
 - Conversations are counted in a query of their own.
 
 ## Frontend things that aren't obvious

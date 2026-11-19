@@ -84,13 +84,7 @@ const ConversationList = ({ query, selected, onSelect }: ConversationListProps) 
                 >
                   <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1 }}>
                     <Typography component="span" sx={{ fontWeight: 600 }}>
-                      {formatDateTime(conversation.startedAt)} · {conversation.username ?? 'unknown'}
-                      {conversation.impersonatedUsername && (
-                        <Box component="span" sx={{ color: 'warning.dark', fontWeight: 400 }}>
-                          {' '}
-                          as {conversation.impersonatedUsername}
-                        </Box>
-                      )}
+                      {formatDateTime(conversation.startedAt)}
                     </Typography>
                     <Typography component="span" variant="body2" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
                       {formatEuros(conversation.cost)}
