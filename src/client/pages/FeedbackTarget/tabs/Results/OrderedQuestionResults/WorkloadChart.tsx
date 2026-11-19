@@ -1,5 +1,5 @@
 import { Box } from '@mui/material'
-import { alpha, useTheme } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import { useTranslation } from 'react-i18next'
 
 import type { ResultQuestion } from './blocks'
@@ -103,7 +103,7 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
 
           return (
             <g key={option.id}>
-              <path d={wedgePath(RADIUS, from, to)} fill={alpha(color, 0.3)} />
+              <path d={wedgePath(RADIUS, from, to)} fill={theme.palette.action.hover} />
               {share > 0 && <path d={wedgePath(Math.sqrt(share) * RADIUS, from, to)} fill={color} />}
               <text
                 x={labelX}
