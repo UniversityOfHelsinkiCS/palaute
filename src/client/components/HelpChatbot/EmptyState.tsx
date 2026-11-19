@@ -100,10 +100,7 @@ const EmptyState = () => {
         }}
       >
         <InfoOutlined aria-hidden="true" sx={{ flex: 'none', fontSize: 15, mt: '2px' }} />
-        <span>
-          {t('helpChatbot:disclaimer')}
-          {` ${t('helpChatbot:disclaimerSaved')}`}
-        </span>
+        <span>{t('helpChatbot:disclaimer')}</span>
       </Box>
     </Box>
   )
