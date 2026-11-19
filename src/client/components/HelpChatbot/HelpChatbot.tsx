@@ -3,8 +3,9 @@ import type { KeyboardEvent } from 'react'
 import { Box, GlobalStyles, useMediaQuery } from '@mui/material'
 import { keyframes } from '@mui/material/styles'
 import { visuallyHidden } from '@mui/utils'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
+import { useLocation } from 'react-router-dom'
 
 import type { ChatSize, WidgetView } from './layout'
 
@@ -14,7 +15,9 @@ import {
   DEFAULT_MENU_HEIGHT,
   DEFAULT_PILL_WIDTH,
   FULL_SCREEN_QUERY,
+  EASING,
   TRANSITION,
+  TRANSITION_MS,
   anchorSx,
   dialogsBesideChatStyles,
   getLayout,
@@ -63,17 +66,38 @@ const HelpChatbot = () => {
   const askRef = useRef<HTMLButtonElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const focusAfterViewChange = useRef(false)
+  const closeAfterNavigation = useRef(false)
+  const rootTopBeforeViewChange = useRef<number | null>(null)
+  const { key: locationKey } = useLocation()
 
   const reduceMotion = useMediaQuery('(prefers-reduced-motion: reduce)')
   const narrow = useMediaQuery(theme => theme.breakpoints.down('sm'))
   const short = useMediaQuery(FULL_SCREEN_QUERY)
   const fullScreen = view === 'chat' && (narrow || short)
 
+  const rememberRootTop = () => {
+    rootTopBeforeViewChange.current = rootRef.current?.getBoundingClientRect().top ?? null
+  }
+
   // The element the user activated disappears on every view change, so focus is moved explicitly
   const goTo = (next: WidgetView) => {
     focusAfterViewChange.current = true
+    rememberRootTop()
     setView(next)
   }
+
+  useLayoutEffect(() => {
+    const from = rootTopBeforeViewChange.current
+    rootTopBeforeViewChange.current = null
+    const root = rootRef.current
+    if (from === null || !root || reduceMotion) return
+    const distance = from - root.getBoundingClientRect().top
+    if (Math.abs(distance) < 1) return
+    root.animate([{ transform: `translateY(${distance}px)` }, { transform: 'none' }], {
+      duration: TRANSITION_MS,
+      easing: EASING,
+    })
+  }, [view, reduceMotion])
 
   useEffect(() => {
     if (!focusAfterViewChange.current) return
@@ -121,6 +145,18 @@ const HelpChatbot = () => {
   }
 
   const close = () => goTo('pill')
+
+  useLayoutEffect(() => {
+    if (!closeAfterNavigation.current) return
+    closeAfterNavigation.current = false
+    focusAfterViewChange.current = true
+    setView('pill')
+  }, [locationKey])
+
+  const closeOnGuideOpen = () => {
+    closeAfterNavigation.current = true
+    rememberRootTop()
+  }
 
   const sendDraft = () => {
     const question = draft.trim()
@@ -213,6 +249,7 @@ const HelpChatbot = () => {
                 askRef={askRef}
                 onHeightChange={setMenuHeight}
                 onAsk={() => goTo('chat')}
+                onGuideOpen={closeOnGuideOpen}
                 onClose={close}
               />
             )}
@@ -235,6 +272,7 @@ const HelpChatbot = () => {
                 onAnnounce={announce}
                 onToggleExpand={() => setChatSize(chatSize === 'expanded' ? 'normal' : 'expanded')}
                 onNewConversation={startNewConversation}
+                onGuideOpen={closeOnGuideOpen}
                 onClose={close}
               />
             )}

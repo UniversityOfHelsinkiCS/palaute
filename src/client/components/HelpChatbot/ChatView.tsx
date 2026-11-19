@@ -35,6 +35,7 @@ type ChatViewProps = {
   onAnnounce: (text: string) => void
   onToggleExpand: () => void
   onNewConversation: () => void
+  onGuideOpen: () => void
   onClose: () => void
 }
 
@@ -57,6 +58,7 @@ const ChatView = ({
   onAnnounce,
   onToggleExpand,
   onNewConversation,
+  onGuideOpen,
   onClose,
 }: ChatViewProps) => {
   const { t } = useTranslation()
@@ -103,12 +105,11 @@ const ChatView = ({
           >
             {t('helpChatbot:guideStripPrefix')}{' '}
             {guide.inApp ? (
-              // The full-screen chat covers the page, so it closes to show the guide
               <Link
                 component={RouterLink}
                 to={guide.href}
                 underline="always"
-                onClick={fullScreen ? onClose : undefined}
+                onClick={onGuideOpen}
                 sx={{ fontWeight: 600 }}
               >
                 {t('helpChatbot:guideStripLink')}

@@ -40,7 +40,9 @@ export const FULL_SCREEN_QUERY = '(max-height: 639.95px)'
 // So short that the header and the input would leave no room for messages
 export const COMPACT_QUERY = '(max-height: 399.95px)'
 
-export const TRANSITION = '.32s cubic-bezier(.2, .8, .2, 1)'
+export const TRANSITION_MS = 320
+export const EASING = 'cubic-bezier(.2, .8, .2, 1)'
+export const TRANSITION = `${TRANSITION_MS}ms ${EASING}`
 
 const px = (value: number) => `${value}px`
 
@@ -147,8 +149,6 @@ export const stickyRootSx =
       height: 0,
       top: top(theme.spacing(2)),
       [theme.breakpoints.up('sm')]: { top: top(theme.spacing(3)) },
-      transition: `top ${TRANSITION}`,
-      '@media (prefers-reduced-motion: reduce)': { transition: 'none' },
     }
   }
 

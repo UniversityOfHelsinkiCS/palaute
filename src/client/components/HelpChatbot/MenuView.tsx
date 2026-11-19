@@ -52,10 +52,11 @@ type MenuViewProps = {
   askRef: Ref<HTMLButtonElement>
   onHeightChange: (height: number) => void
   onAsk: () => void
+  onGuideOpen: () => void
   onClose: () => void
 }
 
-const MenuView = ({ guide, askRef, onHeightChange, onAsk, onClose }: MenuViewProps) => {
+const MenuView = ({ guide, askRef, onHeightChange, onAsk, onGuideOpen, onClose }: MenuViewProps) => {
   const { t } = useTranslation()
   const titleId = useId()
   const guideLabelId = useId()
@@ -96,7 +97,7 @@ const MenuView = ({ guide, askRef, onHeightChange, onAsk, onClose }: MenuViewPro
           underline="none"
           aria-labelledby={guideLabelId}
           aria-describedby={guideDescriptionId}
-          onClick={onClose}
+          onClick={guide.inApp ? onGuideOpen : onClose}
           sx={optionSx}
         >
           <Box component="span" sx={iconSlotSx}>
