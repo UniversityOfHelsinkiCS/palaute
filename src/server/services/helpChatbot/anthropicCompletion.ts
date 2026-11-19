@@ -2,28 +2,29 @@ import Anthropic from '@anthropic-ai/sdk'
 
 import type { Completion, CompletionRequest, CompletionUsage } from './completion'
 
-import { ANTHROPIC_API_KEY, HELP_CHATBOT_MODEL } from '../../util/config'
+import { ANTHROPIC_API_KEY } from '../../util/config'
 import { logger } from '../../util/logger'
 import { noAnswer } from './completion'
 import { SYSTEM_PROMPTS } from './systemPrompt'
+
+export const MODEL = 'claude-haiku-5-5'
 
 // Includes the thinking tokens
 const MAX_TOKENS = 4000
 const TIMEOUT_MS = 60_000
 
-// The SDK retries overloaded, rate-limited and failed requests. TIMEOUT_MS also limits all the attempts together, so
-// the user never waits longer than with Azure.
+// The SDK retries overloaded, rate-limited and failed requests. TIMEOUT_MS limits all the attempts together.
 let client: Anthropic | undefined
 const getClient = () => (client ??= new Anthropic({ apiKey: ANTHROPIC_API_KEY, maxRetries: 2, timeout: TIMEOUT_MS }))
 
-// Mapped to the Azure values, which the admin views and saved turns use
+// Mapped to the values the turns answered through Azure were saved with, which the admin views read
 const FINISH_REASONS: Partial<Record<Anthropic.StopReason, string>> = {
   end_turn: 'stop',
   max_tokens: 'length',
   refusal: 'content_filter',
 }
 
-// input_tokens is only the uncached remainder, unlike Azure's prompt_tokens
+// input_tokens is only the uncached remainder, while promptTokens is the whole input
 const toUsage = (usage: Anthropic.Usage): CompletionUsage => {
   const cachedTokens = usage.cache_read_input_tokens ?? 0
   const cacheWriteTokens = usage.cache_creation_input_tokens ?? 0
@@ -52,7 +53,7 @@ export const getAnthropicCompletion = async (
   try {
     response = await getClient().messages.create(
       {
-        model: HELP_CHATBOT_MODEL,
+        model: MODEL,
         max_tokens: MAX_TOKENS,
         // The system prompt is the same for every conversation in a language, so its cache entry is shared
         system: [{ type: 'text', text: SYSTEM_PROMPTS[language], cache_control: { type: 'ephemeral' } }],
@@ -82,5 +83,5 @@ export const getAnthropicCompletion = async (
     })
   else if (finishReason === 'length') logger.warn('[HelpChatbot] Reply was cut off at the token limit', { usage })
 
-  return { deployment: HELP_CHATBOT_MODEL, model: response.model, content, finishReason, usage }
+  return { deployment: MODEL, model: response.model, content, finishReason, usage }
 }

@@ -119,7 +119,7 @@ User: Can students see the open answers?
 Answer: Only if the question is [[common:public]]. Open questions are [[common:notPublic]] by default, so only responsible teachers and programme admins see their answers. A responsible teacher can make one public on the [[feedbackTargetView:feedbacksTab]] tab after the survey has closed.
 `
 
-// One per UI language, each identical for every request in that language, so Azure's prompt caching can reuse it
+// One per UI language, each identical for every request in that language, so the prompt cache can reuse it
 export const SYSTEM_PROMPTS = Object.fromEntries(
   LANGUAGES.map(language => [
     language,

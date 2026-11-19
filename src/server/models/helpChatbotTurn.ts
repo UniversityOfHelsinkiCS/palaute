@@ -29,7 +29,7 @@ class HelpChatbotTurn extends Model<InferAttributes<HelpChatbotTurn>, InferCreat
   declare answer: string | null
   declare status: HelpChatbotTurnStatus
   declare finishReason: string | null
-  // Prices go by model, the version Azure reports, not by deployment
+  // Prices go by model, the version the provider reports, not by deployment
   declare deployment: string | null
   declare model: string | null
   declare gitSha: string | null

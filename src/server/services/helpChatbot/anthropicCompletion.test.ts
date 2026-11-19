@@ -12,7 +12,6 @@ const { API_KEY } = vi.hoisted(() => ({ API_KEY: 'test-api-key' }))
 vi.mock('../../util/config', async importOriginal => ({
   ...(await importOriginal<typeof import('../../util/config')>()),
   ANTHROPIC_API_KEY: API_KEY,
-  HELP_CHATBOT_MODEL: 'claude-haiku-5-5',
 }))
 
 const MESSAGES = [{ role: 'user' as const, content: 'How do I add a question?' }]

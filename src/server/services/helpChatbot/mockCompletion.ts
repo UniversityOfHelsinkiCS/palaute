@@ -79,7 +79,7 @@ const shouldFail = (conversationId: string, question: string) => {
 
 const randomLatency = () => (Math.random() < 0.1 ? 6000 + Math.random() * 2000 : 700 + Math.random() * 1800)
 
-// Aborts like a cancelled Azure request
+// Aborts like a cancelled request
 export const getMockCompletion = async (
   { conversationId, messages }: CompletionRequest,
   signal: AbortSignal

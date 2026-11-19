@@ -20,7 +20,7 @@ export type CompletionRequest = {
 }
 
 // content is empty when reasoning used up the token limit or the content filter stopped the answer. The tokens
-// are billed all the same. finishReason uses the Azure values, e.g. length when cut off at the token limit.
+// are billed all the same. finishReason uses the values of the turns answered through Azure, e.g. length when cut off at the token limit.
 export type Completion = {
   deployment: string
   // The model version the provider reports

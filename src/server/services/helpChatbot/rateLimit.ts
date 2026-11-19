@@ -6,7 +6,7 @@ const MINUTE = 60
 const DAY = 24 * 60 * 60
 
 // Checked in order, so a request rejected by a user's limit doesn't use up the global budget. To cut the chatbot
-// off entirely, remove AZURE_API_KEY.
+// off entirely, remove ANTHROPIC_API_KEY.
 export const RATE_LIMITS = [
   { name: 'user per minute', scope: 'user', windowSeconds: MINUTE, max: 10 },
   { name: 'user per day', scope: 'user', windowSeconds: DAY, max: 100 },

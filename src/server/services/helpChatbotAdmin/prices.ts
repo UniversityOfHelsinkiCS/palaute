@@ -2,13 +2,14 @@ import type { HelpChatbotCurrency, HelpChatbotPrice } from '@common/types/helpCh
 
 export const CURRENCIES: HelpChatbotCurrency[] = ['EUR', 'USD']
 
-// Per million tokens, as quoted: Azure in euros as agreed for our subscription, Anthropic in dollars. Costs are summed
+// Per million tokens, as quoted: Anthropic in dollars, and Azure, which answered until November 2026, in euros. Costs are summed
 // in each currency, not converted. To change a price, add an entry with a later validFrom rather than editing one:
 // each turn is priced with the price valid when it was asked. A model without a separate cache write price has it
 // at the input price.
 type PriceEntry = Omit<HelpChatbotPrice, 'validTo'>
 
 const PRICE_ENTRIES: PriceEntry[] = [
+  // For the turns answered through Azure
   {
     family: 'gpt-5-mini',
     validFrom: '2026-01-01T00:00:00Z',

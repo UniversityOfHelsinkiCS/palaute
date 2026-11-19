@@ -93,7 +93,7 @@ export const pricedTurns = (conditions: Conditions) => {
         t.reasoning_tokens * p.output / 1000000 AS reasoning_cost,
         t.prompt_tokens IS NOT NULL AND p.family IS NULL AS unpriced
       FROM help_chatbot_turns t
-      -- Azure reports the model with its version date, e.g. gpt-5-mini-2025-08-07. LIKE rather than a regular
+      -- Azure reported the model with its version date, e.g. gpt-5-mini-2025-08-07. LIKE rather than a regular
       -- expression, which made a query over 200 000 turns several times slower.
       LEFT JOIN prices p
         ON (t.model = p.family OR t.model LIKE p.family || '-____-__-__')
