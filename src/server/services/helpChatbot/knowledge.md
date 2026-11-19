@@ -207,9 +207,20 @@ Course surveys only. Students can give free-form feedback while the course runs.
 ## Downloading results and statistics
 
 - The [[feedbackTargetView:feedbacksTab]] tab's [[feedbackTargetResults:export]] offers [[common:exportXLSX]] (one sheet, a column per question, answers shuffled per question, no timestamps or student information) and [[common:exportPdf]]. Responsible teachers and programme staff can download; those who see only public answers get only those.
-- [[navBar:courseSummary]] shows averages of the university (and programme) level scale questions, [[courseSummary:feedbackCount]], [[courseSummary:feedbackPercentage]] and [[courseSummary:feedbackResponsePercentage]], by academic year, semester or period, from 2020 onwards. "Cannot answer" isn't counted in the averages, and colours show how high an average is. [[courseSummary:myCourses]] shows the user's own courses as a teacher, [[courseSummary:myOrganisations]] the organisations they have rights to. Its [[common:exportXLSX]] has sheets for organisations, course units and course realisations.
-- Course summary covers course surveys only. A course is missing if its survey hasn't opened yet, it has no students, or it belongs to another organisation in Sisu. Courses linked to the programme only via their realisation are marked partially responsible. The figures are recalculated overnight.
 - A teacher's older surveys are in [[navBar:myCourses]] > [[teacherView:endedSurveys]].
+
+### Course summary
+
+[[navBar:courseSummary]] shows statistics of course surveys only, from 2020 onwards: averages of the university level scale questions (workload as an arrow), [[courseSummary:feedbackCount]] (answers/enrolled), [[courseSummary:feedbackPercentage]], [[courseSummary:feedbackResponsePercentage]] and [[courseSummary:censoredCount]] (answers hidden with the eye icon). "Cannot answer" isn't counted in the averages, and colours show how high an average is.
+
+- Tabs: [[courseSummary:myCourses]] has the user's own courses as a teacher, grouped by degree programme; [[courseSummary:myOrganisations]] (only with organisation rights) the organisations they have rights to. A programme's page has the same summary on its [[organisationSettings:summaryTab]] tab, which also shows the programme's own scale questions.
+- Time: the menus at the top show one period at a time: [[courseSummary:year]] (by default the current academic year, which starts on 1 August), optionally narrowed with [[courseSummary:semester]] or [[courseSummary:period]]. To see an earlier year, choose it in [[courseSummary:year]]. The choice isn't remembered between visits.
+- Clicking a course unit opens its own page: a total row and one row per realisation, newest first, with its dates, staff, a link to its results and whether counter feedback was given. [[courseSummary:all]] (instead of [[courseSummary:filter]]) lists every year there, in sections per version of the university level questions; this is how to compare a course's years. The same page opens from a course page's [[feedbackTargetView:courseSummary]] link and from [[organisationSettings:allCourseUnitRealisations]] on a programme's [[organisationSettings:courseRealisationsTab]] tab.
+- Without organisation rights, a teacher sees only the realisations they teach themselves, never a colleague's; seeing those needs organisation rights. They also can't open a course's page at all if none of their own realisations of it started in the last 24 months.
+- [[courseSummary:tableView]] / [[courseSummary:treeView]] switches between the tree and a table with a [[courseSummary:sortBy]] menu; in the tree, the arrows under the column headings sort. Open University courses are included by default; a menu next to the time menus can leave them out or show only them.
+- [[common:exportXLSX]] downloads the selected period, with sheets for organisations, course units and course realisations.
+- A course is missing if its survey hasn't opened or got answers yet, it has no students, or it belongs to another organisation in Sisu. Courses linked to the programme only via their realisation are marked [[common:partiallyResponsible]].
+- A realisation's figures update at once; course unit and organisation totals are recalculated overnight.
 
 ## Degree programme and faculty pages
 
