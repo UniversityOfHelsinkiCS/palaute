@@ -1,3 +1,5 @@
+import type { HelpChatbotCurrency } from '@common/types/helpChatbotAdmin'
+
 import { Alert, Box, Checkbox, FormControlLabel, Paper, Typography } from '@mui/material'
 import { isAxiosError } from 'axios'
 import { useSnackbar } from 'notistack'
@@ -8,7 +10,7 @@ import type { ConversationKey } from './api'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
 import { useHelpChatbotConversation } from './api'
-import { formatDateTime, formatEuros, formatNumber, shortSha } from './format'
+import { formatAmounts, formatDateTime, formatNumber, shortSha } from './format'
 import { describeMetadata, formatEntries, metadataChanges } from './metadata'
 import TurnItem from './TurnItem'
 import { conversationToMarkdown } from './turnText'
@@ -41,7 +43,8 @@ const ConversationDetail = ({ conversationKey, highlightedTurnId }: Conversation
   const first = turns[0]
   const shown = turns.filter(turn => showOutsideHistory || turn.inHistory || turn.id === highlightedTurnId)
   const tokens = turns.reduce((sum, turn) => sum + (turn.promptTokens ?? 0) + (turn.completionTokens ?? 0), 0)
-  const cost = turns.reduce((sum, turn) => sum + (turn.cost ?? 0), 0)
+  const costs: Partial<Record<HelpChatbotCurrency, number>> = {}
+  for (const { cost } of turns) if (cost) costs[cost.currency] = (costs[cost.currency] ?? 0) + cost.amount
   const versions = unique(turns.map(turn => shortSha(turn.gitSha)))
   const models = unique(turns.flatMap(turn => (turn.model ? [turn.model] : [])))
   // The first turn's metadata is the conversation's; a turn shows only what differs from it
@@ -66,7 +69,7 @@ const ConversationDetail = ({ conversationKey, highlightedTurnId }: Conversation
           {firstMetadata.length > 0 && <Typography variant="body2">{formatEntries(firstMetadata)}</Typography>}
           <Typography variant="body2" color="text.secondary">
             {turns.length} questions · version {versions.join(', ')} · {models.join(', ') || 'no model'} ·{' '}
-            {formatNumber(tokens)} tokens · {formatEuros(cost)}
+            {formatNumber(tokens)} tokens · {formatAmounts(costs)}
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1, alignItems: 'flex-start' }}>

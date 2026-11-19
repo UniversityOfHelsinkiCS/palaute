@@ -1,6 +1,6 @@
 import { setTimeout as sleep } from 'node:timers/promises'
 
-import type { Completion, CompletionRequest } from './azureCompletion'
+import type { Completion, CompletionRequest } from './completion'
 
 import { ApplicationError } from '../../util/ApplicationError'
 import { inDevelopment } from '../../util/config'

@@ -1,10 +1,15 @@
-import type { HelpChatbotCost, HelpChatbotDateRange, HelpChatbotUsage } from '@common/types/helpChatbotAdmin'
+import type {
+  HelpChatbotCosts,
+  HelpChatbotCurrency,
+  HelpChatbotDateRange,
+  HelpChatbotUsage,
+} from '@common/types/helpChatbotAdmin'
 
 import { QueryTypes } from 'sequelize'
 
 import { sequelize } from '../../db/dbConnection'
 import { inProduction } from '../../util/config'
-import { PRICES } from './prices'
+import { CURRENCIES, PRICES } from './prices'
 
 // User input only ever goes in as replacements
 
@@ -55,30 +60,32 @@ const pricesValues = () => {
       [`family${i}`]: price.family,
       [`validFrom${i}`]: price.validFrom,
       [`validTo${i}`]: price.validTo,
+      [`currency${i}`]: price.currency,
       [`input${i}`]: price.input,
       [`cachedInput${i}`]: price.cachedInput,
       [`cacheWrite${i}`]: price.cacheWrite,
       [`output${i}`]: price.output,
     })
-    return `(:family${i}, CAST(:validFrom${i} AS timestamptz), CAST(:validTo${i} AS timestamptz),
+    return `(:family${i}, CAST(:validFrom${i} AS timestamptz), CAST(:validTo${i} AS timestamptz), :currency${i},
       CAST(:input${i} AS float8), CAST(:cachedInput${i} AS float8), CAST(:cacheWrite${i} AS float8),
       CAST(:output${i} AS float8))`
   })
   return { sql: rows.join(',\n'), replacements }
 }
 
-// WITH clauses defining `turns`: the turns matching `conditions` with their costs in euros, null without usage or
-// a price. output_cost excludes the reasoning, which is billed at the output price. Costs are floats: exact
+// WITH clauses defining `turns`: the turns matching `conditions` with their costs in their price's currency, null
+// without usage or a price. output_cost excludes the reasoning, which is billed at the output price. Costs are floats: exact
 // decimals made the sums much slower.
 export const pricedTurns = (conditions: Conditions) => {
   const prices = pricesValues()
   const sql = `
-    prices (family, valid_from, valid_to, input, cached_input, cache_write, output) AS (
+    prices (family, valid_from, valid_to, currency, input, cached_input, cache_write, output) AS (
       VALUES ${prices.sql}
     ),
     turns AS (
       SELECT
         t.*,
+        p.currency,
         (t.prompt_tokens - t.cached_tokens - t.cache_write_tokens) * p.input / 1000000 AS input_cost,
         t.cached_tokens * p.cached_input / 1000000 AS cached_cost,
         t.cache_write_tokens * p.cache_write / 1000000 AS cache_write_cost,
@@ -115,40 +122,46 @@ export const USAGE_COLUMNS = `
   coalesce(sum(t.completion_tokens), 0) AS "completionTokens",
   coalesce(sum(t.reasoning_tokens), 0) AS "reasoningTokens",
   avg(t.duration_ms) FILTER (WHERE t.prompt_tokens IS NOT NULL) AS "avgDurationMs",
-  coalesce(sum(t.input_cost), 0) AS "inputCost",
-  coalesce(sum(t.cached_cost), 0) AS "cachedCost",
-  coalesce(sum(t.cache_write_cost), 0) AS "cacheWriteCost",
-  coalesce(sum(t.output_cost), 0) AS "outputCost",
-  coalesce(sum(t.reasoning_cost), 0) AS "reasoningCost",
-  count(t.id) FILTER (WHERE t.unpriced) AS "unpricedTurns"`
+  count(t.id) FILTER (WHERE t.unpriced) AS "unpricedTurns",
+  ${CURRENCIES.map(
+    currency => `
+  count(t.id) FILTER (WHERE t.currency = '${currency}' AND t.prompt_tokens IS NOT NULL) AS "turns${currency}",
+  coalesce(sum(t.input_cost) FILTER (WHERE t.currency = '${currency}'), 0) AS "inputCost${currency}",
+  coalesce(sum(t.cached_cost) FILTER (WHERE t.currency = '${currency}'), 0) AS "cachedCost${currency}",
+  coalesce(sum(t.cache_write_cost) FILTER (WHERE t.currency = '${currency}'), 0) AS "cacheWriteCost${currency}",
+  coalesce(sum(t.output_cost) FILTER (WHERE t.currency = '${currency}'), 0) AS "outputCost${currency}",
+  coalesce(sum(t.reasoning_cost) FILTER (WHERE t.currency = '${currency}'), 0) AS "reasoningCost${currency}"`
+  ).join(',')}`
 
 // Postgres returns counts and sums as strings
 type NumericValue = string | number | null
 
-export type UsageRow = Record<Exclude<keyof HelpChatbotUsage, 'cost'>, NumericValue> & {
-  inputCost: NumericValue
-  cachedCost: NumericValue
-  cacheWriteCost: NumericValue
-  outputCost: NumericValue
-  reasoningCost: NumericValue
-  unpricedTurns: NumericValue
-}
+type CostColumn =
+  `${'turns' | 'inputCost' | 'cachedCost' | 'cacheWriteCost' | 'outputCost' | 'reasoningCost'}${HelpChatbotCurrency}`
+
+export type UsageRow = Record<Exclude<keyof HelpChatbotUsage, 'costs'>, NumericValue> & Record<CostColumn, NumericValue>
 
 export const toNumber = (value: NumericValue) => Number(value ?? 0)
 
-export const toCost = (row: UsageRow): HelpChatbotCost => {
-  const cost = {
-    input: toNumber(row.inputCost),
-    cachedInput: toNumber(row.cachedCost),
-    cacheWrite: toNumber(row.cacheWriteCost),
-    output: toNumber(row.outputCost),
-    reasoning: toNumber(row.reasoningCost),
+export const toCosts = (row: UsageRow): HelpChatbotCosts => {
+  const costs: HelpChatbotCosts = {}
+  for (const currency of CURRENCIES) {
+    const turns = toNumber(row[`turns${currency}`])
+    if (turns === 0) continue
+    const cost = {
+      input: toNumber(row[`inputCost${currency}`]),
+      cachedInput: toNumber(row[`cachedCost${currency}`]),
+      cacheWrite: toNumber(row[`cacheWriteCost${currency}`]),
+      output: toNumber(row[`outputCost${currency}`]),
+      reasoning: toNumber(row[`reasoningCost${currency}`]),
+    }
+    costs[currency] = {
+      turns,
+      ...cost,
+      total: cost.input + cost.cachedInput + cost.cacheWrite + cost.output + cost.reasoning,
+    }
   }
-  return {
-    ...cost,
-    total: cost.input + cost.cachedInput + cost.cacheWrite + cost.output + cost.reasoning,
-    unpricedTurns: toNumber(row.unpricedTurns),
-  }
+  return costs
 }
 
 export const toUsage = (row: UsageRow): HelpChatbotUsage => ({
@@ -167,7 +180,8 @@ export const toUsage = (row: UsageRow): HelpChatbotUsage => ({
   completionTokens: toNumber(row.completionTokens),
   reasoningTokens: toNumber(row.reasoningTokens),
   avgDurationMs: row.avgDurationMs === null ? null : Math.round(toNumber(row.avgDurationMs)),
-  cost: toCost(row),
+  costs: toCosts(row),
+  unpricedTurns: toNumber(row.unpricedTurns),
 })
 
 // Timestamps from raw queries are Dates

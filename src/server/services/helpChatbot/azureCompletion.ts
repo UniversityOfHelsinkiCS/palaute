@@ -1,12 +1,10 @@
-import type { LanguageId } from '@common/types/common'
-
 import axios, { isAxiosError, isCancel } from 'axios'
 
-import type { ChatMessage } from './history'
+import type { Completion, CompletionRequest, CompletionUsage } from './completion'
 
-import { ApplicationError } from '../../util/ApplicationError'
 import { AZURE_API_KEY, AZURE_RESOURCE, HELP_CHATBOT_MODEL } from '../../util/config'
 import { logger } from '../../util/logger'
+import { noAnswer } from './completion'
 import { SYSTEM_PROMPTS } from './systemPrompt'
 
 // Accepts reasoning_effort for the GPT-5 models
@@ -14,32 +12,6 @@ const API_VERSION = '2024-10-21'
 // Includes the reasoning tokens
 const MAX_COMPLETION_TOKENS = 4000
 const TIMEOUT_MS = 60_000
-
-export type CompletionUsage = {
-  promptTokens: number
-  cachedTokens: number
-  cacheWriteTokens: number
-  completionTokens: number
-  reasoningTokens: number
-}
-
-export type CompletionRequest = {
-  conversationId: string
-  language: LanguageId
-  // The trimmed history, ending with the question
-  messages: ChatMessage[]
-}
-
-// content is empty when reasoning used up the token limit or the content filter stopped the answer. The tokens
-// are billed all the same.
-export type Completion = {
-  deployment: string
-  // The model version Azure reports
-  model: string | null
-  content: string
-  finishReason: string | null
-  usage: CompletionUsage | null
-}
 
 type AzureChatCompletion = {
   model?: string
@@ -74,8 +46,6 @@ const describeError = (error: unknown) => {
     azureCode: error.response?.data?.error?.code,
   }
 }
-
-export const noAnswer = () => new ApplicationError('No answer from the language model', 502)
 
 // A cancellation through signal is rethrown as is
 export const getAzureCompletion = async (

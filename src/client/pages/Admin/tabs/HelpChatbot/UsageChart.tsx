@@ -1,11 +1,15 @@
-import type { GetHelpChatbotUsageResponse, HelpChatbotUsageGrouping } from '@common/types/helpChatbotAdmin'
+import type {
+  GetHelpChatbotUsageResponse,
+  HelpChatbotCurrency,
+  HelpChatbotUsageGrouping,
+} from '@common/types/helpChatbotAdmin'
 
 import 'chart.js/auto'
 import { useTheme } from '@mui/material'
 import { format } from 'date-fns'
 import { Bar } from 'react-chartjs-2'
 
-import { formatEuros, formatNumber } from './format'
+import { formatMoney, formatNumber } from './format'
 
 export type UsageMetric = 'questions' | 'tokens' | 'cost'
 
@@ -15,14 +19,16 @@ const PERIOD_FORMATS: Record<HelpChatbotUsageGrouping, string> = {
   month: 'MMM yyyy',
 }
 
+// Each currency's costs are charted on their own
 type UsageChartProps = {
   periods: GetHelpChatbotUsageResponse['periods']
   groupBy: HelpChatbotUsageGrouping
-  metric: UsageMetric
-}
+} & ({ metric: 'questions' | 'tokens' } | { metric: 'cost'; currency: HelpChatbotCurrency })
 
 // The per-period numbers aren't in any table; the CSV download is the chart's text alternative
-const UsageChart = ({ periods, groupBy, metric }: UsageChartProps) => {
+const UsageChart = (props: UsageChartProps) => {
+  const { periods, groupBy, metric } = props
+  const currency = props.metric === 'cost' ? props.currency : null
   const theme = useTheme()
   const labels = periods.map(period => format(new Date(`${period.start}T00:00:00`), PERIOD_FORMATS[groupBy]))
   // Told apart by lightness as well as hue: input in blues, output in oranges
@@ -49,20 +55,23 @@ const UsageChart = ({ periods, groupBy, metric }: UsageChartProps) => {
       { label: 'Output', data: periods.map(p => p.completionTokens - p.reasoningTokens) },
       { label: 'Reasoning', data: periods.map(p => p.reasoningTokens) },
     ],
-    cost: [
-      { label: 'Uncached input', data: periods.map(p => p.cost.input) },
-      { label: 'Cache writes', data: periods.map(p => p.cost.cacheWrite) },
-      { label: 'Cached input', data: periods.map(p => p.cost.cachedInput) },
-      { label: 'Output', data: periods.map(p => p.cost.output) },
-      { label: 'Reasoning', data: periods.map(p => p.cost.reasoning) },
-    ],
+    cost:
+      currency === null
+        ? []
+        : [
+            { label: 'Uncached input', data: periods.map(p => p.costs[currency]?.input ?? 0) },
+            { label: 'Cache writes', data: periods.map(p => p.costs[currency]?.cacheWrite ?? 0) },
+            { label: 'Cached input', data: periods.map(p => p.costs[currency]?.cachedInput ?? 0) },
+            { label: 'Output', data: periods.map(p => p.costs[currency]?.output ?? 0) },
+            { label: 'Reasoning', data: periods.map(p => p.costs[currency]?.reasoning ?? 0) },
+          ],
   }[metric]
 
-  const formatValue = (value: number) => (metric === 'cost' ? formatEuros(value) : formatNumber(value))
+  const formatValue = (value: number) => (currency === null ? formatNumber(value) : formatMoney(value, currency))
 
   return (
     <Bar
-      aria-label={`${metric} per ${groupBy}, as a stacked bar chart`}
+      aria-label={`${metric}${currency === null ? '' : ` in ${currency}`} per ${groupBy}, as a stacked bar chart`}
       role="img"
       height={260}
       data={{

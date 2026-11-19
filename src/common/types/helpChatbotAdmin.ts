@@ -3,29 +3,35 @@ import type { HelpChatbotRating, HelpChatbotTurnStatus } from './helpChatbot'
 // Metadata as read back: older turns may hold keys HelpChatbotTurnMetadata no longer lists
 export type HelpChatbotSavedMetadata = Record<string, unknown>
 
-// € per million tokens. validFrom is inclusive, validTo exclusive and null while current.
-// family is the model without Azure's version date, e.g. gpt-5-mini
+export type HelpChatbotCurrency = 'EUR' | 'USD'
+
+// Per million tokens in currency. validFrom is inclusive, validTo exclusive and null while current. family is the
+// model without the provider's version date, e.g. gpt-5-mini
 export type HelpChatbotPrice = {
   family: string
   validFrom: string
   validTo: string | null
+  currency: HelpChatbotCurrency
   input: number
   cachedInput: number
   cacheWrite: number
   output: number
 }
 
-// In euros. input excludes the cached input and cache writes, and output the reasoning, which is billed at the
-// output price. unpricedTurns have usage but no price, and aren't in the sums.
+// The costs in one currency, of the turns priced in it. input excludes the cached input and cache writes, and output
+// the reasoning, which is billed at the output price.
 export type HelpChatbotCost = {
+  turns: number
   input: number
   cachedInput: number
   cacheWrite: number
   output: number
   reasoning: number
   total: number
-  unpricedTurns: number
 }
+
+// Costs aren't converted between currencies, so each is summed on its own. Only the currencies with priced turns.
+export type HelpChatbotCosts = Partial<Record<HelpChatbotCurrency, HelpChatbotCost>>
 
 // GET /admin/help-chatbot/meta
 export type GetHelpChatbotMetaResponse = {
@@ -66,7 +72,8 @@ export type HelpChatbotConversationSummary = {
   aborted: number
   cutOff: number
   totalTokens: number
-  cost: number
+  // Only the currencies with priced turns
+  costs: Partial<Record<HelpChatbotCurrency, number>>
 }
 
 export type GetHelpChatbotConversationsResponse = {
@@ -96,7 +103,7 @@ export type HelpChatbotTurnDetails = {
   reasoningTokens: number | null
   durationMs: number | null
   // null without usage or a price
-  cost: number | null
+  cost: { amount: number; currency: HelpChatbotCurrency } | null
   rating: HelpChatbotRating | null
   feedbackComment: string | null
   feedbackReviewedAt: string | null
@@ -172,7 +179,9 @@ export type HelpChatbotUsage = {
   reasoningTokens: number
   // Of the billed turns
   avgDurationMs: number | null
-  cost: HelpChatbotCost
+  costs: HelpChatbotCosts
+  // With usage but no price, and so in none of the costs
+  unpricedTurns: number
 }
 
 export type GetHelpChatbotUsageResponse = {

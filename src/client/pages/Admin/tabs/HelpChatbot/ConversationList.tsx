@@ -9,7 +9,7 @@ import type { ConversationKey } from './api'
 import { LoadingProgress } from '../../../../components/common/LoadingProgress'
 import { NorButton } from '../../../../components/common/NorButton'
 import { useHelpChatbotConversations } from './api'
-import { formatDateTime, formatEuros, formatNumber } from './format'
+import { formatAmounts, formatDateTime, formatNumber } from './format'
 import { getUiLanguage } from './metadata'
 
 const describeProblems = ({ failed, empty, aborted, cutOff }: HelpChatbotConversationSummary) => {
@@ -87,7 +87,7 @@ const ConversationList = ({ query, selected, onSelect }: ConversationListProps) 
                       {formatDateTime(conversation.startedAt)}
                     </Typography>
                     <Typography component="span" variant="body2" color="text.secondary" sx={{ whiteSpace: 'nowrap' }}>
-                      {formatEuros(conversation.cost)}
+                      {formatAmounts(conversation.costs)}
                     </Typography>
                   </Box>
                   <Typography

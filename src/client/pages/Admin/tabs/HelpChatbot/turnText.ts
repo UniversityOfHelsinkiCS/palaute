@@ -1,6 +1,6 @@
 import type { GetHelpChatbotConversationResponse, HelpChatbotTurnDetails } from '@common/types/helpChatbotAdmin'
 
-import { formatDateTime, formatDuration, formatEuros, formatNumber, formatTime, shortSha } from './format'
+import { formatDateTime, formatDuration, formatMoney, formatNumber, formatTime, shortSha } from './format'
 import { describeMetadata, formatEntries, metadataChanges } from './metadata'
 
 // Why a turn isn't part of the conversation the user saw, or null if it is
@@ -63,7 +63,7 @@ export const conversationToMarkdown = (
       turn.finishReason,
       turn.durationMs === null ? null : formatDuration(turn.durationMs),
       describeTokens(turn),
-      turn.cost === null ? null : formatEuros(turn.cost),
+      turn.cost === null ? null : formatMoney(turn.cost.amount, turn.cost.currency),
     ].filter(Boolean)
     const followsNote =
       turn.followsNumber !== null && turn.followsNumber !== turn.number - 1 ? `Follows #${turn.followsNumber}.` : null

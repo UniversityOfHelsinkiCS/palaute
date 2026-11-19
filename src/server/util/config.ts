@@ -28,6 +28,8 @@ export const { API_TOKEN, JWT_KEY, REDIS_HOST, JAMI_HOST, JAMI_PORT, PATE_JWT, F
 
 // Azure OpenAI for the help chatbot, shared with gptwrapper. The deployment is named after the model.
 export const { AZURE_API_KEY, AZURE_RESOURCE } = process.env
+// Anthropic's own API, used for the claude-* models
+export const { ANTHROPIC_API_KEY } = process.env
 export const HELP_CHATBOT_MODEL = process.env.HELP_CHATBOT_MODEL || 'gpt-5-mini'
 
 export const CRON_DISABLED = process.env.CRON_DISABLED === 'true'

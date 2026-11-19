@@ -3,26 +3,37 @@ import type {
   GetHelpChatbotConversationsQuery,
   GetHelpChatbotConversationsResponse,
   HelpChatbotConversationSummary,
+  HelpChatbotCurrency,
   HelpChatbotTurnDetails,
 } from '@common/types/helpChatbotAdmin'
 
 import { ApplicationError } from '../../util/ApplicationError'
 import { annotateTurns } from './annotateTurns'
+import { CURRENCIES } from './prices'
 import { Conditions, containsPattern, pricedTurns, select, toIso, toNumber } from './sql'
 
 export const CONVERSATIONS_PAGE_SIZE = 25
+
+const TURN_COST = 't.input_cost + t.cached_cost + t.cache_write_cost + t.output_cost + t.reasoning_cost'
+
+const toCosts = (costs: Record<HelpChatbotCurrency, Numeric | null>): HelpChatbotConversationSummary['costs'] =>
+  Object.fromEntries(
+    Object.entries(costs).flatMap(([currency, cost]) => (cost === null ? [] : [[currency, toNumber(cost)]]))
+  )
 
 // Postgres returns counts and sums as strings
 type Numeric = string | number
 
 type ConversationRow = Omit<
   HelpChatbotConversationSummary,
-  'startedAt' | NumericKeys<HelpChatbotConversationSummary>
+  'startedAt' | 'costs' | NumericKeys<HelpChatbotConversationSummary>
 > & {
   startedAt: Date
   total: Numeric
   totalQuestions: Numeric
-} & Record<NumericKeys<HelpChatbotConversationSummary>, Numeric>
+} & Record<NumericKeys<HelpChatbotConversationSummary>, Numeric> &
+  // null when no turn is priced in the currency
+  Record<`cost${HelpChatbotCurrency}`, Numeric | null>
 
 type NumericKeys<T> = { [K in keyof T]: T[K] extends number ? K : never }[keyof T]
 
@@ -75,7 +86,7 @@ export const getConversations = async (
         count(*) FILTER (WHERE t.status = 'aborted') AS aborted,
         count(*) FILTER (WHERE t.status = 'answered' AND t.finish_reason = 'length') AS cut_off,
         coalesce(sum(t.prompt_tokens + t.completion_tokens), 0) AS total_tokens,
-        coalesce(sum(t.input_cost + t.cached_cost + t.cache_write_cost + t.output_cost + t.reasoning_cost), 0) AS cost,
+        ${CURRENCIES.map(currency => `sum(${TURN_COST}) FILTER (WHERE t.currency = '${currency}') AS cost_${currency}`).join(',\n        ')},
         ${query.search ? 'bool_or(t.question ILIKE :search OR t.answer ILIKE :search)' : 'TRUE'} AS matches_search
       FROM turns t
       GROUP BY t.conversation_id, t.user_id
@@ -96,7 +107,7 @@ export const getConversations = async (
       c.questions, c.up, c.down, c.comments, c.empty, c.failed, c.aborted,
       c.cut_off AS "cutOff",
       c.total_tokens AS "totalTokens",
-      c.cost,
+      ${CURRENCIES.map(currency => `c.cost_${currency} AS "cost${currency}"`).join(', ')},
       c.total AS "total",
       c.total_questions AS "totalQuestions"
     FROM page c
@@ -124,7 +135,8 @@ export const getConversations = async (
       aborted,
       cutOff,
       totalTokens,
-      cost,
+      costEUR,
+      costUSD,
       total,
       totalQuestions,
       ...row
@@ -140,7 +152,7 @@ export const getConversations = async (
       aborted: toNumber(aborted),
       cutOff: toNumber(cutOff),
       totalTokens: toNumber(totalTokens),
-      cost: toNumber(cost),
+      costs: toCosts({ EUR: costEUR, USD: costUSD }),
     })
   )
 
@@ -159,6 +171,7 @@ type TurnRow = Omit<
   createdAt: Date
   feedbackReviewedAt: Date | null
   cost: Numeric | null
+  currency: HelpChatbotCurrency | null
 }
 
 // A 404 if the conversation has no turns
@@ -181,7 +194,7 @@ export const getConversation = async (
       t.prompt_tokens AS "promptTokens", t.cached_tokens AS "cachedTokens",
       t.cache_write_tokens AS "cacheWriteTokens", t.completion_tokens AS "completionTokens",
       t.reasoning_tokens AS "reasoningTokens", t.duration_ms AS "durationMs",
-      t.input_cost + t.cached_cost + t.cache_write_cost + t.output_cost + t.reasoning_cost AS "cost",
+      ${TURN_COST} AS "cost", t.currency,
       t.rating, t.feedback_comment AS "feedbackComment", t.feedback_reviewed_at AS "feedbackReviewedAt"
     FROM turns t
     ORDER BY t.created_at, t.id
@@ -194,11 +207,11 @@ export const getConversation = async (
     conversationId,
     userId,
     turns: annotateTurns(rows).map(
-      ({ previousTurnId, createdAt, feedbackReviewedAt, cost, ...turn }): HelpChatbotTurnDetails => ({
+      ({ previousTurnId, createdAt, feedbackReviewedAt, cost, currency, ...turn }): HelpChatbotTurnDetails => ({
         ...turn,
         createdAt: toIso(createdAt),
         feedbackReviewedAt: feedbackReviewedAt === null ? null : toIso(feedbackReviewedAt),
-        cost: cost === null ? null : toNumber(cost),
+        cost: cost === null || currency === null ? null : { amount: toNumber(cost), currency },
       })
     ),
   }

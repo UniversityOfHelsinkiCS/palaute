@@ -1,13 +1,24 @@
+import type { HelpChatbotCurrency } from '@common/types/helpChatbotAdmin'
+
 import { format } from 'date-fns'
 
 const integer = new Intl.NumberFormat('en-GB', { maximumFractionDigits: 0 })
 
 export const formatNumber = (value: number) => integer.format(value)
 
+export const CURRENCY_SYMBOLS: Record<HelpChatbotCurrency, string> = { EUR: '€', USD: '$' }
+
 // Single questions cost fractions of a cent, so small sums keep four decimals
-export const formatEuros = (value: number) => {
-  if (value === 0) return '€0'
-  return `€${value.toFixed(Math.abs(value) < 1 ? 4 : 2)}`
+export const formatMoney = (value: number, currency: HelpChatbotCurrency) => {
+  const symbol = CURRENCY_SYMBOLS[currency]
+  if (value === 0) return `${symbol}0`
+  return `${symbol}${value.toFixed(Math.abs(value) < 1 ? 4 : 2)}`
+}
+
+// Costs aren't converted, so a sum in several currencies shows each
+export const formatAmounts = (amounts: Partial<Record<HelpChatbotCurrency, number>>) => {
+  const entries = Object.entries(amounts) as [HelpChatbotCurrency, number][]
+  return entries.length === 0 ? '–' : entries.map(([currency, value]) => formatMoney(value, currency)).join(' + ')
 }
 
 export const formatPercent = (part: number, whole: number) =>

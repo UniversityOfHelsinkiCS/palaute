@@ -8,7 +8,7 @@ import { alpha } from '@mui/material/styles'
 import { forwardRef } from 'react'
 
 import { AnswerMarkdown } from '../../../../components/HelpChatbot'
-import { formatDuration, formatEuros, formatTime } from './format'
+import { formatDuration, formatMoney, formatTime } from './format'
 import { formatEntries, type MetadataEntry } from './metadata'
 import ReviewedCheckbox from './ReviewedCheckbox'
 import { describeOutsideHistory, describeTokens } from './turnText'
@@ -33,7 +33,7 @@ const TurnItem = forwardRef<HTMLLIElement, TurnItemProps>(({ turn, highlighted, 
     turn.finishReason,
     turn.durationMs === null ? null : formatDuration(turn.durationMs),
     describeTokens(turn),
-    turn.cost === null ? null : formatEuros(turn.cost),
+    turn.cost === null ? null : formatMoney(turn.cost.amount, turn.cost.currency),
     turn.followsNumber !== null && turn.followsNumber !== turn.number - 1 ? `follows #${turn.followsNumber}` : null,
     turn.retriedAsNumber === null ? null : `asked again as #${turn.retriedAsNumber}`,
     metadataChanges.length > 0 ? formatEntries(metadataChanges) : null,

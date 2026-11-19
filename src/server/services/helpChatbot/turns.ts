@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto'
 import { Op } from 'sequelize'
 import z from 'zod/v4'
 
-import type { Completion } from './azureCompletion'
+import type { Completion } from './completion'
 import type { ChatMessage } from './history'
 import type { HelpChatbotFeedback } from './parseRequest'
 
