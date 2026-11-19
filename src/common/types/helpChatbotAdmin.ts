@@ -11,14 +11,16 @@ export type HelpChatbotPrice = {
   validTo: string | null
   input: number
   cachedInput: number
+  cacheWrite: number
   output: number
 }
 
-// In euros. output excludes the reasoning, which is billed at the output price. unpricedTurns have usage but
-// no price, and aren't in the sums.
+// In euros. input excludes the cached input and cache writes, and output the reasoning, which is billed at the
+// output price. unpricedTurns have usage but no price, and aren't in the sums.
 export type HelpChatbotCost = {
   input: number
   cachedInput: number
+  cacheWrite: number
   output: number
   reasoning: number
   total: number
@@ -89,6 +91,7 @@ export type HelpChatbotTurnDetails = {
   gitSha: string | null
   promptTokens: number | null
   cachedTokens: number | null
+  cacheWriteTokens: number | null
   completionTokens: number | null
   reasoningTokens: number | null
   durationMs: number | null
@@ -164,6 +167,7 @@ export type HelpChatbotUsage = {
   billed: number
   promptTokens: number
   cachedTokens: number
+  cacheWriteTokens: number
   completionTokens: number
   reasoningTokens: number
   // Of the billed turns

@@ -33,9 +33,11 @@ class HelpChatbotTurn extends Model<InferAttributes<HelpChatbotTurn>, InferCreat
   declare deployment: string | null
   declare model: string | null
   declare gitSha: string | null
-  // cachedTokens is part of promptTokens and reasoningTokens part of completionTokens; don't add them up
+  // cachedTokens and cacheWriteTokens are part of promptTokens and reasoningTokens part of completionTokens; don't
+  // add them up. All of them are null or none, or the turn's cost is silently left out.
   declare promptTokens: number | null
   declare cachedTokens: number | null
+  declare cacheWriteTokens: number | null
   declare completionTokens: number | null
   declare reasoningTokens: number | null
   declare durationMs: number | null
@@ -105,6 +107,10 @@ HelpChatbotTurn.init(
       allowNull: true,
     },
     cachedTokens: {
+      type: INTEGER,
+      allowNull: true,
+    },
+    cacheWriteTokens: {
       type: INTEGER,
       allowNull: true,
     },

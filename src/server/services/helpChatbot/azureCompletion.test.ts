@@ -36,7 +36,7 @@ const completion = (content: string | null, finishReason = 'stop') => ({
   usage: {
     prompt_tokens: 6000,
     completion_tokens: 200,
-    prompt_tokens_details: { cached_tokens: 5000 },
+    prompt_tokens_details: { cached_tokens: 5000, cache_write_tokens: 800 },
     completion_tokens_details: { reasoning_tokens: 64 },
   },
 })
@@ -79,7 +79,13 @@ describe('getAzureCompletion', () => {
       model: 'gpt-5-mini-2025-08-07',
       content: 'Open the survey.',
       finishReason: 'stop',
-      usage: { promptTokens: 6000, cachedTokens: 5000, completionTokens: 200, reasoningTokens: 64 },
+      usage: {
+        promptTokens: 6000,
+        cachedTokens: 5000,
+        cacheWriteTokens: 800,
+        completionTokens: 200,
+        reasoningTokens: 64,
+      },
     })
   })
 

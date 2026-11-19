@@ -64,10 +64,12 @@ const downloadCsv = (usage: GetHelpChatbotUsageResponse, query: GetHelpChatbotUs
     'thumbs down',
     'input tokens',
     'cached input tokens',
+    'cache write tokens',
     'output tokens',
     'reasoning tokens',
     'uncached input cost €',
     'cached input cost €',
+    'cache write cost €',
     'output cost € (without reasoning)',
     'reasoning cost €',
     'total cost €',
@@ -84,10 +86,12 @@ const downloadCsv = (usage: GetHelpChatbotUsageResponse, query: GetHelpChatbotUs
     p.down,
     p.promptTokens,
     p.cachedTokens,
+    p.cacheWriteTokens,
     p.completionTokens,
     p.reasoningTokens,
     p.cost.input,
     p.cost.cachedInput,
+    p.cost.cacheWrite,
     p.cost.output,
     p.cost.reasoning,
     p.cost.total,
@@ -138,7 +142,12 @@ const NUMERIC: SystemStyleObject<Theme> = {
 
 const CostBreakdown = ({ totals }: { totals: HelpChatbotUsage }) => {
   const rows = [
-    { label: 'Uncached input', tokens: totals.promptTokens - totals.cachedTokens, cost: totals.cost.input },
+    {
+      label: 'Uncached input',
+      tokens: totals.promptTokens - totals.cachedTokens - totals.cacheWriteTokens,
+      cost: totals.cost.input,
+    },
+    { label: 'Cache writes', tokens: totals.cacheWriteTokens, cost: totals.cost.cacheWrite },
     { label: 'Cached input', tokens: totals.cachedTokens, cost: totals.cost.cachedInput },
     { label: 'Output', tokens: totals.completionTokens - totals.reasoningTokens, cost: totals.cost.output },
     { label: 'Reasoning', tokens: totals.reasoningTokens, cost: totals.cost.reasoning },
@@ -186,21 +195,26 @@ const PriceTable = ({ prices }: { prices: HelpChatbotPrice[] }) => (
           <TableCell>Valid</TableCell>
           <TableCell sx={NUMERIC}>Input</TableCell>
           <TableCell sx={NUMERIC}>Cached input</TableCell>
+          <TableCell sx={NUMERIC}>Cache write</TableCell>
           <TableCell sx={NUMERIC}>Output</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>
-        {prices.map(price => (
-          <TableRow key={`${price.family}:${price.validFrom}`}>
-            <TableCell sx={{ whiteSpace: 'nowrap' }}>{price.family}</TableCell>
-            <TableCell sx={{ whiteSpace: 'nowrap' }}>
-              {formatDate(price.validFrom)} – {price.validTo ? formatDate(price.validTo) : 'now'}
-            </TableCell>
-            <TableCell sx={NUMERIC}>{price.input.toFixed(2)}</TableCell>
-            <TableCell sx={NUMERIC}>{price.cachedInput.toFixed(2)}</TableCell>
-            <TableCell sx={NUMERIC}>{price.output.toFixed(2)}</TableCell>
-          </TableRow>
-        ))}
+        {prices.map(price => {
+          const formatPrice = (value: number) => value.toFixed(2)
+          return (
+            <TableRow key={`${price.family}:${price.validFrom}`}>
+              <TableCell sx={{ whiteSpace: 'nowrap' }}>{price.family}</TableCell>
+              <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                {formatDate(price.validFrom)} – {price.validTo ? formatDate(price.validTo) : 'now'}
+              </TableCell>
+              <TableCell sx={NUMERIC}>{formatPrice(price.input)}</TableCell>
+              <TableCell sx={NUMERIC}>{formatPrice(price.cachedInput)}</TableCell>
+              <TableCell sx={NUMERIC}>{formatPrice(price.cacheWrite)}</TableCell>
+              <TableCell sx={NUMERIC}>{formatPrice(price.output)}</TableCell>
+            </TableRow>
+          )
+        })}
       </TableBody>
     </Table>
   </TableContainer>
@@ -341,7 +355,7 @@ const UsageView = () => {
             <Tile
               label="Tokens"
               value={formatNumber(usage.totals.promptTokens + usage.totals.completionTokens)}
-              detail={`${formatNumber(usage.totals.cachedTokens)} cached · ${formatNumber(usage.totals.reasoningTokens)} reasoning`}
+              detail={`${formatNumber(usage.totals.cachedTokens)} cached · ${formatNumber(usage.totals.cacheWriteTokens)} cache writes · ${formatNumber(usage.totals.reasoningTokens)} reasoning`}
             />
             <Tile
               label="Cost"

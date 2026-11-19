@@ -75,7 +75,7 @@ export const getConversations = async (
         count(*) FILTER (WHERE t.status = 'aborted') AS aborted,
         count(*) FILTER (WHERE t.status = 'answered' AND t.finish_reason = 'length') AS cut_off,
         coalesce(sum(t.prompt_tokens + t.completion_tokens), 0) AS total_tokens,
-        coalesce(sum(t.input_cost + t.cached_cost + t.output_cost + t.reasoning_cost), 0) AS cost,
+        coalesce(sum(t.input_cost + t.cached_cost + t.cache_write_cost + t.output_cost + t.reasoning_cost), 0) AS cost,
         ${query.search ? 'bool_or(t.question ILIKE :search OR t.answer ILIKE :search)' : 'TRUE'} AS matches_search
       FROM turns t
       GROUP BY t.conversation_id, t.user_id
@@ -179,8 +179,9 @@ export const getConversation = async (
       t.question, t.answer,
       t.finish_reason AS "finishReason", t.deployment, t.model, t.git_sha AS "gitSha",
       t.prompt_tokens AS "promptTokens", t.cached_tokens AS "cachedTokens",
-      t.completion_tokens AS "completionTokens", t.reasoning_tokens AS "reasoningTokens",
-      t.duration_ms AS "durationMs", t.input_cost + t.cached_cost + t.output_cost + t.reasoning_cost AS "cost",
+      t.cache_write_tokens AS "cacheWriteTokens", t.completion_tokens AS "completionTokens",
+      t.reasoning_tokens AS "reasoningTokens", t.duration_ms AS "durationMs",
+      t.input_cost + t.cached_cost + t.cache_write_cost + t.output_cost + t.reasoning_cost AS "cost",
       t.rating, t.feedback_comment AS "feedbackComment", t.feedback_reviewed_at AS "feedbackReviewedAt"
     FROM turns t
     ORDER BY t.created_at, t.id

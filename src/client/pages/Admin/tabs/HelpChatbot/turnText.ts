@@ -26,9 +26,9 @@ export const describeOutsideHistory = (turn: HelpChatbotTurnDetails): string | n
 
 export const describeTokens = (turn: HelpChatbotTurnDetails) => {
   if (turn.promptTokens === null) return null
-  return `${formatNumber(turn.promptTokens)} in (${formatNumber(turn.cachedTokens ?? 0)} cached) · ${formatNumber(
-    turn.completionTokens ?? 0
-  )} out (${formatNumber(turn.reasoningTokens ?? 0)} reasoning)`
+  return `${formatNumber(turn.promptTokens)} in (${formatNumber(turn.cachedTokens ?? 0)} cached, ${formatNumber(
+    turn.cacheWriteTokens ?? 0
+  )} cache writes) · ${formatNumber(turn.completionTokens ?? 0)} out (${formatNumber(turn.reasoningTokens ?? 0)} reasoning)`
 }
 
 const describeRating = (turn: HelpChatbotTurnDetails) => {

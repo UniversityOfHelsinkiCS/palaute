@@ -18,6 +18,7 @@ const TIMEOUT_MS = 60_000
 export type CompletionUsage = {
   promptTokens: number
   cachedTokens: number
+  cacheWriteTokens: number
   completionTokens: number
   reasoningTokens: number
 }
@@ -46,7 +47,7 @@ type AzureChatCompletion = {
   usage?: {
     prompt_tokens: number
     completion_tokens: number
-    prompt_tokens_details?: { cached_tokens?: number }
+    prompt_tokens_details?: { cached_tokens?: number; cache_write_tokens?: number }
     completion_tokens_details?: { reasoning_tokens?: number }
   }
 }
@@ -56,6 +57,7 @@ const toUsage = (usage: AzureChatCompletion['usage']): CompletionUsage | null =>
     ? {
         promptTokens: usage.prompt_tokens,
         cachedTokens: usage.prompt_tokens_details?.cached_tokens ?? 0,
+        cacheWriteTokens: usage.prompt_tokens_details?.cache_write_tokens ?? 0,
         completionTokens: usage.completion_tokens,
         reasoningTokens: usage.completion_tokens_details?.reasoning_tokens ?? 0,
       }

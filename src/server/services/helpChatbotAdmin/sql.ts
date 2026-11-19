@@ -57,10 +57,12 @@ const pricesValues = () => {
       [`validTo${i}`]: price.validTo,
       [`input${i}`]: price.input,
       [`cachedInput${i}`]: price.cachedInput,
+      [`cacheWrite${i}`]: price.cacheWrite,
       [`output${i}`]: price.output,
     })
     return `(:family${i}, CAST(:validFrom${i} AS timestamptz), CAST(:validTo${i} AS timestamptz),
-      CAST(:input${i} AS float8), CAST(:cachedInput${i} AS float8), CAST(:output${i} AS float8))`
+      CAST(:input${i} AS float8), CAST(:cachedInput${i} AS float8), CAST(:cacheWrite${i} AS float8),
+      CAST(:output${i} AS float8))`
   })
   return { sql: rows.join(',\n'), replacements }
 }
@@ -71,14 +73,15 @@ const pricesValues = () => {
 export const pricedTurns = (conditions: Conditions) => {
   const prices = pricesValues()
   const sql = `
-    prices (family, valid_from, valid_to, input, cached_input, output) AS (
+    prices (family, valid_from, valid_to, input, cached_input, cache_write, output) AS (
       VALUES ${prices.sql}
     ),
     turns AS (
       SELECT
         t.*,
-        (t.prompt_tokens - t.cached_tokens) * p.input / 1000000 AS input_cost,
+        (t.prompt_tokens - t.cached_tokens - t.cache_write_tokens) * p.input / 1000000 AS input_cost,
         t.cached_tokens * p.cached_input / 1000000 AS cached_cost,
+        t.cache_write_tokens * p.cache_write / 1000000 AS cache_write_cost,
         (t.completion_tokens - t.reasoning_tokens) * p.output / 1000000 AS output_cost,
         t.reasoning_tokens * p.output / 1000000 AS reasoning_cost,
         t.prompt_tokens IS NOT NULL AND p.family IS NULL AS unpriced
@@ -108,11 +111,13 @@ export const USAGE_COLUMNS = `
   count(t.prompt_tokens) AS "billed",
   coalesce(sum(t.prompt_tokens), 0) AS "promptTokens",
   coalesce(sum(t.cached_tokens), 0) AS "cachedTokens",
+  coalesce(sum(t.cache_write_tokens), 0) AS "cacheWriteTokens",
   coalesce(sum(t.completion_tokens), 0) AS "completionTokens",
   coalesce(sum(t.reasoning_tokens), 0) AS "reasoningTokens",
   avg(t.duration_ms) FILTER (WHERE t.prompt_tokens IS NOT NULL) AS "avgDurationMs",
   coalesce(sum(t.input_cost), 0) AS "inputCost",
   coalesce(sum(t.cached_cost), 0) AS "cachedCost",
+  coalesce(sum(t.cache_write_cost), 0) AS "cacheWriteCost",
   coalesce(sum(t.output_cost), 0) AS "outputCost",
   coalesce(sum(t.reasoning_cost), 0) AS "reasoningCost",
   count(t.id) FILTER (WHERE t.unpriced) AS "unpricedTurns"`
@@ -123,6 +128,7 @@ type NumericValue = string | number | null
 export type UsageRow = Record<Exclude<keyof HelpChatbotUsage, 'cost'>, NumericValue> & {
   inputCost: NumericValue
   cachedCost: NumericValue
+  cacheWriteCost: NumericValue
   outputCost: NumericValue
   reasoningCost: NumericValue
   unpricedTurns: NumericValue
@@ -134,12 +140,13 @@ export const toCost = (row: UsageRow): HelpChatbotCost => {
   const cost = {
     input: toNumber(row.inputCost),
     cachedInput: toNumber(row.cachedCost),
+    cacheWrite: toNumber(row.cacheWriteCost),
     output: toNumber(row.outputCost),
     reasoning: toNumber(row.reasoningCost),
   }
   return {
     ...cost,
-    total: cost.input + cost.cachedInput + cost.output + cost.reasoning,
+    total: cost.input + cost.cachedInput + cost.cacheWrite + cost.output + cost.reasoning,
     unpricedTurns: toNumber(row.unpricedTurns),
   }
 }
@@ -156,6 +163,7 @@ export const toUsage = (row: UsageRow): HelpChatbotUsage => ({
   billed: toNumber(row.billed),
   promptTokens: toNumber(row.promptTokens),
   cachedTokens: toNumber(row.cachedTokens),
+  cacheWriteTokens: toNumber(row.cacheWriteTokens),
   completionTokens: toNumber(row.completionTokens),
   reasoningTokens: toNumber(row.reasoningTokens),
   avgDurationMs: row.avgDurationMs === null ? null : Math.round(toNumber(row.avgDurationMs)),

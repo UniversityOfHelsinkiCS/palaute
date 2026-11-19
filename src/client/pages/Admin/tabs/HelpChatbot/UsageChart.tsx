@@ -31,6 +31,7 @@ const UsageChart = ({ periods, groupBy, metric }: UsageChartProps) => {
       ? [theme.palette.primary.main, theme.palette.warning.main]
       : [
           theme.palette.primary.dark,
+          theme.palette.primary.main,
           theme.palette.primary.light,
           theme.palette.warning.main,
           theme.palette.warning.dark,
@@ -42,13 +43,15 @@ const UsageChart = ({ periods, groupBy, metric }: UsageChartProps) => {
       { label: 'Empty, failed or aborted', data: periods.map(p => p.empty + p.failed + p.aborted + p.pending) },
     ],
     tokens: [
-      { label: 'Uncached input', data: periods.map(p => p.promptTokens - p.cachedTokens) },
+      { label: 'Uncached input', data: periods.map(p => p.promptTokens - p.cachedTokens - p.cacheWriteTokens) },
+      { label: 'Cache writes', data: periods.map(p => p.cacheWriteTokens) },
       { label: 'Cached input', data: periods.map(p => p.cachedTokens) },
       { label: 'Output', data: periods.map(p => p.completionTokens - p.reasoningTokens) },
       { label: 'Reasoning', data: periods.map(p => p.reasoningTokens) },
     ],
     cost: [
       { label: 'Uncached input', data: periods.map(p => p.cost.input) },
+      { label: 'Cache writes', data: periods.map(p => p.cost.cacheWrite) },
       { label: 'Cached input', data: periods.map(p => p.cost.cachedInput) },
       { label: 'Output', data: periods.map(p => p.cost.output) },
       { label: 'Reasoning', data: periods.map(p => p.cost.reasoning) },
