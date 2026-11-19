@@ -21,7 +21,7 @@ NorppAI is an AI assistant that answers questions about using Norppa. It's an ex
 
 Azure OpenAI, deployment `HELP_CHATBOT_MODEL` (default `gpt-5-mini`), with the same key and resource as gptwrapper. A `claude-*` model goes to Anthropic's own API with `ANTHROPIC_API_KEY` instead (`anthropicCompletion.ts`), which maps the token counts and finish reasons to the Azure ones: Anthropic's `input_tokens` excludes the cached input and cache writes, `max_tokens` is saved as `length` and a refusal as `content_filter`. Anthropic caches only what's marked: the system prompt, shared by every conversation in a language, and the conversation so far, for 5 minutes. Overloaded, rate-limited and failed requests are retried twice, within the same 60 s as one Azure request.
 
-In `knowledge.md`, `[[section:key]]` becomes the UI label in the user's language (`[[section:key|fi]]` in the given one), so answers quote what users see on screen. A missing key fails the tests. HTML comments are notes for editors and never reach the model. The file is read from the source tree at runtime, as `tsc` doesn't copy it to `build/`. Its own header comment has the rules for editing it.
+In `knowledge.md`, `[[section:key]]` becomes the UI label in the user's language (`[[section:key|fi]]` in the given one, `[[section:key|count=5]]` filling the label's `{{count}}`), so answers quote what users see on screen. A missing key or an unfilled placeholder fails the tests. HTML comments are notes for editors and never reach the model. The file is read from the source tree at runtime, as `tsc` doesn't copy it to `build/`. Its own header comment has the rules for editing it.
 
 ## Saved turns
 

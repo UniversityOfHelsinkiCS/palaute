@@ -1,6 +1,7 @@
 <!--
 Source of the help chatbot's knowledge, rendered into the system prompt by systemPrompt.ts.
 [[section:key]] becomes the UI label in the user's UI language, [[section:key|fi]] the label in the given language.
+A label with a placeholder needs its value, e.g. [[section:key|count=5]] for {{count}}.
 
 Rules for editing:
 - Write in English and check every fact against the code; the user guide is partly outdated.
@@ -169,7 +170,7 @@ The same for all survey types. The [[feedbackTargetView:feedbacksTab]] tab shows
 - Scale and choice questions are public by default; open questions, the grouping question and copied or carried-over questions are [[common:notPublic]]. The grouping question's publicity can be changed only on the [[feedbackTargetView:feedbacksTab]] tab. University level scale and choice questions, and programme questions the programme has made public, are always public.
 - A responsible teacher sets a question's publicity on the [[feedbackTargetView:feedbacksTab]] tab (scale and choice questions also in the question editor). An open question can be made public only after the survey has closed, after confirming its answers contain no personal data.
 - [[feedbackTargetResults:setHidden]] (eye icon; responsible teachers and programme admins) hides an open answer from those who see only public answers. All identical answers to the question are hidden together.
-- Small courses: if fewer than 5 students are enrolled, students must tick [[feedbackView:allowSubmitCheckbox]] to submit, and results are shown only to the responsible teachers. Others see a note that results aren't shown. The limit counts enrolled students in Norppa, not answers.
+- Small courses: if fewer than 5 students are enrolled, students must tick [[feedbackView:allowSubmitCheckbox|count=5]] to submit, and results are shown only to the responsible teachers. Others see a note that results aren't shown. The limit counts enrolled students in Norppa, not answers.
 - Open answers are listed in alphabetical order, and each question's answers are shuffled separately in the download, so one student's answers can't be linked together.
 - The tab shows each question's distribution, with chart and table views, the mean of scale questions and the workload question, and the daily number of answers. The questions are in the same order as students see them, with the survey's text sections. [[feedbackTargetResults:useClassicLayout]] switches to the earlier layout, where scale and choice questions come first and open questions after them; the tab opens in the new layout every time.
 

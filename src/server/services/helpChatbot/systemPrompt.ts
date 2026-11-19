@@ -41,12 +41,21 @@ export const translate = (key: string, language: LanguageId) => {
   throw new Error(`[HelpChatbot] No translation for ${key} in knowledge.md`)
 }
 
-// [[section:key]] becomes the UI label in the user's language, [[section:key|fi]] in the given one
+// [[section:key]] becomes the UI label in the user's language, [[section:key|fi]] in the given one, and
+// [[section:key|count=5]] fills the label's {{count}}. Throws on an unfilled placeholder, which would reach the model.
 export const renderKnowledge = (template: string, language: LanguageId) =>
   template
     .replace(/<!--[\s\S]*?-->/g, '')
-    .replace(/\[\[([\w:-]+)(?:\|(fi|sv|en))?\]\]/g, (_, key: string, pinned?: LanguageId) => {
-      const label = translate(key, pinned ?? language).replace(/<[^>]*>/g, '')
+    .replace(/\[\[([\w:-]+)((?:\|[\w=]+)*)\]\]/g, (_, key: string, options: string) => {
+      const parts = options.split('|').slice(1)
+      const pinned = parts.find((part): part is LanguageId => ['fi', 'sv', 'en'].includes(part))
+      const values = Object.fromEntries(parts.filter(part => part.includes('=')).map(part => part.split('=')))
+      const label = translate(key, pinned ?? language)
+        .replace(/<[^>]*>/g, '')
+        .replace(/\{\{(\w+)\}\}/g, (__, name: string) => {
+          if (!(name in values)) throw new Error(`[HelpChatbot] No value for {{${name}}} of ${key} in knowledge.md`)
+          return values[name]
+        })
       return `**${label}**`
     })
 

@@ -16,6 +16,15 @@ describe('renderKnowledge', () => {
     expect(renderKnowledge('<!--\nNote for editors\n-->Text', 'en')).toBe('Text')
   })
 
+  it('fills a placeholder of the label', () => {
+    expect(renderKnowledge('[[feedbackView:allowSubmitCheckbox|count=5]]', 'en')).toContain('less than 5 students')
+    expect(renderKnowledge('[[feedbackView:allowSubmitCheckbox|fi|count=5]]', 'en')).not.toContain('{{')
+  })
+
+  it('throws on an unfilled placeholder', () => {
+    expect(() => renderKnowledge('[[feedbackView:allowSubmitCheckbox]]', 'en')).toThrow('{{count}}')
+  })
+
   it('throws on an unknown key', () => {
     expect(() => renderKnowledge('[[navBar:noSuchKey]]', 'en')).toThrow('navBar:noSuchKey')
   })
@@ -25,7 +34,7 @@ describe('SYSTEM_PROMPTS', () => {
   it.each(['fi', 'sv', 'en'] as const)('resolves every label of knowledge.md in %s', language => {
     const prompt = SYSTEM_PROMPTS[language]
 
-    expect(prompt).not.toMatch(/\[\[|<!--/)
+    expect(prompt).not.toMatch(/\[\[|<!--|\{\{/)
     expect(prompt).toContain(`**${translate('navBar:courseSummary', language)}**`)
   })
 })
