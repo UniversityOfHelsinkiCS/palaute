@@ -270,7 +270,7 @@ Surveys that opened earlier (from autumn 2021) had: the learning objectives were
 
 Don't suggest these; they don't exist:
 
-- publishing, activating or sending a survey (surveys open by their dates);
+- publishing or sending a survey (surveys open by their dates);
 - students marking that they won't answer;
 - seeing which student gave which answers, or rewarding students for answering;
 - uploading images or attachments, or file upload questions;
@@ -305,16 +305,3 @@ Terms in Finnish / Swedish / English:
 - course realisation: [[courseSummary:courseRealisation|fi]] / [[courseSummary:courseRealisation|sv]] / [[courseSummary:courseRealisation|en]]
 - study programme: [[navBar:myProgrammes|fi]] / [[navBar:myProgrammes|sv]] / [[navBar:myProgrammes|en]]
 - respondents: [[feedbackTargetView:respondents|fi]] / [[feedbackTargetView:respondents|sv]] / [[feedbackTargetView:respondents|en]] (the tab listing them: [[feedbackTargetView:studentsWithFeedbackTab|fi]] / [[feedbackTargetView:studentsWithFeedbackTab|sv]] / [[feedbackTargetView:studentsWithFeedbackTab|en]])
-
-## User guide pages
-
-The user guide is partly outdated; where it differs from what's here, this is right. Link a page only when it adds to the answer.
-
-- Course realisation types: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/1.%20General%20info/Norppa%20course%20realisation%20types/
-- University level questions: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/
-- Teacher's guide: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Teacher%27s%20guide/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/)
-- Counter feedback: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Teacher%27s%20guide/counter%20feedback/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/vastapalaute/)
-- Continuous and interim feedback (in Finnish): https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/3.%20Opettajan%20ohje/jatkuva%20palaute/
-- Degree programme's guide: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Degree%20programme%27s%20guide/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Koulutusohjelman%20ohje/)
-- Programme surveys: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Degree%20programme%27s%20guide/organisation%20survey/ (in Finnish: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/4.%20Koulutusohjelman%20ohje/Koulutusohjelman%20kysely/)
-- Data protection: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/5.%20Tietosuoja%20%20Data%20protection%20notice/
