@@ -18,6 +18,7 @@ import ExportFeedbacksMenu from './ExportFeedbacksMenu'
 import FeedbackResponse from './FeedbackResponse'
 import GroupSelector from './GroupSelector'
 import OrderedQuestionResults from './OrderedQuestionResults'
+import { MAX_WIDTH } from './OrderedQuestionResults/layout'
 import QuestionResults from './QuestionResults'
 import FeedbackChart from './QuestionResults/FeedbackChart'
 import useChartConfig from './QuestionResults/useChartConfig'
@@ -221,7 +222,7 @@ const Results = () => {
   )
 
   return (
-    <Box id="feedback-target-tab-content">
+    <Box id="feedback-target-tab-content" sx={ordered ? { maxWidth: MAX_WIDTH } : undefined}>
       <TabHeading actions={toolbar}>{t('feedbackTargetView:feedbacksTab')}</TabHeading>
 
       {isOpen && feedback && (
@@ -261,6 +262,7 @@ const Results = () => {
             t={t}
             showTable={showTable}
             inTabPanel
+            fullWidth={ordered}
           />
         )}
 

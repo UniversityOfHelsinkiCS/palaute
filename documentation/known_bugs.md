@@ -10,7 +10,7 @@ Found while writing the help chatbot's knowledge document (September 2026) and t
 
 `src/server/services/feedbackTargets/getFeedbacks.ts:160-178`
 
-On courses with fewer than five students, only the Results tab limits the answers to responsible teachers (`Results.jsx:186`). The server returns them to anyone with normal access (teachers, programme staff with read rights and students get the public ones) as soon as any student's user feedback target was updated after 10 June 2025, which is taken as consent. But `updatedAt` also changes for unrelated writes, e.g. when `feedbackOpenEmailSent` is set (`sendEmailToStudentsWhenOpeningImmediately.ts:61`), so it doesn't show consent.
+On courses with fewer than five students, only the Results tab limits the answers to responsible teachers (`Results.jsx:187`). The server returns them to anyone with normal access (teachers, programme staff with read rights and students get the public ones) as soon as any student's user feedback target was updated after 10 June 2025, which is taken as consent. But `updatedAt` also changes for unrelated writes, e.g. when `feedbackOpenEmailSent` is set (`sendEmailToStudentsWhenOpeningImmediately.ts:61`), so it doesn't show consent.
 
 Fix: store the consent with the answer, and check the role on the server.
 
@@ -187,7 +187,7 @@ Fix: update the editor with the saved questions' ids after saving.
 
 `src/server/services/surveys/teacherSurvey.ts:10-27`
 
-Carry-over clones the previous realisation's own questions with their `data`, and a grouping question's options are the previous realisation's Sisu groups (`GroupingQuestionSettings.jsx:117-128`). The new survey asks students to choose between last time's groups, and the results page finds no teachers for them (`Results.jsx:72-84`).
+Carry-over clones the previous realisation's own questions with their `data`, and a grouping question's options are the previous realisation's Sisu groups (`GroupingQuestionSettings.jsx:117-128`). The new survey asks students to choose between last time's groups, and the results page finds no teachers for them (`Results.jsx:73-85`).
 
 Fix: rebuild the options from the new realisation's groups, or leave the grouping question out of the carry-over.
 
@@ -258,7 +258,7 @@ Each of these gives the user an error when they try the action.
 | What                                 | Shown to                         | Allowed for                      | Where                                                           |
 | ------------------------------------ | -------------------------------- | -------------------------------- | --------------------------------------------------------------- |
 | Send reminder email (Share tab)      | all teachers                     | responsible teachers, org admins | `tabs/Share/Share.jsx:72-84`, `Access.ts:77`                    |
-| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `Results.jsx:153`, `hideFeedback.ts:58`                         |
+| Hide an open answer (eye icon)       | all teachers                     | responsible teachers, org admins | `Results.jsx:154`, `hideFeedback.ts:58`                         |
 | Give counter feedback tab            | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:116`, `updateFeedbackResponse.ts:24` |
 | Create interim feedback              | responsible teachers, org admins | responsible teachers             | `FeedbackTargetContent.jsx:121-122`, `interimFeedbacks.ts:169`  |
 | Edit interim feedback name and dates | all teachers                     | responsible teachers             | `FeedbackTargetInformation.jsx:34`, `interimFeedbacks.ts:199`   |

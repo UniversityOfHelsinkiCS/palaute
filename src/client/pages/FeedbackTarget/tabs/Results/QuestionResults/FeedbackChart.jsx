@@ -150,11 +150,6 @@ const buildChartConfig = (feedbacks, studentCount, opensAt, closesAt, feedbackRe
       maintainAspectRatio: false,
       resizeDelay: 100,
       clip: { left: 0, top: false, right: 0, bottom: false },
-      layout: {
-        padding: {
-          right: 50,
-        },
-      },
       interaction: {
         intersect: false,
         mode: 'nearest',
@@ -246,6 +241,7 @@ const FeedbackChart = ({
   feedbackReminderLastSentAt,
   showTable,
   inTabPanel = false,
+  fullWidth = false,
 }) => {
   const { t, i18n } = useTranslation()
   const [config, setConfig] = React.useState({ type: 'line', data: { datasets: [] }, options: {} })
@@ -274,7 +270,11 @@ const FeedbackChart = ({
         {t('courseSummary:feedbackCount')}
       </Typography>
       <Box sx={{ display: showTable ? 'none' : 'flex', justifyContent: 'center', width: '100%', height: '20rem' }}>
-        <Box role="img" aria-label={t('feedbackTargetResults:feedbackCountChartAriaLabel')} minWidth="80%">
+        <Box
+          role="img"
+          aria-label={t('feedbackTargetResults:feedbackCountChartAriaLabel')}
+          minWidth={fullWidth ? '100%' : '80%'}
+        >
           <Line {...config} />
         </Box>
       </Box>
