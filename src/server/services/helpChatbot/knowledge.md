@@ -302,7 +302,7 @@ Terms in Finnish / Swedish / English:
 
 ## User guide pages
 
-The user guide is partly outdated; where it differs from this documentation, this documentation is right. Link a page only when it adds to the answer.
+The user guide is partly outdated; where it differs from what's here, this is right. Link a page only when it adds to the answer.
 
 - Course realisation types: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/1.%20General%20info/Norppa%20course%20realisation%20types/
 - University level questions: https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/2.%20HY%20yhteiset%20kysymykset%20%20joint%20questions/
