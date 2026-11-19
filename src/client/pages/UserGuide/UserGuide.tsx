@@ -1,5 +1,5 @@
 import { Box, GlobalStyles } from '@mui/material'
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Navigate, useParams, useSearchParams } from 'react-router-dom'
 
@@ -9,6 +9,7 @@ import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import { BELOW_HEADER } from '../../hooks/useHeaderHeight'
+import apiClient from '../../util/apiClient'
 import canSeeUserGuide from './canSeeUserGuide'
 import { getGuideHome, getGuidePages } from './content'
 import GroupLanding from './GroupLanding'
@@ -34,6 +35,13 @@ const GuideLayout = ({ pages, home, page, query, canEdit }: GuideLayoutProps) =>
   const { t } = useTranslation()
   const articleRef = useRef<HTMLElement>(null)
   useScrollToSection(articleRef)
+
+  useEffect(() => {
+    // TODO: Uncomment when the guide is opened to everyone, so that admins aren't counted
+    // if (canEdit) return
+    apiClient.post('/user-guide/opened').catch(() => {})
+  }, [])
+
   // Previous and next stay within the page's group; landing pages and pages outside the groups have neither
   const siblings =
     page?.group && !page.isLanding ? pages.filter(other => other.group === page.group && !other.isLanding) : []

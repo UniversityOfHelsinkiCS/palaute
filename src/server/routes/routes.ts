@@ -40,6 +40,11 @@ router.use(['/ping', '/noad/ping'], (_, res) => {
 router.use(iamGroupsMiddleware)
 router.use(currentUserMiddleware)
 
+// Counted from the access log line; the handler has nothing else to do
+router.post('/user-guide/opened', (_, res) => {
+  res.sendStatus(204)
+})
+
 router.use('/noad', noadRouter)
 router.use('/', userController)
 router.use('/feedbacks', feedbacksRouter.ad)
