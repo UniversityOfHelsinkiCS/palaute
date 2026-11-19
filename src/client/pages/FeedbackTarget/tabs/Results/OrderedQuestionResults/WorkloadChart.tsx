@@ -26,6 +26,12 @@ const point = (radius: number, angle: number) => [
   CENTER_Y - radius * Math.sin(toRadians(angle)),
 ]
 
+const needlePath = (outline: number) => {
+  const tipCenter = RADIUS * 0.92 - 1
+  const tipRadius = 1 + outline
+  return `M 0 ${-4 - outline} L ${tipCenter} ${-tipRadius} A ${tipRadius} ${tipRadius} 0 0 1 ${tipCenter} ${tipRadius} L 0 ${4 + outline} Z`
+}
+
 let measuringContext: CanvasRenderingContext2D | null | undefined
 
 const measureText = (text: string, font: string) => {
@@ -138,13 +144,17 @@ const WorkloadChart = ({ question }: { question: ResultQuestion }) => {
           )
         })}
         {needleAngle !== null && (
-          <g fill={theme.palette.text.primary}>
-            <polygon
-              points={[point(RADIUS * 0.92, needleAngle), point(4, needleAngle + 90), point(4, needleAngle - 90)]
-                .map(([x, y]) => `${x},${y}`)
-                .join(' ')}
-            />
-            <circle cx={CENTER_X} cy={CENTER_Y} r={6} />
+          <g transform={`translate(${CENTER_X} ${CENTER_Y}) rotate(${-needleAngle})`}>
+            {[
+              { color: theme.palette.background.paper, outline: 1.5 },
+              { color: theme.palette.action.hover, outline: 1.5 },
+              { color: theme.palette.text.primary, outline: 0 },
+            ].map(({ color, outline }) => (
+              <g key={color} fill={color} opacity={outline ? 0.7 : 1}>
+                <path d={needlePath(outline)} />
+                <circle r={6 + outline} />
+              </g>
+            ))}
           </g>
         )}
       </Box>
