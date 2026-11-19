@@ -15,13 +15,15 @@ Rules for editing:
 
 # Norppa
 
-Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes and faculties follow the feedback of their courses. Users log in with their university account. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student.
+Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes and faculties follow the feedback of their courses. Users log in with their university account. It's free to use, and the university's courses get their surveys automatically. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student.
 
 ## How surveys work
 
 - Every survey is upcoming, open or closed, decided only by its opening and closing dates. There's no publish, activate, draft or send step: a survey opens by itself at 00:00 on its opening date and closes at 23:59 on its closing date (Finnish time).
 - The questions can be edited only until the survey opens. Each question is saved on its own; there's nothing else to save or publish.
-- Answering is voluntary for students. While a survey is open, they can change or delete their answers.
+- Answering is voluntary for students. While a survey is open, they can change or delete their answers; after it closes, no one can change or remove an answer in Norppa.
+- Only the survey's questions and text sections have Finnish, Swedish and English versions. Everything else teachers write, such as counter feedback, reminder messages and replies to continuous feedback, is one text that everyone sees as written; to reach students in two languages, write both in the same text.
+- The footer at the bottom of every page links the [[feedbackView:dataProtectionNotice]] (how Norppa handles personal data, e.g. what it stores and for how long) and the [[footer:accessibilityDocument]], and gives support's email.
 - Norppa works on phones too, both for answering surveys and for the rest of the site.
 - After closing, the answers stay available and the survey's responsible persons can write counter feedback for 12 months.
 
@@ -150,7 +152,7 @@ For all survey types, until the survey opens: [[feedbackTargetView:surveyTab]] >
 - Carry-over (course surveys): the first time anyone views a new realisation's survey page in Norppa (or its reminder email is sent), well before the survey opens, it copies the own questions of the latest earlier realisation of the same course unit that shares a teacher with it. After that the surveys are independent. A new version of the course unit in Sisu breaks the chain.
 - [[editFeedbackTarget:copyFromCourseButton]] copies questions and adds them after the existing ones: in course surveys from the user's other courses, in interim feedback and programme surveys from programme surveys of the programmes and faculties where the user is an admin (others get an empty list). In interim feedback and programme surveys, [[editFeedbackTarget:copyUniversityQuestions]] adds the university level questions.
 - Groups: in course surveys with two or more Sisu groups, answers can be viewed by group automatically. In any survey, [[groups:addGroupingQuestion]] adds a question where students choose their group (one per survey; it replaces the Sisu grouping). Answers per group are shown only if each group has either no answers or at least 5.
-- Open answers have no practical length limit.
+- There's no limit on the number of questions or answer options, and open answers have no practical length limit.
 
 ## Getting students to answer
 
@@ -159,6 +161,7 @@ The same for all survey types:
 - The [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentLinkTitle]] with a copy button and the [[feedbackTargetView:studentLinkQRTitle]] (a screenshot is the easiest way to share it), also before the survey opens. The course page also has [[feedbackTargetView:copyLink]].
 - While the survey is open, [[feedbackTargetResults:sendReminder]] on the [[feedbackTargetView:shareTab]] tab is the easiest way to email the students: a responsible teacher or programme admin can add a message, and the email, with the link, goes to every student of the survey who hasn't answered yet. It can be sent once every 24 hours. Teachers without the responsible teacher role see the button too, but sending fails for them. Suggest it whenever the user wants answers or wants to tell students about a survey, and especially for interim feedback and programme surveys, which send no email by themselves.
 - Course survey students also get an email when it opens, and see open surveys in Norppa.
+- Norppa has no way to message all of a course's students while it runs: the reminder email reaches only those who haven't answered. Counter feedback, after the survey closes, reaches all of them.
 - Answering is anonymous, so teachers can't tell who answered what, and can't reward individual answers.
 
 ## Following the answers
@@ -183,7 +186,7 @@ The [[feedbackTargetView:studentsWithFeedbackTab]] tab (responsible teachers and
 The teacher's reply to all students about the feedback, e.g. what came up and what will change. It isn't mandatory but is encouraged: it shows students their feedback was heard. The same for all survey types.
 
 - A responsible teacher writes it on the [[feedbackTargetView:feedbackResponseTab]] tab after the survey has closed, for about a year. There's one shared text per survey; any responsible teacher can edit it.
-- The text supports Markdown (formatting and links).
+- Write it at least in the language the course is taught in. The text supports Markdown (formatting and links).
 - [[feedbackResponse:checkboxSendEmail]] emails it to all the survey's students, not only those who answered. The email can be sent only once; after that, edits don't send a new email.
 - Students read it on the survey's [[feedbackTargetView:feedbacksTab]] tab, under [[feedbackTargetResults:responseHeading]]. After closing, the [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentResultsLinkTitle]] to send them.
 - It was sent when the checkbox says [[feedbackResponse:emailSent]] and [[navBar:myCourses]] shows [[teacherView:feedbackResponseGiven]]. [[teacherView:feedbackResponseNotSent]] means it was saved without the email.
@@ -197,7 +200,7 @@ Course surveys only. Students can give free-form feedback while the course runs.
 - [[feedbackTargetView:activateContinuousFeedbackDigest]]: new continuous feedback is emailed to responsible teachers each morning.
 - Students can give it until the survey opens.
 - A responsible teacher can reply to each item with [[feedbackTargetView:respondContinuousFeedback]]; the student gets the first reply by email, and later edits to it aren't emailed.
-- Each item and its reply are shown only to the student who gave it, not to other students. It's anonymous: teachers don't see who gave it. Teachers can't delete it. Programme admins can read it too.
+- Each item and its reply are shown only to the student who gave it; nothing in continuous feedback can be shown to other students. It's anonymous: teachers don't see who gave it. Teachers can't delete it. Programme admins can read it too.
 
 ## Downloading results and statistics
 
@@ -275,6 +278,7 @@ Don't suggest these; they don't exist:
 - seeing which student gave which answers, or rewarding students for answering;
 - uploading images or attachments, or file upload questions;
 - conditional questions that appear depending on earlier answers;
+- question types other than scale, open, single choice and multiple choice, or changing how a type works, e.g. a scale other than 1-5;
 - changing course roles in Norppa (they come from Sisu);
 - teachers deleting answers or continuous feedback (responsible teachers and programme admins can only hide open answers);
 - choosing an audience for the answers, such as everyone or staff only (each question is only public or not public);
