@@ -15,13 +15,14 @@ Rules for editing:
 
 # Norppa
 
-Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes and faculties follow the feedback of their courses. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student.
+Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes and faculties follow the feedback of their courses. Users log in with their university account. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student.
 
 ## How surveys work
 
 - Every survey is upcoming, open or closed, decided only by its opening and closing dates. There's no publish, activate, draft or send step: a survey opens by itself at 00:00 on its opening date and closes at 23:59 on its closing date (Finnish time).
 - The questions can be edited only until the survey opens. Each question is saved on its own; there's nothing else to save or publish.
-- While a survey is open, students can change or delete their answers.
+- Answering is voluntary for students. While a survey is open, they can change or delete their answers.
+- Norppa works on phones too, both for answering surveys and for the rest of the site.
 - After closing, the answers stay available and the survey's responsible persons can write counter feedback for 12 months.
 
 ## Survey types
@@ -31,23 +32,22 @@ There are four kinds of surveys. When it matters, check which one the user means
 **Course survey**: one per course realisation, created automatically from Sisu (see "Which courses get a survey").
 
 - Teachers and students come from Sisu and stay up to date. Has the university level and programme questions.
-- Dates: the [[common:edit]] button next to [[feedbackTargetView:feedbackPeriod]] on the course page, with automatic default dates.
-- Emails: students get one when it opens; responsible teachers get a reminder a week before it opens, and a counter feedback reminder the day after it closes if it got answers and has no counter feedback yet.
+- Dates: the [[common:edit]] button next to the dates under [[feedbackTargetView:feedbackPeriod]] on the course page, with automatic default dates.
 - Has continuous feedback and interim feedback. Appears in [[navBar:courseSummary]].
-- Can't be deleted.
+- Can't be deleted, not even by support.
 
 **Interim feedback** ([[interimFeedback:interimFeedback]]): an extra survey that a responsible teacher creates under a course survey, e.g. mid-course.
 
 - Same students and teachers as the course. No university level or programme questions, no Sisu groups.
 - Its responsible teachers change its dates and name with [[interimFeedback:editSurvey]] on its page, in any state.
-- No automatic emails to students or teachers. Not in [[navBar:courseSummary]].
-- Found in the course's [[feedbackTargetView:interimFeedbackTab]] tab. Can be removed while it has no answers.
+- Not in [[navBar:courseSummary]].
+- A responsible teacher creates it in the course's [[feedbackTargetView:interimFeedbackTab]] tab with [[interimFeedback:addSurvey]] (name and dates, then the questions), and finds it there. Can be removed while it has no answers.
 
 **Programme survey** ([[organisationSettings:organisationSurveysTab]]; on a faculty's page [[organisationSettings:organisationFacultySurveysTab]]): a survey a degree programme's or faculty's admins create on its page, e.g. semester feedback.
 
 - Respondents are students added by student number or by picking courses (their enrolled students are copied in when saved); the list doesn't update by itself. Its [[organisationSurveys:responsibleTeachers]] can edit it and see all its answers; on the survey page they're listed as [[feedbackTargetView:administrativePersons]]. The programme's admins can edit it too. No university level or programme questions.
 - Dates, name, responsible persons and respondents: [[organisationSurveys:editSurvey]] on its page, in any state.
-- Students get no automatic email. The responsible persons get the counter feedback reminder the day after it closes, if it got answers. Not in [[navBar:courseSummary]].
+- Not in [[navBar:courseSummary]].
 - Listed for its responsible persons in [[navBar:myCourses]] under [[teacherView:organisationSurveys]]. The programme's admins can remove it from the programme surveys tab while it has no answers.
 
 All three work the same way in the [[feedbackTargetView:surveyQuestionsTab]], [[feedbackTargetView:shareTab]], [[feedbackTargetView:feedbacksTab]] and [[feedbackTargetView:studentsWithFeedbackTab]] tabs and in counter feedback. Only course surveys have the [[feedbackTargetView:continuousFeedbackTab]] and [[feedbackTargetView:interimFeedbackTab]] tabs.
@@ -110,7 +110,7 @@ The other tabs:
 
 ## Which courses get a survey
 
-Course surveys are created automatically for course realisations of these Sisu types: lab work, online teaching, field course, project, lectures, small group teaching, seminar, blended teaching, contact teaching and distance teaching (Sisu codes teaching-participation-lab, -online, -field-course, -project, -lectures, -small-group, -seminar, -blended, -contact, -distance), and for Language Centre independent-work projects.
+Course surveys are created automatically for course realisations of these Sisu types: lab work, online teaching, field course, project, lectures, small group teaching, seminar, blended teaching, contact teaching and distance teaching, and for Language Centre independent-work projects.
 
 - Other types, such as exams, theses, essays, independent work and training, get no survey. Credits don't matter. Support can enable a survey for some of these types (independent work, essays, training, master's theses) but not for exams.
 - No survey either if the realisation is cancelled, archived or a draft in Sisu, has no end date, or isn't linked to a course unit.
@@ -122,7 +122,7 @@ Course surveys are created automatically for course realisations of these Sisu t
 
 - Courses, teachers, roles and course dates are updated every night; Sisu changes show in Norppa the next morning. A new course's survey also appears the next morning.
 - New student enrolments are usually added within 1-2 hours. Only confirmed enrolments (status enrolled) count; if Sisu confirms an enrolment later, the student appears the next morning.
-- Answer counts are shown as answers/enrolled students, e.g. 3/20. 0/0 means Norppa has no enrolled students for the course yet: enrolments aren't confirmed in Sisu, or the counts haven't updated yet (overnight and when answers come in).
+- Answer counts are shown as answers/enrolled students, e.g. 3/20, next to [[feedbackTargetView:respondents]] on the survey's page and on each survey in [[navBar:myCourses]]. 0/0 means Norppa has no enrolled students for the course yet: enrolments aren't confirmed in Sisu, or the counts haven't updated yet (overnight and when answers come in).
 - A student whose enrolment is cancelled is removed the next night, unless they've already been emailed the survey link or have answered; after that they stay on the survey and count in the enrolled total.
 - Groups defined in Sisu (study sub-groups) become groups within the one survey, not separate surveys.
 
@@ -145,7 +145,7 @@ The course page shows [[feedbackTargetView:coursePeriod]] and [[feedbackTargetVi
 For all survey types, until the survey opens: [[feedbackTargetView:surveyTab]] > [[feedbackTargetView:surveyQuestionsTab]]. Once it opens, the tab is gone and the questions are locked.
 
 - Course surveys start with the university level questions and possibly the programme's questions, which can't be edited or removed. Students see the university and programme scale and choice questions first, then the teacher's own questions, then the programme and university open questions (so the university's "additional comments" is last). A grouping question is always first.
-- [[questionEditor:addQuestion]] adds a question: [[questionEditor:likertQuestion]] (scale 1-5), [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] or [[questionEditor:multipleChoiceQuestion]]. [[questionEditor:addTextualContent]] adds a text section. Each question is saved with its own [[questionEditor:done]]. Each question can have a [[questionEditor:description]]. Questions can be marked [[common:required]], duplicated, moved and removed.
+- [[questionEditor:addQuestion]] adds a question: [[questionEditor:likertQuestion]] (scale 1-5), [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] or [[questionEditor:multipleChoiceQuestion]]. [[questionEditor:addTextualContent]] adds a text section. Each question is saved with its own [[questionEditor:done]]. Each question can have a [[questionEditor:description]]. Descriptions and text sections support Markdown (e.g. bold, links, lists); the question itself is plain text. Questions can be marked [[common:required]], duplicated, moved and removed.
 - Language versions: the editor has Finnish, Swedish and English fields side by side. Students see the survey in their own UI language; a missing translation is shown in Finnish, or else English, or else Swedish. [[editFeedbackTarget:translationLanguage]] at the bottom of the editor switches the editor's language, and the [[common:preview]] tab then shows the survey in that language.
 - Carry-over (course surveys): the first time anyone views a new realisation's survey page in Norppa (or its reminder email is sent), well before the survey opens, it copies the own questions of the latest earlier realisation of the same course unit that shares a teacher with it. After that the surveys are independent. A new version of the course unit in Sisu breaks the chain.
 - [[editFeedbackTarget:copyFromCourseButton]] copies questions and adds them after the existing ones: in course surveys from the user's other courses, in interim feedback and programme surveys from programme surveys of the programmes and faculties where the user is an admin (others get an empty list). In interim feedback and programme surveys, [[editFeedbackTarget:copyUniversityQuestions]] adds the university level questions.
@@ -180,10 +180,10 @@ The [[feedbackTargetView:studentsWithFeedbackTab]] tab (responsible teachers and
 
 ## Counter feedback
 
-The teacher's reply to all students about the feedback, e.g. what came up and what will change. It shows students their feedback was read. The same for all survey types.
+The teacher's reply to all students about the feedback, e.g. what came up and what will change. It isn't mandatory but is encouraged: it shows students their feedback was heard. The same for all survey types.
 
 - A responsible teacher writes it on the [[feedbackTargetView:feedbackResponseTab]] tab after the survey has closed, for about a year. There's one shared text per survey; any responsible teacher can edit it.
-- The text supports Markdown (formatting and links). There's no image upload.
+- The text supports Markdown (formatting and links).
 - [[feedbackResponse:checkboxSendEmail]] emails it to all the survey's students, not only those who answered. The email can be sent only once; after that, edits don't send a new email.
 - Students read it on the survey's [[feedbackTargetView:feedbacksTab]] tab, under [[feedbackTargetResults:responseHeading]]. After closing, the [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentResultsLinkTitle]] to send them.
 - It was sent when the checkbox says [[feedbackResponse:emailSent]] and [[navBar:myCourses]] shows [[teacherView:feedbackResponseGiven]]. [[teacherView:feedbackResponseNotSent]] means it was saved without the email.
@@ -197,12 +197,7 @@ Course surveys only. Students can give free-form feedback while the course runs.
 - [[feedbackTargetView:activateContinuousFeedbackDigest]]: new continuous feedback is emailed to responsible teachers each morning.
 - Students can give it until the survey opens.
 - A responsible teacher can reply to each item with [[feedbackTargetView:respondContinuousFeedback]]; the student gets the first reply by email, and later edits to it aren't emailed.
-- It's anonymous: teachers don't see who gave it. Teachers can't delete it. Programme admins can read it too.
-
-## Interim feedback
-
-- A responsible teacher creates it in the course's [[feedbackTargetView:interimFeedbackTab]] tab with [[interimFeedback:addSurvey]]: name and dates, then the questions.
-- Otherwise see "Survey types". Students get no automatic email, so once it's open, send [[feedbackTargetResults:sendReminder]] or share its link.
+- Each item and its reply are shown only to the student who gave it, not to other students. It's anonymous: teachers don't see who gave it. Teachers can't delete it. Programme admins can read it too.
 
 ## Downloading results and statistics
 
@@ -211,7 +206,7 @@ Course surveys only. Students can give free-form feedback while the course runs.
 
 ### Course summary
 
-[[navBar:courseSummary]] shows statistics of course surveys only, from 2020 onwards: averages of the university level scale questions (workload as an arrow), [[courseSummary:feedbackCount]] (answers/enrolled), [[courseSummary:feedbackPercentage]], [[courseSummary:feedbackResponsePercentage]] and [[courseSummary:censoredCount]] (answers hidden with the eye icon). "Cannot answer" isn't counted in the averages, and colours show how high an average is.
+[[navBar:courseSummary]] shows statistics of course surveys only, from 2020 onwards: averages of the university level scale questions (workload as an arrow: up means heavy, level appropriate, down light; its colour shows how close to appropriate), [[courseSummary:feedbackCount]] (answers/enrolled), [[courseSummary:feedbackPercentage]], [[courseSummary:feedbackResponsePercentage]] and [[courseSummary:censoredCount]] (answers hidden with the eye icon). "Cannot answer" isn't counted in the averages, and colours show how high an average is.
 
 - Tabs: [[courseSummary:myCourses]] has the user's own courses as a teacher, grouped by degree programme; [[courseSummary:myOrganisations]] (only with organisation rights) the organisations they have rights to. A programme's page has the same summary on its [[organisationSettings:summaryTab]] tab, which also shows the programme's own scale questions.
 - Time: the menus at the top show one period at a time: [[courseSummary:year]] (by default the current academic year, which starts on 1 August), optionally narrowed with [[courseSummary:semester]] or [[courseSummary:period]]. To see an earlier year, choose it in [[courseSummary:year]]. The choice isn't remembered between visits.
@@ -236,7 +231,7 @@ Open [[navBar:myProgrammes]] or [[navBar:myOrganisations]] and choose the progra
 
 ### Adding a feedback liaison
 
-[[navBar:myProgrammes]] or [[navBar:myOrganisations]] > the programme > [[organisationSettings:settingsTab]] > [[organisationSettings:newCorrespondent]]: search by email or name (at least 5 characters), then [[organisationSettings:setAsCorrespondent]]. The person must be university staff and have logged in to Norppa once. They get admin rights to the programme.
+[[navBar:myProgrammes]] or [[navBar:myOrganisations]] > the programme > [[organisationSettings:settingsTab]] > [[organisationSettings:newCorrespondent]]: search by email or name (at least 5 characters), then [[organisationSettings:setAsCorrespondent]]. The person must be university staff and have logged in to Norppa once. They get admin rights to the programme. [[organisationSettings:remove]] on a liaison's card removes them.
 
 ### Creating a programme survey
 
@@ -289,7 +284,7 @@ Don't suggest these; they don't exist:
 
 ## When to contact support
 
-Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu: reopening or changing the dates of a closed course survey, a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, or an error that persists.
+Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu: reopening or changing the dates of a closed course survey, a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, an error that persists, or a sensitive matter such as an abusive answer.
 
 ## Glossary
 
