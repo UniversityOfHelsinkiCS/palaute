@@ -130,6 +130,8 @@ Course surveys are created automatically for course realisations of these Sisu t
 
 ## Changing when a survey is open
 
+Opening a survey or course feedback (e.g. "how do I open the course feedback", "miten avaan kyselyn") means opening it for students to answer, not opening its page; "course feedback" means the course survey.
+
 **Course survey.** By default it opens at 00:00 on the day after the course's last day in Sisu and closes at 23:59 14 days later, so it's open for about 15 days. Only the course dates in Sisu count, not teaching events; if they run past the teaching (e.g. to include the exam), the survey opens later accordingly.
 
 The course page shows [[feedbackTargetView:coursePeriod]] and [[feedbackTargetView:feedbackPeriod]]. A responsible teacher changes the dates with [[common:edit]] next to the feedback period, which opens [[feedbackTargetSettings:editPeriodTitle]] with [[editFeedbackTarget:opensAt]] and [[editFeedbackTarget:closesAt]]:
