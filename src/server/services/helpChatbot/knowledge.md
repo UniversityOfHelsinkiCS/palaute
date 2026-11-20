@@ -25,7 +25,7 @@ Norppa (norppa.helsinki.fi) is the course feedback system of the University of H
 - Only the survey's questions and text sections have Finnish, Swedish and English versions. Everything else teachers write, such as counter feedback, reminder messages and replies to continuous feedback, is one text that everyone sees as written; to reach students in two languages, write both in the same text.
 - The footer at the bottom of every page links the [[feedbackView:dataProtectionNotice]] (how Norppa handles personal data, e.g. what it stores and for how long) and the [[footer:accessibilityDocument]], and gives support's email.
 - Norppa works on phones too, both for answering surveys and for the rest of the site.
-- After closing, the answers stay available and the survey's responsible persons can write counter feedback for 12 months.
+- After closing, the answers stay available. The responsible persons can write counter feedback for 12 months after closing.
 
 ## Survey types
 
@@ -38,7 +38,7 @@ There are four kinds of surveys. When it matters, check which one the user means
 - Has continuous feedback and interim feedback. Appears in [[navBar:courseSummary]].
 - Can't be deleted, not even by support.
 
-**Interim feedback** ([[interimFeedback:interimFeedback]]): an extra survey that a responsible teacher creates under a course survey, e.g. mid-course.
+**Interim feedback**: an extra survey that a responsible teacher creates under a course survey, e.g. mid-course.
 
 - Same students and teachers as the course. No university level or programme questions, no Sisu groups.
 - Its responsible teachers change its dates and name with [[interimFeedback:editSurvey]] on its page, in any state.
@@ -144,7 +144,7 @@ The course page shows [[feedbackTargetView:coursePeriod]] and [[feedbackTargetVi
 
 ## Editing the questions
 
-For all survey types, until the survey opens: [[feedbackTargetView:surveyTab]] > [[feedbackTargetView:surveyQuestionsTab]]. Once it opens, the tab is gone and the questions are locked.
+For all survey types, until the survey opens: [[feedbackTargetView:surveyTab]] > [[feedbackTargetView:surveyQuestionsTab]]. Once it opens, the tab is gone and the questions are locked. Only Norppa's admins can still change an open survey's questions, e.g. to fix a typo: ask support.
 
 - Course surveys start with the university level questions and possibly the programme's questions, which can't be edited or removed. Students see the university and programme scale and choice questions first, then the teacher's own questions, then the programme and university open questions (so the university's "additional comments" is last). A grouping question is always first.
 - [[questionEditor:addQuestion]] adds a question: [[questionEditor:likertQuestion]] (scale 1-5), [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] or [[questionEditor:multipleChoiceQuestion]]. [[questionEditor:addTextualContent]] adds a text section. Each question is saved with its own [[questionEditor:done]]. Each question can have a [[questionEditor:description]]. Descriptions and text sections support Markdown (e.g. bold, links, lists); the question itself is plain text. Questions can be marked [[common:required]], duplicated, moved and removed.
@@ -159,7 +159,7 @@ For all survey types, until the survey opens: [[feedbackTargetView:surveyTab]] >
 The same for all survey types:
 
 - The [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentLinkTitle]] with a copy button and the [[feedbackTargetView:studentLinkQRTitle]] (a screenshot is the easiest way to share it), also before the survey opens. The course page also has [[feedbackTargetView:copyLink]].
-- While the survey is open, [[feedbackTargetResults:sendReminder]] on the [[feedbackTargetView:shareTab]] tab is the easiest way to email the students: a responsible teacher or programme admin can add a message, and the email, with the link, goes to every student of the survey who hasn't answered yet. It can be sent once every 24 hours. Teachers without the responsible teacher role see the button too, but sending fails for them. Suggest it whenever the user wants answers or wants to tell students about a survey, and especially for interim feedback and programme surveys, which send no email by themselves.
+- While the survey is open, [[feedbackTargetResults:sendReminder]] on the [[feedbackTargetView:shareTab]] tab is the easiest way to email the students: a responsible teacher or programme admin can add a message, and the email, with the link, goes to every student of the survey who hasn't answered yet. It can be sent once every 24 hours, so e.g. every day. Teachers without the responsible teacher role see the button too, but sending fails for them. Suggest it whenever the user wants answers or wants to tell students about a survey, and especially for interim feedback and programme surveys, which send no email by themselves.
 - Course survey students also get an email when it opens, and see open surveys in Norppa.
 - Norppa has no way to message all of a course's students while it runs: the reminder email reaches only those who haven't answered. Counter feedback, after the survey closes, reaches all of them.
 - Answering is anonymous, so teachers can't tell who answered what, and can't reward individual answers.
@@ -227,7 +227,7 @@ Open [[navBar:myProgrammes]] or [[navBar:myOrganisations]] and choose the progra
 - [[organisationSettings:summaryTab]]: its course summary.
 - [[organisationSettings:openQuestionsTab]] (admins): all answers to the university and programme level open questions of its courses.
 - [[organisationSettings:courseRealisationsTab]]: its course realisations.
-- [[organisationSettings:surveyTab]] (faculties: [[organisationSettings:surveyFacultyTab]]) (admins): questions added to all its course surveys. In the survey, its scale and choice questions come after the university ones and its open questions after the teacher's own questions. They're read live, so adding, changing or removing one changes the survey of every course in the programme at once, including surveys that are already open or closed.
+- [[organisationSettings:surveyTab]] (faculties: [[organisationSettings:surveyFacultyTab]]) (admins): questions added to all its course surveys. In the survey, its scale and choice questions come after the university ones and its open questions after the teacher's own questions. They're read live, so adding, changing or removing one changes the survey of every course in the programme at once, including surveys that are already open or closed. Removing one also removes its answers from those surveys, and adding it back doesn't restore them.
 - [[organisationSettings:organisationSurveysTab]] (faculties: [[organisationSettings:organisationFacultySurveysTab]]) (admins): its programme surveys.
 - [[organisationSettings:responsiblesTab]]: its teachers and their course counts.
 - [[organisationSettings:settingsTab]] (admins): [[organisationSettings:feedbackCorrespondents]], [[organisationSettings:studentListVisibility]] (whether responsible teachers see who has answered, for all courses or per course) and [[organisationSettings:courseSettings]] ([[organisationSettings:feedbackEnabled]] per course unit).
@@ -239,7 +239,7 @@ Open [[navBar:myProgrammes]] or [[navBar:myOrganisations]] and choose the progra
 ### Creating a programme survey
 
 1. On the programme's page, open [[organisationSettings:organisationSurveysTab]] (on a faculty's page [[organisationSettings:organisationFacultySurveysTab]]) and click [[organisationSurveys:addSurvey]] (admins only).
-2. Give the name, dates, [[organisationSurveys:responsibleTeachers]] (university staff) and the respondents: pasted student numbers or [[organisationSurveys:addCourses]]. Only those students can answer. Save. Saving fails if the student numbers include the responsible persons' own or unrecognised ones: they're marked red, and [[organisationSurveys:removeResponsiblePersonStudentNumbers]] or [[organisationSurveys:removeInvalidStudentNumbers]] removes them, the responsible persons' first. Editing works the same way.
+2. Give the name, dates, [[organisationSurveys:responsibleTeachers]] (university staff) and the respondents: pasted student numbers or [[organisationSurveys:addCourses]]. Only those students can answer. Save. Saving fails if the student numbers include the responsible persons' own or unrecognised ones. They're marked red, with a button below to remove them: [[organisationSurveys:removeResponsiblePersonStudentNumbers]] or [[organisationSurveys:removeInvalidStudentNumbers]]. Then save again. The responsible persons' own numbers are checked first, so the next save may still find unrecognised ones. Editing works the same way.
 3. Write the questions in its [[feedbackTargetView:surveyQuestionsTab]] tab. There are no university level or programme questions.
 4. Nothing else is needed: it opens by itself on its opening date. Students get no email automatically, so once it's open, send [[feedbackTargetResults:sendReminder]] from its [[feedbackTargetView:shareTab]] tab, or share its link.
 
@@ -288,7 +288,7 @@ Don't suggest these; they don't exist:
 
 ## When to contact support
 
-Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu: reopening or changing the dates of a closed course survey, a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, an error that persists, or a sensitive matter such as an abusive answer.
+Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu: reopening or changing the dates of a closed course survey, changing an open survey's questions (e.g. a typo), a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, an error that persists, or a sensitive matter such as an abusive answer.
 
 ## Glossary
 
