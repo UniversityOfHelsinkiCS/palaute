@@ -101,6 +101,15 @@ export const createApi = (request: APIRequestContext) => {
     createInterimFeedback: (parentId: number, body: unknown): Promise<FeedbackTarget> =>
       send('POST', `/api/feedback-targets/${parentId}/interimFeedbacks`, { headers: admin, data: body }),
 
+    // Replaces the teacher's own questions on a feedback target with the given ones
+    setTeacherSurveyQuestions: async (feedbackTarget: FeedbackTarget, questions: unknown[]) => {
+      const { surveys } = await send('GET', `/api/feedback-targets/${feedbackTarget.id}`, { headers: admin })
+      return send('PUT', `/api/feedback-targets/${feedbackTarget.id}`, {
+        headers: admin,
+        data: { surveyId: surveys.teacherSurvey.id, questions },
+      })
+    },
+
     giveInterimFeedback: (interimFeedback: FeedbackTarget, headers: TestUser) =>
       send('POST', '/api/feedbacks', {
         headers,

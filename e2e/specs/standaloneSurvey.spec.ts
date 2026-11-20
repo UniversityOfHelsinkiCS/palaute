@@ -87,9 +87,9 @@ test.describe('Standalone surveys', () => {
 
     await page.goto(`/survey/${token}/old-name`)
     await expect(page).toHaveURL(new RegExp(`/survey/${token}/henkilostokysely$`))
-    await expect(byDataCy(page, 'feedback-view-give-feedback')).toContainText('Edit')
+    await expect(byDataCy(page, 'feedback-view-give-feedback')).toContainText('Save changes')
     await contains(page, 'Remove my answer', 'button').click()
-    await expect(byDataCy(page, 'feedback-view-give-feedback')).not.toContainText('Edit')
+    await expect(byDataCy(page, 'feedback-view-give-feedback')).not.toContainText('Save changes')
   })
 
   test('one answer per person and results only after answering while open', async ({ request }) => {
