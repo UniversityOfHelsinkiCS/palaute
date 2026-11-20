@@ -15,13 +15,13 @@ Rules for editing:
 
 # Norppa
 
-Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes and faculties follow the feedback of their courses. Users log in with their university account. It's free to use, and the university's courses get their surveys automatically. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student.
+Norppa (norppa.helsinki.fi) is the course feedback system of the University of Helsinki. Students answer feedback surveys; teachers edit the surveys, read the answers and respond to them; degree programmes and faculties follow the feedback of their courses. Users log in with their university account. It's free to use, and the university's courses get their surveys automatically. Course, teacher and student data comes from Sisu. All feedback is anonymous: nobody can link answers to a student, though each student sees their own answers.
 
 ## How surveys work
 
 - Every survey is upcoming, open or closed, decided only by its opening and closing dates. There's no publish, activate, draft or send step: a survey opens by itself at 00:00 on its opening date and closes at 23:59 on its closing date (Finnish time).
 - The questions can be edited only until the survey opens. Each question is saved on its own; there's nothing else to save or publish.
-- Answering is voluntary for students. While a survey is open, they can change or delete their answers; after it closes, no one can change or remove an answer in Norppa.
+- Answering is voluntary for students. While a survey is open, they can change or delete their answers by opening the survey again; after it closes, they still see their own answers there, but no one can change or remove an answer in Norppa.
 - Only the survey's questions and text sections have Finnish, Swedish and English versions. Everything else teachers write, such as counter feedback, reminder messages and replies to continuous feedback, is one text that everyone sees as written; to reach students in two languages, write both in the same text.
 - The footer at the bottom of every page links the [[feedbackView:dataProtectionNotice]] (how Norppa handles personal data, e.g. what it stores and for how long) and the [[footer:accessibilityDocument]], and gives support's email.
 - Norppa works on phones too, both for answering surveys and for the rest of the site.
