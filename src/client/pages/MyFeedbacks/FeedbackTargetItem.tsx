@@ -12,6 +12,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { NorButton } from '../../components/common/NorButton'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import apiClient from '../../util/apiClient'
 import styles from '../../util/chipStyles'
 import { SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING } from '../../util/common'
@@ -23,6 +24,7 @@ import feedbackTargetNotGivingFeedback from '../../util/feedbackTargetNotGivingF
 import { getStartAndEndString } from '../../util/getDateRangeString'
 import { getLanguageValue } from '../../util/languageUtils'
 import noFeedbackAllowed from '../../util/noFeedbackAllowed'
+import { clearDraft, getDraftKey } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { getCourseName } from './utils'
 
 type NoFeedbackActionsProps = {
@@ -329,6 +331,7 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }: FeedbackTargetItemProps
   const { t, i18n } = useTranslation()
   const queryClient = useQueryClient()
   const { enqueueSnackbar } = useSnackbar()
+  const { authorizedUser } = useAuthorizedUser()
 
   const { id, closesAt, opensAt, feedback, feedbackResponse, courseUnit } = feedbackTarget
 
@@ -357,6 +360,11 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }: FeedbackTargetItemProps
 
   const onDelete = async () => {
     await apiClient.delete(`/feedbacks/${feedback?.id}`)
+    // Otherwise unsent edits to the deleted feedback would reappear when the form is opened
+    if (authorizedUser) clearDraft(getDraftKey(authorizedUser.id, id))
+    // Removed rather than invalidated: an invalidated copy would still be shown while it is
+    // refetched, and the form only reads its initial values once, so the deleted answers would stay
+    queryClient.removeQueries({ queryKey: ['feedbackTarget', String(id)] })
     queryClient.invalidateQueries({ queryKey: ['feedbackTargetsForStudent'] })
     // Invalidate the waiting feedback count for the student
     queryClient.invalidateQueries({ queryKey: ['myFeedbacksWaitingFeedbackCount'] })
