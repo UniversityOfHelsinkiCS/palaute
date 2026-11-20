@@ -107,7 +107,7 @@ A survey's page shows its tabs according to the user's role and the survey's sta
 The other tabs:
 
 - [[feedbackTargetView:feedbacksTab]]: all teachers.
-- [[feedbackTargetView:feedbackResponseTab]]: responsible teachers and programme admins, until 12 months after the survey closes. Counter feedback can be written only after the survey has closed; before that, the form is disabled.
+- [[feedbackTargetView:feedbackResponseTab]]: responsible teachers, until 12 months after the survey closes. Counter feedback can be written only after the survey has closed; before that, the form is disabled.
 - [[feedbackTargetView:continuousFeedbackTab]] and [[feedbackTargetView:interimFeedbackTab]] (course surveys only): responsible teachers.
 
 ## Which courses get a survey
@@ -161,6 +161,7 @@ The same for all survey types:
 - The [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentLinkTitle]] with a copy button and the [[feedbackTargetView:studentLinkQRTitle]] (a screenshot is the easiest way to share it), also before the survey opens. The course page also has [[feedbackTargetView:copyLink]].
 - While the survey is open, [[feedbackTargetResults:sendReminder]] on the [[feedbackTargetView:shareTab]] tab is the easiest way to email the students: a responsible teacher or programme admin can add a message, and the email, with the link, goes to every student of the survey who hasn't answered yet. It can be sent once every 24 hours, so e.g. every day. Teachers without the responsible teacher role see the button too, but sending fails for them. Suggest it whenever the user wants answers or wants to tell students about a survey, and especially for interim feedback and programme surveys, which send no email by themselves.
 - Course survey students also get an email when it opens, and see open surveys in Norppa.
+- Students log in with their university account. An enrolled student without one can answer a course survey with a personal link that Norppa's admins create: ask support.
 - Norppa has no way to message all of a course's students while it runs: the reminder email reaches only those who haven't answered. Counter feedback, after the survey closes, reaches all of them.
 - Answering is anonymous, so teachers can't tell who answered what, and can't reward individual answers.
 
@@ -185,7 +186,7 @@ The [[feedbackTargetView:studentsWithFeedbackTab]] tab (responsible teachers and
 
 The teacher's reply to all students about the feedback, e.g. what came up and what will change. It isn't mandatory but is encouraged: it shows students their feedback was heard. The same for all survey types.
 
-- A responsible teacher writes it on the [[feedbackTargetView:feedbackResponseTab]] tab after the survey has closed, for about a year. There's one shared text per survey; any responsible teacher can edit it.
+- A responsible teacher writes it on the [[feedbackTargetView:feedbackResponseTab]] tab after the survey has closed, for about a year. There's one shared text per survey; any responsible teacher can edit it. Programme admins can't write it.
 - Write it at least in the language the course is taught in. The text supports Markdown (formatting and links).
 - [[feedbackResponse:checkboxSendEmail]] emails it to all the survey's students, not only those who answered. The email can be sent only once; after that, edits don't send a new email.
 - Students read it on the survey's [[feedbackTargetView:feedbacksTab]] tab, under [[feedbackTargetResults:responseHeading]]. After closing, the [[feedbackTargetView:shareTab]] tab has the [[feedbackTargetView:studentResultsLinkTitle]] to send them.
@@ -226,10 +227,10 @@ Open [[navBar:myProgrammes]] or [[navBar:myOrganisations]] and choose the progra
 
 - [[organisationSettings:summaryTab]]: its course summary.
 - [[organisationSettings:openQuestionsTab]] (admins): all answers to the university and programme level open questions of its courses.
-- [[organisationSettings:courseRealisationsTab]]: its course realisations.
+- [[organisationSettings:courseRealisationsTab]]: its course realisations that have a course survey, for the period chosen in the time menu at the top (by default the current academic year; a course counts in the period it starts in). The list is ordered by course code; [[organisationSettings:calendarMode]] groups the courses by start date. Clicking a course opens a panel with its course period, [[feedbackTargetView:feedbackPeriod]] dates, answer count (answers/enrolled), teachers and a link to its survey page. [[organisationSettings:filters]] (click to open) has [[organisationSettings:findByTeacher]], [[organisationSettings:findByCourseUnit]] (name or code) and [[organisationSettings:includeWithoutTeachers]]: courses with no teachers in Sisu are hidden unless it's ticked. Each course's [[organisationSettings:allCourseUnitRealisations]] opens its course unit's page in [[navBar:courseSummary]].
 - [[organisationSettings:surveyTab]] (faculties: [[organisationSettings:surveyFacultyTab]]) (admins): questions added to all its course surveys. In the survey, its scale and choice questions come after the university ones and its open questions after the teacher's own questions. They're read live, so adding, changing or removing one changes the survey of every course in the programme at once, including surveys that are already open or closed. Removing one also removes its answers from those surveys, and adding it back doesn't restore them.
 - [[organisationSettings:organisationSurveysTab]] (faculties: [[organisationSettings:organisationFacultySurveysTab]]) (admins): its programme surveys.
-- [[organisationSettings:responsiblesTab]]: its teachers and their course counts.
+- [[organisationSettings:responsiblesTab]]: its teachers and their course counts for a chosen period. [[common:exportXLSX]] downloads it as [[organisationSettings:summary]] (course counts) or [[organisationSettings:detailed]] (each teacher's courses with codes and dates).
 - [[organisationSettings:settingsTab]] (admins): [[organisationSettings:feedbackCorrespondents]], [[organisationSettings:studentListVisibility]] (whether responsible teachers see who has answered, for all courses or per course) and [[organisationSettings:courseSettings]] ([[organisationSettings:feedbackEnabled]] per course unit).
 
 ### Adding a feedback liaison
@@ -288,7 +289,7 @@ Don't suggest these; they don't exist:
 
 ## When to contact support
 
-Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu: reopening or changing the dates of a closed course survey, changing an open survey's questions (e.g. a typo), a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, an error that persists, or a sensitive matter such as an abusive answer.
+Support is norppa@helsinki.fi. Suggest it only when the user can't solve the problem in Norppa or Sisu: reopening or changing the dates of a closed course survey, changing an open survey's questions (e.g. a typo), a personal answer link for a student without a university account, a survey for a course type that doesn't get one automatically, a course or student still missing a few days after the Sisu data was fixed, an error that persists, or a sensitive matter such as an abusive answer.
 
 ## Glossary
 
