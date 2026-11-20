@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
 const dontKnow = { en: 'N/A', sv: 'N/A', fi: 'eos' }
 
@@ -20,8 +20,17 @@ export const getDontKnowOption = (values, preferred) => {
 }
 
 // Custom hook for delayed validation to prevent premature error display during keyboard navigation
-export const useDelayedTouched = setTouched => {
+export const useDelayedTouched = (setTouched, value) => {
   const touchedTimeoutRef = useRef(null)
+
+  // An answer that changes while the timer is pending was changed from outside the question,
+  // e.g. by discarding changes. Marking it touched would then show an error the user did not cause.
+  useEffect(() => {
+    if (touchedTimeoutRef.current) {
+      clearTimeout(touchedTimeoutRef.current)
+      touchedTimeoutRef.current = null
+    }
+  }, [value])
 
   const handleGroupBlur = () => {
     if (touchedTimeoutRef.current) {

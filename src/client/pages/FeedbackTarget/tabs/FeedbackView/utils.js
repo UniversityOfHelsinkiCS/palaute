@@ -128,6 +128,56 @@ export const getInitialValues = (questions, feedback) => {
   return { answers }
 }
 
+/*
+ * Unsent answers are kept in sessionStorage so that they survive a page reload. Unlike
+ * localStorage, sessionStorage belongs to one browser tab and is emptied when the tab is
+ * closed, so answers are not left behind on a shared computer.
+ */
+export const getDraftKey = (userId, formId) => `feedbackDraft:${userId}:${formId}`
+
+export const loadDraft = key => {
+  try {
+    const draft = JSON.parse(sessionStorage.getItem(key))
+    return draft && typeof draft === 'object' ? draft : null
+  } catch {
+    // Storage can be unavailable (e.g. blocked by browser settings) or hold invalid JSON
+    return null
+  }
+}
+
+export const saveDraft = (key, answers) => {
+  try {
+    sessionStorage.setItem(key, JSON.stringify(answers))
+  } catch {
+    // Saving a draft is a convenience, so a failure is ignored
+  }
+}
+
+export const clearDraft = key => {
+  try {
+    sessionStorage.removeItem(key)
+  } catch {
+    // See saveDraft
+  }
+}
+
+/**
+ * Applies draft answers on top of the form's answers. Answers to questions that no longer
+ * exist, or whose shape no longer matches (the survey may have been edited), are dropped.
+ * @returns {object|null} the merged answers, or null if the draft had nothing usable
+ */
+export const mergeDraft = (answers, draft) => {
+  if (!draft) return null
+
+  const usable = Object.entries(draft).filter(
+    ([questionId, value]) => questionId in answers && Array.isArray(value) === Array.isArray(answers[questionId])
+  )
+
+  if (usable.length === 0) return null
+
+  return { ...answers, ...Object.fromEntries(usable) }
+}
+
 export const useSaveValues = () => {
   const { feedbackTarget } = useFeedbackTargetContext()
 

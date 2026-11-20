@@ -57,9 +57,11 @@ const ConfirmDialog = ({
       aria-labelledby={titleId}
       aria-describedby={descriptionId}
       disableRestoreFocus
+      // Show the rest of the page to screen readers again as soon as the dialog starts to close,
+      // rather than when its fade-out ends, which is also when focus is moved back to the page
+      closeAfterTransition={false}
       slotProps={{
         transition: {
-          // Runs before MUI moves focus into the dialog, so this is still the opening control
           onEnter: () => {
             openerRef.current = document.activeElement as HTMLElement | null
           },

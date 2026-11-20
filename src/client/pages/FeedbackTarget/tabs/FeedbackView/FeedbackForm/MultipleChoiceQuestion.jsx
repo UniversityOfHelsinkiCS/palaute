@@ -13,7 +13,7 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
   const { t } = useTranslation()
   const language = useQuestionLanguage()
 
-  const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched)
+  const { handleGroupBlur, handleGroupFocus } = useDelayedTouched(helpers.setTouched, answer)
 
   const label = getLanguageValue(question.data?.label, language) ?? ''
 

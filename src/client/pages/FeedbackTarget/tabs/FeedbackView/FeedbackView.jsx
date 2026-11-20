@@ -17,7 +17,16 @@ import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import FormContainer from './FormContainer'
 import PrivacyDialog from './PrivacyDialog'
 import Toolbar from './Toolbar'
-import { makeValidate, getInitialValues, getQuestions, formatDate, checkIsFeedbackOpen, useSaveValues } from './utils'
+import {
+  makeValidate,
+  getInitialValues,
+  getQuestions,
+  formatDate,
+  checkIsFeedbackOpen,
+  useSaveValues,
+  getDraftKey,
+  clearDraft,
+} from './utils'
 
 const FeedbackView = ({ questionsUneditableInfo }) => {
   const navigate = useNavigate()
@@ -55,6 +64,8 @@ const FeedbackView = ({ questionsUneditableInfo }) => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(questions, feedbackTarget.feedback)
   const validate = makeValidate(questions)
+  // Drafts are only kept for users who can actually submit the form
+  const draftKey = !formIsDisabled && authorizedUser ? getDraftKey(authorizedUser.id, feedbackTarget.id) : null
 
   const handleSubmit = async values => {
     try {
@@ -69,6 +80,8 @@ const FeedbackView = ({ questionsUneditableInfo }) => {
         }))
 
         await submitMutation.mutateAsync(feedbackData)
+
+        if (draftKey) clearDraft(draftKey)
 
         if (SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING) {
           navigate(`/feedbacks?status=given`)
@@ -153,6 +166,7 @@ const FeedbackView = ({ questionsUneditableInfo }) => {
             onOpenPrivacyDialog={handleOpenPrivacyDialog}
             isEdit={Boolean(feedback)}
             fewEnrolled={studentCount < FEEDBACK_HIDDEN_STUDENT_COUNT}
+            draftKey={draftKey}
           />
         )}
 

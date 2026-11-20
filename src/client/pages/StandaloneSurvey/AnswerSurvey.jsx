@@ -8,13 +8,20 @@ import AlertLink from '../../components/common/AlertLink'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import Markdown from '../../components/common/Markdown'
 import { NorButton } from '../../components/common/NorButton'
+import useAuthorizedUser from '../../hooks/useAuthorizedUser'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import { getLanguageValue } from '../../util/languageUtils'
 import { TranslationContextProvider } from '../../util/translationContext'
 import { FeedbackTargetTab, FeedbackTargetTabsContainer } from '../FeedbackTarget/FeedbackTargetTabs'
 import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
-import { formatDate, getInitialValues, makeValidate } from '../FeedbackTarget/tabs/FeedbackView/utils'
+import {
+  clearDraft,
+  formatDate,
+  getDraftKey,
+  getInitialValues,
+  makeValidate,
+} from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { toFeedbackData, useAnswerResults, useAnswerSurvey, useDeleteResponse, useSaveResponse } from './api'
 import { getAnswerPath, toSlug } from './paths'
 import SurveyHeader from './SurveyHeader'
@@ -28,10 +35,13 @@ const AnswerForm = ({ survey, token, basePath }) => {
   const { enqueueSnackbar } = useSnackbar()
   const saveResponse = useSaveResponse(token)
   const deleteResponse = useDeleteResponse(token)
+  const { authorizedUser } = useAuthorizedUser()
 
   const isOpen = feedbackTargetIsOpen(survey)
   const isEnded = feedbackTargetIsEnded(survey)
   const canAnswer = isOpen
+  // Drafts are only kept while the survey can be answered
+  const draftKey = canAnswer && authorizedUser ? getDraftKey(authorizedUser.id, `survey:${token}`) : null
   const description = getLanguageValue(survey.description, i18n.language)?.trim()
 
   const handleError = e => {
@@ -45,6 +55,7 @@ const AnswerForm = ({ survey, token, basePath }) => {
     }
     try {
       await saveResponse.mutateAsync(toFeedbackData(values.answers))
+      if (draftKey) clearDraft(draftKey)
       enqueueSnackbar(t('standaloneSurvey:saved'), { variant: 'success', autoHideDuration: 6000 })
       navigate(`${basePath}/results`)
     } catch (e) {
@@ -54,6 +65,8 @@ const AnswerForm = ({ survey, token, basePath }) => {
 
   const handleDelete = async () => {
     if (!window.confirm(t('standaloneSurvey:deleteConfirmation'))) return
+
+    if (draftKey) clearDraft(draftKey)
     try {
       await deleteResponse.mutateAsync()
       enqueueSnackbar(t('standaloneSurvey:deleted'), { variant: 'success' })
@@ -97,6 +110,7 @@ const AnswerForm = ({ survey, token, basePath }) => {
         showSubmitButton
         questions={survey.questions}
         isEdit={Boolean(survey.response)}
+        draftKey={draftKey}
       />
 
       {canAnswer && survey.response && (
