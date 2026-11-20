@@ -23,7 +23,7 @@ import {
   getLayout,
   restingSpaceSx,
   scrollPaddingStyles,
-  stickyRootSx,
+  rootSx,
   widgetZIndex,
 } from './layout'
 import MenuView from './MenuView'
@@ -103,7 +103,8 @@ const HelpChatbot = () => {
     if (!focusAfterViewChange.current) return
     focusAfterViewChange.current = false
     const target = { pill: pillRef, menu: askRef, chat: inputRef }[view]
-    target.current?.focus()
+    // The scroll padding covers the pill, so focusing would scroll the page
+    target.current?.focus({ preventScroll: true })
   }, [view])
 
   // Keeps an open MUI modal's focus trap, which listens on the document, from pulling focus out of the chat.
@@ -115,6 +116,19 @@ const HelpChatbot = () => {
     }
     document.body.addEventListener('focusin', keepFocus)
     return () => document.body.removeEventListener('focusin', keepFocus)
+  }, [view])
+
+  // Leaves focus where the user clicked
+  useEffect(() => {
+    if (view !== 'menu') return undefined
+    const closeOnOutsideClick = (event: PointerEvent) => {
+      const root = rootRef.current
+      if (!root || root.contains(event.target as Node)) return
+      rootTopBeforeViewChange.current = root.getBoundingClientRect().top
+      setView('pill')
+    }
+    document.addEventListener('pointerdown', closeOnOutsideClick)
+    return () => document.removeEventListener('pointerdown', closeOnOutsideClick)
   }, [view])
 
   // The expand toggle disappears when the chat goes full-screen
@@ -165,7 +179,6 @@ const HelpChatbot = () => {
     setDraft('')
   }
 
-  // The Retry button disappears, so focus goes where the user will type next
   const retryQuestion = () => {
     retry()
     inputRef.current?.focus()
@@ -186,7 +199,6 @@ const HelpChatbot = () => {
     close()
   }
 
-  // Hidden on mobile screen width
   if (narrow && view === 'pill') return null
 
   const layout = getLayout({ view, pillWidth, menuHeight, chatSize, fullScreen })
@@ -205,7 +217,7 @@ const HelpChatbot = () => {
         component="aside"
         aria-label={t('helpChatbot:regionLabel')}
         onKeyDown={handleKeyDown}
-        sx={stickyRootSx(view, layout)}
+        sx={rootSx(view, layout)}
       >
         <Box
           sx={mergeSx(anchorSx(fullScreen), {

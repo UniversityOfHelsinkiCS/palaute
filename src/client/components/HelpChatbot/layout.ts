@@ -27,7 +27,6 @@ export const CHAT_HEADER_HEIGHT = 60
 export const PILL_HEIGHT = 56
 export const PILL_PADDING_LEFT = 54
 export const PILL_PADDING_RIGHT = 18
-// Only until the pill and the menu have been measured, before the first paint
 export const DEFAULT_PILL_WIDTH = 172
 export const DEFAULT_MENU_HEIGHT = 192
 const MENU_WIDTH = 300
@@ -37,7 +36,6 @@ const MENU_SEAL_BOTTOM = 23
 
 // The chat doesn't fit next to the page below these (WCAG 1.4.10 Reflow). Theme breakpoints are width-only.
 export const FULL_SCREEN_QUERY = '(max-height: 639.95px)'
-// So short that the header and the input would leave no room for messages
 export const COMPACT_QUERY = '(max-height: 399.95px)'
 
 export const TRANSITION_MS = 320
@@ -76,7 +74,6 @@ type LayoutInput = {
   fullScreen: boolean
 }
 
-// CSS lengths, so plain CSS transitions animate between views
 export const getLayout = ({ view, pillWidth, menuHeight, chatSize, fullScreen }: LayoutInput): BoxLayout => {
   if (view === 'pill') return fixedBox(px(pillWidth), px(PILL_HEIGHT), PILL_HEIGHT / 2, [9, 8, 1])
   if (view === 'menu') {
@@ -126,33 +123,41 @@ export const scrollPaddingStyles = (theme: Theme) => ({
 // MUI's default dialog width with the dialog's margins
 const MIN_DIALOG_SPACE = '664px'
 
-// Lays dialogs out beside the open chat, unless that would make them narrower than MUI's default
 export const dialogsBesideChatStyles = (chatWidth: string) => (theme: Theme) => ({
   [`.${dialogClasses.container}`]: {
     paddingRight: `clamp(0px, 100vw - ${MIN_DIALOG_SPACE}, ${chatWidth} + ${theme.spacing(3)})`,
   },
 })
 
-// A zero-height sticky root above the footer: follows the viewport's bottom edge and stops at the footer,
-// without scroll listeners, which stuttered
-export const stickyRootSx =
+// Sticky rather than scroll listeners, which stuttered. The open chat's root is fixed, as focusing inside a
+// sticky one scrolls the page.
+export const rootSx =
   (view: WidgetView, { height }: BoxLayout): SxProps<Theme> =>
   theme => {
-    // Keeps the pill and the menu below the viewport's top, and the chat over the footer rather than the NavBar
-    const top = (margin: string) =>
-      view === 'chat' ? `calc(100dvh - ${FOOTER_PADDING})` : `calc(${height} + 2 * ${margin} - ${FOOTER_PADDING})`
+    if (view === 'chat') {
+      return {
+        position: 'fixed',
+        left: 0,
+        right: 0,
+        bottom: FOOTER_PADDING,
+        height: 0,
+        // The open chat stays usable when a dialog opens over the page
+        zIndex: theme.zIndex.modal + 1,
+      }
+    }
+    // Keeps the pill and the menu below the viewport's top
+    const top = (margin: string) => `calc(${height} + 2 * ${margin} - ${FOOTER_PADDING})`
     return {
       position: 'sticky',
       bottom: FOOTER_PADDING,
-      // The open chat stays usable when a dialog opens over the page
-      zIndex: view === 'chat' ? theme.zIndex.modal + 1 : widgetZIndex(theme),
+      zIndex: widgetZIndex(theme),
       height: 0,
       top: top(theme.spacing(2)),
       [theme.breakpoints.up('sm')]: { top: top(theme.spacing(3)) },
     }
   }
 
-// Inside the sticky root, also when full-screen, so switching to full-screen doesn't make the box jump
+// Inside the root, also when full-screen, so switching to full-screen doesn't make the box jump
 export const anchorSx =
   (fullScreen: boolean): SxProps<Theme> =>
   theme => {

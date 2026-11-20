@@ -46,7 +46,7 @@ With 200 000 turns, most views loaded in under 1.5 s, but searching (`ILIKE '%â€
 ## Frontend things that aren't obvious
 
 - **One box, three views** (`pill`, `menu`, `chat`). CSS transitions between fixed sizes do the resizing. The pill's width and the menu's height are measured, because translations vary and deployments can override them.
-- **Position:** the widget sits in a zero-height sticky root just above the footer, so it follows the viewport without scroll listeners (those stuttered).
+- **Position:** the pill and the menu sit in a zero-height sticky root just above the footer, so they follow the viewport without scroll listeners (those stuttered). The open chat's root is fixed, as focusing inside a sticky one scrolls the page.
 - **Moving between the viewport's edge and the footer** is animated from measured positions (`HelpChatbot.tsx`), not with a transition on the sticky offsets, which can't follow the footer. A guide link closes the chat only once the guide has rendered, as the guide moves the footer.
 - **The seal** is one element outside the box, played from a sprite sheet. The command that generates the sheet is in `sealSprite.ts`.
 - **Layering:** the pill and menu sit below MUI modals. The open chat sits above them, dialogs are laid out beside it, and it stops the modal's focus trap from pulling focus out of it.
