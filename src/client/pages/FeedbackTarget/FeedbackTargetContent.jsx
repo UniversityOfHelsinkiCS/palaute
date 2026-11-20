@@ -136,7 +136,7 @@ const FeedbackTargetContent = () => {
     ((isStudent && continuousFeedbackEnabled) || isOrganisationAdmin || isResponsibleTeacher) && !userCreated
   const showSurveyTabGroup = !isStudent || isTeacher || isOrganisationAdmin
   const hideSurveyTab = !showSurveyTabGroup && isOngoing && continuousFeedbackEnabled
-  const showEditFeedbackResponseTab = (isOrganisationAdmin || isResponsibleTeacher) && !isOld
+  const showEditFeedbackResponseTab = isResponsibleTeacher && !isOld
   const showStudentsWithFeedbackTab =
     isAdmin || ((isOrganisationAdmin || isResponsibleTeacher) && (ALWAYS_SHOW_STUDENT_LIST || isOpen || isEnded))
   const showLinksTab = isOrganisationAdmin || isTeacher
