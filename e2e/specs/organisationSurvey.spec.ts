@@ -474,7 +474,16 @@ test.describe('Students', () => {
     await loginAs(studentHenri)
   })
 
-  test('can view ongoing organisation surveys and give organisation survey feedback', async ({ page }) => {
+  test('can view ongoing organisation surveys and give organisation survey feedback', async ({ page, api }) => {
+    await api.setTeacherSurveyQuestions(survey, [
+      {
+        type: 'OPEN',
+        required: false,
+        data: { label: { en: 'Anything else?', fi: 'Muuta?', sv: 'Något annat?' } },
+      },
+    ])
+    const openAnswer = page.getByRole('textbox', { name: 'Anything else?' })
+
     await page.goto(`/feedbacks`)
     await expect(byDataCy(page, `feedback-item-${survey.id}`)).toBeAttached()
     await byDataCy(page, 'feedback-item-give-feedback').click()
@@ -484,6 +493,7 @@ test.describe('Students', () => {
     await byDataCy(page, 'feedback-target-give-feedback-tab').click()
     await expect(byDataCy(page, 'feedback-target-results-tab')).not.toBeAttached()
 
+    await openAnswer.fill('First answer')
     await byDataCy(page, 'feedback-view-give-feedback').click()
     await expect(contains(page, 'Feedback has been given. Thank you for your feedback!')).toBeAttached()
     await expect(byDataCy(page, 'feedback-target-results-feedback-chart')).toBeAttached()
@@ -491,6 +501,14 @@ test.describe('Students', () => {
 
     // Edit answer
     await byDataCy(page, 'feedback-target-edit-feedback-tab').click()
+    await expect(openAnswer).toHaveValue('First answer')
+
+    // Saving without changes is not sent, and the student stays on the form
+    await byDataCy(page, 'feedback-view-give-feedback').click()
+    await expect(contains(page, 'No unsaved changes')).toBeAttached()
+    await expect(page).not.toHaveURL(/\/results/)
+
+    await openAnswer.fill('Edited answer')
     await byDataCy(page, 'feedback-view-give-feedback').click()
     await expect(contains(page, 'Feedback has been given. Thank you for your feedback!')).toBeAttached()
     await expect(page).toHaveURL(/\/results/)
