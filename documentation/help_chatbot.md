@@ -14,7 +14,7 @@ NorppAI is an AI assistant that answers questions about using Norppa. It's shown
 - `HELP_CHATBOT_ENABLED` (off in `config/default.js`, on in `config/hy.js`) hides the whole feature. Changing it needs a redeploy.
 - **In an emergency**, remove `ANTHROPIC_API_KEY` from the deployment: production then answers 503.
 - Without `ANTHROPIC_API_KEY`, development uses `mockCompletion.ts`. In development it fails 15% of requests at random; put `#long`, `#slow`, `#fail` or `#failonce` in a question for a long answer, an 8 s wait, a failure, or a failure on the first try only.
-- Rate limits (`rateLimit.ts`, Redis): 10 a minute and 100 a day per user, 2000 a day in total. If Redis is down, nothing is limited.
+- Rate limits (`rateLimit.ts`, Redis): 20 a minute and 500 a day per user, 5000 a day in total. If Redis is down, nothing is limited.
 - Access (staff and admins) is checked on the client in `AdUser.tsx` and on the server in `helpChatbotController.ts`; change both together. The viewer stays admins-only because it's mounted in the admin router.
 
 ## The model and its knowledge

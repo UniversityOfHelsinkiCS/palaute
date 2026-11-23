@@ -8,9 +8,9 @@ const DAY = 24 * 60 * 60
 // Checked in order, so a request rejected by a user's limit doesn't use up the global budget. To cut the chatbot
 // off entirely, remove ANTHROPIC_API_KEY.
 export const RATE_LIMITS = [
-  { name: 'user per minute', scope: 'user', windowSeconds: MINUTE, max: 10 },
-  { name: 'user per day', scope: 'user', windowSeconds: DAY, max: 100 },
-  { name: 'global per day', scope: 'global', windowSeconds: DAY, max: 2000 },
+  { name: 'user per minute', scope: 'user', windowSeconds: MINUTE, max: 20 },
+  { name: 'user per day', scope: 'user', windowSeconds: DAY, max: 500 },
+  { name: 'global per day', scope: 'global', windowSeconds: DAY, max: 5000 },
 ] as const
 
 // Fails open: allows the request if Redis is unavailable, also when the connection is lost after startup
