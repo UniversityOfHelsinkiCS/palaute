@@ -159,16 +159,31 @@ export const clearDraft = key => {
   }
 }
 
+// A choice answer is only valid if its options still exist
+const hasExistingOptions = (question, value) => {
+  const optionIds = (question.data?.options ?? []).map(option => option.id)
+
+  if (question.type === 'MULTIPLE_CHOICE') return value.every(id => optionIds.includes(id))
+  if (question.type === 'SINGLE_CHOICE') return value === '' || optionIds.includes(value)
+  return true
+}
+
 /**
- * Applies draft answers on top of the form's answers. Answers to questions that no longer
- * exist, or whose shape no longer matches (the survey may have been edited), are dropped.
+ * Applies draft answers on top of the form's answers. The survey may have been edited after the
+ * draft was saved, so an answer is dropped if its question no longer exists, its shape no longer
+ * matches, or it refers to an option that has been removed.
  * @returns {object|null} the merged answers, or null if the draft had nothing usable
  */
-export const mergeDraft = (answers, draft) => {
+export const mergeDraft = (answers, draft, questions) => {
   if (!draft) return null
 
+  const questionById = new Map(questions.map(q => [String(q.id), q]))
+
   const usable = Object.entries(draft).filter(
-    ([questionId, value]) => questionId in answers && Array.isArray(value) === Array.isArray(answers[questionId])
+    ([questionId, value]) =>
+      questionId in answers &&
+      Array.isArray(value) === Array.isArray(answers[questionId]) &&
+      hasExistingOptions(questionById.get(questionId), value)
   )
 
   if (usable.length === 0) return null

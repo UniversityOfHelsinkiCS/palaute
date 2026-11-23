@@ -56,7 +56,9 @@ const FormContainer = ({
   const submitButtonRef = useRef(null)
 
   // Read once when the form mounts: Formik only uses initialValues on its first render
-  const [restoredAnswers] = useState(() => (draftKey ? mergeDraft(initialValues.answers, loadDraft(draftKey)) : null))
+  const [restoredAnswers] = useState(() =>
+    draftKey ? mergeDraft(initialValues.answers, loadDraft(draftKey), questions) : null
+  )
   const [showDraftNotice, setShowDraftNotice] = useState(Boolean(restoredAnswers))
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false)
   const [discardConfirmed, setDiscardConfirmed] = useState(false)
