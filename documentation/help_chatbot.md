@@ -1,6 +1,6 @@
 # Help chatbot
 
-NorppAI is an AI assistant that answers questions about using Norppa. It's an experimental MVP, shown to admins only and not on phone-width screens (below the `sm` breakpoint). Code, routes and config call it the help chatbot; "NorppAI" is only for text users see. `NorppaFeedback` is unrelated: it's feedback about Norppa itself.
+NorppAI is an AI assistant that answers questions about using Norppa. It's shown to staff (`isEmployee`) and admins, but not on phone-width screens (below the `sm` breakpoint). Code, routes and config call it the help chatbot; "NorppAI" is only for text users see. `NorppaFeedback` is unrelated: it's feedback about Norppa itself.
 
 ## Where things are
 
@@ -15,7 +15,7 @@ NorppAI is an AI assistant that answers questions about using Norppa. It's an ex
 - **In an emergency**, remove `ANTHROPIC_API_KEY` from the deployment: production then answers 503.
 - Without `ANTHROPIC_API_KEY`, development uses `mockCompletion.ts`. In development it fails 15% of requests at random; put `#long`, `#slow`, `#fail` or `#failonce` in a question for a long answer, an 8 s wait, a failure, or a failure on the first try only.
 - Rate limits (`rateLimit.ts`, Redis): 10 a minute and 100 a day per user, 2000 a day in total. If Redis is down, nothing is limited.
-- Access is checked only for admins, on the client in `AdUser.tsx` and on the server in `helpChatbotController.ts`. Opening the chat to teachers means changing both. The viewer stays admins-only because it's mounted in the admin router.
+- Access (staff and admins) is checked on the client in `AdUser.tsx` and on the server in `helpChatbotController.ts`; change both together. The viewer stays admins-only because it's mounted in the admin router.
 
 ## The model and its knowledge
 

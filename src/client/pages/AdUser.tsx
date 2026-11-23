@@ -91,7 +91,9 @@ const AdUser = () => {
         <Router />
       </Box>
       <DevTools />
-      {HELP_CHATBOT_ENABLED && authorizedUser?.isAdmin === true && <HelpChatbot />}
+      {HELP_CHATBOT_ENABLED && (authorizedUser?.isAdmin === true || authorizedUser?.isEmployee === true) && (
+        <HelpChatbot />
+      )}
       <Footer user={authorizedUser} />
     </Box>
   )

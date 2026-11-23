@@ -2,12 +2,11 @@ import type { LanguageId } from '@common/types/common'
 import type { HelpChatbotTurnMetadata, PostHelpChatbotTurnResponse } from '@common/types/helpChatbot'
 
 import * as Sentry from '@sentry/node'
-import { Router, type Response } from 'express'
+import { Router, type NextFunction, type Response } from 'express'
 
 import type { Completion } from '../../services/helpChatbot'
 import type { AuthenticatedRequest } from '../../types'
 
-import { adminAccess } from '../../middleware/adminAccess'
 import {
   checkRateLimit,
   createTurn,
@@ -22,6 +21,7 @@ import {
   setTurnStatus,
   trimHistory,
 } from '../../services/helpChatbot'
+import { ApplicationError } from '../../util/ApplicationError'
 import { logger } from '../../util/logger'
 
 // The admin during "login as", so impersonating doesn't get around the limits
@@ -109,7 +109,11 @@ const putFeedback = async (req: AuthenticatedRequest, res: Response) => {
 export const router = Router()
 
 // The server's only access check
-router.use(adminAccess)
+router.use((req: AuthenticatedRequest, _res: Response, next: NextFunction) => {
+  const { user } = req
+  if (user.isAdmin || user.isEmployee || user.mockedBy?.isAdmin) return next()
+  throw ApplicationError.Forbidden()
+})
 
 router.post('/turns', postTurn)
 router.put('/turns/:id/feedback', putFeedback)
