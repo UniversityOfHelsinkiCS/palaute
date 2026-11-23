@@ -1,6 +1,6 @@
 import { useMutation } from '@tanstack/react-query'
 import { parseISO, lightFormat } from 'date-fns'
-import { partition } from 'lodash-es'
+import { isEqualWith, partition } from 'lodash-es'
 
 import apiClient from '../../../../util/apiClient'
 import { STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL } from '../../../../util/common'
@@ -175,6 +175,19 @@ export const mergeDraft = (answers, draft) => {
 
   return { ...answers, ...Object.fromEntries(usable) }
 }
+
+/**
+ * Compares two sets of answers. Multiple-choice answers are arrays of option ids, and their
+ * order depends on the order the options were ticked, so arrays are compared without order.
+ */
+export const answersEqual = (a, b) =>
+  isEqualWith(a, b, (x, y) => {
+    if (Array.isArray(x) && Array.isArray(y)) {
+      return x.length === y.length && x.every(item => y.includes(item))
+    }
+    // undefined lets isEqualWith compare everything else as isEqual would
+    return undefined
+  })
 
 export const useSaveValues = () => {
   const { feedbackTarget } = useFeedbackTargetContext()

@@ -1,6 +1,5 @@
 import { Typography, Box, Card, CardContent, Alert, Stack } from '@mui/material'
 import { Formik, Form, useFormikContext } from 'formik'
-import { isEqual } from 'lodash-es'
 import { useSnackbar } from 'notistack'
 import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -13,7 +12,7 @@ import { useTranslationContext } from '../../../../util/translationContext'
 import { ConsentCheckbox } from './ConsentCheckbox'
 import ErrorSummary from './ErrorSummary'
 import FeedbackForm from './FeedbackForm'
-import { clearDraft, loadDraft, mergeDraft, saveDraft } from './utils'
+import { answersEqual, clearDraft, loadDraft, mergeDraft, saveDraft } from './utils'
 
 // Keeps a copy of the answers in sessionStorage while the user fills in the form.
 const DraftSaver = ({ draftKey, submittedAnswers }) => {
@@ -22,7 +21,7 @@ const DraftSaver = ({ draftKey, submittedAnswers }) => {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (isEqual(values.answers, initialSubmittedAnswers)) {
+      if (answersEqual(values.answers, initialSubmittedAnswers)) {
         clearDraft(draftKey)
       } else {
         saveDraft(draftKey, values.answers)
@@ -83,7 +82,7 @@ const FormContainer = ({
   }
 
   const handleSubmit = async (values, formikHelpers) => {
-    if (isEdit && isEqual(values.answers, initialValues.answers)) {
+    if (isEdit && answersEqual(values.answers, initialValues.answers)) {
       enqueueSnackbar(t('feedbackView:noUnsavedChanges'), { variant: 'info' })
       return
     }
@@ -102,7 +101,7 @@ const FormContainer = ({
         const disabled = isSubmitting || disabledProp
 
         const submitDisabled = disabled || (fewEnrolled && !values.activateSubmit && !isEdit)
-        const hasChanges = !isEqual(values.answers, initialValues.answers)
+        const hasChanges = !answersEqual(values.answers, initialValues.answers)
         const showDiscardButton = Boolean(draftKey) && hasChanges && !isSubmitting
 
         const handleConfirmDiscard = () => {
