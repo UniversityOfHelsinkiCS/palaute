@@ -42,6 +42,9 @@ const AnswerForm = ({ survey, token, basePath }) => {
   const canAnswer = isOpen
   // Drafts are only kept while the survey can be answered
   const draftKey = canAnswer && authorizedUser ? getDraftKey(authorizedUser.id, `survey:${token}`) : null
+  // Without a draftKey the form neither saves nor restores a draft. During a delete this cancels a
+  // pending save, and the form shown after the delete starts empty. If the delete fails, the draft is saved again
+  const formDraftKey = deleteResponse.isPending ? null : draftKey
   const description = getLanguageValue(survey.description, i18n.language)?.trim()
 
   const handleError = e => {
@@ -110,7 +113,7 @@ const AnswerForm = ({ survey, token, basePath }) => {
         showSubmitButton
         questions={survey.questions}
         isEdit={Boolean(survey.response)}
-        draftKey={draftKey}
+        draftKey={formDraftKey}
       />
 
       {canAnswer && survey.response && (
