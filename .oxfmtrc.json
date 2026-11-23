@@ -20,5 +20,6 @@
       ["value-parent", "value-sibling", "value-index"],
       "unknown"
     ]
-  }
+  },
+  "overrides": [{ "files": ["**/*.md"], "options": { "sortImports": false } }]
 }
