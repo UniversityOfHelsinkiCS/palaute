@@ -17,7 +17,6 @@ import { useQuery } from '@tanstack/react-query'
 import apiClient from '../../../../util/apiClient'
 
 const ConfigDebug = () => {
-  // eslint-disable-next-line no-undef
   const entries = Object.entries(CONFIG ?? {})
 
   const { data, isLoading } = useQuery({

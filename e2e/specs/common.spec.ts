@@ -21,7 +21,6 @@ test.describe('Common tests', () => {
     await loginAs(admin)
     await page.goto(`/admin/users`)
     await expect(contains(page, 'HY-Minttujam')).toBeAttached()
-    await expect(contains(page, 'Pahaminttu')).not.toBeAttached()
   })
   test('Custom translation override is loaded correctly', async ({ page, loginAs }) => {
     await loginAs(admin)

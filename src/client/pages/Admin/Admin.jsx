@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom'
 import { RouterTabs } from '../../components/common/RouterTabs'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
-import { CONFIG_TEST_VALUE, HELP_CHATBOT_ENABLED, PRIVATE_TEST } from '../../util/common'
+import { CONFIG_TEST_VALUE, HELP_CHATBOT_ENABLED } from '../../util/common'
 import CrashDebug from './CrashDebug'
 import BannerView from './tabs/Banners/BannersView'
 import CacheTab from './tabs/Cache/CacheTab'
@@ -38,7 +38,7 @@ const ConfigTestValues = () => {
     <Typography variant="caption" color="textSecondary">
       The secret words are:{' '}
       <Box color="pink">
-        {CONFIG_TEST_VALUE} {PRIVATE_TEST}
+        {CONFIG_TEST_VALUE}
         {t('test:testValue')}
       </Box>
       They are used for testing.

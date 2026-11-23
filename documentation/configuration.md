@@ -24,7 +24,7 @@ and `const value = config.get('key')`. The config values can be getted and parse
 Client configuration is slightly more involved.
 A global `CONFIG` object is populated at build time using Vite in the [vite.config](/vite.config.ts).
 
-By default the `CONFIG` object contains all the values in config, but if you wish to exclude some from it (as they are technically public) you should add the excluded fields to the `PRIVATE_KEYS` config.
+`CONFIG` only contains the keys listed in [clientConfig.ts](/src/common/clientConfig.ts). To use a new config value in the client, add it there.
 
 Because eslint (and we) don't like custom global objects like `CONFIG`, the values required by client are safely parsed in `src/client/util/common` to exported constants.
 

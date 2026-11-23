@@ -1,8 +1,7 @@
+import type { ClientConfig } from '@common/clientConfig'
+
 import norppaViskaali from '../assets/norppa_holy_smoke.png'
 import stylizedNorppa from '../assets/stylized_norppa.png'
-/**
- * Insert common items here
- */
 import toscalogoColor from '../assets/toscalogo_color.svg'
 import toscalogoGrayscale from '../assets/toscalogo_grayscale.svg'
 
@@ -22,69 +21,9 @@ export const inE2EMode = import.meta.env.REACT_APP_E2E === 'true'
 
 export const basePath = inDevelopment || inE2EMode ? '' : import.meta.env.BASE_PATH
 
-// must match values from /config/*
-type Config = {
-  DEV_ADMINS: string[]
-  INCLUDE_COURSES: string[]
-  TAGS_ENABLED: string[]
-  WORKLOAD_QUESTION_ID: number
-  WORKLOAD_QUESTION_ID_ORDER: string[]
-  NOAD_LINK_EXPIRATION_DAYS: number
-  FEEDBACK_TARGET_CACHE_TTL: number | undefined
-  USER_CACHE_TTL: number | undefined
-  FEEDBACK_HIDDEN_STUDENT_COUNT: number
-  TEACHER_REMINDER_DAYS_TO_OPEN: number
-  SEND_STUDENT_AUTOMATIC_REMINDER_ENABLED: boolean
-  STUDENT_REMINDER_DAYS_TO_CLOSE: number
-  FEEDBACK_REMINDER_COOLDOWN: number
-  CONFIG_TEST_VALUE: string
-  CONFIG_NAME: string
-  FRONTEND_SENTRY_DSN: string
-  BACKEND_SENTRY_DSN: string
-  PUBLIC_URL: string
-  GRAYLOG_URL: string
-  TRANSLATION_NAMESPACE: string
-  LANGUAGES: string[]
-  DEV_USERNAME: string
-  UNIVERSITY_ROOT_ID: string
-  OPEN_UNIVERSITY_ORG_ID: string
-  SUMMARY_EXCLUDED_ORG_IDS: string[]
-  SUMMARY_SKIP_ORG_IDS: string[]
-  FEEDBACK_RESPONSE_EMAILS_SINCE_DATE: string
-  PRIVATE_KEYS: string[]
-  IAM_GROUPS_HEADER: string
-  GELF_TRANSPORT_ENABLED: boolean
-  STUDENT_FEEDBACK_SHOW_REALISATION_NAME: boolean
-  STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL: boolean
-  UI_CONFIG_NAME: string | null
-  CUSTOM_FOOTER_COMPONENT: string
-  CUSTOM_SESSION_PINGER: 'Pinger-default' | 'Pinger-shibboleth'
-  ORGANISATION_SURVEYS_ENABLED: boolean
-  PUBLIC_COURSE_BROWSER_ENABLED: boolean
-  HELP_CHATBOT_ENABLED: boolean
-  USER_GUIDE_ENABLED: boolean
-  ALWAYS_SHOW_STUDENT_LIST: boolean
-  SUMMARY_COLORS: string[]
-  SUMMARY_COLOR_SCALE_MIN: number
-  SUMMARY_COLOR_SCALE_MAX: number
-  UNIVERSITY_LEVEL_VIEWING_SPECIAL_GROUPS: string[]
-  FEEDBACK_CORRESPONDENT_SPECIAL_GROUP: string
-  SHOW_FEEDBACKS_TO_STUDENTS_ONLY_AFTER_ENDING: boolean
-  ENABLE_CORRESPONDENT_MANAGEMENT: boolean
-  ADD_LEADING_ZERO_TO_STUDENT_NUMBERS: boolean
-  SHOW_COURSE_CODES_WITH_COURSE_NAMES: boolean
-  SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS: boolean
-  SHOW_CHIPS_AT_COURSE_UNIT_LEVEL_IN_ACCORDIONS: boolean
-  SHOW_BUTTON_DOWNLOAD_SISU_CSV: boolean
-  SURVEY_OPENING_EMAILS_CHUNK_MAX_SIZE: number
-  // Optional: only present in some deployment configs
-  INTERIM_FEEDBACKS_ENABLED?: boolean
-  PRIVATE_TEST?: string
-}
-
 // CONFIG is injected at build time by Vite. Read into a local variable to avoid
 // duplicating the large object throughout the bundle when values are read multiple times.
-const config = CONFIG as Config
+const config = CONFIG as ClientConfig
 
 export const INCLUDE_COURSES = config?.INCLUDE_COURSES
 export const TAGS_ENABLED = config?.TAGS_ENABLED
@@ -95,7 +34,6 @@ export const GRAYLOG_URL = config?.GRAYLOG_URL
 export const TRANSLATION_NAMESPACE = config?.TRANSLATION_NAMESPACE
 export const LANGUAGES = config?.LANGUAGES ?? []
 export const DEV_USERNAME = config?.DEV_USERNAME
-export const PRIVATE_TEST = config?.PRIVATE_TEST // expected to be undefined in e2e tests
 export const STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL = config?.STUDENT_FEEDBACK_QUESTIONS_ORDER_INITIAL
 export const FEEDBACK_HIDDEN_STUDENT_COUNT = config?.FEEDBACK_HIDDEN_STUDENT_COUNT
 export const OPEN_UNIVERSITY_ORG_ID = config?.OPEN_UNIVERSITY_ORG_ID
