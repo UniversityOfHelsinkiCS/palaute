@@ -9,7 +9,7 @@ runs:
   using: composite
   steps:
     # Everything that needs the registry runs before any npm package
-    - uses: oras-project/setup-oras@005458ad77f1c8facd38a094e4af2e69e5607ff4 # v2.0.2
+    - uses: oras-project/setup-oras@ac735097e22fe643015b0d19645f7c9a69942128 # v2.0.4
 
     - name: Log in to the registry
       uses: docker/login-action@v4
