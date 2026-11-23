@@ -2,6 +2,9 @@ name: E2E Tests
 
 on: [workflow_call]
 
+permissions:
+  contents: read
+
 jobs:
   lint:
     if: ${{ github.actor != 'renovate[bot]' }}
