@@ -72,7 +72,7 @@ const NotGivingFeedbackButton = ({ noFeedbackAllowed, onNotGivingFeedback }: Not
 
 type FeedbackGivenActionsProps = {
   editPath: string
-  onDelete: () => void
+  onDelete: () => Promise<void>
   viewPath: string
   notGivingFeedback?: boolean
 }
@@ -86,8 +86,8 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath, notGivingFeedback 
   }
 
   const handleSubmit = async () => {
-    onDelete()
     handleClose()
+    await onDelete()
   }
 
   return (
@@ -359,7 +359,13 @@ const FeedbackTargetItem = ({ feedbackTarget, divider }: FeedbackTargetItemProps
   const { continuousFeedbackEnabled } = feedbackTarget
 
   const onDelete = async () => {
-    await apiClient.delete(`/feedbacks/${feedback?.id}`)
+    try {
+      await apiClient.delete(`/feedbacks/${feedback?.id}`)
+    } catch {
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      return
+    }
+
     // Otherwise unsent edits to the deleted feedback would reappear when the form is opened
     if (authorizedUser) clearDraft(getDraftKey(authorizedUser.id, id))
     // Removed rather than invalidated: an invalidated copy would still be shown while it is

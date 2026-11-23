@@ -2,13 +2,16 @@ import FeedbackGivenIcon from '@mui/icons-material/Check'
 import NoFeedbackIcon from '@mui/icons-material/Edit'
 import { Box, ListItemText, Chip, Dialog, DialogTitle, ListItem } from '@mui/material'
 import { lightFormat, parseISO } from 'date-fns'
+import { useSnackbar } from 'notistack'
 import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 
 import { NorButton } from '../../components/common/NorButton'
+import useNoadUser from '../../hooks/useNoadUser'
 import apiClient from '../../util/apiClient'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
+import { clearDraft, getDraftKey } from '../FeedbackTarget/tabs/FeedbackView/utils'
 
 const styles = {
   listItem: {
@@ -45,8 +48,8 @@ const FeedbackGivenActions = ({ editPath, onDelete, viewPath }) => {
   }
 
   const handleSubmit = async () => {
-    onDelete()
     handleClose()
+    await onDelete()
   }
 
   return (
@@ -98,6 +101,8 @@ const formatDate = date => lightFormat(date, 'd.M.yyyy')
 
 const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
   const { t } = useTranslation()
+  const { enqueueSnackbar } = useSnackbar()
+  const { noadUser } = useNoadUser()
 
   const { id, closesAt, opensAt, userFeedbackTargets } = feedbackTarget
 
@@ -112,7 +117,15 @@ const GuestFeedbackTargetItem = ({ feedbackTarget }) => {
   const isOpen = feedbackTargetIsOpen(feedbackTarget)
 
   const onDelete = async () => {
-    await apiClient.delete(`/feedbacks/${feedback.id}`)
+    try {
+      await apiClient.delete(`/feedbacks/${feedback.id}`)
+    } catch {
+      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      return
+    }
+
+    // Otherwise unsent edits to the deleted feedback would reappear when the form is opened
+    if (noadUser) clearDraft(getDraftKey(noadUser.id, id))
     window.location.reload()
   }
 
