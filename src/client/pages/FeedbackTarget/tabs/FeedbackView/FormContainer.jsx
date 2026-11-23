@@ -14,17 +14,25 @@ import ErrorSummary from './ErrorSummary'
 import FeedbackForm from './FeedbackForm'
 import { answersEqual, clearDraft, loadDraft, mergeDraft, saveDraft } from './utils'
 
-// Keeps a copy of the answers in sessionStorage while the user fills in the form.
+// Keeps the user's unsaved changes in sessionStorage while they fill in the form.
+// Only changed answers are saved, so restoring a draft doesn't revert answers that were
+// submitted from another tab after the draft was made
 const DraftSaver = ({ draftKey, submittedAnswers }) => {
   const { values } = useFormikContext()
   const [initialSubmittedAnswers] = useState(submittedAnswers)
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (answersEqual(values.answers, initialSubmittedAnswers)) {
+      const changedAnswers = Object.fromEntries(
+        Object.entries(values.answers).filter(
+          ([questionId, value]) => !answersEqual(value, initialSubmittedAnswers[questionId])
+        )
+      )
+
+      if (Object.keys(changedAnswers).length === 0) {
         clearDraft(draftKey)
       } else {
-        saveDraft(draftKey, values.answers)
+        saveDraft(draftKey, changedAnswers)
       }
     }, 300)
 
