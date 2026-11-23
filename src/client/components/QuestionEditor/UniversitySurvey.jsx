@@ -3,6 +3,7 @@ import { useSnackbar } from 'notistack'
 import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../util/apiClient'
+import queryClient from '../../util/queryClient'
 import { NorButton } from '../common/NorButton'
 import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
@@ -25,6 +26,8 @@ const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
   const handleSubmit = async values => {
     try {
       await saveSurveyValues(values, universitySurvey.id)
+      await queryClient.invalidateQueries({ queryKey: ['universitySurveyVersions'] })
+      await queryClient.invalidateQueries({ queryKey: ['universitySurvey'] })
       enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
     } catch {
       enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
