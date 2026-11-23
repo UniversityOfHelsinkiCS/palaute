@@ -7,7 +7,6 @@ import { errorMiddleware } from '../middleware/errorMiddleware'
 import { iamGroupsMiddleware } from '../middleware/iamGroupsMiddleware'
 import { shibbolethCharsetMiddleware } from '../middleware/shibbolethCharsetMiddleware'
 import { HELP_CHATBOT_ENABLED } from '../util/config'
-import { initializeSentry } from '../util/sentry'
 import { adminRouter } from './admin'
 import { continuousFeedbackController } from './continuousFeedback'
 import { courseSummaryRouter } from './courseSummary'
@@ -26,8 +25,6 @@ import { tagsRouter } from './tags'
 import { userController } from './users'
 
 export const router = express()
-
-initializeSentry()
 
 router.use(json({ limit: '1mb' }))
 router.use(shibbolethCharsetMiddleware)

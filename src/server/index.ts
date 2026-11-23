@@ -1,6 +1,8 @@
 // Must stay the first import: imports are evaluated before the module body, so a dotenv.config() call here
-// would run after modules that read process.env at load time (e.g. util/config)
+// would run after modules that read process.env at load time (e.g. util/config).
+// Sentry must init before express and pg are loaded, or it can't instrument them
 import 'dotenv/config'
+import './instrument'
 import compression from 'compression'
 import express, { Request, Response } from 'express'
 import path from 'path'
