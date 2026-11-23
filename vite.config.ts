@@ -10,6 +10,7 @@ export default defineConfig({
     react(),
     sentryVitePlugin({
       applicationKey: 'norppa-course-feedback',
+      telemetry: false,
     }),
   ],
   server: {
