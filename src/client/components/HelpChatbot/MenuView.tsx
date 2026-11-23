@@ -7,7 +7,7 @@ import { useId, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
-import type { GuideLink } from './useGuideLink'
+import type { GuideLink } from '../../hooks/useGuideLink'
 
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { SEAL_SIZE, getMenuHeight } from './layout'

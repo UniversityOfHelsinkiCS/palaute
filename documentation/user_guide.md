@@ -1,12 +1,13 @@
 # User guide
 
-An in-app user guide at `/guide` for teachers and degree programme staff, meant to replace the partly outdated guide on the wiki (`links:wikiRoot`).
+An in-app user guide at `/guide` for teachers and degree programme staff. It replaces the partly outdated guide on the wiki.
 
 ## Visibility
 
 - Behind `USER_GUIDE_ENABLED`: off in `config/default.js`, on in `config/hy.js`. The content is written for HY (Sisu, IAM groups, HY's support address), so other deployments shouldn't turn it on as is.
-- Admins only until the content has been reviewed (`canSeeUserGuide.ts`, also used by the help chatbot).
-- The chatbot's "Read the user guide" option and "Prefer to read?" strip open the guide when the user can see it, else the wiki (`useGuideLink`). The footer and the chatbot's answers still link to the wiki.
+- Employees and admins only (`canSeeUserGuide.ts`).
+- The footer, the course page's and programme page's instructions buttons and the chatbot's "Read the user guide" option and "Prefer to read?" strip open the guide when the user can see it, else the wiki (`useGuideLink`), e.g. for a teacher who isn't an employee or a deployment without the guide.
+- The teachers' emails link to the guide.
 
 ## Content
 
@@ -35,6 +36,5 @@ In `src/client/pages/UserGuide/`. The page is loaded lazily with all of its text
 
 ## Later
 
-- Open the guide to all staff once the content has been reviewed, and link it from the footer instead of the wiki.
 - Swedish translation.
 - Link the chatbot's answers to guide pages instead of the wiki.

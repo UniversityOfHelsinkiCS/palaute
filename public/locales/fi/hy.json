@@ -15,6 +15,6 @@
     "courseRealisationPageStudent": "https://studies.helsinki.fi/kurssit/toteutus/{{courseRealisationId}}/"
   },
   "mails": {
-    "instructionsAndSupport": "Ota yhteyttä tukeen: <a href=mailto:norppa@helsinki.fi>norppa@helsinki.fi</a> <br/>\nKäyttöohje: <a href=https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback>https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Lisätietoja Norpasta Flammassa</a>"
+    "instructionsAndSupport": "Ota yhteyttä tukeen: <a href=mailto:norppa@helsinki.fi>norppa@helsinki.fi</a> <br/>\nKäyttöohje: <a href=https://norppa.helsinki.fi/guide>https://norppa.helsinki.fi/guide</a> <br/>\n<a href=https://flamma.helsinki.fi/sv/group/ajankohtaista/nyhet/-/uutinen/opiskelijat-saavat-uuden-tyokalun-kurssipalautteen-antoon/20194526>Lisätietoja Norpasta Flammassa</a>"
   }
 }

@@ -9,6 +9,7 @@ import { useLocation } from 'react-router-dom'
 
 import type { ChatSize, WidgetView } from './layout'
 
+import useGuideLink from '../../hooks/useGuideLink'
 import { mergeSx } from '../../util/sx'
 import ChatView from './ChatView'
 import {
@@ -32,7 +33,6 @@ import { playFlip } from './sealSprite'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
 import useAnnouncer from './useAnnouncer'
 import useConversation from './useConversation'
-import useGuideLink from './useGuideLink'
 import WidgetSeal from './WidgetSeal'
 
 const fadeIn = keyframes`

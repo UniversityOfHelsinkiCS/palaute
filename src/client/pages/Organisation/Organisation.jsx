@@ -18,6 +18,7 @@ import ProtectedRoute from '../../components/common/ProtectedRoute'
 import { RouterTab, RouterTabs } from '../../components/common/RouterTabs'
 import Title from '../../components/common/Title'
 import useAuthorizedUser from '../../hooks/useAuthorizedUser'
+import useGuideLink from '../../hooks/useGuideLink'
 import useOrganisation from '../../hooks/useOrganisation'
 import { ORGANISATION_SURVEYS_ENABLED, SHOW_COURSES_TAB_IN_ORGANISATION_SETTINGS } from '../../util/common'
 import errors from '../../util/errorMessage'
@@ -40,6 +41,7 @@ const Organisation = () => {
   const { t, i18n } = useTranslation()
   const { organisation, isLoading, isLoadingError, error } = useOrganisation(code, { retry: 2 })
   const { authorizedUser } = useAuthorizedUser()
+  const guide = useGuideLink('/guide/programmes', 'links:wikiOrganisationHelp')
 
   if (isLoading) {
     return <LoadingProgress />
@@ -75,9 +77,11 @@ const Organisation = () => {
           {name} ({organisation.code})
         </Typography>
       </Box>
-      <Box mb="1rem">
-        <LinkButton to={t('links:wikiOrganisationHelp')} title={t('footer:wikiLink')} external />
-      </Box>
+      {guide && (
+        <Box mb="1rem">
+          <LinkButton to={guide.href} title={t('footer:wikiLink')} external={!guide.inApp} />
+        </Box>
+      )}
       <Box mb="2rem">
         <RouterTabs variant="scrollable" scrollButtons="auto">
           {hasAdminAccess && (

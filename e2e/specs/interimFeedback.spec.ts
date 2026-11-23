@@ -116,7 +116,7 @@ test.describe('Responsible Teachers', () => {
     await expect(byDataCy(page, 'interim-feedback-target-organisation-link')).not.toBeAttached()
     await expect(byDataCy(page, 'interim-feedback-target-course-summary-link')).not.toBeAttached()
     await expect(byDataCy(page, 'interim-feedback-target-course-page-link')).not.toBeAttached()
-    await expect(byDataCy(page, 'interim-feedback-target-wiki-link')).toBeAttached()
+    await expect(byDataCy(page, 'interim-feedback-target-guide-link')).toBeAttached()
     await expect(byDataCy(page, 'interim-feedback-target-sisu-page-link')).not.toBeAttached()
     await expect(byDataCy(page, 'interim-feedback-target-interim-feedback-parent-link')).toBeAttached()
 

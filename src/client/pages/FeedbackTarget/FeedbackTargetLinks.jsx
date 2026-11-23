@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next'
 
 import LinkButton from '../../components/common/LinkButton'
 import { NorButton } from '../../components/common/NorButton'
+import useGuideLink from '../../hooks/useGuideLink'
 import { getPrimaryCourseName } from '../../util/courseIdentifiers'
 import { getLanguageValue } from '../../util/languageUtils'
 import { useFeedbackTargetContext } from './FeedbackTargetContext'
@@ -16,6 +17,7 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
   const { enqueueSnackbar } = useSnackbar()
 
   const { feedbackTarget, organisation, isTeacher, isStudent } = useFeedbackTargetContext()
+  const guide = useGuideLink('/guide/teachers', 'links:wikiTeacherHelp')
 
   const { parentFeedback, isLoading: isParentFeedbackLoading } = useInterimFeedbackParent(
     feedbackTarget.id,
@@ -98,12 +100,12 @@ const FeedbackTargetLinks = ({ isInterimFeedback = false }) => {
             title={parentCourseName}
           />
         )}
-        {isTeacher && (
+        {isTeacher && guide && (
           <LinkButton
-            data-cy={`${dataCyPrefix}feedback-target-wiki-link`}
-            to={t('links:wikiTeacherHelp')}
+            data-cy={`${dataCyPrefix}feedback-target-guide-link`}
+            to={guide.href}
             title={t('footer:wikiLink')}
-            external
+            external={!guide.inApp}
           />
         )}
       </Stack>

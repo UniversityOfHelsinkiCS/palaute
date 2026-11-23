@@ -86,7 +86,7 @@ const expectSurveyPage = async (page: Page, feedbackCount: string, hasOrganisati
   }
   await expect(byDataCy(page, 'feedback-target-course-summary-link')).not.toBeAttached()
   await expect(byDataCy(page, 'feedback-target-course-page-link')).not.toBeAttached()
-  await expect(byDataCy(page, 'feedback-target-wiki-link')).toBeAttached()
+  await expect(byDataCy(page, 'feedback-target-guide-link')).toBeAttached()
   await expect(byDataCy(page, 'feedback-target-sisu-page-link')).not.toBeAttached()
   await expect(byDataCy(page, 'feedback-target-interim-feedback-parent-link')).not.toBeAttached()
 

@@ -1,11 +1,14 @@
 import { Box, Container, Divider, Grid, Link, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
 
+import useGuideLink from '../hooks/useGuideLink'
 import { inProduction, inStaging } from '../util/common'
 import ExternalLink from './common/ExternalLink'
 
 const Footer = ({ user }) => {
   const { t } = useTranslation()
+  const guide = useGuideLink()
   return (
     <Box marginTop="auto" pt="1rem">
       <Divider />
@@ -39,10 +42,16 @@ const Footer = ({ user }) => {
                     </ExternalLink>
                   </Typography>
                 </Grid>
-                {user && user.isEmployee && (
+                {guide && (guide.inApp || user?.isEmployee) && (
                   <Grid item xs={12} md="auto">
                     <Typography>
-                      <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
+                      {guide.inApp ? (
+                        <Link component={RouterLink} to={guide.href} underline="always">
+                          {t('footer:wikiLink')}
+                        </Link>
+                      ) : (
+                        <ExternalLink href={guide.href}>{t('footer:wikiLink')}</ExternalLink>
+                      )}
                     </Typography>
                   </Grid>
                 )}

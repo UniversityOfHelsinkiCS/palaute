@@ -1,7 +1,9 @@
 import { Box, Container, Divider, Link, Typography } from '@mui/material'
 import { formatDistanceToNow } from 'date-fns/esm'
 import { useTranslation } from 'react-i18next'
+import { Link as RouterLink } from 'react-router-dom'
 
+import useGuideLink from '../hooks/useGuideLink'
 import { images, inProduction, inStaging } from '../util/common'
 import { localeForLanguage } from '../util/languageUtils'
 import ExternalLink from './common/ExternalLink'
@@ -19,6 +21,7 @@ const styles = {
 
 const Footer = ({ user }) => {
   const { t, i18n } = useTranslation()
+  const guide = useGuideLink()
 
   const uptime = formatDistanceToNow(user?.lastRestart ? Date.parse(user?.lastRestart) : Date.now(), {
     locale: localeForLanguage(i18n.language),
@@ -56,9 +59,15 @@ const Footer = ({ user }) => {
             <Typography>
               <ExternalLink href={t('links:dataProtection')}>{t('feedbackView:dataProtectionNotice')}</ExternalLink>
             </Typography>
-            {user && user.isEmployee && (
+            {guide && (guide.inApp || user?.isEmployee) && (
               <Typography>
-                <ExternalLink href={t('links:wikiRoot')}>{t('footer:wikiLink')}</ExternalLink>
+                {guide.inApp ? (
+                  <Link component={RouterLink} to={guide.href} underline="always">
+                    {t('footer:wikiLink')}
+                  </Link>
+                ) : (
+                  <ExternalLink href={guide.href}>{t('footer:wikiLink')}</ExternalLink>
+                )}
               </Typography>
             )}
           </div>

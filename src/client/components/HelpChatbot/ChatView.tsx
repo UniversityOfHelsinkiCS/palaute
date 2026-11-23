@@ -6,9 +6,9 @@ import { useId } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Link as RouterLink } from 'react-router-dom'
 
+import type { GuideLink } from '../../hooks/useGuideLink'
 import type { ChatEntry } from './types'
 import type { FeedbackActions } from './useConversation'
-import type { GuideLink } from './useGuideLink'
 
 import ExternalLink from '../common/ExternalLink'
 import ChatHeader from './ChatHeader'

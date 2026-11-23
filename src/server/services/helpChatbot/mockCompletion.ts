@@ -7,8 +7,7 @@ import { inDevelopment } from '../../util/config'
 
 // Triggers in a question: #long, #slow (8 s), #fail, and #failonce to fail only the first attempt
 
-const GUIDE = 'https://wiki.helsinki.fi/xwiki/bin/view/CF/Course%20feedback/'
-const TEACHER_GUIDE = `${GUIDE}3.%20Teacher%27s%20guide/`
+const GUIDE = '/guide'
 
 const QUESTIONS_ANSWER = `You can add questions to your feedback survey on the course's feedback page:
 
@@ -17,11 +16,11 @@ const QUESTIONS_ANSWER = `You can add questions to your feedback survey on the c
 3. Click **Add question** and pick a question type.
 4. Write the question and save your changes.
 
-The [Teacher's guide](${TEACHER_GUIDE}) has more on the different question types.`
+The [user guide](${GUIDE}/questions) has more on the different question types.`
 
 const RESPONSES_ANSWER = `Responses are on the course's feedback page, under the **Feedback** tab. You'll see a summary of each question, and the open answers below it.
 
-See the [Teacher's guide](${TEACHER_GUIDE}) for how to download the responses or reply to them.`
+See the [user guide](${GUIDE}/results) for how to download the responses or reply to them.`
 
 const LONG_ANSWER = `# Setting up course feedback
 

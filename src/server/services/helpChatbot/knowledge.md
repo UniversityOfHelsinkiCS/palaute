@@ -4,7 +4,7 @@ Source of the help chatbot's knowledge, rendered into the system prompt by syste
 A label with a placeholder needs its value, e.g. [[section:key|count=5]] for {{count}}.
 
 Rules for editing:
-- Write in English and check every fact against the code; the user guide is partly outdated.
+- Write in English and check every fact against the code; the old user guide on the wiki is partly outdated.
 - Only describe what users at HY can acually reach: check the config (config/hy.js), the data and the role
   that gates a feature, not just that the code exists.
 - Say which survey types and roles a fact applies to. Unqualified facts are read as applying to all.
