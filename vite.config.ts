@@ -34,8 +34,9 @@ export default defineConfig({
     outDir: 'build/client',
     sourcemap: true,
   },
+  envPrefix: ['VITE_', 'REACT_APP_'],
   define: {
-    'process.env': process.env,
+    'import.meta.env.BASE_PATH': JSON.stringify(process.env.BASE_PATH ?? ''),
     CONFIG: (() => {
       const configObj = config.util.toObject(undefined)
       for (const key of config.get<string[]>('PRIVATE_KEYS')) {

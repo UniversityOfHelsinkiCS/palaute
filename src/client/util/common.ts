@@ -1,8 +1,3 @@
-// sorry for doing this, getting process.env and config to play nice with typescript is not fun but
-// getting types for the exports from this file is worth having it be a .ts file
-// eslint-disable-next-line
-// @ts-nocheck
-
 import norppaViskaali from '../assets/norppa_holy_smoke.png'
 import stylizedNorppa from '../assets/stylized_norppa.png'
 /**
@@ -18,14 +13,14 @@ export const images = {
   norppa_stylized: stylizedNorppa,
 }
 
-export const GIT_SHA = process.env.REACT_APP_GIT_SHA || ''
+export const GIT_SHA = import.meta.env.REACT_APP_GIT_SHA || ''
 
-export const inDevelopment = process.env.NODE_ENV === 'development'
-export const inProduction = process.env.NODE_ENV === 'production'
-export const inStaging = process.env.REACT_APP_STAGING === 'true'
-export const inE2EMode = process.env.REACT_APP_E2E === 'true'
+export const inDevelopment = import.meta.env.DEV
+export const inProduction = import.meta.env.PROD
+export const inStaging = import.meta.env.REACT_APP_STAGING === 'true'
+export const inE2EMode = import.meta.env.REACT_APP_E2E === 'true'
 
-export const basePath = inDevelopment || inE2EMode ? '' : process.env.BASE_PATH
+export const basePath = inDevelopment || inE2EMode ? '' : import.meta.env.BASE_PATH
 
 // must match values from /config/*
 type Config = {
