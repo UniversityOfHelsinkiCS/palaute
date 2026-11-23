@@ -1,4 +1,4 @@
-import Sentry from '@sentry/node'
+import * as Sentry from '@sentry/node'
 import { Response, Router } from 'express'
 
 import { UserFeedbackTarget, FeedbackTarget, Feedback } from '../../models'
