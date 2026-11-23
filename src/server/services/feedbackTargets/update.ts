@@ -163,7 +163,7 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
     )
   }
 
-  if (questions && surveyId) {
+  if (Array.isArray(questions) && surveyId) {
     const {
       newIds,
       removedIds,
