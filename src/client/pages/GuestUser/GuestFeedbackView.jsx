@@ -8,6 +8,7 @@ import { useParams, useNavigate, Link, Navigate } from 'react-router-dom'
 import AlertLink from '../../components/common/AlertLink'
 import { LoadingProgress } from '../../components/common/LoadingProgress'
 import useFeedbackTarget from '../../hooks/useFeedbackTarget'
+import useNoadUser from '../../hooks/useNoadUser'
 import feedbackTargetIsEnded from '../../util/feedbackTargetIsEnded'
 import feedbackTargetIsOpen from '../../util/feedbackTargetIsOpen'
 import FormContainer from '../FeedbackTarget/tabs/FeedbackView/FormContainer'
@@ -18,6 +19,8 @@ import {
   getQuestions,
   formatDate,
   checkIsFeedbackOpen,
+  getDraftKey,
+  clearDraft,
 } from '../FeedbackTarget/tabs/FeedbackView/utils'
 import { saveValues } from './utils'
 
@@ -31,8 +34,9 @@ const GuestFeedbackView = () => {
   const { feedbackTarget, isLoading } = useFeedbackTarget(id, {
     skipCache: true,
   })
+  const { noadUser, isLoading: noadUserIsLoading } = useNoadUser()
 
-  if (isLoading) {
+  if (isLoading || noadUserIsLoading) {
     return <LoadingProgress />
   }
 
@@ -49,6 +53,7 @@ const GuestFeedbackView = () => {
   const questions = getQuestions(feedbackTarget)
   const initialValues = getInitialValues(questions, feedbackTarget.feedback)
   const validate = makeValidate(questions)
+  const draftKey = !formIsDisabled && noadUser ? getDraftKey(noadUser.id, feedbackTarget.id) : null
 
   const handleSubmit = async values => {
     try {
@@ -58,6 +63,8 @@ const GuestFeedbackView = () => {
         })
       } else {
         await saveValues(values, feedbackTarget)
+
+        if (draftKey) clearDraft(draftKey)
 
         navigate(`/noad/targets/${id}/results`)
 
@@ -121,6 +128,7 @@ const GuestFeedbackView = () => {
           questions={questions}
           onOpenPrivacyDialog={handleOpenPrivacyDialog}
           isEdit={Boolean(feedback)}
+          draftKey={draftKey}
         />
       )}
     </>
