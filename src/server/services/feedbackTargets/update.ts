@@ -2,13 +2,13 @@ import { startOfDay, endOfDay } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import _ from 'lodash'
 
-import { Survey, Question, FeedbackTarget } from '../../models'
+import { Survey, FeedbackTarget } from '../../models'
 import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
-import { validateGroupingQuestions } from '../../util/groupingQuestion'
 import { logger } from '../../util/logger'
 import { createFeedbackTargetSurveyLog, createFeedbackTargetLog } from '../auditLog'
 import { updateOrganisationSurvey } from '../organisations/organisationSurveys'
+import { saveQuestions } from '../questions/saveQuestions'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 const filterUpdates = (update: any) => update !== undefined && update !== null
@@ -61,34 +61,6 @@ const parseUpdatedQuestionIds = (updatedPublicQuestionIds: number[], questions: 
   return _.uniq(currentIds).filter(Number)
 }
 
-const handleListOfUpdatedQuestionsAndReturnIds = async (questions: any[]) => {
-  validateGroupingQuestions(questions)
-
-  const updatedQuestionIdsList = []
-
-  for (const question of questions) {
-    let updatedQuestion
-    if (question.id) {
-      const [, updatedQuestions] = await Question.update(
-        {
-          ...question,
-        },
-        { where: { id: question.id }, returning: true }
-      )
-      // eslint-disable-next-line prefer-destructuring
-      updatedQuestion = updatedQuestions[0]
-    } else {
-      updatedQuestion = await Question.create({
-        ...question,
-      })
-    }
-
-    updatedQuestionIdsList.push(updatedQuestion.id)
-  }
-
-  return updatedQuestionIdsList
-}
-
 const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId: number, questions: any[]) => {
   const survey = await Survey.findOne({
     where: {
@@ -98,7 +70,7 @@ const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId
   })
   if (!survey) throw ApplicationError.NotFound('Survey not found')
   const oldIds = survey.questionIds
-  survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(questions)
+  survey.questionIds = await saveQuestions(questions, oldIds)
   const newIds = _.difference(survey.questionIds, oldIds)
 
   if (newIds.length > 1) {

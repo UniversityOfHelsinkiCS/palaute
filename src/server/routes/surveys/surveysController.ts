@@ -8,15 +8,17 @@ import { Response, Router } from 'express'
 import z from 'zod/v4'
 
 import { sequelize } from '../../db/dbConnection'
-import { Survey, Question, Organisation, User } from '../../models'
+import { Survey, Organisation, User } from '../../models'
 import { createOrganisationSurveyLog } from '../../services/auditLog'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
+import { saveQuestions } from '../../services/questions/saveQuestions'
 import {
   getUniversitySurvey as _getUniversitySurvey,
   createUniversitySurvey as _createUniversitySurvey,
 } from '../../services/surveys'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
+import { assertOwnQuestionIds } from '../../util/surveyQuestions'
 
 const checkUserWriteAccess = async (survey: Survey, user: User) => {
   const organisationAccess = await getUserOrganisationAccess(user)
@@ -24,33 +26,6 @@ const checkUserWriteAccess = async (survey: Survey, user: User) => {
   const surveysOrganisation = organisationAccess.find(({ organisation }) => organisation.code === survey.typeId)
 
   return surveysOrganisation?.access?.write ?? false
-}
-
-const handleListOfUpdatedQuestionsAndReturnIds = async (questions: Question[]) => {
-  const updatedQuestionIdsList = []
-
-  /* eslint-disable */
-  for (const question of questions) {
-    let updatedQuestion
-    if (question.id) {
-      const [_, updatedQuestions] = await Question.update(
-        {
-          ...question,
-        },
-        { where: { id: question.id }, returning: true }
-      )
-      updatedQuestion = updatedQuestions[0]
-    } else {
-      updatedQuestion = await Question.create({
-        ...question,
-      })
-    }
-
-    updatedQuestionIdsList.push(updatedQuestion.id)
-  }
-  /* eslint-enable */
-
-  return updatedQuestionIdsList
 }
 
 const update = async (req: AuthenticatedRequest, res: Response) => {
@@ -73,10 +48,11 @@ const update = async (req: AuthenticatedRequest, res: Response) => {
   const { questions } = req.body
 
   if (questions) {
+    assertOwnQuestionIds(questions, survey.questionIds)
     if (!isUniversitySurvey) {
       await createOrganisationSurveyLog(survey, questions, user)
     }
-    survey.questionIds = await handleListOfUpdatedQuestionsAndReturnIds(questions)
+    survey.questionIds = await saveQuestions(questions, survey.questionIds)
   }
 
   // Mark updatedAt as changed to force a query. Otherwise save() may not actually run a query and trigger hooks
