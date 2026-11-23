@@ -53,9 +53,9 @@ const runUpdaterForEnrolmentsOfCourse = async (req: AuthenticatedRequest, res: R
   try {
     await updaterClient.updateEnrolments(curId)
   } catch (error) {
-    if (error?.response) {
-      res.status(error.response.status).send(error.response.data)
-    }
+    if (!error?.response) throw error
+    res.sendStatus(error.response.status)
+    return
   }
 
   res.send({})

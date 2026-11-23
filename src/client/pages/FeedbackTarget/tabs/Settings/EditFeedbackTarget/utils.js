@@ -19,7 +19,7 @@ const getOrganisationName = ({ name }, language) => {
   // Some organisations only have a Finnish name
   const localizedName = name[language] ?? name.fi ?? name.en ?? name.sv
 
-  return localizedName.replace("'", '`')
+  return localizedName.replaceAll("'", '`')
 }
 
 // A programme survey belongs to the organisation whose code is its typeId, so the organisations that
