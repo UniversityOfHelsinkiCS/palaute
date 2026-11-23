@@ -42,6 +42,22 @@ const DraftSaver = ({ draftKey, submittedAnswers }) => {
   return null
 }
 
+const DraftNotice = ({ submittedAnswers, isEdit }) => {
+  const { t } = useTranslation()
+  const { values } = useFormikContext()
+  const hasChanges = !answersEqual(values.answers, submittedAnswers)
+  const [visible, setVisible] = useState(hasChanges)
+
+  if (visible && !hasChanges) setVisible(false)
+  if (!visible) return null
+
+  return (
+    <Alert severity="warning" data-cy="feedback-view-draft-notice">
+      {t(isEdit ? 'feedbackView:unsavedChangesNotice' : 'feedbackView:unsentAnswersNotice')}
+    </Alert>
+  )
+}
+
 const FormContainer = ({
   onSubmit,
   initialValues,
@@ -67,7 +83,6 @@ const FormContainer = ({
   const [restoredAnswers] = useState(() =>
     draftKey ? mergeDraft(initialValues.answers, loadDraft(draftKey), questions) : null
   )
-  const [showDraftNotice, setShowDraftNotice] = useState(Boolean(restoredAnswers))
   const [discardDialogOpen, setDiscardDialogOpen] = useState(false)
   const [discardConfirmed, setDiscardConfirmed] = useState(false)
 
@@ -116,7 +131,6 @@ const FormContainer = ({
 
         const handleConfirmDiscard = () => {
           clearDraft(draftKey)
-          setShowDraftNotice(false)
           resetForm({ values: { ...values, answers: initialValues.answers } })
           setDiscardConfirmed(true)
           setDiscardDialogOpen(false)
@@ -161,7 +175,7 @@ const FormContainer = ({
 
         const formContent = (
           <>
-            <Box sx={{ mb: showDraftNotice && hasChanges ? 2 : 4 }}>
+            <Stack spacing={2} sx={{ mb: 4 }}>
               <Alert severity="info">
                 {t('feedbackView:feedbackInfo', { context })}
                 {onOpenPrivacyDialog && (
@@ -173,13 +187,8 @@ const FormContainer = ({
                   </>
                 )}
               </Alert>
-            </Box>
-
-            {showDraftNotice && hasChanges && (
-              <Alert severity="warning" role="presentation" sx={{ mb: 4 }} data-cy="feedback-view-draft-notice">
-                {t(isEdit ? 'feedbackView:unsavedChangesNotice' : 'feedbackView:unsentAnswersNotice')}
-              </Alert>
-            )}
+              {restoredAnswers && <DraftNotice submittedAnswers={initialValues.answers} isEdit={isEdit} />}
+            </Stack>
 
             <Box ref={questionsRef}>
               <FeedbackForm questions={questions} name="answers" disabled={disabledProp && showSubmitButton} />
