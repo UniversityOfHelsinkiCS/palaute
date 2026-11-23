@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/node'
 import { NextFunction, Response } from 'express'
 import jwt from 'jsonwebtoken'
 
@@ -94,6 +95,9 @@ export const currentUserMiddleware = async (req: UnauthenticatedRequest, _res: R
   if (isAdminLoginAs(authenticatedReq)) {
     await setLoggedInAsUser(authenticatedReq)
   }
+
+  const { id, email, username: effectiveUsername } = authenticatedReq.user
+  Sentry.setUser({ id, email, username: effectiveUsername })
 
   next()
 }
