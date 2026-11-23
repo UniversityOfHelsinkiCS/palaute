@@ -18,10 +18,8 @@ export type HelpChatbotPrice = {
   output: number
 }
 
-// The costs in one currency, of the turns priced in it. input excludes the cached input and cache writes, and output
-// the reasoning, which is billed at the output price.
-export type HelpChatbotCost = {
-  turns: number
+// input excludes the cached input and cache writes, and output the reasoning, which is billed at the output price
+export type HelpChatbotCostAmounts = {
   input: number
   cachedInput: number
   cacheWrite: number
@@ -30,8 +28,11 @@ export type HelpChatbotCost = {
   total: number
 }
 
-// Costs aren't converted between currencies, so each is summed on its own. Only the currencies with priced turns.
-export type HelpChatbotCosts = Partial<Record<HelpChatbotCurrency, HelpChatbotCost>>
+// Euros and dollars summed as equal. byCurrency has only the currencies with priced turns.
+export type HelpChatbotCost = HelpChatbotCostAmounts & {
+  turns: number
+  byCurrency: Partial<Record<HelpChatbotCurrency, HelpChatbotCostAmounts>>
+}
 
 // GET /admin/help-chatbot/meta
 export type GetHelpChatbotMetaResponse = {
@@ -179,8 +180,9 @@ export type HelpChatbotUsage = {
   reasoningTokens: number
   // Of the billed turns
   avgDurationMs: number | null
-  costs: HelpChatbotCosts
-  // With usage but no price, and so in none of the costs
+  // null without priced turns
+  cost: HelpChatbotCost | null
+  // With usage but no price, and so not in the cost
   unpricedTurns: number
 }
 

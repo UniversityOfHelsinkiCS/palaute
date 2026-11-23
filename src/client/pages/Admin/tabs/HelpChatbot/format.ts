@@ -15,6 +15,9 @@ export const formatMoney = (value: number, currency: HelpChatbotCurrency) => {
   return `${symbol}${value.toFixed(Math.abs(value) < 1 ? 4 : 2)}`
 }
 
+// The usage tab sums euros and dollars as equal and shows the sum in euros, but the chart tooltips show each
+export const formatCost = (value: number) => formatMoney(value, 'EUR')
+
 // Costs aren't converted, so a sum in several currencies shows each
 export const formatAmounts = (amounts: Partial<Record<HelpChatbotCurrency, number>>) => {
   const entries = Object.entries(amounts) as [HelpChatbotCurrency, number][]

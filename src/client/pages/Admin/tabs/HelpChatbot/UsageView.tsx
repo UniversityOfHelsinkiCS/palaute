@@ -1,9 +1,7 @@
 import type {
   GetHelpChatbotUsageQuery,
   GetHelpChatbotUsageResponse,
-  HelpChatbotCost,
-  HelpChatbotCosts,
-  HelpChatbotCurrency,
+  HelpChatbotCostAmounts,
   HelpChatbotPrice,
   HelpChatbotUsage,
   HelpChatbotUsageGrouping,
@@ -28,7 +26,6 @@ import {
   ToggleButtonGroup,
   Typography,
 } from '@mui/material'
-import { Fragment } from 'react'
 
 import type { UsageMetric } from './UsageChart'
 
@@ -37,10 +34,9 @@ import { NorButton } from '../../../../components/common/NorButton'
 import { useHelpChatbotUsage } from './api'
 import {
   CURRENCY_SYMBOLS,
-  formatAmounts,
+  formatCost,
   formatDate,
   formatDuration,
-  formatMoney,
   formatNumber,
   formatPercent,
   shortSha,
@@ -56,11 +52,6 @@ const isMetric = (value: string | undefined): value is UsageMetric => METRICS.so
 
 const DEFAULT_DAYS = 30
 
-const costCurrencies = (usage: HelpChatbotUsage) => Object.keys(usage.costs) as HelpChatbotCurrency[]
-
-const mapCosts = (costs: HelpChatbotCosts, value: (cost: HelpChatbotCost) => number) =>
-  Object.fromEntries(Object.entries(costs).flatMap(([currency, cost]) => (cost ? [[currency, value(cost)]] : [])))
-
 const average = (total: number, count: number) => (count === 0 ? '–' : formatNumber(total / count))
 
 const problems = (usage: HelpChatbotUsage) => usage.empty + usage.failed + usage.aborted + usage.pending
@@ -70,7 +61,7 @@ const csvCell = (value: string | number | null) => {
   return /[",\n]/.test(text) ? `"${text.replace(/"/g, '""')}"` : text
 }
 
-const CSV_COSTS: { label: string; key: keyof HelpChatbotCost }[] = [
+const CSV_COSTS: { label: string; key: keyof HelpChatbotCostAmounts }[] = [
   { label: 'uncached input cost', key: 'input' },
   { label: 'cached input cost', key: 'cachedInput' },
   { label: 'cache write cost', key: 'cacheWrite' },
@@ -79,9 +70,7 @@ const CSV_COSTS: { label: string; key: keyof HelpChatbotCost }[] = [
   { label: 'total cost', key: 'total' },
 ]
 
-// The cost columns of each currency with costs in the range
 const downloadCsv = (usage: GetHelpChatbotUsageResponse, query: GetHelpChatbotUsageQuery) => {
-  const currencies = costCurrencies(usage.totals)
   const header = [
     'period start',
     'questions',
@@ -96,7 +85,7 @@ const downloadCsv = (usage: GetHelpChatbotUsageResponse, query: GetHelpChatbotUs
     'cache write tokens',
     'output tokens',
     'reasoning tokens',
-    ...currencies.flatMap(currency => CSV_COSTS.map(({ label }) => `${label} ${currency}`)),
+    ...CSV_COSTS.map(({ label }) => label),
     'unpriced turns',
   ]
   const rows = usage.periods.map(p => [
@@ -113,7 +102,7 @@ const downloadCsv = (usage: GetHelpChatbotUsageResponse, query: GetHelpChatbotUs
     p.cacheWriteTokens,
     p.completionTokens,
     p.reasoningTokens,
-    ...currencies.flatMap(currency => CSV_COSTS.map(({ key }) => p.costs[currency]?.[key] ?? 0)),
+    ...CSV_COSTS.map(({ key }) => p.cost?.[key] ?? 0),
     p.unpricedTurns,
   ])
   const csv = [header, ...rows].map(row => row.map(csvCell).join(',')).join('\n')
@@ -159,10 +148,9 @@ const NUMERIC: SystemStyleObject<Theme> = {
   whiteSpace: 'nowrap',
 }
 
-// A cost and share column for each currency, as costs aren't converted
 const CostBreakdown = ({ totals }: { totals: HelpChatbotUsage }) => {
-  const currencies = costCurrencies(totals)
-  const rows: { label: string; tokens: number; key: keyof HelpChatbotCost }[] = [
+  const { cost } = totals
+  const rows: { label: string; tokens: number; key: keyof HelpChatbotCostAmounts }[] = [
     {
       label: 'Uncached input',
       tokens: totals.promptTokens - totals.cachedTokens - totals.cacheWriteTokens,
@@ -180,12 +168,8 @@ const CostBreakdown = ({ totals }: { totals: HelpChatbotUsage }) => {
           <TableRow>
             <TableCell>Tokens</TableCell>
             <TableCell sx={NUMERIC}>Count</TableCell>
-            {currencies.map(currency => (
-              <Fragment key={currency}>
-                <TableCell sx={NUMERIC}>Cost {CURRENCY_SYMBOLS[currency]}</TableCell>
-                <TableCell sx={NUMERIC}>Share</TableCell>
-              </Fragment>
-            ))}
+            <TableCell sx={NUMERIC}>Cost</TableCell>
+            <TableCell sx={NUMERIC}>Share</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -193,15 +177,8 @@ const CostBreakdown = ({ totals }: { totals: HelpChatbotUsage }) => {
             <TableRow key={row.label}>
               <TableCell>{row.label}</TableCell>
               <TableCell sx={NUMERIC}>{formatNumber(row.tokens)}</TableCell>
-              {currencies.map(currency => {
-                const cost = totals.costs[currency]
-                return (
-                  <Fragment key={currency}>
-                    <TableCell sx={NUMERIC}>{formatMoney(cost?.[row.key] ?? 0, currency)}</TableCell>
-                    <TableCell sx={NUMERIC}>{formatPercent(cost?.[row.key] ?? 0, cost?.total ?? 0)}</TableCell>
-                  </Fragment>
-                )
-              })}
+              <TableCell sx={NUMERIC}>{formatCost(cost?.[row.key] ?? 0)}</TableCell>
+              <TableCell sx={NUMERIC}>{formatPercent(cost?.[row.key] ?? 0, cost?.total ?? 0)}</TableCell>
             </TableRow>
           ))}
           <TableRow>
@@ -209,14 +186,8 @@ const CostBreakdown = ({ totals }: { totals: HelpChatbotUsage }) => {
             <TableCell sx={{ ...NUMERIC, fontWeight: 700 }}>
               {formatNumber(totals.promptTokens + totals.completionTokens)}
             </TableCell>
-            {currencies.map(currency => (
-              <Fragment key={currency}>
-                <TableCell sx={{ ...NUMERIC, fontWeight: 700 }}>
-                  {formatMoney(totals.costs[currency]?.total ?? 0, currency)}
-                </TableCell>
-                <TableCell />
-              </Fragment>
-            ))}
+            <TableCell sx={{ ...NUMERIC, fontWeight: 700 }}>{formatCost(cost?.total ?? 0)}</TableCell>
+            <TableCell />
           </TableRow>
         </TableBody>
       </Table>
@@ -297,9 +268,9 @@ const VersionTable = ({ versions }: { versions: GetHelpChatbotUsageResponse['ver
             </TableCell>
             <TableCell sx={NUMERIC}>{formatDuration(version.avgDurationMs)}</TableCell>
             <TableCell sx={NUMERIC}>
-              {formatAmounts(mapCosts(version.costs, cost => cost.total / cost.turns))}
+              {version.cost ? formatCost(version.cost.total / version.cost.turns) : '–'}
             </TableCell>
-            <TableCell sx={NUMERIC}>{formatAmounts(mapCosts(version.costs, cost => cost.total))}</TableCell>
+            <TableCell sx={NUMERIC}>{version.cost ? formatCost(version.cost.total) : '–'}</TableCell>
           </TableRow>
         ))}
       </TableBody>
@@ -395,24 +366,18 @@ const UsageView = () => {
               value={formatNumber(usage.totals.promptTokens + usage.totals.completionTokens)}
               detail={`${formatNumber(usage.totals.cachedTokens)} cached · ${formatNumber(usage.totals.cacheWriteTokens)} cache writes · ${formatNumber(usage.totals.reasoningTokens)} reasoning`}
             />
-            {costCurrencies(usage.totals).map(currency => {
-              const cost = usage.totals.costs[currency]
-              return (
-                cost && (
-                  <Tile
-                    key={currency}
-                    label={`Cost ${CURRENCY_SYMBOLS[currency]}`}
-                    value={formatMoney(cost.total, currency)}
-                    detail={`${formatMoney(cost.total / cost.turns, currency)} per question`}
-                  />
-                )
-              )
-            })}
-            {(costCurrencies(usage.totals).length === 0 || usage.totals.unpricedTurns > 0) && (
+            {usage.totals.cost && (
+              <Tile
+                label="Cost"
+                value={formatCost(usage.totals.cost.total)}
+                detail={`${formatCost(usage.totals.cost.total / usage.totals.cost.turns)} per question`}
+              />
+            )}
+            {(!usage.totals.cost || usage.totals.unpricedTurns > 0) && (
               <Tile
                 label="Unpriced"
                 value={formatNumber(usage.totals.unpricedTurns)}
-                detail="turns with no price, in none of the costs"
+                detail="turns with no price, not in the cost"
               />
             )}
           </Box>
@@ -436,21 +401,10 @@ const UsageView = () => {
               </ToggleButtonGroup>
             </Box>
             <Box sx={{ height: 280, p: 2 }}>
-              {shownMetric === 'cost' && costCurrencies(usage.totals).length === 0 && (
+              {shownMetric === 'cost' && !usage.totals.cost ? (
                 <Typography sx={{ p: 2 }} color="text.secondary">
                   No priced questions in this range.
                 </Typography>
-              )}
-              {shownMetric === 'cost' ? (
-                costCurrencies(usage.totals).map(currency => (
-                  <UsageChart
-                    key={currency}
-                    periods={usage.periods}
-                    groupBy={query.groupBy ?? 'day'}
-                    metric="cost"
-                    currency={currency}
-                  />
-                ))
               ) : (
                 <UsageChart periods={usage.periods} groupBy={query.groupBy ?? 'day'} metric={shownMetric} />
               )}
@@ -476,7 +430,7 @@ const UsageView = () => {
             <Box sx={{ flex: '1 1 520px', minWidth: 0 }}>
               <Section
                 title="Prices"
-                description="Per million tokens, in the currency quoted. Costs are summed in each currency, not converted. Reasoning is billed as output. Each question is priced with the price valid when it was asked. Set in src/server/services/helpChatbotAdmin/prices.ts."
+                description="Per million tokens, in the currency quoted. Costs sum euros and dollars as equal. Reasoning is billed as output. Each question is priced with the price valid when it was asked. Set in src/server/services/helpChatbotAdmin/prices.ts."
               >
                 <PriceTable prices={usage.prices} />
               </Section>

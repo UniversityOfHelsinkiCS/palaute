@@ -1,6 +1,6 @@
 import type {
   GetHelpChatbotUsageResponse,
-  HelpChatbotCurrency,
+  HelpChatbotCostAmounts,
   HelpChatbotUsageGrouping,
 } from '@common/types/helpChatbotAdmin'
 
@@ -9,7 +9,7 @@ import { useTheme } from '@mui/material'
 import { format } from 'date-fns'
 import { Bar } from 'react-chartjs-2'
 
-import { formatMoney, formatNumber } from './format'
+import { formatAmounts, formatCost, formatNumber } from './format'
 
 export type UsageMetric = 'questions' | 'tokens' | 'cost'
 
@@ -19,16 +19,22 @@ const PERIOD_FORMATS: Record<HelpChatbotUsageGrouping, string> = {
   month: 'MMM yyyy',
 }
 
-// Each currency's costs are charted on their own
+const COST_SERIES: { label: string; key: keyof HelpChatbotCostAmounts }[] = [
+  { label: 'Uncached input', key: 'input' },
+  { label: 'Cache writes', key: 'cacheWrite' },
+  { label: 'Cached input', key: 'cachedInput' },
+  { label: 'Output', key: 'output' },
+  { label: 'Reasoning', key: 'reasoning' },
+]
+
 type UsageChartProps = {
   periods: GetHelpChatbotUsageResponse['periods']
   groupBy: HelpChatbotUsageGrouping
-} & ({ metric: 'questions' | 'tokens' } | { metric: 'cost'; currency: HelpChatbotCurrency })
+  metric: UsageMetric
+}
 
 // The per-period numbers aren't in any table; the CSV download is the chart's text alternative
-const UsageChart = (props: UsageChartProps) => {
-  const { periods, groupBy, metric } = props
-  const currency = props.metric === 'cost' ? props.currency : null
+const UsageChart = ({ periods, groupBy, metric }: UsageChartProps) => {
   const theme = useTheme()
   const labels = periods.map(period => format(new Date(`${period.start}T00:00:00`), PERIOD_FORMATS[groupBy]))
   // Told apart by lightness as well as hue: input in blues, output in oranges
@@ -55,23 +61,24 @@ const UsageChart = (props: UsageChartProps) => {
       { label: 'Output', data: periods.map(p => p.completionTokens - p.reasoningTokens) },
       { label: 'Reasoning', data: periods.map(p => p.reasoningTokens) },
     ],
-    cost:
-      currency === null
-        ? []
-        : [
-            { label: 'Uncached input', data: periods.map(p => p.costs[currency]?.input ?? 0) },
-            { label: 'Cache writes', data: periods.map(p => p.costs[currency]?.cacheWrite ?? 0) },
-            { label: 'Cached input', data: periods.map(p => p.costs[currency]?.cachedInput ?? 0) },
-            { label: 'Output', data: periods.map(p => p.costs[currency]?.output ?? 0) },
-            { label: 'Reasoning', data: periods.map(p => p.costs[currency]?.reasoning ?? 0) },
-          ],
+    cost: COST_SERIES.map(({ label, key }) => ({ label, data: periods.map(p => p.cost?.[key] ?? 0) })),
   }[metric]
 
-  const formatValue = (value: number) => (currency === null ? formatNumber(value) : formatMoney(value, currency))
+  const formatValue = (value: number) => (metric === 'cost' ? formatCost(value) : formatNumber(value))
+
+  // A cost shows its amount in each currency rather than the sum
+  const formatTooltipValue = (datasetIndex: number, dataIndex: number, value: number) => {
+    const byCurrency = periods[dataIndex].cost?.byCurrency
+    if (metric !== 'cost' || !byCurrency) return formatValue(value)
+    const { key } = COST_SERIES[datasetIndex]
+    return formatAmounts(
+      Object.fromEntries(Object.entries(byCurrency).map(([currency, cost]) => [currency, cost[key]]))
+    )
+  }
 
   return (
     <Bar
-      aria-label={`${metric}${currency === null ? '' : ` in ${currency}`} per ${groupBy}, as a stacked bar chart`}
+      aria-label={`${metric} per ${groupBy}, as a stacked bar chart`}
       role="img"
       height={260}
       data={{
@@ -87,7 +94,12 @@ const UsageChart = (props: UsageChartProps) => {
         },
         plugins: {
           legend: { position: 'top', align: 'end' },
-          tooltip: { callbacks: { label: item => `${item.dataset.label}: ${formatValue(Number(item.raw))}` } },
+          tooltip: {
+            callbacks: {
+              label: item =>
+                `${item.dataset.label}: ${formatTooltipValue(item.datasetIndex, item.dataIndex, Number(item.raw))}`,
+            },
+          },
           datalabels: { display: false },
         },
       }}

@@ -1,5 +1,6 @@
 import type {
-  HelpChatbotCosts,
+  HelpChatbotCost,
+  HelpChatbotCostAmounts,
   HelpChatbotCurrency,
   HelpChatbotDateRange,
   HelpChatbotUsage,
@@ -139,29 +140,42 @@ type NumericValue = string | number | null
 type CostColumn =
   `${'turns' | 'inputCost' | 'cachedCost' | 'cacheWriteCost' | 'outputCost' | 'reasoningCost'}${HelpChatbotCurrency}`
 
-export type UsageRow = Record<Exclude<keyof HelpChatbotUsage, 'costs'>, NumericValue> & Record<CostColumn, NumericValue>
+export type UsageRow = Record<Exclude<keyof HelpChatbotUsage, 'cost'>, NumericValue> & Record<CostColumn, NumericValue>
 
 export const toNumber = (value: NumericValue) => Number(value ?? 0)
 
-export const toCosts = (row: UsageRow): HelpChatbotCosts => {
-  const costs: HelpChatbotCosts = {}
+const COST_KEYS = ['input', 'cachedInput', 'cacheWrite', 'output', 'reasoning', 'total'] as const
+
+const toCost = (row: UsageRow): HelpChatbotCost | null => {
+  const cost: HelpChatbotCost = {
+    turns: 0,
+    input: 0,
+    cachedInput: 0,
+    cacheWrite: 0,
+    output: 0,
+    reasoning: 0,
+    total: 0,
+    byCurrency: {},
+  }
   for (const currency of CURRENCIES) {
     const turns = toNumber(row[`turns${currency}`])
     if (turns === 0) continue
-    const cost = {
+    const parts = {
       input: toNumber(row[`inputCost${currency}`]),
       cachedInput: toNumber(row[`cachedCost${currency}`]),
       cacheWrite: toNumber(row[`cacheWriteCost${currency}`]),
       output: toNumber(row[`outputCost${currency}`]),
       reasoning: toNumber(row[`reasoningCost${currency}`]),
     }
-    costs[currency] = {
-      turns,
-      ...cost,
-      total: cost.input + cost.cachedInput + cost.cacheWrite + cost.output + cost.reasoning,
+    const amounts: HelpChatbotCostAmounts = {
+      ...parts,
+      total: parts.input + parts.cachedInput + parts.cacheWrite + parts.output + parts.reasoning,
     }
+    cost.turns += turns
+    for (const key of COST_KEYS) cost[key] += amounts[key]
+    cost.byCurrency[currency] = amounts
   }
-  return costs
+  return cost.turns === 0 ? null : cost
 }
 
 export const toUsage = (row: UsageRow): HelpChatbotUsage => ({
@@ -180,7 +194,7 @@ export const toUsage = (row: UsageRow): HelpChatbotUsage => ({
   completionTokens: toNumber(row.completionTokens),
   reasoningTokens: toNumber(row.reasoningTokens),
   avgDurationMs: row.avgDurationMs === null ? null : Math.round(toNumber(row.avgDurationMs)),
-  costs: toCosts(row),
+  cost: toCost(row),
   unpricedTurns: toNumber(row.unpricedTurns),
 })
 
