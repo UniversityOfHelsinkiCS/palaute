@@ -9,6 +9,7 @@ import type { TextQuestion } from './blocks'
 
 import Markdown from '../../../../../components/common/Markdown'
 import { NorButton } from '../../../../../components/common/NorButton'
+import { keepInPlace } from '../../../../../util/keepInPlace'
 import { getLanguageValue } from '../../../../../util/languageUtils'
 
 const COLLAPSED_HEIGHT = 112
@@ -93,7 +94,10 @@ const TextSection = ({ question }: { question: TextQuestion }) => {
         <NorButton
           color="empty"
           size="small"
-          onClick={() => setExpanded(previous => !previous)}
+          onClick={event => {
+            if (expanded) keepInPlace(event.currentTarget, () => setExpanded(false))
+            else setExpanded(true)
+          }}
           aria-expanded={expanded}
           aria-controls={contentId}
           sx={{ ml: -0.5, '@media print': { display: 'none' } }}

@@ -9,6 +9,7 @@ import type { ResultQuestion } from './blocks'
 import Markdown from '../../../../../components/common/Markdown'
 import { NorButton } from '../../../../../components/common/NorButton'
 import { focusIndicatorStyle } from '../../../../../util/accessibility'
+import { keepInPlace } from '../../../../../util/keepInPlace'
 import { useTranslationContext } from '../../../../../util/translationContext'
 
 const INITIAL_ANSWER_COUNT = 4
@@ -145,7 +146,10 @@ const OpenAnswers = ({ question, openAnswerActions, peek = true }: OpenAnswersPr
         <NorButton
           color="empty"
           size="small"
-          onClick={() => setExpanded(previous => !previous)}
+          onClick={event => {
+            if (expanded) keepInPlace(event.currentTarget, () => setExpanded(false))
+            else setExpanded(true)
+          }}
           aria-expanded={expanded}
           aria-controls={listId}
           sx={{ ml: -0.5, mt: 0.5, '@media print': { display: 'none' } }}
