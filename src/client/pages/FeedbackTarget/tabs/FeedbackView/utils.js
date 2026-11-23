@@ -129,9 +129,7 @@ export const getInitialValues = (questions, feedback) => {
 }
 
 /*
- * Unsent answers are kept in sessionStorage so that they survive a page reload. Unlike
- * localStorage, sessionStorage belongs to one browser tab and is emptied when the tab is
- * closed, so answers are not left behind on a shared computer.
+ * Unsent answers are kept in sessionStorage so that they survive a page reload.
  */
 export const getDraftKey = (userId, formId) => `feedbackDraft:${userId}:${formId}`
 
