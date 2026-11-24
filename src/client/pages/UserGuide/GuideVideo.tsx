@@ -11,10 +11,9 @@ type VideoInfo = {
   url: string
 }
 
-const useVideos = (language: string, enabled = true) =>
+const useVideos = (language: string) =>
   useQuery({
     queryKey: ['userGuideVideos', language],
-    enabled,
     queryFn: async (): Promise<VideoInfo[]> => {
       const response = await fetch(`${basePath}/manual/${language}/index.json`)
       // No videos where they haven't been recorded, e.g. in development
@@ -25,9 +24,7 @@ const useVideos = (language: string, enabled = true) =>
 
 const GuideVideo = ({ slug, language, editUrl }: { slug: string; language: string; editUrl?: string }) => {
   const { data: videos } = useVideos(language)
-  // A Swedish build may have been made before its videos were recorded
-  const { data: englishVideos } = useVideos('en', language === 'sv')
-  const video = videos?.find(other => other.slug === slug) ?? englishVideos?.find(other => other.slug === slug)
+  const video = videos?.find(other => other.slug === slug)
   if (!video) return null
 
   return (
