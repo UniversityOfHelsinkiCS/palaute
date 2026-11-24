@@ -8,7 +8,7 @@ import type { PublicitySettings } from './QuestionPublicity'
 
 import { getLanguageValue } from '../../../../../util/languageUtils'
 import AnswerCount from './AnswerCount'
-import { BLOCK_CLASS, QUESTION_COLUMN, SECTION_GAP } from './layout'
+import { ANSWER_SX, BLOCK_CLASS, QUESTION_ROW_SX } from './layout'
 import QuestionLabel from './QuestionLabel'
 
 type QuestionBlockProps = {
@@ -37,18 +37,12 @@ const QuestionBlock = ({
       className={BLOCK_CLASS}
       aria-labelledby={`question-${question.id}-label`}
       aria-describedby={hasDescription ? `question-${question.id}-description` : undefined}
-      sx={{
-        display: 'grid',
-        alignItems: 'start',
-        columnGap: SECTION_GAP,
-        rowGap: 1.5,
-        gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: `${QUESTION_COLUMN} minmax(0, 1fr)` },
-      }}
+      sx={QUESTION_ROW_SX}
     >
       <QuestionLabel question={question} headingLevel={headingLevel} isPublic={isPublic} publicity={publicity}>
         <AnswerCount question={question} feedbackCount={feedbackCount} />
       </QuestionLabel>
-      <Box sx={{ minWidth: 0 }}>{children}</Box>
+      <Box sx={ANSWER_SX}>{children}</Box>
     </Box>
   )
 }

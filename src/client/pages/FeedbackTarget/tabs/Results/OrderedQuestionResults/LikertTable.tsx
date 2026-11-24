@@ -6,17 +6,9 @@ import type { PublicitySettings } from './QuestionPublicity'
 
 import AnswerCount from './AnswerCount'
 import { getLikertCounts } from './counts'
-import { BLOCK_CLASS, CHART_SX, QUESTION_COLUMN, SECTION_GAP } from './layout'
+import { ANSWER_SX, BLOCK_CLASS, QUESTION_ROW_SX } from './layout'
 import LikertDistribution from './LikertDistribution'
 import QuestionLabel from './QuestionLabel'
-
-const rowSx = {
-  display: 'grid',
-  alignItems: 'start',
-  columnGap: SECTION_GAP,
-  rowGap: 1.5,
-  gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: `${QUESTION_COLUMN} minmax(0, 1fr)` },
-}
 
 type LikertTableProps = {
   questions: ResultQuestion[]
@@ -49,7 +41,7 @@ const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds
       }}
     >
       {rows.map(({ question, counts }) => (
-        <Box key={question.id} role="row" sx={rowSx}>
+        <Box key={question.id} role="row" sx={QUESTION_ROW_SX}>
           <Box role="rowheader" sx={{ minWidth: 0 }}>
             <QuestionLabel
               question={question}
@@ -60,7 +52,7 @@ const LikertTable = ({ questions, headingLevel, feedbackCount, publicQuestionIds
               <AnswerCount question={question} feedbackCount={feedbackCount} />
             </QuestionLabel>
           </Box>
-          <Box role="cell" sx={{ minWidth: 0, ...CHART_SX }}>
+          <Box role="cell" sx={ANSWER_SX}>
             <LikertDistribution question={question} counts={counts} maxShare={maxShare} />
           </Box>
         </Box>

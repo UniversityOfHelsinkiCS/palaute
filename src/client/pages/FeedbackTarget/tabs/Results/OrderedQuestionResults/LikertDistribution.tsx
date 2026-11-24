@@ -8,6 +8,7 @@ import type { ResultQuestion } from './blocks'
 import { getColor } from '../../../../../util/resultColors'
 import AverageResult, { getMean } from '../QuestionResults/AverageResult'
 import { formatPercent, LIKERT_VALUES } from './counts'
+import { CHART_SX } from './layout'
 
 const COLUMN_HEIGHT = 88
 const GRID_LINES = 4
@@ -17,6 +18,9 @@ const CARET_WIDTH = 5
 const CARET_HEIGHT = 6
 const CARET_GAP = 4
 const MEAN_SIZE = '2.25rem'
+// On narrow screens the "don't know" column gets no wider than a value column, 100cqw being the width of the chart
+const GAP_COLUMN = '1.5rem'
+const GRID_COLUMNS = `repeat(${LIKERT_VALUES.length}, minmax(0, 1fr)) ${GAP_COLUMN} min(3.5rem, (100cqw - ${GAP_COLUMN}) / ${LIKERT_VALUES.length + 1})`
 const TOOLTIP_MODIFIERS = [{ name: 'offset', options: { offset: [0, -8] } }]
 
 // The five values take equal slots, a value sitting in the middle of its slot
@@ -77,7 +81,8 @@ const LikertColumn = ({ gridColumn, name, count, tooltip, height, color }: Liker
           </Box>
           <Box
             sx={{
-              width: '2.25rem',
+              // So that bars never touch on narrow screens
+              width: 'min(2.25rem, 75%)',
               height: `${height}px`,
               borderRadius: '2px 2px 0 0',
               backgroundColor: color,
@@ -127,87 +132,89 @@ const LikertDistribution = ({ question, counts, maxShare }: LikertDistributionPr
   )
 
   return (
-    <Box
-      role="img"
-      aria-label={label}
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(5, minmax(0, 1fr)) 1.5rem 3.5rem',
-        alignItems: 'end',
-        // Inherited, so that the scale line and the grid lines print too
-        printColorAdjust: 'exact',
-      }}
-    >
-      {LIKERT_VALUES.map(column)}
-      {column(0)}
+    <Box sx={{ containerType: 'inline-size', ...CHART_SX }}>
       <Box
+        role="img"
+        aria-label={label}
         sx={{
-          gridColumn: '1 / 6',
-          gridRow: 2,
-          position: 'relative',
-          height: mean > 0 ? `calc(${LINE_CENTER + 2 + CARET_GAP + CARET_HEIGHT}px + ${MEAN_SIZE})` : LINE_CENTER * 2,
+          display: 'grid',
+          gridTemplateColumns: GRID_COLUMNS,
+          alignItems: 'end',
+          // Inherited, so that the scale line and the grid lines print too
+          printColorAdjust: 'exact',
         }}
       >
+        {LIKERT_VALUES.map(column)}
+        {column(0)}
         <Box
           sx={{
-            position: 'absolute',
-            left: valuePosition(1),
-            right: `calc(100% - ${valuePosition(5)})`,
-            top: LINE_CENTER - 2,
-            height: 4,
-            borderRadius: 2,
-            backgroundColor: 'action.hover',
+            gridColumn: '1 / 6',
+            gridRow: 2,
+            position: 'relative',
+            height: mean > 0 ? `calc(${LINE_CENTER + 2 + CARET_GAP + CARET_HEIGHT}px + ${MEAN_SIZE})` : LINE_CENTER * 2,
           }}
-        />
-        {LIKERT_VALUES.map(value => (
+        >
           <Box
-            key={value}
             sx={{
               position: 'absolute',
-              left: valuePosition(value),
-              top: LINE_CENTER,
-              width: 2,
-              height: 8,
-              transform: 'translate(-50%, -50%)',
-              backgroundColor: 'text.disabled',
+              left: valuePosition(1),
+              right: `calc(100% - ${valuePosition(5)})`,
+              top: LINE_CENTER - 2,
+              height: 4,
+              borderRadius: 2,
+              backgroundColor: 'action.hover',
             }}
           />
-        ))}
-        {mean > 0 && (
-          <Tooltip
-            title={`${t('feedbackSummary:average')}: ${mean.toFixed(2)}`}
-            placement="bottom"
-            slotProps={{ popper: { modifiers: TOOLTIP_MODIFIERS } }}
-          >
+          {LIKERT_VALUES.map(value => (
             <Box
+              key={value}
               sx={{
                 position: 'absolute',
-                left: valuePosition(mean),
-                top: LINE_CENTER + 2 + CARET_GAP,
-                transform: 'translateX(-50%)',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
+                left: valuePosition(value),
+                top: LINE_CENTER,
+                width: 2,
+                height: 8,
+                transform: 'translate(-50%, -50%)',
+                backgroundColor: 'text.disabled',
               }}
+            />
+          ))}
+          {mean > 0 && (
+            <Tooltip
+              title={`${t('feedbackSummary:average')}: ${mean.toFixed(2)}`}
+              placement="bottom"
+              slotProps={{ popper: { modifiers: TOOLTIP_MODIFIERS } }}
             >
               <Box
                 sx={{
-                  width: 0,
-                  height: 0,
-                  borderLeft: `${CARET_WIDTH}px solid transparent`,
-                  borderRight: `${CARET_WIDTH}px solid transparent`,
-                  borderBottom: `${CARET_HEIGHT}px solid ${getColor(mean)}`,
-                  printColorAdjust: 'exact',
+                  position: 'absolute',
+                  left: valuePosition(mean),
+                  top: LINE_CENTER + 2 + CARET_GAP,
+                  transform: 'translateX(-50%)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                 }}
-              />
-              <AverageResult
-                question={question}
-                variant="outlined"
-                sx={{ width: MEAN_SIZE, height: MEAN_SIZE, '& .MuiTypography-root': { fontSize: '0.8125rem' } }}
-              />
-            </Box>
-          </Tooltip>
-        )}
+              >
+                <Box
+                  sx={{
+                    width: 0,
+                    height: 0,
+                    borderLeft: `${CARET_WIDTH}px solid transparent`,
+                    borderRight: `${CARET_WIDTH}px solid transparent`,
+                    borderBottom: `${CARET_HEIGHT}px solid ${getColor(mean)}`,
+                    printColorAdjust: 'exact',
+                  }}
+                />
+                <AverageResult
+                  question={question}
+                  variant="outlined"
+                  sx={{ width: MEAN_SIZE, height: MEAN_SIZE, '& .MuiTypography-root': { fontSize: '0.8125rem' } }}
+                />
+              </Box>
+            </Tooltip>
+          )}
+        </Box>
       </Box>
     </Box>
   )
