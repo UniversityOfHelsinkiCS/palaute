@@ -333,7 +333,7 @@
     "here": "här",
     "multipleChoiceQuestions": "Flervalsfrågor",
     "openQuestions": "Öppna frågor",
-    "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, N/A = kan inte svara",
+    "multipleChoiceScale": "1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, N/A = ingen åsikt",
     "publicQuestionConfirmation": "Jag har kontrollerat att svaren på denna fråga inte innehåller personuppgifter eller annan känslig information som inte får publiceras.",
     "showFullText": "Visa hela texten",
     "showLessText": "Visa mindre",
@@ -409,7 +409,7 @@
     "keyboardShortcut": "Du kan även byta vy med kortkommandot Alt + T.",
     "chartAriaLabel": "Stapeldiagram som visar svarens fördelning. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T.",
     "feedbackCountChartAriaLabel": "Linjediagram som visar det kumulativa antalet svar över tid. Byta till tabellvy genom att trycka på \"Visa tabellvy\"-knappen eller använda kortkommandot Alt + T.",
-    "likertQuestionAriaDescription": "Fråga \"{{ question }}\" är en likertskalfråga, där 1 betyder \"helt av annan åsikt\" och 5 betyder \"helt av samma åsikt\". Alternativet N/A betyder \"kan inte svara\".",
+    "likertQuestionAriaDescription": "Fråga \"{{ question }}\" är en likertskalfråga, där 1 betyder \"helt av annan åsikt\" och 5 betyder \"helt av samma åsikt\". Alternativet N/A betyder \"ingen åsikt\".",
     "multipleChoiceQuestionAriaDescription": "Fråga \"{{ question }}\" är en flervalsfråga, där respondenten kan välja mer än ett alternativ.",
     "singleChoiceQuestionAriaDescription": "Fråga \"{{ question }}\" är en enkelvalsfråga, där respondenten kan välja endast ett alternativ.",
     "questionAriaDescription": "Fråga: {{question}}"

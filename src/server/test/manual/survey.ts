@@ -8,7 +8,7 @@ export const MANUAL_UNIVERSITY_QUESTIONS = [
     data: {
       content: {
         fi: 'Vastaa seuraaviin väittämiin asteikolla 1 = täysin eri mieltä, 2 = osin eri mieltä, 3 = ei samaa eikä eri mieltä, 4 = osin samaa mieltä, 5 = täysin samaa mieltä, eos = en osaa sanoa',
-        sv: 'Besvara följande påståenden med skalan 1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, n/a = ingen uppgift',
+        sv: 'Besvara följande påståenden med skalan 1 = helt av annan åsikt, 2 = delvis av annan åsikt, 3 = varken av samma eller annan åsikt, 4 = delvis av samma åsikt, 5 = helt av samma åsikt, n/a = ingen åsikt',
         en: 'Answer the following question using the scale 1 = Completely disagree, 2 = Partly disagree, 3 = Neither disagree nor agree, 4 = Partly agree, 5 = Completely agree, N/A = Cannot answer',
       },
     },
