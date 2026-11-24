@@ -9,10 +9,10 @@ import { Link as RouterLink } from 'react-router-dom'
 
 import type { GuideLink } from '../../hooks/useGuideLink'
 
+import useElementSize from '../../hooks/useElementSize'
 import { focusIndicatorStyle } from '../../util/accessibility'
 import { SEAL_SIZE, getMenuHeight } from './layout'
 import { focusRing, primaryTint, primaryTintBorder } from './tokens'
-import useElementSize from './useElementSize'
 
 const optionSx: SxProps<Theme> = {
   display: 'flex',

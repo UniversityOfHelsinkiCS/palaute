@@ -4,8 +4,8 @@ import { Box } from '@mui/material'
 import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import useElementSize from '../../hooks/useElementSize'
 import { PILL_PADDING_LEFT, PILL_PADDING_RIGHT, getPillWidth } from './layout'
-import useElementSize from './useElementSize'
 
 type PillViewProps = {
   buttonRef: Ref<HTMLButtonElement>
