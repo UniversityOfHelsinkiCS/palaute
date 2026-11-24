@@ -49,12 +49,12 @@ const SingleChoiceQuestion = ({ question, name, disabled }) => {
           onChange={event => {
             helpers.setValue(event.target.value)
           }}
-          sx={{ paddingLeft: '0.8rem' }}
+          sx={{ paddingLeft: '0.8rem', gap: 2 }}
         >
           {options.map(option => (
             <FormControlLabel
               value={option.id}
-              control={<Radio color="primary" disableFocusRipple />}
+              control={<Radio color="primary" disableFocusRipple sx={{ my: '-9px' }} />}
               label={getLanguageValue(option.label, language)}
               key={option.id}
               disabled={disabled}

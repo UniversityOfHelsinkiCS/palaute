@@ -8,9 +8,10 @@ const styles = {
   label: {
     marginBottom: theme => theme.spacing(1),
     display: 'block',
+    padding: 0,
   },
   description: {
-    marginBottom: theme => theme.spacing(1),
+    marginBottom: theme => theme.spacing(2),
   },
   questionContainer: theme => ({
     marginY: '0.5rem',

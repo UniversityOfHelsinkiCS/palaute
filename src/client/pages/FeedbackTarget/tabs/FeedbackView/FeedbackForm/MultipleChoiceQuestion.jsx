@@ -51,7 +51,11 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
         labelProps={{ component: 'legend', id: `question-${question.id}-legend` }}
         id={`question-${question.id}`}
       >
-        <FormGroup role="group" aria-labelledby={`question-${question.id}-legend`} sx={{ paddingLeft: '0.75rem' }}>
+        <FormGroup
+          role="group"
+          aria-labelledby={`question-${question.id}-legend`}
+          sx={{ paddingLeft: '0.75rem', gap: 2 }}
+        >
           {options.map(option => (
             <FormControlLabel
               value={option.id}
@@ -63,6 +67,7 @@ const MultipleChoiceQuestion = ({ question, name, disabled }) => {
                   name={option.id}
                   disabled={disabled}
                   disableFocusRipple
+                  sx={{ my: '-9px' }}
                 />
               }
               label={getLanguageValue(option.label, language)}
