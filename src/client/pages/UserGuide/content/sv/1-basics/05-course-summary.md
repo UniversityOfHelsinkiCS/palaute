@@ -21,7 +21,7 @@ Så navigerar du i hierarkin: öppna en organisation för att se dess studieavsn
 
 Kolumnerna:
 
-- _En kolumn för varje skalfråga på universitetsnivå_ (och på utbildningsprogrammets sida för var och en av dess skalfrågor): svarens medeltal på skalan 1–5. Svaret "ingen uppgift" räknas inte med. Du ser frågan genom att föra muspekaren över kolumnens rubrik.
+- _En kolumn för varje skalfråga på universitetsnivå_ (och på utbildningsprogrammets sida för var och en av dess skalfrågor): svarens medeltal på skalan 1–5. Svaret "ingen åsikt" räknas inte med. Du ser frågan genom att föra muspekaren över kolumnens rubrik.
 - _Arbetsmängd_: en pil visar om studerandena upplevde arbetsmängden som tung eller lätt i förhållande till studiepoängen. Du ser hur svaren fördelade sig genom att föra muspekaren över pilen.
 - [[courseSummary:feedbackCount]]: svar / anmälda studerande.
 - [[courseSummary:feedbackPercentage]]: andelen studerande som svarat.

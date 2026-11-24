@@ -51,7 +51,7 @@ manualTest(
     })
     await caption({
       fi: 'Asteikko- ja valintakysymysten vastausjakaumat näytetään kaavioina. Keskiarvoon ei lasketa ”ei osaa sanoa” -vastauksia.',
-      sv: 'Svaren på skal- och valfrågorna visas som diagram. Svar med alternativet ingen uppgift räknas inte med i medeltalet.',
+      sv: 'Svaren på skal- och valfrågorna visas som diagram. Svar med alternativet ingen åsikt räknas inte med i medeltalet.',
       en: 'The scale and choice questions show how the answers are spread, as charts. The average leaves out “don’t know” answers.',
     })
     await hover(page.getByRole('table', { name: t('feedbackView:dataTableCaption') }).first())

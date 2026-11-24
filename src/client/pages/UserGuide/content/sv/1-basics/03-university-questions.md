@@ -8,7 +8,7 @@ Frågorna på universitetsnivå är universitetets gemensamma frågor och är de
 
 ## Frågorna {#questions}
 
-De nuvarande frågorna på universitetsnivå togs i bruk i augusti 2026. Studeranden svarar först på fem påståenden på en skala från 1 till 5, där 1 är _helt av annan åsikt_ och 5 _helt av samma åsikt_. En studerande som inte kan svara kan välja _ingen uppgift_.
+De nuvarande frågorna på universitetsnivå togs i bruk i augusti 2026. Studeranden svarar först på fem påståenden på en skala från 1 till 5, där 1 är _helt av annan åsikt_ och 5 _helt av samma åsikt_. En studerande som inte kan svara kan välja _ingen åsikt_.
 
 1. Kursens struktur och tidtabell var tydliga.
 2. Det framgick tydligt på kursen vad vi förväntades lära oss.

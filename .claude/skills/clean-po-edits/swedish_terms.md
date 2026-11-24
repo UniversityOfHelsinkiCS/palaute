@@ -35,7 +35,7 @@ Translate from the Finnish. Finland-Swedish, addressed as "du". The prose matche
 | tekstiosio                                   | textavsnitt                                                                            |
 | avoin kysymys                                | öppen fråga                                                                            |
 | julkinen / ei julkinen                       | publik / inte publik                                                                   |
-| eos                                          | ingen uppgift                                                                          |
+| eos                                          | ingen åsikt                                                                            |
 | opiskelija                                   | studerande                                                                             |
 | muistutusviesti                              | påminnelse via e-post                                                                  |
 | ladata                                       | ladda ner                                                                              |

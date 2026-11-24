@@ -37,7 +37,7 @@ Frågorna kan redigeras av:
 
 ## Frågetyper {#question-types}
 
-Det finns fyra frågetyper: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] och [[questionEditor:multipleChoiceQuestion]]. Skalfrågor besvaras på en skala 1–5 eller med alternativet _ingen uppgift_. Siffrorna har inga förklaringar, så berätta i frågan eller i dess beskrivning vad 1 och 5 betyder, till exempel 1 = helt av annan åsikt, 5 = helt av samma åsikt.
+Det finns fyra frågetyper: [[questionEditor:likertQuestion]], [[questionEditor:openQuestion]], [[questionEditor:singleChoiceQuestion]] och [[questionEditor:multipleChoiceQuestion]]. Skalfrågor besvaras på en skala 1–5 eller med alternativet _ingen åsikt_. Siffrorna har inga förklaringar, så berätta i frågan eller i dess beskrivning vad 1 och 5 betyder, till exempel 1 = helt av annan åsikt, 5 = helt av samma åsikt.
 
 ## Kopiera frågor från en annan enkät {#copy-questions}
 
