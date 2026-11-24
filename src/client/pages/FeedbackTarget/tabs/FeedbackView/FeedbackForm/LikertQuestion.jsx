@@ -8,18 +8,19 @@ import { useQuestionLanguage } from '../../../../../util/questionLanguageContext
 import QuestionBase from './QuestionBase'
 import { getDontKnowOption, useDelayedTouched } from './utils'
 
-const styles = {
-  optionLabel: {
-    marginLeft: theme => theme.spacing(0.2),
-    marginRight: theme => theme.spacing(0.2),
-  },
-  dontKnowLabel: {
-    marginLeft: theme => theme.spacing(1),
-    marginRight: theme => theme.spacing(0.5),
-  },
-}
-
 const options = [1, 2, 3, 4, 5, 0]
+
+const RADIO_ICON = 24
+const OPTION_MARGIN = 1.6
+const DONT_KNOW_MARGINS = [8, 4]
+const MARGINS = (options.length - 1) * 2 * OPTION_MARGIN + DONT_KNOW_MARGINS[0] + DONT_KNOW_MARGINS[1]
+// Shrinks on narrow screens before the options wrap, 100cqw being the width of the row. A few pixels spare for rounding.
+const RADIO_PADDING = `clamp(2px, (100cqw - ${options.length * RADIO_ICON + MARGINS + 4}px) / ${2 * options.length}, 9px)`
+
+const styles = {
+  optionLabel: { mx: `${OPTION_MARGIN}px` },
+  dontKnowLabel: { ml: `${DONT_KNOW_MARGINS[0]}px`, mr: `${DONT_KNOW_MARGINS[1]}px` },
+}
 
 const LikertQuestion = ({ question, name, disabled }) => {
   const [{ value: answer }, meta, helpers] = useField(name)
@@ -50,6 +51,7 @@ const LikertQuestion = ({ question, name, disabled }) => {
   return (
     <FormControl
       component="fieldset"
+      fullWidth
       aria-describedby={ariaDescribedBy.length > 0 ? ariaDescribedBy.join(' ') : undefined}
       onBlur={handleGroupBlur}
       onFocus={handleGroupFocus}
@@ -68,12 +70,13 @@ const LikertQuestion = ({ question, name, disabled }) => {
             helpers.setValue(event.target.value)
           }}
           row
+          sx={{ containerType: 'inline-size' }}
         >
           {options.map(option => (
             <FormControlLabel
               labelPlacement="top"
               value={option.toString()}
-              control={<Radio color="primary" disableFocusRipple />}
+              control={<Radio color="primary" disableFocusRipple sx={{ p: RADIO_PADDING }} />}
               label={parseOption(option)}
               key={option}
               sx={{
