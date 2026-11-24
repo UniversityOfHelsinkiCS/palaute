@@ -5,7 +5,7 @@ description: Bring the in-app user guide and NorppAI's knowledge base up to date
 
 # Sync the user guide and knowledge base with the code
 
-The documents are `src/server/services/helpChatbot/knowledge.md` and the guide in `src/client/pages/UserGuide/content/{fi,en}`. Read the rules for each before starting: the header comment of `knowledge.md` and `content/README.md`.
+The documents are `src/server/services/helpChatbot/knowledge.md` and the guide in `src/client/pages/UserGuide/content/{fi,sv,en}`. Read the rules for each before starting: the header comment of `knowledge.md` and `content/README.md`.
 
 ## Scope
 
@@ -31,7 +31,7 @@ The documents are `src/server/services/helpChatbot/knowledge.md` and the guide i
 
 ## 3. Ask
 
-After triage, ask all open questions at once with AskUserQuestion (4 per call), each option previewing its proposed text in both languages, or an outline for a new page. Ask only:
+After triage, ask all open questions at once with AskUserQuestion (4 per call), each option previewing its proposed text in Finnish and English, or an outline for a new page. Ask only:
 
 - whether to document a change users can see, when that isn't clear
 - adding or removing a section or page
@@ -44,7 +44,7 @@ Apply clear factual updates without asking. Once the user has decided about a fe
 
 - Change the smallest unit that's wrong. Leave the wording around it alone; no restyling or reorganising. A new fact goes in its existing section.
 - Add a section or page when a feature has no fitting home, and fix what it makes wrong elsewhere: counts, lists, comparisons, links. A removed feature loses its whole section and the links to it.
-- Edit both languages. The PO owns the Finnish wording: change only the fact in it.
+- Edit all three languages. The PO owns the Finnish wording: change only the fact in it. Translate the Swedish from the Finnish with the terms in `.claude/skills/clean-po-edits/swedish_terms.md`.
 - Guide terms: Sisu (not SISU), administrative person, feedback liaison, programme director, responsible teacher. No em dashes.
 
 ## 5. Fact-check

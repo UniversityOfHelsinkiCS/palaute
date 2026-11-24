@@ -32,7 +32,7 @@ if len(sys.argv) != 2:
     sys.exit(__doc__)
 base = sys.argv[1]
 stale = 0
-for language in ('fi', 'en'):
+for language in ('fi', 'sv', 'en'):
     paths = sorted(Path(CONTENT, language).rglob('*.md'))
     current = titles_in(path.read_text() for path in paths)
     renamed = titles_in(files_at(base, language)) - current

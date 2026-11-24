@@ -1,11 +1,11 @@
 ---
 name: clean-po-edits
-description: After the PO has edited the Finnish user guide or manual video captions, fix their typos and anything they broke, and mirror their changes into English. Use when asked to sync, mirror or apply the PO's guide changes.
+description: After the PO has edited the Finnish user guide or manual video captions, fix their typos and anything they broke, and mirror their changes into English and Swedish. Use when asked to sync, mirror or apply the PO's guide changes.
 ---
 
 # Sync the PO's user guide edits
 
-The PO edits the Finnish user guide (`src/client/pages/UserGuide/content/fi`) and the captions in `e2e/manual/scenarios/*.manual.ts` directly on master. That is the intended workflow: the English follows afterwards.
+The PO edits the Finnish user guide (`src/client/pages/UserGuide/content/fi`) and the captions in `e2e/manual/scenarios/*.manual.ts` directly on master. That is the intended workflow: the English and Swedish follow afterwards.
 
 ## 1. Find what's new
 
@@ -18,20 +18,21 @@ The PO edits the Finnish user guide (`src/client/pages/UserGuide/content/fi`) an
 - Always run `npm run lint:quiet` and `npx vitest run src/client/pages/UserGuide`, and fix what they find in the PO's edits with the smallest change that keeps their wording. For example, an apostrophe inside a single-quoted caption gets double quotes, not a reworded sentence.
 - Fix only typos and broken markup: misspellings, missing brackets or periods, double spaces, stray text around links. Never reword, restructure or undo the PO's edits.
 - When the PO renames a section or page, update the link texts that quote the old title to the new one.
-- Run `python3 .claude/skills/clean-po-edits/scripts/check_links.py <base>`: it lists links in both languages whose text quotes a title renamed since the base. Update each to the new title (in English, after step 3's renames). Link texts that differ from their target otherwise are deliberate: inflected into a sentence (`[tukeen]`), or naming the whole page while pointing at one of its sections.
+- Run `python3 .claude/skills/clean-po-edits/scripts/check_links.py <base>`: it lists links in every language whose text quotes a title renamed since the base. Update each to the new title (in English and Swedish, after step 3's renames). Link texts that differ from their target otherwise are deliberate: inflected into a sentence (`[tukeen]`), or naming the whole page while pointing at one of its sections.
 - Commit: `docs: fix typos in Finnish user guide`.
 
-## 3. Mirror into English
+## 3. Mirror into English and Swedish
 
 - Every Finnish change gets its English counterpart in the same file under `content/en`: changed sentences, added and removed text, renamed headings and titles, and link texts to renamed sections. Grammar-only Finnish fixes may need nothing.
 - Write natural English, not a word-for-word translation. Keep the guide's terms: Sisu (not SISU), administrative person, feedback liaison, programme director, responsible teacher. Captions use the UI's "feedback correspondent". No em dashes.
 - Captions where the PO also wrote the English: keep their English as is, fixing only typos and syntax.
-- Afterwards, compare `git diff --word-diff <base> HEAD -- content/fi` with `git diff --word-diff -- content/en` file by file, and check every Finnish hunk has its counterpart.
-- Commit the English and any caption changes together: `docs: apply PO changes to English user guide`.
+- Then the same Finnish changes into `content/sv`, translated from the Finnish with the terms in `.claude/skills/clean-po-edits/swedish_terms.md`. Captions get Swedish only once the Swedish videos are recorded (`sv:` in a scenario).
+- Afterwards, compare `git diff --word-diff <base> HEAD -- content/fi` with `git diff --word-diff -- content/en` and `-- content/sv` file by file, and check every Finnish hunk has its counterpart in both.
+- Commit the English, Swedish and any caption changes together: `docs: apply PO changes to English user guide` (the title marks the next run's base, so keep it as is).
 
 ## 4. Verify and report
 
 - `npx vitest run src/client/pages/UserGuide`, `npm run lint -- --format=agent`, `npm run format`.
 - The user accepts the PO's content choices. Only flag content that's critically wrong, such as wrong information on who can see answers or on anonymity, with a suggested one-line fix; don't apply it unasked.
 - Report the commits made, and note that nothing was pushed.
-- End by asking the developer to review the Finnish fixes and the English changes carefully before pushing. Fold the changes they ask for into the last commit.
+- End by asking the developer to review the Finnish fixes and the English and Swedish changes carefully before pushing. Fold the changes they ask for into the last commit.

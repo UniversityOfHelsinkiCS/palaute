@@ -1,12 +1,12 @@
 # User guide content
 
-The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in `fi/` and in English in `en/`. Swedish users get the English text with the UI labels in Swedish. See `documentation/user_guide.md` for how the guide works.
+The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in `fi/`, in Swedish in `sv/` and in English in `en/`. Finnish is the source: Swedish and English follow its changes. See `documentation/user_guide.md` for how the guide works.
 
 `npm run test:unit` checks the content: run it after editing.
 
 ## Files
 
-- Each page is in a group folder, `<language>/<order>-<group>/<order>-<slug>.md`, e.g. `fi/2-teachers/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in both languages.
+- Each page is in a group folder, `<language>/<order>-<group>/<order>-<slug>.md`, e.g. `fi/2-teachers/05-counter-feedback.md`. The orders set the group's and the page's place in the menu, the slug the page's address (`/guide/counter-feedback`), so it must be unique across groups. Use the same file name in every language.
 - Each page in a group starts with a one-sentence description of what's on it, shown on its card on the group's landing page:
 
   ```
@@ -29,7 +29,7 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
   - `programmes`: programme staff's own tasks, addressed to them: following feedback, programme questions, settings and programme surveys. Programme surveys link to the teachers' pages for what works the same way.
   - A rule has one full home, usually in `basics`. A task page may repeat its gist in one sentence and link to it, so the reader needn't leave the task.
 - Each page starts with one `# Title`, which is also its name in the menu. Don't put labels in the title.
-- Write the same pages, sections and section ids in both languages. The texts don't have to be word-for-word translations.
+- Write the same pages, sections and section ids in every language. The texts don't have to be word-for-word translations.
 
 ## Writing
 
@@ -50,9 +50,9 @@ The in-app user guide (`/guide`). Each page is one Markdown file, in Finnish in 
 Plain Markdown: headings, paragraphs, lists, bold, italics and links. No images (screenshots go out of date with every UI change) and no tables.
 
 - **UI labels**: `[[section:key]]` shows the label with that translation key in the user's language, in bold, e.g. `[[navBar:myCourses]]`. `[[section:key|fi]]` shows it in the given language. Use these for every button, tab and menu item, so the guide always matches the screen. Find keys in `public/locales/en/translation.json` (HY's own wording is in `hy.json`). Labels with a `{{placeholder}}` can't be used, as the guide has no value to fill it with.
-- **Section ids**: `## Heading {#some-id}` gives a section an id to link to. Use the same id in both languages. Every `##` section needs one, as the menu lists them under the open page; keep their titles plain text.
+- **Section ids**: `## Heading {#some-id}` gives a section an id to link to. Use the same id in every language. Every `##` section needs one, as the menu lists them under the open page; keep their titles plain text.
 - **Links** to guide pages: `[counter feedback](/guide/counter-feedback)`, or to a section: `(/guide/counter-feedback#send-email)`. Other links to Norppa start with `/` too, e.g. `/courses`. Links to other sites open in a new tab.
 - **Bold** is for UI labels only, so the reader can tell what's on the screen. Use _italics_ for terms and emphasis.
 - **Notes**: `> **Note:** ...` shows a highlighted box.
-- **Videos**: `[[video:slug]]` on its own line shows the video recorded by `e2e/manual/scenarios/<slug>.manual.ts`, in the guide's language. In every language, put it after the steps it shows.
+- **Videos**: `[[video:slug]]` on its own line shows the video recorded by `e2e/manual/scenarios/<slug>.manual.ts`, in the guide's language (English in the Swedish guide until Swedish videos are recorded). In every language, put it after the steps it shows.
 - **Comments**: `<!-- ... -->` are notes for editors and aren't shown.
