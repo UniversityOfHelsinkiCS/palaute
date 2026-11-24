@@ -1,0 +1,1899 @@
+{
+  "title": "Norppa API traffic",
+  "uid": "norppa-api-traffic",
+  "timezone": "utc",
+  "editable": true,
+  "schemaVersion": 39,
+  "time": {
+    "from": "now-7d/d",
+    "to": "now"
+  },
+  "refresh": "",
+  "graphTooltip": 1,
+  "templating": {
+    "list": [
+      {
+        "name": "datasource",
+        "label": "Loki",
+        "type": "datasource",
+        "query": "loki",
+        "current": {},
+        "hide": 0
+      },
+      {
+        "name": "environment",
+        "label": "Environment",
+        "type": "custom",
+        "query": "production,staging",
+        "current": {
+          "text": "production",
+          "value": "production"
+        },
+        "options": [
+          {
+            "text": "production",
+            "value": "production",
+            "selected": true
+          },
+          {
+            "text": "staging",
+            "value": "staging",
+            "selected": false
+          }
+        ],
+        "hide": 0
+      }
+    ]
+  },
+  "panels": [
+    {
+      "id": 1,
+      "type": "row",
+      "title": "Overview",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 3,
+      "type": "stat",
+      "title": "Requests",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 1,
+        "w": 8,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "",
+          "queryType": "range"
+        }
+      ],
+      "description": "",
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center"
+      }
+    },
+    {
+      "id": 4,
+      "type": "stat",
+      "title": "Distinct users",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 8,
+        "y": 1,
+        "w": 8,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (userId) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{userId}}",
+          "queryType": "range"
+        }
+      ],
+      "description": "Users who loaded the app. Shibboleth logins only. Leaves out users seen only today (UTC) until midnight, so ranges of a day or two come out low.",
+      "interval": "1d",
+      "maxDataPoints": 11000,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["max"],
+          "fields": "/^Last \\*$/",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center"
+      },
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": ["lastNotNull"]
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": ["count"],
+            "includeTimeField": false
+          }
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "type": "stat",
+      "title": "New features distinct users",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 1,
+        "w": 8,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (userId, feature) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |~ `\"url\":\"/api/(user-guide/opened|help-chatbot/turns)` | json method, url, status, responseTime, userId, userAgent | method=\"POST\" | url=~\"/api/(user-guide/opened|help-chatbot/turns)/?([?].*)?\" | status < 400 | __error__=\"\" | userId!=\"\" | label_format feature=`{{ if hasPrefix \"/api/user-guide\" .url }}User guide{{ else }}NorppAI{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{feature}}",
+          "queryType": "range"
+        }
+      ],
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": ["lastNotNull"]
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Field": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Last *": {
+                "aggregations": ["count"],
+                "operation": "aggregate"
+              }
+            }
+          }
+        }
+      ],
+      "description": "User guide: users who opened it. NorppAI: users who asked a question.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "text"
+          },
+          "displayName": "${__data.fields.Field}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": true
+        },
+        "colorMode": "none",
+        "graphMode": "none",
+        "textMode": "value_and_name",
+        "justifyMode": "center",
+        "orientation": "vertical"
+      }
+    },
+    {
+      "id": 5,
+      "type": "row",
+      "title": "Users",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 5,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 6,
+      "type": "timeseries",
+      "title": "Active users per hour",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 6,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "count(sum by (userId) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" [$__interval])))",
+          "legendFormat": "Users",
+          "queryType": "range"
+        }
+      ],
+      "description": "",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "bars",
+            "lineWidth": 2,
+            "fillOpacity": 80,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisSoftMin": 0,
+            "barAlignment": -1
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "interval": "1h"
+    },
+    {
+      "id": 7,
+      "type": "barchart",
+      "title": "Active users per day",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 12,
+        "y": 6,
+        "w": 12,
+        "h": 8
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "count(sum by (userId) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval])))",
+          "legendFormat": "Users",
+          "queryType": "range"
+        }
+      ],
+      "description": "Days are UTC. Today shows up after midnight UTC.",
+      "interval": "1d",
+      "maxDataPoints": 11000,
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Time",
+              "operator": "-",
+              "right": "86400000"
+            },
+            "alias": "Day",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "targetField": "Day",
+                "destinationType": "time"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "lineWidth": 1,
+            "axisSoftMin": 0
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Day"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:MM/DD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "xField": "Day",
+        "orientation": "vertical",
+        "stacking": "none",
+        "showValue": "never",
+        "barWidth": 0.9,
+        "groupWidth": 0.9,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 50,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      }
+    },
+    {
+      "id": 8,
+      "type": "row",
+      "title": "Feature usage",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 14,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 9,
+      "type": "timeseries",
+      "title": "Feature usage over time",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 15,
+        "w": 16,
+        "h": 10
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (feature) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |~ `\"method\":\"(POST|PUT)\"` | json method, url, status, responseTime, userId, userAgent | label_format path=`{{ trimSuffix \"/\" (regexReplaceAll \"[?].*\" .url \"\") }}` | label_format feature=`{{ if eq .method \"POST\" }}{{ if eq .path \"/api/feedbacks\" }}Feedback given{{ else if eq .path \"/api/noad/feedbacks\" }}Feedback given (non-AD){{ else if and (hasPrefix \"/api/continuous-feedback/\" .path) (contains \"/response/\" .path) }}Continuous feedback replies{{ else if hasPrefix \"/api/continuous-feedback/\" .path }}Continuous feedback sent{{ else if eq .path \"/api/norppa-feedback\" }}Norppa feedback sent{{ end }}{{ else if eq .method \"PUT\" }}{{ if and (hasPrefix \"/api/standalone-surveys/answer/\" .path) (hasSuffix \"/response\" .path) }}Standalone survey answers{{ end }}{{ end }}` | feature!=\"\" | status < 400 | __error__=\"\" | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{feature}}",
+          "queryType": "range"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(count_over_time({app=\"norppa\", environment=\"$environment\"} |= `type = 'Notify students about counter feedback'` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "Counter feedback given",
+          "queryType": "range"
+        }
+      ],
+      "description": "Successful requests per interval. Counter feedback counts the ones sent with the email to students.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10,
+            "showPoints": "never",
+            "spanNulls": false,
+            "stacking": {
+              "mode": "none",
+              "group": "A"
+            },
+            "axisSoftMin": 0
+          },
+          "color": {
+            "mode": "palette-classic"
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Feedback given"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Feedback given (non-AD)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Standalone survey answers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Continuous feedback sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Continuous feedback replies"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Counter feedback given"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "purple"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Norppa feedback sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "multi",
+          "sort": "desc"
+        }
+      },
+      "interval": "1h",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "Time": 0,
+              "Feedback given": 1,
+              "Feedback given (non-AD)": 2,
+              "Standalone survey answers": 3,
+              "Continuous feedback sent": 4,
+              "Continuous feedback replies": 5,
+              "Counter feedback given": 6,
+              "Norppa feedback sent": 7
+            }
+          }
+        }
+      ],
+      "maxDataPoints": 11000
+    },
+    {
+      "id": 10,
+      "type": "bargauge",
+      "title": "Totals in range",
+      "datasource": {
+        "type": "datasource",
+        "uid": "-- Dashboard --"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 15,
+        "w": 8,
+        "h": 10
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "datasource",
+            "uid": "-- Dashboard --"
+          },
+          "panelId": 9
+        }
+      ],
+      "description": "Summed from the chart on the left. Features without use in the range are left out. Counter feedback saved without the email to students is not counted.",
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "indexByName": {
+              "Time": 0,
+              "Feedback given": 1,
+              "Feedback given (non-AD)": 2,
+              "Standalone survey answers": 3,
+              "Continuous feedback sent": 4,
+              "Continuous feedback replies": 5,
+              "Counter feedback given": 6,
+              "Norppa feedback sent": 7
+            }
+          }
+        },
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": ["sum"],
+            "includeTimeField": false
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "min": 0,
+          "fieldMinMax": false
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Feedback given"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Feedback given (non-AD)"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Standalone survey answers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Continuous feedback sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Continuous feedback replies"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Counter feedback given"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "purple"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Norppa feedback sent"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "valueMode": "text",
+        "namePlacement": "top",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 11,
+      "type": "row",
+      "title": "Endpoints and clients",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 25,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 12,
+      "type": "table",
+      "title": "Endpoints",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 26,
+        "w": 16,
+        "h": 12
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "label_replace(sum by (endpoint) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` | json method, url, responseTime | label_format path=`{{ regexReplaceAll \"/[^/]*[0-9][^/]*\" (regexReplaceAll \"[?].*\" .url \"\") \"/:id\" }}` | label_format endpoint=`{{ .method }} {{ .path }}` | drop method, url, path | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval])), \"metric\", \"requests\", \"\", \"\")",
+          "legendFormat": "{{endpoint}} {{metric}}",
+          "queryType": "range"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "label_replace(sum by (endpoint) (sum_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` | json method, url, responseTime | label_format path=`{{ regexReplaceAll \"/[^/]*[0-9][^/]*\" (regexReplaceAll \"[?].*\" .url \"\") \"/:id\" }}` | label_format endpoint=`{{ .method }} {{ .path }}` | drop method, url, path | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts | unwrap responseTime | __error__=\"\" [$__interval])), \"metric\", \"time\", \"\", \"\")",
+          "legendFormat": "{{endpoint}} {{metric}}",
+          "queryType": "range"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "label_replace(sum by (endpoint) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |= `\"status\":\"5` | json method, url, responseTime | label_format path=`{{ regexReplaceAll \"/[^/]*[0-9][^/]*\" (regexReplaceAll \"[?].*\" .url \"\") \"/:id\" }}` | label_format endpoint=`{{ .method }} {{ .path }}` | drop method, url, path | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval])), \"metric\", \"errors\", \"\", \"\")",
+          "legendFormat": "{{endpoint}} {{metric}}",
+          "queryType": "range"
+        }
+      ],
+      "description": "Path segments containing a digit are collapsed to :id. Average instead of a percentile, because percentiles can't be added up from the hourly pieces Loki can split into.",
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "seriesToRows",
+            "reducers": ["sum"],
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "groupingToMatrix",
+          "options": {
+            "columnField": "metric",
+            "rowField": "endpoint",
+            "valueField": "Total",
+            "emptyValue": "null"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "time",
+              "operator": "/",
+              "right": "requests"
+            },
+            "alias": "Average",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "excludeByName": {
+              "time": true
+            },
+            "indexByName": {
+              "endpoint\\metric": 0,
+              "requests": 1,
+              "Average": 2,
+              "errors": 3
+            },
+            "renameByName": {
+              "endpoint\\metric": "Endpoint",
+              "requests": "Requests",
+              "Average": "Average time",
+              "errors": "5xx"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Requests",
+                "desc": true
+              }
+            ]
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "align": "auto",
+            "filterable": true
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Average time"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "ms"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.width",
+                "value": 120
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Requests"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "locale"
+              },
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.width",
+                "value": 100
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "5xx"
+            },
+            "properties": [
+              {
+                "id": "decimals",
+                "value": 0
+              },
+              {
+                "id": "custom.width",
+                "value": 60
+              },
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              },
+              {
+                "id": "custom.cellOptions",
+                "value": {
+                  "type": "color-text"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "showHeader": true,
+        "footer": {
+          "show": false
+        }
+      }
+    },
+    {
+      "id": 13,
+      "type": "piechart",
+      "title": "Users by device",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 26,
+        "w": 8,
+        "h": 12
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (userId, device) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | label_format device=`{{ if contains \"Mobi\" __line__ }}Mobile{{ else }}Desktop{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{device}}",
+          "queryType": "range"
+        }
+      ],
+      "interval": "1d",
+      "maxDataPoints": 11000,
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "reducers": ["lastNotNull"]
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Field": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Last *": {
+                "aggregations": ["count"],
+                "operation": "aggregate"
+              }
+            }
+          }
+        }
+      ],
+      "description": "A user on both counts in both. Leaves out users seen only today (UTC) until midnight, so ranges of a day or two come out low.",
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "displayName": "${__data.fields.Field}"
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": true
+        },
+        "pieType": "donut",
+        "displayLabels": ["name", "percent"],
+        "legend": {
+          "displayMode": "table",
+          "placement": "bottom",
+          "showLegend": true,
+          "values": ["value", "percent"]
+        },
+        "tooltip": {
+          "mode": "single"
+        }
+      }
+    },
+    {
+      "id": 14,
+      "type": "row",
+      "title": "Emails",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 38,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 16,
+      "type": "stat",
+      "title": "Emails sent",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 39,
+        "w": 24,
+        "h": 4
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(sum_over_time({app=\"norppa\", environment=\"$environment\"} |= `Sending email to` | regexp `Sending email to (?P<recipients>[0-9]+) recipients, type = '(?P<type>[^']*)'` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts | unwrap recipients [$__interval])) or vector(0)",
+          "legendFormat": "",
+          "queryType": "range"
+        }
+      ],
+      "description": "One email per recipient.",
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "text",
+                "value": null
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center"
+      }
+    },
+    {
+      "id": 15,
+      "type": "barchart",
+      "title": "Emails per day by type",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 43,
+        "w": 16,
+        "h": 10
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (type) (sum_over_time({app=\"norppa\", environment=\"$environment\"} |= `Sending email to` | regexp `Sending email to (?P<recipients>[0-9]+) recipients, type = '(?P<type>[^']*)'` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts | unwrap recipients [$__interval]))",
+          "legendFormat": "{{type}}",
+          "queryType": "range"
+        }
+      ],
+      "description": "One email per recipient. Days are UTC. Today shows up after midnight UTC.",
+      "interval": "1d",
+      "maxDataPoints": 11000,
+      "transformations": [
+        {
+          "id": "seriesToColumns",
+          "options": {
+            "byField": "Time",
+            "mode": "outer"
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Time",
+              "operator": "-",
+              "right": "86400000"
+            },
+            "alias": "Day",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "convertFieldType",
+          "options": {
+            "conversions": [
+              {
+                "targetField": "Day",
+                "destinationType": "time"
+              }
+            ],
+            "fields": {}
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          },
+          "custom": {
+            "fillOpacity": 80,
+            "lineWidth": 1,
+            "axisSoftMin": 0
+          }
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Day"
+            },
+            "properties": [
+              {
+                "id": "unit",
+                "value": "time:MM/DD"
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Time"
+            },
+            "properties": [
+              {
+                "id": "custom.hideFrom",
+                "value": {
+                  "legend": true,
+                  "tooltip": true,
+                  "viz": true
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify students about feedback opening"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify students about feedback opening immediately"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Remind students about feedback"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify students about counter feedback"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Remind teachers about feedback opening"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "purple"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Remind teachers about giving counter feedback"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Send continuous feedback digest to teachers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Send continuous feedback response to student"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-red"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "xField": "Day",
+        "orientation": "vertical",
+        "stacking": "normal",
+        "showValue": "never",
+        "barWidth": 0.9,
+        "groupWidth": 0.9,
+        "xTickLabelRotation": 0,
+        "xTickLabelSpacing": 50,
+        "legend": {
+          "displayMode": "list",
+          "placement": "bottom",
+          "showLegend": true
+        },
+        "tooltip": {
+          "mode": "single",
+          "sort": "none"
+        }
+      }
+    },
+    {
+      "id": 17,
+      "type": "bargauge",
+      "title": "Emails by type",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 16,
+        "y": 43,
+        "w": 8,
+        "h": 10
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (type) (sum_over_time({app=\"norppa\", environment=\"$environment\"} |= `Sending email to` | regexp `Sending email to (?P<recipients>[0-9]+) recipients, type = '(?P<type>[^']*)'` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts | unwrap recipients [$__interval]))",
+          "legendFormat": "{{type}}",
+          "queryType": "range"
+        }
+      ],
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "transformations": [
+        {
+          "id": "reduce",
+          "options": {
+            "mode": "reduceFields",
+            "reducers": ["sum"],
+            "includeTimeField": false
+          }
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "fixed",
+            "fixedColor": "blue"
+          },
+          "min": 0,
+          "fieldMinMax": false
+        },
+        "overrides": [
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify students about feedback opening"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify students about feedback opening immediately"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-blue"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Remind students about feedback"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "yellow"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Notify students about counter feedback"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "green"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Remind teachers about feedback opening"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "purple"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Remind teachers about giving counter feedback"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "orange"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Send continuous feedback digest to teachers"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "red"
+                }
+              }
+            ]
+          },
+          {
+            "matcher": {
+              "id": "byName",
+              "options": "Send continuous feedback response to student"
+            },
+            "properties": [
+              {
+                "id": "color",
+                "value": {
+                  "mode": "fixed",
+                  "fixedColor": "light-red"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "orientation": "horizontal",
+        "displayMode": "basic",
+        "valueMode": "text",
+        "namePlacement": "top",
+        "showUnfilled": true
+      }
+    },
+    {
+      "id": 18,
+      "type": "row",
+      "title": "Server errors",
+      "collapsed": false,
+      "gridPos": {
+        "x": 0,
+        "y": 53,
+        "w": 24,
+        "h": 1
+      },
+      "panels": []
+    },
+    {
+      "id": 19,
+      "type": "stat",
+      "title": "Server errors (5xx)",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 54,
+        "w": 6,
+        "h": 5
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |= `\"status\":\"5` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval])) or vector(0)",
+          "legendFormat": "",
+          "queryType": "range"
+        }
+      ],
+      "description": "",
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "locale",
+          "decimals": 0,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 1
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["sum"],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center"
+      }
+    },
+    {
+      "id": 20,
+      "type": "stat",
+      "title": "5xx rate",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 0,
+        "y": 59,
+        "w": 6,
+        "h": 5
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "",
+          "queryType": "range",
+          "hide": true
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum(count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |= `\"status\":\"5` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval])) or vector(0)",
+          "legendFormat": "",
+          "queryType": "range",
+          "hide": true
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "A",
+          "hide": true,
+          "reducer": "sum"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "reduce",
+          "expression": "B",
+          "hide": true,
+          "reducer": "sum"
+        },
+        {
+          "refId": "E",
+          "datasource": {
+            "type": "__expr__",
+            "uid": "__expr__"
+          },
+          "type": "math",
+          "expression": "$D / $C * 100",
+          "hide": false
+        }
+      ],
+      "description": "",
+      "interval": "1h",
+      "maxDataPoints": 11000,
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "decimals": 2,
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "mode": "absolute",
+            "steps": [
+              {
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "orange",
+                "value": 0.5
+              },
+              {
+                "color": "red",
+                "value": 2
+              }
+            ]
+          }
+        },
+        "overrides": []
+      },
+      "options": {
+        "reduceOptions": {
+          "calcs": ["lastNotNull"],
+          "fields": "",
+          "values": false
+        },
+        "colorMode": "value",
+        "graphMode": "none",
+        "textMode": "value",
+        "justifyMode": "center"
+      }
+    },
+    {
+      "id": 21,
+      "type": "logs",
+      "title": "Recent 5xx responses",
+      "datasource": {
+        "type": "loki",
+        "uid": "${datasource}"
+      },
+      "gridPos": {
+        "x": 6,
+        "y": 54,
+        "w": 18,
+        "h": 10
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "{app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |= `\"status\":\"5` | json method, url, status, responseTime, userId, userAgent | line_format \"{{.method}} {{.url}} {{.status}} {{.responseTime}} ms\"",
+          "legendFormat": "",
+          "queryType": "range"
+        }
+      ],
+      "options": {
+        "showTime": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending",
+        "enableLogDetails": true
+      }
+    }
+  ]
+}
