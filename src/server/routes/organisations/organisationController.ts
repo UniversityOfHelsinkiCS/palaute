@@ -21,10 +21,14 @@ import { createOrganisationLog } from '../../services/auditLog'
 import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
 import getOpenFeedbackByOrganisation from '../../services/organisations/getOpenFeedbackByOrganisation'
 import { getOrganisationsList } from '../../services/organisations/getOrganisationsList'
+import { setProgrammeQuestionPublicity } from '../../services/organisations/setQuestionPublicity'
+import { QuestionPublicityBodySchema } from '../../services/questions/saveQuestions'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { formatActivityPeriod } from '../../util/common'
 import { ORGANISATION_SURVEYS_ENABLED } from '../../util/config'
+import { parseInput } from '../../util/parseInput'
+import { assertNoQuestionFields } from '../../util/surveyQuestions'
 import { router as feedbackCorrespondentRouter } from './feedbackCorrespondentController'
 import { router as organisationSurveyRouter } from './organisationSurveyController'
 import { getAccessAndOrganisation } from './util'
@@ -77,6 +81,7 @@ const getOrganisationsListHandler = async (req: AuthenticatedRequest, res: Respo
 const updateOrganisation = async (req: AuthenticatedRequest, res: Response) => {
   const { user, body } = req
   const { code } = req.params
+  assertNoQuestionFields(body)
 
   const { organisation, hasAdminAccess } = await getAccessAndOrganisation(user, code, { write: true })
 
@@ -85,7 +90,6 @@ const updateOrganisation = async (req: AuthenticatedRequest, res: Response) => {
     'studentListVisibleByCourse',
     'disabledCourseCodes',
     'studentListVisibleCourseCodes',
-    'publicQuestionIds',
   ])
 
   if (!hasAdminAccess && (updates.disabledCourseCodes || updates.studentListVisibleCourseCodes)) {
@@ -333,6 +337,13 @@ if (ORGANISATION_SURVEYS_ENABLED) router.use('/', organisationSurveyRouter)
 router.get('/', getOrganisations)
 router.get('/list', getOrganisationsListHandler)
 router.put('/:code', updateOrganisation)
+router.put('/:code/question-publicity', async (req: AuthenticatedRequest, res: Response) => {
+  const { questionId, isPublic } = parseInput(QuestionPublicityBodySchema, req.body)
+  const { organisation } = await getAccessAndOrganisation(req.user, req.params.code, { write: true })
+  if (!organisation) throw ApplicationError.NotFound('Organisation not found')
+
+  res.send(await setProgrammeQuestionPublicity({ organisation, user: req.user, questionId, isPublic }))
+})
 router.get('/:code', getOrganisationByCode)
 router.get('/:code/open', getOpenQuestionsByOrganisation)
 router.get('/:code/logs', getOrganisationLogs)

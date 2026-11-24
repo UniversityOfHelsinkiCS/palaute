@@ -4,7 +4,7 @@ import { Response, Router } from 'express'
 import z from 'zod/v4'
 
 import { adminAccess } from '../../middleware/adminAccess'
-import { STANDALONE_QUESTION_VISIBILITIES } from '../../models/standaloneSurveyQuestion'
+import { QuestionPublicityBodySchema, QuestionsBodySchema } from '../../services/questions/saveQuestions'
 import { assertCanManage, getAccess } from '../../services/standaloneSurveys/access'
 import {
   getPublicQuestionIds,
@@ -30,7 +30,7 @@ import {
   setResponsibleUsers,
   updateSurvey,
 } from '../../services/standaloneSurveys/surveys'
-import { updatePublicQuestions, updateQuestions } from '../../services/standaloneSurveys/updateQuestions'
+import { setQuestionPublicity, updateQuestions } from '../../services/standaloneSurveys/updateQuestions'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { parseInput } from '../../util/parseInput'
@@ -57,21 +57,6 @@ const UpdateBodySchema = z.object({
   opensAt: z.coerce.date().optional(),
   closesAt: z.coerce.date().optional(),
 })
-
-const QuestionsBodySchema = z.object({
-  questions: z.array(
-    z.object({
-      id: z.number().int().optional(),
-      type: z.enum(['TEXT', 'LIKERT', 'SINGLE_CHOICE', 'MULTIPLE_CHOICE', 'OPEN']),
-      secondaryType: z.enum(['GROUPING']).nullish(),
-      required: z.boolean(),
-      data: z.record(z.string(), z.any()),
-      visibility: z.enum(STANDALONE_QUESTION_VISIBILITIES).optional(),
-    })
-  ),
-})
-
-const PublicQuestionsBodySchema = z.object({ publicQuestionIds: z.array(z.number().int()) })
 
 const ResponsibleUsersBodySchema = z.object({ userIds: z.array(z.string()).min(1) })
 
@@ -105,6 +90,7 @@ const toManagementJson = (survey: Awaited<ReturnType<typeof getSurveyById>>, acc
   opensAt: survey.opensAt,
   closesAt: survey.closesAt,
   createdAt: survey.createdAt,
+  questionsVersion: survey.questionsVersion,
   questions: getQuestions(survey),
   publicQuestionIds: getPublicQuestionIds(survey),
   responsibleUsers: getResponsibleUsers(survey),
@@ -186,17 +172,17 @@ router.delete('/:id', adminAccess, async (req: AuthenticatedRequest, res: Respon
 })
 
 router.put('/:id/questions', async (req: AuthenticatedRequest, res: Response) => {
-  const { questions } = parseInput(QuestionsBodySchema, req.body)
+  const { questions, questionsVersion } = parseInput(QuestionsBodySchema, req.body)
   const { survey } = await getManagedSurvey(req)
-  await updateQuestions(survey, questions as any, req.user)
+  const { createdIds } = await updateQuestions(survey, questions, questionsVersion, req.user)
   const updated = await getSurveyById(survey.id)
-  res.send(toManagementJson(updated, getAccess(updated, req.user)))
+  res.send({ ...toManagementJson(updated, getAccess(updated, req.user)), createdIds })
 })
 
-router.put('/:id/public-questions', async (req: AuthenticatedRequest, res: Response) => {
-  const { publicQuestionIds } = parseInput(PublicQuestionsBodySchema, req.body)
+router.put('/:id/question-publicity', async (req: AuthenticatedRequest, res: Response) => {
+  const { questionId, isPublic } = parseInput(QuestionPublicityBodySchema, req.body)
   const { survey } = await getManagedSurvey(req)
-  await updatePublicQuestions(survey, publicQuestionIds, req.user)
+  await setQuestionPublicity(survey, questionId, isPublic, req.user)
   const updated = await getSurveyById(survey.id)
   res.send(toManagementJson(updated, getAccess(updated, req.user)))
 })

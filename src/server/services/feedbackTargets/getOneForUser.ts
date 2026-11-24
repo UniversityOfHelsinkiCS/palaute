@@ -11,6 +11,7 @@ import {
   Tag,
   Group,
   Summary,
+  Survey,
 } from '../../models'
 import { User as UserType } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
@@ -166,9 +167,15 @@ const getFromDb = async (id: number | string) => {
   return feedbackTargetJson
 }
 
+// A read that raced a question save can cache the old questions, and the editor would then fail every save
+const hasOldQuestions = async (data: Awaited<ReturnType<typeof getFromDb>>) => {
+  const survey = await Survey.findOne({ where: { feedbackTargetId: data.id }, attributes: ['questionsVersion'] })
+  return Boolean(survey) && survey?.questionsVersion !== data.surveys.teacherSurvey?.questionsVersion
+}
+
 const getAdditionalDataFromCacheOrDb = async (id: number | string) => {
   let data = (await cache.get(id)) as Awaited<ReturnType<typeof getFromDb>> | null
-  if (!data) {
+  if (!data || (await hasOldQuestions(data))) {
     data = await getFromDb(id)
     cache.set(data.id, data)
   }

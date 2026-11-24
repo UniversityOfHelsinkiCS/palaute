@@ -8,59 +8,22 @@ import { Response, Router } from 'express'
 import z from 'zod/v4'
 
 import { sequelize } from '../../db/dbConnection'
-import { Survey, Organisation, User } from '../../models'
-import { createOrganisationSurveyLog } from '../../services/auditLog'
-import { getUserOrganisationAccess } from '../../services/organisationAccess/organisationAccess'
-import { saveQuestions } from '../../services/questions/saveQuestions'
+import { Survey, Organisation } from '../../models'
+import { QuestionsBodySchema } from '../../services/questions/saveQuestions'
 import {
   getUniversitySurvey as _getUniversitySurvey,
   createUniversitySurvey as _createUniversitySurvey,
 } from '../../services/surveys'
+import { updateSurveyQuestions } from '../../services/surveys/updateQuestions'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
-import { assertOwnQuestionIds } from '../../util/surveyQuestions'
-
-const checkUserWriteAccess = async (survey: Survey, user: User) => {
-  const organisationAccess = await getUserOrganisationAccess(user)
-
-  const surveysOrganisation = organisationAccess.find(({ organisation }) => organisation.code === survey.typeId)
-
-  return surveysOrganisation?.access?.write ?? false
-}
+import { parseInput } from '../../util/parseInput'
 
 const update = async (req: AuthenticatedRequest, res: Response) => {
-  const { user } = req
-  const survey = await Survey.findByPk(Number(req.params.id))
-
-  if (!survey) throw ApplicationError.NotFound('Survey not found')
-
-  if (survey.type === 'feedbackTarget') throw ApplicationError.Forbidden('Wrong endpoint to update fbt survey')
-
-  const isUniversitySurvey = survey.type === 'university'
-
-  if (isUniversitySurvey && !user.isAdmin) throw ApplicationError.Forbidden('Only admins can update university survey')
-
-  if (survey.type === 'programme') {
-    const writeAccess = await checkUserWriteAccess(survey, user)
-    if (!writeAccess) throw ApplicationError.Forbidden('User does not have write access to this survey')
-  }
-
-  const { questions } = req.body
-
-  if (questions) {
-    assertOwnQuestionIds(questions, survey.questionIds)
-    if (!isUniversitySurvey) {
-      await createOrganisationSurveyLog(survey, questions, user)
-    }
-    survey.questionIds = await saveQuestions(questions, survey.questionIds)
-  }
-
-  // Mark updatedAt as changed to force a query. Otherwise save() may not actually run a query and trigger hooks
-  survey.changed('updatedAt', true)
-  const updatedSurvey = await survey.save()
-  await updatedSurvey.populateQuestions()
-
-  res.send(updatedSurvey)
+  const { questions, questionsVersion } = parseInput(QuestionsBodySchema, req.body)
+  res.send(
+    await updateSurveyQuestions({ surveyId: Number(req.params.id), user: req.user, questions, questionsVersion })
+  )
 }
 
 const AtQuerySchema = z.object({
@@ -198,7 +161,7 @@ const getProgrammeSurveyForEditor = async (req: AuthenticatedRequest, res: Respo
 
 export const router = Router()
 
-router.put('/:id', update)
+router.put('/:id/questions', update)
 router.post('/university', createUniversitySurvey)
 router.get('/university/versions', getUniversitySurveyVersions)
 router.get('/university', getUniversitySurvey)

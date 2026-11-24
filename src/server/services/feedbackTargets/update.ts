@@ -2,13 +2,11 @@ import { startOfDay, endOfDay } from 'date-fns'
 import { parseFromTimeZone } from 'date-fns-timezone'
 import _ from 'lodash'
 
-import { Survey, FeedbackTarget } from '../../models'
 import { User } from '../../models/user'
 import { ApplicationError } from '../../util/ApplicationError'
-import { logger } from '../../util/logger'
-import { createFeedbackTargetSurveyLog, createFeedbackTargetLog } from '../auditLog'
+import { assertNoQuestionFields } from '../../util/surveyQuestions'
+import { createFeedbackTargetLog } from '../auditLog'
 import { updateOrganisationSurvey } from '../organisations/organisationSurveys'
-import { saveQuestions } from '../questions/saveQuestions'
 import { getFeedbackTargetContext } from './getFeedbackTargetContext'
 
 const filterUpdates = (update: any) => update !== undefined && update !== null
@@ -19,7 +17,6 @@ const parseUpdates = (body: any) => {
     hidden,
     opensAt,
     closesAt,
-    publicQuestionIds,
     feedbackVisibility,
     continuousFeedbackEnabled,
     sendContinuousFeedbackDigestEmail,
@@ -34,7 +31,6 @@ const parseUpdates = (body: any) => {
       hidden,
       opensAt: opensAt ? startOfDay(parseDate(opensAt)) : undefined,
       closesAt: closesAt ? endOfDay(parseDate(closesAt)) : undefined,
-      publicQuestionIds: publicQuestionIds?.filter((id: any) => !!Number(id)),
       feedbackVisibility,
       continuousFeedbackEnabled,
       sendContinuousFeedbackDigestEmail,
@@ -43,54 +39,6 @@ const parseUpdates = (body: any) => {
     },
     filterUpdates
   )
-
-  return updates
-}
-
-const parseUpdatedQuestionIds = (updatedPublicQuestionIds: number[], questions: any[], publicQuestionIds: number[]) => {
-  let currentIds = updatedPublicQuestionIds ?? publicQuestionIds
-  const configurable = questions.filter(q => q.publicityConfigurable)
-  // remove nonpublic
-  currentIds = _.difference(
-    currentIds,
-    configurable.filter(q => !q.public).map(q => q.id)
-  )
-  // add public
-  currentIds = currentIds.concat(configurable.filter(q => q.public).map(q => q.id))
-
-  return _.uniq(currentIds).filter(Number)
-}
-
-const updateSurvey = async (feedbackTarget: FeedbackTarget, user: User, surveyId: number, questions: any[]) => {
-  const survey = await Survey.findOne({
-    where: {
-      id: surveyId,
-      feedbackTargetId: feedbackTarget.id,
-    },
-  })
-  if (!survey) throw ApplicationError.NotFound('Survey not found')
-  const oldIds = survey.questionIds
-  survey.questionIds = await saveQuestions(questions, oldIds)
-  const newIds = _.difference(survey.questionIds, oldIds)
-
-  if (newIds.length > 1) {
-    logger.error(
-      `[updateSurvey] expected at most 1 new question, got ${newIds.length} (feedbackTargetId=${feedbackTarget.id})`
-    )
-  }
-
-  // remove the deleted question id
-  const removedIds = _.difference(oldIds, survey.questionIds)
-
-  const updates = {
-    questions,
-    newIds,
-    removedIds,
-  }
-
-  await survey.save()
-
-  await createFeedbackTargetSurveyLog(feedbackTarget.id, user, removedIds, newIds)
 
   return updates
 }
@@ -108,8 +56,8 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
     throw ApplicationError.Forbidden('No rights to update feedback target')
   }
 
+  assertNoQuestionFields(body)
   const updates = parseUpdates(body)
-  const { questions, surveyId } = body
 
   if (updates.opensAt || updates.closesAt) {
     if ((updates.opensAt ?? feedbackTarget.opensAt) > (updates.closesAt ?? feedbackTarget.closesAt)) {
@@ -125,33 +73,6 @@ const update = async ({ feedbackTargetId, user, body }: UpdateParams) => {
       }
       await updateOrganisationSurvey(feedbackTarget.id, activityPeriod)
     }
-  }
-
-  if (Array.isArray(questions)) {
-    updates.publicQuestionIds = parseUpdatedQuestionIds(
-      updates.publicQuestionIds,
-      questions,
-      feedbackTarget.publicQuestionIds
-    )
-  }
-
-  if (Array.isArray(questions) && surveyId) {
-    const {
-      newIds,
-      removedIds,
-      questions: updatedQuestions,
-    } = await updateSurvey(feedbackTarget, user, surveyId, questions)
-
-    if (newIds.length === 1) {
-      const newQuestion = questions.find((q: any) => q.id === undefined)
-      if (newQuestion?.public) {
-        updates.publicQuestionIds.push(newIds[0])
-      }
-    }
-
-    updates.publicQuestionIds = updates.publicQuestionIds.filter((id: any) => !removedIds.includes(id))
-
-    updates.questions = updatedQuestions
   }
 
   await createFeedbackTargetLog(feedbackTarget, updates, user)

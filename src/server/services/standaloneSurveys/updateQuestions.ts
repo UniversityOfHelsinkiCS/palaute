@@ -1,25 +1,15 @@
-import type { QuestionData, QuestionSecondaryType, QuestionType } from '@common/types/question'
+import type { QuestionType } from '@common/types/question'
 
 import _ from 'lodash'
 
 import type { StandaloneQuestionVisibility } from '../../models/standaloneSurveyQuestion'
 
 import { sequelize } from '../../db/dbConnection'
-import { Question, StandaloneSurvey, StandaloneSurveyQuestion, User } from '../../models'
+import { StandaloneSurvey, StandaloneSurveyQuestion, User } from '../../models'
 import { ApplicationError } from '../../util/ApplicationError'
-import { validateGroupingQuestions } from '../../util/groupingQuestion'
+import { assertQuestionsVersion, logAfterSave, QuestionInput, saveQuestionList } from '../questions/saveQuestions'
 import { getAccess } from './access'
 import { createLog } from './logs'
-
-export type QuestionInput = {
-  id?: number
-  type: QuestionType
-  secondaryType?: QuestionSecondaryType
-  required: boolean
-  data: QuestionData
-  // Only used for new questions, existing ones change it with updatePublicQuestions
-  visibility?: StandaloneQuestionVisibility
-}
 
 const assertCanPublish = (survey: StandaloneSurvey, questionTypes: QuestionType[]) => {
   if (questionTypes.includes('OPEN') && !survey.isEnded()) {
@@ -27,111 +17,108 @@ const assertCanPublish = (survey: StandaloneSurvey, questionTypes: QuestionType[
   }
 }
 
-export const updateQuestions = async (survey: StandaloneSurvey, questions: QuestionInput[], user: User) => {
+// `public` only sets a new question's visibility, existing ones change it with setQuestionPublicity
+export const updateQuestions = async (
+  survey: StandaloneSurvey,
+  questions: QuestionInput[],
+  questionsVersion: number,
+  user: User
+) => {
   if (!getAccess(survey, user).canEditQuestions) {
     throw ApplicationError.Forbidden('Questions cannot be changed once the survey has opened')
   }
 
-  validateGroupingQuestions(questions)
+  const newQuestions = questions.filter(q => q.clientId)
   assertCanPublish(
     survey,
-    questions.filter(q => !q.id && q.visibility === 'PUBLIC').map(q => q.type)
+    newQuestions.flatMap(q => (q.public && q.type ? [q.type] : []))
   )
 
-  const existing = survey.surveyQuestions ?? []
-  const existingIds = existing.map(sq => sq.questionId)
-  const inputIds = questions.flatMap(q => (q.id ? [q.id] : []))
+  const result = await sequelize.transaction(async transaction => {
+    const locked = await StandaloneSurvey.findByPk(survey.id, { lock: transaction.LOCK.UPDATE, transaction })
+    if (!locked) throw ApplicationError.NotFound('Survey not found')
+    assertQuestionsVersion(locked, questionsVersion)
 
-  if (inputIds.some(id => !existingIds.includes(id))) {
-    throw ApplicationError.BadRequest('Question does not belong to this survey')
-  }
-  if (_.uniq(inputIds).length !== inputIds.length) throw ApplicationError.BadRequest('Duplicate question')
+    const existing = await StandaloneSurveyQuestion.findAll({
+      where: { standaloneSurveyId: survey.id },
+      order: [['position', 'ASC']],
+      transaction,
+    })
 
-  const removedIds = _.difference(existingIds, inputIds)
+    const saved = await saveQuestionList({
+      currentIds: existing.map(sq => sq.questionId),
+      questions,
+      transaction,
+    })
 
-  const created: number[] = []
-  await sequelize.transaction(async transaction => {
-    if (removedIds.length > 0) {
+    if (saved.removedIds.length > 0) {
       await StandaloneSurveyQuestion.destroy({
-        where: { standaloneSurveyId: survey.id, questionId: removedIds },
+        where: { standaloneSurveyId: survey.id, questionId: saved.removedIds },
         transaction,
       })
     }
 
-    for (const [position, input] of questions.entries()) {
-      const values = {
-        type: input.type,
-        secondaryType: input.secondaryType ?? null,
-        required: input.required,
-        data: input.data,
-      }
-
-      if (input.id) {
-        await Question.update(values, { where: { id: input.id }, transaction })
-        await StandaloneSurveyQuestion.update(
-          { position },
-          { where: { standaloneSurveyId: survey.id, questionId: input.id }, transaction }
+    for (const [position, questionId] of saved.questionIds.entries()) {
+      const input = newQuestions.find(q => saved.createdIds[q.clientId!] === questionId)
+      if (input) {
+        const visibility: StandaloneQuestionVisibility =
+          input.public && input.secondaryType !== 'GROUPING' ? 'PUBLIC' : 'PRIVATE'
+        await StandaloneSurveyQuestion.create(
+          { standaloneSurveyId: survey.id, questionId, position, visibility },
+          { transaction }
         )
       } else {
-        const question = await Question.create(values, { transaction })
-        created.push(question.id)
-        await StandaloneSurveyQuestion.create(
-          {
-            standaloneSurveyId: survey.id,
-            questionId: question.id,
-            position,
-            visibility: input.visibility ?? 'PRIVATE',
-          },
-          { transaction }
+        await StandaloneSurveyQuestion.update(
+          { position },
+          { where: { standaloneSurveyId: survey.id, questionId }, transaction }
         )
       }
     }
+
+    locked.questionsVersion += 1
+    await locked.save({ transaction })
+
+    return saved
   })
 
-  const questionsById = _.keyBy(existing, 'questionId')
+  const previousById = _.keyBy(survey.surveyQuestions ?? [], 'questionId')
   const logData: Record<string, unknown> = {}
-  if (created.length > 0) {
-    const first = questions.find(q => !q.id)
-    logData.createQuestion = { ...first?.data, id: created[0] }
+  const [firstCreatedId] = result.newIds
+  if (firstCreatedId) {
+    const created = result.questions.find(q => q.id === firstCreatedId)
+    logData.createQuestion = { ...created?.data, id: firstCreatedId }
   }
-  if (removedIds.length > 0) {
-    logData.deleteQuestion = { ...questionsById[removedIds[0]]?.question?.data, id: removedIds[0] }
+  const [firstRemovedId] = result.removedIds
+  if (firstRemovedId) {
+    logData.deleteQuestion = { ...previousById[firstRemovedId]?.question?.data, id: firstRemovedId }
   }
 
-  await createLog(survey.id, user, logData)
+  await logAfterSave(() => createLog(survey.id, user, logData))
+
+  return { createdIds: result.createdIds }
 }
 
-export const updatePublicQuestions = async (survey: StandaloneSurvey, publicQuestionIds: number[], user: User) => {
-  const surveyQuestions = survey.surveyQuestions ?? []
-  const questionsById = _.keyBy(surveyQuestions, 'questionId')
-
-  if (publicQuestionIds.some(id => !questionsById[id])) {
-    throw ApplicationError.BadRequest('Question does not belong to this survey')
+export const setQuestionPublicity = async (
+  survey: StandaloneSurvey,
+  questionId: number,
+  isPublic: boolean,
+  user: User
+) => {
+  const surveyQuestion = survey.surveyQuestions?.find(sq => sq.questionId === questionId)
+  const question = surveyQuestion?.question
+  if (!surveyQuestion || !question) throw ApplicationError.BadRequest('Question does not belong to this survey')
+  if (question.secondaryType === 'GROUPING') {
+    throw ApplicationError.Forbidden('Publicity of this question cannot be changed')
   }
+  if (isPublic) assertCanPublish(survey, [question.type])
 
-  const wasPublic = surveyQuestions.filter(sq => sq.visibility === 'PUBLIC').map(sq => sq.questionId)
-  const enabled = _.difference(publicQuestionIds, wasPublic)
-  const disabled = _.difference(wasPublic, publicQuestionIds)
+  const visibility: StandaloneQuestionVisibility = isPublic ? 'PUBLIC' : 'PRIVATE'
+  if (surveyQuestion.visibility === visibility) return
 
-  assertCanPublish(
-    survey,
-    enabled.map(id => questionsById[id].question!.type)
+  await StandaloneSurveyQuestion.update({ visibility }, { where: { id: surveyQuestion.id } })
+  await logAfterSave(() =>
+    createLog(survey.id, user, {
+      [isPublic ? 'enabledPublicQuestions' : 'disabledPublicQuestions']: [{ id: questionId, data: question.data }],
+    })
   )
-
-  await sequelize.transaction(async transaction => {
-    const setVisibility = (questionIds: number[], visibility: StandaloneQuestionVisibility) =>
-      StandaloneSurveyQuestion.update(
-        { visibility },
-        { where: { standaloneSurveyId: survey.id, questionId: questionIds }, transaction }
-      )
-    if (enabled.length > 0) await setVisibility(enabled, 'PUBLIC')
-    if (disabled.length > 0) await setVisibility(disabled, 'PRIVATE')
-  })
-
-  const toLogQuestion = (id: number) => ({ id, data: questionsById[id].question?.data })
-  const logData: Record<string, unknown> = {}
-  if (enabled.length > 0) logData.enabledPublicQuestions = enabled.map(toLogQuestion)
-  if (disabled.length > 0) logData.disabledPublicQuestions = disabled.map(toLogQuestion)
-
-  await createLog(survey.id, user, logData)
 }

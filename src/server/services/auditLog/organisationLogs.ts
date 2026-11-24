@@ -1,5 +1,4 @@
 import _ from 'lodash'
-import { Op } from 'sequelize'
 
 import { OrganisationLog, Organisation, Question, User } from '../../models'
 import { withMockedBy } from './withMockedBy'
@@ -14,14 +13,13 @@ const createFromData = async (organisationId: string, user: User, data: object) 
   return log
 }
 
-export const createOrganisationSurveyLog = async (survey: any, questions: any[], user: User) => {
-  let previousQuestions: any[] = await Question.findAll({
-    where: {
-      id: { [Op.in]: survey.questionIds },
-    },
-    attributes: ['id', 'type', 'data', 'required'],
-  })
-  previousQuestions = previousQuestions.map(question => question.dataValues)
+export const createOrganisationSurveyLog = async (
+  survey: any,
+  questions: any[],
+  user: User,
+  previousRows: Question[]
+) => {
+  const previousQuestions: any[] = previousRows.map(({ id, type, data, required }) => ({ id, type, data, required }))
 
   questions = questions.map(({ id, type, data, required }) => ({
     id,
@@ -57,9 +55,8 @@ export const createOrganisationSurveyLog = async (survey: any, questions: any[],
 
   for (const question of questions) {
     let data
-    if (question.id) {
-      const previousQuestion = previousQuestions.find(q => q.id === question.id)
-      // Get the changed values of the question
+    const previousQuestion = question.id && previousQuestions.find(q => q.id === question.id)
+    if (previousQuestion) {
       const difference = _.fromPairs(
         _.differenceWith(_.toPairs(question), _.toPairs(previousQuestion), (a, b) => _.isEqual(a, b))
       )
@@ -111,8 +108,12 @@ export const createOrganisationLog = async (organisation: Organisation, updates:
   }
 
   if (Array.isArray(updates.publicQuestionIds)) {
-    data.addedPublicQuestionIds = _.difference(updates.publicQuestionIds, organisation.publicQuestionIds)
-    data.removedPublicQuestionIds = _.difference(organisation.publicQuestionIds, updates.publicQuestionIds)
+    const added = _.difference(updates.publicQuestionIds, organisation.publicQuestionIds)
+    const removed = _.difference(organisation.publicQuestionIds, updates.publicQuestionIds)
+    if (added.length > 0 || removed.length > 0) {
+      data.addedPublicQuestionIds = added
+      data.removedPublicQuestionIds = removed
+    }
   }
 
   if (updates.studentListVisible !== undefined) data.studentListVisible = Boolean(updates.studentListVisible)

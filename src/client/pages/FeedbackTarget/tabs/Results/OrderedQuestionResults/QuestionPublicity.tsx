@@ -11,7 +11,7 @@ export type PublicitySettings = {
   publicQuestionIds: number[]
   configurableQuestionIds?: number[]
   isOpen: boolean
-  savePublicQuestionIds: (publicQuestionIds: number[]) => Promise<unknown>
+  setQuestionPublicity: (questionId: number, isPublic: boolean) => Promise<unknown>
 }
 
 const QuestionPublicity = ({
@@ -19,11 +19,11 @@ const QuestionPublicity = ({
   publicQuestionIds,
   configurableQuestionIds,
   isOpen,
-  savePublicQuestionIds,
+  setQuestionPublicity,
 }: PublicitySettings & { question: ResultQuestion }) => {
   const { t, i18n } = useTranslation()
   const context = useTranslationContext()
-  const { isPublic, togglePublicity } = useQuestionPublicity({ question, publicQuestionIds, savePublicQuestionIds })
+  const { isPublic, togglePublicity } = useQuestionPublicity({ question, publicQuestionIds, setQuestionPublicity })
 
   const isConfigurable = configurableQuestionIds?.includes(question.id) ?? false
   const isLockedUntilClose = question.type === 'OPEN' && isOpen

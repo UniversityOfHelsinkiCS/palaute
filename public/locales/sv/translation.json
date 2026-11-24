@@ -279,7 +279,9 @@
     "removeSelected": "Ta bort valda frågor",
     "removeManyConfirmation": "Är du säker på att du vill ta bort de {{count}} valda frågorna?",
     "selectAll": "Markera alla",
-    "deselectAll": "Avmarkera alla"
+    "deselectAll": "Avmarkera alla",
+    "saveFailed": "Ändringarna kunde inte sparas.",
+    "changedElsewhere": "Frågorna har ändrats någon annanstans. Ladda om sidan och försök igen."
   },
   "editFeedbackTarget": {
     "closesAt": "Stängs",

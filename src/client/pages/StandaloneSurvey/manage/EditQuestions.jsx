@@ -1,35 +1,20 @@
-import { useSnackbar } from 'notistack'
 import { useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
 
 import QuestionEditor from '../../../components/QuestionEditor/QuestionEditor'
+import { SaveRejected } from '../../../components/QuestionEditor/useQuestionSaving'
 import { validateQuestions } from '../../../components/QuestionEditor/utils'
 import useInteractiveMutation from '../../../hooks/useInteractiveMutation'
-import { useUpdatePublicQuestions, useUpdateQuestions } from '../api'
-
-const toQuestionInputs = questions =>
-  questions.map(({ id, type, secondaryType, required, data, public: isPublic }) => ({
-    ...(id ? { id } : { visibility: isPublic ? 'PUBLIC' : 'PRIVATE' }),
-    type,
-    secondaryType: secondaryType === 'GROUPING' ? 'GROUPING' : null,
-    required: Boolean(required),
-    data,
-  }))
+import { useSetQuestionPublicity, useUpdateQuestions } from '../api'
 
 const withPublicity = (survey, publicQuestionIds) =>
   survey.questions.map(q => ({ ...q, public: publicQuestionIds.includes(q.id) }))
 
 const EditQuestions = ({ survey }) => {
   const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
   const updateQuestions = useUpdateQuestions(survey.id)
-  const updatePublicQuestions = useUpdatePublicQuestions(survey.id)
-  const save = useInteractiveMutation(questions =>
-    updateQuestions.mutateAsync({ questions: toQuestionInputs(questions) })
-  )
-  const savePublicQuestionIds = useInteractiveMutation(publicQuestionIds =>
-    updatePublicQuestions.mutateAsync({ publicQuestionIds })
-  )
+  const setPublicity = useSetQuestionPublicity(survey.id)
+  const savePublicity = useInteractiveMutation(publicity => setPublicity.mutateAsync(publicity))
 
   const initialValues = useMemo(
     () => ({
@@ -43,23 +28,19 @@ const EditQuestions = ({ survey }) => {
     [survey]
   )
 
-  const handleSubmit = async values => {
-    if (!validateQuestions(values)) {
-      enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
-      return
-    }
-    await save(values.questions)
+  const saveQuestions = (payload, values) => {
+    if (!validateQuestions(values)) throw new SaveRejected(t('common:choiceQuestionError'))
+    return updateQuestions.mutateAsync(payload)
   }
 
-  const handlePublicityToggle = async (question, isPublic) => {
-    const publicIds = survey.publicQuestionIds.filter(id => id !== question.id)
-    await savePublicQuestionIds(isPublic ? [...publicIds, question.id] : publicIds)
-  }
+  const handlePublicityToggle = (question, isPublic) => savePublicity({ questionId: question.id, isPublic })
 
   return (
     <QuestionEditor
+      key={survey.id}
       initialValues={initialValues}
-      handleSubmit={handleSubmit}
+      questionsVersion={survey.questionsVersion}
+      saveQuestions={saveQuestions}
       handlePublicityToggle={handlePublicityToggle}
       groupingQuestionSettings
       movableGroupingQuestion

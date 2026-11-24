@@ -25,7 +25,7 @@ type OrderedQuestionResultsProps = {
   isOrganisationUser: boolean
   isOpen: boolean
   feedbackCount: number
-  savePublicQuestionIds: (publicQuestionIds: number[]) => Promise<unknown>
+  setQuestionPublicity: (questionId: number, isPublic: boolean) => Promise<unknown>
   openAnswerActions?: OpenAnswerActions
   showTable: boolean
   baseHeadingLevel?: number
@@ -41,7 +41,7 @@ const OrderedQuestionResults = ({
   isOrganisationUser,
   isOpen,
   feedbackCount,
-  savePublicQuestionIds,
+  setQuestionPublicity,
   openAnswerActions,
   showTable,
   baseHeadingLevel = 2,
@@ -60,7 +60,7 @@ const OrderedQuestionResults = ({
   )
 
   const publicity: PublicitySettings | undefined = isResponsibleTeacher
-    ? { publicQuestionIds, configurableQuestionIds: publicityConfigurableQuestionIds, isOpen, savePublicQuestionIds }
+    ? { publicQuestionIds, configurableQuestionIds: publicityConfigurableQuestionIds, isOpen, setQuestionPublicity }
     : undefined
 
   return (

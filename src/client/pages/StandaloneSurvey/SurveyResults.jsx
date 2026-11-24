@@ -15,7 +15,7 @@ const SurveyResults = ({
   isLoading,
   isOpen,
   isResponsibleUser = false,
-  savePublicQuestionIds,
+  setQuestionPublicity,
   openAnswerActions,
   exportMenu,
   groupSelector,
@@ -55,7 +55,9 @@ const SurveyResults = ({
             </Alert>
           ) : (
             <OrderedQuestionResults
-              publicityConfigurableQuestionIds={isResponsibleUser ? questions.map(q => q.id) : []}
+              publicityConfigurableQuestionIds={
+                isResponsibleUser ? questions.filter(q => q.secondaryType !== 'GROUPING').map(q => q.id) : []
+              }
               publicQuestionIds={publicQuestionIds}
               questions={questions}
               feedbacks={results.feedbacks}
@@ -63,7 +65,7 @@ const SurveyResults = ({
               isOrganisationUser={false}
               isOpen={isOpen}
               feedbackCount={responseCount}
-              savePublicQuestionIds={savePublicQuestionIds}
+              setQuestionPublicity={setQuestionPublicity}
               openAnswerActions={openAnswerActions}
               showTable={showTable}
             />

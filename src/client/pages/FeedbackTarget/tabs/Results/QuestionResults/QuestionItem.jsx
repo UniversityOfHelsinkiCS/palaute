@@ -55,13 +55,13 @@ const QuestionItem = ({
   feedbackCount,
   disabled,
   disabledInfo,
-  savePublicQuestionIds,
+  setQuestionPublicity,
   openAnswerActions,
   showTable,
   inTabPanel = false,
 }) => {
   const { t, i18n } = useTranslation()
-  const { isPublic, togglePublicity } = useQuestionPublicity({ question, publicQuestionIds, savePublicQuestionIds })
+  const { isPublic, togglePublicity } = useQuestionPublicity({ question, publicQuestionIds, setQuestionPublicity })
 
   const Component = componentByType[question.type]
   const content = Component ? (

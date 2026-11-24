@@ -285,7 +285,9 @@
     "removeSelected": "Poista valitut kysymykset",
     "removeManyConfirmation": "Haluatko varmasti poistaa valitut {{count}} kysymystä?",
     "selectAll": "Valitse kaikki",
-    "deselectAll": "Tyhjennä valinnat"
+    "deselectAll": "Tyhjennä valinnat",
+    "saveFailed": "Muutosten tallentaminen epäonnistui.",
+    "changedElsewhere": "Kysymyksiä on muutettu muualla. Päivitä sivu ja yritä uudelleen."
   },
   "editFeedbackTarget": {
     "closesAt": "Sulkeutuu",

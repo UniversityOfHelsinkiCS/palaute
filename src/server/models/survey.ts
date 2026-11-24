@@ -24,6 +24,8 @@ class Survey extends Model<InferAttributes<Survey>, InferCreationAttributes<Surv
   declare type: 'feedbackTarget' | 'courseUnit' | 'programme' | 'university'
   declare typeId: string
   declare validFrom: CreationOptional<Date | null>
+  // Bumped by every question save, a save based on an older version is refused
+  declare questionsVersion: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -80,6 +82,11 @@ Survey.init(
     validFrom: {
       type: DATE,
       allowNull: true,
+    },
+    questionsVersion: {
+      type: INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
     createdAt: {
       type: DATE,

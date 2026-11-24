@@ -1,6 +1,5 @@
 import { Box } from '@mui/material'
 import { useSnackbar } from 'notistack'
-import { useTranslation } from 'react-i18next'
 
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
@@ -8,31 +7,20 @@ import { NorButton } from '../common/NorButton'
 import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
 
-const saveSurveyValues = async (values, surveyId) => {
-  const { questions } = values
-  const editableQuestions = questions.filter(({ editable }) => editable)
-
-  const { data } = await apiClient.put(`/surveys/${surveyId}`, {
-    questions: editableQuestions,
-  })
-
+const saveQuestions = async (surveyId, payload) => {
+  const { data } = await apiClient.put(`/surveys/${surveyId}/questions`, payload)
+  // The editor reads the survey once when it opens, so the cache must not keep the old questions
+  queryClient.setQueryData(['universitySurveyVersions'], versions =>
+    versions?.map(survey => (survey.id === surveyId ? { ...survey, ...data } : survey))
+  )
+  // The server works out which questions are public
+  void queryClient.invalidateQueries({ queryKey: ['universitySurveyVersions'] })
+  void queryClient.invalidateQueries({ queryKey: ['universitySurvey'] })
   return data
 }
 
 const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
-  const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
-
-  const handleSubmit = async values => {
-    try {
-      await saveSurveyValues(values, universitySurvey.id)
-      await queryClient.invalidateQueries({ queryKey: ['universitySurveyVersions'] })
-      await queryClient.invalidateQueries({ queryKey: ['universitySurvey'] })
-      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
-  }
 
   const onPublicityToggle = () => {
     enqueueSnackbar(`
@@ -53,8 +41,10 @@ const UniversitySurvey = ({ universitySurvey, onCreateVersionClick }) => {
   return (
     <>
       <QuestionEditor
+        key={universitySurvey.id}
         initialValues={initialValues}
-        handleSubmit={handleSubmit}
+        questionsVersion={universitySurvey.questionsVersion}
+        saveQuestions={payload => saveQuestions(universitySurvey.id, payload)}
         handlePublicityToggle={onPublicityToggle}
         editorLevel="university"
       />

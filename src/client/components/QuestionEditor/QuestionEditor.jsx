@@ -9,6 +9,7 @@ import { NorButton } from '../common/NorButton'
 import GroupingQuestionSettings from './GroupingQuestionSettings'
 import QuestionCard from './QuestionCard'
 import QuestionEditorActions from './QuestionEditorActions'
+import useQuestionSaving from './useQuestionSaving'
 import { createQuestion, getQuestionId, copyQuestion, questionCanMoveUp, questionCanMoveDown } from './utils'
 
 const TypeMenu = ({ id, labelledBy, anchorEl, open, onClose, onChooseType, language }) => {
@@ -69,7 +70,7 @@ const QuestionEditorForm = ({
   groupingQuestionSettings,
   groups,
   editorLevel,
-  movableGroupingQuestion,
+  movableGroupingQuestion = false,
 }) => {
   const addButtonRef = useRef()
   const textContentButtonRef = useRef()
@@ -81,19 +82,29 @@ const QuestionEditorForm = ({
   const addButtonId = useId()
   const typeMenuId = useId()
   const [editingQuestionId, setEditingQuestionId] = useState(null)
+  // An added question that hasn't been through Done yet, cancelling it removes it
+  const [newQuestionId, setNewQuestionId] = useState(null)
 
-  const handleStopEditing = async () => {
+  const startEditingNew = question => {
+    setEditingQuestionId(getQuestionId(question))
+    setNewQuestionId(getQuestionId(question))
+  }
+
+  const cancelEditing = () => {
+    setEditingQuestionId(null)
+    setNewQuestionId(null)
+  }
+
+  const handleStopEditing = () => {
     if (editingQuestionId) {
-      setEditingQuestionId(null)
+      cancelEditing()
       saveChanges()
     }
   }
 
   const getAddButtonRef = type => (type === 'TEXT' ? textContentButtonRef : addButtonRef)
 
-  const makePublicityToggle = question => isPublic => {
-    handlePublicityToggle(question, isPublic)
-  }
+  const makePublicityToggle = question => isPublic => handlePublicityToggle(question, isPublic)
 
   const isGroupingQuestion = question => question.secondaryType === 'GROUPING'
 
@@ -118,18 +129,19 @@ const QuestionEditorForm = ({
       addButtonRef={addGroupingQuestionButtonRef}
       onAddQuestion={question => {
         addGroupingQuestion(question)
-        setEditingQuestionId(getQuestionId(question))
+        startEditingNew(question)
       }}
       onRemove={() => {
         removeGroupingQuestion()
-        setEditingQuestionId(null)
+        cancelEditing()
         saveChanges()
       }}
       onCancelEditing={isNew => {
         if (isNew) removeGroupingQuestion()
-        setEditingQuestionId(null)
+        cancelEditing()
       }}
       isEditing={editingQuestionId === getQuestionId(groupingQuestion)}
+      isNew={newQuestionId === getQuestionId(groupingQuestion)}
       onStartEditing={() => setEditingQuestionId(getQuestionId(groupingQuestion))}
       onStopEditing={handleStopEditing}
       {...cardProps}
@@ -177,9 +189,7 @@ const QuestionEditorForm = ({
                     const isMovableGroupingQuestion = movableGroupingQuestion && isGroupingQuestion(question)
 
                     return (
-                      // A stable key keeps the grouping card mounted when saving gives the question an id,
-                      // so focus can return to its edit button
-                      <Box component="li" key={isMovableGroupingQuestion ? 'grouping' : getQuestionId(question)}>
+                      <Box component="li" key={getQuestionId(question)}>
                         {isMovableGroupingQuestion ? (
                           renderGroupingQuestionSettings(listCardProps)
                         ) : (
@@ -198,11 +208,12 @@ const QuestionEditorForm = ({
                               saveChanges()
                             }}
                             isEditing={editingQuestionId === getQuestionId(question)}
+                            isNew={newQuestionId === getQuestionId(question)}
                             onStopEditing={isNew => {
                               handleStopEditing()
                               if (isNew) requestAnimationFrame(() => getAddButtonRef(question.type).current?.focus())
                             }}
-                            onCancelEditing={() => setEditingQuestionId(null)}
+                            onCancelEditing={cancelEditing}
                             onCancelledNewExited={() => {
                               // Move focus out of the closed dialog before removing its card, otherwise
                               // Firefox does not announce the newly focused button
@@ -227,9 +238,14 @@ const QuestionEditorForm = ({
                 anchorEl={addButtonRef.current}
                 onClose={() => setMenuOpen(false)}
                 onChooseType={type => {
-                  const newQuestion = createQuestion({ type })
+                  // New programme questions start private, university question publicity isn't configurable
+                  const newQuestion = createQuestion({
+                    type,
+                    options:
+                      { programme: { public: false }, university: { publicityConfigurable: false } }[editorLevel] ?? {},
+                  })
                   arrayHelpers.push(newQuestion)
-                  setEditingQuestionId(getQuestionId(newQuestion))
+                  startEditingNew(newQuestion)
                 }}
                 language={i18n.language}
               />
@@ -265,7 +281,7 @@ const QuestionEditorForm = ({
                   onClick={() => {
                     const textContent = createQuestion({ type: 'TEXT' })
                     arrayHelpers.push(textContent)
-                    setEditingQuestionId(getQuestionId(textContent))
+                    startEditingNew(textContent)
                   }}
                   ref={textContentButtonRef}
                 >
@@ -281,41 +297,44 @@ const QuestionEditorForm = ({
   )
 }
 
+/** The form is filled from initialValues once, server data that changes later doesn't reset it */
 const QuestionEditor = ({
   initialValues,
-  teacherQuestionIds,
-  handleSubmit,
-  handlePublicityToggle,
+  questionsVersion,
+  saveQuestions,
   copyFromCourseDialog,
-  groupingQuestionSettings,
-  groups,
+  teacherQuestionIds,
   userCreated,
   curStartDate,
-  editorLevel,
-  movableGroupingQuestion = false,
-}) => (
-  <Formik initialValues={initialValues} onSubmit={handleSubmit} validateOnChange={false} enableReinitialize>
-    {({ handleSubmit }) => (
-      <QuestionEditorForm
-        saveChanges={handleSubmit}
-        handlePublicityToggle={handlePublicityToggle}
-        actions={
-          copyFromCourseDialog && (
-            <QuestionEditorActions
-              onSubmit={handleSubmit}
-              copyUniversityQuestionsButton={userCreated}
-              deletableQuestionIds={teacherQuestionIds}
-              curStartDate={curStartDate}
-            />
-          )
-        }
-        groupingQuestionSettings={groupingQuestionSettings}
-        groups={groups}
-        editorLevel={editorLevel}
-        movableGroupingQuestion={movableGroupingQuestion}
-      />
-    )}
-  </Formik>
-)
+  ...formProps
+}) => {
+  const saving = useQuestionSaving({ initialValues, questionsVersion, saveQuestions })
+
+  return (
+    <Formik
+      innerRef={saving.formikRef}
+      initialValues={initialValues}
+      onSubmit={saving.request}
+      validateOnChange={false}
+    >
+      {({ handleSubmit }) => (
+        <QuestionEditorForm
+          {...formProps}
+          saveChanges={handleSubmit}
+          actions={
+            copyFromCourseDialog && (
+              <QuestionEditorActions
+                onSubmit={handleSubmit}
+                copyUniversityQuestionsButton={userCreated}
+                deletableQuestionIds={teacherQuestionIds}
+                curStartDate={curStartDate}
+              />
+            )
+          }
+        />
+      )}
+    </Formik>
+  )
+}
 
 export default QuestionEditor

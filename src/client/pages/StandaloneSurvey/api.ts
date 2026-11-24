@@ -7,8 +7,6 @@ import { isAxiosError } from 'axios'
 import apiClient from '../../util/apiClient'
 import queryClient from '../../util/queryClient'
 
-export type StandaloneQuestionVisibility = 'PUBLIC' | 'PRIVATE'
-
 export type ResultsData = {
   feedbacks: { data: QuestionAnswer[] }[]
   responseCount: number
@@ -41,6 +39,7 @@ export type ManagedSurvey = {
   opensAt: string
   closesAt: string
   createdAt: string
+  questionsVersion: number
   questions: Question[]
   publicQuestionIds: number[]
   responsibleUsers: ResponsibleUser[]
@@ -114,9 +113,9 @@ export const useManagedResults = (id: number | string, groupId: string) =>
 export const useSurveyLogs = (id: number | string) =>
   useGet<any[]>(['standaloneSurveyLogs', String(id)], `/standalone-surveys/${id}/logs`)
 
-const useSurveyUpdate = <T>(id: number | string, path: string) =>
+const useSurveyUpdate = <T, R extends ManagedSurvey = ManagedSurvey>(id: number | string, path: string) =>
   useMutation({
-    mutationFn: async (body: T) => (await apiClient.put<ManagedSurvey>(`/standalone-surveys/${id}${path}`, body)).data,
+    mutationFn: async (body: T) => (await apiClient.put<R>(`/standalone-surveys/${id}${path}`, body)).data,
     onSuccess: async survey => {
       queryClient.setQueryData(surveyKey(id), survey)
       await queryClient.invalidateQueries({ queryKey: ['standaloneSurveyLogs', String(id)] })
@@ -125,19 +124,17 @@ const useSurveyUpdate = <T>(id: number | string, path: string) =>
     },
   })
 
-export type QuestionInput = Omit<Question, 'id'> & {
-  id?: number
-  visibility?: StandaloneQuestionVisibility
-}
-
 export const useUpdateSurvey = (id: number | string) =>
   useSurveyUpdate<{ name?: LocalizedString; opensAt?: Date; closesAt?: Date }>(id, '')
 
 export const useUpdateQuestions = (id: number | string) =>
-  useSurveyUpdate<{ questions: QuestionInput[] }>(id, '/questions')
+  useSurveyUpdate<
+    { questions: unknown[]; questionsVersion: number },
+    ManagedSurvey & { createdIds: Record<string, number> }
+  >(id, '/questions')
 
-export const useUpdatePublicQuestions = (id: number | string) =>
-  useSurveyUpdate<{ publicQuestionIds: number[] }>(id, '/public-questions')
+export const useSetQuestionPublicity = (id: number | string) =>
+  useSurveyUpdate<{ questionId: number; isPublic: boolean }>(id, '/question-publicity')
 
 export const useUpdateResponsibleUsers = (id: number | string) =>
   useSurveyUpdate<{ userIds: string[] }>(id, '/responsible-users')

@@ -196,7 +196,7 @@ const Results = () => {
     isOrganisationUser: isOrganisationReader,
     isOpen,
     feedbackCount: groupFeedbackCount,
-    savePublicQuestionIds: publicityMutation.mutateAsync,
+    setQuestionPublicity: (questionId, isPublic) => publicityMutation.mutateAsync({ questionId, isPublic }),
     openAnswerActions,
     showTable,
   }

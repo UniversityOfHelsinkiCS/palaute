@@ -80,17 +80,9 @@ Open questions can be made public only after the survey has closed, so that some
 
 Fix: leave open questions out of the public results while the survey hasn't ended, or make them private again when the survey is reopened.
 
-### Survey questions can be changed after the survey has opened
-
-`src/server/services/feedbackTargets/update.ts:178-195`
-
-Only the client locks the Questions tab once feedback opens (`FeedbackTargetContent.jsx:175`). The server accepts question changes at any time, so answered questions can be removed or changed.
-
-Fix: reject `questions` for non-admins once `opensAt` has passed.
-
 ### Survey dates can be changed after the survey has opened or closed
 
-`src/server/services/feedbackTargets/update.ts:154-158`
+`src/server/services/feedbackTargets/update.ts:60-63`
 
 Only the client limits the dates (`Dates/utils.js:27-40`, `FeedbackPeriodForm.jsx:30-38`). The server checks only that the closing date isn't before the opening date, so an open survey's opening date can be moved and a closed survey reopened.
 
@@ -175,14 +167,6 @@ Fix: run the writes in one transaction. `createUserFeedbackTargets` catches and 
 
 Fix: pass `{ transaction: t }` to every query.
 
-### A new programme question's publicity can't be set before a reload
-
-`src/client/components/QuestionEditor/ProgrammeSurvey.jsx:53-56`
-
-Until the page is reloaded after saving, a new programme question's card has no id and shows Public, although a new programme question isn't public. The publicity toggle uses the question's id, so it doesn't work before a reload.
-
-Fix: update the editor with the saved questions' ids after saving.
-
 ### The grouping question is carried over with the old groups
 
 `src/server/services/surveys/teacherSurvey.ts:10-27`
@@ -247,7 +231,7 @@ Fix: exclude `userCreated` feedback targets.
 
 ## Dead code and data
 
-- `feedback_targets.feedback_visibility` has had no UI since commit 493aaab9, but the server still accepts and reads it (`update.ts:22`, `getFeedbacks.ts:148`). 47 surveys still have `ALL`.
+- `feedback_targets.feedback_visibility` has had no UI since commit 493aaab9, but the server still accepts and reads it (`update.ts:19`, `getFeedbacks.ts:148`). 47 surveys still have `ALL`.
 - The "not giving feedback" button needs `course_units_organisations.no_feedback_allowed`, which nothing sets and which is never true in production.
 - `feedbackTargetResults:useLegacyVersion`, `STUDENT_FEEDBACK_SHOW_REALISATION_NAME`, `FEEDBACK_RESPONSE_EMAILS_SINCE_DATE` and `organisations.responsible_user_id` aren't used.
 

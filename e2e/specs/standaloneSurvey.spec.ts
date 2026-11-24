@@ -26,10 +26,14 @@ const api = (request: APIRequestContext) => {
       ).body.id as number,
     get: (id: number, user: TestUser = admin) => send('GET', `/${id}`, user),
     update: (id: number, data: unknown, user: TestUser = admin) => send('PUT', `/${id}`, user, data),
-    setQuestions: (id: number, questions: unknown[], user: TestUser = admin) =>
-      send('PUT', `/${id}/questions`, user, { questions }),
-    setPublicQuestions: (id: number, publicQuestionIds: number[], user: TestUser = admin) =>
-      send('PUT', `/${id}/public-questions`, user, { publicQuestionIds }),
+    setQuestions: async (id: number, questions: Record<string, unknown>[], user: TestUser = admin) =>
+      send('PUT', `/${id}/questions`, user, {
+        questions: questions.map((q, index) => (q.id ? q : { clientId: `new-${index}`, ...q })),
+        questionsVersion: (await send('GET', `/${id}`, admin)).body.questionsVersion,
+      }),
+    putQuestions: (id: number, data: unknown, user: TestUser = admin) => send('PUT', `/${id}/questions`, user, data),
+    setPublicity: (id: number, questionId: number, isPublic: boolean, user: TestUser = admin) =>
+      send('PUT', `/${id}/question-publicity`, user, { questionId, isPublic }),
     answer: (token: string, data: unknown[], user: TestUser) =>
       send('PUT', `/answer/${token}/response`, user, { data }),
     deleteAnswer: (token: string, user: TestUser) => send('DELETE', `/answer/${token}/response`, user),
@@ -41,8 +45,8 @@ const api = (request: APIRequestContext) => {
   }
 }
 
-const likert = { type: 'LIKERT', required: true, data: { label: { en: 'I like my job' } }, visibility: 'PUBLIC' }
-const open = { type: 'OPEN', required: false, data: { label: { en: 'Anything else?' } }, visibility: 'PRIVATE' }
+const likert = { type: 'LIKERT', required: true, data: { label: { en: 'I like my job' } }, public: true }
+const open = { type: 'OPEN', required: false, data: { label: { en: 'Anything else?' } }, public: false }
 
 const setupSurvey = async (request: APIRequestContext) => {
   const surveys = api(request)
@@ -213,7 +217,7 @@ test.describe('Standalone surveys', () => {
           { id: 'b', label: { en: 'B' } },
         ],
       },
-      visibility: 'PRIVATE',
+      public: false,
     }
     const { body } = await surveys.setQuestions(id, [likert, grouping])
     const [likertId, groupingId] = body.questions.map((q: { id: number }) => q.id)
@@ -233,11 +237,11 @@ test.describe('Standalone surveys', () => {
 
   test('open answers are published only after the survey closes', async ({ request }) => {
     const surveys = api(request)
-    const { id, likertId, openId } = await setupSurvey(request)
+    const { id, openId } = await setupSurvey(request)
 
-    expect((await surveys.setPublicQuestions(id, [likertId, openId])).status).toBe(403)
+    expect((await surveys.setPublicity(id, openId, true)).status).toBe(403)
     await surveys.update(id, { opensAt: subDays(new Date(), 3), closesAt: subDays(new Date(), 1) })
-    expect((await surveys.setPublicQuestions(id, [likertId, openId])).status).toBe(200)
+    expect((await surveys.setPublicity(id, openId, true)).status).toBe(200)
   })
 
   test('a closed survey can be renamed from the settings', async ({ page, loginAs, request }) => {
@@ -269,7 +273,7 @@ test.describe('Standalone surveys', () => {
 
   test('only visibility can be changed once the survey has opened', async ({ request }) => {
     const surveys = api(request)
-    const { id } = await setupSurvey(request)
+    const { id, likertId } = await setupSurvey(request)
     const { body } = await surveys.get(id)
     const current = body.questions.map(
       ({ id: questionId, type, required, data }: { id: number; type: string; required: boolean; data: unknown }) => ({
@@ -283,7 +287,30 @@ test.describe('Standalone surveys', () => {
     const relabelled = [{ ...current[0], data: { label: { en: 'I love my job' } } }, current[1]]
     expect((await surveys.setQuestions(id, relabelled, teacher)).status).toBe(403)
     expect((await surveys.setQuestions(id, current, teacher)).status).toBe(403)
-    expect((await surveys.setPublicQuestions(id, [], teacher)).status).toBe(200)
+    expect((await surveys.setPublicity(id, likertId, false, teacher)).status).toBe(200)
     expect((await surveys.setQuestions(id, relabelled, admin)).status).toBe(200)
+  })
+
+  test('refuses a question save based on an outdated version', async ({ request }) => {
+    const surveys = api(request)
+    const { id } = await setupSurvey(request)
+    const { body } = await surveys.get(id)
+    const current = body.questions.map(
+      ({ id: questionId, type, required, data }: { id: number; type: string; required: boolean; data: unknown }) => ({
+        id: questionId,
+        type,
+        required,
+        data,
+      })
+    )
+
+    const saved = await surveys.putQuestions(id, { questions: current, questionsVersion: body.questionsVersion })
+    expect(saved.status).toBe(200)
+    const stale = await surveys.putQuestions(id, {
+      questions: [...current, { clientId: 'late', ...open }],
+      questionsVersion: body.questionsVersion,
+    })
+    expect(stale.status).toBe(409)
+    expect((await surveys.get(id)).body.questions).toHaveLength(2)
   })
 })

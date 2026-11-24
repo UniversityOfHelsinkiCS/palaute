@@ -6,7 +6,7 @@ import useOpenAnswerActions from '../../../hooks/useOpenAnswerActions'
 import { getLanguageValue } from '../../../util/languageUtils'
 import ExportFeedbacksMenu from '../../FeedbackTarget/tabs/Results/ExportFeedbacksMenu'
 import GroupSelector from '../../FeedbackTarget/tabs/Results/GroupSelector'
-import { useManagedResults, useUpdatePublicQuestions } from '../api'
+import { useManagedResults, useSetQuestionPublicity } from '../api'
 import SurveyResults from '../SurveyResults'
 
 const getFilename = (survey, language) =>
@@ -26,7 +26,7 @@ const ManageResults = ({ survey, isOpen }) => {
   const [groupId, setGroupId] = useState('ALL')
   const results = useManagedResults(survey.id, groupId)
   const groups = getGroups(survey)
-  const updatePublicQuestions = useUpdatePublicQuestions(survey.id)
+  const setPublicity = useSetQuestionPublicity(survey.id)
   const openAnswerActions = useOpenAnswerActions({
     hidePath: `/standalone-surveys/${survey.id}/hide-answer`,
     deletePath: `/standalone-surveys/${survey.id}/delete-answer`,
@@ -44,7 +44,7 @@ const ManageResults = ({ survey, isOpen }) => {
         isLoading={results.isLoading}
         isOpen={isOpen}
         isResponsibleUser
-        savePublicQuestionIds={publicQuestionIds => updatePublicQuestions.mutateAsync({ publicQuestionIds })}
+        setQuestionPublicity={(questionId, isPublic) => setPublicity.mutateAsync({ questionId, isPublic })}
         openAnswerActions={openAnswerActions}
         groupSelector={
           groups.length > 1 && (

@@ -194,7 +194,8 @@ test.describe('Teacher view', () => {
     ).toBeVisible()
     // The save starts only after the confirmation has closed, so wait for the request before reloading
     const saved = page.waitForResponse(
-      response => response.request().method() === 'PUT' && response.url().endsWith(`/feedback-targets/${fbtId}`)
+      response =>
+        response.request().method() === 'PUT' && response.url().endsWith(`/feedback-targets/${fbtId}/questions`)
     )
     await page.locator('[data-cy=question-card-remove-empty-options-confirm]').click()
     await saved

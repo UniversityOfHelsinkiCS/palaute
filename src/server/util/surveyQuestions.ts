@@ -2,7 +2,14 @@ import _ from 'lodash'
 
 import { ApplicationError } from './ApplicationError'
 
-export const assertOwnQuestionIds = (questions: { id?: number | null }[], surveyQuestionIds: number[]) => {
+// Clients from before the separate question endpoints still send these, they must get an error, not a silent success
+export const assertNoQuestionFields = (body: Record<string, unknown> | undefined) => {
+  if (['questions', 'surveyId', 'publicQuestionIds'].some(key => body && key in body)) {
+    throw ApplicationError.BadRequest('Questions are saved elsewhere, reload the page')
+  }
+}
+
+export const assertOwnQuestionIds = (questions: { id?: number }[], surveyQuestionIds: number[]) => {
   const ids = questions.flatMap(q => (q.id ? [q.id] : []))
 
   if (ids.some(id => !surveyQuestionIds.includes(id))) {

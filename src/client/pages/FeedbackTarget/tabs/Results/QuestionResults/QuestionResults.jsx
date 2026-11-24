@@ -56,7 +56,7 @@ const QuestionResults = React.memo(
     isOrganisationUser,
     isOpen,
     feedbackCount,
-    savePublicQuestionIds,
+    setQuestionPublicity,
     openAnswerActions,
     showTable,
     inTabPanel = false,
@@ -133,7 +133,7 @@ const QuestionResults = React.memo(
                   disabled={!publicityConfigurableQuestionIds?.includes(q.id)}
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
-                  savePublicQuestionIds={savePublicQuestionIds}
+                  setQuestionPublicity={setQuestionPublicity}
                   openAnswerActions={openAnswerActions}
                   showTable={showTable}
                   inTabPanel={inTabPanel}
@@ -177,7 +177,7 @@ const QuestionResults = React.memo(
                   }
                   isResponsibleTeacher={isResponsibleTeacher}
                   feedbackCount={feedbackCount}
-                  savePublicQuestionIds={savePublicQuestionIds}
+                  setQuestionPublicity={setQuestionPublicity}
                   openAnswerActions={openAnswerActions}
                   inTabPanel={inTabPanel}
                 />

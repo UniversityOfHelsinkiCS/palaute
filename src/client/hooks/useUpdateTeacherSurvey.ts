@@ -5,42 +5,18 @@ import { useMutation } from '@tanstack/react-query'
 import apiClient from '../util/apiClient'
 import queryClient from '../util/queryClient'
 
-type FeedbackTargetWithSurveys = {
-  id: number
-  surveys: { teacherSurvey: { id: number } }
-}
+type QuestionsPayload = { questions: unknown[]; questionsVersion: number }
 
-type UpdateTeacherSurveyArgs = {
-  questions: (Question & { editable?: boolean })[]
-  groupingQuestion?: Question | null
-}
+type SavedQuestions = { questions: Question[]; createdIds: Record<string, number>; questionsVersion: number }
 
-const useUpdateTeacherSurvey = (feedbackTarget: FeedbackTargetWithSurveys) => {
-  const { surveys, id } = feedbackTarget
-  const { id: surveyId } = surveys.teacherSurvey
+const useUpdateTeacherSurvey = (feedbackTarget: { id: number }) => {
+  const { id } = feedbackTarget
 
-  const mutationFn = async ({ questions, groupingQuestion }: UpdateTeacherSurveyArgs) => {
-    const editableQuestions = questions.filter(({ editable }) => editable)
-    if (groupingQuestion) {
-      editableQuestions.push(groupingQuestion)
-    }
-
-    const payload = {
-      surveyId,
-      questions: editableQuestions,
-    }
-
-    return apiClient.put(`/feedback-targets/${id}`, payload)
-  }
-
-  const mutation = useMutation({
-    mutationFn,
-    onSuccess: () => {
-      queryClient.refetchQueries({ queryKey: ['feedbackTarget', String(id)] })
-    },
+  return useMutation({
+    mutationFn: async (payload: QuestionsPayload) =>
+      (await apiClient.put<SavedQuestions>(`/feedback-targets/${id}/questions`, payload)).data,
+    onSuccess: () => queryClient.refetchQueries({ queryKey: ['feedbackTarget', String(id)] }),
   })
-
-  return mutation
 }
 
 export default useUpdateTeacherSurvey

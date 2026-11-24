@@ -102,11 +102,14 @@ export const createApi = (request: APIRequestContext) => {
       send('POST', `/api/feedback-targets/${parentId}/interimFeedbacks`, { headers: admin, data: body }),
 
     // Replaces the teacher's own questions on a feedback target with the given ones
-    setTeacherSurveyQuestions: async (feedbackTarget: FeedbackTarget, questions: unknown[]) => {
+    setTeacherSurveyQuestions: async (feedbackTarget: FeedbackTarget, questions: Record<string, unknown>[]) => {
       const { surveys } = await send('GET', `/api/feedback-targets/${feedbackTarget.id}`, { headers: admin })
-      return send('PUT', `/api/feedback-targets/${feedbackTarget.id}`, {
+      return send('PUT', `/api/feedback-targets/${feedbackTarget.id}/questions`, {
         headers: admin,
-        data: { surveyId: surveys.teacherSurvey.id, questions },
+        data: {
+          questions: questions.map((q, index) => (q.id ? q : { clientId: `new-${index}`, ...q })),
+          questionsVersion: surveys.teacherSurvey.questionsVersion,
+        },
       })
     },
 

@@ -25,6 +25,7 @@ class StandaloneSurvey extends Model<InferAttributes<StandaloneSurvey>, InferCre
   declare opensAt: Date
   declare closesAt: Date
   declare createdByUserId: string
+  declare questionsVersion: CreationOptional<number>
   declare createdAt: CreationOptional<Date>
   declare updatedAt: CreationOptional<Date>
 
@@ -77,6 +78,11 @@ StandaloneSurvey.init(
     createdByUserId: {
       type: STRING,
       allowNull: false,
+    },
+    questionsVersion: {
+      type: INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     },
     createdAt: {
       type: DATE,

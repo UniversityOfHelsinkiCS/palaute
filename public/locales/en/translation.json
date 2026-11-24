@@ -290,7 +290,9 @@
     "removeSelected": "Remove selected questions",
     "removeManyConfirmation": "Are you sure you want to remove the selected {{count}} questions?",
     "selectAll": "Select all",
-    "deselectAll": "Deselect all"
+    "deselectAll": "Deselect all",
+    "saveFailed": "The changes could not be saved.",
+    "changedElsewhere": "The questions were changed elsewhere. Reload the page and try again."
   },
   "editFeedbackTarget": {
     "closesAt": "Closes at",

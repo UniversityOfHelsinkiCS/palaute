@@ -1,3 +1,5 @@
+import type { Transaction } from 'sequelize'
+
 import { CourseRealisationsTag, CourseRealisation } from '../../models'
 import { FeedbackTarget } from '../../models/feedbackTarget'
 import { Organisation } from '../../models/organisation'
@@ -6,7 +8,8 @@ import { FEEDBACK_TARGET_CACHE_TTL } from '../../util/config'
 import { logger } from '../../util/logger'
 import { redis } from '../../util/redisClient'
 
-const getKey = (feedbackTargetId: number | string) => `feedbackTarget:${feedbackTargetId}`
+// Change the version when the cached shape changes, so entries in the old shape aren't read
+const getKey = (feedbackTargetId: number | string) => `feedbackTarget:v2:${feedbackTargetId}`
 
 const cache = {
   get: async (feedbackTargetId: number | string) => {
@@ -28,7 +31,7 @@ const cache = {
 
     const pattern = getKey('*')
     const keys = await redis.keys(pattern)
-    if (keys?.length > 0) redis.delete(keys)
+    if (keys?.length > 0) await redis.delete(keys)
   },
   entries: async () => {
     const pattern = getKey('*')
@@ -45,24 +48,33 @@ const onOrganisationChange = async (organisationCode: string) => {
   const cachedFeedbackTargets = await cache.entries()
   for (const fbt of cachedFeedbackTargets) {
     if (fbt.courseUnit.organisations.some((org: any) => org.code === organisationCode)) {
-      cache.invalidate(fbt.id)
+      await cache.invalidate(fbt.id)
     }
   }
 }
 
-const onFeedbackTargetChange = (feedbackTarget: FeedbackTarget) => {
-  cache.invalidate(feedbackTarget.id)
-}
+const onFeedbackTargetChange = (feedbackTarget: FeedbackTarget) => cache.invalidate(feedbackTarget.id)
 
 const onSurveyChange = (survey: Survey) => {
-  if (survey.type === 'feedbackTarget') {
-    cache.invalidate(survey.feedbackTargetId)
-  } else if (survey.type === 'programme') {
-    onOrganisationChange(survey.typeId)
-  } else {
-    cache.invalidateAll()
-  }
+  if (survey.type === 'feedbackTarget') return cache.invalidate(survey.feedbackTargetId)
+  if (survey.type === 'programme') return onOrganisationChange(survey.typeId)
+  return cache.invalidateAll()
 }
+
+// Invalidating before commit lets a concurrent read cache the old data again.
+// Errors are only logged, they would fail a request whose changes are already saved
+const afterCommit =
+  <T>(invalidate: (instance: T) => Promise<unknown>) =>
+  async (instance: T, options: { transaction?: Transaction | null }) => {
+    const safeInvalidate = async () => {
+      await invalidate(instance).catch(error => logger.error('[CACHE] invalidation failed', { error }))
+    }
+    if (options?.transaction) {
+      options.transaction.afterCommit(safeInvalidate)
+    } else {
+      await safeInvalidate()
+    }
+  }
 
 const onTagChange = async (curTag: CourseRealisationsTag) => {
   const fbts = await FeedbackTarget.findAll({
@@ -76,14 +88,15 @@ const onTagChange = async (curTag: CourseRealisationsTag) => {
   fbts.map(({ id }) => id).forEach(cache.invalidate)
 }
 
-Organisation.afterUpdate(({ code }) => onOrganisationChange(code))
-Organisation.afterSave(({ code }) => onOrganisationChange(code))
+const onOrganisationSave = afterCommit(({ code }: Organisation) => onOrganisationChange(code))
+Organisation.afterUpdate(onOrganisationSave)
+Organisation.afterSave(onOrganisationSave)
 
-FeedbackTarget.afterUpdate(onFeedbackTargetChange)
-FeedbackTarget.afterSave(onFeedbackTargetChange)
+FeedbackTarget.afterUpdate(afterCommit(onFeedbackTargetChange))
+FeedbackTarget.afterSave(afterCommit(onFeedbackTargetChange))
 
-Survey.afterUpdate(onSurveyChange)
-Survey.afterSave(onSurveyChange)
+Survey.afterUpdate(afterCommit(onSurveyChange))
+Survey.afterSave(afterCommit(onSurveyChange))
 
 CourseRealisationsTag.afterCreate(onTagChange)
 CourseRealisationsTag.beforeDestroy(onTagChange)

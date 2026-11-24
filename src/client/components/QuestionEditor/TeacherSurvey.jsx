@@ -1,5 +1,3 @@
-import { uniq } from 'lodash-es'
-import { useSnackbar } from 'notistack'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -10,33 +8,23 @@ import { getSurveyType } from '../../util/courseIdentifiers'
 import { TranslationContextProvider } from '../../util/translationContext'
 import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
+import { SaveRejected } from './useQuestionSaving'
 import { validateQuestions } from './utils'
 
 const TeacherSurvey = ({ feedbackTarget }) => {
   const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
   const teacherSurveyMutation = useUpdateTeacherSurvey(feedbackTarget)
-  const updateSurvey = useInteractiveMutation(questions => teacherSurveyMutation.mutateAsync(questions))
   const questionPublicityMutation = useQuestionPublicityMutation({
     resource: 'feedbackTarget',
     resourceId: feedbackTarget.id,
   })
-  const togglePublicity = useInteractiveMutation(ids => questionPublicityMutation.mutateAsync(ids))
+  const togglePublicity = useInteractiveMutation(publicity => questionPublicityMutation.mutateAsync(publicity))
 
-  const onPublicityToggle = async (question, isPublic) => {
-    const newPublicQuestionIds = isPublic
-      ? uniq(feedbackTarget.publicQuestionIds.concat(question.id))
-      : feedbackTarget.publicQuestionIds.filter(id => id !== question.id)
-    await togglePublicity(newPublicQuestionIds)
-  }
+  const onPublicityToggle = (question, isPublic) => togglePublicity({ questionId: question.id, isPublic })
 
-  const handleSubmit = async values => {
-    if (!validateQuestions(values)) {
-      enqueueSnackbar(t('common:choiceQuestionError'), { variant: 'error' })
-      return
-    }
-
-    await updateSurvey(values)
+  const saveQuestions = (payload, values) => {
+    if (!validateQuestions(values)) throw new SaveRejected(t('common:choiceQuestionError'))
+    return teacherSurveyMutation.mutateAsync(payload)
   }
 
   const { surveys, publicQuestionIds, publicityConfigurableQuestionIds, userCreated, courseRealisation } =
@@ -63,8 +51,10 @@ const TeacherSurvey = ({ feedbackTarget }) => {
     // For interim feedbacks, translations with an `_interim` variant are used if available
     <TranslationContextProvider value={isInterimFeedback ? 'interim' : undefined}>
       <QuestionEditor
+        key={feedbackTarget.id}
         initialValues={initialValues}
-        handleSubmit={handleSubmit}
+        questionsVersion={surveys.teacherSurvey.questionsVersion}
+        saveQuestions={saveQuestions}
         handlePublicityToggle={onPublicityToggle}
         teacherQuestionIds={surveys.teacherSurvey.questionIds}
         copyFromCourseDialog

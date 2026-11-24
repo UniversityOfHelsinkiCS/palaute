@@ -189,7 +189,12 @@ class FeedbackTarget extends Model<InferAttributes<FeedbackTarget>, InferCreatio
     const programmePublicQuestionIds = surveys.programmeSurveys.flatMap((s: any) => s.publicQuestionIds)
 
     const questionIds = (this.questions ?? [])
-      .filter(({ id }) => !globallyPublicQuestionIds?.includes(id) && !programmePublicQuestionIds?.includes(id))
+      .filter(
+        ({ id, secondaryType }) =>
+          secondaryType !== 'GROUPING' &&
+          !globallyPublicQuestionIds?.includes(id) &&
+          !programmePublicQuestionIds?.includes(id)
+      )
       .map(({ id }) => id)
 
     return questionIds

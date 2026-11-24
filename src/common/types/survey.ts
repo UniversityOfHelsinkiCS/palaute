@@ -3,6 +3,7 @@ import type { Question } from './question'
 export type Survey = {
   id: number
   questionIds: number[]
+  questionsVersion: number
   questions?: Question[]
 }
 

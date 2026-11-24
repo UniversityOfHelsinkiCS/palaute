@@ -45,7 +45,10 @@ const createQuestionData = type => {
   }
 }
 
-export const getQuestionId = question => (question ? (question.id ?? question[TEMP_ID]) : undefined)
+// The temporary ID wins, so a question keeps its identity when a save gives it an id
+export const getQuestionId = question => (question ? (question[TEMP_ID] ?? question.id) : undefined)
+
+export const getClientId = question => question?.[TEMP_ID]
 
 // Shortens a question label without cutting in the middle of a word, unless the first word
 // is already longer than the maximum length.
@@ -138,7 +141,8 @@ export const validateQuestions = ({ questions, groupingQuestion }) => {
 }
 
 export const copyQuestionsFromFeedbackTarget = feedbackTarget => {
-  const questions = feedbackTarget.surveys?.teacherSurvey?.questions ?? []
+  // A grouping question refers to the other course's groups
+  const questions = (feedbackTarget.surveys?.teacherSurvey?.questions ?? []).filter(q => q.secondaryType !== 'GROUPING')
 
   return questions.map(q => ({
     ...copyQuestion(q),

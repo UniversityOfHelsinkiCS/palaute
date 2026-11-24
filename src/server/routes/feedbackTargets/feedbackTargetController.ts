@@ -25,9 +25,13 @@ import {
 import { getFeedbackErrorViewDetails } from '../../services/feedbackTargets/getErrorViewDetails'
 import { getWaitingFeedbackCountForStudent } from '../../services/feedbackTargets/getForStudent'
 import { adminDeleteFeedback } from '../../services/feedbackTargets/hideFeedback'
+import { setQuestionPublicity } from '../../services/feedbackTargets/setQuestionPublicity'
+import { updateTeacherSurveyQuestions } from '../../services/feedbackTargets/updateQuestions'
+import { QuestionPublicityBodySchema, QuestionsBodySchema } from '../../services/questions/saveQuestions'
 import { AuthenticatedRequest } from '../../types'
 import { ApplicationError } from '../../util/ApplicationError'
 import { PUBLIC_COURSE_BROWSER_ENABLED } from '../../util/config'
+import { parseInput } from '../../util/parseInput'
 import { router as interimFeedbacksRouter } from './interimFeedbackController'
 
 const adRouter = Router()
@@ -192,6 +196,22 @@ adRouter.put('/:id', async (req: AuthenticatedRequest, res: Response) => {
   })
 
   res.send(updatedFeedbackTarget)
+})
+
+adRouter.put('/:id/questions', async (req: AuthenticatedRequest, res: Response) => {
+  const feedbackTargetId = Number(req.params.id)
+  if (!feedbackTargetId) throw ApplicationError.BadRequest('Missing id')
+
+  const { questions, questionsVersion } = parseInput(QuestionsBodySchema, req.body)
+  res.send(await updateTeacherSurveyQuestions({ feedbackTargetId, user: req.user, questions, questionsVersion }))
+})
+
+adRouter.put('/:id/question-publicity', async (req: AuthenticatedRequest, res: Response) => {
+  const feedbackTargetId = Number(req.params.id)
+  if (!feedbackTargetId) throw ApplicationError.BadRequest('Missing id')
+
+  const { questionId, isPublic } = parseInput(QuestionPublicityBodySchema, req.body)
+  res.send(await setQuestionPublicity({ feedbackTargetId, user: req.user, questionId, isPublic }))
 })
 
 const getFeedbacks = async (req: AuthenticatedRequest, res: Response) => {

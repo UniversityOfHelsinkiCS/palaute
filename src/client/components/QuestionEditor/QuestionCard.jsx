@@ -13,7 +13,7 @@ import {
   Typography,
   useMediaQuery,
 } from '@mui/material'
-import { useField } from 'formik'
+import { useField, useFormikContext } from 'formik'
 import { useId, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 
@@ -35,7 +35,7 @@ import OrderButtons from './OrderButtons'
 import SingleChoicePreview from './SingleChoicePreview'
 import TextEditor from './TextEditor'
 import TextPreview from './TextPreview'
-import { getEmptyOptions, getQuestionId, getQuestionLabel, hasMissingOptions, isEmptyOption } from './utils'
+import { getEmptyOptions, getQuestionLabel, hasMissingOptions, isEmptyOption } from './utils'
 
 const editorComponentByType = {
   LIKERT: LikertEditor,
@@ -134,6 +134,7 @@ const QuestionCard = ({
   onMoveDown,
   onCopy,
   isEditing = false,
+  isNew = false,
   onStartEditing,
   onStopEditing,
   onCancelEditing,
@@ -145,7 +146,8 @@ const QuestionCard = ({
 }) => {
   const { t } = useTranslation()
   const language = useQuestionLanguage()
-  const [field, meta, helpers] = useField(name)
+  const [field, , helpers] = useField(name)
+  const { setFieldValue } = useFormikContext()
   const { value: question } = field
 
   const EditorComponent = editorComponentByType[question.type]
@@ -176,12 +178,11 @@ const QuestionCard = ({
 
   const removeLabel = isText ? t('questionEditor:removeTextualContent') : t('questionEditor:removeQuestion')
 
-  const handlePublicityToggle = isPublic => {
-    helpers.setValue({
-      ...field.value,
-      public: isPublic,
-    })
-    onPublicityToggle(isPublic)
+  // The toggle handler returns false when the change wasn't saved
+  // Only `public` is reverted, the question may have been edited while the change was saved
+  const handlePublicityToggle = async isPublic => {
+    await setFieldValue(`${name}.public`, isPublic)
+    if (!(await onPublicityToggle(isPublic))) await setFieldValue(`${name}.public`, !isPublic)
   }
 
   const [removeDialogOpen, setRemoveDialogOpen] = useState(false)
@@ -198,6 +199,9 @@ const QuestionCard = ({
     if (removeConfirmed) onRemove()
   }
 
+  // The question as it was when editing started, Cancel restores it
+  const snapshotRef = useRef(question)
+
   const editorRef = useRef(null)
   const editButtonRef = useRef(null)
   const skipEditButtonFocusRef = useRef(false)
@@ -210,13 +214,11 @@ const QuestionCard = ({
   const [emptyOptionsRemovalConfirmed, setEmptyOptionsRemovalConfirmed] = useState(false)
   const emptyOptionCount = getEmptyOptions(question).length
 
-  // Not a missing initial value: a question inserted above others takes over the initial value
-  // of the one it displaced
-  const isNew = getQuestionId(meta.initialValue) !== getQuestionId(question)
-
   const handleCancelEditing = () => {
     if (!isNew) {
-      helpers.setValue(meta.initialValue)
+      const snapshot = snapshotRef.current
+      // Keep an ID the question got from a save that finished while editing
+      helpers.setValue(question.id && !snapshot.id ? { ...snapshot, id: question.id } : snapshot)
     }
     setMissingOptionsErrorRequested(false)
     skipEditButtonFocusRef.current = false
@@ -224,10 +226,17 @@ const QuestionCard = ({
     onCancelEditing(isNew)
   }
 
-  const stopEditing = () => {
+  const stopEditing = async (current = question) => {
+    // The question save doesn't change an existing question's publicity, so it's saved first.
+    // If that fails, the dialog stays open with the publicity as it was
+    const previousPublic = snapshotRef.current.public
+    if (current.id && current.public !== previousPublic && !(await onPublicityToggle(current.public))) {
+      await helpers.setValue({ ...current, public: previousPublic })
+      return
+    }
     setMissingOptionsErrorRequested(false)
-    // A saved new question's card may be remounted, so QuestionEditor moves focus instead.
-    // The grouping question card stays mounted, so its edit button can be focused
+    // A new question's dialog was opened from an add button, which QuestionEditor focuses again.
+    // The grouping question's add button is gone by then, so its edit button is focused
     skipEditButtonFocusRef.current = isNew && !isGrouping
     cancelledNewRef.current = false
     onStopEditing(isNew)
@@ -247,7 +256,7 @@ const QuestionCard = ({
       return
     }
 
-    stopEditing()
+    void stopEditing()
   }
 
   const handleConfirmEmptyOptionsRemoval = () => {
@@ -260,11 +269,12 @@ const QuestionCard = ({
   const handleEmptyOptionsDialogExited = async () => {
     if (!emptyOptionsRemovalConfirmed) return
 
-    await helpers.setValue({
+    const withoutEmptyOptions = {
       ...question,
       data: { ...question.data, options: question.data.options.filter(option => !isEmptyOption(option)) },
-    })
-    stopEditing()
+    }
+    await helpers.setValue(withoutEmptyOptions)
+    await stopEditing(withoutEmptyOptions)
   }
 
   const handleDialogExited = () => {
@@ -306,8 +316,8 @@ const QuestionCard = ({
                 <QuestionPublicityToggle
                   questionId={question.id}
                   checked={question.public}
-                  disabled={!question.publicityConfigurable}
-                  onChange={() => handlePublicityToggle(!question.public)}
+                  disabled={!question.publicityConfigurable || !question.id}
+                  onChange={() => void handlePublicityToggle(!question.public)}
                   questionLabel={questionLabel}
                 />
               )}
@@ -356,7 +366,8 @@ const QuestionCard = ({
             >
               <EditActions
                 showPublicity={!isText}
-                publicityConfigurable={publicityConfigurable}
+                // Until the question's first save returns, the save would ignore a publicity change
+                publicityConfigurable={publicityConfigurable && (isNew || Boolean(question.id))}
                 isPublic={question.public}
                 showRequiredToggle={requiredConfigurable}
                 name={name}
@@ -448,7 +459,10 @@ const QuestionCard = ({
               )}
               <NorButton
                 color="secondary"
-                onClick={onStartEditing}
+                onClick={() => {
+                  snapshotRef.current = question
+                  onStartEditing()
+                }}
                 data-cy="editQuestion"
                 ref={editButtonRef}
                 icon={<EditOutlined />}

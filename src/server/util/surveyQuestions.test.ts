@@ -4,7 +4,7 @@ import { assertOwnQuestionIds } from './surveyQuestions'
 
 describe('assertOwnQuestionIds', () => {
   it('accepts own and new questions', () => {
-    expect(() => assertOwnQuestionIds([{ id: 1 }, {}, { id: 2 }, { id: null }], [1, 2, 3])).not.toThrow()
+    expect(() => assertOwnQuestionIds([{ id: 1 }, {}, { id: 2 }], [1, 2, 3])).not.toThrow()
   })
 
   it('rejects a question of another survey', () => {

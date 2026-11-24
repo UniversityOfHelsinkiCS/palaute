@@ -1,67 +1,47 @@
-import { uniq } from 'lodash-es'
-import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 
+import useInteractiveMutation from '../../hooks/useInteractiveMutation'
 import useQuestionPublicityMutation from '../../hooks/useQuestionPublicityMutation'
 import apiClient from '../../util/apiClient'
+import queryClient from '../../util/queryClient'
 import { getFormInitialValues } from './getFormInitialValues'
 import QuestionEditor from './QuestionEditor'
-
-const saveSurveyValues = async (values, surveyId) => {
-  const { questions } = values
-  const editableQuestions = questions.filter(({ editable }) => editable)
-
-  const { data } = await apiClient.put(`/surveys/${surveyId}`, {
-    questions: editableQuestions,
-  })
-
-  return data
-}
+import { SaveCancelled } from './useQuestionSaving'
 
 const ProgrammeSurvey = ({ organisation, survey }) => {
   const { t } = useTranslation()
-  const { enqueueSnackbar } = useSnackbar()
 
   const surveyId = survey?.id
 
-  const [warningSeen, setWarningSeen] = useState(false)
+  // Asked once, before the first change of any kind is written
+  const confirmedRef = useRef(false)
+  const confirmEdit = () => {
+    confirmedRef.current ||= window.confirm(t('organisationSettings:editProgrammeQuestionsDialogContent'))
+    return confirmedRef.current
+  }
 
   const mutation = useQuestionPublicityMutation({
     resource: 'organisation',
     resourceId: organisation.code,
   })
 
-  const handleSubmit = async (values, actions) => {
-    const hasConfirmed = warningSeen || window.confirm(t('organisationSettings:editProgrammeQuestionsDialogContent'))
+  const programmeSurveyKey = ['programmeSurvey', organisation.code]
 
-    if (!hasConfirmed) return
+  const saveQuestions = async payload => {
+    if (!confirmEdit()) throw new SaveCancelled()
 
-    setWarningSeen(true)
-
-    try {
-      await saveSurveyValues(values, surveyId)
-      actions.resetForm({ values })
-      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch (e) {
-      // eslint-disable-next-line no-console
-      console.error(e)
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
+    const { data } = await apiClient.put(`/surveys/${surveyId}/questions`, payload)
+    // The editor reads the survey once when it opens, so the cache must not keep the old questions
+    queryClient.setQueryData(programmeSurveyKey, current => current && { ...current, ...data })
+    // New public questions change the organisation's public questions
+    void queryClient.invalidateQueries({ queryKey: ['organisation', organisation.code] })
+    return data
   }
 
-  const onPublicityToggle = async (question, isPublic) => {
-    const newPublicQuestionIds = isPublic
-      ? uniq(organisation.publicQuestionIds.concat(question.id))
-      : organisation.publicQuestionIds.filter(id => id !== question.id)
-
-    try {
-      await mutation.mutateAsync(newPublicQuestionIds)
-      enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
-    } catch {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
-    }
-  }
+  const togglePublicity = useInteractiveMutation(publicity => mutation.mutateAsync(publicity))
+  const onPublicityToggle = (question, isPublic) =>
+    confirmEdit() && togglePublicity({ questionId: question.id, isPublic })
 
   const { universitySurvey } = survey
   const allQuestions = universitySurvey.questions.concat(survey.questions)
@@ -79,8 +59,10 @@ const ProgrammeSurvey = ({ organisation, survey }) => {
 
   return (
     <QuestionEditor
+      key={surveyId}
       initialValues={initialValues}
-      handleSubmit={handleSubmit}
+      questionsVersion={survey.questionsVersion}
+      saveQuestions={saveQuestions}
       handlePublicityToggle={onPublicityToggle}
       editorLevel="programme"
     />

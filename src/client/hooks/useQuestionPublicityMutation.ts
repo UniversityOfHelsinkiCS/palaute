@@ -5,31 +5,27 @@ import apiClient from '../util/apiClient'
 import queryClient from '../util/queryClient'
 
 type UseQuestionPublicityMutationParams = {
-  resource: string
+  resource: 'feedbackTarget' | 'organisation'
   resourceId: number | string
 }
 
-const useQuestionPublicityMutation = ({ resource, resourceId }: UseQuestionPublicityMutationParams) => {
-  const resourcePathName = kebabCase(resource)
-  const mutationFn = async (publicQuestionIds: number[]) => {
-    const res = await apiClient.put<{ publicQuestionIds: number[] }>(`/${resourcePathName}s/${resourceId}`, {
-      publicQuestionIds,
-    })
-    return res.data.publicQuestionIds
-  }
+type QuestionPublicity = { questionId: number; isPublic: boolean }
 
-  const mutation = useMutation({
-    mutationFn,
+const useQuestionPublicityMutation = ({ resource, resourceId }: UseQuestionPublicityMutationParams) =>
+  useMutation({
+    mutationFn: async (publicity: QuestionPublicity) => {
+      const res = await apiClient.put<{ publicQuestionIds: number[] }>(
+        `/${kebabCase(resource)}s/${resourceId}/question-publicity`,
+        publicity
+      )
+      return res.data.publicQuestionIds
+    },
     onSuccess: publicQuestionIds => {
-      const queryKey = [resource, String(resourceId)]
-      queryClient.setQueryData(queryKey, (current: Record<string, unknown>) => ({
+      queryClient.setQueryData([resource, String(resourceId)], (current: Record<string, unknown>) => ({
         ...current,
         publicQuestionIds,
       }))
     },
   })
-
-  return mutation
-}
 
 export default useQuestionPublicityMutation

@@ -8,16 +8,7 @@ const updateDates = async (values, feedbackTarget) => {
   const closesAt = values.closesAt ? endOfDay(new Date(values.closesAt)) : null
   const opensAt = values.opensAt ? startOfDay(new Date(values.opensAt)) : null
 
-  const { surveys, id } = feedbackTarget
-  const { id: surveyId } = surveys.teacherSurvey
-
-  const payload = {
-    surveyId,
-    closesAt,
-    opensAt,
-  }
-
-  const { data } = await apiClient.put(`/feedback-targets/${id}`, payload)
+  const { data } = await apiClient.put(`/feedback-targets/${feedbackTarget.id}`, { closesAt, opensAt })
 
   return data
 }
