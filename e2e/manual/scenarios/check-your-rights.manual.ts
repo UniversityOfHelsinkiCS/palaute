@@ -5,7 +5,12 @@ import { colleagues, teacher } from '../users'
 
 manualTest(
   'Omien oikeuksien tarkistaminen',
-  { annotation: { type: 'en', description: 'Checking your rights' } },
+  {
+    annotation: [
+      { type: 'sv', description: 'Kontrollera dina rättigheter' },
+      { type: 'en', description: 'Checking your rights' },
+    ],
+  },
   async ({ page, demo, loginAs, caption, hover, click, pause, t }) => {
     await demo.seed('ongoing', { feedbackCorrespondent: true })
     const fbtId = demo.fbtId
@@ -13,22 +18,26 @@ manualTest(
 
     await caption({
       fi: 'Tässä videossa tarkistetaan omat roolit kursseilla ja oikeudet koulutusohjelmiin.',
+      sv: 'I den här videon kontrollerar vi våra roller på kurser och våra rättigheter till utbildningsprogram.',
       en: 'In this video, we check our roles on courses and our rights to degree programmes.',
     })
 
     await caption({
       fi: 'Norpan käyttöoikeusroolit tulevat Sisusta. Poikkeus on palautevastaavan rooli, joka lisätään Norpassa käsin.',
+      sv: 'Användarrollerna i Norppa kommer från Sisu. Undantaget är rollen som korrespondent för responsen, som läggs till för hand i Norppa.',
       en: "Norppa's user roles come from Sisu. The exception is the feedback correspondent's role, which is added by hand in Norppa.",
     })
 
     await caption({
       fi: 'Roolisi kurssilla näkyy kurssin sivulla.',
+      sv: 'Din roll på en kurs syns på kursens sida.',
       en: 'Your role on a course shows on the course page.',
     })
     await openFromMyTeaching(page, click, caption, fbtId, 'active')
 
     await caption({
       fi: 'Kurssin henkilökunta näkyy rooleittain otsikoiden Vastuuopettajat, Opettajat ja Hallintohenkilöt alla.',
+      sv: 'Kursens personal visas enligt roll under rubrikerna Ansvariga lärare, Lärare och Administratörer.',
       en: "The course's staff are listed by role under the headings Responsible teachers, Teachers and Administrative persons.",
     })
     await click(byDataCy(page, 'feedback-target-teacher-list').getByRole('button'))
@@ -37,45 +46,52 @@ manualTest(
 
     await caption({
       fi: 'Jos nimesi on otsikon Vastuuopettajat alla, voit muokata kyselyä ja kirjoittaa vastapalautteen.',
+      sv: 'Om ditt namn står under Ansvariga lärare kan du redigera enkäten och skriva motrespons.',
       en: 'If your name is under Responsible teachers, you can edit the survey and write counter feedback.',
     })
     await hover(byDataCy(page, 'feedback-target-responsible-teacher-list'))
 
     await caption({
       fi: 'Hallintohenkilöillä on samat oikeudet. Koulutusohjelman kyselyssä roolit määrittelee kyselyn ylläpitäjä, ja vastuuhenkilöt ovat tämän otsikon alla.',
+      sv: 'Administratörerna har samma rättigheter. I en programenkät bestämmer den som sköter enkäten rollerna, och de ansvariga personerna står under den här rubriken.',
       en: "Administrative persons have the same rights. In a programme's survey, the roles are set by the survey's maintainer, and the responsible persons are under this heading.",
     })
     await hover(byDataCy(page, 'feedback-target-responsible-administrative-person-list'))
 
     await caption({
       fi: 'Jos nimesi on otsikon Opettajat alla, näet kyselyn ja sen julkiset vastaukset, mutta et voi muokata kyselyä etkä kirjoittaa vastapalautetta.',
+      sv: 'Om ditt namn står under Lärare ser du enkäten och dess publika svar, men du kan inte redigera enkäten eller skriva motrespons.',
       en: 'If your name is under Teachers, you see the survey and its public answers, but cannot edit the survey or write counter feedback.',
     })
     await hover(byDataCy(page, 'feedback-target-teacher-list'))
 
     await caption({
       fi: 'Oikeudet koulutusohjelmiin ja tiedekuntiin näet nimesi alta oikeasta yläkulmasta.',
+      sv: 'Dina rättigheter till utbildningsprogram och fakulteter hittar du under ditt namn uppe till höger.',
       en: 'Your rights to degree programmes and faculties are under your name in the top right corner.',
     })
     await click(page.getByRole('button', { name: `${teacher.givenname} ${teacher.sn}` }))
 
-    await caption({ fi: 'Valitaan Omat tietoni.', en: 'Choose My information.' })
+    await caption({ fi: 'Valitaan Omat tietoni.', sv: 'Välj Mina uppgifter.', en: 'Choose My information.' })
     await click(page.getByRole('menuitem', { name: t('navBar:userInformation') }))
     const dialog = page.getByRole('dialog')
     await expect(dialog).toBeVisible()
 
     await caption({
       fi: 'Ikkunassa näkyvät Norppaan vaikuttavat IAM-ryhmäsi ja oikeutesi organisaatioihin koodeittain.',
+      sv: 'I fönstret syns dina IAM-grupper som påverkar Norppa och dina rättigheter till organisationer enligt deras koder.',
       en: 'The window shows your IAM groups that affect Norppa and your rights to organisations by their codes.',
     })
 
     await caption({
       fi: 'Koodin vieressä on oikeutesi. Read on lukuoikeus: näet organisaation sivun ja julkiset vastaukset. Admin antaa lisäksi kaikki vastaukset ja organisaation asetukset.',
+      sv: 'Bredvid koden står din rättighet. Read är läsrättighet: du ser organisationens sida och de publika svaren. Admin ger dessutom alla svar och organisationens inställningar.',
       en: "Next to the code is your right. Read lets you see the organisation's page and public answers. Admin also gives you all answers and the organisation's settings.",
     })
 
     await caption({
       fi: 'Organisaation nimi näkyy, kun viet hiiren koodin päälle.',
+      sv: 'Organisationens namn syns när du för muspekaren över koden.',
       en: "The organisation's name shows when you hover over the code.",
     })
     await hover(dialog.getByText('KH50_005'))
@@ -83,6 +99,7 @@ manualTest(
 
     await caption({
       fi: 'Valmista! Väärä rooli kurssilla korjataan Sisussa, ja puuttuvia oikeuksia pyydetään koulutusohjelman hallinnolta.',
+      sv: 'Klart! En fel roll på en kurs rättas i Sisu, och rättigheter som saknas ber du om av utbildningsprogrammets förvaltning.',
       en: "Done! A wrong course role is fixed in Sisu, and missing rights are asked from the programme's administration.",
     })
   }

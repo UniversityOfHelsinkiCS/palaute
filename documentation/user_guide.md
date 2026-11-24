@@ -36,5 +36,4 @@ In `src/client/pages/UserGuide/`. The page is loaded lazily with all of its text
 
 ## Later
 
-- Swedish videos: the Swedish guide shows the English ones for now.
 - Link the chatbot's answers to guide pages instead of the wiki.

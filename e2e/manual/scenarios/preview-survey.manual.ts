@@ -5,7 +5,12 @@ import { teacher } from '../users'
 
 manualTest(
   'Kyselyn esikatselu',
-  { annotation: { type: 'en', description: 'Previewing the survey' } },
+  {
+    annotation: [
+      { type: 'sv', description: 'Förhandsvisa enkäten' },
+      { type: 'en', description: 'Previewing the survey' },
+    ],
+  },
   async ({ page, demo, lang, loginAs, caption, hover, click, scrollTo, pause, t }) => {
     await demo.seed('ongoing')
     const fbtId = demo.fbtId
@@ -13,6 +18,7 @@ manualTest(
 
     await caption({
       fi: 'Tässä videossa katsotaan kyselyä opiskelijan silmin.',
+      sv: 'I den här videon ser vi enkäten så som studerandena ser den.',
       en: 'In this video, we see the survey as a student sees it.',
     })
 
@@ -22,12 +28,14 @@ manualTest(
     await expect(previewTab).toHaveAttribute('aria-selected', 'true')
     await caption({
       fi: 'Kyselyn sivu avautuu Esikatselu-välilehdelle.',
+      sv: 'Enkätens sida öppnas på fliken Förhandsvisning.',
       en: "The survey's page opens on the Preview tab.",
     })
     await hover(previewTab)
 
     await caption({
       fi: 'Esikatselussa näkyy koko kysely siinä järjestyksessä kuin opiskelija sen näkee. Esikatselulomaketta ei voi lähettää.',
+      sv: 'Förhandsvisningen visar hela enkäten i den ordning studeranden ser den. Förhandsvisningen kan inte skickas in.',
       en: 'The preview shows the whole survey in the order the student sees it. The preview form cannot be submitted.',
     })
 
@@ -36,12 +44,14 @@ manualTest(
 
     await caption({
       fi: 'Opiskelija näkee kysymykset Sisussa määritellyllä asiointikielellään. Esikatselun kielen voi vaihtaa välilehden alareunan valikosta.',
+      sv: 'Studerandena ser frågorna på det språk de har valt i Sisu. Du kan byta förhandsvisningens språk i menyn längst ner på fliken.',
       en: "Students see the questions in their own preferred language set in Sisu. The preview's language can be changed from the menu at the bottom of the tab.",
     })
     await click(language)
 
     await caption({
       fi: 'Valitaan englanti. Kysymykset vaihtuvat englanniksi.',
+      sv: 'Välj finska. Frågorna byts till finska.',
       en: 'Choose Finnish. The questions change to Finnish.',
     })
     // The options are Finnish, Swedish and English
@@ -50,6 +60,7 @@ manualTest(
 
     await caption({
       fi: 'Sama kieli on käytössä myös Muokkaa kysymyksiä -välilehdellä, jossa myös kysymyseditorin kysymykset vaihtuvat valitulle kielelle.',
+      sv: 'Samma språk används också på fliken Redigera frågor, där frågorna i frågeredigeraren också byts till det valda språket.',
       en: 'The same language is used in the Edit questions tab, where the questions in the editor change to it too.',
     })
     await click(byDataCy(page, 'feedback-target-settings-tab'))
@@ -58,6 +69,7 @@ manualTest(
 
     await caption({
       fi: 'Kysymysten muokkauksen ja esikatselun välillä voi siirtyä vaihtamalla välilehteä. Palataan Esikatselu-välilehdelle.',
+      sv: 'Du kan växla mellan att redigera frågorna och förhandsvisningen genom att byta flik. Gå tillbaka till fliken Förhandsvisning.',
       en: 'You can move between editing the questions and the preview by changing the tab. Go back to the Preview tab.',
     })
     await click(previewTab)
@@ -65,6 +77,7 @@ manualTest(
 
     await caption({
       fi: 'Valmista! Esikatselulla voit tarkistaa kyselyn ennen sen avautumista.',
+      sv: 'Klart! Med förhandsvisningen kan du kontrollera enkäten innan den öppnas.',
       en: 'Done! With the preview, you can check the survey before it opens.',
     })
   }

@@ -12,6 +12,7 @@ type Narrate = (caption: Caption) => Promise<void>
 export const findInMyTeaching = async (page: Page, click: Click, caption: Narrate, tab: 'active' | 'ended') => {
   await caption({
     fi: 'Siirrytään ensin Kyselyni-sivulle yläpalkista.',
+    sv: 'Gå först till Mina enkäter i den övre menyn.',
     en: 'First, go to My surveys in the top bar.',
   })
   await click(byDataCy(page, 'navbar-links').locator('a[href="/courses"]'))
@@ -19,16 +20,22 @@ export const findInMyTeaching = async (page: Page, click: Click, caption: Narrat
   if (tab === 'active') {
     await caption({
       fi: 'Käynnissä olevat kurssit ovat Aktiiviset-välilehdellä.',
+      sv: 'Pågående kurser finns på fliken Aktiva.',
       en: 'Running courses are on the Active tab.',
     })
     await click(byDataCy(page, 'my-teaching-active-tab'))
   } else {
     await caption({
       fi: 'Päättyneet kurssit ovat Päättyneet-välilehdellä.',
+      sv: 'Avslutade kurser finns på fliken Avslutade.',
       en: 'Finished courses are on the Ended tab.',
     })
     await click(byDataCy(page, 'my-teaching-ended-tab'))
-    await caption({ fi: 'Avataan kurssi listalta.', en: 'Open the course from the list.' })
+    await caption({
+      fi: 'Avataan kurssi listalta.',
+      sv: 'Öppna kursen i listan.',
+      en: 'Open the course from the list.',
+    })
     await click(byDataCy(page, `my-teaching-course-unit-accordion-${COURSE_CODE}`))
   }
 }
@@ -43,6 +50,7 @@ export const openFromMyTeaching = async (
   await findInMyTeaching(page, click, caption, tab)
   await caption({
     fi: 'Siirrytään kurssikyselyn sivulle valitsemalla kurssin toteutus.',
+    sv: 'Gå till kursenkätens sida genom att välja kursens genomförande.',
     en: "Open the course survey's page by choosing the course realisation.",
   })
   await click(byDataCy(page, `my-teaching-feedback-target-item-link-${fbtId}`))

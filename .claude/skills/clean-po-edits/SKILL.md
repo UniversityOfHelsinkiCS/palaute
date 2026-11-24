@@ -26,7 +26,7 @@ The PO edits the Finnish user guide (`src/client/pages/UserGuide/content/fi`) an
 - Every Finnish change gets its English counterpart in the same file under `content/en`: changed sentences, added and removed text, renamed headings and titles, and link texts to renamed sections. Grammar-only Finnish fixes may need nothing.
 - Write natural English, not a word-for-word translation. Keep the guide's terms: Sisu (not SISU), administrative person, feedback liaison, programme director, responsible teacher. Captions use the UI's "feedback correspondent". No em dashes.
 - Captions where the PO also wrote the English: keep their English as is, fixing only typos and syntax.
-- Then the same Finnish changes into `content/sv`, translated from the Finnish with the terms in `.claude/skills/clean-po-edits/swedish_terms.md`. Captions get Swedish only once the Swedish videos are recorded (`sv:` in a scenario).
+- Then the same Finnish changes into `content/sv`, translated from the Finnish with the terms in `.claude/skills/clean-po-edits/swedish_terms.md`. Captions get their `sv:` the same way.
 - Afterwards, compare `git diff --word-diff <base> HEAD -- content/fi` with `git diff --word-diff -- content/en` and `-- content/sv` file by file, and check every Finnish hunk has its counterpart in both.
 - Commit the English, Swedish and any caption changes together: `docs: apply PO changes to English user guide` (the title marks the next run's base, so keep it as is).
 

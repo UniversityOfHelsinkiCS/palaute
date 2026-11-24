@@ -41,6 +41,16 @@ export default defineConfig<ManualOptions>({
       },
     },
     {
+      name: 'sv',
+      use: {
+        ...devices['Desktop Chrome'],
+        viewport,
+        lang: 'sv',
+        locale: 'sv-FI',
+        timezoneId: 'Europe/Helsinki',
+      },
+    },
+    {
       name: 'en',
       use: {
         ...devices['Desktop Chrome'],

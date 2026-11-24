@@ -108,6 +108,12 @@ const SPELLED_OUT: Record<string, [RegExp, string][]> = {
     // Otherwise it's read in past tense
     [/\bRead\b/g, 'riid'],
   ],
+  sv: [
+    [/\bXLSX\b/g, 'X L S X'],
+    [/\bpdf\b/gi, 'P D F'],
+    [/\bIAM\b/g, 'I A M'],
+    [/\bQR\b/g, 'Q R'],
+  ],
   en: [
     [/\bXLSX\b/g, 'X L S X'],
     [/\bIAM\b/g, 'I A M'],

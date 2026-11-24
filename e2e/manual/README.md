@@ -50,7 +50,7 @@ manualTest(
 
 ## Languages
 
-Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.manual.config.ts`: `fi` and `en`. Missing captions fall back to Finnish. The title is in Finnish, other languages are annotations.
+Captions are `{ fi, sv?, en? }` and each language is a project in `playwright.manual.config.ts`: `fi`, `sv` and `en`. Missing captions fall back to Finnish. The title is in Finnish, other languages are annotations.
 
 ## Narration
 

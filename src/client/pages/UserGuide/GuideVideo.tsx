@@ -25,7 +25,7 @@ const useVideos = (language: string, enabled = true) =>
 
 const GuideVideo = ({ slug, language, editUrl }: { slug: string; language: string; editUrl?: string }) => {
   const { data: videos } = useVideos(language)
-  // Swedish videos aren't recorded yet
+  // A Swedish build may have been made before its videos were recorded
   const { data: englishVideos } = useVideos('en', language === 'sv')
   const video = videos?.find(other => other.slug === slug) ?? englishVideos?.find(other => other.slug === slug)
   if (!video) return null
