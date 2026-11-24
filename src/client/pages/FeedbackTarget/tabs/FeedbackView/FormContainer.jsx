@@ -181,7 +181,13 @@ const FormContainer = ({
                 {onOpenPrivacyDialog && (
                   <>
                     {' '}
-                    <AlertLink component="button" type="button" onClick={onOpenPrivacyDialog} sx={{ mt: -0.2 }}>
+                    <AlertLink
+                      component="button"
+                      type="button"
+                      onClick={onOpenPrivacyDialog}
+                      // Wraps with the text before it instead of as a centred block of its own
+                      sx={{ display: 'inline', textAlign: 'inherit', verticalAlign: 'baseline' }}
+                    >
                       {t('feedbackView:feedbackInfoLink')}
                     </AlertLink>
                   </>
