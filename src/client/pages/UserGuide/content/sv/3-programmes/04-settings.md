@@ -16,7 +16,7 @@ Korrespondenter för responsen läggs till i Norppa. En korrespondent för respo
 
 Sökningen hittar bara universitetets personal. Om någon inte hittas kan du be personen logga in i Norppa en gång och försöka på nytt.
 
-Listan [[organisationSettings:feedbackCorrespondents]] visar programmets korrespondenter för responsen. [[organisationSettings:remove]] tar bort en korrespondent.
+Listan [[organisationSettings:feedbackCorrespondents]] visar programmets korrespondenter för responsen. Knappen [[organisationSettings:remove]] tar bort en korrespondent.
 
 <!-- Explain IAM-based liaisons once Jami actually creates them; see documentation/known_bugs.md. -->
 
@@ -26,7 +26,7 @@ På enkätens flik [[feedbackTargetView:studentsWithFeedbackTab]] ser kursens an
 
 - [[organisationSettings:studentListVisible]]: syns på alla programmets kurser.
 - [[organisationSettings:studentListHidden]]: syns inte på någon kurs.
-- [[organisationSettings:studentListByCourse]]: under [[organisationSettings:courseSettings]] får varje studieavsnitt en knapp [[organisationSettings:courseStudentListVisible]]. Slå på den för de kurser där uppgiften ska visas.
+- [[organisationSettings:studentListByCourse]]: under [[organisationSettings:courseSettings]] får varje studieavsnitt ett reglage [[organisationSettings:courseStudentListVisible]]. Slå på den för de kurser där uppgiften ska visas.
 
 Inställningen gäller de studieavsnitt där utbildningsprogrammet är den primära organisationen. Om ett studieavsnitt hör till flera utbildningsprogram kan det primära programmet göra inställningen.
 
@@ -34,6 +34,6 @@ När inställningen är på syns uppgiften när enkäten har stängts och minst 
 
 ## Stänga av responsen för en kurs {#disable-feedback}
 
-Under [[organisationSettings:courseSettings]] har varje studieavsnitt i programmet en knapp [[organisationSettings:feedbackEnabled]]. Sök kursen med fältet [[organisationSettings:findByCourseUnit]] och stäng av insamlingen av respons, till exempel om kursens respons samlas in på något annat sätt.
+Under [[organisationSettings:courseSettings]] har varje studieavsnitt i programmet ett reglage [[organisationSettings:feedbackEnabled]]. Sök kursen med fältet [[organisationSettings:findByCourseUnit]] och stäng av insamlingen av respons, till exempel om kursens respons samlas in på något annat sätt.
 
-Knappen gäller alla genomföranden av studieavsnittet. Kursens lärare ser då meddelandet [[teacherView:disabledCourseWarning]] på sidan [[navBar:myCourses]] och meddelandet [[feedbackTargetView:feedbackDisabled]] på kursens sida. Studerande kommer inte åt enkäten, och Norppa skickar ingen e-post om den. När du slår på knappen igen fungerar responsen normalt igen.
+Reglaget gäller alla genomföranden av studieavsnittet. Kursens lärare ser då meddelandet [[teacherView:disabledCourseWarning]] på sidan [[navBar:myCourses]] och meddelandet [[feedbackTargetView:feedbackDisabled]] på kursens sida. Studerande kommer inte åt enkäten, och Norppa skickar ingen e-post om den. När du slår på reglaget fungerar responsen normalt igen.

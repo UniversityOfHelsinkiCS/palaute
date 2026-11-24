@@ -42,13 +42,13 @@ Siffrorna i kurssammanfattningen räknas om varje natt, och där finns bara kurs
 
 ## Ett svar måste tas bort {#remove-answer}
 
-Svar kan inte tas bort i Norppa. Ett öppet svar kan [döljas](/guide/results#hide-answers), och då ser bara de ansvariga lärarna och utbildningsprogrammets admins (utbildningsprogrammets direktör, korrespondent för responsen) det. Om ett svar måste tas bort helt, kontakta [supporten](#support).
+Svar kan inte tas bort i Norppa. Ett öppet svar kan [gömmas](/guide/results#hide-answers), och då ser bara de ansvariga lärarna och utbildningsprogrammets admins (utbildningsprogrammets direktör, korrespondent för responsen) det. Om ett svar måste tas bort helt, kontakta [supporten](#support).
 
 ## Support {#support}
 
 Supportens adress är [norppa@helsinki.fi](mailto:norppa@helsinki.fi). Det mesta kan göras i Norppa eller rättas i Sisu, men kontakta supporten om du behöver:
 
-- öppna en avslutad kursenkät på nytt eller ändra dess datum
+- öppna en stängd kursenkät på nytt eller ändra dess datum
 - en enkät för en kurstyp som inte får en automatiskt, till exempel ett självständigt projekt, en essä, en praktik eller en pro gradu-avhandling (inte för tentamina)
 - hjälp när en kurs, lärare eller studerande fortfarande saknas i Norppa några dagar efter att uppgifterna har rättats i Sisu (ändringar i Sisu syns vanligtvis följande morgon; se [Uppdateringar från Sisu](/guide/schedule#sisu-updates))
 - hjälp med ett fel som inte går över

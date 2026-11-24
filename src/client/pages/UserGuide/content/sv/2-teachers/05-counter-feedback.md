@@ -16,7 +16,7 @@ Som enkätens ansvariga lärare kan du skriva motrespons inom 12 månader efter 
 2. Öppna fliken [[feedbackTargetView:feedbackResponseTab]].
 3. Skriv texten i fältet [[feedbackResponse:responseLabel]]. Fältet stöder Markdown, till exempel rubriker, listor, fetstil och länkar. Under [[feedbackResponse:previewLabel]] nedanför ser du hur texten kommer att se ut.
 4. Välj [[feedbackResponse:checkboxSendEmail]] om du vill skicka motresponsen till studerandena per e-post, eller avmarkera rutan om du bara vill spara den.
-5. Klicka på [[feedbackResponse:dialogSendEmailSubmit]] och bekräfta, eller på [[feedbackResponse:dialogSaveSubmit]] om du avmarkerade rutan.
+5. Välj [[feedbackResponse:dialogSendEmailSubmit]] och bekräfta, eller på [[feedbackResponse:dialogSaveSubmit]] om du avmarkerade rutan.
 
 [[video:write-counter-feedback]]
 
@@ -30,7 +30,7 @@ E-postmeddelandet om motresponsen går till alla enkätens studerande, inte bara
 
 E-postmeddelandet kan bara skickas en gång. Därefter står det [[feedbackResponse:emailSent]] vid kryssrutan. Du kan fortfarande redigera texten: studerandena ser den nya versionen i Norppa, men inget nytt e-postmeddelande skickas.
 
-Om du sparade motresponsen utan e-post kan du skicka den senare: välj [[feedbackResponse:checkboxSendEmail]] och klicka på [[feedbackResponse:dialogSendEmailSubmit]].
+Om du sparade motresponsen utan e-post kan du skicka den senare: välj [[feedbackResponse:checkboxSendEmail]] och välj [[feedbackResponse:dialogSendEmailSubmit]].
 
 ### Kontrollera statusen {#status}
 
@@ -46,6 +46,6 @@ Siffran på fliken [[teacherView:endedSurveys]] visar hur många kurser som sakn
 
 När enkäten har stängts ser studerandena motresponsen på enkätens flik [[feedbackTargetView:feedbacksTab]] under rubriken [[feedbackTargetResults:responseHeading]] (om de har svarat på kursenkäten).
 
-I [[navBar:myFeedbacks]] ser studerandena [[userFeedbacks:feedbackResponseGiven]] vid enkäten. Om du skickade e-postmeddelandet får de motresponsen också per e-post.
+Vid enkäten i [[navBar:myFeedbacks]] står det då [[userFeedbacks:feedbackResponseGiven]]. Om du skickade e-postmeddelandet får de motresponsen också per e-post.
 
 Om du vill dela motresponsen på annat sätt, till exempel i kursens lärmiljö, kopiera [[feedbackTargetView:studentResultsLinkTitle]] från enkätens flik [[feedbackTargetView:shareTab]]. Länken finns där när enkäten har stängts.

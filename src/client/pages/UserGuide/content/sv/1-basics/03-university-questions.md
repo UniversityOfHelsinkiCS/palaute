@@ -30,7 +30,7 @@ _Kunskapsmålen var tydliga_, _Lärmetoderna stödde mitt lärande_, _Materialet
 
 ## Frågorna i enkäten och resultaten {#in-surveys}
 
-- I kursenkätens frågeeditor står frågorna på universitetsnivå överst med märket [[questionEditor:universityQuestion]], och de kan inte redigeras eller tas bort. Se [Fasta frågor](/guide/questions#fixed-questions).
-- Studeranden ser skal- och flervalsfrågorna först och frågan _Övriga kommentarer_ sist; se [Frågornas ordning för studerande](/guide/questions#question-order).
-- Svaren på skal- och flervalsfrågorna är publika. Svaren på den öppna frågan är som standard inte publika, det vill säga de syns endast för den ansvariga läraren. Se [Svarens synlighet för olika användare](/guide/anonymity#public-answers).
+- I kursenkätens frågeredigerare står frågorna på universitetsnivå överst med märket [[questionEditor:universityQuestion]], och de kan inte redigeras eller tas bort. Se [Fasta frågor](/guide/questions#fixed-questions).
+- Studeranden ser skal- och valfrågorna först och frågan _Övriga kommentarer_ sist; se [Frågornas ordning för studerande](/guide/questions#question-order).
+- Svaren på skal- och valfrågorna är publika. Svaren på den öppna frågan är som standard inte publika, det vill säga de syns endast för den ansvariga läraren. Se [Svarens synlighet för olika användare](/guide/anonymity#public-answers).
 - Mellanrespons och programenkäter har inga frågor på universitetsnivå, men du kan lägga till dem med knappen [[editFeedbackTarget:copyUniversityQuestions]] om du vill.

@@ -30,6 +30,7 @@ Translate from the Finnish. Finland-Swedish, addressed as "du". The prose matche
 | yliopistotason kysymykset                    | frågor på universitetsnivå                                                             |
 | koulutusohjelman kysymykset                  | frågor på programnivå                                                                  |
 | arvoasteikkokysymys                          | skalfråga                                                                              |
+| valintakysymys (single and multiple choice)  | valfråga                                                                               |
 | ryhmittelykysymys                            | grupperingsfråga                                                                       |
 | tekstiosio                                   | textavsnitt                                                                            |
 | avoin kysymys                                | öppen fråga                                                                            |
@@ -40,6 +41,9 @@ Translate from the Finnish. Finland-Swedish, addressed as "du". The prose matche
 | ladata                                       | ladda ner                                                                              |
 | lukuoikeus / admin-oikeus                    | läsrättigheter / adminrättigheter                                                      |
 | välilehti                                    | flik                                                                                   |
+| kytkin                                       | reglage                                                                                |
+| sulkeutunut (kysely)                         | stängd                                                                                 |
+| piilottaa                                    | gömma (as the UI's Göm)                                                                |
 | Huom.!                                       | Obs!                                                                                   |
 
-A label takes its noun where Swedish needs one: "fliken [[…]]", "knappen [[…]]", "under rubriken [[…]]". Link texts quoting a title use the Swedish title.
+The teachers' and programmes' pages address the reader as "du", not "läraren". Steps say "Välj [[…]]"; "Klicka på" only for unlabelled icons. A label takes its noun where Swedish needs one, also as a subject: "fliken [[…]]", "Knappen [[…]] visar …", "under rubriken [[…]]". Links: "Se [Exakt titel](…)." or "…; se [Titel](…)". Notes: `> **Obs!**`. Times: kl. 00.00, kl. 23.59.

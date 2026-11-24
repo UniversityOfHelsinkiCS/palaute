@@ -13,7 +13,7 @@ Kurssammanfattningen samlar statistiken för kursenkäterna: medeltalen för ska
 
 Utbildningsprogrammets egen sammanfattning finns på utbildningsprogrammets sida, på fliken [[organisationSettings:summaryTab]], och där ingår också utbildningsprogrammets egna skalfrågor. Se [Utbildningsprogrammets sida](/guide/programme-page#programme-page).
 
-Så navigerar du i hierarkin: öppna en organisation för att se dess studieavsnitt, och klicka på ett studieavsnitt för att öppna alla dess genomföranden. Genom att klicka på ett genomförande kommer du till svaren på dess responsblankett.
+Så navigerar du i hierarkin: öppna en organisation för att se dess studieavsnitt, och klicka på ett studieavsnitt för att öppna alla dess genomföranden. Genom att klicka på ett genomförande kommer du till svaren på dess enkät.
 
 [[video:course-summary]]
 
@@ -26,7 +26,7 @@ Kolumnerna:
 - [[courseSummary:feedbackCount]]: svar / anmälda studerande.
 - [[courseSummary:feedbackPercentage]]: andelen studerande som svarat.
 - [[courseSummary:feedbackResponsePercentage]]: andelen kursgenomföranden som har fått motrespons.
-- [[courseSummary:censoredCount]]: svar som kursens ansvariga lärare eller utbildningsprogrammets admin-användare har dolt. Visas endast för organisationens admin-användare.
+- [[courseSummary:censoredCount]]: svar som kursens ansvariga lärare eller utbildningsprogrammets admins har gömt. Visas endast för organisationens admins.
 
 Medeltalets färg och nyans visar hur högt det är: låga medeltal är röda, medelhöga gula och höga gröna. En blek cell betyder att det inte finns några svar.
 
@@ -34,7 +34,7 @@ Siffrorna för ett studieavsnitt, ett utbildningsprogram eller en fakultet räkn
 
 Kolumnerna är de frågor på universitetsnivå som var i bruk i början av den valda perioden. Om kursens enkät hade andra frågor visas en informationsikon i stället för medeltal på kursens rad.
 
-Genom att välja en kolumnrubrik kan du sortera raderna enligt den. [[courseSummary:tableView]] visar samma siffror som en enda tabell, och [[courseSummary:treeView]] återställer trädvyn. I vyn [[courseSummary:myOrganisations]] kan du fästa de organisationer du följer oftast överst med [[courseSummary:pinOrganisation]].
+Genom att välja en kolumnrubrik kan du sortera raderna enligt den. Knappen [[courseSummary:tableView]] visar samma siffror som en enda tabell, och knappen [[courseSummary:treeView]] återställer trädvyn. I vyn [[courseSummary:myOrganisations]] kan du fästa de organisationer du följer oftast överst med [[courseSummary:pinOrganisation]].
 
 ## Välja tidsperiod {#filters}
 

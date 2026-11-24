@@ -12,7 +12,7 @@ Norppa hämtar varje kursgenomförandes lärare och deras roller från Sisu. På
 
 - _Ansvarig lärare_: rollerna "ansvarig lärare" och "kontaktperson" i Sisu. En ansvarig lärare kan
   - redigera enkätens frågor och ändra dess datum
-  - läsa alla svar, dölja öppna svar och se vilka som har svarat
+  - läsa alla svar, gömma öppna svar och se vilka som har svarat
   - skicka påminnelser via e-post till studerandena
   - skriva motrespons
   - använda kontinuerlig respons och skapa mellanrespons.
@@ -23,7 +23,7 @@ Ansvariga lärare och administratörer får också Norppas e-postmeddelanden om 
 
 Samma roller gäller kursens mellanrespons. I en programenkät har de ansvariga personer som utbildningsprogrammet har valt den ansvariga lärarens rättigheter; se [Programenkäter](/guide/programme-surveys).
 
-Anvisningarna för ansvariga lärare och administratörer finns i avsnittet [Ansvarig lärare](/guide/teachers).
+Instruktionerna för ansvariga lärare och administratörer finns i avsnittet [Ansvarig lärare](/guide/teachers).
 
 ## Rättigheter i utbildningsprogrammet eller fakulteten {#organisation-rights}
 
@@ -31,15 +31,15 @@ Rättigheterna till ett utbildningsprogram eller en fakultet kommer från univer
 
 - _Läsrättigheter_ (Read): utbildningsprogrammets eller fakultetens sida med kurssammanfattning och kurser samt svaren på kursernas publika frågor när enkäterna har stängts.
 - _Adminrättigheter_ (Admin): läsrättigheter (se ovan) och dessutom
-  - alla svar på kurserna, också de öppna frågorna på fliken [[organisationSettings:openQuestionsTab]]
+  - alla svar på kurserna, också svaren på de öppna frågorna på fliken [[organisationSettings:openQuestionsTab]]
   - flikarna [[organisationSettings:settingsTab]], [[organisationSettings:surveyTab]] och [[organisationSettings:organisationSurveysTab]]
-  - kursenkäter: redigera frågorna innan enkäten öppnas, dölja öppna svar, skicka påminnelser via e-post och se vilka som har svarat
+  - kursenkäter: redigera frågorna innan enkäten öppnas, gömma öppna svar, skicka påminnelser via e-post och se vilka som har svarat
 
 Rättigheter i utbildningsprogrammet gör dig inte till lärare på en kurs: för att ändra kursenkätens datum eller skriva motrespons behöver du rollen som ansvarig lärare i Sisu.
 
-_Korrespondenter för responsen_ får adminrättigheter till sitt utbildningsprogram. Utbildningsprogrammets admin-användare lägger till dem i Norppa; se [Lägga till en korrespondent för responsen](/guide/settings#feedback-liaison).
+_Korrespondenter för responsen_ får adminrättigheter till sitt utbildningsprogram. Utbildningsprogrammets admins lägger till dem i Norppa; se [Lägga till en korrespondent för responsen](/guide/settings#feedback-liaison).
 
-Anvisningarna för utbildningsprogrammens personal finns i avsnittet [Utbildningsprogram](/guide/programmes).
+Instruktionerna för utbildningsprogrammens personal finns i avsnittet [Utbildningsprogram](/guide/programmes).
 
 ## Kontrollera dina rättigheter {#check-your-rights}
 
@@ -51,7 +51,7 @@ Anvisningarna för utbildningsprogrammens personal finns i avsnittet [Utbildning
 ## Om din roll är fel {#wrong-role}
 
 - Fel roll på kursen eller du saknas helt från kursen: rollen måste rättas i Sisu. Det gör den person som sköter kursgenomförandet i Sisu, ofta utbildningsprogrammets studieförvaltning. Norppa uppdaterar rollerna varje natt, så ändringen syns följande morgon. Om till exempel en gästföreläsare får de ansvariga lärarnas e-postmeddelanden har hen lagts till i Sisu som ansvarig lärare, kontaktperson eller administratör; att ändra rollen i Sisu till lärare löser saken.
-- Rättigheter till utbildningsprogrammet eller fakulteten saknas: IAM-grupperna sköts utanför Norppa. Be ditt utbildningsprograms eller din fakultets förvaltning att lägga till dig i rätt grupp, och logga sedan ut ur Norppa och in igen. Alternativt kan en admin-användare i utbildningsprogrammet lägga till dig som korrespondent för responsen.
+- Rättigheter till utbildningsprogrammet eller fakulteten saknas: IAM-grupperna sköts utanför Norppa. Be ditt utbildningsprograms eller din fakultets förvaltning att lägga till dig i rätt grupp, och logga sedan ut ur Norppa och in igen. Alternativt kan en admin i utbildningsprogrammet lägga till dig som korrespondent för responsen.
 
 Om rollen i Sisu är fel, kontakta universitetets allmänna support på [uni-help@helsinki.fi](mailto:uni-help@helsinki.fi).
 

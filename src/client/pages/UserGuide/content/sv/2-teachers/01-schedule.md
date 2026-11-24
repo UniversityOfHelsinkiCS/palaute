@@ -4,17 +4,17 @@ description: När kursenkäten öppnas och stängs, och hur du ändrar dess datu
 
 # Enkätens tidtabell
 
-Norppa skapar kursenkäten automatiskt, och enkäten öppnas och stängs också automatiskt. Läraren behöver inte göra något för att enkäten ska öppnas. Innan den öppnas kan läraren ändå lägga till [egna frågor](/guide/questions) och [ändra datumen](#change-dates).
+Norppa skapar kursenkäten automatiskt, och enkäten öppnas och stängs också automatiskt. Du behöver inte göra något för att enkäten ska öppnas. Innan den öppnas kan du ändå lägga till [egna frågor](/guide/questions) och [ändra datumen](#change-dates).
 
 ## När enkäten är öppen {#feedback-period}
 
 Som standard öppnas kursenkäten kl. 00.00 dagen efter kursens sista dag och stängs 14 dagar senare kl. 23.59, så den är öppen i ungefär två veckor. Om kursens sista dag till exempel är den 12 december är enkäten öppen 13–27 december.
 
-Norppa visar både kursens datum (från Sisu): [[feedbackTargetView:coursePeriod]] och enkätens datum: [[feedbackTargetView:feedbackPeriod]].
+Norppa visar kursens datum (från Sisu) under [[feedbackTargetView:coursePeriod]] och enkätens datum under [[feedbackTargetView:feedbackPeriod]].
 
 - Kursens datum i Sisu bestämmer kursenkätens tidtabell. Om kursens datum i Sisu fortsätter efter föreläsningarna, till exempel fram till tentamen, öppnas enkäten senare i motsvarande grad.
 - Om kursens datum ändras i Sisu ändras också kursenkätens datum automatiskt.
-- Om läraren ändrar enkätens datum manuellt i Norppa påverkar ändringar i Sisu dem inte längre.
+- Om du ändrar enkätens datum manuellt i Norppa påverkar ändringar i Sisu dem inte längre.
 
 Ungefär en vecka innan enkäten öppnas får de ansvariga lärarna och administratörerna ett e-postmeddelande med enkätens datum, en länk för att redigera den och de frågor som lärarna har lagt till så här långt. I meddelandet nämns också om färre än fem studerande har anmält sig till kursen; se [Kurser med färre än fem studerande](/guide/anonymity#small-courses).
 
@@ -23,13 +23,13 @@ Ungefär en vecka innan enkäten öppnas får de ansvariga lärarna och administ
 Som ansvarig lärare eller administratör för kursen kan du ändra kursenkätens datum:
 
 1. Välj [[navBar:myCourses]] och sedan kursen.
-2. Klicka på [[common:edit]] bredvid [[feedbackTargetView:feedbackPeriod]].
+2. Välj [[common:edit]] bredvid [[feedbackTargetView:feedbackPeriod]].
 3. Välj datumen under [[editFeedbackTarget:opensAt]] och [[editFeedbackTarget:closesAt]] i fönstret [[feedbackTargetSettings:editPeriodTitle]].
-4. Klicka på [[common:save]].
+4. Välj [[common:save]].
 
 [[video:change-dates]]
 
-Beroende på enkätens status (kommande, öppen, avslutad) kan den ansvariga läraren ändra följande:
+Beroende på enkätens status (kommande, öppen, stängd) kan du ändra följande:
 
 - Innan enkäten öppnas kan du ändra start- och slutdatumet. Startdatumet kan inte ligga i det förflutna, och enkäten måste vara öppen i minst ett dygn, så slutdatumet måste vara tidigast dagen efter startdatumet.
 - Medan enkäten är öppen kan du bara ändra slutdatumet. Du kan förlänga enkäten, till exempel till tiden efter bedömningen, eller sätta dagens datum som slutdatum, så att enkäten stängs i dag kl. 23.59. Det finns ingen knapp som stänger enkäten genast.
@@ -39,11 +39,11 @@ Beroende på enkätens status (kommande, öppen, avslutad) kan den ansvariga lä
 
 ## Öppna enkäten genast {#open-now}
 
-(Obs! Lägg till dina egna frågor först: när enkäten är öppen kan de inte längre ändras.)
+> **Obs!** Lägg till dina egna frågor först: när enkäten har öppnats kan de inte längre ändras.
 
 1. Välj [[navBar:myCourses]] och sedan kursen.
-2. Klicka på [[common:edit]] bredvid [[feedbackTargetView:feedbackPeriod]].
-3. Klicka på [[editFeedbackTarget:openImmediately]] i fönstret.
+2. Välj [[common:edit]] bredvid [[feedbackTargetView:feedbackPeriod]].
+3. Välj [[editFeedbackTarget:openImmediately]] i fönstret.
 4. Bekräfta genom att välja [[editFeedbackTarget:openFeedbackImmediatelyDialogConfirm]].
 
 Enkäten öppnas genast, och studerandena får länken per e-post direkt.

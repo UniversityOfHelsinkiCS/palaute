@@ -40,7 +40,7 @@
 
 [[video:grouping-question]]
 
-## Insamling av svar {#collecting-answers}
+## Samla in svar {#collecting-answers}
 
 ### Dela enkätens länk
 
@@ -60,7 +60,7 @@
 
 [[video:answer-visibility]]
 
-### Dölja ett öppet svar
+### Gömma ett öppet svar
 
 [[video:hide-answers]]
 

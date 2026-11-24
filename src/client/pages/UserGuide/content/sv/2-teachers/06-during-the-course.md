@@ -4,7 +4,7 @@ description: Kontinuerlig respons och mellanrespons, så att du hör studeranden
 
 # Kontinuerlig respons och mellanrespons
 
-Utöver kursenkäten i slutet av kursen kan läraren samla in respons under kursen på två sätt. Kursens ansvariga lärare kan aktivera "kontinuerlig respons", som är ett lättillgängligt sätt för studerandena att ge snabb respons till läraren, med e-post. Dessutom kan läraren samla in mellanrespons med en separat enkät, till exempel mitt i kursen. Dessa funktioner finns bara i vanliga kursenkäter (inte i utbildningsprogrammens egna enkäter).
+Utöver kursenkäten i slutet av kursen kan du samla in respons under kursen på två sätt. Kursens ansvariga lärare kan aktivera "kontinuerlig respons", ett enkelt sätt för studerandena att snabbt ge läraren respons, som läraren kan få per e-post. Dessutom kan du samla in mellanrespons med en separat enkät, till exempel mitt i kursen. Dessa funktioner finns bara i vanliga kursenkäter (inte i utbildningsprogrammens egna enkäter).
 
 ## Kontinuerlig respons {#continuous-feedback}
 
@@ -16,7 +16,7 @@ Så här aktiverar du kontinuerlig respons:
 2. Öppna fliken [[feedbackTargetView:continuousFeedbackTab]].
 3. Slå på [[feedbackTargetView:activateContinuousFeedback]].
 4. Om du vill få e-post om ny respons, slå på [[feedbackTargetView:activateContinuousFeedbackDigest]].
-5. Skriv en lämplig inledning för studerandena i fältet [[feedbackTargetView:continuousFeedbackPreambleLabel]], till exempel vad du önskar respons om, och klicka på [[common:save]]. Inledningen visas på responsformuläret.
+5. Skriv en lämplig inledning för studerandena i fältet [[feedbackTargetView:continuousFeedbackPreambleLabel]], till exempel vad du önskar respons om, och välj [[common:save]]. Inledningen visas för studerandena ovanför responsfältet.
 
 [[video:continuous-feedback]]
 
@@ -26,7 +26,7 @@ Studerandena kan ge kontinuerlig respons tills kursenkäten öppnas. Den respons
 
 ### Dagligt e-postmeddelande
 
-När [[feedbackTargetView:activateContinuousFeedbackDigest]] är påslaget får kursens ansvariga lärare varje morgon ett e-postmeddelande med den kontinuerliga respons som getts under det senaste dygnet. Om ingen ny respons har kommit skickas inget meddelande. Respons som har getts medan e-postmeddelandet var avstängt skickas inte i efterhand, men den sparas i Norppa.
+När [[feedbackTargetView:activateContinuousFeedbackDigest]] är på får kursens ansvariga lärare varje morgon ett e-postmeddelande med den kontinuerliga respons som getts under det senaste dygnet. Om ingen ny respons har kommit skickas inget meddelande. Respons som har getts medan e-postmeddelandet var avstängt skickas inte i efterhand, men den sparas i Norppa.
 
 ### Läsa och svara
 
@@ -34,8 +34,8 @@ På fliken [[feedbackTargetView:continuousFeedbackTab]] finns all kontinuerlig r
 
 Så här svarar du på respons:
 
-1. Klicka på [[feedbackTargetView:respondContinuousFeedback]].
-2. Skriv ditt svar och klicka på [[common:send]].
+1. Välj [[feedbackTargetView:respondContinuousFeedback]].
+2. Skriv ditt svar och välj [[common:send]].
 
 Lärarens svar syns bara för den studerande som gav responsen. Den studerande får svaret per e-post, och det syns också i Norppa. Du kan ändra svaret senare med knappen [[common:edit]], men inget e-postmeddelande skickas om ändringarna.
 
@@ -51,10 +51,10 @@ Så här skapar du en mellanrespons (ansvariga lärare):
 
 1. Välj kursen i [[navBar:myCourses]].
 2. Öppna fliken [[feedbackTargetView:interimFeedbackTab]].
-3. Klicka på [[interimFeedback:addSurvey]].
-4. Ge mellanresponsen ett namn på minst ett språk och datumen i fälten [[interimFeedback:startDate]] och [[interimFeedback:endDate]].
-5. Klicka på [[common:save]]. Den nya mellanresponsen öppnas på fliken [[feedbackTargetView:surveyQuestionsTab]].
-6. Lägg till dina frågor. Se [redigera frågorna](/guide/questions#edit-questions).
+3. Välj [[interimFeedback:addSurvey]].
+4. Ge mellanresponsen ett namn på minst ett språk och ange datumen i fälten [[interimFeedback:startDate]] och [[interimFeedback:endDate]].
+5. Välj [[common:save]]. Den nya mellanresponsen öppnas på fliken [[feedbackTargetView:surveyQuestionsTab]].
+6. Lägg till dina frågor. Se [Redigera frågorna](/guide/questions#edit-questions).
 
 [[video:interim-feedback]]
 
@@ -62,16 +62,16 @@ Mellanrespons har inga frågor på universitetsnivå eller programnivå. Om du v
 
 Mellanresponsen öppnas kl. 00.00 på startdagen och stängs kl. 23.59 på slutdagen.
 
-Så här ändrar du namnet eller datumen: öppna mellanresponsen med knappen [[interimFeedback:viewFeedback]] och klicka på [[interimFeedback:editSurvey]]. Du kan göra det när som helst, till exempel för att förlänga mellanresponsen eller öppna den på nytt efter att den har stängts.
+Så här ändrar du namnet eller datumen: öppna mellanresponsen med knappen [[interimFeedback:viewFeedback]] och välj [[interimFeedback:editSurvey]]. Du kan göra det när som helst, till exempel för att förlänga mellanresponsen eller öppna den på nytt efter att den har stängts.
 
 ### Samla in svar
 
-Norppa skickar inga automatiska e-postmeddelanden om mellanrespons, varken till studerande eller till lärare. När mellanresponsen är öppen, skicka en påminnelse med knappen [[feedbackTargetResults:sendReminder]] på fliken [[feedbackTargetView:shareTab]] eller dela länken, till exempel per e-post. Se [dela enkäten](/guide/collecting-answers#share-link). Studerandena ser mellanresponsen i [[navBar:myFeedbacks]].
+Norppa skickar inga automatiska e-postmeddelanden om mellanrespons, varken till studerande eller till lärare. När mellanresponsen är öppen, skicka en påminnelse med knappen [[feedbackTargetResults:sendReminder]] på fliken [[feedbackTargetView:shareTab]] eller dela länken, till exempel per e-post. Se [Dela länken och QR-koden](/guide/collecting-answers#share-link). Studerandena ser mellanresponsen i [[navBar:myFeedbacks]].
 
 När en mellanrespons är öppen visas märket [[teacherView:interimFeedbackOpen]] vid kursen i [[navBar:myCourses]].
 
 ### Resultat och borttagning
 
-[[interimFeedback:viewResults]] för mellanresponsen visar de svar som har kommit in. De fungerar tekniskt på samma sätt som i kursenkäten: se [resultat](/guide/results). När mellanresponsen har stängts kan den ansvariga läraren skicka [motrespons](/guide/counter-feedback) om den. Mellanrespons syns inte i [[navBar:courseSummary]].
+Knappen [[interimFeedback:viewResults]] för mellanresponsen visar de svar som har kommit in. De fungerar tekniskt på samma sätt som i kursenkäten: se [Resultat](/guide/results). När mellanresponsen har stängts kan den ansvariga läraren skicka [motrespons](/guide/counter-feedback) om den. Mellanrespons syns inte i [[navBar:courseSummary]].
 
-Så här tar du bort en mellanrespons: klicka på [[interimFeedback:remove]] och bekräfta. En mellanrespons kan bara tas bort om den inte har fått några svar.
+Så här tar du bort en mellanrespons: välj [[interimFeedback:remove]] och bekräfta. En mellanrespons kan bara tas bort om den inte har fått några svar.

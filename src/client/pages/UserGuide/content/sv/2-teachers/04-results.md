@@ -1,5 +1,5 @@
 ---
-description: Granska svaren, deras synlighet, dölja öppna svar och ladda ner svaren.
+description: Granska svaren, deras synlighet, gömma öppna svar och ladda ner svaren.
 ---
 
 # Resultat
@@ -15,11 +15,11 @@ Enkätens svar syns på fliken [[feedbackTargetView:feedbacksTab]] från och med
 
 På fliken ser du:
 
-- Hur antalet svar har ökat dag för dag, som andel av enkätens studerande. I diagrammet är enkätens start- och slutdatum och den senaste påminnelsen utmärkta.
-- Hur svaren på varje skal- och valfråga fördelar sig. För skalfrågor visas också medelvärdet, där svaren [[feedbackView:dontKnowOption]] inte räknas med. I frågan om arbetsbelastning visar en pil åt vilket håll svaren lutar.
+- Hur antalet svar har ökat dag för dag, som andel av enkätens studerande. I diagrammet är enkätens start- och slutdatum och den senaste påminnelsen markerade.
+- Hur svaren på varje skal- och valfråga fördelar sig. För skalfrågor visas också medeltalet, där svaren [[feedbackView:dontKnowOption]] inte räknas med. I frågan om arbetsmängden visar en pil åt vilket håll svaren lutar.
 - Svaren på de öppna frågorna i alfabetisk ordning.
 
-[[feedbackTargetResults:tableView]] visar diagrammen som tabeller och [[feedbackTargetResults:chartView]] byter tillbaka.
+Knappen [[feedbackTargetResults:tableView]] visar diagrammen som tabeller och knappen [[feedbackTargetResults:chartView]] byter tillbaka.
 
 Om kursen har grupper i Sisu eller enkäten har en grupperingsfråga kan du filtrera svaren gruppvis med [[groups:chooseGroup]]. En enskild grupps svar visas bara om varje grupp som har fått svar har minst fem svarande; se [Svar per grupp](/guide/anonymity#groups).
 
@@ -31,7 +31,7 @@ Varje fråga är antingen [[common:public]] eller [[common:notPublic]]. Ansvarig
 
 Så här ändrar du en frågas synlighet:
 
-1. Klicka på [[common:public]] eller [[common:notPublic]] under frågan på fliken [[feedbackTargetView:feedbacksTab]].
+1. Välj [[common:public]] eller [[common:notPublic]] under frågan på fliken [[feedbackTargetView:feedbacksTab]].
 2. Välj [[common:publicInfo]] eller [[common:notPublicInfo]]. Ändringen sparas genast.
 
 [[video:answer-visibility]]
@@ -42,18 +42,18 @@ En öppen fråga kan göras publik först efter att enkäten har stängts, efter
 
 Du kan inte ändra synligheten för frågor som universitetet eller utbildningsprogrammet har gjort publika.
 
-## Dölja öppna svar {#hide-answers}
+## Gömma öppna svar {#hide-answers}
 
-Om ett öppet svar innehåller personuppgifter, såsom ett studentnummer, eller annars är olämpligt, kan du dölja det. Också utbildningsprogrammets admins kan dölja svar.
+Om ett öppet svar innehåller personuppgifter, såsom ett studentnummer, eller annars är olämpligt, kan du gömma det. Också utbildningsprogrammets admins kan gömma svar.
 
 1. Leta upp svaret på fliken [[feedbackTargetView:feedbacksTab]].
 2. Klicka på ögonikonen bredvid det ([[feedbackTargetResults:setHidden]]).
 
 [[video:hide-answers]]
 
-Svaret döljs för alla som bara ser publika svar. Ansvariga lärare och utbildningsprogrammets admins ser det fortfarande, märkt som dolt. Också svar som är exakt likadana i samma fråga döljs. Du visar svaret igen genom att klicka på ikonen på nytt ([[feedbackTargetResults:setVisible]]).
+Svaret göms för alla som bara ser publika svar. Ansvariga lärare och utbildningsprogrammets admins ser det fortfarande, märkt som gömt. Också svar som är exakt likadana i samma fråga göms. Du visar svaret igen genom att klicka på ikonen på nytt ([[feedbackTargetResults:setVisible]]).
 
-Att dölja svar spelar bara roll för publika frågor. Dolda svar lämnas bort ur pdf-filen.
+Att gömma svar spelar bara roll för publika frågor. Gömda svar lämnas bort ur pdf-filen.
 
 Svar kan inte tas bort. Om ett svar måste tas bort helt, kontakta [supporten](/guide/help#support).
 
@@ -61,9 +61,9 @@ Svar kan inte tas bort. Om ett svar måste tas bort helt, kontakta [supporten](/
 
 Fliken [[feedbackTargetView:studentsWithFeedbackTab]] under fliken [[feedbackTargetView:surveyTab]] listar kursens studerande (det vill säga de potentiella svarandena). Listan syns för ansvariga lärare och utbildningsprogrammets admins (utbildningsprogrammets direktör, korrespondenten för responsen).
 
-Om en studerande har svarat ([[common:feedbackGiven]] eller [[common:feedbackNotGiven]]) visas bara när enkäten har stängts, minst fem studerande har svarat och kursens utbildningsprogram har tillåtit funktionen i sina inställningar. Annars står det [[common:feedbackHidden]] i kolumnen. Listan visar aldrig vem som svarade vad. Se närmare [Vem har svarat](/guide/anonymity#who-answered).
+Om en studerande har svarat ([[common:feedbackGiven]] eller [[common:feedbackNotGiven]]) visas bara när enkäten har stängts, minst fem studerande har svarat och kursens utbildningsprogram har tillåtit funktionen i sina inställningar. Annars står det [[common:feedbackHidden]] i kolumnen. Listan visar aldrig vem som svarade vad. Se [Vem har svarat](/guide/anonymity#who-answered).
 
-[[feedbackTargetView:copyStudentNumbers]] kopierar studentnumren, till exempel för att klistra in dem i ett e-postmeddelande. [[common:exportXLSX]] laddar ner en Excel-fil över dem som har svarat.
+Knappen [[feedbackTargetView:copyStudentNumbers]] kopierar studentnumren, till exempel för att klistra in dem i ett e-postmeddelande. Knappen [[common:exportXLSX]] laddar ner en Excel-fil över dem som har svarat.
 
 ## Ladda ner svaren {#download}
 
