@@ -29,7 +29,11 @@ export type GuidePage = {
   editUrl: string
 }
 
-type GuideLanguage = 'fi' | 'en'
+const LANGUAGES = ['fi', 'sv', 'en'] as const
+
+type GuideLanguage = (typeof LANGUAGES)[number]
+
+const isGuideLanguage = (language: string): language is GuideLanguage => LANGUAGES.some(other => other === language)
 
 const FILES = import.meta.glob<string>(['./content/*/*.md', './content/*/*/*.md', '!./content/*/home.md'], {
   query: '?raw',
@@ -38,7 +42,7 @@ const FILES = import.meta.glob<string>(['./content/*/*.md', './content/*/*/*.md'
 })
 
 // A page in a group folder or the group's index.md, or a page of its own, whose order then places it among the groups
-const FILE_NAME = /\/content\/(fi|en)\/(?:(\d+)-([a-z]+)\/)?(?:(\d+)-([a-z0-9-]+)|(index))\.md$/
+const FILE_NAME = /\/content\/(fi|sv|en)\/(?:(\d+)-([a-z]+)\/)?(?:(\d+)-([a-z0-9-]+)|(index))\.md$/
 
 // Only a description, as "description: ..." between --- lines at the top of the file
 const FRONT_MATTER = /^---\n([\s\S]*?)\n---\n/
@@ -51,9 +55,9 @@ export const videoEditUrl = (slug: string) => `${REPO_EDIT_URL}/e2e/manual/scena
 
 const parsePage = (path: string, file: string): { order: number[]; page: GuidePage } => {
   const [, language, groupOrder, group, order, slug, index] = FILE_NAME.exec(path) ?? []
-  if ((language !== 'fi' && language !== 'en') || (index && !group)) {
+  if (!isGuideLanguage(language) || (index && !group)) {
     throw new Error(
-      `[UserGuide] Unexpected file name ${path}, should be content/<fi|en>/[<order>-<group>/]<order>-<slug>.md or content/<fi|en>/<order>-<group>/index.md`
+      `[UserGuide] Unexpected file name ${path}, should be content/<fi|sv|en>/[<order>-<group>/]<order>-<slug>.md or content/<fi|sv|en>/<order>-<group>/index.md`
     )
   }
   const frontMatter = FRONT_MATTER.exec(file)?.[1] ?? ''
@@ -111,12 +115,23 @@ const homeIn = (language: GuideLanguage): GuidePage => {
   }
 }
 
-export const GUIDE_HOMES: Record<GuideLanguage, GuidePage> = { fi: homeIn('fi'), en: homeIn('en') }
+export const GUIDE_HOMES: Record<GuideLanguage, GuidePage> = {
+  fi: homeIn('fi'),
+  sv: homeIn('sv'),
+  en: homeIn('en'),
+}
 
-export const GUIDE_PAGES: Record<GuideLanguage, GuidePage[]> = { fi: pagesIn('fi'), en: pagesIn('en') }
+export const GUIDE_PAGES: Record<GuideLanguage, GuidePage[]> = {
+  fi: pagesIn('fi'),
+  sv: pagesIn('sv'),
+  en: pagesIn('en'),
+}
 
-// Swedish has no guide of its own: Swedish users get the English text and videos, with the UI labels in Swedish
-const guideLanguage = (uiLanguage: string): GuideLanguage => (uiLanguage.startsWith('fi') ? 'fi' : 'en')
+const guideLanguage = (uiLanguage: string): GuideLanguage => {
+  if (uiLanguage.startsWith('fi')) return 'fi'
+  if (uiLanguage.startsWith('sv')) return 'sv'
+  return 'en'
+}
 
 export const getGuidePages = (uiLanguage: string) => GUIDE_PAGES[guideLanguage(uiLanguage)]
 

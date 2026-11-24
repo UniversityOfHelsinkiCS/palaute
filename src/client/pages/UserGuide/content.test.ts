@@ -38,17 +38,21 @@ const videosOf = (markdown: string) => markdown.split('\n').flatMap(line => VIDE
 
 describe('user guide content', () => {
   // The home page's top too, which isn't in the list of pages
-  const allPages = (['fi', 'en'] as const).flatMap(language => [...GUIDE_PAGES[language], GUIDE_HOMES[language]])
+  const allPages = (['fi', 'sv', 'en'] as const).flatMap(language => [...GUIDE_PAGES[language], GUIDE_HOMES[language]])
 
-  it('has the same pages, section ids and videos in Finnish and English, so links work in both', () => {
-    expect(GUIDE_PAGES.fi.length).toBeGreaterThan(0)
-    expect(GUIDE_PAGES.fi.map(page => page.slug)).toEqual(GUIDE_PAGES.en.map(page => page.slug))
-    expect(GUIDE_PAGES.fi.map(page => page.group)).toEqual(GUIDE_PAGES.en.map(page => page.group))
-    for (const [index, page] of GUIDE_PAGES.fi.entries()) {
-      expect(anchorsOf(page.markdown), page.slug).toEqual(anchorsOf(GUIDE_PAGES.en[index].markdown))
-      expect(videosOf(page.markdown), page.slug).toEqual(videosOf(GUIDE_PAGES.en[index].markdown))
+  it.each(['sv', 'en'] as const)(
+    'has the same pages, section ids and videos in Finnish and %s, so links work in both',
+    language => {
+      const pages = GUIDE_PAGES[language]
+      expect(GUIDE_PAGES.fi.length).toBeGreaterThan(0)
+      expect(GUIDE_PAGES.fi.map(page => page.slug)).toEqual(pages.map(page => page.slug))
+      expect(GUIDE_PAGES.fi.map(page => page.group)).toEqual(pages.map(page => page.group))
+      for (const [index, page] of GUIDE_PAGES.fi.entries()) {
+        expect(anchorsOf(page.markdown), page.slug).toEqual(anchorsOf(pages[index].markdown))
+        expect(videosOf(page.markdown), page.slug).toEqual(videosOf(pages[index].markdown))
+      }
     }
-  })
+  )
 
   // The address has only the slug, not the group
   it('has a unique slug for each page', () => {
