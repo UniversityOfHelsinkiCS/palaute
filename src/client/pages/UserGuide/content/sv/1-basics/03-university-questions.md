@@ -26,7 +26,7 @@ I kurssammanfattningen är kolumnerna de frågor som var i bruk i början av den
 
 Åren 2021–2026 hade Norppa följande frågor på universitetsnivå:
 
-_Lärandemålen var tydliga för mig_, _Genomförandet stödde mitt lärande_, _Materialet stödde mitt lärande_ och _Bedömningsmetoderna som användes på kursen mäter mitt lärande_. Frågan om arbetsmängden var densamma som nu, och i slutet fanns den öppna frågan _Övriga kommentarer_.
+_Kunskapsmålen var tydliga_, _Lärmetoderna stödde mitt lärande_, _Materialet stödde mitt lärande_ och _Bedömningsmetoderna, som används i kursen, mäter mitt lärande_. Frågan om arbetsmängden var densamma som nu, och i slutet fanns den öppna frågan _Övriga observationer_.
 
 ## Frågorna i enkäten och resultaten {#in-surveys}
 
