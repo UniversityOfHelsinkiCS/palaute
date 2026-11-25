@@ -5,7 +5,7 @@
   "editable": true,
   "schemaVersion": 39,
   "time": {
-    "from": "now-7d/d",
+    "from": "now-6d/d",
     "to": "now"
   },
   "refresh": "",
@@ -60,7 +60,7 @@
       "panels": []
     },
     {
-      "id": 3,
+      "id": 4,
       "type": "stat",
       "title": "Requests",
       "datasource": {
@@ -120,7 +120,7 @@
       }
     },
     {
-      "id": 4,
+      "id": 3,
       "type": "stat",
       "title": "Distinct users",
       "datasource": {
@@ -140,13 +140,43 @@
             "type": "loki",
             "uid": "${datasource}"
           },
-          "expr": "sum by (userId) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "expr": "sum by (userId, device) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | userId=~\"[a-g].*\" | label_format device=`{{ if contains \"Mobi\" __line__ }}Mobile{{ else }}Desktop{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{userId}}",
+          "queryType": "range"
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (userId, device) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | userId=~\"[h-k].*\" | label_format device=`{{ if contains \"Mobi\" __line__ }}Mobile{{ else }}Desktop{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{userId}}",
+          "queryType": "range"
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (userId, device) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | userId=~\"[l-r].*\" | label_format device=`{{ if contains \"Mobi\" __line__ }}Mobile{{ else }}Desktop{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
+          "legendFormat": "{{userId}}",
+          "queryType": "range"
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "loki",
+            "uid": "${datasource}"
+          },
+          "expr": "sum by (userId, device) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | userId!~\"[a-r].*\" | label_format device=`{{ if contains \"Mobi\" __line__ }}Mobile{{ else }}Desktop{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
           "legendFormat": "{{userId}}",
           "queryType": "range"
         }
       ],
-      "description": "Users who loaded the app. Shibboleth logins only. Leaves out users seen only today (UTC) until midnight, so ranges of a day or two come out low.",
-      "interval": "1d",
+      "description": "Users who loaded the app. Shibboleth logins only.",
+      "interval": "1h",
       "maxDataPoints": 11000,
       "fieldConfig": {
         "defaults": {
@@ -169,8 +199,8 @@
       },
       "options": {
         "reduceOptions": {
-          "calcs": ["max"],
-          "fields": "/^Last \\*$/",
+          "calcs": ["lastNotNull"],
+          "fields": "",
           "values": false
         },
         "colorMode": "value",
@@ -182,7 +212,20 @@
         {
           "id": "reduce",
           "options": {
-            "reducers": ["lastNotNull"]
+            "mode": "seriesToRows",
+            "reducers": ["lastNotNull"],
+            "labelsToFields": true
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "userId": {
+                "aggregations": [],
+                "operation": "groupby"
+              }
+            }
           }
         },
         {
@@ -217,7 +260,7 @@
             "uid": "${datasource}"
           },
           "expr": "sum by (userId, feature) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"responseTime\"` !~ `\"url\": ?\"/api/(noad/)?ping` |~ `\"url\":\"/api/(user-guide/opened|help-chatbot/turns)` | json method, url, status, responseTime, userId, userAgent | method=\"POST\" | url=~\"/api/(user-guide/opened|help-chatbot/turns)/?([?].*)?\" | status < 400 | __error__=\"\" | userId!=\"\" | label_format feature=`{{ if hasPrefix \"/api/user-guide\" .url }}User guide{{ else }}NorppAI{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
-          "legendFormat": "{{feature}}",
+          "legendFormat": "{{userId}}",
           "queryType": "range"
         }
       ],
@@ -227,18 +270,20 @@
         {
           "id": "reduce",
           "options": {
-            "reducers": ["lastNotNull"]
+            "mode": "seriesToRows",
+            "reducers": ["lastNotNull"],
+            "labelsToFields": true
           }
         },
         {
           "id": "groupBy",
           "options": {
             "fields": {
-              "Field": {
+              "feature": {
                 "aggregations": [],
                 "operation": "groupby"
               },
-              "Last *": {
+              "userId": {
                 "aggregations": ["count"],
                 "operation": "aggregate"
               }
@@ -255,7 +300,7 @@
             "mode": "fixed",
             "fixedColor": "text"
           },
-          "displayName": "${__data.fields.Field}"
+          "displayName": "${__data.fields.feature}"
         },
         "overrides": []
       },
@@ -290,8 +335,8 @@
       "type": "timeseries",
       "title": "Active users per hour",
       "datasource": {
-        "type": "loki",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "gridPos": {
         "x": 0,
@@ -303,12 +348,10 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "loki",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "expr": "count(sum by (userId) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" [$__interval])))",
-          "legendFormat": "Users",
-          "queryType": "range"
+          "panelId": 3
         }
       ],
       "description": "",
@@ -345,15 +388,53 @@
           "sort": "desc"
         }
       },
-      "interval": "1h"
+      "transformations": [
+        {
+          "id": "seriesToRows",
+          "options": {}
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Time": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Metric": {
+                "aggregations": ["distinctCount"],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Metric (distinctCount)": "Users"
+            }
+          }
+        },
+        {
+          "id": "sortBy",
+          "options": {
+            "sort": [
+              {
+                "field": "Time"
+              }
+            ]
+          }
+        }
+      ]
     },
     {
       "id": 7,
       "type": "barchart",
       "title": "Active users per day",
       "datasource": {
-        "type": "loki",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "gridPos": {
         "x": 12,
@@ -365,23 +446,26 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "loki",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "expr": "count(sum by (userId) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval])))",
-          "legendFormat": "Users",
-          "queryType": "range"
+          "panelId": 3
         }
       ],
-      "description": "Days are UTC. Today shows up after midnight UTC.",
-      "interval": "1d",
-      "maxDataPoints": 11000,
+      "description": "Days are UTC.",
       "transformations": [
         {
-          "id": "seriesToColumns",
+          "id": "seriesToRows",
+          "options": {}
+        },
+        {
+          "id": "sortBy",
           "options": {
-            "byField": "Time",
-            "mode": "outer"
+            "sort": [
+              {
+                "field": "Time"
+              }
+            ]
           }
         },
         {
@@ -391,10 +475,71 @@
             "binary": {
               "left": "Time",
               "operator": "-",
+              "right": "1"
+            },
+            "alias": "Covered",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Covered",
+              "operator": "/",
+              "right": "86400000"
+            },
+            "alias": "Days",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "unary",
+            "unary": {
+              "operator": "floor",
+              "fieldName": "Days"
+            },
+            "alias": "Whole days",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Whole days",
+              "operator": "*",
               "right": "86400000"
             },
             "alias": "Day",
             "replaceFields": false
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Day": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Metric": {
+                "aggregations": ["distinctCount"],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Metric (distinctCount)": "Users"
+            }
           }
         },
         {
@@ -432,22 +577,6 @@
               {
                 "id": "unit",
                 "value": "time:MM/DD"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": true,
-                  "tooltip": true,
-                  "viz": true
-                }
               }
             ]
           }
@@ -1093,8 +1222,8 @@
       "type": "piechart",
       "title": "Users by device",
       "datasource": {
-        "type": "loki",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "gridPos": {
         "x": 16,
@@ -1106,32 +1235,30 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "loki",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "expr": "sum by (userId, device) (count_over_time({app=\"norppa\", environment=\"$environment\"} |= `\"url\":\"/api/login\"` | pattern `<_>\"userId\":\"<userId>\"<_>` | userId!=\"\" | label_format device=`{{ if contains \"Mobi\" __line__ }}Mobile{{ else }}Desktop{{ end }}` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts [$__interval]))",
-          "legendFormat": "{{device}}",
-          "queryType": "range"
+          "panelId": 3
         }
       ],
-      "interval": "1d",
-      "maxDataPoints": 11000,
       "transformations": [
         {
           "id": "reduce",
           "options": {
-            "reducers": ["lastNotNull"]
+            "mode": "seriesToRows",
+            "reducers": ["lastNotNull"],
+            "labelsToFields": true
           }
         },
         {
           "id": "groupBy",
           "options": {
             "fields": {
-              "Field": {
+              "device": {
                 "aggregations": [],
                 "operation": "groupby"
               },
-              "Last *": {
+              "userId": {
                 "aggregations": ["count"],
                 "operation": "aggregate"
               }
@@ -1139,14 +1266,14 @@
           }
         }
       ],
-      "description": "A user on both counts in both. Leaves out users seen only today (UTC) until midnight, so ranges of a day or two come out low.",
+      "description": "A user on both counts in both.",
       "fieldConfig": {
         "defaults": {
           "unit": "locale",
           "color": {
             "mode": "palette-classic"
           },
-          "displayName": "${__data.fields.Field}"
+          "displayName": "${__data.fields.device}"
         },
         "overrides": []
       },
@@ -1183,7 +1310,7 @@
       "panels": []
     },
     {
-      "id": 16,
+      "id": 17,
       "type": "stat",
       "title": "Emails sent",
       "datasource": {
@@ -1243,12 +1370,12 @@
       }
     },
     {
-      "id": 15,
+      "id": 16,
       "type": "barchart",
       "title": "Emails per day by type",
       "datasource": {
-        "type": "loki",
-        "uid": "${datasource}"
+        "type": "datasource",
+        "uid": "-- Dashboard --"
       },
       "gridPos": {
         "x": 0,
@@ -1260,23 +1387,26 @@
         {
           "refId": "A",
           "datasource": {
-            "type": "loki",
-            "uid": "${datasource}"
+            "type": "datasource",
+            "uid": "-- Dashboard --"
           },
-          "expr": "sum by (type) (sum_over_time({app=\"norppa\", environment=\"$environment\"} |= `Sending email to` | regexp `Sending email to (?P<recipients>[0-9]+) recipients, type = '(?P<type>[^']*)'` | label_format ts=`{{ __timestamp__ | unixEpochMillis }}` | ts >= $__from | drop ts | unwrap recipients [$__interval]))",
-          "legendFormat": "{{type}}",
-          "queryType": "range"
+          "panelId": 15
         }
       ],
-      "description": "One email per recipient. Days are UTC. Today shows up after midnight UTC.",
-      "interval": "1d",
-      "maxDataPoints": 11000,
+      "description": "One email per recipient. Days are UTC.",
       "transformations": [
         {
-          "id": "seriesToColumns",
+          "id": "seriesToRows",
+          "options": {}
+        },
+        {
+          "id": "sortBy",
           "options": {
-            "byField": "Time",
-            "mode": "outer"
+            "sort": [
+              {
+                "field": "Time"
+              }
+            ]
           }
         },
         {
@@ -1286,10 +1416,84 @@
             "binary": {
               "left": "Time",
               "operator": "-",
+              "right": "1"
+            },
+            "alias": "Covered",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Covered",
+              "operator": "/",
+              "right": "86400000"
+            },
+            "alias": "Days",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "unary",
+            "unary": {
+              "operator": "floor",
+              "fieldName": "Days"
+            },
+            "alias": "Whole days",
+            "replaceFields": false
+          }
+        },
+        {
+          "id": "calculateField",
+          "options": {
+            "mode": "binary",
+            "binary": {
+              "left": "Whole days",
+              "operator": "*",
               "right": "86400000"
             },
             "alias": "Day",
             "replaceFields": false
+          }
+        },
+        {
+          "id": "groupBy",
+          "options": {
+            "fields": {
+              "Day": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Metric": {
+                "aggregations": [],
+                "operation": "groupby"
+              },
+              "Value": {
+                "aggregations": ["sum"],
+                "operation": "aggregate"
+              }
+            }
+          }
+        },
+        {
+          "id": "groupingToMatrix",
+          "options": {
+            "columnField": "Metric",
+            "rowField": "Day",
+            "valueField": "Value (sum)",
+            "emptyValue": "null"
+          }
+        },
+        {
+          "id": "organize",
+          "options": {
+            "renameByName": {
+              "Day\\Metric": "Day"
+            }
           }
         },
         {
@@ -1327,22 +1531,6 @@
               {
                 "id": "unit",
                 "value": "time:MM/DD"
-              }
-            ]
-          },
-          {
-            "matcher": {
-              "id": "byName",
-              "options": "Time"
-            },
-            "properties": [
-              {
-                "id": "custom.hideFrom",
-                "value": {
-                  "legend": true,
-                  "tooltip": true,
-                  "viz": true
-                }
               }
             ]
           },
@@ -1489,7 +1677,7 @@
       }
     },
     {
-      "id": 17,
+      "id": 15,
       "type": "bargauge",
       "title": "Emails by type",
       "datasource": {
