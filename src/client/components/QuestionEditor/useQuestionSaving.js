@@ -51,6 +51,8 @@ const useQuestionSaving = ({ initialValues, questionsVersion, saveQuestions }) =
   // The server refuses a save if anyone else has saved the questions since this version
   const versionRef = useRef(questionsVersion)
   const lastSavedRef = useRef(initialValues)
+  // A change that is waiting, being saved or failed to save
+  const unsavedRef = useRef(false)
 
   const withKnownIds = question => {
     const id = question.id ?? createdIdsRef.current[getClientId(question)]
@@ -79,10 +81,12 @@ const useQuestionSaving = ({ initialValues, questionsVersion, saveQuestions }) =
         versionRef.current = result.questionsVersion
         lastSavedRef.current = mapQuestions(snapshot, withKnownIds)
         applyToForm(withKnownIds)
+        unsavedRef.current = Boolean(pendingRef.current)
         enqueueSnackbar(t('common:saveSuccess'), { variant: 'success' })
       } catch (error) {
         if (error instanceof SaveCancelled) {
           pendingRef.current = null
+          unsavedRef.current = false
           formikRef.current?.resetForm({ values: lastSavedRef.current })
         } else {
           // The failed change stays in the form and is sent again with the next save
@@ -101,13 +105,20 @@ const useQuestionSaving = ({ initialValues, questionsVersion, saveQuestions }) =
 
   const request = values => {
     pendingRef.current = values
+    unsavedRef.current = true
     void run()
   }
 
   useEffect(() => {
     mountedRef.current = true
+    // Closing or reloading the page would drop changes that aren't saved yet
+    const warnBeforeLeaving = event => {
+      if (unsavedRef.current) event.preventDefault()
+    }
+    window.addEventListener('beforeunload', warnBeforeLeaving)
     return () => {
       mountedRef.current = false
+      window.removeEventListener('beforeunload', warnBeforeLeaving)
     }
   }, [])
 
