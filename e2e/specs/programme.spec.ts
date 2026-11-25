@@ -19,7 +19,10 @@ test.describe('Organisation settings', () => {
 
     test.beforeEach(async ({ page }) => {
       confirmMessages = []
-      page.on('dialog', dialog => confirmMessages.push(dialog.message()))
+      // The editor also warns before leaving while a save is running, that prompt isn't checked here
+      page.on('dialog', dialog => {
+        if (dialog.type() === 'confirm') confirmMessages.push(dialog.message())
+      })
       await page.goto(`/organisations/TEST_ORG/survey`)
     })
 
