@@ -50,7 +50,7 @@ Omien kysymysten kopioiminen toisen kurssin kyselystä:
 
 [[video:copy-questions]]
 
-Kysymykset lisätään omien kysymystesi perään ja tallennetaan heti. Vain opettajan omat kysymykset kopioituvat, eivät yliopistotason tai koulutusohjelman kysymykset. Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
+Kysymykset lisätään omien kysymystesi perään ja tallennetaan heti. Vain opettajan omat kysymykset kopioituvat, eivät yliopistotason tai koulutusohjelman kysymykset eikä ryhmittelykysymys. Kopioidut kysymykset eivät ole julkisia, ennen kuin muutat ne julkisiksi.
 
 Välipalautteessa ja koulutusohjelman kyselyssä [[editFeedbackTarget:copyFromCourseButton]] näyttää sen sijaan koulutusohjelman kyselyt niistä koulutusohjelmista ja tiedekunnista, joihin sinulla on admin-oikeudet. Välipalautteessa ja koulutusohjelman kyselyssä on lisäksi [[editFeedbackTarget:copyUniversityQuestions]]-painike, josta voi halutessaan lisätä yliopistotason kysymykset.
 
@@ -91,7 +91,7 @@ Jos kurssilla ei ole ryhmiä Sisussa tai ne eivät sovi tarpeisiisi, lisää _ry
 
 [[video:grouping-question]]
 
-Ryhmittelykysymys on vastaajalle pakollinen, kyselyn ensimmäinen kysymys eikä se ole oletuksena julkinen. Kurssipalautekyselyssä voi olla vain yksi ryhmittelykysymys, ja jos opettaja on luonut sen itse, tämä ryhmittely korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
+Ryhmittelykysymys on vastaajalle pakollinen. Se on kyselyn ensimmäinen kysymys eikä se ole koskaan julkinen. Kurssipalautekyselyssä voi olla vain yksi ryhmittelykysymys, ja jos opettaja on luonut sen itse, tämä ryhmittely korvaa Sisun ryhmät. Jos haluat palata Sisun ryhmiin, poista ryhmittelykysymys.
 
 Anonymiteetin suojaamiseksi vastaukset näytetään ryhmittäin vain, jos jokaisessa vastauksia saaneessa ryhmässä on vähintään viisi vastaajaa (ks. [Ryhmien vastaukset](/guide/anonymity#groups)).
 

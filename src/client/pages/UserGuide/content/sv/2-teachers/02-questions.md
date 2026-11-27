@@ -50,7 +50,7 @@ Så här kopierar du dina egna frågor från enkäten på en annan kurs:
 
 [[video:copy-questions]]
 
-Frågorna läggs till efter dina egna frågor och sparas genast. Bara lärarens egna frågor kopieras, inte frågorna på universitetsnivå eller programnivå. De kopierade frågorna är inte publika förrän du gör dem publika.
+Frågorna läggs till efter dina egna frågor och sparas genast. Bara lärarens egna frågor kopieras, inte frågorna på universitetsnivå eller programnivå och inte heller grupperingsfrågan. De kopierade frågorna är inte publika förrän du gör dem publika.
 
 I mellanrespons och programenkäter visar knappen [[editFeedbackTarget:copyFromCourseButton]] i stället programenkäterna från de utbildningsprogram och fakulteter där du har adminrättigheter. I mellanrespons och programenkäter finns dessutom knappen [[editFeedbackTarget:copyUniversityQuestions]], med vilken du kan lägga till frågorna på universitetsnivå om du vill.
 
@@ -91,7 +91,7 @@ Om kursen inte har några grupper i Sisu, eller om de inte passar dina behov, l�
 
 [[video:grouping-question]]
 
-Grupperingsfrågan är obligatorisk för den som svarar, den är enkätens första fråga och den är inte publik som standard. En kursenkät kan bara ha en grupperingsfråga, och om du har skapat den själv ersätter den grupperna från Sisu. Om du vill återgå till grupperna i Sisu, ta bort grupperingsfrågan.
+Grupperingsfrågan är obligatorisk för den som svarar, den är enkätens första fråga och den är aldrig publik. En kursenkät kan bara ha en grupperingsfråga, och om du har skapat den själv ersätter den grupperna från Sisu. Om du vill återgå till grupperna i Sisu, ta bort grupperingsfrågan.
 
 För att skydda anonymiteten visas svaren gruppvis bara om varje grupp som har fått svar har minst fem svarande (se [Svar per grupp](/guide/anonymity#groups)).
 

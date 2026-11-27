@@ -22,7 +22,7 @@ To turn on continuous feedback:
 
 The switches are saved at once, but Norppa doesn't tell students about continuous feedback automatically, so it's a good idea to let them know separately. Students find the course in [[navBar:myFeedbacks]] on the [[userFeedbacks:continuousFeedbackTab]] tab and write their feedback under [[userFeedbacks:giveContinuousFeedback]].
 
-Students can give continuous feedback until the course survey opens. The feedback given is saved in Norppa.
+Students can give continuous feedback until the course survey opens. Until then, a student can also edit their feedback if it hasn't been replied to yet. The feedback given is saved in Norppa.
 
 ### Daily email
 

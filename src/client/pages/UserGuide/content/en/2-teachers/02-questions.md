@@ -50,7 +50,7 @@ To copy your own questions from another course survey into a course survey:
 
 [[video:copy-questions]]
 
-The questions are added after your existing questions and saved at once. Only the teacher's own questions are copied, not the university level or programme questions. Copied questions aren't public until you make them public.
+The questions are added after your existing questions and saved at once. Only the teacher's own questions are copied, not the university level or programme questions or a grouping question. Copied questions aren't public until you make them public.
 
 In interim feedback and programme surveys, [[editFeedbackTarget:copyFromCourseButton]] lists programme surveys instead: those of the degree programmes and faculties where you have admin rights. There's also [[editFeedbackTarget:copyUniversityQuestions]], which you can use to add the university level questions if you want.
 
@@ -91,7 +91,7 @@ If the course has no groups in Sisu, or they don't suit you, add a _grouping que
 
 [[video:grouping-question]]
 
-The grouping question is required for respondents, it's the survey's first question, and it isn't public by default. A course survey can have only one, and if the teacher has created it, its grouping replaces the Sisu groups. To go back to the Sisu groups, remove the grouping question.
+The grouping question is required for respondents, it's the survey's first question, and it's never public. A course survey can have only one, and if the teacher has created it, its grouping replaces the Sisu groups. To go back to the Sisu groups, remove the grouping question.
 
 To protect anonymity, answers are shown by group only if every group with answers has at least 5 respondents (see [Answers by group](/guide/anonymity#groups)).
 

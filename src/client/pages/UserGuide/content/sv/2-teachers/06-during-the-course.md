@@ -22,7 +22,7 @@ Så här aktiverar du kontinuerlig respons:
 
 Valen sparas genast, men Norppa informerar inte studerandena om den kontinuerliga responsen automatiskt, så det är bra att berätta om den separat. Studerandena hittar kursen i [[navBar:myFeedbacks]] på fliken [[userFeedbacks:continuousFeedbackTab]] och skriver sin respons under [[userFeedbacks:giveContinuousFeedback]].
 
-Studerandena kan ge kontinuerlig respons tills kursenkäten öppnas. Den respons som ges sparas i Norppa.
+Studerandena kan ge kontinuerlig respons tills kursenkäten öppnas. Till dess kan den studerande också redigera sin respons, om ingen har svarat på den ännu. Den respons som ges sparas i Norppa.
 
 ### Dagligt e-postmeddelande
 

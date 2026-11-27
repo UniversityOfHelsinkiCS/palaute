@@ -22,7 +22,7 @@ Jatkuvan palautteen aktivointi:
 
 Valinnat tallentuvat heti, mutta Norppa ei infoa opiskelijoita jatkuvasta palautteesta automaattisesti, joten siitä on hyvä informoida erikseen. Opiskelijat löytävät kurssin [[navBar:myFeedbacks]]-sivun [[userFeedbacks:continuousFeedbackTab]]-välilehdeltä ja kirjoittavat palautteensa kohdassa [[userFeedbacks:giveContinuousFeedback]].
 
-Opiskelijat voivat antaa jatkuvaa palautetta kurssipalautteen avautumiseen asti. Annettu palaute tallentuu Norppaan.
+Opiskelijat voivat antaa jatkuvaa palautetta kurssipalautteen avautumiseen asti. Siihen asti opiskelija voi myös muokata palautettaan, jos siihen ei ole vielä vastattu. Annettu palaute tallentuu Norppaan.
 
 ### Päivittäinen sähköposti
 
