@@ -1,6 +1,7 @@
 import { Box } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -18,11 +19,14 @@ const styles = {
   },
 }
 
-const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
+const ResponseForm = ({ feedbackId, setShow, refetch, response = '', feedbackText, onSaved }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
 
   const { id } = useParams()
+
+  // The feedback text the teacher saw when they started writing, to notice if the student edited it in the meantime
+  const [feedbackTextWhenOpened] = useState(feedbackText)
 
   const handleSubmit = async values => {
     try {
@@ -32,10 +36,13 @@ const ResponseForm = ({ feedbackId, setShow, refetch, response = '' }) => {
         })
       }
 
-      await sendContinuousFeedbackResponse(values, id, feedbackId)
+      const savedFeedback = await sendContinuousFeedbackResponse(values, id, feedbackId)
 
       setShow(false)
       refetch()
+      onSaved?.({
+        feedbackChanged: feedbackTextWhenOpened !== undefined && savedFeedback.data !== feedbackTextWhenOpened,
+      })
 
       enqueueSnackbar(t('feedbackTargetView:continuousFeedbackResponseSuccessAlert'), {
         variant: 'success',

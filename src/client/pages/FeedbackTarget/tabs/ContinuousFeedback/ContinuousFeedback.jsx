@@ -30,45 +30,93 @@ const slideDown = keyframes`
   to   { opacity: 1; transform: translateY(0); }
 `
 
-const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
+const ResponseItem = ({
+  feedbackId,
+  response,
+  isTeacher,
+  refetch,
+  mayBeOutdated,
+  onSaved,
+  focusEditButton,
+  onEditButtonFocused,
+}) => {
   const { t } = useTranslation()
 
   const [showEdit, setShowEdit] = useState(false)
+  const editButtonRef = useRef(null)
+
+  // A new response was just saved and its form removed, so focus moves to the Edit button of the response.
+  // The request is cleared once done so that the button doesn't take focus again if it remounts later.
+  useEffect(() => {
+    if (!focusEditButton) return
+    editButtonRef.current?.focus()
+    onEditButtonFocused()
+  }, [focusEditButton, onEditButtonFocused])
+
+  const handleSaved = result => {
+    editButtonRef.current?.focus()
+    onSaved?.(result)
+  }
 
   return (
     <Box sx={{ ml: '2rem' }}>
+      {mayBeOutdated && (
+        <Alert severity="warning" sx={{ mb: 1 }}>
+          {t('feedbackTargetView:continuousFeedbackEditedWhileResponding')}
+        </Alert>
+      )}
       <OpenFeedbackContainer sx={{ mb: '1rem' }}>
         <Box width="100%">
           <Typography variant="body2">{t('feedbackTargetView:continuousFeedbackResponse')}</Typography>
           <Markdown>{response}</Markdown>
           {isTeacher && (
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: -2 }}>
-              <NorButton color="secondary" onClick={() => setShowEdit(!showEdit)}>
+              <NorButton ref={editButtonRef} color="secondary" onClick={() => setShowEdit(!showEdit)}>
                 {showEdit ? t('common:close') : t('common:edit')}
               </NorButton>
             </Box>
           )}
         </Box>
       </OpenFeedbackContainer>
-      {showEdit && <ResponseForm feedbackId={feedbackId} setShow={setShowEdit} refetch={refetch} response={response} />}
+      {showEdit && (
+        <ResponseForm
+          feedbackId={feedbackId}
+          setShow={setShowEdit}
+          refetch={refetch}
+          response={response}
+          onSaved={handleSaved}
+        />
+      )}
     </Box>
   )
 }
 
-const FeedbackItem = ({ feedback, canRespond, canEdit, canDelete, deleteAnswer, refetch, focusEditButton }) => {
+const FeedbackItem = ({
+  feedback,
+  canRespond,
+  canEdit,
+  canDelete,
+  deleteAnswer,
+  refetch,
+  focusEditButton,
+  newFeedbackInputRef,
+}) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
 
   const [showResponse, setShowResponse] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
+  // Set when the student edited the feedback while the teacher was writing a response to it.
+  const [responseMayBeOutdated, setResponseMayBeOutdated] = useState(false)
+  const [focusResponseEditButton, setFocusResponseEditButton] = useState(false)
   const editButtonRef = useRef(null)
   const wasEditing = useRef(false)
 
   useEffect(() => {
-    if (wasEditing.current && !isEditing) editButtonRef.current?.focus()
+    if (wasEditing.current && !isEditing) (editButtonRef.current ?? newFeedbackInputRef?.current)?.focus()
     wasEditing.current = isEditing
-  }, [isEditing])
+  }, [isEditing, newFeedbackInputRef])
 
   const date = format(new Date(createdAt), 'dd.MM.yy HH.mm')
 
@@ -121,8 +169,30 @@ const FeedbackItem = ({ feedback, canRespond, canEdit, canDelete, deleteAnswer, 
           </Box>
         </Box>
       </OpenFeedbackContainer>
-      {response && <ResponseItem feedbackId={id} response={response} isTeacher={canRespond} refetch={refetch} />}
-      {showResponse && <ResponseForm feedbackId={id} setShow={setShowResponse} refetch={refetch} />}
+      {response && (
+        <ResponseItem
+          feedbackId={id}
+          response={response}
+          isTeacher={canRespond}
+          refetch={refetch}
+          mayBeOutdated={responseMayBeOutdated}
+          onSaved={() => setResponseMayBeOutdated(false)}
+          focusEditButton={focusResponseEditButton}
+          onEditButtonFocused={() => setFocusResponseEditButton(false)}
+        />
+      )}
+      {showResponse && (
+        <ResponseForm
+          feedbackId={id}
+          setShow={setShowResponse}
+          refetch={refetch}
+          feedbackText={data}
+          onSaved={({ feedbackChanged }) => {
+            setResponseMayBeOutdated(feedbackChanged)
+            setFocusResponseEditButton(true)
+          }}
+        />
+      )}
     </Box>
   )
 }
@@ -142,7 +212,7 @@ const TeacherInfo = ({ enabled, hasFeedback }) => {
   return null
 }
 
-const ContinuousFeedbackList = ({ canRespond, canGiveFeedback, focusFeedbackId }) => {
+const ContinuousFeedbackList = ({ canRespond, canGiveFeedback, focusFeedbackId, newFeedbackInputRef }) => {
   const { id } = useParams()
   const { continuousFeedbacks, isLoading, refetch } = useFeedbackTargetContinuousFeedbacks(id)
   const { canDelete, deleteAnswer } = useDeleteContinuousFeedback()
@@ -169,6 +239,7 @@ const ContinuousFeedbackList = ({ canRespond, canGiveFeedback, focusFeedbackId }
           canRespond={canRespond}
           canEdit={canEdit(feedback)}
           focusEditButton={feedback.id === focusFeedbackId}
+          newFeedbackInputRef={newFeedbackInputRef}
           refetch={refetch}
           canDelete={canDelete}
           deleteAnswer={deleteAnswer}
@@ -194,6 +265,7 @@ const ContinuousFeedback = () => {
 
   const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
   const [focusFeedbackId, setFocusFeedbackId] = useState(null)
+  const newFeedbackInputRef = useRef(null)
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
 
@@ -215,7 +287,11 @@ const ContinuousFeedback = () => {
 
       {isStudent && isOngoing && isFeedbackEnabled && (
         <Section title={t('userFeedbacks:giveContinuousFeedback')}>
-          <ContinuousFeedbackForm fewEnrolled={isSmallCourse} onSubmitted={setFocusFeedbackId} />
+          <ContinuousFeedbackForm
+            fewEnrolled={isSmallCourse}
+            onSubmitted={setFocusFeedbackId}
+            inputRef={newFeedbackInputRef}
+          />
         </Section>
       )}
       {showFeedbackList && (
@@ -246,6 +322,7 @@ const ContinuousFeedback = () => {
               canGiveFeedback={isStudent && isOngoing && isFeedbackEnabled}
               canDelete={isAdmin}
               focusFeedbackId={focusFeedbackId}
+              newFeedbackInputRef={newFeedbackInputRef}
             />
           )}
         </Section>

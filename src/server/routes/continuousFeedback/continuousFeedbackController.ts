@@ -120,7 +120,7 @@ const editFeedback = async (req: AuthenticatedRequest, res: Response) => {
   if (!continuousFeedback) throw ApplicationError.NotFound('Continuous feedback not found')
 
   // The teacher's response was written to the original text, so editing it afterwards would break the conversation
-  if (continuousFeedback.response) throw ApplicationError.Forbidden('Continuous feedback has already been responded to')
+  if (continuousFeedback.response) throw ApplicationError.Conflict('Continuous feedback has already been responded to')
 
   continuousFeedback.data = feedback
   await continuousFeedback.save()

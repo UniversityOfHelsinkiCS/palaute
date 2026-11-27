@@ -1,7 +1,8 @@
-import { Box } from '@mui/material'
+import { Alert, Box } from '@mui/material'
+import { isAxiosError } from 'axios'
 import { Form, Formik } from 'formik'
 import { useSnackbar } from 'notistack'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -15,6 +16,15 @@ const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
   const { t } = useTranslation()
   const { id } = useParams()
 
+  // Translation key of the reason the server refused the edit. The form then stays open as read-only so the
+  // student can still copy their text.
+  const [refusal, setRefusal] = useState(null)
+  const inputRef = useRef(null)
+
+  useEffect(() => {
+    if (refusal) inputRef.current?.focus()
+  }, [refusal])
+
   const handleSubmit = async values => {
     try {
       await editContinuousFeedback(values.feedback, id, feedbackId)
@@ -24,8 +34,17 @@ const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
         variant: 'success',
         autoHideDuration: 6000,
       })
-    } catch {
-      enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+    } catch (error) {
+      const status = isAxiosError(error) ? error.response?.status : undefined
+
+      if (status === 409) {
+        setRefusal('feedbackTargetView:continuousFeedbackEditRefusedResponded')
+        void refetch()
+      } else if (status === 403 || status === 404) {
+        setRefusal('feedbackTargetView:continuousFeedbackEditRefused')
+      } else {
+        enqueueSnackbar(t('common:unknownError'), { variant: 'error' })
+      }
     }
   }
 
@@ -33,7 +52,7 @@ const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
   const [discardConfirmed, setDiscardConfirmed] = useState(false)
 
   const requestClose = dirty => {
-    if (dirty) setDiscardDialogOpen(true)
+    if (dirty && !refusal) setDiscardDialogOpen(true)
     else onClose()
   }
 
@@ -66,6 +85,11 @@ const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
             onKeyDown={event => handleKeyDown(event, { dirty, isSubmitting })}
             sx={{ width: '100%', mb: 1 }}
           >
+            {refusal && (
+              <Alert severity="warning" sx={{ mb: 2 }}>
+                {t(refusal)}
+              </Alert>
+            )}
             <FormikTextField
               id={`edit-continuous-feedback-${feedbackId}`}
               name="feedback"
@@ -81,19 +105,23 @@ const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
                 const { length } = event.target.value
                 event.target.setSelectionRange(length, length)
               }}
+              inputRef={inputRef}
+              slotProps={{ input: { readOnly: Boolean(refusal) } }}
               data-cy="editContinuousFeedbackInput"
             />
             <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-              <NorButton
-                type="submit"
-                color="primary"
-                disabled={!values.feedback.trim() || values.feedback === feedback || isSubmitting}
-                data-cy="saveContinuousFeedbackEdit"
-              >
-                {t('common:save')}
-              </NorButton>
+              {!refusal && (
+                <NorButton
+                  type="submit"
+                  color="primary"
+                  disabled={!values.feedback.trim() || values.feedback === feedback || isSubmitting}
+                  data-cy="saveContinuousFeedbackEdit"
+                >
+                  {t('common:save')}
+                </NorButton>
+              )}
               <NorButton color="secondary" onClick={() => requestClose(dirty)} disabled={isSubmitting}>
-                {t('common:cancel')}
+                {refusal ? t('common:close') : t('common:cancel')}
               </NorButton>
             </Box>
           </Box>

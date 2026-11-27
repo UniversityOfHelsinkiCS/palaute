@@ -27,7 +27,7 @@ const styles = {
   },
 }
 
-const ContinuousFeedbackForm = ({ fewEnrolled, onSubmitted }) => {
+const ContinuousFeedbackForm = ({ fewEnrolled, onSubmitted, inputRef }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget } = useFeedbackTargetContext()
@@ -72,7 +72,14 @@ const ContinuousFeedbackForm = ({ fewEnrolled, onSubmitted }) => {
       <Formik initialValues={{ feedback: '', activateSubmit: false }} onSubmit={handleSubmit}>
         {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
-            <FormikTextField name="feedback" label={t('norppaFeedback:feedback')} fullWidth minRows={4} multiline />
+            <FormikTextField
+              name="feedback"
+              label={t('norppaFeedback:feedback')}
+              fullWidth
+              minRows={4}
+              multiline
+              inputRef={inputRef}
+            />
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1, mt: '1rem' }}>
               {fewEnrolled && (
                 <ConsentCheckbox
