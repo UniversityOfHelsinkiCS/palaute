@@ -55,7 +55,7 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   )
 }
 
-const FeedbackItem = ({ feedback, canRespond, canEdit, canDelete, deleteAnswer, refetch }) => {
+const FeedbackItem = ({ feedback, canRespond, canEdit, canDelete, deleteAnswer, refetch, focusEditButton }) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
@@ -88,6 +88,9 @@ const FeedbackItem = ({ feedback, canRespond, canEdit, canDelete, deleteAnswer, 
             {canEdit && !isEditing && (
               <NorButton
                 ref={editButtonRef}
+                // The student just sent this feedback, so focus is moved to the edit button to help the user find the saved feedback
+                // oxlint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus={focusEditButton}
                 color="secondary"
                 icon={<EditIcon aria-hidden />}
                 aria-label={t('feedbackTargetView:editContinuousFeedbackLabel', { date })}
@@ -139,7 +142,7 @@ const TeacherInfo = ({ enabled, hasFeedback }) => {
   return null
 }
 
-const ContinuousFeedbackList = ({ canRespond, canGiveFeedback }) => {
+const ContinuousFeedbackList = ({ canRespond, canGiveFeedback, focusFeedbackId }) => {
   const { id } = useParams()
   const { continuousFeedbacks, isLoading, refetch } = useFeedbackTargetContinuousFeedbacks(id)
   const { canDelete, deleteAnswer } = useDeleteContinuousFeedback()
@@ -165,6 +168,7 @@ const ContinuousFeedbackList = ({ canRespond, canGiveFeedback }) => {
           feedback={feedback}
           canRespond={canRespond}
           canEdit={canEdit(feedback)}
+          focusEditButton={feedback.id === focusFeedbackId}
           refetch={refetch}
           canDelete={canDelete}
           deleteAnswer={deleteAnswer}
@@ -189,6 +193,7 @@ const ContinuousFeedback = () => {
     useFeedbackTargetContext()
 
   const { continuousFeedbacks } = useFeedbackTargetContinuousFeedbacks(feedbackTarget.id)
+  const [focusFeedbackId, setFocusFeedbackId] = useState(null)
 
   const isOngoing = feedbackTargetIsOngoing(feedbackTarget)
 
@@ -210,7 +215,7 @@ const ContinuousFeedback = () => {
 
       {isStudent && isOngoing && isFeedbackEnabled && (
         <Section title={t('userFeedbacks:giveContinuousFeedback')}>
-          <ContinuousFeedbackForm fewEnrolled={isSmallCourse} />
+          <ContinuousFeedbackForm fewEnrolled={isSmallCourse} onSubmitted={setFocusFeedbackId} />
         </Section>
       )}
       {showFeedbackList && (
@@ -240,6 +245,7 @@ const ContinuousFeedback = () => {
               canRespond={isResponsibleTeacher}
               canGiveFeedback={isStudent && isOngoing && isFeedbackEnabled}
               canDelete={isAdmin}
+              focusFeedbackId={focusFeedbackId}
             />
           )}
         </Section>

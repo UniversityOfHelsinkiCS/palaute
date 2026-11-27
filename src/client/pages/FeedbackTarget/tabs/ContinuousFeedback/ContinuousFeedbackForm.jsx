@@ -27,7 +27,7 @@ const styles = {
   },
 }
 
-const ContinuousFeedbackForm = ({ fewEnrolled }) => {
+const ContinuousFeedbackForm = ({ fewEnrolled, onSubmitted }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget } = useFeedbackTargetContext()
@@ -37,8 +37,10 @@ const ContinuousFeedbackForm = ({ fewEnrolled }) => {
 
   const handleSubmit = async (values, { resetForm }) => {
     try {
-      await saveContinuousFeedback(values, id)
+      const newFeedback = await saveContinuousFeedback(values, id)
       resetForm()
+      // Clearing the form disables the submit button, so focus moves to the saved feedback instead of dropping to the page
+      onSubmitted?.(newFeedback.id)
       queryClient.invalidateQueries(['feedbackTargetContinuousFeedbacks'])
       enqueueSnackbar(t('norppaFeedback:successAlert'), {
         variant: 'success',
