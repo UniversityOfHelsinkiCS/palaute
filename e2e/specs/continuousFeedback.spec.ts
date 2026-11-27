@@ -34,7 +34,7 @@ test.describe('Continuous feedback', () => {
     await page.locator('[data-cy=giveContinuousFeedback]').click()
     await page.locator('textarea').first().fill('Giving continuous feedback')
     await contains(page, 'Send feedback').click()
-    await expect(contains(page, 'Feedback has been sent succesfully')).toBeAttached()
+    await expect(contains(page, 'Feedback has been sent successfully')).toBeAttached()
     await expect(contains(page, 'Giving continuous feedback')).toBeAttached()
 
     await loginAs(teacher)
@@ -43,7 +43,7 @@ test.describe('Continuous feedback', () => {
     await page.locator('[data-cy=respondContinuousFeedback]').click()
     await textField(page, 'continuousFeedbackResponseInput').fill('Responding to continuous feedback')
     await page.locator('[data-cy=sendContinuousFeedbackResponse]').click()
-    await expect(contains(page, 'Response sent succesfully')).toBeAttached()
+    await expect(contains(page, 'Response sent successfully')).toBeAttached()
     await expect(contains(page, 'Responding to continuous feedback')).toBeAttached()
 
     await loginAs(student)
@@ -70,7 +70,7 @@ test.describe('Continuous feedback', () => {
     await expect(editInput).toBeFocused()
     await editInput.fill('Edited feedback')
     await page.locator('[data-cy=saveContinuousFeedbackEdit]').click()
-    await expect(contains(page, 'Feedback edited succesfully')).toBeAttached()
+    await expect(contains(page, 'Feedback edited successfully')).toBeAttached()
     await expect(contains(page, 'Edited feedback')).toBeAttached()
     await expect(page.locator('[data-cy=editContinuousFeedback]')).toBeFocused()
 
@@ -80,7 +80,7 @@ test.describe('Continuous feedback', () => {
     await page.locator('[data-cy=respondContinuousFeedback]').click()
     await textField(page, 'continuousFeedbackResponseInput').fill('Responding to edited feedback')
     await page.locator('[data-cy=sendContinuousFeedbackResponse]').click()
-    await expect(contains(page, 'Response sent succesfully')).toBeAttached()
+    await expect(contains(page, 'Response sent successfully')).toBeAttached()
 
     await loginAs(student)
     await page.locator('[data-cy=my-feedbacks-continuous-tab]').click()
