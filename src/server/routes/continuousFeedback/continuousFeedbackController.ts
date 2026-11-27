@@ -86,6 +86,48 @@ const submitFeedback = async (req: AuthenticatedRequest, res: Response) => {
   res.send(newFeedback)
 }
 
+const editFeedback = async (req: AuthenticatedRequest, res: Response) => {
+  const { user } = req
+
+  const feedbackTargetId = Number(req.params.id)
+  const continuousFeedbackId = Number(req.params.continuousFeedbackId)
+  const { feedback } = req.body
+
+  if (typeof feedback !== 'string' || !feedback.trim()) throw ApplicationError.BadRequest('Feedback missing')
+
+  const { feedbackTarget, access } = await getFeedbackTargetContext({
+    feedbackTargetId,
+    user,
+  })
+
+  if (!access?.canGiveContinuousFeedback())
+    throw ApplicationError.Forbidden('User not allowed to give continuous feedback')
+
+  if (!feedbackTarget.continuousFeedbackEnabled) throw ApplicationError.Forbidden('Continuous feedback is disabled')
+
+  const continuousFeedbackIsOver = (await feedbackTarget.feedbackCanBeGiven()) || feedbackTarget.isEnded()
+
+  if (continuousFeedbackIsOver) throw ApplicationError.Forbidden('Continuous feedback is closed')
+
+  const continuousFeedback = await ContinuousFeedback.findOne({
+    where: {
+      id: continuousFeedbackId,
+      feedbackTargetId,
+      userId: user.id,
+    },
+  })
+
+  if (!continuousFeedback) throw ApplicationError.NotFound('Continuous feedback not found')
+
+  // The teacher's response was written to the original text, so editing it afterwards would break the conversation
+  if (continuousFeedback.response) throw ApplicationError.Forbidden('Continuous feedback has already been responded to')
+
+  continuousFeedback.data = feedback
+  await continuousFeedback.save()
+
+  res.send(continuousFeedback)
+}
+
 const respondToFeedback = async (req: AuthenticatedRequest, res: Response) => {
   const { user } = req
 
@@ -141,6 +183,7 @@ const router = Router()
 
 router.get('/:id', getFeedbacks)
 router.post('/:id', submitFeedback)
+router.put('/:id/:continuousFeedbackId', editFeedback)
 router.post('/:id/response/:continuousFeedbackId', respondToFeedback)
 router.delete('/:id/:continuousFeedbackId', adminAccess, deleteFeedback)
 

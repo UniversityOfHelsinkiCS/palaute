@@ -12,6 +12,14 @@ export const saveContinuousFeedback = async (values, feedbackTargetId) => {
   return data
 }
 
+export const editContinuousFeedback = async (feedback, feedbackTargetId, continuousFeedbackId) => {
+  const { data } = await apiClient.put(`/continuous-feedback/${feedbackTargetId}/${continuousFeedbackId}`, {
+    feedback,
+  })
+
+  return data
+}
+
 export const sendContinuousFeedbackResponse = async (values, feedbackTargetId, continuousFeedbackId) => {
   const { response } = values
 

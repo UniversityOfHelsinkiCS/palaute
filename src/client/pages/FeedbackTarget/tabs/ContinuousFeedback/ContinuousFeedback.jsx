@@ -1,8 +1,9 @@
 import { keyframes } from '@emotion/react'
-import { DeleteForever } from '@mui/icons-material'
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever'
+import EditIcon from '@mui/icons-material/Edit'
 import { Box, Typography, Alert, IconButton } from '@mui/material'
 import { format } from 'date-fns'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router-dom'
 
@@ -12,12 +13,14 @@ import Markdown from '../../../../components/common/Markdown'
 import { NorButton } from '../../../../components/common/NorButton'
 import Section from '../../../../components/common/Section'
 import { OpenFeedbackContainer } from '../../../../components/OpenFeedback/OpenFeedback'
+import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import useFeedbackTargetContinuousFeedbacks from '../../../../hooks/useFeedbackTargetContinuousFeedbacks'
 import { focusIndicatorStyle } from '../../../../util/accessibility'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import ContinuousFeedbackForm from './ContinuousFeedbackForm'
 import ContinuousFeedbackSettings from './ContinuousFeedbackSettings'
+import EditFeedbackForm from './EditFeedbackForm'
 import ResponseForm from './ResponseForm'
 import useDeleteContinuousFeedback from './useDeleteContinuousFeedback'
 import { feedbackTargetIsOngoing } from './utils'
@@ -52,22 +55,48 @@ const ResponseItem = ({ feedbackId, response, isTeacher, refetch }) => {
   )
 }
 
-const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }) => {
+const FeedbackItem = ({ feedback, canRespond, canEdit, canDelete, deleteAnswer, refetch }) => {
   const { t } = useTranslation()
 
   const { id, createdAt, data, response } = feedback
 
   const [showResponse, setShowResponse] = useState(false)
+  const [isEditing, setIsEditing] = useState(false)
+  const editButtonRef = useRef(null)
+  const wasEditing = useRef(false)
+
+  useEffect(() => {
+    if (wasEditing.current && !isEditing) editButtonRef.current?.focus()
+    wasEditing.current = isEditing
+  }, [isEditing])
+
+  const date = format(new Date(createdAt), 'dd.MM.yy HH.mm')
 
   return (
     <Box sx={{ mb: '2rem', animation: `${slideDown} 0.2s ease-out` }}>
       <OpenFeedbackContainer>
         <Box sx={{ width: '100%' }}>
-          <Markdown>{data}</Markdown>
-          <Box sx={{ display: 'flex' }}>
+          {isEditing ? (
+            <EditFeedbackForm feedbackId={id} feedback={data} onClose={() => setIsEditing(false)} refetch={refetch} />
+          ) : (
+            <Markdown>{data}</Markdown>
+          )}
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <Typography variant="body2" sx={{ mr: 'auto' }}>
-              {format(new Date(createdAt), 'dd.MM.yy HH.mm')}
+              {date}
             </Typography>
+            {canEdit && !isEditing && (
+              <NorButton
+                ref={editButtonRef}
+                color="secondary"
+                icon={<EditIcon aria-hidden />}
+                aria-label={t('feedbackTargetView:editContinuousFeedbackLabel', { date })}
+                onClick={() => setIsEditing(true)}
+                data-cy="editContinuousFeedback"
+              >
+                {t('common:edit')}
+              </NorButton>
+            )}
             {canRespond && !response && (
               <NorButton onClick={() => setShowResponse(!showResponse)} data-cy="respondContinuousFeedback">
                 {showResponse
@@ -83,7 +112,7 @@ const FeedbackItem = ({ feedback, canRespond, canDelete, deleteAnswer, refetch }
                 sx={{ ml: 1, ...focusIndicatorStyle() }}
                 disableRipple
               >
-                <DeleteForever sx={{ fontSize: '12px' }} />
+                <DeleteForeverIcon sx={{ fontSize: '12px' }} />
               </IconButton>
             )}
           </Box>
@@ -110,10 +139,13 @@ const TeacherInfo = ({ enabled, hasFeedback }) => {
   return null
 }
 
-const ContinuousFeedbackList = ({ canRespond }) => {
+const ContinuousFeedbackList = ({ canRespond, canGiveFeedback }) => {
   const { id } = useParams()
   const { continuousFeedbacks, isLoading, refetch } = useFeedbackTargetContinuousFeedbacks(id)
   const { canDelete, deleteAnswer } = useDeleteContinuousFeedback()
+  const { authorizedUser } = useAuthorizedUser()
+
+  const canEdit = feedback => canGiveFeedback && feedback.userId === authorizedUser?.id && !feedback.response
 
   if (isLoading) {
     return <LoadingProgress />
@@ -132,6 +164,7 @@ const ContinuousFeedbackList = ({ canRespond }) => {
           key={feedback.id}
           feedback={feedback}
           canRespond={canRespond}
+          canEdit={canEdit(feedback)}
           refetch={refetch}
           canDelete={canDelete}
           deleteAnswer={deleteAnswer}
@@ -195,12 +228,20 @@ const ContinuousFeedback = () => {
               <Alert severity="info">
                 {!isOngoing && !continuousFeedbacks?.length
                   ? t('feedbackTargetView:noContinuousFeedbackGivenStudentClosed')
-                  : t('feedbackTargetView:continuousFeedbackStudentInfo')}
+                  : isOngoing && isFeedbackEnabled
+                    ? t('feedbackTargetView:continuousFeedbackStudentInfo')
+                    : t('feedbackTargetView:continuousFeedbackStudentInfoClosed')}
               </Alert>
             </Box>
           )}
 
-          {showFeedbackList && <ContinuousFeedbackList canRespond={isResponsibleTeacher} canDelete={isAdmin} />}
+          {showFeedbackList && (
+            <ContinuousFeedbackList
+              canRespond={isResponsibleTeacher}
+              canGiveFeedback={isStudent && isOngoing && isFeedbackEnabled}
+              canDelete={isAdmin}
+            />
+          )}
         </Section>
       )}
     </Box>
