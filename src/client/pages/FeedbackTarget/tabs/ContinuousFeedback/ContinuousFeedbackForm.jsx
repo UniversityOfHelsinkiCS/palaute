@@ -1,15 +1,19 @@
 import { Box, Typography, Alert } from '@mui/material'
 import { Form, Formik } from 'formik'
 import { useSnackbar } from 'notistack'
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useParams } from 'react-router'
 
 import FormikTextField from '../../../../components/common/FormikTextField'
 import { NorButton } from '../../../../components/common/NorButton'
+import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
 import { FEEDBACK_HIDDEN_STUDENT_COUNT } from '../../../../util/common'
 import queryClient from '../../../../util/queryClient'
 import { useFeedbackTargetContext } from '../../FeedbackTargetContext'
 import { ConsentCheckbox } from '../FeedbackView/ConsentCheckbox'
+import { clearDraft, getDraftKey } from '../FeedbackView/utils'
+import DraftSaver, { loadFeedbackDraft } from './DraftSaver'
 import { saveContinuousFeedback } from './utils'
 
 const styles = {
@@ -31,14 +35,20 @@ const ContinuousFeedbackForm = ({ fewEnrolled, onSubmitted, inputRef }) => {
   const { t } = useTranslation()
   const { enqueueSnackbar } = useSnackbar()
   const { feedbackTarget } = useFeedbackTargetContext()
+  const { authorizedUser } = useAuthorizedUser()
 
   const { id } = useParams()
   const preamble = feedbackTarget?.continuousFeedbackPreamble?.trim()
 
+  const draftKey = authorizedUser ? getDraftKey(authorizedUser.id, `continuous:${id}`) : null
+  // Read once when the form mounts: Formik only uses initialValues on its first render
+  const [initialFeedback] = useState(() => loadFeedbackDraft(draftKey) ?? '')
+
   const handleSubmit = async (values, { resetForm }) => {
     try {
       const newFeedback = await saveContinuousFeedback(values, id)
-      resetForm()
+      resetForm({ values: { feedback: '', activateSubmit: false } })
+      if (draftKey) clearDraft(draftKey)
       // Clearing the form disables the submit button, so focus moves to the saved feedback instead of dropping to the page
       onSubmitted?.(newFeedback.id)
       queryClient.invalidateQueries(['feedbackTargetContinuousFeedbacks'])
@@ -69,9 +79,10 @@ const ContinuousFeedbackForm = ({ fewEnrolled, onSubmitted, inputRef }) => {
           {preamble}
         </Typography>
       )}
-      <Formik initialValues={{ feedback: '', activateSubmit: false }} onSubmit={handleSubmit}>
+      <Formik initialValues={{ feedback: initialFeedback, activateSubmit: false }} onSubmit={handleSubmit}>
         {({ values, isSubmitting, setFieldValue }) => (
           <Form sx={styles.container}>
+            {draftKey && <DraftSaver draftKey={draftKey} unchangedValue="" />}
             <FormikTextField
               name="feedback"
               label={t('norppaFeedback:feedback')}

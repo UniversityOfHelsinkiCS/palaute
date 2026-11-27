@@ -9,12 +9,25 @@ import { useParams } from 'react-router-dom'
 import ConfirmDialog from '../../../../components/common/ConfirmDialog'
 import FormikTextField from '../../../../components/common/FormikTextField'
 import { NorButton } from '../../../../components/common/NorButton'
+import useAuthorizedUser from '../../../../hooks/useAuthorizedUser'
+import { clearDraft, getDraftKey } from '../FeedbackView/utils'
+import DraftSaver, { loadFeedbackDraft } from './DraftSaver'
 import { editContinuousFeedback } from './utils'
 
-const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
+const EditFeedbackForm = ({ feedbackId, feedback, onClose: closeForm, refetch }) => {
   const { enqueueSnackbar } = useSnackbar()
   const { t } = useTranslation()
   const { id } = useParams()
+  const { authorizedUser } = useAuthorizedUser()
+
+  const draftKey = authorizedUser ? getDraftKey(authorizedUser.id, `continuous:${id}:edit:${feedbackId}`) : null
+  // Read once when the form mounts: Formik only uses initialValues on its first render
+  const [initialFeedback] = useState(() => loadFeedbackDraft(draftKey) ?? feedback)
+
+  const onClose = () => {
+    if (draftKey) clearDraft(draftKey)
+    closeForm()
+  }
 
   // Translation key of the reason the server refused the edit. The form then stays open as read-only so the
   // student can still copy their text.
@@ -77,69 +90,75 @@ const EditFeedbackForm = ({ feedbackId, feedback, onClose, refetch }) => {
   }
 
   return (
-    <Formik initialValues={{ feedback }} onSubmit={handleSubmit}>
-      {({ values, isSubmitting, dirty }) => (
-        <>
-          <Box
-            component={Form}
-            onKeyDown={event => handleKeyDown(event, { dirty, isSubmitting })}
-            sx={{ width: '100%', mb: 1 }}
-          >
-            {refusal && (
-              <Alert severity="warning" sx={{ mb: 2 }}>
-                {t(refusal)}
-              </Alert>
-            )}
-            <FormikTextField
-              id={`edit-continuous-feedback-${feedbackId}`}
-              name="feedback"
-              label={t('feedbackTargetView:editContinuousFeedbackField')}
-              fullWidth
-              minRows={4}
-              multiline
-              // The user opened the form by pressing Edit, which is removed while editing, so focus must move here
-              // oxlint-disable-next-line jsx-a11y/no-autofocus
-              autoFocus
-              onFocus={event => {
-                // Place the caret at the end of the text instead of selecting or starting at the beginning
-                const { length } = event.target.value
-                event.target.setSelectionRange(length, length)
-              }}
-              inputRef={inputRef}
-              slotProps={{ input: { readOnly: Boolean(refusal) } }}
-              data-cy="editContinuousFeedbackInput"
-            />
-            <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
-              {!refusal && (
-                <NorButton
-                  type="submit"
-                  color="primary"
-                  disabled={!values.feedback.trim() || values.feedback === feedback || isSubmitting}
-                  data-cy="saveContinuousFeedbackEdit"
-                >
-                  {t('common:save')}
-                </NorButton>
+    <Formik initialValues={{ feedback: initialFeedback }} onSubmit={handleSubmit}>
+      {({ values, isSubmitting }) => {
+        // Compared with the saved feedback instead of Formik's dirty, because a restored draft is the form's initial value
+        const dirty = values.feedback !== feedback
+
+        return (
+          <>
+            <Box
+              component={Form}
+              onKeyDown={event => handleKeyDown(event, { dirty, isSubmitting })}
+              sx={{ width: '100%', mb: 1 }}
+            >
+              {draftKey && !refusal && <DraftSaver draftKey={draftKey} unchangedValue={feedback} />}
+              {refusal && (
+                <Alert severity="warning" sx={{ mb: 2 }}>
+                  {t(refusal)}
+                </Alert>
               )}
-              <NorButton color="secondary" onClick={() => requestClose(dirty)} disabled={isSubmitting}>
-                {refusal ? t('common:close') : t('common:cancel')}
-              </NorButton>
+              <FormikTextField
+                id={`edit-continuous-feedback-${feedbackId}`}
+                name="feedback"
+                label={t('feedbackTargetView:editContinuousFeedbackField')}
+                fullWidth
+                minRows={4}
+                multiline
+                // The user opened the form by pressing Edit, which is removed while editing, so focus must move here
+                // oxlint-disable-next-line jsx-a11y/no-autofocus
+                autoFocus
+                onFocus={event => {
+                  // Place the caret at the end of the text instead of selecting or starting at the beginning
+                  const { length } = event.target.value
+                  event.target.setSelectionRange(length, length)
+                }}
+                inputRef={inputRef}
+                slotProps={{ input: { readOnly: Boolean(refusal) } }}
+                data-cy="editContinuousFeedbackInput"
+              />
+              <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+                {!refusal && (
+                  <NorButton
+                    type="submit"
+                    color="primary"
+                    disabled={!values.feedback.trim() || values.feedback === feedback || isSubmitting}
+                    data-cy="saveContinuousFeedbackEdit"
+                  >
+                    {t('common:save')}
+                  </NorButton>
+                )}
+                <NorButton color="secondary" onClick={() => requestClose(dirty)} disabled={isSubmitting}>
+                  {refusal ? t('common:close') : t('common:cancel')}
+                </NorButton>
+              </Box>
             </Box>
-          </Box>
-          {/* Rendered outside the form so that Escape inside the dialog doesn't reach the form's key handler */}
-          <ConfirmDialog
-            open={discardDialogOpen}
-            onClose={() => setDiscardDialogOpen(false)}
-            onConfirm={handleConfirmDiscard}
-            disableRestoreFocus={discardConfirmed}
-            onExited={handleDiscardDialogExited}
-            title={`${t('feedbackView:discardChanges')}?`}
-            content={t('feedbackView:discardChangesConfirmation')}
-            confirmLabel={t('feedbackView:discardChanges')}
-            confirmColor="error"
-            dataCy="continuous-feedback-discard-dialog"
-          />
-        </>
-      )}
+            {/* Rendered outside the form so that Escape inside the dialog doesn't reach the form's key handler */}
+            <ConfirmDialog
+              open={discardDialogOpen}
+              onClose={() => setDiscardDialogOpen(false)}
+              onConfirm={handleConfirmDiscard}
+              disableRestoreFocus={discardConfirmed}
+              onExited={handleDiscardDialogExited}
+              title={`${t('feedbackView:discardChanges')}?`}
+              content={t('feedbackView:discardChangesConfirmation')}
+              confirmLabel={t('feedbackView:discardChanges')}
+              confirmColor="error"
+              dataCy="continuous-feedback-discard-dialog"
+            />
+          </>
+        )
+      }}
     </Formik>
   )
 }
